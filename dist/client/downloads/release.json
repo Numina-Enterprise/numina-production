@@ -1,0 +1,91 @@
+{
+  "version": "0.1.0",
+  "workerSha256": "58232602a2e27312d6534f736d383e6c069e628fc6a77eebafbc366681c414ab",
+  "testReport": {
+    "suite": "numina-implementation-v0.1",
+    "passed": 20,
+    "total": 20,
+    "results": [
+      {
+        "name": "valid",
+        "pass": true
+      },
+      {
+        "name": "wrong environment",
+        "pass": true
+      },
+      {
+        "name": "wrong audience",
+        "pass": true
+      },
+      {
+        "name": "wrong action",
+        "pass": true
+      },
+      {
+        "name": "wrong resource",
+        "pass": true
+      },
+      {
+        "name": "wrong issuer",
+        "pass": true
+      },
+      {
+        "name": "profile changed",
+        "pass": true
+      },
+      {
+        "name": "expired",
+        "pass": true
+      },
+      {
+        "name": "not yet valid",
+        "pass": true
+      },
+      {
+        "name": "lifetime exceeded",
+        "pass": true
+      },
+      {
+        "name": "inverted window",
+        "pass": true
+      },
+      {
+        "name": "issuance after activation",
+        "pass": true
+      },
+      {
+        "name": "short nonce",
+        "pass": true
+      },
+      {
+        "name": "unsupported version",
+        "pass": true
+      },
+      {
+        "name": "extra field",
+        "pass": true
+      },
+      {
+        "name": "fractional time",
+        "pass": true
+      },
+      {
+        "name": "tampered signature",
+        "pass": true
+      },
+      {
+        "name": "untrusted key",
+        "pass": true
+      },
+      {
+        "name": "wrong key purpose",
+        "pass": true
+      },
+      {
+        "name": "unsupported algorithm",
+        "pass": true
+      }
+    ]
+  }
+}
