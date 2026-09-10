@@ -2,8 +2,9 @@ import {VERSION,PROFILE,canonical,encoder,b64,digest,verifyCredential,decision} 
 import {initialize,rateLimit,replay,commitEvent,storeViolation,coverage} from './store.js';
 import {DEMO_KEY,CONFORMANCE} from './generated.js';
 import {CORE_MANIFEST,CORE_CONTEXT,verifyCoreEac,assessStability} from './core-v18.js';
+import {controlHttp} from './control-http.js';
 const LIMIT=8192;
-const security={'X-Numina-Version':VERSION,'X-Numina-Profile':PROFILE.id,'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Strict-Transport-Security':'max-age=31536000','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"};
+const security={"X-Numina-Version":"1.0.0","X-Numina-Profile":"numina-demo-rp-0.1","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 function response(body,status=200,extra={}) {return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 async function receiptFor(env,result,hash,requestId,kind,now) {
   const receipt={id:crypto.randomUUID(),kind,requestId,credentialHash:hash,issuedAt:now,version:VERSION,profile:PROFILE.id,scope:'test-only',outcome:result.outcome,reason:result.reason};
@@ -26,9 +27,16 @@ async function readEnvelope(req) {
 export default {
  async fetch(req,env) {
   const requestId=crypto.randomUUID(),start=Date.now(),now=Math.floor(start/1000),url=new URL(req.url),path=url.pathname;
+  // Only known public hosts redirect; the destination never trusts forwarded headers.
+  if(url.hostname==='numinalabs.xyz'||(url.hostname==='www.numinalabs.xyz'&&url.protocol==='http:')) {
+   const target=new URL('https://www.numinalabs.xyz');target.pathname=url.pathname;target.search=url.search;
+   return new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{...security,Location:target.href}});
+  }
   let status=200,outcome,reason;
   const finish=r=>{status=r.status;r.headers.set('X-Request-Id',requestId);return r;};
   try {
+   if(path.startsWith('/api/control/')){const r=await controlHttp(req,env);for(const [k,v]of Object.entries(security))r.headers.set(k,v);return finish(r);}
+   if(env.NUMINA_CONTROL_OWNER&&req.method==='POST'&&['/api/v0.1/commit','/api/v0.1/verify'].includes(path))return finish(response({error:'DEMO_MUTATIONS_RETIRED',next:'/api/control/v1/next-action'},410));
    if(!path.startsWith('/api/')) { const r=await env.ASSETS.fetch(req);const h=new Headers(r.headers);for(const [k,v]of Object.entries(security))h.set(k,v); return new Response(r.body,{status:r.status,headers:h}); }
    if(!['GET','POST'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{'Allow':'GET, POST'}));
    if(path==='/api/v0.1/health'&&req.method==='GET')return finish(response({status:'up',version:VERSION,scope:'test-only',fundsExecution:false}));
@@ -72,6 +80,6 @@ export default {
    console.log(JSON.stringify({event:'authority_decision',requestId,version:VERSION,outcome,reason,credentialHash:hash,receiptId:receipt.receipt.id,durable}));
    return finish(response({...result,committed:path.endsWith('/commit')&&result.outcome==='VALID_FOR_COMMIT',receipt,persisted:durable,receiptUrl:durable?'/api/v0.1/receipts/'+receipt.receipt.id:null},result.outcome==='VALID_FOR_COMMIT'?200:result.outcome==='INVALID'?422:409));
   } catch(e) { reason=e.reason||'DEPENDENCY_UNAVAILABLE';outcome=e.status?'INVALID':'REVALIDATION_REQUIRED';return finish(response({...decision(outcome,reason),requestId},e.status||503)); }
-  finally {if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,version:VERSION,route:path.replace(/\/receipts\/.*/, '/receipts/:id').slice(0,120),method:req.method,status,outcome,reason,durationMs:Date.now()-start}));}
+  finally {if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,version:path.startsWith('/api/control/')?'1.0.0':VERSION,route:path.replace(/\/receipts\/.*/, '/receipts/:id').slice(0,120),method:req.method,status,outcome,reason,durationMs:Date.now()-start}));}
  }
 };

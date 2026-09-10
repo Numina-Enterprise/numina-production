@@ -1,0 +1,8 @@
+# Permanent redirects for legacy page links. Domain redirects require Worker or edge configuration.
+/index.html / 301
+/about.html /about 301
+/authority.html /authority 301
+/blockchain.html /blockchain 301
+/platform.html /platform 301
+/pricing.html /pricing 301
+/services.html /services 301

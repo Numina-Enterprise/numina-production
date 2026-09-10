@@ -116,8 +116,233 @@ function assessStability(input){
  return {coreVersion:'1.8.0',scope:'observation-only synthetic inputs',requiredSupport:Number(required),deficiency:Number(deficiency),state:deficiency===0n?'HEALTHY':support>0n?'CALL_REQUIRED':'DEFAULT_PENDING',proposedCallAmount:Number(buffered<i.maxCallAmount?buffered:i.maxCallAmount),authorityChanged:false,callIssued:false};
 }
 
+// The only production state machine. No network effects or device-local authority.
+const CONTROL_VERSION = '1.0.0';
+const CONTROL_SCOPES = ['request.create','evidence.attest','evidence.resolve','record.write','authority.delegate'];
+const CONTROL_ADAPTER = {id:'internal.record.v1',version:1,action:'record.write',externalExecution:false};
+function stable(value) {
+  if(value===null || typeof value==='boolean') return JSON.stringify(value);
+  if(typeof value==='number' && Number.isSafeInteger(value) && !Object.is(value,-0)) return String(value);
+  if(typeof value==='string') return JSON.stringify(value);
+  if(Array.isArray(value)) return '['+value.map(stable).join(',')+']';
+  if(value && Object.getPrototypeOf(value)===Object.prototype) return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stable(value[k])).join(',')+'}';
+  throw new Error('INVALID_CANONICAL_VALUE');
+}
+async function controlHash(value) {return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(typeof value==='string'?value:stable(value)))),b=>b.toString(16).padStart(2,'0')).join('');}
+function controlError(code,status=422) {throw Object.assign(new Error(code),{status,code});}
+function demand(ok,code,status=422){if(!ok)controlError(code,status);}
+function textField(value,max=160){return typeof value==='string'&&value.length>0&&value.length<=max&&!/[\u0000-\u001f]/.test(value);}
+function controlExact(obj,keys){demand(obj&&Object.getPrototypeOf(obj)===Object.prototype&&Object.keys(obj).every(k=>keys.includes(k)),'UNKNOWN_FIELDS');}
+function resourceWithin(resource,prefix){return prefix==='*'||resource.startsWith(prefix);}
+function prefixWithin(child,parent){return parent==='*'||(child!=='*'&&child.startsWith(parent));}
+function initialControlState(owner,now) {
+  return {schema:1,root:owner,createdAt:now,grants:[{id:'root',parent:null,subject:owner,scopes:[...CONTROL_SCOPES],resourcePrefix:'*',expiresAt:253402300799,revoked:false}],requests:[],evidence:[],records:[]};
+}
+function grantValid(state,grant,now,seen=new Set()) {
+  if(!grant||seen.has(grant.id)||seen.size>=8||grant.revoked||grant.expiresAt<=now)return false;
+  if(grant.id==='root')return grant.parent===null&&grant.subject===state.root;
+  seen.add(grant.id);const parent=state.grants.find(g=>g.id===grant.parent);
+  return !!parent&&grantValid(state,parent,now,seen)&&parent.scopes.includes('authority.delegate')&&grant.scopes.every(s=>parent.scopes.includes(s))&&prefixWithin(grant.resourcePrefix,parent.resourcePrefix)&&grant.expiresAt<=parent.expiresAt;
+}
+function authorizeControl(state,actor,scope,resource,now,grantId) {
+  return state.grants.find(g=>(!grantId||g.id===grantId)&&g.subject===actor&&g.scopes.includes(scope)&&resourceWithin(resource,g.resourcePrefix)&&grantValid(state,g,now))||null;
+}
+function authorized(state,actor,scope,resource,now,grantId){const grant=authorizeControl(state,actor,scope,resource,now,grantId);demand(grant,'AUTHORITY_DENIED',403);return grant;}
+function normalizeRecord(input) {
+  controlExact(input,['resource','payload']);demand(textField(input.resource,160)&&/^record:[a-zA-Z0-9_.:/-]+$/.test(input.resource),'INVALID_RESOURCE');
+  demand(textField(input.payload,4000),'INVALID_PAYLOAD');
+  const canonical={resource:input.resource,payload:input.payload};
+  demand(stable(JSON.parse(stable(canonical)))===stable(input),'ADAPTER_SEMANTIC_LOSS');return canonical;
+}
+function selectedEvidence(state,request,key,now,visiting=new Set()){
+  if(visiting.has(key))return {reason:'EVIDENCE_DEPENDENCY_CYCLE'};
+  visiting=new Set(visiting);visiting.add(key);
+  const nodes=state.evidence.filter(e=>e.kind==='attestation'&&e.requestId===request.id&&e.key===key);
+  if(!nodes.length)return {reason:'MISSING_EVIDENCE'};
+  const resolution=state.evidence.filter(e=>e.kind==='resolution'&&e.requestId===request.id&&e.key===key&&authorizeControl(state,e.actor,'evidence.resolve',request.wants.resource,now,e.grantId)).at(-1);
+  let active=nodes;
+  if(resolution){const selected=nodes.find(e=>e.id===resolution.selectedId);const later=nodes.filter(e=>e.sequence>resolution.sequence);active=[selected,...later].filter(Boolean);}
+  if(new Set(active.map(e=>e.value)).size>1)return {reason:'CONTRADICTORY_EVIDENCE'};
+  const valid=active.filter(e=>e.expiresAt>now&&authorizeControl(state,e.actor,'evidence.attest',request.wants.resource,now,e.grantId)&&e.parents.every(id=>{
+    const parent=state.evidence.find(p=>p.id===id);if(!parent||parent.kind!=='attestation'||parent.key===key)return false;
+    const selected=selectedEvidence(state,request,parent.key,now,visiting);return !!selected.nodes?.some(p=>p.id===id);
+  }));
+  if(!valid.length)return {reason:'STALE_EVIDENCE'};
+  return {nodes:valid};
+}
+function reconcileControl(state,now) {
+  // One event-driven loop; all decision projections are derived from current state.
+  return state.requests.map(request=>{
+    if(request.execution.state==='committed')return {requestId:request.id,outcome:'ALLOW',reason:'INTERNAL_RECORD_COMMITTED',action:null};
+    if(!authorizeControl(state,request.who,'record.write',request.wants.resource,now,request.authority))return {requestId:request.id,outcome:'DENY',reason:'AUTHORITY_UNAVAILABLE',action:null};
+    if(request.route!==CONTROL_ADAPTER.id)return {requestId:request.id,outcome:'ESCALATE',reason:'UNSUPPORTED_ADAPTER',action:null};
+    for(const key of request.policy.requiredEvidence){const result=selectedEvidence(state,request,key,now);if(result.reason)return {requestId:request.id,outcome:'ESCALATE',reason:result.reason,action:null};}
+    return {requestId:request.id,outcome:'ALLOW',reason:'BOUNDS_AND_EVIDENCE_VERIFIED',action:'record.write'};
+  });
+}
+async function verifiedActions(state,revision,now,actor) {
+  const stateHash=await controlHash(state);const decisions=reconcileControl(state,now);
+  return Promise.all(decisions.map(async d=>{
+    const request=state.requests.find(r=>r.id===d.requestId);
+    const canAct=!!authorizeControl(state,actor,'record.write',request.wants.resource,now);
+    const next=d.action&&canAct?{kind:d.action,requestId:request.id,expectedRevision:revision,adapter:CONTROL_ADAPTER.id,actionId:await controlHash({revision,stateHash,requestId:request.id,actor,kind:d.action})}:null;
+    return {...d,nextAction:next};
+  }));
+}
+async function reduceControl(current,command,actor,revision,now) {
+  controlExact(command,['id','expectedRevision','type','data']);demand(textField(command.id,100)&&/^[a-zA-Z0-9_-]+$/.test(command.id),'INVALID_COMMAND_ID');
+  demand(command.expectedRevision===revision,'STALE_REVISION',409);demand(Number.isSafeInteger(now)&&now>0,'INVALID_TIME');
+  const state=structuredClone(current),data=command.data;let result={};let parentIds=[];
+  demand(data&&Object.getPrototypeOf(data)===Object.prototype,'INVALID_COMMAND');
+  if(command.type==='request'){
+    controlExact(data,['id','route','wants','requiredEvidence','grantId']);const wants=normalizeRecord(data.wants);
+    demand(textField(data.id,100)&&!state.requests.some(r=>r.id===data.id),'REQUEST_ID_CONFLICT');demand(textField(data.route,100),'INVALID_ROUTE');
+    demand(Array.isArray(data.requiredEvidence)&&data.requiredEvidence.length<=10&&data.requiredEvidence.every(k=>textField(k,80))&&new Set(data.requiredEvidence).size===data.requiredEvidence.length,'INVALID_EVIDENCE_REQUIREMENTS');
+    authorized(state,actor,'request.create',wants.resource,now,data.grantId);const grant=authorized(state,actor,'record.write',wants.resource,now,data.grantId);
+    state.requests.push({id:data.id,who:actor,wants,authority:grant.id,policy:{requiredEvidence:data.requiredEvidence},route:data.route,evidence:[],execution:{state:'pending'},settlement:{state:'not_applicable'},verifiedOutcome:null,createdAt:now});result={requestId:data.id};
+  }else if(command.type==='attest'){
+    controlExact(data,['requestId','key','value','expiresAt','parents']);const request=state.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);demand(request.execution.state==='pending','REQUEST_FINAL',409);
+    const grant=authorized(state,actor,'evidence.attest',request.wants.resource,now);demand(request.policy.requiredEvidence.includes(data.key)&&textField(data.value,2000),'INVALID_ATTESTATION');
+    demand(Number.isSafeInteger(data.expiresAt)&&data.expiresAt>now&&data.expiresAt<=Math.min(now+86400,grant.expiresAt),'INVALID_EVIDENCE_EXPIRY');
+    demand(Array.isArray(data.parents)&&data.parents.length<=10&&new Set(data.parents).size===data.parents.length&&data.parents.every(id=>state.evidence.some(e=>e.id===id&&e.requestId===request.id&&e.kind==='attestation'&&e.key!==data.key)),'INVALID_EVIDENCE_PARENTS');
+    const node={id:command.id,sequence:revision+1,kind:'attestation',actor,grantId:grant.id,requestId:request.id,key:data.key,value:data.value,expiresAt:data.expiresAt,parents:data.parents,at:now,provenance:{source:'authenticated-operator',externalVerification:false}};
+    node.hash=await controlHash(node);state.evidence.push(node);request.evidence.push(node.id);parentIds=[node.id];result={evidenceId:node.id};
+  }else if(command.type==='resolve'){
+    controlExact(data,['requestId','key','selectedId','reason']);const request=state.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);demand(request.execution.state==='pending','REQUEST_FINAL',409);
+    const grant=authorized(state,actor,'evidence.resolve',request.wants.resource,now);demand(textField(data.reason,1000),'RESOLUTION_REASON_REQUIRED');
+    const nodes=state.evidence.filter(e=>e.kind==='attestation'&&e.requestId===request.id&&e.key===data.key);demand(nodes.some(e=>e.id===data.selectedId),'EVIDENCE_NOT_FOUND');
+    const node={id:command.id,sequence:revision+1,kind:'resolution',actor,grantId:grant.id,requestId:request.id,key:data.key,selectedId:data.selectedId,reason:data.reason,parents:nodes.map(e=>e.id),at:now};node.hash=await controlHash(node);state.evidence.push(node);request.evidence.push(node.id);parentIds=[node.id];result={evidenceId:node.id};
+  }else if(command.type==='delegate'){
+    controlExact(data,['id','parent','subject','scopes','resourcePrefix','expiresAt']);const parent=state.grants.find(g=>g.id===data.parent);
+    demand(parent&&parent.subject===actor&&grantValid(state,parent,now)&&parent.scopes.includes('authority.delegate'),'AUTHORITY_DENIED',403);
+    demand(textField(data.id,100)&&!state.grants.some(g=>g.id===data.id),'GRANT_ID_CONFLICT');demand(textField(data.subject,254)&&/^email:[^\s@]+@[^\s@]+$/.test(data.subject),'INVALID_SUBJECT');
+    demand(Array.isArray(data.scopes)&&data.scopes.length>0&&new Set(data.scopes).size===data.scopes.length&&data.scopes.every(s=>parent.scopes.includes(s)),'AUTHORITY_BROADENING');
+    demand(textField(data.resourcePrefix,160)&&prefixWithin(data.resourcePrefix,parent.resourcePrefix),'AUTHORITY_BROADENING');
+    demand(Number.isSafeInteger(data.expiresAt)&&data.expiresAt>now&&data.expiresAt<=parent.expiresAt&&data.expiresAt<=now+2592000,'AUTHORITY_BROADENING');
+    const grant={...data,revoked:false};state.grants.push(grant);demand(grantValid(state,grant,now),'INVALID_GRANT_CHAIN');result={grantId:grant.id};
+  }else if(command.type==='revoke'){
+    controlExact(data,['grantId']);const grant=state.grants.find(g=>g.id===data.grantId);demand(grant&&grant.id!=='root','INVALID_GRANT');
+    const parent=state.grants.find(g=>g.id===grant.parent);demand(actor===state.root||(parent?.subject===actor&&grantValid(state,parent,now)),'AUTHORITY_DENIED',403);grant.revoked=true;result={grantId:grant.id};
+  }else if(command.type==='execute'){
+    controlExact(data,['requestId','actionId']);const request=state.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);authorized(state,actor,'record.write',request.wants.resource,now);
+    const projected=(await verifiedActions(state,revision,now,actor)).find(d=>d.requestId===request.id);demand(projected.nextAction&&projected.nextAction.actionId===data.actionId,'NEXT_ACTION_NOT_VERIFIED',409);
+    const normalized=normalizeRecord(request.wants);demand(!state.records.some(r=>r.requestId===request.id),'ALREADY_COMMITTED',409);
+    const node={id:command.id,sequence:revision+1,kind:'execution',requestId:request.id,actor,at:now,adapter:CONTROL_ADAPTER.id,adapterVersion:1,parents:[...request.evidence],inputHash:await controlHash(normalized),outcome:'INTERNAL_RECORD_COMMITTED'};
+    node.hash=await controlHash(node);state.evidence.push(node);request.evidence.push(node.id);state.records.push({...normalized,requestId:request.id,evidenceId:node.id,at:now});
+    request.execution={state:'committed',recordId:request.id};request.verifiedOutcome={scope:'internal.record.v1',evidenceId:node.id,externalExecution:false};parentIds=[node.id];result={requestId:request.id,recordId:request.id,evidenceId:node.id};
+  }else if(command.type==='reconcile'){
+    controlExact(data,[]);demand(state.grants.some(g=>g.subject===actor&&grantValid(state,g,now)),'AUTHORITY_DENIED',403);result={reconciled:true};
+  }else controlError('UNKNOWN_COMMAND');
+  demand(state.requests.length<=100&&state.grants.length<=100&&state.evidence.length<=400,'STATE_CAPACITY',409);
+  demand(new TextEncoder().encode(stable(state)).byteLength<=524288,'STATE_CAPACITY',409);
+  return {state,result,parents:parentIds,decisions:reconcileControl(state,now)};
+}
+
+const CONTROL_SCHEMA=[
+ 'CREATE TABLE numina_control_state (id INTEGER PRIMARY KEY NOT NULL, revision INTEGER NOT NULL, state_json TEXT NOT NULL, state_hash TEXT NOT NULL, head_hash TEXT NOT NULL, mutation_id TEXT NOT NULL)',
+ 'CREATE TABLE numina_control_events (id TEXT PRIMARY KEY NOT NULL, revision INTEGER NOT NULL, actor TEXT NOT NULL, command_hash TEXT NOT NULL, event_json TEXT NOT NULL, hash TEXT NOT NULL)',
+ 'CREATE UNIQUE INDEX numina_control_event_revision ON numina_control_events(revision)'
+];
+async function readControl(db){
+  if(!db)controlError('STORAGE_UNAVAILABLE',503);
+  const row=await db.prepare('SELECT * FROM numina_control_state WHERE id=1').first();if(!row)controlError('CONTROL_NOT_INITIALIZED',503);
+  let state;try{state=JSON.parse(row.state_json);}catch{controlError('STATE_CORRUPT',503);}
+  if(state.schema!==1||!Array.isArray(state.grants)||!Array.isArray(state.requests)||!Array.isArray(state.evidence)||!Array.isArray(state.records)||await controlHash(state)!==row.state_hash)controlError('STATE_CORRUPT',503);
+  const events=await db.prepare('SELECT id,revision,hash,event_json FROM numina_control_events ORDER BY revision').all();let previous=null,index=0,lastEvent;
+  for(const entry of events.results){let event;try{event=JSON.parse(entry.event_json);}catch{controlError('JOURNAL_CORRUPT',503);}
+    if(entry.revision!==index++||event.revision!==entry.revision||event.id!==entry.id||event.previous!==previous||await controlHash(event)!==entry.hash)controlError('JOURNAL_CORRUPT',503);previous=entry.hash;lastEvent=event;
+  }
+  if(index!==row.revision+1||previous!==row.head_hash||lastEvent?.id!==row.mutation_id||lastEvent?.stateHash!==row.state_hash)controlError('EVIDENCE_HEAD_CORRUPT',503);
+  for(const node of state.evidence){const {hash,...value}=node;if(await controlHash(value)!==hash)controlError('EVIDENCE_CORRUPT',503);}
+  return {...row,state};
+}
+async function bootstrapControl(db,owner,now){
+  const count=await db.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();if(count.n!==0)controlError('ALREADY_INITIALIZED',409);
+  const state=initialControlState(owner,now),stateHash=await controlHash(state),event={id:'genesis',revision:0,actor:owner,at:now,type:'bootstrap',previous:null,stateHash};const hash=await controlHash(event);
+  try{await db.batch([
+    db.prepare('INSERT INTO numina_control_state(id,revision,state_json,state_hash,head_hash,mutation_id) VALUES(1,0,?,?,?,?)').bind(stable(state),stateHash,hash,'genesis'),
+    db.prepare('INSERT INTO numina_control_events(id,revision,actor,command_hash,event_json,hash) VALUES(?,0,?,?,?,?)').bind('genesis',owner,await controlHash({type:'bootstrap',owner}),stable(event),hash)
+  ]);}catch{controlError('BOOTSTRAP_CONFLICT',409);}
+  return {initialized:true,revision:0,stateHash};
+}
+async function controlSnapshot(db,actor,now){const row=await readControl(db);if(!row.state.grants.some(g=>g.subject===actor&&grantValid(row.state,g,now)))controlError('AUTHORITY_DENIED',403);
+  const allowed=new Set(row.state.requests.filter(r=>actor===row.state.root||authorizeControl(row.state,actor,'record.write',r.wants.resource,now)).map(r=>r.id));
+  const visible=structuredClone(row.state);if(actor!==visible.root){visible.requests=visible.requests.filter(r=>allowed.has(r.id));visible.evidence=visible.evidence.filter(e=>allowed.has(e.requestId));visible.records=visible.records.filter(r=>allowed.has(r.requestId));const ids=new Set(visible.grants.filter(g=>g.subject===actor).map(g=>g.id));for(const id of [...ids]){let g=visible.grants.find(g=>g.id===id);while(g?.parent){ids.add(g.parent);g=visible.grants.find(p=>p.id===g.parent);}}visible.grants=visible.grants.filter(g=>ids.has(g.id));}
+  return {revision:row.revision,stateHash:row.state_hash,evidenceHead:row.head_hash,projection:actor===row.state.root?'complete':'authority-scoped',state:visible,decisions:(await verifiedActions(row.state,row.revision,now,actor)).filter(d=>allowed.has(d.requestId))};
+}
+function controlResult(prior,replayed){const event=typeof prior.event_json==='string'?JSON.parse(prior.event_json):prior.event;return {replayed,event:{id:event.id,revision:event.revision,actor:event.actor,type:event.type,result:event.result},eventHash:prior.hash};}
+async function commitControl(db,command,actor,now){
+  if(!command||typeof command.id!=='string'||!Number.isSafeInteger(command.expectedRevision))controlError('INVALID_COMMAND',400);
+  const commandHash=await controlHash(command),prior=await db.prepare('SELECT actor,command_hash,event_json,hash FROM numina_control_events WHERE id=?').bind(command.id).first();
+  if(prior){if(prior.actor!==actor||prior.command_hash!==commandHash)controlError('IDEMPOTENCY_CONFLICT',409);return controlResult(prior,true);}
+  const row=await readControl(db);if(row.revision>=2048)controlError('EVENT_CAPACITY',409);
+  const reduced=await reduceControl(row.state,command,actor,row.revision,now),stateHash=await controlHash(reduced.state);
+  const event={id:command.id,revision:row.revision+1,actor,at:now,type:command.type,command,commandHash,previous:row.head_hash,stateHash,parents:reduced.parents,result:reduced.result,decisionsHash:await controlHash(reduced.decisions)};const hash=await controlHash(event);
+  // Conservative transaction-time fence: no previously active grant/evidence may expire while this command commits.
+  const validUntil=Math.min(now+5,...row.state.grants.filter(g=>g.expiresAt>now).map(g=>g.expiresAt),...row.state.evidence.filter(e=>e.expiresAt>now).map(e=>e.expiresAt));
+  let failure;try{await db.batch([
+    db.prepare('UPDATE numina_control_state SET revision=?,state_json=?,state_hash=?,head_hash=?,mutation_id=? WHERE id=1 AND revision=? AND head_hash=? AND ? > unixepoch()').bind(event.revision,stable(reduced.state),stateHash,hash,command.id,row.revision,row.head_hash,validUntil),
+    db.prepare('INSERT INTO numina_control_events(id,revision,actor,command_hash,event_json,hash) SELECT ?,?,?,?,?,? FROM numina_control_state WHERE id=1 AND mutation_id=? AND head_hash=? AND NOT EXISTS(SELECT 1 FROM numina_control_events WHERE id=?)').bind(command.id,event.revision,actor,commandHash,stable(event),hash,command.id,hash,command.id)
+  ]);}catch(e){failure=e;}
+  const persisted=await db.prepare('SELECT actor,command_hash,event_json,hash FROM numina_control_events WHERE id=?').bind(command.id).first();
+  if(persisted){if(persisted.actor!==actor||persisted.command_hash!==commandHash)controlError('IDEMPOTENCY_CONFLICT',409);return controlResult(persisted,persisted.hash!==hash);}
+  if(failure)throw failure;controlError('STALE_REVISION',409);
+}
+
+function controlResponse(body,status=200){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Numina-Control-Version':CONTROL_VERSION}});}
+async function controlActor(req,env){
+  if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
+  const auth=req.headers.get('authorization');
+  if(auth){if(!auth.startsWith('Bearer ')||await controlHash(auth.slice(7))!==env.NUMINA_CONTROL_API_KEY_SHA256)controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}
+  // These two identity headers are set and overwritten by the Sites dispatcher.
+  const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
+  if(!id||!email)controlError('UNAUTHENTICATED',401);
+  return 'email:'+email.trim().toLowerCase();
+}
+async function controlBody(req){
+  if(req.headers.get('content-type')?.split(';')[0]!=='application/json'||req.headers.has('content-encoding'))controlError('JSON_REQUIRED',415);
+  const reader=req.body?.getReader();if(!reader)controlError('EMPTY_BODY',400);const chunks=[];let bytes=0;const deadline=Date.now()+5000;
+  for(;;){let timer;let chunk;try{chunk=await Promise.race([reader.read(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Object.assign(new Error('BODY_TIMEOUT'),{code:'BODY_TIMEOUT',status:408})),Math.max(1,deadline-Date.now()));})]);}finally{clearTimeout(timer);}if(chunk.done)break;bytes+=chunk.value.byteLength;if(bytes>16384){await reader.cancel();controlError('BODY_TOO_LARGE',413);}chunks.push(chunk.value);}
+  const combined=new Uint8Array(bytes);let offset=0;for(const chunk of chunks){combined.set(chunk,offset);offset+=chunk.byteLength;}
+  try{const raw=new TextDecoder('utf-8',{fatal:true}).decode(combined),value=JSON.parse(raw);if(stable(value)!==raw)controlError('CANONICAL_JSON_REQUIRED',400);return value;}catch{controlError('CANONICAL_JSON_REQUIRED',400);}
+}
+async function controlHttp(req,env){
+  const path=new URL(req.url).pathname,now=Math.floor(Date.now()/1000);
+  try{
+    const bucket=await controlHash('control:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
+    if(!await rateLimit(env.DB,bucket,now))return controlResponse({error:'RATE_LIMITED'},429);
+    if(req.method==='GET'&&path==='/api/control/v1/health'){
+      const row=await readControl(env.DB);const count=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();
+      const configured=!!env.NUMINA_CONTROL_OWNER&&!!env.NUMINA_CONTROL_API_KEY_SHA256&&env.NUMINA_CONTROL_OWNER===row.state.root;
+      const healthy=configured&&count.n===row.revision+1;
+      return controlResponse({status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',sharedState:'D1',authority:'root-traceable-attenuated-grants',interoperability:[CONTROL_ADAPTER],evidence:'versioned-causal-DAG-and-hash-linked-journal',reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,stateIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,stateHash:row.state_hash,evidenceHead:row.head_hash,externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
+    }
+    if(req.method==='GET'&&path==='/api/control/v1/manifest')return controlResponse({version:CONTROL_VERSION,architecture:'singular',lifecycle:['REQUEST','AUTHORITY','POLICY','ROUTE','EXECUTION','SETTLEMENT','EVIDENCE','RECONCILIATION','VERIFIED_NEXT_STATE'],adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',publicDemoCredentials:'not recognized',limits:{requests:100,grants:100,evidenceNodes:400,journalEvents:2048,stateBytes:524288},externalExecution:false,constitution:'Core v1.8 source preserved; full C1-C14 hosted certification not claimed'});
+    if(!['GET','POST'].includes(req.method))return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
+    const actor=await controlActor(req,env);
+    if(req.method==='POST'&&!req.headers.get('authorization')){
+      const origin=req.headers.get('origin');if(origin!==new URL(req.url).origin)controlError('ORIGIN_REQUIRED',403);
+    }
+    if(path==='/api/control/v1/bootstrap'&&req.method==='POST'){
+      if(actor!==env.NUMINA_CONTROL_OWNER)controlError('AUTHORITY_DENIED',403);
+      const body=await controlBody(req);if(stable(body)!==stable({initialize:true}))controlError('INVALID_BOOTSTRAP',400);
+      return controlResponse(await bootstrapControl(env.DB,actor,now),201);
+    }
+    const current=await readControl(env.DB);if(current.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    if(path==='/api/control/v1/state'&&req.method==='GET')return controlResponse(await controlSnapshot(env.DB,actor,now));
+    if(path==='/api/control/v1/next-action'&&req.method==='GET'){const snapshot=await controlSnapshot(env.DB,actor,now);return controlResponse({revision:snapshot.revision,decisions:snapshot.decisions});}
+    if(path==='/api/control/v1/commands'&&req.method==='POST'){const body=await controlBody(req);return controlResponse(await commitControl(env.DB,body,actor,Math.floor(Date.now()/1000)));}
+    if(path==='/api/control/v1/journal'&&req.method==='GET'){
+      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      const after=Number(new URL(req.url).searchParams.get('after')??-1);if(!Number.isSafeInteger(after)||after< -1)controlError('INVALID_CURSOR',400);
+      const rows=await env.DB.prepare('SELECT event_json,hash FROM numina_control_events WHERE revision>? ORDER BY revision LIMIT 100').bind(after).all();return controlResponse({events:rows.results.map(r=>({event:JSON.parse(r.event_json),hash:r.hash})),next:rows.results.length?JSON.parse(rows.results.at(-1).event_json).revision:null});
+    }
+    return controlResponse({error:'NOT_FOUND'},404);
+  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path,code,status}));return controlResponse({status:'unavailable',error:code},status);}
+}
+
 const LIMIT=8192;
-const security={'X-Numina-Version':VERSION,'X-Numina-Profile':PROFILE.id,'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Strict-Transport-Security':'max-age=31536000','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"};
+const security={"X-Numina-Version":"1.0.0","X-Numina-Profile":"numina-demo-rp-0.1","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 function response(body,status=200,extra={}) {return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 async function receiptFor(env,result,hash,requestId,kind,now) {
   const receipt={id:crypto.randomUUID(),kind,requestId,credentialHash:hash,issuedAt:now,version:VERSION,profile:PROFILE.id,scope:'test-only',outcome:result.outcome,reason:result.reason};
@@ -140,9 +365,16 @@ async function readEnvelope(req) {
 export default {
  async fetch(req,env) {
   const requestId=crypto.randomUUID(),start=Date.now(),now=Math.floor(start/1000),url=new URL(req.url),path=url.pathname;
+  // Only known public hosts redirect; the destination never trusts forwarded headers.
+  if(url.hostname==='numinalabs.xyz'||(url.hostname==='www.numinalabs.xyz'&&url.protocol==='http:')) {
+   const target=new URL('https://www.numinalabs.xyz');target.pathname=url.pathname;target.search=url.search;
+   return new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{...security,Location:target.href}});
+  }
   let status=200,outcome,reason;
   const finish=r=>{status=r.status;r.headers.set('X-Request-Id',requestId);return r;};
   try {
+   if(path.startsWith('/api/control/')){const r=await controlHttp(req,env);for(const [k,v]of Object.entries(security))r.headers.set(k,v);return finish(r);}
+   if(env.NUMINA_CONTROL_OWNER&&req.method==='POST'&&['/api/v0.1/commit','/api/v0.1/verify'].includes(path))return finish(response({error:'DEMO_MUTATIONS_RETIRED',next:'/api/control/v1/next-action'},410));
    if(!path.startsWith('/api/')) { const r=await env.ASSETS.fetch(req);const h=new Headers(r.headers);for(const [k,v]of Object.entries(security))h.set(k,v); return new Response(r.body,{status:r.status,headers:h}); }
    if(!['GET','POST'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{'Allow':'GET, POST'}));
    if(path==='/api/v0.1/health'&&req.method==='GET')return finish(response({status:'up',version:VERSION,scope:'test-only',fundsExecution:false}));
@@ -186,6 +418,6 @@ export default {
    console.log(JSON.stringify({event:'authority_decision',requestId,version:VERSION,outcome,reason,credentialHash:hash,receiptId:receipt.receipt.id,durable}));
    return finish(response({...result,committed:path.endsWith('/commit')&&result.outcome==='VALID_FOR_COMMIT',receipt,persisted:durable,receiptUrl:durable?'/api/v0.1/receipts/'+receipt.receipt.id:null},result.outcome==='VALID_FOR_COMMIT'?200:result.outcome==='INVALID'?422:409));
   } catch(e) { reason=e.reason||'DEPENDENCY_UNAVAILABLE';outcome=e.status?'INVALID':'REVALIDATION_REQUIRED';return finish(response({...decision(outcome,reason),requestId},e.status||503)); }
-  finally {if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,version:VERSION,route:path.replace(/\/receipts\/.*/, '/receipts/:id').slice(0,120),method:req.method,status,outcome,reason,durationMs:Date.now()-start}));}
+  finally {if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,version:path.startsWith('/api/control/')?'1.0.0':VERSION,route:path.replace(/\/receipts\/.*/, '/receipts/:id').slice(0,120),method:req.method,status,outcome,reason,durationMs:Date.now()-start}));}
  }
 };
