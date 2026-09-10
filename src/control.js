@@ -36,7 +36,8 @@ export function normalizeRecord(input) {
   const canonical={resource:input.resource,payload:input.payload};
   demand(stable(JSON.parse(stable(canonical)))===stable(input),'ADAPTER_SEMANTIC_LOSS');return canonical;
 }
-function selectedEvidence(state,request,key,now,visiting=new Set()){
+function selectedEvidence(state,request,key,now,visiting=new Set(),memo=new Map()){
+  if(memo.has(key))return memo.get(key);
   if(visiting.has(key))return {reason:'EVIDENCE_DEPENDENCY_CYCLE'};
   visiting=new Set(visiting);visiting.add(key);
   const nodes=state.evidence.filter(e=>e.kind==='attestation'&&e.requestId===request.id&&e.key===key);
@@ -47,10 +48,9 @@ function selectedEvidence(state,request,key,now,visiting=new Set()){
   if(new Set(active.map(e=>e.value)).size>1)return {reason:'CONTRADICTORY_EVIDENCE'};
   const valid=active.filter(e=>e.expiresAt>now&&authorizeControl(state,e.actor,'evidence.attest',request.wants.resource,now,e.grantId)&&e.parents.every(id=>{
     const parent=state.evidence.find(p=>p.id===id);if(!parent||parent.kind!=='attestation'||parent.key===key)return false;
-    const selected=selectedEvidence(state,request,parent.key,now,visiting);return !!selected.nodes?.some(p=>p.id===id);
+    const selected=selectedEvidence(state,request,parent.key,now,visiting,memo);return !!selected.nodes?.some(p=>p.id===id);
   }));
-  if(!valid.length)return {reason:'STALE_EVIDENCE'};
-  return {nodes:valid};
+  const result=valid.length?{nodes:valid}:{reason:'STALE_EVIDENCE'};memo.set(key,result);return result;
 }
 export function reconcileControl(state,now) {
   // One event-driven loop; all decision projections are derived from current state.

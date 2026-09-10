@@ -24,7 +24,7 @@ export async function controlHttp(req,env){
     const bucket=await controlHash('control:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
     if(!await rateLimit(env.DB,bucket,now))return controlResponse({error:'RATE_LIMITED'},429);
     if(req.method==='GET'&&path==='/api/control/v1/health'){
-      const row=await readControl(env.DB);const count=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();
+      const row=await readControl(env.DB);const count={n:row.eventCount};
       const configured=!!env.NUMINA_CONTROL_OWNER&&!!env.NUMINA_CONTROL_API_KEY_SHA256&&env.NUMINA_CONTROL_OWNER===row.state.root;
       const healthy=configured&&count.n===row.revision+1;
       return controlResponse({status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',sharedState:'D1',authority:'root-traceable-attenuated-grants',interoperability:[CONTROL_ADAPTER],evidence:'versioned-causal-DAG-and-hash-linked-journal',reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,stateIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,stateHash:row.state_hash,evidenceHead:row.head_hash,externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);

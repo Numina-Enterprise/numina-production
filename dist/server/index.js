@@ -154,7 +154,8 @@ function normalizeRecord(input) {
   const canonical={resource:input.resource,payload:input.payload};
   demand(stable(JSON.parse(stable(canonical)))===stable(input),'ADAPTER_SEMANTIC_LOSS');return canonical;
 }
-function selectedEvidence(state,request,key,now,visiting=new Set()){
+function selectedEvidence(state,request,key,now,visiting=new Set(),memo=new Map()){
+  if(memo.has(key))return memo.get(key);
   if(visiting.has(key))return {reason:'EVIDENCE_DEPENDENCY_CYCLE'};
   visiting=new Set(visiting);visiting.add(key);
   const nodes=state.evidence.filter(e=>e.kind==='attestation'&&e.requestId===request.id&&e.key===key);
@@ -165,10 +166,9 @@ function selectedEvidence(state,request,key,now,visiting=new Set()){
   if(new Set(active.map(e=>e.value)).size>1)return {reason:'CONTRADICTORY_EVIDENCE'};
   const valid=active.filter(e=>e.expiresAt>now&&authorizeControl(state,e.actor,'evidence.attest',request.wants.resource,now,e.grantId)&&e.parents.every(id=>{
     const parent=state.evidence.find(p=>p.id===id);if(!parent||parent.kind!=='attestation'||parent.key===key)return false;
-    const selected=selectedEvidence(state,request,parent.key,now,visiting);return !!selected.nodes?.some(p=>p.id===id);
+    const selected=selectedEvidence(state,request,parent.key,now,visiting,memo);return !!selected.nodes?.some(p=>p.id===id);
   }));
-  if(!valid.length)return {reason:'STALE_EVIDENCE'};
-  return {nodes:valid};
+  const result=valid.length?{nodes:valid}:{reason:'STALE_EVIDENCE'};memo.set(key,result);return result;
 }
 function reconcileControl(state,now) {
   // One event-driven loop; all decision projections are derived from current state.
@@ -245,16 +245,17 @@ const CONTROL_SCHEMA=[
 ];
 async function readControl(db){
   if(!db)controlError('STORAGE_UNAVAILABLE',503);
-  const row=await db.prepare('SELECT * FROM numina_control_state WHERE id=1').first();if(!row)controlError('CONTROL_NOT_INITIALIZED',503);
+  const [stateRows,events]=await db.batch([db.prepare('SELECT * FROM numina_control_state WHERE id=1'),db.prepare('SELECT id,revision,hash,event_json FROM numina_control_events ORDER BY revision')]);
+  const row=stateRows.results[0];if(!row)controlError('CONTROL_NOT_INITIALIZED',503);
   let state;try{state=JSON.parse(row.state_json);}catch{controlError('STATE_CORRUPT',503);}
   if(state.schema!==1||!Array.isArray(state.grants)||!Array.isArray(state.requests)||!Array.isArray(state.evidence)||!Array.isArray(state.records)||await controlHash(state)!==row.state_hash)controlError('STATE_CORRUPT',503);
-  const events=await db.prepare('SELECT id,revision,hash,event_json FROM numina_control_events ORDER BY revision').all();let previous=null,index=0,lastEvent;
+  let previous=null,index=0,lastEvent;
   for(const entry of events.results){let event;try{event=JSON.parse(entry.event_json);}catch{controlError('JOURNAL_CORRUPT',503);}
     if(entry.revision!==index++||event.revision!==entry.revision||event.id!==entry.id||event.previous!==previous||await controlHash(event)!==entry.hash)controlError('JOURNAL_CORRUPT',503);previous=entry.hash;lastEvent=event;
   }
   if(index!==row.revision+1||previous!==row.head_hash||lastEvent?.id!==row.mutation_id||lastEvent?.stateHash!==row.state_hash)controlError('EVIDENCE_HEAD_CORRUPT',503);
   for(const node of state.evidence){const {hash,...value}=node;if(await controlHash(value)!==hash)controlError('EVIDENCE_CORRUPT',503);}
-  return {...row,state};
+  return {...row,state,eventCount:index};
 }
 async function bootstrapControl(db,owner,now){
   const count=await db.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();if(count.n!==0)controlError('ALREADY_INITIALIZED',409);
@@ -312,7 +313,7 @@ async function controlHttp(req,env){
     const bucket=await controlHash('control:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
     if(!await rateLimit(env.DB,bucket,now))return controlResponse({error:'RATE_LIMITED'},429);
     if(req.method==='GET'&&path==='/api/control/v1/health'){
-      const row=await readControl(env.DB);const count=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();
+      const row=await readControl(env.DB);const count={n:row.eventCount};
       const configured=!!env.NUMINA_CONTROL_OWNER&&!!env.NUMINA_CONTROL_API_KEY_SHA256&&env.NUMINA_CONTROL_OWNER===row.state.root;
       const healthy=configured&&count.n===row.revision+1;
       return controlResponse({status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',sharedState:'D1',authority:'root-traceable-attenuated-grants',interoperability:[CONTROL_ADAPTER],evidence:'versioned-causal-DAG-and-hash-linked-journal',reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,stateIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,stateHash:row.state_hash,evidenceHead:row.head_hash,externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);

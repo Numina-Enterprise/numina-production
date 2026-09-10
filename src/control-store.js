@@ -6,16 +6,17 @@ export const CONTROL_SCHEMA=[
 ];
 export async function readControl(db){
   if(!db)controlError('STORAGE_UNAVAILABLE',503);
-  const row=await db.prepare('SELECT * FROM numina_control_state WHERE id=1').first();if(!row)controlError('CONTROL_NOT_INITIALIZED',503);
+  const [stateRows,events]=await db.batch([db.prepare('SELECT * FROM numina_control_state WHERE id=1'),db.prepare('SELECT id,revision,hash,event_json FROM numina_control_events ORDER BY revision')]);
+  const row=stateRows.results[0];if(!row)controlError('CONTROL_NOT_INITIALIZED',503);
   let state;try{state=JSON.parse(row.state_json);}catch{controlError('STATE_CORRUPT',503);}
   if(state.schema!==1||!Array.isArray(state.grants)||!Array.isArray(state.requests)||!Array.isArray(state.evidence)||!Array.isArray(state.records)||await controlHash(state)!==row.state_hash)controlError('STATE_CORRUPT',503);
-  const events=await db.prepare('SELECT id,revision,hash,event_json FROM numina_control_events ORDER BY revision').all();let previous=null,index=0,lastEvent;
+  let previous=null,index=0,lastEvent;
   for(const entry of events.results){let event;try{event=JSON.parse(entry.event_json);}catch{controlError('JOURNAL_CORRUPT',503);}
     if(entry.revision!==index++||event.revision!==entry.revision||event.id!==entry.id||event.previous!==previous||await controlHash(event)!==entry.hash)controlError('JOURNAL_CORRUPT',503);previous=entry.hash;lastEvent=event;
   }
   if(index!==row.revision+1||previous!==row.head_hash||lastEvent?.id!==row.mutation_id||lastEvent?.stateHash!==row.state_hash)controlError('EVIDENCE_HEAD_CORRUPT',503);
   for(const node of state.evidence){const {hash,...value}=node;if(await controlHash(value)!==hash)controlError('EVIDENCE_CORRUPT',503);}
-  return {...row,state};
+  return {...row,state,eventCount:index};
 }
 export async function bootstrapControl(db,owner,now){
   const count=await db.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();if(count.n!==0)controlError('ALREADY_INITIALIZED',409);
