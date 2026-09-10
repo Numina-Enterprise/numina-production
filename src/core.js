@@ -1,5 +1,5 @@
-export const VERSION = '0.1.0';
-export const PROFILE = Object.freeze({id:'numina-demo-rp-0.1',version:'0.1',environment:'test',issuer:'numina-demo',audience:'numina-demo-gateway',action:'simulate.commit',maxLifetimeSeconds:600,keyPurpose:'eac-test-authorization',canonicalization:'numina-ascii-json-v0.1',invariants:'C1-C14 source mapping pending'});
+export const VERSION = '0.2.0';
+export const PROFILE = Object.freeze({id:'numina-demo-rp-0.1',version:'0.1',environment:'test',issuer:'numina-demo',audience:'numina-demo-gateway',action:'simulate.commit',maxLifetimeSeconds:600,keyPurpose:'eac-test-authorization',canonicalization:'numina-ascii-json-v0.1',invariants:'Frozen v0.2 source preserved; full hosted enforcement not claimed'});
 export const encoder = new TextEncoder();
 export function canonical(value) {
   if (value === null || typeof value === 'boolean') return JSON.stringify(value);

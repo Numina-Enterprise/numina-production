@@ -1,8 +1,8 @@
 # Conformance v0.1
 
-Release 0.1.0 · Implementation test specification · 2026-09-10
+Web release 0.2.0 · Implementation test specification · 2026-09-10
 
-This suite tests the implemented demo protocol. It is not the original frozen 20 scenarios, which were not available, and does not certify C1–C14 or financial safety.
+This suite tests the implemented demo protocol. It is separate from the original frozen 20 scenarios in the supplied Core v1.8 archive, and does not certify C1–C14 or financial safety.
 
 ## Run independently
 
@@ -26,4 +26,8 @@ Run `node scripts/fixtures.mjs`, `npm run build`, and `npm test` with Node 24+. 
 
 ## Required remaining assurance
 
-Frozen C1–C14 mapping, original scenario parity, independent security review, sustained load/abuse testing, disaster recovery rehearsal, remote alert delivery and comprehensive external bypass detection are not established by this suite. Public deployment status and actual live checks are reported separately.
+Full hosted C1–C14 enforcement, parity beyond the exposed adapter functions, independent security review, sustained load/abuse testing, disaster recovery rehearsal, remote alert delivery and comprehensive external bypass detection are not established by this suite. Public deployment status and actual live checks are reported separately.
+
+## Core v1.8 source audit
+
+All 309 supplied test cases passed locally using unittest plus zero-argument assertion functions and a narrowly checked pytest.raises adapter. Pytest itself was unavailable and its installation was blocked by network policy. No source test was rewritten. All 104 present manifest entries matched; two listed Python bytecode cache files were absent. The adapter also verifies a Python-signed 10^18-quantity EAC and rejects a one-unit signature mutation. Margin arithmetic is checked against the original v1.8 examples. Neither this audit nor source hashes establish independent certification.

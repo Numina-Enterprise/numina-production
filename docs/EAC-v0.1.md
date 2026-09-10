@@ -1,10 +1,20 @@
 # Economic Authorization Credential v0.1
 
-Release 0.1.0 · 2026-09-10 · Numina Labs · Implementation draft
+Web release 0.2.0 · 2026-09-10 · Numina Labs · Implementation draft
 
-This document describes the public test implementation derived from the supplied Numina architecture: an EAC, deterministic verifier, Recognition Profile, atomic commit gateway, replay-safe event state, external violation receipt, and Authority Coverage. It is not a replacement for the frozen architecture. The exact C1–C14 text and original 20 scenarios were not available. No constitutional conformance or standards recognition is asserted.
+This document describes the public test implementation derived from the supplied Numina architecture: an EAC, deterministic verifier, Recognition Profile, atomic commit gateway, replay-safe event state, external violation receipt, and Authority Coverage. It is not a replacement for the frozen architecture. The supplied Core v1.8 archive now provides the frozen C1–C14 names and original 20 scenarios. They are preserved in Frozen-Constitution-v0.2.md and the vendored reference. Full hosted constitutional enforcement and external standards recognition are not asserted.
 
-## Scope
+## Core v1.8 reference EAC adapter
+
+The current supplied Numina core uses a richer EAC than the separately versioned /api/v0.1 transport demo described below. POST /api/core/v1.8/eac/verify accepts exactly credentialJson (the original canonical JSON string), signatureHex (the core's 128 lowercase hex Ed25519 signature), and kid. It verifies the original Python-signed bytes without coercing large integer quantities into floating-point numbers.
+
+The reference EAC fields are authorization_id, operation_id, principal_id, agent_id, mandate_id, asset, side, rail, max_quantity_wei, max_price_usd_minor_per_eth, max_notional_usd_minor, nonce, dependency_root, pre_state_digest, constitution_digest, issuer_id, issued_sequence, and valid_until_sequence. Integers remain exact. Signatures cover the credential alone, matching numina/eac.py and numina/canonical.py in the supplied source. The kid selects the pinned EAC test key, which is purpose-restricted in server configuration. No caller-supplied key is accepted.
+
+The hosted test Recognition Profile accepts numina-demo, SIM_A, and the SHA-256 of the preserved v0.2 constitutional specification. Its synthetic sequence is 100, status age is at most 32, and dependency/state digests must match /api/core/v1.8/context. Validity through sequence 132 is inclusive, matching the reference. The profile further narrows execution bounds to synthetic BUY/ETH authority <= 2,000,000 minor units. Future issuance, changed dependency/state, invalid bounds and unsupported shapes fail closed. This endpoint never commits and reports kernelDecision NOT_EVALUATED; the reference kernel's ALLOW/DENY/ESCALATE remains separate from EAC outcomes.
+
+The full core permits wider Python/Unicode/integer inputs; this public profile restricts field strings to ASCII tokens, nonnegative integers below 10^38, and fixed synthetic context. Unknown or duplicate fields and noncanonical bytes are rejected. It is a narrowed interoperability adapter, not a replacement core specification. See core-v1.8-eac.json for a credential signed by the unchanged Python implementation.
+
+## Scope of the v0.1 transport demo
 
 Only simulated ledger events are supported. The public test signing key is intentionally downloadable. It proves protocol behavior, not identity or economic authority. There are no financial execution adapters, funds, custody, wallet, brokerage, or employer-system integrations.
 

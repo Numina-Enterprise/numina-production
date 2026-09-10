@@ -4,7 +4,7 @@ export const SCHEMA = [
  'CREATE TABLE IF NOT EXISTS numina_limits_v1 (bucket TEXT PRIMARY KEY, count INTEGER NOT NULL, expires_at INTEGER NOT NULL)',
  'CREATE INDEX IF NOT EXISTS numina_limits_expiry_v1 ON numina_limits_v1(expires_at)'
 ];
-export async function initialize(db) { if(!db)throw new Error('STORAGE_UNAVAILABLE'); await db.batch(SCHEMA.map(s=>db.prepare(s))); }
+export async function initialize(db) { if(!db)throw new Error('STORAGE_UNAVAILABLE'); await db.prepare('SELECT 1 FROM numina_events_v1 LIMIT 1').first(); }
 export async function rateLimit(db,ip,now) {
   const window=Math.floor(now/60), expiry=(window+1)*60;
   const sql='INSERT INTO numina_limits_v1(bucket,count,expires_at) VALUES (?,1,?) ON CONFLICT(bucket) DO UPDATE SET count=count+1 RETURNING count';
@@ -21,5 +21,5 @@ export async function commitEvent(db,c,hash,receipt,now) {
 export async function storeViolation(db,receipt,now) { const r=await db.prepare('INSERT INTO numina_violations_v1(receipt_id,receipt_json,created_at) SELECT ?,?,? WHERE (SELECT COUNT(*) FROM numina_violations_v1)<10000 RETURNING receipt_id').bind(receipt.receipt.id,JSON.stringify(receipt),now).all(); return r.results.length===1; }
 export async function coverage(db) {
   const count=await db.prepare('SELECT COUNT(*) AS total, COALESCE(SUM(CASE WHEN receipt_json IS NULL OR json_valid(receipt_json)=0 THEN 1 ELSE 0 END),0) AS missing FROM numina_events_v1').first();
-  return {scope:'demo ledger only',registeredEndpoints:['POST /api/v0.1/commit'],events:count.total,eventsWithoutReceipt:count.missing,bypassDetected:count.missing>0,assurance:'Structural receipt presence only; database-admin writes and systems outside this ledger are not covered.',externalExecution:'disabled',constitutionalConformance:'pending frozen C1-C14 source'};
+  return {scope:'demo ledger only',registeredEndpoints:['POST /api/v0.1/commit'],events:count.total,eventsWithoutReceipt:count.missing,bypassDetected:count.missing>0,assurance:'Structural receipt presence only; database-admin writes and systems outside this ledger are not covered.',externalExecution:'disabled',constitutionalConformance:'Frozen source preserved; full hosted enforcement not established'};
 }

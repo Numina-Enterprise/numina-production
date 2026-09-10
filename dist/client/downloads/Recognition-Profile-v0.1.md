@@ -1,6 +1,6 @@
 # Recognition Profile v0.1
 
-Release 0.1.0 · Implementation draft · 2026-09-10
+Web release 0.2.0 · Implementation draft · 2026-09-10
 
 Profile ID: `numina-demo-rp-0.1`. This is local recognition policy for a public test service, not institutional or standards-body recognition.
 
@@ -32,6 +32,6 @@ Authority Coverage is scoped to this simulated ledger. It enumerates the registe
 
 ## Frozen constitutional source register
 
-C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14: all reserved, exact source text not supplied, mapping UNVERIFIED. None is renumbered, reworded, inferred, or declared satisfied. Import the authoritative frozen text and original scenarios verbatim, record their provenance/hash, then map implementation evidence and close gaps before claiming constitutional conformance.
+The supplied Core v1.8 package contains the C1–C14 names in specs/AUTHORITY-PHYSICS-v0.2.md and the original twenty scenarios in tests/test_frozen.py. They are preserved verbatim in source. The source digest and names appear in core-v1.8-manifest.json. The web adapter does not implement or certify the whole constitution; its bounded credential and observation functions are listed separately.
 
 Changes to trust, lifetime, audience, or semantics require a new versioned profile. An EAC naming another profile produces REVALIDATION_REQUIRED after signature and scope checks. No external standards recognition is claimed.

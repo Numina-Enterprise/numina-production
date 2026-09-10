@@ -1,6 +1,7 @@
 import {VERSION,PROFILE,canonical,encoder,b64,digest,verifyCredential,decision} from './core.js';
 import {initialize,rateLimit,replay,commitEvent,storeViolation,coverage} from './store.js';
 import {DEMO_KEY,CONFORMANCE} from './generated.js';
+import {CORE_MANIFEST,CORE_CONTEXT,verifyCoreEac,assessStability} from './core-v18.js';
 const LIMIT=8192;
 const security={'X-Numina-Version':VERSION,'X-Numina-Profile':PROFILE.id,'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Strict-Transport-Security':'max-age=31536000','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"};
 function response(body,status=200,extra={}) {return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
@@ -11,6 +12,7 @@ async function receiptFor(env,result,hash,requestId,kind,now) {
   const value=b64(await crypto.subtle.sign('Ed25519',key,encoder.encode(canonical({receipt,protected:protectedHeader}))));
   return {receipt,signature:{...protectedHeader,value}};
 }
+async function signingReady(env){try{const privateKey=await crypto.subtle.importKey('jwk',JSON.parse(env.NUMINA_RECEIPT_PRIVATE_JWK),'Ed25519',false,['sign']);const publicKey=await crypto.subtle.importKey('jwk',JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK),'Ed25519',false,['verify']);const challenge=encoder.encode('numina-readiness-v1');return await crypto.subtle.verify('Ed25519',publicKey,await crypto.subtle.sign('Ed25519',privateKey,challenge),challenge);}catch{return false;}}
 async function readEnvelope(req) {
   if((req.headers.get('content-type')||'').split(';')[0].trim()!=='application/json')throw {status:415,reason:'JSON_REQUIRED'};
   if(req.headers.has('content-encoding'))throw {status:415,reason:'ENCODING_UNSUPPORTED'};
@@ -34,11 +36,20 @@ export default {
    // Cloudflare supplies CF-Connecting-IP; untrusted forwarded headers are never used.
    const ip=await digest('numina-rate:'+now.toString().slice(0,-5)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
    if(!await rateLimit(env.DB,ip,now))return finish(response({error:'RATE_LIMITED'},429,{'Retry-After':String(60-now%60)}));
-   if(path==='/api/v0.1/status'&&req.method==='GET')return finish(response({status:env.NUMINA_RECEIPT_PRIVATE_JWK?'ready':'degraded',version:VERSION,storage:'available',receiptSigning:!!env.NUMINA_RECEIPT_PRIVATE_JWK,financialExecution:false,constitutionalConformance:'UNVERIFIED_C1_C14',limits:{bodyBytes:LIMIT,requestsPerMinutePerIp:30,requestsPerMinuteGlobal:300,maxEvents:10000},coverage:await coverage(env.DB)},env.NUMINA_RECEIPT_PRIVATE_JWK?200:503));
+   if(path==='/api/v0.1/status'&&req.method==='GET'){const ready=await signingReady(env);return finish(response({status:ready?'ready':'degraded',version:VERSION,coreVersion:'1.8.0',storage:'available',receiptSigning:ready,financialExecution:false,constitutionalConformance:'SOURCE_PRESERVED_HOSTED_SCOPE_LIMITED',limits:{bodyBytes:LIMIT,requestsPerMinutePerIp:30,requestsPerMinuteGlobal:300,maxEvents:10000},coverage:await coverage(env.DB)},ready?200:503));}
    if(path==='/api/v0.1/profile'&&req.method==='GET')return finish(response(PROFILE));
    if(path==='/api/v0.1/keys'&&req.method==='GET')return finish(response({keys:[DEMO_KEY,...(env.NUMINA_RECEIPT_PUBLIC_JWK?[{kid:'numina-receipt-1',purpose:'external-test-receipt',jwk:JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)}]:[])],warning:'EAC key is intentionally public test material. Receipt keys cannot authorize credentials.'}));
    if(path==='/api/v0.1/conformance'&&req.method==='GET')return finish(response({version:VERSION,scope:'implementation conformance; not constitutional certification',report:CONFORMANCE,harness:'/downloads/conformance.mjs',vectors:'/downloads/conformance-vectors.json'}));
    if(path==='/api/v0.1/coverage'&&req.method==='GET')return finish(response(await coverage(env.DB)));
+   if(path==='/api/core/v1.8/manifest'&&req.method==='GET')return finish(response(CORE_MANIFEST));
+   if(path==='/api/core/v1.8/context'&&req.method==='GET')return finish(response(CORE_CONTEXT));
+   if(['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path)){
+    if(req.method!=='POST')return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'POST'}));
+    const input=await readEnvelope(req);
+    if(path.endsWith('/assess'))return finish(response(assessStability(input)));
+    const result=await verifyCoreEac(input);outcome=result.outcome;reason=result.reason;
+    return finish(response(result,result.outcome==='VALID_FOR_COMMIT'?200:result.outcome==='INVALID'?422:409));
+   }
    if(path.startsWith('/api/v0.1/receipts/')&&req.method==='GET') {
     const id=path.slice('/api/v0.1/receipts/'.length);if(!/^[0-9a-f-]{36}$/.test(id))return finish(response({error:'NOT_FOUND'},404));
     const row=await env.DB.prepare('SELECT receipt_json FROM numina_events_v1 WHERE receipt_id=? UNION ALL SELECT receipt_json FROM numina_violations_v1 WHERE receipt_id=? LIMIT 1').bind(id,id).first();

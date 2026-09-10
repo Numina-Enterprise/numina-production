@@ -1,10 +1,10 @@
 # Numina Authority demo operations v0.1
 
-Release 0.1.0 · 2026-09-10
+Web release 0.2.0 · 2026-09-10
 
 ## Deployment
 
-Existing Sites project and custom domain are reused. The package contains `dist/server/index.js`, static assets in `dist/client`, and `dist/.openai/hosting.json`. D1 binding is `DB`. Runtime secrets stay in Sites environment settings. Tables are created idempotently by fixed application SQL. No request accepts SQL or database configuration.
+Existing Sites project and custom domain are reused. The package contains `dist/server/index.js`, static assets in `dist/client`, and `dist/.openai/hosting.json`. D1 binding is `DB`. Runtime secrets stay in Sites environment settings. The three existing tables were established by release 0.1.0. Release 0.2.0 makes no schema changes and only checks readiness; production requests no longer run DDL. Future schema changes must use inspected generated migrations. No request accepts SQL or database configuration.
 
 `NUMINA_RECEIPT_PRIVATE_JWK` is a secret Ed25519 private JWK. `NUMINA_RECEIPT_PUBLIC_JWK` is its public counterpart. The deployed receipt key is separate from the intentionally public EAC fixture key. Never expose the receipt private key in source or logs. Rotate receipt signing with a new key ID and retain old public keys before changing keys. Current v0.1 uses one receipt key; no automated rotation is provided.
 
@@ -32,4 +32,4 @@ Retain the previously saved Sites version. Redeploy it to roll back the website;
 
 ## Scope limitations
 
-No financial execution, authenticated issuer identity, delegation, live revocation registry, institutional recognition, independent audit, or exact C1–C14 mapping. Authority Coverage checks this ledger only. This release does not prove universal bypass prevention. Use only synthetic data; receipt URLs expose non-sensitive test receipts to anyone holding their opaque identifier.
+No financial execution, authenticated issuer identity, delegation, live revocation registry, institutional recognition, independent audit, or full hosted C1–C14 enforcement. Authority Coverage checks this ledger only. This release does not prove universal bypass prevention. Use only synthetic data; receipt URLs expose non-sensitive test receipts to anyone holding their opaque identifier.

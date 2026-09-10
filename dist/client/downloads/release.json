@@ -1,6 +1,6 @@
 {
-  "version": "0.1.0",
-  "workerSha256": "58232602a2e27312d6534f736d383e6c069e628fc6a77eebafbc366681c414ab",
+  "version": "0.2.0",
+  "workerSha256": "a0cb7a833e20fd926ca9289ddf55c23b3a335cb186d4078bbdb8930c19b9c06b",
   "testReport": {
     "suite": "numina-implementation-v0.1",
     "passed": 20,
@@ -87,5 +87,6 @@
         "pass": true
       }
     ]
-  }
+  },
+  "coreManifest": "/downloads/core-v1.8-manifest.json"
 }
