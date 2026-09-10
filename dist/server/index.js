@@ -77,7 +77,7 @@ const DEMO_KEY={"kid":"numina-demo-eac-1","purpose":"eac-test-authorization","is
 const CONFORMANCE={"suite":"numina-implementation-v0.1","passed":20,"total":20,"results":[{"name":"valid","pass":true},{"name":"wrong environment","pass":true},{"name":"wrong audience","pass":true},{"name":"wrong action","pass":true},{"name":"wrong resource","pass":true},{"name":"wrong issuer","pass":true},{"name":"profile changed","pass":true},{"name":"expired","pass":true},{"name":"not yet valid","pass":true},{"name":"lifetime exceeded","pass":true},{"name":"inverted window","pass":true},{"name":"issuance after activation","pass":true},{"name":"short nonce","pass":true},{"name":"unsupported version","pass":true},{"name":"extra field","pass":true},{"name":"fractional time","pass":true},{"name":"tampered signature","pass":true},{"name":"untrusted key","pass":true},{"name":"wrong key purpose","pass":true},{"name":"unsupported algorithm","pass":true}]};
 
 const LIMIT=8192;
-const security={'X-Numina-Version':VERSION,'X-Numina-Profile':PROFILE.id,'X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Strict-Transport-Security':'max-age=31536000','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"};
+const security={"X-Numina-Version":"0.1.0","X-Numina-Profile":"numina-demo-rp-0.1","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests"};
 function response(body,status=200,extra={}) {return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 async function receiptFor(env,result,hash,requestId,kind,now) {
   const receipt={id:crypto.randomUUID(),kind,requestId,credentialHash:hash,issuedAt:now,version:VERSION,profile:PROFILE.id,scope:'test-only',outcome:result.outcome,reason:result.reason};
@@ -99,6 +99,11 @@ async function readEnvelope(req) {
 export default {
  async fetch(req,env) {
   const requestId=crypto.randomUUID(),start=Date.now(),now=Math.floor(start/1000),url=new URL(req.url),path=url.pathname;
+  // Only known public hosts redirect; the destination never trusts forwarded headers.
+  if(url.hostname==='numinalabs.xyz'||(url.hostname==='www.numinalabs.xyz'&&url.protocol==='http:')) {
+   const target=new URL('https://www.numinalabs.xyz');target.pathname=url.pathname;target.search=url.search;
+   return new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{...security,Location:target.href}});
+  }
   let status=200,outcome,reason;
   const finish=r=>{status=r.status;r.headers.set('X-Request-Id',requestId);return r;};
   try {
