@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {routeRc20} from '../src/rc20.js';
 const env={NUMINA_RC20_ORIGIN:'https://rc20-test.vercel.app'};
 const request=(path,options)=>new Request('https://www.numinalabs.xyz'+path,options);
@@ -30,9 +31,21 @@ test('rc20 gateway keeps method and body limits',async()=>{
   assert.equal((await r.json()).external_execution_performed,false);
 });
 test('old control plane remains reachable and sign-in returns to it',async()=>{
-  const assets={fetch:async(req)=>{assert.equal(new URL(req.url).pathname,'/');return new Response('<a href="/" aria-current="page">Control plane</a><a href="/signin-with-chatgpt?return_to=%2F">Sign in</a>',{headers:{'Content-Type':'text/html'}});}};
+  const assets={fetch:async(req)=>{assert.equal(new URL(req.url).pathname,'/control');return new Response('<a href="/control" aria-current="page">Control plane</a><a href="/signin-with-chatgpt?return_to=%2Fcontrol">Sign in</a>',{headers:{'Content-Type':'text/html'}});}};
   const html=await (await routeRc20(request('/control'),{ASSETS:assets})).text();
   assert.match(html,/href="\/control"/);assert.match(html,/return_to=%2Fcontrol/);
+});
+
+test('packaged static homepage is rc20 when assets run before the Worker, and preserves the control page',()=>{
+  const home=readFileSync(new URL('../dist/client/index.html',import.meta.url),'utf8');
+  const control=readFileSync(new URL('../dist/client/control.html',import.meta.url),'utf8');
+  assert.match(home,/id="production-version">v1\.9\.0-rc20/);
+  assert.match(home,/id="core-conformance">VERIFYING/);
+  assert.match(home,/href="\/control"/);
+  assert.match(control,/<title>Numina — Control plane<\/title>/);
+  assert.match(control,/href="\/control" aria-current="page"/);
+  assert.match(control,/src="\/control.js"/);
+  for(const asset of ['site.css','site.js'])assert.ok(readFileSync(new URL('../dist/client/'+asset,import.meta.url)).length>0);
 });
 test('rc20 homepage keeps navigation to the old control plane and Labs; HEAD has no body',async()=>{
   const upstream=async()=>new Response('<nav></nav>',{headers:{'Content-Type':'text/html'}});

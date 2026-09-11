@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "workerSha256": "060f70e8385ec6c1fce235b154c09526cc75a10723a2f0fdaf78eec762ab8848",
+  "workerSha256": "9b4420d75305559782df8962ad1e4d5378afede57e867c9d18d70d01c3fcaa7b",
   "testReport": {
     "suite": "numina-implementation-v0.1",
     "passed": 20,

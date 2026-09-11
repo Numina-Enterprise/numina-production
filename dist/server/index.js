@@ -353,7 +353,7 @@ async function routeRc20(request, env, upstreamFetch = fetch) {
   const url = new URL(request.url), path = url.pathname;
   if (path === '/control' || path === '/control/') {
     if (!['GET', 'HEAD'].includes(request.method)) return rc20Error(405, 'METHOD_NOT_ALLOWED', {Allow: 'GET, HEAD'});
-    const asset = await env.ASSETS.fetch(new Request(new URL('/', url), {method: 'GET'}));
+    const asset = await env.ASSETS.fetch(new Request(new URL('/control', url), {method: 'GET'}));
     const html = (await asset.text())
       .replace('rel="canonical" href="https://www.numinalabs.xyz/"', 'rel="canonical" href="https://www.numinalabs.xyz/control"')
       .replace('href="/" aria-current="page">Control plane', 'href="/control" aria-current="page">Control plane')
