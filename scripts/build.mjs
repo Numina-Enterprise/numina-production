@@ -13,7 +13,7 @@ const report=JSON.parse(readFileSync('fixtures/conformance-report.json'));
 const key=JSON.parse(readFileSync('fixtures/demo-test-key.json'));delete key.privateJwk;
 writeFileSync('src/generated.js','export const DEMO_KEY='+JSON.stringify(key)+';\nexport const CONFORMANCE='+JSON.stringify(report)+';\n');
 for(const n of ['core-v1.8-manifest.json','core-v1.8-eac.json','core-v1.8-context.json'])copyFileSync('fixtures/'+n,'dist/client/downloads/'+n);
-let source=['core','store','generated','core-generated','core-v18','control','control-store','control-http','worker'].map(n=>readFileSync('src/'+n+'.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export \{.*\};\r?\n/gm,'').replace(/export (?!default)/g,'')).join('\n');
+let source=['core','store','generated','core-generated','core-v18','control','control-store','control-http','rc20','worker'].map(n=>readFileSync('src/'+n+'.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export \{.*\};\r?\n/gm,'').replace(/export (?!default)/g,'')).join('\n');
 writeFileSync('dist/server/index.js',source);
 copyFileSync('.openai/hosting.json','dist/.openai/hosting.json');
 if(readdirSync('.').includes('drizzle'))copy('drizzle','dist/.openai/drizzle');
