@@ -1,5 +1,5 @@
 export const NUSD_POLICY={
- schema:'numina.nusd.discovery.v1',
+ schema:'numina.nusd.status.v1',
  asset:{name:'Numina USD',symbol:'NUSD',asset_id:null,chain:null,contract:null},
  asset_verification:{status:'unconfigured',evidence:[]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',evidence:[],valuation:null,redemption:null},
