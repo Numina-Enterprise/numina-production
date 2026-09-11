@@ -446,9 +446,10 @@ async function readEnvelope(req) {
 export default {
  async fetch(req,env) {
   const requestId=crypto.randomUUID(),start=Date.now(),now=Math.floor(start/1000),url=new URL(req.url),path=url.pathname;
-  // Only known public hosts redirect; the destination never trusts forwarded headers.
-  if(url.hostname==='numinalabs.xyz'||(url.hostname==='www.numinalabs.xyz'&&url.protocol==='http:')) {
-   const target=new URL('https://www.numinalabs.xyz');target.pathname=url.pathname;target.search=url.search;
+  // Keep HTTPS requests on their origin because static pages also serve on both hosts.
+  // Only known public HTTP hosts redirect; forwarded headers never choose the target.
+  if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:') {
+   const target=new URL('https://'+url.hostname);target.pathname=url.pathname;target.search=url.search;
    return new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{...security,Location:target.href}});
   }
   let status=200,outcome,reason;

@@ -2,8 +2,25 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {routeRc20} from '../src/rc20.js';
+import worker from '../src/worker.js';
 const env={NUMINA_RC20_ORIGIN:'https://rc20-test.vercel.app'};
 const request=(path,options)=>new Request('https://www.numinalabs.xyz'+path,options);
+
+test('HTTPS apex verification stays same-origin while public HTTP requests upgrade securely',async()=>{
+  const originalFetch=globalThis.fetch;
+  globalThis.fetch=async(url)=>{assert.equal(url,'https://rc20-test.vercel.app/v1/status');return new Response('{"production_version":"1.9.0-rc20"}',{headers:{'Content-Type':'application/json'}});};
+  try{
+    const r=await worker.fetch(new Request('https://numinalabs.xyz/v1/status'),env);
+    assert.equal(r.status,200);assert.equal(r.headers.get('Location'),null);
+    assert.equal((await r.json()).production_version,'1.9.0-rc20');
+    for(const host of ['numinalabs.xyz','www.numinalabs.xyz']){
+      const redirect=await worker.fetch(new Request('http://'+host+'/v1/status?check=1'),env);
+      assert.equal(redirect.status,301);assert.equal(redirect.headers.get('Location'),'https://'+host+'/v1/status?check=1');
+      const post=await worker.fetch(new Request('http://'+host+'/v1/control/evaluate',{method:'POST'}),env);
+      assert.equal(post.status,308);assert.equal(post.headers.get('Location'),'https://'+host+'/v1/control/evaluate');
+    }
+  }finally{globalThis.fetch=originalFetch;}
+});
 
 test('rc20 routing preserves existing APIs and unrelated pages, and stays inactive without an origin',async()=>{
   for(const path of ['/api/control/v1/state','/labs.html','/core.html','/downloads/Control-Plane-v1.md'])assert.equal(await routeRc20(request(path),env),null);
