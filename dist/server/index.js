@@ -342,7 +342,7 @@ async function controlHttp(req,env){
   }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path,code,status}));return controlResponse({status:'unavailable',error:code},status);}
 }
 
-const RC20_READ_PATHS = new Set(['/', '/index.html', '/status', '/site.css', '/site.js', '/healthz', '/readyz', '/metrics', '/.well-known/security.txt', '/sitemap.xml', '/site.webmanifest', '/robots.txt', '/v1/preflight', '/v1/status', '/v1/capabilities', '/v1/release/manifest', '/v1/release/supply-chain', '/v1/release/sbom', '/v1/release/build-provenance', '/v1/release/attestation', '/v1/keys/release-verification']);
+const RC20_READ_PATHS = new Set(['/healthz', '/readyz', '/metrics', '/.well-known/security.txt', '/site.webmanifest', '/v1/preflight', '/v1/status', '/v1/capabilities', '/v1/release/manifest', '/v1/release/supply-chain', '/v1/release/sbom', '/v1/release/build-provenance', '/v1/release/attestation', '/v1/keys/release-verification']);
 const RC20_POST_PATHS = new Set(['/v1/control/evaluate', '/v1/verify/release-attestation', '/v1/verify/status-witness', '/v1/verify/checkpoint']);
 
 function rc20Error(status, message, extra = {}) {
@@ -372,7 +372,7 @@ async function routeRc20(request, env, upstreamFetch = fetch) {
     origin = new URL(env.NUMINA_RC20_ORIGIN);
     if (origin.protocol !== 'https:' || !origin.hostname.endsWith('.vercel.app') || origin.username || origin.password || origin.port || origin.pathname !== '/' || origin.search || origin.hash) throw new Error();
   } catch { return rc20Error(503, 'RC20_ORIGIN_NOT_CONFIGURED'); }
-  const upstream = new URL(path === '/index.html' ? '/' : path, origin);
+  const upstream = new URL(path, origin);
   upstream.search = url.search;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
@@ -411,9 +411,6 @@ async function routeRc20(request, env, upstreamFetch = fetch) {
     }
     responseHeaders.set('Cache-Control', 'no-store');
     let content = await result.arrayBuffer();
-    if ((path === '/' || path === '/index.html') && result.status === 200 && (result.headers.get('content-type') || '').includes('text/html')) {
-      content = new TextEncoder().encode(new TextDecoder().decode(content).replace('</nav>', '<a href="/control">Control plane</a><a href="/labs.html">Numina Labs</a></nav>'));
-    }
     return new Response(request.method === 'HEAD' ? null : content, {status: result.status, headers: responseHeaders});
   } catch { return rc20Error(controller.signal.aborted ? 504 : 502, 'RC20_SERVICE_UNAVAILABLE'); }
   finally {
