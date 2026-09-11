@@ -1,14 +1,14 @@
 # Numina compute-to-value architecture: NUSD
 
-Proposed integration specification, updated 11 September 2026. **NUSD is the intended pricing and payment unit across every Numina compute-to-value service. Numina treasury is the intended backing source.** This is target architecture, not evidence that every provider is integrated, tokens are issued, treasury assets are funded or external payments are enabled.
+Proposed integration specification, updated 11 September 2026. **NUSD is the intended pricing and payment unit across every Numina compute-to-value service. Numina treasury is the intended backing source. The user-declared stabilization target is 1 NUSD = 1 USD.** This is target architecture, not evidence that every provider is integrated, tokens are issued, treasury assets are funded or external payments are enabled.
 
 ## Service and unit model
 
 Scope includes all LLM providers/models and other compute-to-value services: inference, training, data processing, rendering, simulations, automation, API-result unlocks and delivered applications/services. Each needs its own adapter, measurable unit, authority and acceptance criteria. Provider names alone are not integration evidence.
 
-Quote accepted work in **NUSD per agreed unit**, with a maximum NUSD budget. No USD/USDC conversion is implied. Keep provider invoices in their original currency; comparisons need a separate approved conversion basis. Label internal valuations as such. External quotes must identify source, pair, timestamp, expiry, fees and execution evidence.
+Quote accepted work in **NUSD per agreed unit**, with a maximum NUSD budget. Record the declared NUSD/USD target of 1 separately from observed prices and redeemable amounts. Any target-based USD illustration must say “at the declared target; not an exchange quote.” No USDC reserve or conversion is implied. Keep provider invoices in their original currency. External quotes must identify source, pair, timestamp, expiry, fees and execution evidence.
 
-The current contract candidate uses six decimal places: 1 NUSD = 1,000,000 base units. This is denomination, not a dollar price, backing ratio or redemption promise.
+The current contract candidate uses six decimal places: 1 NUSD = 1,000,000 base units. This denomination is separate from the declared dollar target. Neither the token name nor decimals implement price stabilization, asset custody or a redemption right.
 
 ## Intended flow
 
@@ -23,7 +23,9 @@ The current contract candidate uses six decimal places: 1 NUSD = 1,000,000 base 
 
 ## Treasury and execution boundary
 
-Backing needs documented treasury composition, legal ownership, custodian, encumbrances, valuation method, holder claim, supply/obligation reconciliation and independent audited evidence. Mint authority follows the approved issuance policy; a ledger entry or evidence hash cannot establish assets. No amount, peg, reserve ratio or redeemability is asserted. “Stablecoin” remains conditional on the stabilization mechanism and legal classification.
+Backing needs documented treasury composition, legal ownership, custodian, encumbrances, valuation method, holder claim, supply/obligation reconciliation and independent audited evidence. A ledger can record and help evidence existing assets and enforceable rights when tied to underlying contracts, control/custody and valuation. Completed accepted work may support an enforceable receivable; reconciled paid invoices evidence collections, while future projections remain forecasts. Do not count both a settled receivable and its collected funds as separate backing. [IFRS revenue principles](https://www.ifrs.org/issued-standards/list-of-standards/ifrs-15-revenue-from-contracts-with-customers/)
+
+Mint authority follows the approved issuance policy. The declared 1:1 target requires a defined stabilization mechanism, liquidity, shortfall response and holder terms. No market price, maintained peg, reserve amount or redemption capability is verified. Payment-stablecoin classification and permitted reserve assets require review against the actual model and applicable effective dates. [GENIUS Act](https://www.govinfo.gov/content/pkg/PLAW-119publ27/html/PLAW-119publ27.htm)
 
 Order states: proposed → authorized funding available → work submitted → accepted/disputed → release authorized → payment submitted → payment confirmed → fulfilled. Cancellation/refund and optional redemption have distinct records.
 

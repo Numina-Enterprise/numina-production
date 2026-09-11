@@ -561,7 +561,7 @@ const NUSD_POLICY={
  asset:{name:'Numina USD',symbol:'NUSD',asset_id:null,chain:null,contract:null},
  asset_verification:{status:'unconfigured',evidence:[]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',evidence:[],valuation:null,redemption:null},
- peg:null,
+ peg:{currency:'USD',target:'1',basis:'declared_policy',status:'target_not_verified',verified_redemption:false},
  payment_policy:{scope:'all_compute_to_value_services',accepted_assets:['NUSD'],usd_conversion:null,usdc_fallback:false},
  capabilities:{quote:false,request:false,status:true,settlement:false,mint:false,transfer:false},
  service_pricing:{status:'proposed_not_available_for_purchase',unit:'NUSD',services:[
