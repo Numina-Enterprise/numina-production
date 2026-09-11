@@ -1,9 +1,11 @@
-import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
 for(const p of ['dist/client','dist/server','dist/.openai','dist/client/downloads'])mkdirSync(p,{recursive:true});
+// Remove obsolete files from the former static-root build; assets have one source, dist/client.
+for(const name of readdirSync('dist'))if(statSync('dist/'+name).isFile())unlinkSync('dist/'+name);
 function copy(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=from+'/'+n,b=to+'/'+n;statSync(a).isDirectory()?copy(a,b):copyFileSync(a,b);}}
 copy('public','dist/client');copy('docs','dist/client/downloads');
 copyFileSync('src/core.js','dist/client/authority-core.js');copyFileSync('fixtures/demo-test-key.json','dist/client/downloads/demo-test-key.json');copyFileSync('fixtures/conformance-vectors.json','dist/client/downloads/conformance-vectors.json');copyFileSync('scripts/conformance.mjs','dist/client/downloads/conformance.mjs');
