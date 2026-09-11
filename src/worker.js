@@ -4,6 +4,8 @@ import {DEMO_KEY,CONFORMANCE} from './generated.js';
 import {CORE_MANIFEST,CORE_CONTEXT,verifyCoreEac,assessStability} from './core-v18.js';
 import {controlHttp} from './control-http.js';
 import {routeRc20} from './rc20.js';
+import {appHttp} from './app-http.js';
+import {nusdHttp} from './nusd-http.js';
 const LIMIT=8192;
 const security={"X-Numina-Version":"1.0.0","X-Numina-Profile":"numina-demo-rp-0.1","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 function response(body,status=200,extra={}) {return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
@@ -37,6 +39,9 @@ export default {
   let status=200,outcome,reason;
   const finish=r=>{status=r.status;r.headers.set('X-Request-Id',requestId);return r;};
   try {
+   if(path.startsWith('/api/nusd/v1/')){const r=await nusdHttp(req);for(const [k,v]of Object.entries(security))r.headers.set(k,v);return finish(r);}
+   if(['/platform','/platform/','/platform.html'].includes(path))return new Response(null,{status:308,headers:{...security,Location:'/app'}});
+   if(path.startsWith('/api/app/v1/')){const r=await appHttp(req,env);for(const [k,v]of Object.entries(security))r.headers.set(k,v);return finish(r);}
    const rc20=await routeRc20(req,env);if(rc20){if(path==='/control'||path==='/control/')for(const [k,v]of Object.entries(security))rc20.headers.set(k,v);return finish(rc20);}
    if(path.startsWith('/api/control/')){const r=await controlHttp(req,env);for(const [k,v]of Object.entries(security))r.headers.set(k,v);return finish(r);}
    if(env.NUMINA_CONTROL_OWNER&&req.method==='POST'&&['/api/v0.1/commit','/api/v0.1/verify'].includes(path))return finish(response({error:'DEMO_MUTATIONS_RETIRED',next:'/api/control/v1/next-action'},410));
