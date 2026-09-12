@@ -1,5 +1,0 @@
-{
-  "credentialJson": "{\"agent_id\":\"test-agent\",\"asset\":\"ETH\",\"authorization_id\":\"test-authorization\",\"constitution_digest\":\"38be7b9764e717a4898463f5ce2063252ce8b1e2bc7cb234361ef8b4c8fabe1d\",\"dependency_root\":\"99792641a2c2ed0959066935ade30b51008b0d7a840e85d30c7afcc612a85486\",\"issued_sequence\":100,\"issuer_id\":\"numina-demo\",\"mandate_id\":\"test-mandate\",\"max_notional_usd_minor\":300000,\"max_price_usd_minor_per_eth\":300000,\"max_quantity_wei\":1000000000000000000,\"nonce\":\"core-test-nonce-0000000001\",\"operation_id\":\"test-operation\",\"pre_state_digest\":\"94f907a31249bfa086ae8518ffbc9efede83b4b3c6f2e1abc331a2233a5dc358\",\"principal_id\":\"test-principal\",\"rail\":\"SIM_A\",\"side\":\"BUY\",\"valid_until_sequence\":132}",
-  "signatureHex": "88f67d19a7b46d77a4bc8133b1979f4caf26feccd8da5bf521b1ce8133db884a8f85657792c870f92d6ce934587e37a21c80f9d7f016c5085f8892f316dc4107",
-  "kid": "numina-demo-eac-1"
-}

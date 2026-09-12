@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {planWork,units,decimal} from '../public/economy-model.js';
+import {planWork,units,decimal} from '../reference/legacy-ui/economy-model.js';
 const input={acceptedUnits:'1000',unitPrice:'0.50',fundedAmount:'600',feeBps:'200',providerCost:'2',meteringVerified:true,customerAccepted:true,authorized:true,transferConfirmed:false,payoutConfirmed:false,experienceDelivered:false};
 test('scenario conserves funded value and never represents an executed transaction',()=>{
  const r=planWork(input);assert.equal(r.order_value_usdc,'500.000000');assert.equal(r.proposed_software_fee_usdc,'10.000000');assert.equal(r.recipient_net_usdc,'488.000000');assert.equal(r.unused_funding_usdc,'100.000000');assert.equal(r.eligible_in_scenario,true);assert.equal(r.external_execution_performed,false);assert.equal(r.transfer_confirmed_in_scenario,false);

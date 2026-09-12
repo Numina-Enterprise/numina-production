@@ -1,15 +1,16 @@
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
  asset:{name:'Numina USD',symbol:'NUSD',asset_id:null,chain:null,contract:null},
+ network_policy:{name:'Numina',status:'designated_not_verified',chain_id:null,rpc_url:null,explorer_url:null,genesis_hash:null},
  asset_verification:{status:'unconfigured',evidence:[]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',evidence:[],valuation:null,redemption:null},
  peg:{currency:'USD',target:'1',basis:'declared_policy',status:'target_not_verified',verified_redemption:false},
  payment_policy:{scope:'all_compute_to_value_services',accepted_assets:['NUSD'],usd_conversion:null,usdc_fallback:false},
  capabilities:{quote:false,request:false,status:true,settlement:false,mint:false,transfer:false},
- service_pricing:{status:'proposed_not_available_for_purchase',unit:'NUSD',services:[
-  {service_id:'authorization_check',name:'Authorization check',minimum_units:'1',basis:'per accepted verification result'},
-  {service_id:'result_access',name:'Numina Result Access',minimum_units:'25',basis:'per accepted API result; scope and value agreed before execution'},
-  {service_id:'workflow_delivery',name:'Verified workflow delivery',minimum_units:'250',basis:'per accepted workflow outcome; scope and value agreed before execution'}
+ service_pricing:{status:'not_available_for_purchase',unit:'NUSD',services:[
+  {service_id:'authorization_check',name:'Authorization check',basis:'per accepted verification result'},
+  {service_id:'result_access',name:'Numina Result Access',basis:'per accepted API result; scope and value agreed before execution'},
+  {service_id:'workflow_delivery',name:'Verified workflow delivery',basis:'per accepted workflow outcome; scope and value agreed before execution'}
  ]},
  integration:{interfaces:['HTTP JSON','JSON Schema tool calling','MCP stdio adapter'],provider_coverage:'provider adapters and account connections require individual verification'},
  activation_requirements:['Deployed token identity and security review','Verified treasury assets, control, valuation and encumbrances','Issuer eligibility and service-country review','Published redemption and pricing terms','Order-bound payment verification and result entitlements'],

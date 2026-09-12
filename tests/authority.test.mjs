@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync,mkdtempSync,rmSync,rmdirSync}from'node:fs';import {tmpdir}from'node:os';import {join}from'node:path';import {generateKeyPairSync}from'node:crypto';
 import {canonical,verifyCredential,signCredential,freshCredential,unb64,encoder}from'../src/core.js';
-import {initialize,commitEvent,replay}from'../src/store.js';import {database}from'../scripts/sqlite.mjs';import worker from'../src/worker.js';
+import {initialize,commitEvent,replay}from'../src/store.js';import {database}from'../scripts/sqlite.mjs';import worker from'../src/legacy-authority-worker.js';
 const key=JSON.parse(readFileSync(new URL('../fixtures/demo-test-key.json',import.meta.url))),vectors=JSON.parse(readFileSync(new URL('../fixtures/conformance-vectors.json',import.meta.url)));
 for(const v of vectors.vectors)test('vector: '+v.name,async()=>{const got=await verifyCredential(v.envelope,[key],v.now);assert.equal(got.outcome,v.expected.outcome);assert.equal(got.reason,v.expected.reason);});
 test('canonical order and disallowed ambiguous values',()=>{assert.equal(canonical({b:1,a:2}),'{"a":2,"b":1}');for(const v of [1.1,NaN,-0,'\u00e9',undefined])assert.throws(()=>canonical(v));});
