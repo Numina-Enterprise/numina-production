@@ -1,4 +1,5 @@
 import {clearTreasuryDocuments,loadTreasuryDocuments} from './treasury-documents.js';
+import {clearStripeTreasury,loadStripeTreasury} from './stripe-treasury.js';
 import {requestJson,createViewScope} from './http-client.js';
 const $=id=>document.getElementById(id);let snapshot=null,selected=null,busy=false,treasuryGeneration=0,refreshGeneration=0,refreshOnReturn=false;
 const viewScope=createViewScope();
@@ -7,7 +8,7 @@ async function api(path,body){const generation=viewScope.generation;try{const va
 const words=s=>String(s||'Connection unavailable.').toLowerCase().replaceAll('_',' ');
 const el=(tag,text,className)=>{const n=document.createElement(tag);n.textContent=text;if(className)n.className=className;return n;};
 function renderEvidenceSimulation(){$('simulation-result').textContent='Bank-issued evidence: '+($('simulated-bank-evidence').value==='supplied'?'Supplied':'Not supplied')+' (simulated).';}
-function clearTreasuryStatement(){clearTreasuryDocuments();treasuryGeneration++;$('treasury-owner-panel').hidden=true;$('treasury-owner-details').replaceChildren();$('treasury-simulation-panel').hidden=true;$('simulated-bank-evidence').value='supplied';renderEvidenceSimulation();}
+function clearTreasuryStatement(){clearTreasuryDocuments();clearStripeTreasury();treasuryGeneration++;$('treasury-owner-panel').hidden=true;$('treasury-owner-details').replaceChildren();$('treasury-simulation-panel').hidden=true;$('simulated-bank-evidence').value='supplied';renderEvidenceSimulation();}
 $('simulated-bank-evidence').onchange=renderEvidenceSimulation;
 async function loadTreasuryStatement(){
   if(snapshot?.projection!=='complete')return;
@@ -16,7 +17,7 @@ async function loadTreasuryStatement(){
     if(generation!==treasuryGeneration||snapshot?.projection!=='complete')return;
     if(statement.schema!=='numina.treasury.owner_statement.v1'||statement.classification!=='owner_reported_not_independently_verified')throw new Error('Invalid owner statement');
     const rows=[['Reported owner',statement.reported_owner],['Reported institution',statement.reported_institution],['Reported account',statement.reported_account_type],['Reported date',statement.reported_as_of],['Owner-reported amount',new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(BigInt(statement.reported_amount_usd))],['Reported custodian',statement.reported_custodian],['Source',statement.source],['Owner evidence statement',statement.owner_reports_evidence_supplied?'Owner reports evidence supplied':'No owner evidence-supply statement recorded'],['Owner-reported financial activity',statement.owner_financial_activity_statement||'No owner activity statement recorded'],['Bank-origin verification','Not completed'],['Independent verification','Not completed'],['Verified reserve amount','Not established'],['Verified allocation','Not established'],['Financial execution','Inactive']];
-    const details=$('treasury-owner-details');details.replaceChildren();for(const [label,value]of rows){details.append(el('dt',label),el('dd',value));}$('treasury-owner-panel').hidden=false;$('treasury-simulation-panel').hidden=false;void loadTreasuryDocuments().catch(()=>{if(generation===treasuryGeneration)$('document-summary').textContent='Documents unavailable. Use Refresh state to try again.';});
+    const details=$('treasury-owner-details');details.replaceChildren();for(const [label,value]of rows){details.append(el('dt',label),el('dd',value));}$('treasury-owner-panel').hidden=false;$('treasury-simulation-panel').hidden=false;void loadStripeTreasury();void loadTreasuryDocuments().catch(()=>{if(generation===treasuryGeneration)$('document-summary').textContent='Documents unavailable. Use Refresh state to try again.';});
   }catch{if(generation===treasuryGeneration)clearTreasuryStatement();}
 }
 function controls(){document.querySelectorAll('#workspace button:not([data-document-control])').forEach(b=>b.disabled=busy||!snapshot);$('refresh').disabled=busy;}

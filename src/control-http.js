@@ -1,4 +1,5 @@
 import {treasuryDocumentHttp} from './treasury-documents.js';
+import {readStripeTreasury} from './stripe-treasury.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
 import {readControl,bootstrapControl,controlSnapshot,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
@@ -43,6 +44,11 @@ export async function controlHttp(req,env){
       return controlResponse(await bootstrapControl(env.DB,actor,now),201);
     }
     const current=await readControl(env.DB);if(current.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    if(path==='/api/control/v1/stripe-treasury'){
+      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
+      return controlResponse(await readStripeTreasury(env));
+    }
     if(path==='/api/control/v1/treasury-documents'||path.startsWith('/api/control/v1/treasury-documents/')){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       return await treasuryDocumentHttp(req,env,actor);

@@ -35,7 +35,7 @@ function harness(kind,fetcher){
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:(name,fn)=>events[name]=fn,
   querySelectorAll:selector=>selector.startsWith('a[')?[]:selector.includes('workspace')?[...nodes.values()].filter(n=>n.tagName==='button'):selector.includes('checkout-button')?[get('checkout-button')]:[]};
  const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,setTimeout,clearTimeout,console,selectService,countryOptions,
-  clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
+  clearTreasuryDocuments(){},async loadTreasuryDocuments(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
  const exports=kind==='app'?'({api,openOrder,loadOrders,savedView,boot,clearSession,get session(){return session;},get selected(){return selected;}})':'({api,refresh,run,clearSession,get snapshot(){return snapshot;}})';
  vm.runInContext(source('http-client.js')+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
  return {get,events,subject:context.subject,context,close(){events.pagehide?.();}};
