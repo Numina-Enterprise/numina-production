@@ -34,6 +34,5 @@ async function boot(){
   if(!viewScope.isCurrent(scope))return;
   try{session=await api('session');$('sign-in-panel').hidden=true;$('account-link').textContent='Sign out · '+session.email;$('account-link').href='/signout-with-chatgpt?return_to=%2Fapp';$('team-label').hidden=!session.operator;await loadOrders();}catch(e){if(e.code!=='SIGN_IN_REQUIRED')report(e);}
  }finally{booting=false;connectivity();if(rebootRequested){rebootRequested=false;void boot();}}
- if('serviceWorker'in navigator)navigator.serviceWorker.register('/app-sw.js',{scope:'/app'}).catch(()=>{});
 }
 boot();
