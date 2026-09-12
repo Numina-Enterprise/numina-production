@@ -1,7 +1,10 @@
-export const APP_VERSION='2026-09-11';
+export const APP_VERSION='2026-09-12';
 export const APP_OFFERS={
  diagnostic:{name:'Operational Agent Diagnostic',amount:150000,currency:'usd',paymentLink:'plink_1UEZzUQdJat0efmTmZFJ5X6b',url:'https://book.stripe.com/fZu8wRb8UfHubiWgSxcbC07',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
- audit:{name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'}
+ audit:{name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
+ authorization_check:{name:'Authorization check',amount:null,currency:'nusd',requestOnly:true,description:'Submit the proposed agent action, authorized systems and acceptance criteria for scope review. Intended pricing: NUSD per accepted verification result; price and payment are not activated.'},
+ result_access:{name:'Numina Result Access',amount:null,currency:'nusd',requestOnly:true,description:'Describe the API result, its intended use and the access you need. Scope and intended NUSD pricing are reviewed before any paid entitlement. Payment and result unlocking are not activated.'},
+ workflow_delivery:{name:'Verified workflow delivery',amount:null,currency:'nusd',requestOnly:true,description:'Define the workflow, measurable outcome and delivery evidence for scope review. Intended pricing: NUSD per accepted outcome; payment and execution are not activated.'}
 };
 export function appFail(code,status=400){throw Object.assign(new Error(code),{code,status});}
 export async function appDigest(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(x=>x.toString(16).padStart(2,'0')).join('');}
@@ -33,7 +36,9 @@ export function appTransition(order,input,isOperator,payment){
  if(!/^[a-f0-9-]{36}$/.test(input.idempotencyKey))appFail('INVALID_INPUT');
  const note=appText(input.note,5,4000),action=input.action;
  const transitions=isOperator?{scope:['submitted','scoped'],start:['scoped','in_progress'],deliver:['in_progress','delivered'],decline:['submitted','declined']}:{accept:['delivered','complete'],request_changes:['delivered','in_progress'],cancel:['submitted','cancelled']};
+ if(APP_OFFERS[order.service]?.requestOnly&&order.status==='scoped'){if(isOperator)transitions.decline=['scoped','declined'];else transitions.cancel=['scoped','cancelled'];}
  const pair=transitions[action];if(!pair||order.status!==pair[0])appFail('TRANSITION_NOT_ALLOWED',409);
+ if(APP_OFFERS[order.service]?.requestOnly&&['start','deliver','accept','request_changes'].includes(action))appFail('NUSD_NOT_ACTIVATED',409);
  if(action==='start'&&(payment.status!=='paid'||payment.duplicatePayment))appFail('CONFIRMED_PAYMENT_REQUIRED',409);
  if(action==='deliver'&&(payment.status!=='paid'||payment.duplicatePayment))appFail('PAYMENT_REVIEW_REQUIRED',409);
  return {status:pair[1],note,action};

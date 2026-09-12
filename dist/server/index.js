@@ -564,10 +564,13 @@ async function routeRc20(request, env, upstreamFetch = fetch) {
   }
 }
 
-const APP_VERSION='2026-09-11';
+const APP_VERSION='2026-09-12';
 const APP_OFFERS={
  diagnostic:{name:'Operational Agent Diagnostic',amount:150000,currency:'usd',paymentLink:'plink_1UEZzUQdJat0efmTmZFJ5X6b',url:'https://book.stripe.com/fZu8wRb8UfHubiWgSxcbC07',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
- audit:{name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'}
+ audit:{name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
+ authorization_check:{name:'Authorization check',amount:null,currency:'nusd',requestOnly:true,description:'Submit the proposed agent action, authorized systems and acceptance criteria for scope review. Intended pricing: NUSD per accepted verification result; price and payment are not activated.'},
+ result_access:{name:'Numina Result Access',amount:null,currency:'nusd',requestOnly:true,description:'Describe the API result, its intended use and the access you need. Scope and intended NUSD pricing are reviewed before any paid entitlement. Payment and result unlocking are not activated.'},
+ workflow_delivery:{name:'Verified workflow delivery',amount:null,currency:'nusd',requestOnly:true,description:'Define the workflow, measurable outcome and delivery evidence for scope review. Intended pricing: NUSD per accepted outcome; payment and execution are not activated.'}
 };
 function appFail(code,status=400){throw Object.assign(new Error(code),{code,status});}
 async function appDigest(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(x=>x.toString(16).padStart(2,'0')).join('');}
@@ -599,7 +602,9 @@ function appTransition(order,input,isOperator,payment){
  if(!/^[a-f0-9-]{36}$/.test(input.idempotencyKey))appFail('INVALID_INPUT');
  const note=appText(input.note,5,4000),action=input.action;
  const transitions=isOperator?{scope:['submitted','scoped'],start:['scoped','in_progress'],deliver:['in_progress','delivered'],decline:['submitted','declined']}:{accept:['delivered','complete'],request_changes:['delivered','in_progress'],cancel:['submitted','cancelled']};
+ if(APP_OFFERS[order.service]?.requestOnly&&order.status==='scoped'){if(isOperator)transitions.decline=['scoped','declined'];else transitions.cancel=['scoped','cancelled'];}
  const pair=transitions[action];if(!pair||order.status!==pair[0])appFail('TRANSITION_NOT_ALLOWED',409);
+ if(APP_OFFERS[order.service]?.requestOnly&&['start','deliver','accept','request_changes'].includes(action))appFail('NUSD_NOT_ACTIVATED',409);
  if(action==='start'&&(payment.status!=='paid'||payment.duplicatePayment))appFail('CONFIRMED_PAYMENT_REQUIRED',409);
  if(action==='deliver'&&(payment.status!=='paid'||payment.duplicatePayment))appFail('PAYMENT_REVIEW_REQUIRED',409);
  return {status:pair[1],note,action};
@@ -633,7 +638,7 @@ async function appActor(req,env){
 async function appRate(db,key,max,now){await db.prepare('DELETE FROM numina_app_rate WHERE window<?').bind(Math.floor(now/60)-2).run();const row=await db.prepare('INSERT INTO numina_app_rate (bucket,window,count) VALUES (?,?,1) ON CONFLICT(bucket,window) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(key,Math.floor(now/60),max).first();if(!row)appFail('RATE_LIMITED',429);}
 async function appOrder(db,id,actor){const row=await db.prepare('SELECT * FROM numina_service_orders WHERE id=?').bind(id).first();if(!row||(!actor.operator&&row.owner_subject!==actor.id))appFail('NOT_FOUND',404);return row;}
 async function appOrderPayment(db,id){const payments=(await db.prepare('SELECT * FROM numina_app_payments WHERE order_id=? ORDER BY session_id').bind(id).all()).results;const facts=(await db.prepare('SELECT f.* FROM numina_app_payment_facts f JOIN numina_app_payments p ON p.payment_intent=f.payment_intent WHERE p.order_id=?').bind(id).all()).results;return appPaymentSummary(payments,facts);}
-async function appOrderView(db,row,actor){return {isOwner:row.owner_subject===actor.id,id:row.id,title:row.title,service:row.service,brief:row.brief,successCriteria:row.success_criteria,country:row.country,status:row.status,revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at,customerEmail:row.owner_email,payment:await appOrderPayment(db,row.id)};}
+async function appOrderView(db,row,actor){return {isOwner:row.owner_subject===actor.id,id:row.id,title:row.title,service:row.service,requestOnly:!!APP_OFFERS[row.service]?.requestOnly,brief:row.brief,successCriteria:row.success_criteria,country:row.country,status:row.status,revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at,customerEmail:row.owner_email,payment:APP_OFFERS[row.service]?.requestOnly?{status:'not_available',gross:null,refunded:null,netBeforeFees:null,currency:'nusd',duplicatePayment:false,disputed:false,confirmedBy:null}:await appOrderPayment(db,row.id)};}
 async function appWebhook(req,env){
  const raw=await appReadRaw(req,262144),event=await appVerifyStripe(raw,req.headers.get('stripe-signature'),env.NUMINA_STRIPE_WEBHOOK_SECRET);const obj=event.data.object,hash=await appDigest(raw),now=Math.floor(Date.now()/1000);
  const existing=await env.DB.prepare('SELECT body_hash FROM numina_app_webhook_events WHERE id=?').bind(event.id).first();if(existing){if(existing.body_hash!==hash)appFail('EVENT_ID_CONFLICT',409);return appResponse({received:true,replayed:true});}
@@ -641,7 +646,7 @@ async function appWebhook(req,env){
  if(['checkout.session.completed','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed','checkout.session.expired'].includes(event.type)){
   const order=typeof obj.client_reference_id==='string'?await env.DB.prepare('SELECT * FROM numina_service_orders WHERE id=?').bind(obj.client_reference_id).first():null;
   if(!order)return appResponse({received:true,ignored:true});
-  const offer=APP_OFFERS[order.service];if(obj.object!=='checkout.session'||obj.mode!=='payment'||obj.currency!=='usd'||obj.amount_total!==offer.amount||obj.payment_link!==offer.paymentLink||obj.livemode!==true||!/^cs_live_[A-Za-z0-9]+$/.test(obj.id))appFail('PAYMENT_DETAILS_MISMATCH',422);
+  const offer=APP_OFFERS[order.service];if(!offer||offer.requestOnly||obj.object!=='checkout.session'||obj.mode!=='payment'||obj.currency!=='usd'||obj.amount_total!==offer.amount||obj.payment_link!==offer.paymentLink||obj.livemode!==true||!/^cs_live_[A-Za-z0-9]+$/.test(obj.id))appFail('PAYMENT_DETAILS_MISMATCH',422);
   const pi=typeof obj.payment_intent==='string'?obj.payment_intent:obj.payment_intent?.id;
   const paid=['checkout.session.completed','checkout.session.async_payment_succeeded'].includes(event.type)&&obj.payment_status==='paid';
   if(paid&&!/^pi_[A-Za-z0-9]+$/.test(pi||''))appFail('PAYMENT_INTENT_REQUIRED',422);
@@ -696,6 +701,7 @@ async function appHttp(req,env){
   if(operation==='events'&&req.method==='GET'){const events=(await env.DB.prepare('SELECT id,action,note,revision,created_at FROM numina_service_order_events WHERE order_id=? ORDER BY revision LIMIT 200').bind(row.id).all()).results;return appResponse({events});}
   if(operation==='checkout'&&req.method==='POST'){
    if(actor.id!==row.owner_subject)appFail('CUSTOMER_CHECKOUT_ONLY',403);
+   if(APP_OFFERS[row.service]?.requestOnly)appFail('NUSD_NOT_ACTIVATED',409);
    if(!env.NUMINA_STRIPE_WEBHOOK_SECRET)appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);
    const payment=await appOrderPayment(env.DB,row.id);if(!['submitted','scoped'].includes(row.status)||payment.status!=='unconfirmed')appFail('CHECKOUT_REVIEW_REQUIRED',409);
    if(row.country!=='US'&&row.status!=='scoped')appFail('COUNTRY_REVIEW_REQUIRED',409);
@@ -720,7 +726,7 @@ const NUSD_REDEMPTION_POLICY={"schema":"numina.nusd.redemption_policy.v1","polic
 const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
  asset:{name:'Numina USD',symbol:'NUSD',asset_id:null,chain:null,contract:null},
- network_policy:{name:'Numina',status:'designated_not_verified',chain_id:null,rpc_url:null,explorer_url:null,genesis_hash:null},
+ network_policy:{name:'Numina',status:'provider_reported_live',chain_id:'962421430',rpc_url:'https://u0yth28mgh-u0re35asde-rpc.us0-aws.kaleido.io/',explorer_url:null,genesis_hash:null,provider:'Kaleido',network_type:'permissioned',environment_id:'u0yth28mgh',protocol:'Hyperledger Besu / IBFT',runtime_version:'23.10.2',evm_fork:'London',region:'AWS us-east-2 (Ohio)',validator_count:3,system_monitor_count:1,observed_at:'2026-09-12T16:07:17Z',observed_block_height:'99',evidence_type:'authenticated_provider_dashboard_observation',continuous_monitoring:false,authenticated_rpc_verified:false,rpc_authentication_required:true,independently_verified:false},
  asset_verification:{status:'unconfigured',evidence:[]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',owner_attestation:NUSD_REDEMPTION_POLICY.reserves.owner_attestation,evidence:[],valuation:null,redemption:null},
  peg:{currency:'USD',target:'1',basis:'declared_policy',status:'target_not_verified',verified_redemption:false},

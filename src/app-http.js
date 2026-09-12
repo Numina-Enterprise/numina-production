@@ -15,7 +15,7 @@ async function appActor(req,env){
 async function appRate(db,key,max,now){await db.prepare('DELETE FROM numina_app_rate WHERE window<?').bind(Math.floor(now/60)-2).run();const row=await db.prepare('INSERT INTO numina_app_rate (bucket,window,count) VALUES (?,?,1) ON CONFLICT(bucket,window) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(key,Math.floor(now/60),max).first();if(!row)appFail('RATE_LIMITED',429);}
 async function appOrder(db,id,actor){const row=await db.prepare('SELECT * FROM numina_service_orders WHERE id=?').bind(id).first();if(!row||(!actor.operator&&row.owner_subject!==actor.id))appFail('NOT_FOUND',404);return row;}
 async function appOrderPayment(db,id){const payments=(await db.prepare('SELECT * FROM numina_app_payments WHERE order_id=? ORDER BY session_id').bind(id).all()).results;const facts=(await db.prepare('SELECT f.* FROM numina_app_payment_facts f JOIN numina_app_payments p ON p.payment_intent=f.payment_intent WHERE p.order_id=?').bind(id).all()).results;return appPaymentSummary(payments,facts);}
-async function appOrderView(db,row,actor){return {isOwner:row.owner_subject===actor.id,id:row.id,title:row.title,service:row.service,brief:row.brief,successCriteria:row.success_criteria,country:row.country,status:row.status,revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at,customerEmail:row.owner_email,payment:await appOrderPayment(db,row.id)};}
+async function appOrderView(db,row,actor){return {isOwner:row.owner_subject===actor.id,id:row.id,title:row.title,service:row.service,requestOnly:!!APP_OFFERS[row.service]?.requestOnly,brief:row.brief,successCriteria:row.success_criteria,country:row.country,status:row.status,revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at,customerEmail:row.owner_email,payment:APP_OFFERS[row.service]?.requestOnly?{status:'not_available',gross:null,refunded:null,netBeforeFees:null,currency:'nusd',duplicatePayment:false,disputed:false,confirmedBy:null}:await appOrderPayment(db,row.id)};}
 async function appWebhook(req,env){
  const raw=await appReadRaw(req,262144),event=await appVerifyStripe(raw,req.headers.get('stripe-signature'),env.NUMINA_STRIPE_WEBHOOK_SECRET);const obj=event.data.object,hash=await appDigest(raw),now=Math.floor(Date.now()/1000);
  const existing=await env.DB.prepare('SELECT body_hash FROM numina_app_webhook_events WHERE id=?').bind(event.id).first();if(existing){if(existing.body_hash!==hash)appFail('EVENT_ID_CONFLICT',409);return appResponse({received:true,replayed:true});}
@@ -23,7 +23,7 @@ async function appWebhook(req,env){
  if(['checkout.session.completed','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed','checkout.session.expired'].includes(event.type)){
   const order=typeof obj.client_reference_id==='string'?await env.DB.prepare('SELECT * FROM numina_service_orders WHERE id=?').bind(obj.client_reference_id).first():null;
   if(!order)return appResponse({received:true,ignored:true});
-  const offer=APP_OFFERS[order.service];if(obj.object!=='checkout.session'||obj.mode!=='payment'||obj.currency!=='usd'||obj.amount_total!==offer.amount||obj.payment_link!==offer.paymentLink||obj.livemode!==true||!/^cs_live_[A-Za-z0-9]+$/.test(obj.id))appFail('PAYMENT_DETAILS_MISMATCH',422);
+  const offer=APP_OFFERS[order.service];if(!offer||offer.requestOnly||obj.object!=='checkout.session'||obj.mode!=='payment'||obj.currency!=='usd'||obj.amount_total!==offer.amount||obj.payment_link!==offer.paymentLink||obj.livemode!==true||!/^cs_live_[A-Za-z0-9]+$/.test(obj.id))appFail('PAYMENT_DETAILS_MISMATCH',422);
   const pi=typeof obj.payment_intent==='string'?obj.payment_intent:obj.payment_intent?.id;
   const paid=['checkout.session.completed','checkout.session.async_payment_succeeded'].includes(event.type)&&obj.payment_status==='paid';
   if(paid&&!/^pi_[A-Za-z0-9]+$/.test(pi||''))appFail('PAYMENT_INTENT_REQUIRED',422);
@@ -78,6 +78,7 @@ export async function appHttp(req,env){
   if(operation==='events'&&req.method==='GET'){const events=(await env.DB.prepare('SELECT id,action,note,revision,created_at FROM numina_service_order_events WHERE order_id=? ORDER BY revision LIMIT 200').bind(row.id).all()).results;return appResponse({events});}
   if(operation==='checkout'&&req.method==='POST'){
    if(actor.id!==row.owner_subject)appFail('CUSTOMER_CHECKOUT_ONLY',403);
+   if(APP_OFFERS[row.service]?.requestOnly)appFail('NUSD_NOT_ACTIVATED',409);
    if(!env.NUMINA_STRIPE_WEBHOOK_SECRET)appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);
    const payment=await appOrderPayment(env.DB,row.id);if(!['submitted','scoped'].includes(row.status)||payment.status!=='unconfirmed')appFail('CHECKOUT_REVIEW_REQUIRED',409);
    if(row.country!=='US'&&row.status!=='scoped')appFail('COUNTRY_REVIEW_REQUIRED',409);

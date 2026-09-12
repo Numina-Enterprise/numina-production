@@ -2,7 +2,7 @@ export const NUSD_REDEMPTION_POLICY={"schema":"numina.nusd.redemption_policy.v1"
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
  asset:{name:'Numina USD',symbol:'NUSD',asset_id:null,chain:null,contract:null},
- network_policy:{name:'Numina',status:'designated_not_verified',chain_id:null,rpc_url:null,explorer_url:null,genesis_hash:null},
+ network_policy:{name:'Numina',status:'provider_reported_live',chain_id:'962421430',rpc_url:'https://u0yth28mgh-u0re35asde-rpc.us0-aws.kaleido.io/',explorer_url:null,genesis_hash:null,provider:'Kaleido',network_type:'permissioned',environment_id:'u0yth28mgh',protocol:'Hyperledger Besu / IBFT',runtime_version:'23.10.2',evm_fork:'London',region:'AWS us-east-2 (Ohio)',validator_count:3,system_monitor_count:1,observed_at:'2026-09-12T16:07:17Z',observed_block_height:'99',evidence_type:'authenticated_provider_dashboard_observation',continuous_monitoring:false,authenticated_rpc_verified:false,rpc_authentication_required:true,independently_verified:false},
  asset_verification:{status:'unconfigured',evidence:[]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',owner_attestation:NUSD_REDEMPTION_POLICY.reserves.owner_attestation,evidence:[],valuation:null,redemption:null},
  peg:{currency:'USD',target:'1',basis:'declared_policy',status:'target_not_verified',verified_redemption:false},

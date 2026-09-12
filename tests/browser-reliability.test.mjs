@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {APP_OFFERS} from '../src/app-core.js';
-import {selectService,countryOptions} from '../public/app-entry.js';
+import {selectService,countryOptions,offerLabel} from '../public/app-entry.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const response=(body,status=200)=>Response.json(body,{status});
@@ -34,7 +34,7 @@ function harness(kind,fetcher){
  const window={addEventListener:(name,fn)=>events[name]=fn,location:{assign(){throw new Error('Unexpected navigation in test');}}};
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:(name,fn)=>events[name]=fn,
   querySelectorAll:selector=>selector.startsWith('a[')?[]:selector.includes('workspace')?[...nodes.values()].filter(n=>n.tagName==='button'):selector.includes('checkout-button')?[get('checkout-button')]:[]};
- const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,setTimeout,clearTimeout,console,selectService,countryOptions,
+ const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,setTimeout,clearTimeout,console,selectService,countryOptions,offerLabel,
   clearTreasuryDocuments(){},async loadTreasuryDocuments(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
  const exports=kind==='app'?'({api,openOrder,loadOrders,savedView,boot,clearSession,get session(){return session;},get selected(){return selected;}})':'({api,refresh,run,clearSession,get snapshot(){return snapshot;}})';
  vm.runInContext(source('http-client.js')+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
@@ -75,6 +75,11 @@ test('newer selection and closing details invalidate slow app responses',async()
 test('catalog failure keeps intake disabled even when authentication succeeds',async()=>{
  let posts=0;const h=harness('app',appFetch((path,options)=>{if(options.method==='POST')posts++;return path.endsWith('/catalog')?response({error:'SERVICE_UNAVAILABLE'},503):null;}));
  try{await settled();assert.ok(h.subject.session);assert.equal(h.get('request-fields').disabled,true);await h.get('request-form').fire('submit');assert.equal(posts,0);}finally{h.close();}
+});
+test('NUSD records retain scope-only controls when the catalog cannot load',async()=>{
+ const record={...order('nusd'),service:'result_access',requestOnly:true,status:'scoped',payment:{status:'not_available',currency:'nusd',gross:null,refunded:null}};
+ const h=harness('app',appFetch(path=>path.endsWith('/catalog')?response({error:'SERVICE_UNAVAILABLE'},503):path.endsWith('/nusd')?response({order:record}):null));
+ try{await settled();await h.subject.openOrder('nusd');assert.match(h.get('detail-payment').textContent,/NUSD service/);assert.doesNotMatch(h.get('detail-payment').textContent,/\$0/);assert.equal(h.get('checkout-button').hidden,true);const actions=h.get('order-action').options.map(o=>o.value);assert.ok(!actions.includes('start'));assert.ok(actions.includes('cancel'));}finally{h.close();}
 });
 
 test('acknowledged save remains acknowledged when refresh fails and stale actions are cleared',async()=>{

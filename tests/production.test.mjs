@@ -9,8 +9,10 @@ test('retired reference APIs cannot run or touch storage with or without configu
   assert.equal(response.status,410,path);assert.equal((await response.json()).error,'REFERENCE_RUNTIME_RETIRED');
  }
 });
-test('declaring Numina as the network cannot enable asset execution or create network evidence',()=>{
- assert.equal(NUSD_POLICY.network_policy.name,'Numina');assert.equal(NUSD_POLICY.network_policy.status,'designated_not_verified');
- for(const key of ['chain_id','rpc_url','explorer_url','genesis_hash'])assert.equal(NUSD_POLICY.network_policy[key],null);
+test('provider network provisioning is separate from token identity and financial execution',()=>{
+ assert.equal(NUSD_POLICY.network_policy.name,'Numina');assert.equal(NUSD_POLICY.network_policy.status,'provider_reported_live');
+ assert.equal(NUSD_POLICY.network_policy.chain_id,'962421430');
+ for(const key of ['explorer_url','genesis_hash'])assert.equal(NUSD_POLICY.network_policy[key],null);
+ assert.equal(NUSD_POLICY.network_policy.independently_verified,false);
  assert.equal(NUSD_POLICY.asset.chain,null);assert.equal(NUSD_POLICY.asset.contract,null);assert.equal(NUSD_POLICY.capabilities.mint,false);assert.equal(NUSD_POLICY.capabilities.settlement,false);
 });
