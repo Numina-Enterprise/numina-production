@@ -43,6 +43,15 @@ test('Treasury read is one pinned GET and returns a sanitized read-only projecti
  assert.match(STRIPE_TREASURY_ACCOUNT,/^acct_[A-Za-z0-9]+$/);
 });
 
+test('Treasury reads work on managed Workers without RequestInit cache support',async()=>{
+ const result=await readStripeTreasury(config(),{fetcher:async(url,options)=>{
+  if('cache' in options)throw new TypeError("The 'cache' field on 'RequestInitializerDict' is not implemented.");
+  const headers=new Headers(options.headers);assert.equal(headers.get('Cache-Control'),'no-store');
+  return providerResponse();
+ }});
+ assert.equal(result.connection,'read_only');assert.equal(result.balances.available.usd.value,0);
+});
+
 test('Treasury balances preserve zero, distinguish missing values and use USD cents versus USDC millionths',async()=>{
  const account=financialAccount();
  account.balance={available:{usd:amount('usd',12345),usdc:amount('usdc',1234567)},inbound_pending:{usd:amount('usd',0)},outbound_pending:{usdc:amount('usdc',0)}};
