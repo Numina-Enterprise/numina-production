@@ -501,7 +501,18 @@ function appIntake(input){
 }
 function appPaymentSummary(payments,facts){
  const paid=payments.filter(p=>p.status==='paid');let gross=0,refunded=0,disputed=false;
- for(const p of paid){gross+=p.amount;const related=facts.filter(f=>f.payment_intent===p.payment_intent);refunded+=Math.min(p.amount,Math.max(0,...related.filter(f=>f.kind==='refund').map(f=>f.amount)));const ds=new Map();for(const f of related.filter(f=>f.kind==='dispute').sort((a,b)=>a.event_created-b.event_created||a.event_id.localeCompare(b.event_id)))ds.set(f.object_id,f.status);if([...ds.values()].some(s=>!['won','warning_closed'].includes(s)))disputed=true;}
+ for(const p of paid){
+  gross+=p.amount;const related=facts.filter(f=>f.payment_intent===p.payment_intent);
+  refunded+=Math.min(p.amount,Math.max(0,...related.filter(f=>f.kind==='refund').map(f=>f.amount)));
+  const disputes=new Map();
+  for(const fact of related.filter(f=>f.kind==='dispute')){
+   const latest=disputes.get(fact.object_id);
+   if(!latest||fact.event_created>latest.at)disputes.set(fact.object_id,{at:fact.event_created,statuses:new Set([fact.status])});
+   else if(fact.event_created===latest.at)latest.statuses.add(fact.status);
+  }
+  // IDs do not order events created in the same second. Ambiguous facts require review.
+  if([...disputes.values()].some(d=>[...d.statuses].some(s=>!['won','warning_closed'].includes(s))))disputed=true;
+ }
  return {status:disputed?'disputed':paid.length&&refunded>=gross?'refunded':refunded?'partially_refunded':paid.length?'paid':payments.some(p=>p.status==='pending')?'pending':'unconfirmed',gross,refunded,netBeforeFees:gross-refunded,currency:'usd',duplicatePayment:paid.length>1,disputed,confirmedBy:'Stripe-signed events only'};
 }
 function appTransition(order,input,isOperator,payment){
@@ -558,18 +569,22 @@ async function appWebhook(req,env){
   if(paid&&!/^pi_[A-Za-z0-9]+$/.test(pi||''))appFail('PAYMENT_INTENT_REQUIRED',422);
   const status=paid?'paid':event.type==='checkout.session.completed'?'pending':event.type==='checkout.session.expired'?'expired':'failed';
   const previous=await env.DB.prepare('SELECT order_id,payment_intent FROM numina_app_payments WHERE session_id=?').bind(obj.id).first();if(previous&&(previous.order_id!==order.id||(previous.payment_intent&&pi&&previous.payment_intent!==pi)))appFail('SESSION_CONFLICT',409);
-  statements.push(env.DB.prepare("INSERT INTO numina_app_payments (session_id,order_id,payment_intent,amount,status,event_created,event_id) VALUES (?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET payment_intent=COALESCE(excluded.payment_intent,numina_app_payments.payment_intent), status=CASE WHEN excluded.status='paid' THEN 'paid' WHEN numina_app_payments.status='paid' THEN 'paid' WHEN excluded.event_created>=numina_app_payments.event_created THEN excluded.status ELSE numina_app_payments.status END,event_created=MAX(excluded.event_created,numina_app_payments.event_created),event_id=excluded.event_id").bind(obj.id,order.id,pi||null,offer.amount,status,event.created,event.id));
-  statements.push(env.DB.prepare('UPDATE numina_service_orders SET payment_revision=payment_revision+1 WHERE id=?').bind(order.id));matched=true;
+  statements.push(env.DB.prepare("INSERT INTO numina_app_payments (session_id,order_id,payment_intent,amount,status,event_created,event_id) SELECT ?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM numina_app_webhook_events WHERE id=?) ON CONFLICT(session_id) DO UPDATE SET payment_intent=COALESCE(excluded.payment_intent,numina_app_payments.payment_intent), status=CASE WHEN excluded.status='paid' THEN 'paid' WHEN numina_app_payments.status='paid' THEN 'paid' WHEN excluded.event_created>=numina_app_payments.event_created THEN excluded.status ELSE numina_app_payments.status END,event_created=MAX(excluded.event_created,numina_app_payments.event_created),event_id=excluded.event_id").bind(obj.id,order.id,pi||null,offer.amount,status,event.created,event.id,event.id));
+  statements.push(env.DB.prepare('UPDATE numina_service_orders SET payment_revision=payment_revision+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM numina_app_webhook_events WHERE id=?)').bind(order.id,event.id));matched=true;
  }else if(event.type==='charge.refunded'||['charge.dispute.created','charge.dispute.updated','charge.dispute.closed'].includes(event.type)){
   const pi=typeof obj.payment_intent==='string'?obj.payment_intent:obj.payment_intent?.id;if(!/^pi_[A-Za-z0-9]+$/.test(pi||'')||obj.currency!=='usd')return appResponse({received:true,ignored:true});
   const kind=event.type==='charge.refunded'?'refund':'dispute',amount=kind==='refund'?obj.amount_refunded:obj.amount;
   if(!Number.isSafeInteger(amount)||amount<0||!/^((ch)|(dp))_[A-Za-z0-9]+$/.test(obj.id))appFail('INVALID_PAYMENT_FACT');
   // Retain minimal signed facts so a refund arriving before checkout confirmation is not lost.
-  statements.push(env.DB.prepare('INSERT INTO numina_app_payment_facts (event_id,payment_intent,object_id,kind,amount,status,event_created) VALUES (?,?,?,?,?,?,?) ON CONFLICT(event_id) DO NOTHING').bind(event.id,pi,obj.id,kind,amount,kind==='refund'?'refunded':String(obj.status||'unknown').slice(0,40),event.created));
-  statements.push(env.DB.prepare('UPDATE numina_service_orders SET payment_revision=payment_revision+1 WHERE id IN (SELECT order_id FROM numina_app_payments WHERE payment_intent=?)').bind(pi));matched=true;
+  statements.push(env.DB.prepare('INSERT INTO numina_app_payment_facts (event_id,payment_intent,object_id,kind,amount,status,event_created) SELECT ?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM numina_app_webhook_events WHERE id=?) ON CONFLICT(event_id) DO NOTHING').bind(event.id,pi,obj.id,kind,amount,kind==='refund'?'refunded':String(obj.status||'unknown').slice(0,40),event.created,event.id));
+  statements.push(env.DB.prepare('UPDATE numina_service_orders SET payment_revision=payment_revision+1 WHERE id IN (SELECT order_id FROM numina_app_payments WHERE payment_intent=?) AND NOT EXISTS (SELECT 1 FROM numina_app_webhook_events WHERE id=?)').bind(pi,event.id));matched=true;
  }else return appResponse({received:true,ignored:true});
- statements.push(env.DB.prepare('INSERT INTO numina_app_webhook_events (id,body_hash,type,received_at) VALUES (?,?,?,?) ON CONFLICT(id) DO NOTHING').bind(event.id,hash,event.type,now));
- await env.DB.batch(statements);return appResponse({received:true,matched});
+ // The event guard and every effect share one atomic transaction; concurrent replays are no-ops.
+ statements.push(env.DB.prepare('INSERT INTO numina_app_webhook_events (id,body_hash,type,received_at) VALUES (?,?,?,?) ON CONFLICT(id) DO NOTHING RETURNING id').bind(event.id,hash,event.type,now));
+ statements.push(env.DB.prepare('SELECT body_hash FROM numina_app_webhook_events WHERE id=?').bind(event.id));
+ const results=await env.DB.batch(statements);
+ if(results.at(-1).results[0]?.body_hash!==hash)appFail('EVENT_ID_CONFLICT',409);
+ return appResponse(results.at(-2).results.length?{received:true,matched}:{received:true,replayed:true});
 }
 async function appHttp(req,env){
  const url=new URL(req.url),path=url.pathname,now=Math.floor(Date.now()/1000);

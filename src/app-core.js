@@ -13,7 +13,18 @@ export function appIntake(input){
 }
 export function appPaymentSummary(payments,facts){
  const paid=payments.filter(p=>p.status==='paid');let gross=0,refunded=0,disputed=false;
- for(const p of paid){gross+=p.amount;const related=facts.filter(f=>f.payment_intent===p.payment_intent);refunded+=Math.min(p.amount,Math.max(0,...related.filter(f=>f.kind==='refund').map(f=>f.amount)));const ds=new Map();for(const f of related.filter(f=>f.kind==='dispute').sort((a,b)=>a.event_created-b.event_created||a.event_id.localeCompare(b.event_id)))ds.set(f.object_id,f.status);if([...ds.values()].some(s=>!['won','warning_closed'].includes(s)))disputed=true;}
+ for(const p of paid){
+  gross+=p.amount;const related=facts.filter(f=>f.payment_intent===p.payment_intent);
+  refunded+=Math.min(p.amount,Math.max(0,...related.filter(f=>f.kind==='refund').map(f=>f.amount)));
+  const disputes=new Map();
+  for(const fact of related.filter(f=>f.kind==='dispute')){
+   const latest=disputes.get(fact.object_id);
+   if(!latest||fact.event_created>latest.at)disputes.set(fact.object_id,{at:fact.event_created,statuses:new Set([fact.status])});
+   else if(fact.event_created===latest.at)latest.statuses.add(fact.status);
+  }
+  // IDs do not order events created in the same second. Ambiguous facts require review.
+  if([...disputes.values()].some(d=>[...d.statuses].some(s=>!['won','warning_closed'].includes(s))))disputed=true;
+ }
  return {status:disputed?'disputed':paid.length&&refunded>=gross?'refunded':refunded?'partially_refunded':paid.length?'paid':payments.some(p=>p.status==='pending')?'pending':'unconfirmed',gross,refunded,netBeforeFees:gross-refunded,currency:'usd',duplicatePayment:paid.length>1,disputed,confirmedBy:'Stripe-signed events only'};
 }
 export function appTransition(order,input,isOperator,payment){

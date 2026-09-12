@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync,mkdtempSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';
-import {database} from '../scripts/sqlite.mjs';import {appHttp} from '../src/app-http.js';import {APP_OFFERS,appPaymentSummary} from '../src/app-core.js';
+import {database} from '../scripts/sqlite.mjs';import {appHttp} from '../src/app-http.js';import {APP_OFFERS,appPaymentSummary,appTransition} from '../src/app-core.js';
 const migration=['0001_useful_black_crow.sql','0002_chief_rachel_grey.sql'].flatMap(name=>readFileSync(new URL('../drizzle/'+name,import.meta.url),'utf8').split('--> statement-breakpoint').map(x=>x.trim()).filter(Boolean));
 const owner={'oai-authenticated-user-id':'user-owner','oai-authenticated-user-email':'owner@example.test'},customer={'oai-authenticated-user-id':'user-customer','oai-authenticated-user-email':'customer@example.test'},other={'oai-authenticated-user-id':'user-other','oai-authenticated-user-email':'other@example.test'};
 async function fixture(path){const db=database(path);for(const sql of migration)await db.prepare(sql).run();return {DB:db,NUMINA_CONTROL_OWNER:'email:owner@example.test',NUMINA_STRIPE_WEBHOOK_SECRET:'whsec_test_only_not_production'};}
@@ -20,3 +20,48 @@ test('request persists across database reopen and pages are scoped',async()=>{co
 test('disputes are separate from collected amounts and require review',()=>{const payments=[{status:'paid',amount:150000,payment_intent:'pi_1'}],facts=[{kind:'dispute',payment_intent:'pi_1',object_id:'dp_1',status:'needs_response',event_created:10,event_id:'evt_1'}];assert.equal(appPaymentSummary(payments,facts).status,'disputed');facts.push({...facts[0],status:'won',event_created:11,event_id:'evt_2'});assert.equal(appPaymentSummary(payments,facts).status,'paid');});
 test('a refund arriving during an operator transition prevents stale paid fulfillment',async()=>{const env=await fixture();try{const order=await create(env),paid=payment(order);await webhook(env,paid);await call(env,'orders/'+order.id+'/actions',{action:'scope',note:'Scope confirmed for concurrency regression.',revision:0,idempotencyKey:crypto.randomUUID()},owner);const original=env.DB.batch.bind(env.DB);let intercepted=false;env.DB.batch=async statements=>{if(!intercepted){intercepted=true;const refund={id:'evt_racingrefund',type:'charge.refunded',livemode:true,created:paid.created+1,data:{object:{id:'ch_racingrefund',payment_intent:paid.data.object.payment_intent,currency:'usd',amount_refunded:150000}}};assert.equal((await webhook(env,refund)).status,200);}return original(statements);};const result=await call(env,'orders/'+order.id+'/actions',{action:'start',note:'Start only with a currently confirmed payment.',revision:1,idempotencyKey:crypto.randomUUID()},owner);assert.equal(result.status,409);const view=(await call(env,'orders/'+order.id)).body.order;assert.equal(view.status,'scoped');assert.equal(view.payment.status,'refunded');assert.equal((await call(env,'orders/'+order.id+'/events')).body.events.length,2);}finally{env.DB.close();}});
 test('concurrent intake cannot exceed the open-request limit and rate windows expire',async()=>{const env=await fixture();try{for(let i=0;i<49;i++){await env.DB.prepare('DELETE FROM numina_app_rate').run();await create(env);}await env.DB.prepare('DELETE FROM numina_app_rate').run();const results=await Promise.all([call(env,'orders',intake()),call(env,'orders',intake())]);assert.deepEqual(results.map(r=>r.status).sort(),[201,429]);assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders').first()).n,50);await env.DB.prepare('INSERT INTO numina_app_rate (bucket,window,count) VALUES (?,?,?)').bind('expired',1,1).run();await call(env,'orders');assert.equal(await env.DB.prepare('SELECT bucket FROM numina_app_rate WHERE bucket=?').bind('expired').first(),null);}finally{env.DB.close();}});
+
+test('concurrent signed webhook retries update payment and refund revisions exactly once',async()=>{
+ const env=await fixture();try{
+  const order=await create(env),event=payment(order);
+  const responses=await Promise.all([webhook(env,event),webhook(env,event)]);
+  assert.ok(responses.every(r=>r.status===200));assert.equal(responses.filter(r=>r.body.replayed).length,1);
+  assert.equal((await env.DB.prepare('SELECT payment_revision FROM numina_service_orders WHERE id=?').bind(order.id).first()).payment_revision,1);
+  const refund={id:'evt_concurrentrefund',type:'charge.refunded',livemode:true,created:event.created+1,data:{object:{id:'ch_concurrentrefund',payment_intent:event.data.object.payment_intent,currency:'usd',amount_refunded:50000}}};
+  const retries=await Promise.all([webhook(env,refund),webhook(env,refund)]);assert.equal(retries.filter(r=>r.body.replayed).length,1);
+  assert.equal((await env.DB.prepare('SELECT payment_revision FROM numina_service_orders WHERE id=?').bind(order.id).first()).payment_revision,2);
+  const view=(await call(env,'orders/'+order.id)).body.order;assert.equal(view.payment.gross,150000);assert.equal(view.payment.refunded,50000);
+ }finally{env.DB.close();}
+});
+
+test('concurrent conflicting event payload is rejected without a second payment effect',async()=>{
+ const env=await fixture();try{
+  const order=await create(env),first=payment(order),second=structuredClone(first);second.data.object.payment_intent='pi_conflicting';
+  const responses=await Promise.all([webhook(env,first),webhook(env,second)]);assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);
+  assert.equal((await env.DB.prepare('SELECT payment_revision FROM numina_service_orders WHERE id=?').bind(order.id).first()).payment_revision,1);
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_payments').first()).n,1);
+ }finally{env.DB.close();}
+});
+
+test('event-receipt failure rolls back all payment effects and permits a clean retry',async()=>{
+ const env=await fixture();try{
+  const order=await create(env),event=payment(order),original=env.DB.batch.bind(env.DB);
+  env.DB.batch=statements=>original([...statements.slice(0,-2),env.DB.prepare('INSERT INTO missing_event_table (id) VALUES (?)').bind(event.id)]);
+  assert.equal((await webhook(env,event)).status,503);
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_payments').first()).n,0);
+  assert.equal((await env.DB.prepare('SELECT payment_revision FROM numina_service_orders WHERE id=?').bind(order.id).first()).payment_revision,0);
+  env.DB.batch=original;assert.equal((await webhook(env,event)).status,200);
+ }finally{env.DB.close();}
+});
+
+test('same-second conflicting disputes cannot permit work based on event-ID ordering',()=>{
+ const payments=[{status:'paid',amount:150000,payment_intent:'pi_1'}];
+ for(const ids of [['evt_a','evt_z'],['evt_z','evt_a']]){
+  const facts=['needs_response','won'].map((status,i)=>({kind:'dispute',payment_intent:'pi_1',object_id:'dp_1',status,event_created:10,event_id:ids[i]}));
+  for(const ordered of [facts,[...facts].reverse()]){
+   const summary=appPaymentSummary(payments,ordered);assert.equal(summary.status,'disputed');
+   assert.throws(()=>appTransition({status:'scoped',revision:1},{action:'start',revision:1,idempotencyKey:crypto.randomUUID(),note:'Review the payment before work.'},true,summary),/CONFIRMED_PAYMENT_REQUIRED/);
+  }
+  facts.push({...facts[0],status:'won',event_created:11,event_id:'evt_new'});assert.equal(appPaymentSummary(payments,facts).status,'paid');
+ }
+});
