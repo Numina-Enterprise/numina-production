@@ -1,8 +1,9 @@
+import {treasuryDocumentHttp} from './treasury-documents.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
 import {readControl,bootstrapControl,controlSnapshot,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
 const OWNER_TREASURY_STATEMENT={"schema":"numina.treasury.owner_statement.v1","classification":"owner_reported_not_independently_verified","source":"User statements in the Numina build conversation; not a bank feed or signed reserve report","reported_owner":"SK Consulting LLC","reported_institution":"Bank of America","reported_account_type":"Savings","reported_as_of":"2026-09-11","reported_currency":"USD","reported_amount_usd":"500000000000000","reported_custodian":"Numina","owner_reports_funding_authorized":true,"owner_reports_evidence_supplied":true,"owner_evidence_statement":"Actual evidence: supplied.","bank_evidence_received":false,"independent_verification":"not_completed","verified_reserve_amount_usd":null,"verified_allocation_usd":null,"funds_moved_by_this_record":false,"financial_capabilities_activated":false};
-function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
+function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
   const auth=req.headers.get('authorization');
@@ -42,6 +43,10 @@ export async function controlHttp(req,env){
       return controlResponse(await bootstrapControl(env.DB,actor,now),201);
     }
     const current=await readControl(env.DB);if(current.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    if(path==='/api/control/v1/treasury-documents'||path.startsWith('/api/control/v1/treasury-documents/')){
+      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      return await treasuryDocumentHttp(req,env,actor);
+    }
     if(path==='/api/control/v1/treasury-attestation'){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
@@ -56,5 +61,5 @@ export async function controlHttp(req,env){
       const rows=await env.DB.prepare('SELECT event_json,hash FROM numina_control_events WHERE revision>? ORDER BY revision LIMIT 100').bind(after).all();return controlResponse({events:rows.results.map(r=>({event:JSON.parse(r.event_json),hash:r.hash})),next:rows.results.length?JSON.parse(rows.results.at(-1).event_json).revision:null});
     }
     return controlResponse({error:'NOT_FOUND'},404);
-  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path,code,status}));return controlResponse({status:'unavailable',error:code},status);}
+  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path.replace(/\/treasury-documents\/[^/]+/,'/treasury-documents/:id'),code,status}));return controlResponse({status:'unavailable',error:code},status);}
 }

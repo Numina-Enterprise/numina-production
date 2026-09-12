@@ -290,8 +290,65 @@ async function commitControl(db,command,actor,now){
   if(failure)throw failure;controlError('STALE_REVISION',409);
 }
 
+
+const TREASURY_DOCUMENT_LIMIT=10*1024*1024;
+const treasuryDocumentHeaders={'Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Content-Type-Options':'nosniff'};
+function treasuryDocumentResponse(value,status=200){return new Response(JSON.stringify(value),{status,headers:{...treasuryDocumentHeaders,'Content-Type':'application/json'}});}
+function treasuryDocumentName(raw){
+ let name;try{name=decodeURIComponent(raw||'');}catch{controlError('INVALID_DOCUMENT_NAME',400);}
+ if(!name||name!==name.trim()||new TextEncoder().encode(name).length>160||/[\x00-\x1f\x7f/\\\u202a-\u202e\u2066-\u2069]/.test(name)||!/[.](pdf|png|jpe?g)$/i.test(name))controlError('INVALID_DOCUMENT_NAME',400);
+ return name;
+}
+function treasuryDocumentReceipt(object,prefix){
+ const m=object?.customMetadata,id=object?.key?.slice(prefix.length);
+ if(!object?.key?.startsWith(prefix)||!/^[a-f0-9]{64}$/.test(id)||m?.schema!=='numina.supporting_document.v1'||m.sha256!==id||Number(m.size)!==object.size||object.size<1||object.size>TREASURY_DOCUMENT_LIMIT||!Number.isFinite(Date.parse(m.received_at))||!['application/pdf','image/png','image/jpeg'].includes(m.content_type))controlError('DOCUMENT_RECORD_UNAVAILABLE',503);
+ return {id,name:treasuryDocumentName(m.encoded_name),size:object.size,content_type:m.content_type,sha256:id,received_at:m.received_at,classification:'owner_uploaded_unverified',bank_issuer_verified:false,independent_verification:'not_completed'};
+}
+async function treasuryDocumentBytes(req){
+ if(req.headers.has('content-encoding'))controlError('ENCODED_DOCUMENT_NOT_SUPPORTED',415);
+ const declared=req.headers.get('content-length');if(declared!==null&&(!/^\d+$/.test(declared)||Number(declared)>TREASURY_DOCUMENT_LIMIT))controlError('DOCUMENT_TOO_LARGE',413);
+ const reader=req.body?.getReader();if(!reader)controlError('EMPTY_DOCUMENT',400);
+ const chunks=[];let length=0;const deadline=Date.now()+20000;
+ try{for(;;){let timer;let part;try{part=await Promise.race([reader.read(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Object.assign(new Error('DOCUMENT_UPLOAD_TIMEOUT'),{code:'DOCUMENT_UPLOAD_TIMEOUT',status:408})),Math.max(1,deadline-Date.now()));})]);}finally{clearTimeout(timer);}if(part.done)break;length+=part.value.byteLength;if(length>TREASURY_DOCUMENT_LIMIT)controlError('DOCUMENT_TOO_LARGE',413);chunks.push(part.value);}}
+ catch(error){void reader.cancel().catch(()=>{});throw error;}
+ if(!length)controlError('EMPTY_DOCUMENT',400);if(declared!==null&&Number(declared)!==length)controlError('DOCUMENT_LENGTH_MISMATCH',400);
+ const bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}return bytes;
+}
+function treasuryDocumentFormat(bytes,type,name){
+ const signature=type==='application/pdf'?bytes.length>=8&&new TextDecoder().decode(bytes.slice(0,5))==='%PDF-'&&/\.pdf$/i.test(name):type==='image/png'?bytes.length>=8&&[137,80,78,71,13,10,26,10].every((v,i)=>bytes[i]===v)&&/\.png$/i.test(name):type==='image/jpeg'?bytes.length>=4&&bytes[0]===255&&bytes[1]===216&&bytes[2]===255&&bytes.at(-2)===255&&bytes.at(-1)===217&&/\.jpe?g$/i.test(name):false;
+ if(!signature)controlError('DOCUMENT_FORMAT_MISMATCH',415);
+}
+async function treasuryDocumentHttp(req,env,actor){
+ // Caller has already checked authenticated root ownership, configuration and write origin.
+ if(!env.BUCKET)controlError('DOCUMENT_STORAGE_UNAVAILABLE',503);
+ const url=new URL(req.url),base='/api/control/v1/treasury-documents',prefix='treasury-documents/v1/'+await controlHash(actor)+'/',path=url.pathname;
+ if(path===base&&req.method==='GET'){
+  const cursor=url.searchParams.get('cursor')||undefined;if(cursor&&cursor.length>2048)controlError('INVALID_DOCUMENT_CURSOR',400);
+  const result=await env.BUCKET.list({prefix,limit:50,include:['customMetadata'],...(cursor?{cursor}:{})});
+  if(result.truncated&&!result.cursor)controlError('DOCUMENT_RECORD_UNAVAILABLE',503);
+  return treasuryDocumentResponse({schema:'numina.supporting_documents.v1',documents:result.objects.map(object=>treasuryDocumentReceipt(object,prefix)),next_cursor:result.truncated?result.cursor:null,upload_limit_bytes:TREASURY_DOCUMENT_LIMIT,accepted_types:['application/pdf','image/png','image/jpeg'],receipt_scope:'file_storage_only',bank_issuer_verified:false,financial_execution:false});
+ }
+ if(path===base&&req.method==='POST'){
+  const type=req.headers.get('content-type')?.split(';')[0];if(!['application/pdf','image/png','image/jpeg'].includes(type))controlError('DOCUMENT_TYPE_NOT_SUPPORTED',415);
+  const name=treasuryDocumentName(req.headers.get('x-document-name')),bytes=await treasuryDocumentBytes(req);treasuryDocumentFormat(bytes,type,name);
+  const digest=await crypto.subtle.digest('SHA-256',bytes),id=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join(''),key=prefix+id;
+  const previous=await env.BUCKET.head(key);if(previous)return treasuryDocumentResponse({document:treasuryDocumentReceipt(previous,prefix),replayed:true});
+  const metadata={schema:'numina.supporting_document.v1',encoded_name:encodeURIComponent(name),sha256:id,size:String(bytes.length),content_type:type,received_at:new Date().toISOString()};
+  const stored=await env.BUCKET.put(key,bytes,{onlyIf:new Headers({'If-None-Match':'*'}),sha256:digest,httpMetadata:{contentType:'application/octet-stream',cacheControl:'private, no-store'},customMetadata:metadata});
+  const confirmed=stored||await env.BUCKET.head(key);if(!confirmed)controlError('DOCUMENT_RECEIPT_UNCONFIRMED',503);
+  return treasuryDocumentResponse({document:treasuryDocumentReceipt(confirmed,prefix),replayed:!stored},stored?201:200);
+ }
+ const match=path.match(/^\/api\/control\/v1\/treasury-documents\/([a-f0-9]{64})$/);
+ if(match&&req.method==='GET'){
+  const object=await env.BUCKET.get(prefix+match[1]);if(!object)controlError('DOCUMENT_NOT_FOUND',404);const receipt=treasuryDocumentReceipt(object,prefix);
+  const fallback=receipt.name.replace(/[^A-Za-z0-9._-]/g,'_');
+  return new Response(object.body,{headers:{...treasuryDocumentHeaders,'Content-Type':'application/octet-stream','Content-Length':String(receipt.size),'Content-Disposition':'attachment; filename="'+fallback+'"; filename*=UTF-8\'\''+encodeURIComponent(receipt.name).replace(/[!'()*]/g,c=>'%'+c.charCodeAt(0).toString(16).toUpperCase()),'Content-Security-Policy':"sandbox; default-src 'none'"}});
+ }
+ return treasuryDocumentResponse({error:req.method==='GET'?'DOCUMENT_NOT_FOUND':'METHOD_NOT_ALLOWED'},req.method==='GET'?404:405);
+}
+
 const OWNER_TREASURY_STATEMENT={"schema":"numina.treasury.owner_statement.v1","classification":"owner_reported_not_independently_verified","source":"User statements in the Numina build conversation; not a bank feed or signed reserve report","reported_owner":"SK Consulting LLC","reported_institution":"Bank of America","reported_account_type":"Savings","reported_as_of":"2026-09-11","reported_currency":"USD","reported_amount_usd":"500000000000000","reported_custodian":"Numina","owner_reports_funding_authorized":true,"owner_reports_evidence_supplied":true,"owner_evidence_statement":"Actual evidence: supplied.","bank_evidence_received":false,"independent_verification":"not_completed","verified_reserve_amount_usd":null,"verified_allocation_usd":null,"funds_moved_by_this_record":false,"financial_capabilities_activated":false};
-function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
+function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
   const auth=req.headers.get('authorization');
@@ -331,6 +388,10 @@ async function controlHttp(req,env){
       return controlResponse(await bootstrapControl(env.DB,actor,now),201);
     }
     const current=await readControl(env.DB);if(current.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    if(path==='/api/control/v1/treasury-documents'||path.startsWith('/api/control/v1/treasury-documents/')){
+      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      return await treasuryDocumentHttp(req,env,actor);
+    }
     if(path==='/api/control/v1/treasury-attestation'){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
@@ -345,7 +406,7 @@ async function controlHttp(req,env){
       const rows=await env.DB.prepare('SELECT event_json,hash FROM numina_control_events WHERE revision>? ORDER BY revision LIMIT 100').bind(after).all();return controlResponse({events:rows.results.map(r=>({event:JSON.parse(r.event_json),hash:r.hash})),next:rows.results.length?JSON.parse(rows.results.at(-1).event_json).revision:null});
     }
     return controlResponse({error:'NOT_FOUND'},404);
-  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path,code,status}));return controlResponse({status:'unavailable',error:code},status);}
+  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path.replace(/\/treasury-documents\/[^/]+/,'/treasury-documents/:id'),code,status}));return controlResponse({status:'unavailable',error:code},status);}
 }
 
 const RC20_READ_PATHS = new Set(['/healthz', '/readyz', '/metrics', '/.well-known/security.txt', '/site.webmanifest', '/v1/preflight', '/v1/status', '/v1/capabilities', '/v1/release/manifest', '/v1/release/supply-chain', '/v1/release/sbom', '/v1/release/build-provenance', '/v1/release/attestation', '/v1/keys/release-verification']);
@@ -598,7 +659,7 @@ function response(body,status=200,extra={}){return new Response(JSON.stringify(b
 export default {
  async fetch(req,env){
   const requestId=crypto.randomUUID(),start=Date.now(),url=new URL(req.url),path=url.pathname;let status=200;
-  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,v);headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
+  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
   try{
    // Retired public test surfaces stay closed even if an environment is misconfigured.
@@ -613,6 +674,6 @@ export default {
    if(path.startsWith('/api/'))return finish(response({error:'NOT_FOUND'},404));
    return finish(await env.ASSETS.fetch(req));
   }catch{return finish(response({error:'SERVICE_UNAVAILABLE',requestId},503));}
-  finally{if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,route:path.replace(/\/orders\/[^/]+/,'/orders/:id').slice(0,120),method:req.method,status,durationMs:Date.now()-start}));}
+  finally{if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,route:path.replace(/\/orders\/[^/]+/,'/orders/:id').replace(/\/treasury-documents\/[^/]+/,'/treasury-documents/:id').slice(0,120),method:req.method,status,durationMs:Date.now()-start}));}
  }
 };

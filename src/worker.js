@@ -9,7 +9,7 @@ function response(body,status=200,extra={}){return new Response(JSON.stringify(b
 export default {
  async fetch(req,env){
   const requestId=crypto.randomUUID(),start=Date.now(),url=new URL(req.url),path=url.pathname;let status=200;
-  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,v);headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
+  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
   try{
    // Retired public test surfaces stay closed even if an environment is misconfigured.
@@ -24,6 +24,6 @@ export default {
    if(path.startsWith('/api/'))return finish(response({error:'NOT_FOUND'},404));
    return finish(await env.ASSETS.fetch(req));
   }catch{return finish(response({error:'SERVICE_UNAVAILABLE',requestId},503));}
-  finally{if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,route:path.replace(/\/orders\/[^/]+/,'/orders/:id').slice(0,120),method:req.method,status,durationMs:Date.now()-start}));}
+  finally{if(path.startsWith('/api/'))console.log(JSON.stringify({event:'http_request',requestId,route:path.replace(/\/orders\/[^/]+/,'/orders/:id').replace(/\/treasury-documents\/[^/]+/,'/treasury-documents/:id').slice(0,120),method:req.method,status,durationMs:Date.now()-start}));}
  }
 };

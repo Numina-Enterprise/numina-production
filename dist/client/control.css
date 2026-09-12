@@ -3,3 +3,5 @@
 #treasury-owner-panel{margin-bottom:24px}#treasury-owner-details{grid-template-columns:minmax(130px,1fr) minmax(0,3fr)}@media(max-width:600px){#treasury-owner-details{grid-template-columns:1fr;gap:6px}#treasury-owner-details dd{margin-bottom:12px}}
 
 .simulation-panel{margin-bottom:24px;border:2px dashed #ae9bf5}.simulation-panel .eyebrow{color:#c7b7ff}.simulation-result{font-weight:600;color:#e3dafe}.simulation-panel select{max-width:480px}
+
+.document-panel{margin-bottom:24px}.document-list{list-style:none;padding:0}.document-list li{border-top:1px solid var(--line);padding:18px 0;overflow-wrap:anywhere}.document-list p{font-size:14px;color:var(--muted);line-height:1.6}.document-list details{margin:12px 0}.document-list code{font-size:12px;overflow-wrap:anywhere}.document-panel input[type=file]{max-width:100%}.document-panel #document-message{font-size:14px;line-height:1.6}.simulation-panel summary{margin-bottom:14px}
