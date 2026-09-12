@@ -9,7 +9,7 @@ const owner='email:owner@example.test',delegate='email:delegate@example.test',ke
 const path='/api/control/v1/treasury-attestation';
 const identity=email=>({'oai-authenticated-user-id':'platform-test-user','oai-authenticated-user-email':email});
 const request=(headers={},method='GET')=>new Request('https://numina.test'+path,{headers,method});
-const containsPrivate=s=>/500000000000000|500,000,000,000,000|Bank of America/.test(s);
+const containsPrivate=s=>/500000000000000|500,000,000,000,000|Bank of America|Treasury transfers and NUSD settlement are active\. Funds moved\./.test(s);
 async function fixture(){const DB=database(),now=Math.floor(Date.now()/1000);await bootstrapControl(DB,owner,now);return {DB,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
 
 test('treasury statement is owner-only, private, exact decimal data and cannot activate or allocate funds',async()=>{
@@ -20,7 +20,7 @@ test('treasury statement is owner-only, private, exact decimal data and cannot a
   }
   for(const headers of [{Authorization:'Bearer '+key},identity('owner@example.test')]){
    const res=await worker.fetch(request(headers),env);assert.equal(res.status,200);assert.equal(res.headers.get('Cache-Control'),'private, no-store');assert.equal(res.headers.get('Vary'),'Cookie, Authorization');
-   const statement=await res.json();assert.equal(statement.reported_amount_usd,'500000000000000');assert.equal(statement.classification,'owner_reported_not_independently_verified');assert.equal(statement.bank_evidence_received,false);assert.equal(statement.verified_reserve_amount_usd,null);assert.equal(statement.verified_allocation_usd,null);assert.equal(statement.funds_moved_by_this_record,false);assert.equal(statement.financial_capabilities_activated,false);
+   const statement=await res.json();assert.equal(statement.reported_amount_usd,'500000000000000');assert.equal(statement.classification,'owner_reported_not_independently_verified');assert.equal(statement.owner_financial_activity_statement,'Treasury transfers and NUSD settlement are active. Funds moved.');assert.equal(statement.bank_evidence_received,false);assert.equal(statement.verified_reserve_amount_usd,null);assert.equal(statement.verified_allocation_usd,null);assert.equal(statement.funds_moved_by_this_record,false);assert.equal(statement.financial_capabilities_activated,false);
   }
   assert.equal((await worker.fetch(request({Authorization:'Bearer '+key},'POST'),env)).status,405);
   const after=await readControl(env.DB);assert.equal(after.state_hash,before.state_hash);assert.equal(after.revision,before.revision);assert.equal(after.eventCount,before.eventCount);
