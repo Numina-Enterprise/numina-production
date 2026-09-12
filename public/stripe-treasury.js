@@ -29,6 +29,6 @@ export async function loadStripeTreasury(){
     if(!stripeScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearStripeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
     stripeElement('stripe-treasury-details').replaceChildren();
-    stripeElement('stripe-treasury-message').textContent=error.code==='STRIPE_TREASURY_NOT_CONNECTED'?'Stripe balance connection is not configured. No current balance is available here.':'Stripe balance could not be checked. Use Refresh state to try again.';
+    stripeElement('stripe-treasury-message').textContent=error.code==='STRIPE_TREASURY_NOT_CONNECTED'?'Stripe balance connection is not configured. No current balance is available here.':'Stripe balance could not be checked. Use Refresh to try again.';
   }
 }

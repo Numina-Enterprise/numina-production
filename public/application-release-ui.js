@@ -5,7 +5,7 @@ export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  signerRepository:'skott34-dot/numina-builder',
  signerRepositoryId:1367645630,
  signerWorkflow:'.github/workflows/numina-site-builder.yml',
- signerSha:'4a7210c10fcfa79436018e8ba337244402661036', // Actual prepared builder commit; publication must be confirmed separately.
+ signerSha:'4a7210c10fcfa79436018e8ba337244402661036', // Published immutable builder reviewed in the linked artifact assessment.
  sourceSha:null, // Optional additional approved source pin; never infer it from an unsigned response.
  predicateType:'https://slsa.dev/provenance/v1',
  oidcIssuer:'https://token.actions.githubusercontent.com'
