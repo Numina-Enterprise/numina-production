@@ -3,7 +3,9 @@ const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='
 async function api(path,body){const r=await fetch('/api/control/v1/'+path,{headers:body?{'Content-Type':'application/json'}:{},method:body?'POST':'GET',body:body?stable(body):undefined});const value=await r.json();if(!r.ok)throw Object.assign(new Error(value.error||value.status),{status:r.status});return value;}
 const words=s=>s.toLowerCase().replaceAll('_',' ');
 const el=(tag,text,className)=>{const n=document.createElement(tag);n.textContent=text;if(className)n.className=className;return n;};
-function clearTreasuryStatement(){treasuryGeneration++;$('treasury-owner-panel').hidden=true;$('treasury-owner-details').replaceChildren();}
+function renderEvidenceSimulation(){$('simulation-result').textContent='Bank-issued evidence: '+($('simulated-bank-evidence').value==='supplied'?'Supplied':'Not supplied')+' (simulated).';}
+function clearTreasuryStatement(){treasuryGeneration++;$('treasury-owner-panel').hidden=true;$('treasury-owner-details').replaceChildren();$('treasury-simulation-panel').hidden=true;$('simulated-bank-evidence').value='supplied';renderEvidenceSimulation();}
+$('simulated-bank-evidence').onchange=renderEvidenceSimulation;
 async function loadTreasuryStatement(){
   if(snapshot?.projection!=='complete')return;
   const generation=treasuryGeneration;
@@ -11,7 +13,7 @@ async function loadTreasuryStatement(){
     if(generation!==treasuryGeneration||snapshot?.projection!=='complete')return;
     if(statement.schema!=='numina.treasury.owner_statement.v1'||statement.classification!=='owner_reported_not_independently_verified')throw new Error('Invalid owner statement');
     const rows=[['Reported owner',statement.reported_owner],['Reported institution',statement.reported_institution],['Reported account',statement.reported_account_type],['Reported date',statement.reported_as_of],['Owner-reported amount',new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(BigInt(statement.reported_amount_usd))],['Reported custodian',statement.reported_custodian],['Source',statement.source],['Bank-issued evidence',statement.bank_evidence_received?'Received; review required':'Not supplied'],['Independent verification','Not completed'],['Verified reserve amount','Not established'],['Verified allocation','Not established'],['Financial execution','Inactive']];
-    const details=$('treasury-owner-details');details.replaceChildren();for(const [label,value]of rows){details.append(el('dt',label),el('dd',value));}$('treasury-owner-panel').hidden=false;
+    const details=$('treasury-owner-details');details.replaceChildren();for(const [label,value]of rows){details.append(el('dt',label),el('dd',value));}$('treasury-owner-panel').hidden=false;$('treasury-simulation-panel').hidden=false;
   }catch{if(generation===treasuryGeneration)clearTreasuryStatement();}
 }
 window.addEventListener('pagehide',clearTreasuryStatement);
