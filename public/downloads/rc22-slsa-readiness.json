@@ -15,7 +15,7 @@
     "Exact artifact-to-deployment binding"
   ],
   "sources": [
-    "https://slsa.dev/spec/v1.2/levels",
+    "https://slsa.dev/spec/v1.2/",
     "https://slsa.dev/spec/v1.2/build-requirements",
     "https://slsa.dev/provenance/v1"
   ]

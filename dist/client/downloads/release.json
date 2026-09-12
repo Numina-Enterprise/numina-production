@@ -6,7 +6,7 @@
   "version": "2.0.0",
   "release": "numina-v2.0.0",
   "release_channel": "production",
-  "build_id": "ba73e7560f87e62b0b144fd85f8ac6c560155b8afad6628d987a997eb0b58891",
+  "build_id": "4224a4ff9efa16728b6d6bc2156e1501e7b67dc38daa0282f7cbefd6d8637a07",
   "artifact_digest_algorithm": "sha256",
   "artifact_digest_method": "SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes the two generated release manifests",
   "workerSha256": "9f30adb4b0b1ba1dffdfdaa0beea6040c7a800275852ce3e2807eef6d10b0df5",
@@ -215,7 +215,7 @@
     },
     {
       "path": "client/downloads/rc22-slsa-readiness.json",
-      "sha256": "20cd782f1708afba1a9b0c8f57c31e9dc593e4e35c15dbffbff69cb90000b8da"
+      "sha256": "c20ae558d90170a1d2691107e5331eff66e4cc7ed99094bf919fc370277c222b"
     },
     {
       "path": "client/economy.css",
@@ -279,7 +279,7 @@
     },
     {
       "path": "client/provenance.html",
-      "sha256": "13a0794cd871af6d5fcf616b0c955e1b94349a98b2371d55b428fb154be932ef"
+      "sha256": "422f9a9f7d5f149840ecec9a65791db144c282c01ff217bebfba96e1ba2b3e28"
     },
     {
       "path": "client/redemption.html",
