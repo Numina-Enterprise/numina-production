@@ -564,7 +564,55 @@ async function routeRc20(request, env, upstreamFetch = fetch) {
   }
 }
 
-const APP_VERSION='2026-09-12';
+// Public rc22 runtime evidence. Customer identity and provider credentials stay local.
+const RUNTIME_ORIGIN = 'https://numina-production.vercel.app';
+const RUNTIME_READ_PATHS = new Set([
+  '/v1/status', '/v1/control/state', '/v1/release/manifest',
+  '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers'
+]);
+
+function runtimeError(status, error, extra = {}) {
+  return Response.json({error}, {status, headers: {'Cache-Control':'no-store', ...extra}});
+}
+
+async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 12000) {
+  const path = new URL(request.url).pathname;
+  if (!RUNTIME_READ_PATHS.has(path)) return null;
+  if (!['GET','HEAD'].includes(request.method)) return runtimeError(405, 'METHOD_NOT_ALLOWED', {Allow:'GET, HEAD'});
+  const controller = new AbortController();
+  let reader;
+  const deadline = new Promise((_, reject) => {
+    controller.signal.addEventListener('abort', () => reject(new Error('deadline')), {once:true});
+  });
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await Promise.race([upstreamFetch(RUNTIME_ORIGIN + path, {
+      method:'GET', headers:{Accept:'application/json'}, redirect:'manual', signal:controller.signal
+    }), deadline]);
+    if (response.status >= 300 && response.status < 400) return runtimeError(502, 'RUNTIME_UPSTREAM_REDIRECT');
+    if (!(response.headers.get('content-type') || '').toLowerCase().includes('application/json')) return runtimeError(502, 'RUNTIME_INVALID_RESPONSE');
+    if (!response.body) return runtimeError(502, 'RUNTIME_EMPTY_RESPONSE');
+    reader = response.body.getReader();
+    const chunks = []; let size = 0;
+    while (true) {
+      const next = await Promise.race([reader.read(), deadline]);
+      if (next.done) break;
+      size += next.value.byteLength;
+      if (size > 262144) { void reader.cancel().catch(() => {}); return runtimeError(502, 'RUNTIME_RESPONSE_TOO_LARGE'); }
+      chunks.push(next.value);
+    }
+    const bytes = new Uint8Array(size); let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+    JSON.parse(new TextDecoder().decode(bytes));
+    return new Response(request.method === 'HEAD' ? null : bytes, {status:response.status, headers:{
+      'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store',
+      'X-Numina-Runtime-Release':'1.9.0-rc22', 'X-Content-Type-Options':'nosniff'
+    }});
+  } catch { return runtimeError(controller.signal.aborted ? 504 : 502, 'RUNTIME_SERVICE_UNAVAILABLE'); }
+  finally { clearTimeout(timer); if (controller.signal.aborted && reader) void reader.cancel().catch(() => {}); }
+}
+
+const APP_VERSION='2.0.0';
 const APP_OFFERS={
  diagnostic:{name:'Operational Agent Diagnostic',amount:150000,currency:'usd',paymentLink:'plink_1UEZzUQdJat0efmTmZFJ5X6b',url:'https://book.stripe.com/fZu8wRb8UfHubiWgSxcbC07',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
  audit:{name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
@@ -752,7 +800,7 @@ async function nusdHttp(req){
  return new Response(JSON.stringify({error:'NOT_FOUND'}),{status:404,headers});
 }
 
-const security={"X-Numina-Version":"1.0.0","X-Numina-Profile":"numina-production","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
+const security={"X-Numina-Version":"2.0.0","X-Numina-Profile":"numina-production","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
@@ -766,6 +814,16 @@ export default {
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));
    if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));
+   if(path==='/v2/release/manifest'){
+    if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
+    const artifact=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v2.json',req.url),{method:req.method}));
+    const headers=new Headers(artifact.headers);headers.set('Cache-Control','no-store');return finish(new Response(artifact.body,{status:artifact.status,headers}));
+   }
+   const runtime=await routeRuntime(req);if(runtime)return finish(runtime);
+   if(path.startsWith('/v1/archive/rc20/')){
+    const legacyUrl=new URL(req.url);legacyUrl.pathname='/v1/'+path.slice('/v1/archive/rc20/'.length);
+    const legacy=await routeRc20(new Request(legacyUrl,req),env);if(legacy){const headers=new Headers(legacy.headers);headers.set('X-Numina-Release-Context','historical-rc20');return finish(new Response(legacy.body,{status:legacy.status,headers}));}
+   }
    const rc20=await routeRc20(req,env);if(rc20)return finish(rc20);
    if(path.startsWith('/api/control/'))return finish(await controlHttp(req,env));
    if(path==='/api/core/v1.8/manifest'&&req.method==='GET')return finish(response(CORE_MANIFEST));

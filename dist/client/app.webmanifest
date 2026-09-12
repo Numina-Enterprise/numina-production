@@ -1,8 +1,8 @@
 {
   "id": "/app",
-  "name": "Numina OS \u2014 Operations workspace",
+  "name": "Numina OS 2.0 — Operations workspace",
   "short_name": "Numina OS",
-  "description": "Service requests, payment evidence and agent operations.",
+  "description": "Numina 2.0: service requests, payment evidence and agent operations.",
   "start_url": "/app",
   "scope": "/app",
   "display": "standalone",
