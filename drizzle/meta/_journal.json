@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789083899723,
+      "tag": "0000_hard_midnight",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789161663036,
+      "tag": "0001_useful_black_crow",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789162390920,
+      "tag": "0002_chief_rachel_grey",
+      "breakpoints": true
+    }
+  ]
+}

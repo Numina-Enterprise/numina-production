@@ -1,0 +1,7 @@
+work/
+outputs/
+__pycache__/
+*.pyc
+.sites-runtime/
+.env
+.env.local

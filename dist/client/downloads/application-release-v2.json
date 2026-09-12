@@ -1,0 +1,369 @@
+{
+  "$schema": "https://numinalabs.xyz/schemas/application-release-v2.schema.json",
+  "schema": "numina.application-release.v2",
+  "schema_version": 2,
+  "product": "Numina",
+  "version": "2.0.0",
+  "release": "numina-v2.0.0",
+  "release_channel": "production",
+  "build_id": "ba73e7560f87e62b0b144fd85f8ac6c560155b8afad6628d987a997eb0b58891",
+  "artifact_digest_algorithm": "sha256",
+  "artifact_digest_method": "SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes the two generated release manifests",
+  "workerSha256": "9f30adb4b0b1ba1dffdfdaa0beea6040c7a800275852ce3e2807eef6d10b0df5",
+  "surfaces": [
+    "website",
+    "Numina OS",
+    "installable mobile web app"
+  ],
+  "runtime_dependency": {
+    "product": "Numina control-plane runtime",
+    "version": "1.9.0-rc22",
+    "release": "core-v1.8+prod-v1.9.0-rc22",
+    "manifest": "/v1/release/manifest",
+    "signed_declaration": "/v1/release/attestation"
+  },
+  "compatibility": {
+    "existing_app_api": "/api/app/v1",
+    "existing_control_api": "/api/control/v1",
+    "runtime_read_api": "/v1",
+    "application_release_api": "/v2/release/manifest",
+    "data_migration_required": false
+  },
+  "distribution": {
+    "web": "/app",
+    "apple_app_store": "not_verified_published",
+    "google_play": "not_verified_published",
+    "microsoft_store": "not_verified_published"
+  },
+  "assurance": {
+    "slsa_level_claimed": null,
+    "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+    "record_type": "application_artifact_inventory",
+    "provenance_mode": "detached_slsa_attestation",
+    "builder_signed_provenance": false,
+    "embedded_signature": false,
+    "verification": "/provenance",
+    "signing_repository": "skott34-dot/numina-builder",
+    "source_repository": "skott34-dot/numina-production",
+    "signature_status_scope": "inventory_generation_time; verify detached attestation for current signing status"
+  },
+  "scope": {
+    "financial_execution_activated_by_this_release": false,
+    "nusd_issuance_activated_by_this_release": false,
+    "reserve_verification_established_by_this_release": false
+  },
+  "artifacts": [
+    {
+      "path": ".openai/drizzle/0000_hard_midnight.sql",
+      "sha256": "e377ac20af44cf7424a8343774ab968eed3fe078fbb6b7c6f6835fdf922026e7"
+    },
+    {
+      "path": ".openai/drizzle/0001_useful_black_crow.sql",
+      "sha256": "bf5b083343cc3484b6a341d2e7211ef33a674eaa769b7b6d7c68b29700ba3765"
+    },
+    {
+      "path": ".openai/drizzle/0002_chief_rachel_grey.sql",
+      "sha256": "c76617ec10b48c6171675412e49934af3b2041c70195d6155e8f0b2b6d5433fe"
+    },
+    {
+      "path": ".openai/drizzle/meta/0000_snapshot.json",
+      "sha256": "2d51c566511160681071bc31577d1e2fa5b94c22ad524f945229f478ba188b93"
+    },
+    {
+      "path": ".openai/drizzle/meta/0001_snapshot.json",
+      "sha256": "903cee3dea3c5e370d5cfbd6fc34b064dca1070f9ceac97907e8fcc893d8e6df"
+    },
+    {
+      "path": ".openai/drizzle/meta/0002_snapshot.json",
+      "sha256": "87e30ab6b40950cb74528790348252d3ec3f5583eb723ebeefb1b049371cfde6"
+    },
+    {
+      "path": ".openai/drizzle/meta/_journal.json",
+      "sha256": "53d33329a6f7d750f192c4de6bff35d12ca7c9d20c34ae89da6f7694d0e41e68"
+    },
+    {
+      "path": ".openai/hosting.json",
+      "sha256": "a063044e6e4e4f2dc93aa4b7dfee231b80ad887b0e55d1f61bf981bedede29b0"
+    },
+    {
+      "path": "client/1317faaa99cf1272fa36ee6ba288abf2.txt",
+      "sha256": "f18ec57bea06cb35afc79097523861ec2dba6de228a78ac86943d18d865e2842"
+    },
+    {
+      "path": "client/_headers",
+      "sha256": "550843c25ed4131e68dd670c1e2b4f6b5a15ac85ba2ed2fc4a7cf887e9564489"
+    },
+    {
+      "path": "client/_redirects",
+      "sha256": "f469c8262e5d95afb9ef5ce19dd9396f8d95750983cb04884901ad69dc7e5434"
+    },
+    {
+      "path": "client/about.html",
+      "sha256": "c5d4fb372827ab7903d4563348fdc01041078f06fb6ac45a4f2a41745b3e1fa0"
+    },
+    {
+      "path": "client/app-entry.js",
+      "sha256": "7ac016428ac6326211d12f24d675a16dc42a4900d5af1ca9565e4270984bae1a"
+    },
+    {
+      "path": "client/app-icon-192.png",
+      "sha256": "e5cb20d7a1e828ddce541f2ac252fc4362a3ee8c0b2abf1ee0bcdcdc236206b9"
+    },
+    {
+      "path": "client/app-icon-512.png",
+      "sha256": "47ba5aa331ad8e672d501a3530b8c9d5f0068442c6cdfeb99e6e7ad61f6a61e3"
+    },
+    {
+      "path": "client/app-icon.svg",
+      "sha256": "9392bd83b6fe68187bd6fa7cab575119dbbd6217ea2bb8bccda5e22eb4aae97e"
+    },
+    {
+      "path": "client/app-install.js",
+      "sha256": "be581015d9757d30d10d2198aa1f35d83b6690aa07bfbade5ec580676cd75619"
+    },
+    {
+      "path": "client/app-sw.js",
+      "sha256": "40ec42c3357ad4c49c69bd3a6fe569312ced9ff1201db1cc0335e91c5972b51d"
+    },
+    {
+      "path": "client/app-ui.js",
+      "sha256": "659fe0b35a94bfd3a103006679ff2340669174e4a03fa84ca97475fde9e6c5ba"
+    },
+    {
+      "path": "client/app.css",
+      "sha256": "6304bbd21f98618eddc0cf3294d3a2f058c9146883af8a660c131907ddf54141"
+    },
+    {
+      "path": "client/app.html",
+      "sha256": "2945b54b457d619e23cbc408329f89bee34e8912f47bec9600bef69102001f33"
+    },
+    {
+      "path": "client/app.webmanifest",
+      "sha256": "6f8b8b02a7cd65634e202e58a3ea13eeaac6b670aaf62a143271bbc7cdddde3e"
+    },
+    {
+      "path": "client/application-release-ui.js",
+      "sha256": "743d64924d487cea1929a5c449847f065b820eb88394bc46d277504ad77a3592"
+    },
+    {
+      "path": "client/authority.css",
+      "sha256": "a721f2ce2eba5fc8ebd649bc3f599d4d0c03085a002b62e812013f78bb40a59f"
+    },
+    {
+      "path": "client/authority.html",
+      "sha256": "e51cdcb9b0a7447a795517122c8d8d6ff40f091d8494dc96a08c7359ba4e9b5e"
+    },
+    {
+      "path": "client/blockchain.html",
+      "sha256": "7eaaeebdda2c0372d399ed4d961daa5e25e46df8e5a6b4d5e3233cf4deebc2f0"
+    },
+    {
+      "path": "client/build.html",
+      "sha256": "02da3c23e754d15e9e181745fb889f7fd96fd7f7a04b8b33fc4496aa1f58dfac"
+    },
+    {
+      "path": "client/contact.html",
+      "sha256": "346ad8d1b9f44121958f042720042b7238084bb5012300435b3c94d370e63512"
+    },
+    {
+      "path": "client/control.css",
+      "sha256": "4752117fbcdb53981c5e9acb14bb0e932c79d768f73b8bc84352b7e69bd3d3e9"
+    },
+    {
+      "path": "client/control.html",
+      "sha256": "846e0d90a3488a34bbd33af63acae665662c3baf439d9ca7e55d41d19faad311"
+    },
+    {
+      "path": "client/control.js",
+      "sha256": "0cf97cab7517e22521c289dd381e60b06d872279d54bf2d2dd3400dcf00887a1"
+    },
+    {
+      "path": "client/core.html",
+      "sha256": "69b23ebb54268ffd6d336fe3640befabbe08f93d5316ad7b684abda29f912d92"
+    },
+    {
+      "path": "client/downloads/Compute-to-Value-Architecture.md",
+      "sha256": "45ca183efd233aabddb650b7eca3c58e8a34067f9efa4f3118a8bc02b16088b1"
+    },
+    {
+      "path": "client/downloads/Control-Plane-v1.md",
+      "sha256": "04f2fde99046f4d793b267a2a8e7a6b2de527fb8819d4e33a009d4dddf05eff7"
+    },
+    {
+      "path": "client/downloads/Frozen-Constitution-v0.2.md",
+      "sha256": "2028e716a73fca8f7dcbf47ecee828f0312ae430e0ed4b670f08df389863b438"
+    },
+    {
+      "path": "client/downloads/core-v1.8-context.json",
+      "sha256": "e1345a1b919bb79edc6339607528d148cd74b7e612159eac87f099c6c89c5a28"
+    },
+    {
+      "path": "client/downloads/core-v1.8-manifest.json",
+      "sha256": "bfe4f03d35e6cdd607ec91e5f5f33b1a2fe797551bb74b3a188fae12fa1d26a4"
+    },
+    {
+      "path": "client/downloads/integration-kit-v2.0.0-record.json",
+      "sha256": "aefc27d0832f55303788ad92ab8bddf771d1b9fe352fd46aa46f860b2bf18f55"
+    },
+    {
+      "path": "client/downloads/numina-integration-kit-v2.0.0.zip",
+      "sha256": "00c3afcaa69c83da0da699480b082f8eec579192610dd3d844cc74dd658a094b"
+    },
+    {
+      "path": "client/downloads/numina-nusd-plugin.zip",
+      "sha256": "00c3afcaa69c83da0da699480b082f8eec579192610dd3d844cc74dd658a094b"
+    },
+    {
+      "path": "client/downloads/rc22-slsa-readiness.json",
+      "sha256": "20cd782f1708afba1a9b0c8f57c31e9dc593e4e35c15dbffbff69cb90000b8da"
+    },
+    {
+      "path": "client/economy.css",
+      "sha256": "3093590cffa3c53d24f9b9014a1b06c1e7c8a4b4638a7b2c439c23d6e129d14e"
+    },
+    {
+      "path": "client/economy.html",
+      "sha256": "23a7df4da5a8fa6ae0ab632e898677d50106a6c3aa6c285f31dc9e58e99cdbe7"
+    },
+    {
+      "path": "client/favicon.svg",
+      "sha256": "339a3c8aa0f1cd3fe75760cb5b9cf73446a7a23b2cf0aea6b116d85e427d7628"
+    },
+    {
+      "path": "client/http-client.js",
+      "sha256": "0106075afe1685f4463841339f45d419056b533981958c999a861e88a048b1fe"
+    },
+    {
+      "path": "client/index.html",
+      "sha256": "2c583e8b987c67fdfe36d8fd7c6d88476c4906063fd3dcc5586fad58a6b53dcd"
+    },
+    {
+      "path": "client/integrations.html",
+      "sha256": "54b503c90e89f583713cfbb6616b59500bb1570bd8addd66d7f8684b43e1af84"
+    },
+    {
+      "path": "client/labs.html",
+      "sha256": "9d244bb0ad4b7c8eb94902d4f48add9b8e53f513fa38de0ec9edce9899fb88c8"
+    },
+    {
+      "path": "client/network-status.js",
+      "sha256": "372e7855a88bbd1a57a0bdd8c2817689c70667cb214a535424d1b6548c1835db"
+    },
+    {
+      "path": "client/numina-labs-dark-logo.png",
+      "sha256": "73f55c323742f82b0a2fc96d2a7a66912c6b127461e733a72f48ca4999211ce9"
+    },
+    {
+      "path": "client/numina-labs-logo.png",
+      "sha256": "c0f3853af3fa105c95ce6dfbdc501af7f4fb461e6cf63087f34100e8e3226c6e"
+    },
+    {
+      "path": "client/ownership.html",
+      "sha256": "2215e4ab99d73e677edfd74fe2121434bd2253c21f1b32b7a29da884b8a53574"
+    },
+    {
+      "path": "client/payment-architecture.png",
+      "sha256": "9619654a52c870619c58b13986906a1b064bd54d47fb4f8d6aeacca0136e4e50"
+    },
+    {
+      "path": "client/platform.html",
+      "sha256": "ad11fb20f18fb544560e1e7d67016b5cbc94c01e77ee068bdc15abad5c49396d"
+    },
+    {
+      "path": "client/pricing.html",
+      "sha256": "e263f2966439e02b833bd1105087f9d7e3cc5ef80fa6ef613d5c4123c5bc8d90"
+    },
+    {
+      "path": "client/privacy.html",
+      "sha256": "2d128d048bb6c18e0dea65c4dc4ff51a953dfccff2c4ae61faa02f552ba4b39c"
+    },
+    {
+      "path": "client/provenance.html",
+      "sha256": "13a0794cd871af6d5fcf616b0c955e1b94349a98b2371d55b428fb154be932ef"
+    },
+    {
+      "path": "client/redemption.html",
+      "sha256": "bfed07fa92693f7ed9593332cb8608281a04c8c857dbe79bbdc0ab218fd3dac8"
+    },
+    {
+      "path": "client/release-model.js",
+      "sha256": "a0803b460e1ae51aa4498ed9604ca0e80586c71d8bdb69b0fab616f49f4d6611"
+    },
+    {
+      "path": "client/release-ui.js",
+      "sha256": "51c3c4f4c66398f8b867bec61ca9ba306dbeeefed978ccfa8cc536f92dda3367"
+    },
+    {
+      "path": "client/robots.txt",
+      "sha256": "8ca924e762a363640dce6d32bdb6a440558ad4b6995ae64c643c2f44693f0cc8"
+    },
+    {
+      "path": "client/runtime-release-model.js",
+      "sha256": "66d3a825ca5c48dbc84d4f5a6658ae9f1224751042717da5e6760cdfff7bb4ee"
+    },
+    {
+      "path": "client/runtime-release-ui.js",
+      "sha256": "25838d66bfcded80ad6fceea08b4394861436a2b00b8d463569512e682992fe3"
+    },
+    {
+      "path": "client/sam-kott.jpg",
+      "sha256": "7b5abe326f0b3b19b7dbc028ac43f091fa70cf744775a065cdc7abb5499f8db8"
+    },
+    {
+      "path": "client/schemas/application-release-v2.schema.json",
+      "sha256": "23e51c7238b1c918ed244638a65755c00ecc625423812614d400b82ba197780a"
+    },
+    {
+      "path": "client/services.html",
+      "sha256": "6a92ca0373bfc03040e6fc60ff7f45c020d7df0a7e5706feefe383c1f87a57b9"
+    },
+    {
+      "path": "client/site-shell.css",
+      "sha256": "79d146becc1264237db2a093407206dc51368127fbc049a82fadd866236b7edd"
+    },
+    {
+      "path": "client/site.css",
+      "sha256": "ea08f394a9fadde4e37834d8507c90c4c6553f9ad191b04aa348b4f54253485e"
+    },
+    {
+      "path": "client/site.js",
+      "sha256": "9a253b4fc0f0f46f85000192c9866077f67f155cd7c1acac042177643579dbce"
+    },
+    {
+      "path": "client/sitemap.xml",
+      "sha256": "c03b0382a87213018266b9ac012839f0e96f097391cd0fd429f6261f66b71704"
+    },
+    {
+      "path": "client/spectrum-cover.png",
+      "sha256": "a84daf6ecdae34f014136dc3d59bcefe04c92afdf3059cdbce092369a8a3752e"
+    },
+    {
+      "path": "client/status.html",
+      "sha256": "8d9940e1fb323797598a45ec9668473bd4f19c895ff1fa681068debecb46c458"
+    },
+    {
+      "path": "client/stripe-treasury.js",
+      "sha256": "6b937328a627135a0deb6306c4bba85821f482c15509ba5f65ed0791ed029ce1"
+    },
+    {
+      "path": "client/style.css",
+      "sha256": "7f09eca55870c3c401bd4bc3bcf2acb3abb3451695fe2f2ab4d2343962a4dfaa"
+    },
+    {
+      "path": "client/terminal.css",
+      "sha256": "01815c51e8fee3d1d0c1d9763d93415684a8a4cbd9e08eb77fbd159a9ad4c280"
+    },
+    {
+      "path": "client/theme.css",
+      "sha256": "15380aae1d3754952b64db57ab86ffd54602f9983356007807c681a1862e0b9b"
+    },
+    {
+      "path": "client/treasury-documents.js",
+      "sha256": "cc70ac2e1d8b0e8c3abfb1775f46c3e9e4d46fa72d1e3627e215502f84e5c439"
+    },
+    {
+      "path": "server/index.js",
+      "sha256": "9f30adb4b0b1ba1dffdfdaa0beea6040c7a800275852ce3e2807eef6d10b0df5"
+    }
+  ]
+}
