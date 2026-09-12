@@ -52,6 +52,32 @@ test('Treasury reads work on managed Workers without RequestInit cache support',
  assert.equal(result.connection,'read_only');assert.equal(result.balances.available.usd.value,0);
 });
 
+test('the default Treasury reader preserves the host fetch receiver',async()=>{
+ const original=globalThis.fetch;let calls=0;
+ globalThis.fetch=async function(url,options){assert.equal(this,globalThis);calls++;assert.equal(options.method,'GET');return providerResponse();};
+ try{const result=await readStripeTreasury(config());assert.equal(result.balances.available.usd.value,0);assert.equal(calls,1);}
+ finally{globalThis.fetch=original;}
+});
+
+test('runtime diagnostics reveal only predefined categories and never provider details or credentials',async()=>{
+ const original=console.log,logs=[];console.log=value=>logs.push(JSON.parse(value));
+ try{
+  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>{throw new TypeError('Illegal invocation '+canary+' '+readKey);}}),'STRIPE_TREASURY_UNAVAILABLE',503);
+  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>{throw {name:canary,message:readKey+' '+canary};}}),'STRIPE_TREASURY_UNAVAILABLE',503);
+ }finally{console.log=original;}
+ assert.equal(logs.length,2);assertSafe(logs);
+ assert.deepEqual(logs[0],{event:'stripe_treasury_runtime_error',stage:'fetch_pending',response_received:false,category:'invalid_receiver',error_name:'TypeError'});
+ assert.deepEqual(logs[1],{event:'stripe_treasury_runtime_error',stage:'fetch_pending',response_received:false,category:'unclassified',error_name:'OtherError'});
+});
+
+test('diagnostic logging failures preserve the sanitized provider outcome',async()=>{
+ const original=console.log;console.log=()=>{throw new Error(canary+' '+readKey);};
+ try{
+  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>providerResponse({error:{message:canary}},403)}),'STRIPE_TREASURY_UNAVAILABLE',503);
+  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>{throw new Error(canary);}}),'STRIPE_TREASURY_UNAVAILABLE',503);
+ }finally{console.log=original;}
+});
+
 test('Treasury balances preserve zero, distinguish missing values and use USD cents versus USDC millionths',async()=>{
  const account=financialAccount();
  account.balance={available:{usd:amount('usd',12345),usdc:amount('usdc',1234567)},inbound_pending:{usd:amount('usd',0)},outbound_pending:{usdc:amount('usdc',0)}};
