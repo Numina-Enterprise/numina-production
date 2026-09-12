@@ -33,7 +33,7 @@ test('Treasury read is one pinned GET and returns a sanitized read-only projecti
  assert.equal(requests.length,1);
  const [{url,options}]=requests,headers=new Headers(options.headers);
  assert.equal(url,'https://api.stripe.com/v2/money_management/financial_accounts/'+STRIPE_TREASURY_FINANCIAL_ACCOUNT);
- assert.equal(options.method,'GET');assert.equal(options.redirect,'error');assert.equal(options.body,undefined);
+ assert.equal(options.method,'GET');assert.equal(options.redirect,'manual');assert.equal(options.body,undefined);
  assert.equal(headers.get('Authorization'),'Bearer '+readKey);assert.equal(headers.get('Stripe-Version'),'2026-08-26.preview');
  assert.equal(headers.has('Cookie'),false);assert.equal(headers.has('oai-authenticated-user-email'),false);
  assert.equal(result.schema,'numina.stripe.treasury.v1');assert.equal(result.connection,'read_only');
@@ -142,7 +142,7 @@ test('Stripe errors and redirects are sanitized and cannot forward credentials t
  for(const status of [401,403,404,429,500,503])await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>providerResponse({error:{message:canary+' '+readKey}},status)}),'STRIPE_TREASURY_UNAVAILABLE',503);
  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>{throw new Error(canary+' '+readKey);}}),'STRIPE_TREASURY_UNAVAILABLE',503);
  const attempts=[];
- await rejectsWith(readStripeTreasury(config(),{fetcher:async(url,options)=>{attempts.push(String(url));assert.equal(options.redirect,'error');return new Response(null,{status:302,headers:{Location:'https://evil.example/steal'}});}}),'STRIPE_TREASURY_UNAVAILABLE',503);
+ await rejectsWith(readStripeTreasury(config(),{fetcher:async(url,options)=>{attempts.push(String(url));assert.equal(options.redirect,'manual');return new Response(null,{status:302,headers:{Location:'https://evil.example/steal'}});}}),'STRIPE_TREASURY_UNAVAILABLE',503);
  assert.deepEqual(attempts,['https://api.stripe.com/v2/money_management/financial_accounts/'+STRIPE_TREASURY_FINANCIAL_ACCOUNT]);
  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>{const response=providerResponse();Object.defineProperty(response,'redirected',{value:true});return response;}}),'STRIPE_TREASURY_UNAVAILABLE',503);
 });
