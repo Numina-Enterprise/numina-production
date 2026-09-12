@@ -1,0 +1,15 @@
+name: Numina NUSD runtime image and provenance
+on:
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: numina-nusd-runtime-build
+  cancel-in-progress: false
+jobs:
+  build-and-attest:
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    uses: skott34-dot/numina-builder/.github/workflows/numina-nusd-runtime-builder.yml@cda9bf7702d909ed1d8e16c338a91e283c1bce53
+    # No inputs or inherited secrets. This builds artifacts, never a transaction.

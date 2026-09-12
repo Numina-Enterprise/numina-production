@@ -1,0 +1,64 @@
+x-runtime: &runtime
+  image: numina-nusd-runtime:candidate
+  build:
+    context: .
+    args:
+      NODE_IMAGE: ${NODE_IMAGE:?Set the reviewed official Node 24 image including its digest}
+  user: "1000:1000"
+  working_dir: /opt/numina
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  init: true
+  restart: "no"
+  command: [check-runtime, /var/lib/numina/journal]
+
+services:
+  runtime-check:
+    <<: *runtime
+    network_mode: none
+    volumes:
+      - type: volume
+        source: journal
+        target: /var/lib/numina/journal
+
+  operator:
+    <<: *runtime
+    profiles: [operator]
+    network_mode: bridge
+    environment:
+      NUMINA_RPC_URL_FILE: /run/numina-secrets/rpc-url
+      NUMINA_RPC_AUTHORIZATION_FILE: /run/numina-secrets/rpc-authorization
+    volumes:
+      - type: volume
+        source: journal
+        target: /var/lib/numina/journal
+      - type: volume
+        source: manifests
+        target: /var/lib/numina/manifests
+      - type: bind
+        source: ${NUMINA_OPERATOR_CONFIG_DIR:-./operator-config}
+        target: /review
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${NUMINA_RPC_URL_FILE:-./operator-secrets/rpc-url}
+        target: /run/numina-secrets/rpc-url
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${NUMINA_RPC_AUTHORIZATION_FILE:-./operator-secrets/rpc-authorization}
+        target: /run/numina-secrets/rpc-authorization
+        read_only: true
+        bind:
+          create_host_path: false
+
+volumes:
+  journal:
+    name: numina-nusd-journal
+    external: true
+  manifests:
+    name: numina-nusd-manifests
+    external: true
