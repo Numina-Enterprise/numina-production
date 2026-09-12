@@ -1,15 +1,21 @@
-# Numina singular control plane
+# Numina 2.0
 
-Production release **1.0.0** serves the shared control plane at `/`, with readiness at `/api/control/v1/health`. One D1 state, root-traceable authority, a canonical adapter registry, causal evidence graph, event-driven reconciliation, and revision-bound next actions govern internal record commits. External execution is disabled. See `docs/Control-Plane-v1.md` for actual scope, authentication, API, capacity, deployment, and recovery.
+Numina 2.0.0 serves the website, Numina OS operations workspace and installable mobile web app at https://numinalabs.xyz. Existing application and control APIs remain at `/api/app/v1` and `/api/control/v1`; the application manifest is `/v2/release/manifest`. No data migration is required for this application release.
 
-Build: `node scripts/build.mjs`. Test: `node --test tests/*.test.mjs`. Production verification: `scripts/control-smoke.mjs` (requires the owner's locally held API credential). The historical public demo mutation endpoints are retired when production control authority is configured. Existing test receipts and Core v1.8 source remain preserved.
+The authenticated read-only Numina node observation is available at `/v2/network/status`. The control-plane runtime remains a separately identified v1.9.0-rc22 dependency. Node connectivity does not establish financial execution, token issuance, reserves or redemption.
 
-## Preserved reference implementation
+## Build and provenance
 
-Web version 0.2.0 extends the existing Numina Labs site with `/authority.html` and `/api/v0.1/*`. No financial adapter or employer-owned code is included.
+Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v2.0.0.tar.gz`. The reviewed reusable workflow in `skott34-dot/numina-builder` builds from the source revision and creates detached SLSA provenance for both the exact deployment archive and application inventory. The calling workflow pins the builder by full commit. Verify the actual attestation bundle and artifact before deployment. Merely copying a workflow or changing a manifest field does not establish a SLSA level.
 
-Node 24+: `node scripts/fixtures.mjs`, `npm run build`, `npm test`, `npm start`. `npm run conformance -- https://www.numinalabs.xyz` independently tests a deployed release. No external runtime dependencies.
+Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
-Source: `src/`; existing/new static content: `public/`; portable specs: `docs/`; explicitly public test keys/vectors: `fixtures/`; build output: `dist/client`, `dist/server`, `dist/.openai`. The receipt private key belongs only in runtime secret settings. See `docs/Operations-v0.1.md`.
+## Distribution
 
-Core v1.8 is preserved unchanged under vendor/numina-core-v1.8. Frozen C1–C14 names and the original 20 scenarios are included. The web adapter implements bounded reference EAC verification and observational margin arithmetic, not the entire Python runtime. Public deployment evidence must be checked separately.
+The mobile web app is served at `/app`. Android and iOS source projects are prepared separately; native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
+
+## Source and rights
+
+`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain as source; the provenance workflow does not run them or claim they ran.
+
+Public source access is authorized by the owner. No new open-source license or trademark license is granted by this publication; existing third-party notices and licenses remain applicable. Copyright claims apply only to owned, copyrightable material.

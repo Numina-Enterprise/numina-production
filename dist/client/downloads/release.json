@@ -6,10 +6,10 @@
   "version": "2.0.0",
   "release": "numina-v2.0.0",
   "release_channel": "production",
-  "build_id": "cbf9df77b72f51613380b21277e32c647cc7aef2a9b9c561edca20229d624b29",
+  "build_id": "ba73e7560f87e62b0b144fd85f8ac6c560155b8afad6628d987a997eb0b58891",
   "artifact_digest_algorithm": "sha256",
   "artifact_digest_method": "SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes the two generated release manifests",
-  "workerSha256": "7a93f371c1ac8ad576ce0439025bec84555c1c13cb13ef729daeb3c1607e989c",
+  "workerSha256": "9f30adb4b0b1ba1dffdfdaa0beea6040c7a800275852ce3e2807eef6d10b0df5",
   "surfaces": [
     "website",
     "Numina OS",
@@ -38,8 +38,14 @@
   "assurance": {
     "slsa_level_claimed": null,
     "slsa_predicate_type": "https://slsa.dev/provenance/v1",
-    "record_type": "locally_generated_artifact_inventory",
-    "builder_signed_provenance": false
+    "record_type": "application_artifact_inventory",
+    "provenance_mode": "detached_slsa_attestation",
+    "builder_signed_provenance": false,
+    "embedded_signature": false,
+    "verification": "/provenance",
+    "signing_repository": "skott34-dot/numina-builder",
+    "source_repository": "skott34-dot/numina-production",
+    "signature_status_scope": "inventory_generation_time; verify detached attestation for current signing status"
   },
   "scope": {
     "financial_execution_activated_by_this_release": false,
@@ -117,7 +123,7 @@
     },
     {
       "path": "client/app-sw.js",
-      "sha256": "2f4ce73b76e6e4deb607954c2857433fc07eeac7faf6e66bb85f4c87b9777ecd"
+      "sha256": "40ec42c3357ad4c49c69bd3a6fe569312ced9ff1201db1cc0335e91c5972b51d"
     },
     {
       "path": "client/app-ui.js",
@@ -129,7 +135,7 @@
     },
     {
       "path": "client/app.html",
-      "sha256": "ea9c66ecc5ee68b0e3f7a4f3787e29ad1465c2f5fbcebcedaca0963fc02ac11c"
+      "sha256": "2945b54b457d619e23cbc408329f89bee34e8912f47bec9600bef69102001f33"
     },
     {
       "path": "client/app.webmanifest",
@@ -137,7 +143,7 @@
     },
     {
       "path": "client/application-release-ui.js",
-      "sha256": "98aa687d89dd4a5a17323e9969c7caa65a01fb540a4b68f63a9ad3bb55b3b16e"
+      "sha256": "743d64924d487cea1929a5c449847f065b820eb88394bc46d277504ad77a3592"
     },
     {
       "path": "client/authority.css",
@@ -149,11 +155,11 @@
     },
     {
       "path": "client/blockchain.html",
-      "sha256": "2008599db16dccbd279bacc8c74d46ff4b88702b170c27229c0521166a87d1f4"
+      "sha256": "7eaaeebdda2c0372d399ed4d961daa5e25e46df8e5a6b4d5e3233cf4deebc2f0"
     },
     {
       "path": "client/build.html",
-      "sha256": "7e1513feef33e0e616a306751bf1b12e9545b379311c1a7728dd30083d9d9e40"
+      "sha256": "02da3c23e754d15e9e181745fb889f7fd96fd7f7a04b8b33fc4496aa1f58dfac"
     },
     {
       "path": "client/contact.html",
@@ -165,7 +171,7 @@
     },
     {
       "path": "client/control.html",
-      "sha256": "a7cb6d964c3ec3f484bf3729a133f120efc474a8ac3b8dd6237a949f0fc03101"
+      "sha256": "846e0d90a3488a34bbd33af63acae665662c3baf439d9ca7e55d41d19faad311"
     },
     {
       "path": "client/control.js",
@@ -241,7 +247,7 @@
     },
     {
       "path": "client/network-status.js",
-      "sha256": "290e8762de0d6b0afde0a9e2480b40f97f5bf1fabd3deff8fa70f2965b79bc67"
+      "sha256": "372e7855a88bbd1a57a0bdd8c2817689c70667cb214a535424d1b6548c1835db"
     },
     {
       "path": "client/numina-labs-dark-logo.png",
@@ -273,7 +279,7 @@
     },
     {
       "path": "client/provenance.html",
-      "sha256": "392ead3652f6356c24656d940f826a8b20e2d7f9ce0ef7b9db01ad5c7e55b466"
+      "sha256": "13a0794cd871af6d5fcf616b0c955e1b94349a98b2371d55b428fb154be932ef"
     },
     {
       "path": "client/redemption.html",
@@ -357,7 +363,7 @@
     },
     {
       "path": "server/index.js",
-      "sha256": "7a93f371c1ac8ad576ce0439025bec84555c1c13cb13ef729daeb3c1607e989c"
+      "sha256": "9f30adb4b0b1ba1dffdfdaa0beea6040c7a800275852ce3e2807eef6d10b0df5"
     }
   ]
 }

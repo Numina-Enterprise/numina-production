@@ -568,7 +568,8 @@ async function routeRc20(request, env, upstreamFetch = fetch) {
 const RUNTIME_ORIGIN = 'https://numina-production.vercel.app';
 const RUNTIME_READ_PATHS = new Set([
   '/v1/status', '/v1/control/state', '/v1/release/manifest',
-  '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers'
+  '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers',
+  '/v2/network/status'
 ]);
 
 function runtimeError(status, error, extra = {}) {
@@ -606,7 +607,7 @@ async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 12000) {
     JSON.parse(new TextDecoder().decode(bytes));
     return new Response(request.method === 'HEAD' ? null : bytes, {status:response.status, headers:{
       'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store',
-      'X-Numina-Runtime-Release':'1.9.0-rc22', 'X-Content-Type-Options':'nosniff'
+      ...(path==='/v2/network/status'?{}:{'X-Numina-Runtime-Release':'1.9.0-rc22'}), 'X-Content-Type-Options':'nosniff'
     }});
   } catch { return runtimeError(controller.signal.aborted ? 504 : 502, 'RUNTIME_SERVICE_UNAVAILABLE'); }
   finally { clearTimeout(timer); if (controller.signal.aborted && reader) void reader.cancel().catch(() => {}); }
