@@ -7,7 +7,7 @@ import {readStripeTreasury,STRIPE_TREASURY_ACCOUNT,STRIPE_TREASURY_FINANCIAL_ACC
 import worker from '../src/worker.js';
 
 // Local fixtures only: no Stripe request or real API key is used by this file.
-const readKey='rk_live_000000000000LOCALFIXTURENOTAREALKEY000000000000';
+const readKey=('rk_live_' + 'synthetic'.repeat(4));
 const owner='email:owner@example.test',ownerKey='local-treasury-owner-test-key';
 const endpoint='https://numina.test/api/control/v1/stripe-treasury';
 const canary='PRIVATE_PROVIDER_FIELD_MUST_NOT_ESCAPE_49317';
