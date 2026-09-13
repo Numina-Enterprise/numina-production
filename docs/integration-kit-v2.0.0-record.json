@@ -1,14 +1,22 @@
 {
   "schema": "numina.integration.archive.v2",
   "version": "2.0.0",
+  "revision": "runtime-proof-34725802271",
   "archive": "numina-integration-kit-v2.0.0.zip",
-  "bytes": 48396,
-  "sha256": "00c3afcaa69c83da0da699480b082f8eec579192610dd3d844cc74dd658a094b",
-  "packagedAtUtc": "2026-09-12T19:09:35.4682770Z",
-  "sourceFiles": 36,
+  "bytes": 55125,
+  "sha256": "d0a914661721aa1223a082d4a79519a48cbd8106ca5af1fceb98d938a1b1e649",
+  "packagedAtUtc": "2026-09-13T00:02:47.178081+00:00",
+  "sourceFiles": 37,
   "testsRun": false,
+  "defaultTools": [
+    "numina_application_release",
+    "numina_runtime_build",
+    "numina_nusd_status",
+    "numina_nusd_network",
+    "numina_service_catalog"
+  ],
   "applicationManifest": "https://numinalabs.xyz/v2/release/manifest",
   "providerInstallationPerformed": false,
   "registryPublicationPerformed": false,
-  "sitePublicationPerformedByThisAgent": false
+  "sitePublicationPerformedByThisPackageStep": false
 }

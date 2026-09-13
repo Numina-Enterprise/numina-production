@@ -1,6 +1,9 @@
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
+const integrationArchive=readFileSync('docs/numina-integration-kit-v2.0.0.zip');
+const integrationRecord=JSON.parse(readFileSync('docs/integration-kit-v2.0.0-record.json'));
+if(integrationRecord.sha256!==digest(integrationArchive)||integrationRecord.bytes!==integrationArchive.length)throw Error('Integration archive does not match its inventory');
 const excluded=new Set(['client/downloads/release.json','client/downloads/application-release-v2.json']);
 function collect(base='dist',relative=''){
  return readdirSync(base).flatMap(name=>{
@@ -21,8 +24,10 @@ const record={
  surfaces:['website','Numina OS','installable mobile web app'],
  treasury_records:{view:'/control',access:'owner_authenticated',owner_statement:'/api/control/v1/treasury-attestation',provider_balances:'/api/control/v1/stripe-treasury',supporting_documents:'/api/control/v1/treasury-documents',record_sources_shared_with:'Numina OS',aggregation:'none; preserve source, currency and verification classification'},
  runtime_dependency:{product:'Numina control-plane runtime',version:'1.9.0-rc22',release:'core-v1.8+prod-v1.9.0-rc22',manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'},
+ execution_runtime_build:{product:'Numina NUSD managed runtime',status:'image_built_provenance_verified_not_deployed',run_id:34725802271,run_url:'https://github.com/skott34-dot/numina-production/actions/runs/34725802271',source_commit:'2b0be57996c70e8fda49199d1d649fe3faf0e0d3',builder_commit:'cda9bf7702d909ed1d8e16c338a91e283c1bce53',inventory:'/downloads/provenance/runtime-34725802271/numina-nusd-runtime-inventory.json',inventory_sha256:'33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9',image_archive_sha256:'796add5e929bc63105a0d0e97e026d62481c46af09ec1cb08a30f1f5dafdcc33',source_archive_sha256:'4486f9aae6a7e01078a09860c604f8a17573cd1c7126e2060ac91c1b4329a0ac',provenance:'/downloads/provenance/runtime-34725802271/provenance.jsonl',builder_signed_artifacts_verified:true,application_started_by_build:false,production_host_deployment_verified:false,financial_execution_established:false},
+ financial_status_sources:{public_asset_status:'/api/nusd/v1/status',owner_provider_balances:'/api/control/v1/stripe-treasury',owner_reserve_statement:'/api/control/v1/treasury-attestation',scope:'Read current application and provider observations; build signatures do not replace settlement receipts or bank-origin evidence'},
  compatibility:{existing_app_api:'/api/app/v1',existing_control_api:'/api/control/v1',runtime_read_api:'/v1',application_release_api:'/v2/release/manifest',data_migration_required:false},
- distribution:{web:'/app',apple_app_store:'not_verified_published',google_play:'not_verified_published',microsoft_store:'not_verified_published'},
+ distribution:{web:'/app',integration_kit:{version:integrationRecord.version,revision:integrationRecord.revision,archive:'/downloads/numina-integration-kit-v2.0.0.zip',sha256:integrationRecord.sha256,bytes:integrationRecord.bytes,installation:'/integrations',tools:integrationRecord.defaultTools,provider_installation_verified:false,registry_publication_verified:false},apple_app_store:'not_verified_published',google_play:'not_verified_published',microsoft_store:'not_verified_published'},
  assurance:{slsa_level_claimed:null,slsa_predicate_type:'https://slsa.dev/provenance/v1',record_type:'application_artifact_inventory',provenance_mode:'detached_slsa_attestation',builder_signed_provenance:false,embedded_signature:false,verification:'/provenance',signing_repository:'skott34-dot/numina-builder',source_repository:'skott34-dot/numina-production',signature_status_scope:'inventory_generation_time; verify detached attestation for current signing status',completed_build_assessment:{level:3,type:'producer_self_assessment',scope:'exact signed artifacts from GitHub Actions run 34717406980; not an automatic claim for this generated inventory',record:'/downloads/provenance/run-34717406980/slsa-build-l3-assessment.json'}},
  scope:{financial_execution_activated_by_this_release:false,nusd_issuance_activated_by_this_release:false,reserve_verification_established_by_this_release:false},
  artifacts
