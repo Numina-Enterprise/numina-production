@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Numina 2.0 release and runtime-build evidence discovery, service catalog and gated workflows for MCP and provider tool APIs; no asset execution.",
+  "description": "Numina 3.0 release and runtime-build evidence discovery, service catalog and gated workflows for MCP and provider tool APIs; no asset execution.",
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
