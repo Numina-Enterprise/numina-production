@@ -1,6 +1,6 @@
 {
   "schema": "numina.integration.files.v2",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "scope": "Integration source archive; separate from the Numina application artifact identity",
   "files": [
     {
@@ -85,8 +85,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 855,
-      "sha256": "bb26b35425defec8fa193c537271cf772f5acf7fd4b16b157a4260f98f1e75d9"
+      "bytes": 828,
+      "sha256": "2eb77c40f38a92e1ae6d0723264e28b348ce8e67ce73033915cdb79a896f41e9"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -155,8 +155,8 @@
     },
     {
       "path": "src/client.js",
-      "bytes": 14915,
-      "sha256": "0ffd541bacf607ac0b104a4c9490170d7741ef4cbd350b5493cab1a813241623"
+      "bytes": 14918,
+      "sha256": "3a0288d8598ce7b613cfb1ada88f67e38d10f127c1d2f3260f16ae7f22077753"
     },
     {
       "path": "src/index.d.ts",
@@ -170,8 +170,8 @@
     },
     {
       "path": "src/mcp.js",
-      "bytes": 4669,
-      "sha256": "a1319a88464a4a67d0556d6071ef214406347d0e05eb378ca5338482a0d86b25"
+      "bytes": 4606,
+      "sha256": "4eb9277f0de0f23281c41e84ecd5ac7a6ef363324f55e6c7e5c4704ec709f681"
     },
     {
       "path": "src/provider-adapters.js",
