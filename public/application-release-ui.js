@@ -31,6 +31,8 @@ function clearApplicationEvidence(message='Loading deployed release…'){
  set('[data-application-deployment-receipt]','Unavailable');
  set('[data-application-settlement-receipt]','Unavailable');
  set('[data-application-native-packages]','Unavailable');
+ set('[data-application-production-record]','Unavailable');
+ set('[data-application-funding-record]','Unavailable');
  all('[data-application-requirements]').forEach(list=>list.replaceChildren());
  set('[data-application-hash-note]','No manifest response is currently loaded.');
  all('[data-application-download]').forEach(button=>{button.disabled=true;});
@@ -77,10 +79,13 @@ function commandForPolicy(){
 
 function renderReleaseRequirements(data){
  const receipts=data.nusd_transaction_receipts,readiness=data.nusd_activation_readiness;
+ const evidence=data.recorded_release_evidence;
+ set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Sites version '+evidence.website.version+' published · Vercel '+evidence.runtime.status+' · Source '+evidence.sourceCommit:'No publication record included');
+ set('[data-application-funding-record]',evidence?.fundingPlan?.status==='FUNDING_PLAN_RECORDED'?'Numina journal revision '+evidence.fundingPlan.revision+' · Event '+evidence.fundingPlan.eventId:'No funding-plan record included');
  const text=value=>typeof value==='string'&&value.length<=800?value.replaceAll('_',' '):'Not reported';
  const receiptText=receipt=>{
   if(!receipt||typeof receipt!=='object')return 'Not reported in this release';
-  if(receipt.receipt===null&&receipt.transaction_hash===null)return 'Unfilled — awaiting a provider receipt';
+  if(receipt.receipt===null&&receipt.transaction_hash===null)return 'No completed transaction recorded';
   return 'Release record: '+text(receipt.status)+'; verification record: '+text(receipt.verification?.status)+'. Check the source receipt independently.';
  };
  set('[data-application-deployment-receipt]',receiptText(receipts?.deployment));
@@ -116,14 +121,14 @@ async function refreshApplicationRelease(){
     if(!response.ok||response.redirected)throw Error('Release response unavailable');
     const bytes=await readManifestBytes(response);
     const data=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
-    if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='2.0.0'||data.product!=='Numina'||data.release!=='numina-v2.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
+    if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='3.0.0'||data.product!=='Numina'||data.release!=='numina-v3.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
     // Hash the response body itself. JSON.stringify(data) would change the signed bytes.
     const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),byte=>byte.toString(16).padStart(2,'0')).join('');
     return {data,bytes,digest};
    })()
   ]);
   if(generation!==requestGeneration||controller.signal.aborted)return;
-  set('[data-application-version]','2.0.0');
+  set('[data-application-version]','3.0.0');
   renderReleaseRequirements(data);
   set('[data-application-build]',data.build_id);
   set('[data-application-manifest-sha]',digest);
@@ -143,7 +148,7 @@ async function refreshApplicationRelease(){
   set('[data-application-verification-command]',verificationCommand||'The reviewed builder revision has not been configured yet. A pinned verification command will appear when it is available.');
   all('[data-application-copy-command]').forEach(button=>{button.disabled=!verificationCommand;});
   set('[data-application-provenance-status]','Not verified in this browser. Look up statements for this fingerprint, then verify the signature and builder identity.');
-  set('[data-application-state]','Release 2.0.0 manifest received · fingerprint calculated');
+  set('[data-application-state]','Release 3.0.0 manifest received · fingerprint calculated');
  }catch{
   if(generation===requestGeneration)clearApplicationEvidence('Current release response unavailable');
  }finally{clearTimeout(timer);if(activeController===controller)activeController=null;}

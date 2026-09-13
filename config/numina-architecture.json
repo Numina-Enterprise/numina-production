@@ -34,7 +34,7 @@
   "production_head": null,
   "mint_event": null,
   "pendingRuntimeMigration": "1.9.0-rc26",
-  "frontierVersion": "2.2.0",
+  "frontierVersion": "3.0.0",
   "architectureLayers": {
     "L1": "Root and state",
     "L2": "Intent and evidence",
@@ -42,5 +42,7 @@
     "L4": "Execution",
     "L5": "Canonical evidence"
   },
-  "architectureManifest": "/api/control/v2/architecture"
+  "architectureManifest": "/api/control/v2/architecture",
+  "applicationVersion": "3.0.0",
+  "reconstructedSources": "preserved_unchanged"
 }

@@ -1,6 +1,6 @@
 {
   "id": "/app",
-  "name": "Numina OS 2.0 — Operations workspace",
+  "name": "Numina OS 3 — Operations workspace",
   "short_name": "Numina OS",
   "description": "Numina operations, delegated agents, approvals and canonical treasury records.",
   "start_url": "/app",

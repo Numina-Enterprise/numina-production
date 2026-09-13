@@ -82,7 +82,7 @@ export class NuminaClient {
     validateArguments('numina_application_release',input);
     const data=await this.#send('/application-release');
     if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.product!=='Numina'||
-      typeof data.version!=='string'||!/^2\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/.test(data.version)||
+      typeof data.version!=='string'||!/^[23]\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/.test(data.version)||
       data.release!=='numina-v'+data.version||data.artifact_digest_algorithm!=='sha256'||
       typeof data.build_id!=='string'||!/^[a-f0-9]{64}$/.test(data.build_id)||
       !Array.isArray(data.artifacts)||data.artifacts.length<1||data.artifacts.length>10000||

@@ -8,7 +8,7 @@ The initial Windows environment lacked a discoverable JDK, Gradle or Android SDK
 
 | Field | Candidate value |
 | --- | --- |
-| Native display version | 2.0.0 |
+| Native display version | 3.0.0 |
 | Native build/version code | 1 |
 | Proposed package ID | xyz.numinalabs.app |
 | Minimum Android SDK | 23 |
@@ -17,7 +17,7 @@ The initial Windows environment lacked a discoverable JDK, Gradle or Android SDK
 | Gradle / JDK | 8.13 / 17 |
 | Browser integration | com.google.androidbrowserhelper:androidbrowserhelper:2.7.3 |
 
-The package ID is a proposed code setting, not a store-issued identity. Confirm it against the actual Play/Samsung record before signing; future updates must preserve the real package identity and use an acceptable increasing version code. The application release 2.0.0 does not rename the separately observed rc22 backend dependency.
+The package ID is a proposed code setting, not a store-issued identity. Confirm it against the actual Play/Samsung record before signing; future updates must preserve the real package identity and use an acceptable increasing version code. The application release 3.0.0 does not rename the separately observed rc22 backend dependency.
 
 ## Build the release artifacts
 
