@@ -1,4 +1,4 @@
-# Numina 2.0.0 — iOS source candidate
+# Numina 3.0.0 — iOS source candidate
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
@@ -8,7 +8,7 @@ This folder contains a native SwiftUI/WKWebView Xcode project that opens `https:
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 2.0.0 / 1 |
+| Version / build | 3.0.0 / 1 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
