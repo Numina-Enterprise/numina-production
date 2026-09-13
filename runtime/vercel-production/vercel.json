@@ -3,6 +3,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/control-room",
+      "destination": "https://numinalabs.xyz/control-room"
+    },
+    {
       "source": "/api/control/v2/:path*",
       "destination": "https://numinalabs.xyz/api/control/v2/:path*"
     },

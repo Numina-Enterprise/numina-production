@@ -82,6 +82,10 @@ export async function reduceFrontier(state,command,actor,now){
       r.execution={status:'FINAL',eventId:command.id,at:now,scope:'internal.record.v1'};
       result={requestId:r.id,status:'FINAL',decision,...binding,handoffHash:r.handoff?await controlHash(r.handoff):null,recordHash:await controlHash(record),externalReceipt:null,externalExecution:false};
     }
+  }else if(command.type==='frontier.consolidate'){
+    owner();frontierExact(data,[]);const retained=new Map(),superseded=[];
+    for(const account of f.accounts){if(account.supersededBy)continue;const identity=stable({provider:account.provider,legalEntity:account.legalEntity,accountLabel:account.accountLabel,providerAccountReference:account.providerAccountReference});const previous=retained.get(identity);if(previous){account.supersededBy=previous.id;superseded.push({id:account.id,retainedId:previous.id});}else retained.set(identity,account);}
+    result={status:'REFERENCES_CONSOLIDATED',superseded,treasuryRoute:'/api/control/v1/treasury',externalAccountsChanged:false};
   }else if(command.type==='frontier.account'){
     owner();frontierExact(data,['id','provider','legalEntity','accountLabel','providerAccountReference']);
     frontierAssert(frontierId(data.id)&&['bank-of-america','stripe'].includes(data.provider)&&frontierText(data.legalEntity)&&frontierText(data.accountLabel)&&(data.providerAccountReference===null||frontierText(data.providerAccountReference))&&!f.accounts.some(a=>a.id===data.id),'INVALID_ACCOUNT_LINK',400);
