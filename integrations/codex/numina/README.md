@@ -1,4 +1,4 @@
-# Numina plugin 2.2.0
+# Numina plugin 3.0.0
 
 Read the live Numina architecture, capabilities and canonical journal head in Codex. The bundled HTTP MCP connection needs no account token and performs no writes. Requires a host supporting MCP Streamable HTTP, protocol 2025-11-25.
 

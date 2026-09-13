@@ -1,4 +1,4 @@
-export const APP_VERSION='2.0.0';
+export const APP_VERSION='3.0.0';
 export const APP_OFFERS={
  diagnostic_enterprise:{name:'Operational Agent Diagnostic',amount:500000,currency:'usd',paymentLink:'plink_1UFKjOQdJat0efmTjZUbX8v7',url:'https://book.stripe.com/28E6oJgte52Q5YC31HcbC09',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
  audit_enterprise:{name:'Agentic Systems & Operations Audit',amount:2500000,currency:'usd',paymentLink:'plink_1UFKjlQdJat0efmTGO6ppg0d',url:'https://book.stripe.com/cNi8wRfpadzm1Im9q5cbC0a',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},

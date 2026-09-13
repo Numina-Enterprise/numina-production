@@ -2,8 +2,8 @@
 // This proposed identifier is not registered, assigned, or checked for availability.
 PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app
 PRODUCT_NAME = Numina
-MARKETING_VERSION = 2.0.0
-CURRENT_PROJECT_VERSION = 1
+MARKETING_VERSION = 3.0.0
+CURRENT_PROJECT_VERSION = 2
 IPHONEOS_DEPLOYMENT_TARGET = 15.0
 TARGETED_DEVICE_FAMILY = 1,2
 SWIFT_VERSION = 5.0

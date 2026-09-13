@@ -5,7 +5,7 @@ Status: source candidate only, September 12, 2026. None of these inputs is repre
 | Input | Current state / action needed |
 | --- | --- |
 | macOS + Xcode | Absent on this Windows host; compile and review the source on a supported Mac. |
-| Store identity | Proposed `xyz.numinalabs.app`; confirm the identifier of any existing Numina app before changing it. Version 2.0.0 and build 1 are candidates. |
+| Store identity | Proposed `xyz.numinalabs.app`; confirm the identifier of any existing Numina app before changing it. Version 3.0.0 and build 1 are candidates. |
 | Signing and distribution | No Apple team, signing certificate, provisioning profile, app record, archive or IPA. The owner configures authorized signing before device distribution. |
 | Native sign-in | Browser continuation is implemented. Returning a signed-in session to the native app is not implemented or verified. |
 | Native utility | This is a hosted-web wrapper. Apple guideline 4.2 requires sufficient app functionality beyond merely repackaging a website. This source does not establish review eligibility. |
