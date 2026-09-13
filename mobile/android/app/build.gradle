@@ -18,8 +18,8 @@ android {
     }
     buildTypes {
         release {
-            // No generated or embedded signing identity. The release outputs
-            // remain unsigned until the owner supplies their actual signing setup.
+            // The production release workflow applies the persistent owner
+            // signing identities after compilation; secrets are never in Gradle.
             minifyEnabled false
             debuggable false
         }
