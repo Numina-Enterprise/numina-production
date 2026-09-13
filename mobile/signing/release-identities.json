@@ -34,6 +34,19 @@
       "approvedAt": "2026-09-13T20:19:50.504Z",
       "scope": "Submit this CSR for Apple distribution certificate issuance"
     },
-    "appleIssuanceStatus": "PENDING"
+    "appleIssuanceStatus": "UNVERIFIED",
+    "ownerReportedIssuance": {
+      "status": "ISSUED",
+      "source": "owner_statement",
+      "reportedAt": "2026-09-13T20:22:29.275Z",
+      "independentlyVerified": false
+    }
+  },
+  "canonicalIdentity": {
+    "name": "Numina",
+    "authority": "NUMINA",
+    "rootHash": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+    "headUrl": "https://numinalabs.xyz/api/control/v2/head",
+    "relationship": "Platform certificates are credentials of this existing root; no additional root or treasury is created"
   }
 }
