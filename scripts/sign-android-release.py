@@ -18,7 +18,9 @@ with tempfile.TemporaryDirectory(prefix='numina-signing-',dir=os.environ.get('RU
     for purpose in ['release','upload']:
         entry=vault['android'][purpose]
         key=tmp/(purpose+'.p12');password=tmp/(purpose+'.password')
-        key.write_bytes(base64.b64decode(entry['pkcs12']));password.write_text(entry['password'])
+        # apksigner consumes one line for the store and a second for the key
+        # when both password options refer to the same file.
+        key.write_bytes(base64.b64decode(entry['pkcs12']));password.write_text(entry['password']+'\n'+entry['password']+'\n')
         key.chmod(0o600);password.chmod(0o600)
         credentials[purpose]=(key,password,entry['alias'])
         certificate=run(['keytool','-exportcert','-keystore',key,'-storetype','PKCS12','-storepass:file',password,'-alias',entry['alias'],'-rfc'])
