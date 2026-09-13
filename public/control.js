@@ -1,6 +1,7 @@
 import {clearTreasuryDocuments,loadTreasuryDocuments} from './treasury-documents.js';
 import {clearStripeTreasury,loadStripeTreasury} from './stripe-treasury.js';
 import {requestJson,createViewScope} from './http-client.js';
+import {clearControlReceipt,renderControlReceipt} from './control-receipts.js';
 const $=id=>document.getElementById(id);let snapshot=null,selected=null,busy=false,treasuryGeneration=0,refreshGeneration=0,refreshOnReturn=false;
 const viewScope=createViewScope();
 const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}':JSON.stringify(v);
@@ -20,7 +21,7 @@ async function loadTreasuryStatement(){
 }
 function controls(){document.querySelectorAll('#workspace button:not([data-document-control])').forEach(b=>b.disabled=busy||!snapshot);$('refresh').disabled=busy;}
 function clearWorkspace(resetForms=false){
- snapshot=null;clearTreasuryStatement();$('workspace').hidden=true;$('detail').hidden=true;
+ snapshot=null;clearTreasuryStatement();clearControlReceipt($('detail'));$('workspace').hidden=true;$('detail').hidden=true;
  for(const id of ['requests','grants','evidence','selected-evidence'])$(id).replaceChildren();
  for(const id of ['resource-detail','payload-detail','who-detail','authority-detail','outcome','reason','state-proof'])$(id).textContent='';
  if(resetForms){selected=null;for(const id of ['request-form','attest-form','resolve-form','delegate-form'])$(id).reset();}
@@ -45,7 +46,7 @@ async function refresh(){
  }finally{controls();}
 }
 function render(){const list=$('requests');list.replaceChildren();for(const r of snapshot.state.requests){const d=snapshot.decisions.find(x=>x.requestId===r.id),b=el('button',r.wants.resource,'request-row');b.type='button';b.setAttribute('aria-pressed',String(selected===r.id));b.append(el('span',words(d.reason)));b.onclick=()=>{selected=r.id;render();};list.append(b);}if(!list.children.length)list.append(el('p','No requests yet. Create an internal record request to begin.','empty'));
-  const request=snapshot.state.requests.find(r=>r.id===selected);$('detail').hidden=!request;$('choose').hidden=!!request;if(request){const d=snapshot.decisions.find(x=>x.requestId===request.id);$('resource-detail').textContent=request.wants.resource;$('payload-detail').textContent=request.wants.payload;$('who-detail').textContent=request.who;$('authority-detail').textContent=request.authority;$('outcome').textContent=d.outcome;$('reason').textContent=words(d.reason);$('next').hidden=!d.nextAction;$('next').disabled=busy;$('attest-form').hidden=request.execution.state!=='pending';$('resolve-form').hidden=request.execution.state!=='pending'||!request.evidence.length;
+  const request=snapshot.state.requests.find(r=>r.id===selected);renderControlReceipt($('detail'),snapshot,request);$('detail').hidden=!request;$('choose').hidden=!!request;if(request){const d=snapshot.decisions.find(x=>x.requestId===request.id);$('resource-detail').textContent=request.wants.resource;$('payload-detail').textContent=request.wants.payload;$('who-detail').textContent=request.who;$('authority-detail').textContent=request.authority;$('outcome').textContent=d.outcome;$('reason').textContent=words(d.reason);$('next').hidden=!d.nextAction;$('next').disabled=busy;$('attest-form').hidden=request.execution.state!=='pending';$('resolve-form').hidden=request.execution.state!=='pending'||!request.evidence.length;
     const evidence=$('evidence');evidence.replaceChildren();for(const node of snapshot.state.evidence.filter(e=>e.requestId===request.id)){const li=el('li',node.kind==='attestation'?node.key+': '+node.value:node.kind==='resolution'?'Resolution: '+node.reason:'Internal record committed');li.append(el('div',node.id+' · '+node.actor));evidence.append(li);}if(!evidence.children.length)evidence.append(el('li','No evidence attached.'));
     $('selected-evidence').replaceChildren();for(const node of snapshot.state.evidence.filter(e=>e.kind==='attestation'&&e.requestId===request.id)){const option=el('option',node.key+': '+node.value);option.value=node.id;$('selected-evidence').append(option);}
   }
