@@ -1,11 +1,11 @@
 {
   "schema": "numina.integration.archive.v2",
   "version": "2.0.0",
-  "revision": "frontier-production-v2.1.0",
+  "revision": "frontier-production-v2.2.0",
   "archive": "numina-integration-kit-v2.0.0.zip",
-  "bytes": 61360,
-  "sha256": "a36c01e40aff12c7a54a73d289710ac7f272b8cbbe5e547711e70e288b20de12",
-  "packagedAtUtc": "2026-09-13T19:22:48.199389+00:00",
+  "bytes": 61359,
+  "sha256": "5ed6e6a3830672711634c6ce5519fe30edf8bcf21f53877d2e449e9920a36f4f",
+  "packagedAtUtc": "2026-09-13T19:41:25.068585+00:00",
   "sourceFiles": 39,
   "testsRun": false,
   "defaultTools": [

@@ -13,7 +13,7 @@ with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED) as bundle:
         info.compress_type=zipfile.ZIP_DEFLATED
         bundle.writestr(info,(source/path).read_bytes())
 data=archive.read_bytes();record=json.loads((root/'docs/integration-kit-v2.0.0-record.json').read_text())
-record.update(revision='frontier-production-v2.1.0',livemode=True,bytes=len(data),sha256=sha256(data).hexdigest(),sourceFiles=len(paths),packagedAtUtc=datetime.now(timezone.utc).isoformat(),testsRun=False)
+record.update(revision='frontier-production-v2.2.0',livemode=True,bytes=len(data),sha256=sha256(data).hexdigest(),sourceFiles=len(paths),packagedAtUtc=datetime.now(timezone.utc).isoformat(),testsRun=False)
 record['defaultTools']=json.loads((source/'verification.json').read_text())['defaultTools']
 (root/'docs/integration-kit-v2.0.0-record.json').write_text(json.dumps(record,indent=2)+'\n')
 print(json.dumps({'files':len(paths),'bytes':len(data),'sha256':record['sha256']}))
