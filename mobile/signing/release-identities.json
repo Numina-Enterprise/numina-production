@@ -1,0 +1,39 @@
+{
+  "schema": "numina.release-identities.v1",
+  "createdAt": "2026-09-13T20:17:29.240057+00:00",
+  "legalEntity": "SK Consulting LLC",
+  "packageIdentity": "xyz.numinalabs.app",
+  "googlePlayPackageRegistered": false,
+  "privateKeyStorage": "GitHub Actions encrypted secret NUMINA_RELEASE_SIGNING_VAULT; no private keys in source or local files",
+  "android": {
+    "release": {
+      "alias": "numina-release",
+      "algorithm": "RSA-3072 / SHA-256",
+      "certificateFile": "numina-android-release.pem",
+      "sha256": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+      "issuer": "self-signed Android application identity",
+      "expiresAt": "2056-09-05T20:17:29+00:00"
+    },
+    "upload": {
+      "alias": "numina-upload",
+      "algorithm": "RSA-3072 / SHA-256",
+      "certificateFile": "numina-android-upload.pem",
+      "sha256": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
+      "issuer": "self-signed Android application identity",
+      "expiresAt": "2056-09-05T20:17:29+00:00"
+    }
+  },
+  "apple": {
+    "status": "owner_approved_certificate_request",
+    "distributionCertificateIssued": false,
+    "developerMembershipActive": false,
+    "csrFile": "numina-ios-distribution.csr",
+    "ownerApproval": {
+      "status": "APPROVED",
+      "authority": "Numina owner",
+      "approvedAt": "2026-09-13T20:19:50.504Z",
+      "scope": "Submit this CSR for Apple distribution certificate issuance"
+    },
+    "appleIssuanceStatus": "PENDING"
+  }
+}
