@@ -1,4 +1,5 @@
 import {stable,controlHash,controlError,authorizeControl,normalizeRecord} from './control.js';
+import {NUMINA_TREASURY_POLICIES} from './treasury-policy.js';
 
 export const FRONTIER_VERSION='2.2.0';
 export const FRONTIER_PROVIDERS=[
@@ -82,6 +83,20 @@ export async function reduceFrontier(state,command,actor,now){
       r.execution={status:'FINAL',eventId:command.id,at:now,scope:'internal.record.v1'};
       result={requestId:r.id,status:'FINAL',decision,...binding,handoffHash:r.handoff?await controlHash(r.handoff):null,recordHash:await controlHash(record),externalReceipt:null,externalExecution:false};
     }
+  }else if(command.type==='frontier.treasury_policy'){
+    owner();frontierExact(data,['policyId','policyHash']);
+    const policy=Object.hasOwn(NUMINA_TREASURY_POLICIES,data.policyId)?NUMINA_TREASURY_POLICIES[data.policyId]:null;
+    frontierAssert(policy,'UNKNOWN_TREASURY_POLICY',400);
+    const hash=await controlHash(policy);frontierAssert(data.policyHash===hash,'TREASURY_POLICY_HASH_MISMATCH',409);
+    const policies=f.treasuryPolicies??=[];
+    frontierAssert(!policies.some(p=>p.id===policy.id),'TREASURY_POLICY_ALREADY_RECORDED',409);
+    frontierAssert(!policies.length||policy.version>policies.at(-1).version,'TREASURY_POLICY_VERSION_CONFLICT',409);
+    policies.push({...structuredClone(policy),hash,issuer:actor,recordedAt:now,eventId:command.id});
+    result={status:'OWNER_POLICY_RECORDED',policyId:policy.id,policyHash:hash,treasuryRoute:'/api/control/v1/treasury',projectionChanged:false,externalAccountsChanged:false,reservesVerified:false,redemptionActivated:false};
+  }else if(command.type==='frontier.consolidate'){
+    owner();frontierExact(data,[]);const retained=new Map(),superseded=[];
+    for(const account of f.accounts){if(account.supersededBy)continue;const identity=stable({provider:account.provider,legalEntity:account.legalEntity,accountLabel:account.accountLabel,providerAccountReference:account.providerAccountReference});const previous=retained.get(identity);if(previous){account.supersededBy=previous.id;superseded.push({id:account.id,retainedId:previous.id});}else retained.set(identity,account);}
+    result={status:'REFERENCES_CONSOLIDATED',superseded,treasuryRoute:'/api/control/v1/treasury',externalAccountsChanged:false};
   }else if(command.type==='frontier.account'){
     owner();frontierExact(data,['id','provider','legalEntity','accountLabel','providerAccountReference']);
     frontierAssert(frontierId(data.id)&&['bank-of-america','stripe'].includes(data.provider)&&frontierText(data.legalEntity)&&frontierText(data.accountLabel)&&(data.providerAccountReference===null||frontierText(data.providerAccountReference))&&!f.accounts.some(a=>a.id===data.id),'INVALID_ACCOUNT_LINK',400);
