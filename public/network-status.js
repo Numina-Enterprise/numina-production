@@ -8,7 +8,7 @@ export function networkPresentation(data){
   summary:`${n.name} · ${n.validator_count} validators running when observed`,
   detail:`Chain ${n.chain_id} · ${n.protocol} · ${n.region}`,
   observed:`${n.provider} dashboard observation: ${new Date(n.observed_at).toISOString().replace('T',' ').replace('.000Z',' UTC')}. This is a dated record, not continuous monitoring.`,
-  asset:data.asset?.contract?'See the NUSD status record for contract and activation details.':'NUSD contract not deployed. Issuance, transfers and settlement are not enabled.'
+  asset:data.asset?.contract?'See the NUSD status record for contract and activation details.':'No NUSD contract address is reported in this application record. Read current NUSD status for issuance, transfer and settlement capabilities.'
  };
 }
 

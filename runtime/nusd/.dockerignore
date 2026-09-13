@@ -1,0 +1,17 @@
+**
+!Dockerfile
+!.dockerignore
+!package.json
+!package-lock.json
+!runtime-entrypoint.mjs
+!scripts/
+!scripts/managed-deployment.mjs
+!scripts/validate-deployment.mjs
+!scripts/verify-network.mjs
+!contracts/
+!contracts/NuminaUSD.sol
+!artifacts/
+!artifacts/NuminaUSD.json
+!licenses/
+!licenses/OpenZeppelin-LICENSE
+!licenses/ethers-LICENSE.md
