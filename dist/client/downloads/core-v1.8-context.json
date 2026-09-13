@@ -1,7 +1,0 @@
-{
-  "sequence": 100,
-  "issuer": "numina-demo",
-  "constitutionDigest": "38be7b9764e717a4898463f5ce2063252ce8b1e2bc7cb234361ef8b4c8fabe1d",
-  "dependencyRoot": "99792641a2c2ed0959066935ade30b51008b0d7a840e85d30c7afcc612a85486",
-  "preStateDigest": "94f907a31249bfa086ae8518ffbc9efede83b4b3c6f2e1abc331a2233a5dc358"
-}
