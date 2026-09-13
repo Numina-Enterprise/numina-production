@@ -7,7 +7,7 @@ import {rateLimit} from './store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_TREASURY_POLICY_V2} from './treasury-policy.js';
 
-const frontierRoutes={principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan'};
+const frontierRoutes={principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
 const frontierToolNames={numina_request:'requests',numina_prepare:'prepare',numina_execute:'execute'};
 const frontierTools=[{name:'numina_policy_decision',description:'Read a current policy decision for your registered request. This does not execute it.',inputSchema:{type:'object',properties:{requestId:{type:'string'}},required:['requestId'],additionalProperties:false}},...Object.keys(frontierToolNames).map(name=>({name,description:name==='numina_execute'?'Commit a permitted internal record through the canonical journal. External execution is unavailable.':name==='numina_prepare'?'Prepare a provider handoff; no external submission.':'Register a request under existing delegated authority and a server policy.',inputSchema:{type:'object',properties:{id:{type:'string'},expectedRevision:{type:'integer'},data:{type:'object'}},required:['id','expectedRevision','data'],additionalProperties:false}}))];
 function frontierResponse(value,status=200){return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Authorization, Cookie'}});}
@@ -132,14 +132,14 @@ export async function frontierHttp(req,env){
     }
     if(route==='state'&&req.method==='GET'){
       const f=structuredClone(frontierState(row.state));for(const p of f.principals)delete p.credentialSha256;
-      if(actor!==row.state.root){f.principals=f.principals.filter(p=>p.id===actor);f.requests=f.requests.filter(r=>r.Principal===actor);f.approvals=f.approvals.filter(a=>f.requests.some(r=>r.id===a.requestId));f.accounts=[];delete f.treasuryPolicies;delete f.fundingPlan;const ids=new Set(f.requests.map(r=>r.policyId));f.policies=f.policies.filter(p=>ids.has(p.id));}
+      if(actor!==row.state.root){f.principals=f.principals.filter(p=>p.id===actor);f.requests=f.requests.filter(r=>r.Principal===actor);f.approvals=f.approvals.filter(a=>f.requests.some(r=>r.id===a.requestId));f.accounts=[];delete f.treasuryPolicies;delete f.fundingPlan;delete f.fundingDeclaration;const ids=new Set(f.requests.map(r=>r.policyId));f.policies=f.policies.filter(p=>ids.has(p.id));}
       return frontierResponse({revision:row.revision,head:row.head_hash,root:row.state.root,...f});
     }
     if(route==='decisions'&&req.method==='POST'){const body=await controlBody(req);frontierExact(body,['requestId']);const request=frontierRequest(row.state,body.requestId,actor);return frontierResponse(await frontierDecision(row.state,request,now));}
     if(route.startsWith('receipts/')&&req.method==='GET')return frontierResponse(await frontierReceipt(env.DB,route.slice(9),actor,env));
     if(route==='treasury/accounts'&&req.method==='GET'){
       frontierAssert(actor===row.state.root,'OWNER_REQUIRED',403);
-      return frontierResponse({treasury:await createNuminaTreasury({db:env.DB,principal:actor,root:row.state.root}).readTreasury(),accounts:frontierState(row.state).accounts.filter(a=>!a.supersededBy),supersededReferences:frontierState(row.state).accounts.filter(a=>a.supersededBy),providerObservationRoute:'/api/control/v1/stripe-treasury',bankObservationStatus:'NOT_CONNECTED',fundingPlan:frontierState(row.state).fundingPlan??null});
+      return frontierResponse({treasury:await createNuminaTreasury({db:env.DB,principal:actor,root:row.state.root}).readTreasury(),accounts:frontierState(row.state).accounts.filter(a=>!a.supersededBy),supersededReferences:frontierState(row.state).accounts.filter(a=>a.supersededBy),providerObservationRoute:'/api/control/v1/stripe-treasury',bankObservationStatus:'NOT_CONNECTED',fundingPlan:frontierState(row.state).fundingPlan??null,fundingDeclaration:frontierState(row.state).fundingDeclaration??null});
     }
     if(Object.hasOwn(frontierRoutes,route)&&req.method==='POST')return frontierResponse(await frontierMutate(route,await controlBody(req),actor,env));
     return frontierResponse({error:'NOT_FOUND'},404);
