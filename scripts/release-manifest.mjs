@@ -25,6 +25,7 @@ const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join('')
 const record={
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
  schema:'numina.application-release.v2',schema_version:2,
+ livemode:true,environment:'production',frontier:{version:'2.1.0',workspace:'/frontier',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},
  product:'Numina',version:JSON.parse(readFileSync('package.json')).version,release:'numina-v2.0.0',
  release_channel:'production',build_id:root,artifact_digest_algorithm:'sha256',
  artifact_digest_method:'SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes the two generated release manifests',
