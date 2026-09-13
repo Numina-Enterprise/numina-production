@@ -1,6 +1,6 @@
-# Numina integration kit 2.0.0
+# Numina integration kit 3.0.0
 
-JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 2.0** through [its application manifest](https://numinalabs.xyz/v2/release/manifest). The application and kit have separate artifact identities. The application's **rc22 runtime dependency** and historical rc20 evidence retain their original versions.
+JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 3.0** through [its application manifest](https://numinalabs.xyz/v3/release/manifest). The application and kit have separate artifact identities. The application's **rc22 runtime dependency** and historical rc20 evidence retain their original versions.
 
 This archive is an integration deliverable. It does not install itself into provider accounts, create a hosted MCP endpoint or establish compatibility with every LLM.
 
@@ -50,6 +50,6 @@ The client performs no independent signature check and does not follow evidence 
 
 ## Package status
 
-Version 2.0.0 was packaged **without running tests**, as requested. Earlier 0.2.0 validation is preserved in `history/0.2.0/`; it does not validate these changes. See [VALIDATION.md](VALIDATION.md) and `verification.json` for scope. Schema generation and file/archive hashing are packaging operations, not provider acceptance evidence.
+Version 3.0.0 was packaged **without running tests**, as requested. Earlier 0.2.0 validation is preserved in `history/0.2.0/`; it does not validate these changes. See [VALIDATION.md](VALIDATION.md) and `verification.json` for scope. Schema generation and file/archive hashing are packaging operations, not provider acceptance evidence.
 
 See [COMPATIBILITY.md](COMPATIBILITY.md) for supported formats and official references, [API-CONTRACT.md](API-CONTRACT.md) for exact routes, and [SECURITY.md](SECURITY.md) for credential and activation boundaries. No account installation, registry publication, provider API call, new token or financial transaction was performed by this package update.

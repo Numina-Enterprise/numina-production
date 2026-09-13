@@ -46,7 +46,7 @@ export class NuminaClient {
   #requireAuth(){if(!this.#token)fail('SERVER_AUTH_REQUIRED');}
   async #send(path,body){
     const privateOperation=!['/status','/catalog','/application-release'].includes(path);if(privateOperation)this.#requireAuth();
-    const endpoint=path==='/treasury'?'/api/control/v1/treasury':path==='/application-release'?'/v2/release/manifest':path==='/catalog'?'/api/app/v1/catalog':'/api/nusd/v1'+path;
+    const endpoint=path==='/treasury'?'/api/control/v1/treasury':path==='/application-release'?'/v3/release/manifest':path==='/catalog'?'/api/app/v1/catalog':'/api/nusd/v1'+path;
     const controller=new AbortController();let timer,reader;
     const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(new NuminaError('REQUEST_TIMEOUT'));},this.#timeout);});
     try{

@@ -24,6 +24,7 @@ const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const record={
+ source_alignment:{manifest:'/source-alignment.json',root:'NUMINA',layers:['L1','L2','L3','L4','L5']},
  recorded_release_evidence:releaseEvidence,
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
  schema:'numina.application-release.v2',schema_version:2,

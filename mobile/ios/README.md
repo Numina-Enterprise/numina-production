@@ -8,12 +8,12 @@ This folder contains a native SwiftUI/WKWebView Xcode project that opens `https:
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 3.0.0 / 1 |
+| Version / build | 3.0.0 / 2 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
 
-For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 1 must also be checked against any existing release history.
+For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 2 must also be checked against any existing release history.
 
 ## Included behavior
 
@@ -29,7 +29,7 @@ The saved hosted source starts authentication at `/signin-with-chatgpt?return_to
 
 There is no verified native OAuth callback, associated-domain entitlement, universal-link registration, token exchange, or session handoff. No authorization token or browser cookie is copied into WebKit. A native authenticated workspace requires an explicitly supported server flow and device validation before release. Apple's supported native web authentication API is [ASWebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession).
 
-## Open and build later on a Mac
+## Build on a Mac
 
 Open `Numina.xcodeproj` in a supported Xcode installation on macOS and select the shared `Numina` scheme. All sources are included directly; no package manager, project generator, dependency installation or paid build service is required.
 
@@ -41,10 +41,14 @@ xcodebuild -project Numina.xcodeproj -scheme Numina -configuration Debug -sdk ip
 
 Before a signed archive, the owner must confirm the app identity, configure their authorized Apple team and signing, and address `RELEASE-INPUTS.md`. Select an iOS device destination, then use Product → Archive. Export/upload is a separate action. Apple describes the archive and signing path in [Distributing your app](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases).
 
-## Work record
+## Historical preparation record
 
 Prepared on Windows, September 12, 2026. `xcodebuild`, `swift`, and `plutil` were not available on PATH. The project was not compiled, launched, tested, signed, archived, validated in Xcode, or submitted. No tests or test target were added. No Apple account, signing credential, key generation, paid service, or hosted-site mutation was used. Source inspection is not a successful native build.
 
 The app icon asset catalog and final privacy manifest are intentionally not claimed complete. The project's unconfigured icon permits source preparation but is a release blocker. No `.ipa`, `.xcarchive`, signing material, or simulated store receipt is included.
 
 Apple documents persistent storage in [WKWebsiteDataStore](https://developer.apple.com/documentation/webkit/wkwebsitedatastore). Current review requirements and privacy details were checked against the official sources linked in `RELEASE-INPUTS.md`.
+
+## Current v3 build record
+
+Hosted build 34785069076 compiled the unsigned device release successfully on 2026-09-13 at 21:52:23 UTC from commit `7e0de0c9e789cb9ab6aa499e891235b56510eb84`. The unsigned app ZIP is downloadable; no signed IPA or App Store submission exists. Exact hashes and remaining signing status are in `../../docs/native-package-record-v3.json`. The earlier preparation record above is historical.
