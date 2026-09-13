@@ -76,7 +76,7 @@ async function frontierDiscovery(req,env){
   if(version&&version!=='2025-11-25')return error(-32602,'Supported MCP protocol version: 2025-11-25');
   if(msg.method==='initialize')return result({protocolVersion:'2025-11-25',capabilities:{tools:{listChanged:false}},serverInfo:{name:'numina-discovery',version:FRONTIER_VERSION}});
   if(msg.method==='ping')return result({});
-  const names={numina_architecture:'Read Numina L3, L4 and L5 architecture layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the current public journal head and revision; does not read private records.'};
+  const names={numina_architecture:'Read Numina L1 through L5 architecture layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the current public journal head and revision; does not read private records.'};
   if(msg.method==='tools/list')return result({tools:Object.entries(names).map(([name,description])=>({name,description,inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false}}))});
   if(msg.method!=='tools/call')return error(-32601,'Method not found');
   if(!Object.hasOwn(names,msg.params?.name??'')||!msg.params.arguments||Array.isArray(msg.params.arguments)||typeof msg.params.arguments!=='object'||Object.keys(msg.params.arguments).length)return error(-32602,'Expected a listed tool and empty arguments');
@@ -96,6 +96,10 @@ export async function frontierHttp(req,env){
     if(!['GET','POST'].includes(req.method))return frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     const now=Math.floor(Date.now()/1000),bucket=await controlHash('frontier:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
     if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
+    if(path==='/api/control/v2/head'&&req.method==='GET'){
+      const row=await readControl(env.DB);
+      return frontierResponse({schema:'numina.public-head.v1',rootHash:await controlHash(row.state.root),revision:row.revision,head:row.head_hash,stateHash:row.state_hash,eventCount:row.eventCount,journalContinuity:row.eventCount===row.revision+1,scope:'Numina canonical internal journal',blockchainConnection:'/v2/network/status',blockchainAnchorVerified:false});
+    }
     if(path==='/api/control/v2/discovery-mcp'){
       if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
       return req.method==='POST'?frontierDiscovery(req,env):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);

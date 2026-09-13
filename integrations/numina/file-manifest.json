@@ -56,7 +56,7 @@
     {
       "path": "distribution.json",
       "bytes": 2364,
-      "sha256": "4372c7373d0c6e09a70b0484b7089411caa9a4e54ef20aec47e0817bd4f090fd"
+      "sha256": "a19644436e38773486007444591009bbffbaeb7b7f45aae0afb189d78619b5d0"
     },
     {
       "path": "examples/mcp-host.example.json",
@@ -151,7 +151,7 @@
     {
       "path": "scripts/package-distribution.js",
       "bytes": 4812,
-      "sha256": "47400a4b709a71aab44b4b43bd24f509e813dddc41b8d4353bd2da31701ee0a1"
+      "sha256": "081b2c7aa8a0002378d42d2fa69325f3cc0944911acba6db33b7eba2ec3334e2"
     },
     {
       "path": "src/client.js",
@@ -191,7 +191,7 @@
     {
       "path": "verification.json",
       "bytes": 1934,
-      "sha256": "5c5eb9942fb88d25652cfab6a6a79542fdd241737af235ae2ad6d15b8e768d8e"
+      "sha256": "6f5e6cb9ff5f2e32ea03f09e3b04957ac1ac7a97e1f10b3f765c03c4a5ae5e3a"
     }
   ]
 }
