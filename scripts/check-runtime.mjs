@@ -7,6 +7,6 @@ const records=Object.fromEntries(await Promise.all(Object.entries(paths).map(asy
 })));
 const evidence=await assessRuntimeEvidence(records);
 const bootstrap=await verifyRuntimeReceipt(records.bootstrap?.data);
-const checks={release:evidence.manifestMatches,signature:evidence.releaseDeclarationVerified,status:evidence.runtimeStatusMatches,control:evidence.controlStateBound,ready:records.ready?.data?.status==='ready',durable:bootstrap.valid && bootstrap.envelope.artifact_type==='NUMINA_BOOTSTRAP_ATTESTATION' && bootstrap.envelope.payload.release===RUNTIME_VERSION && bootstrap.envelope.payload.evidence_store_durable===true};
+const checks={release:evidence.manifestMatches,signature:evidence.releaseDeclarationVerified,status:evidence.runtimeStatusMatches,supply:evidence.supplyIdentityMatches,control:evidence.controlStateBound,ready:records.ready?.data?.status==='ready',durable:bootstrap.valid && bootstrap.envelope.artifact_type==='NUMINA_BOOTSTRAP_ATTESTATION' && bootstrap.envelope.payload.release===RUNTIME_VERSION && bootstrap.envelope.payload.evidence_store_durable===true};
 const report={checkedAt:new Date().toISOString(),origin:RUNTIME_ORIGIN,expected:RUNTIME_VERSION,observed:records.manifest?.data?.production_version??null,checks,errors:Object.fromEntries(Object.entries(records).filter(([,r])=>r.state==='error').map(([k,r])=>[k,r.error])),passed:Object.values(checks).every(Boolean)};
 console.log(JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;
