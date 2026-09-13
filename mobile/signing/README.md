@@ -7,3 +7,5 @@ Private keys and randomly generated passwords are stored only in the repository'
 The iOS file is a certificate-signing request. Its private key is retained in the same encrypted vault. Apple must issue the distribution certificate after the organization's developer enrollment; the CSR is not an Apple certificate or App Store approval. No iOS signing or store submission is claimed.
 
 The signed Android build performs compilation, packaging, signature and alignment verification. It runs no application tests and submits nothing to an app store.
+
+Android release build 34780729273 completed on 2026-09-13 with verified APK and AAB signatures. Public artifacts and SHA-256 digests are recorded in `docs/android-signed-build-record-v2.json`. Google Play publication and physical-device installation remain unverified.
