@@ -1,6 +1,6 @@
 # Numina integration kit 2.0.0
 
-JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 2.0** through [its application manifest](https://numinalabs.xyz/v2/release/manifest). The application and kit have separate artifact identities. The application's **rc26 runtime dependency** and historical rc20 evidence retain their original versions.
+JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 2.0** through [its application manifest](https://numinalabs.xyz/v2/release/manifest). The application and kit have separate artifact identities. The application's **rc22 runtime dependency** and historical rc20 evidence retain their original versions.
 
 This archive is an integration deliverable. It does not install itself into provider accounts, create a hosted MCP endpoint or establish compatibility with every LLM.
 
@@ -46,7 +46,7 @@ The low-level `openAIChatTools()` and `openAIResponsesTools()` retain their earl
 
 The `numina_runtime_build` tool reads `execution_runtime_build` from the existing application manifest. It preserves source and builder revisions, artifact hashes, proof links and financial-status source labels. Revision `root-readiness-v2.0.0` also includes `nusd_transaction_receipts` and `nusd_activation_readiness` when the root manifest supplies them. Missing fields stay omitted. These are server-reported records, with no independent receipt or readiness verification by the client; a recorded claim or empty slot does not prove deployment, backing or settlement.
 
-The client performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc26 control-plane runtime and separately built Linux execution image retain their separate identities. This read-only addition does not change the six default discovery tools, install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
+The client performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc22 control-plane runtime and separately built Linux execution image retain their separate identities. This read-only addition does not change the six default discovery tools, install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
 
 ## Package status
 

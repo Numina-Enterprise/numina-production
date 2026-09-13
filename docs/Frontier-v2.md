@@ -40,3 +40,7 @@ A2A: `/.well-known/agent-card.json`, JSON-RPC compatibility version `0.3.0`, `me
 The hosted website and mobile web app share this release. Native store approval and third-party marketplace publication are separate external states. Existing native wrappers point at the hosted application; no store approval is asserted.
 
 Further tests were skipped at the owner's request. Build completion and production observations are reported separately.
+
+## Architecture and adoption
+
+Numina L3 (authority), L4 (execution) and L5 (canonical evidence) share one journal. See [Architecture-layers.md](Architecture-layers.md). Public MCP discovery is available at `/api/control/v2/discovery-mcp`; it reads architecture, capabilities and the current head without authentication. The Codex plugin uses that endpoint. Private operations remain at `/api/control/v2/mcp`. The web app runs on desktop and mobile browsers; native-store status is recorded separately.
