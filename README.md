@@ -20,7 +20,7 @@ Runtime signing keys, provider credentials and private records belong only in pr
 
 ## Distribution
 
-The mobile web app is served at `/app`. Android and iOS source projects are prepared separately; native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
+The mobile web app is served at `/app`. Android and iOS device release packages compiled on GitHub-hosted builders. Their exact inputs, artifact hashes and signing/publication status are recorded in docs/native-package-record-v2.json. Native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
 
 ## Source and rights
 
