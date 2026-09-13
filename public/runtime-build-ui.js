@@ -97,7 +97,8 @@ function assessFinancialStatus(data) {
 }
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
-  const panels = [...document.querySelectorAll('[data-linux-runtime-panel]')];
+  const panels = [...document.querySelectorAll('[data-linux-runtime-panel], [data-nusd-status-panel]')];
+  const hasBuildPanel = panels.some(panel => panel.hasAttribute('data-linux-runtime-panel'));
   if (panels.length) {
     let generation = 0, controller;
     const set = (attribute, value) => panels.forEach(panel => {
@@ -135,7 +136,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
         });
       };
       const currentView = () => current === generation && !active.signal.aborted;
-      const readBuild = timed(signal => Promise.all([
+      const readBuild = hasBuildPanel ? timed(signal => Promise.all([
         readRecord(LINUX_RUNTIME_PROOF.directory + 'release-review.json', signal, LINUX_RUNTIME_PROOF.reviewSha256),
         readRecord(LINUX_RUNTIME_PROOF.directory + 'numina-nusd-runtime-inventory.json', signal, LINUX_RUNTIME_PROOF.inventorySha256),
       ])).then(([review, inventory]) => {
@@ -144,7 +145,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
       }).catch(() => {
         if (current === generation) proof({ state: 'Build verification record unavailable',
           detail: 'The dated record could not be loaded or did not match its reviewed fingerprint. Open the evidence links to inspect it.' });
-      });
+      }) : Promise.resolve();
       const readStatus = timed(signal => readRecord('/api/nusd/v1/status', signal)).then(data => {
         const view = assessFinancialStatus(data);
         if (currentView()) financial(view);
@@ -154,7 +155,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
       });
       await Promise.all([readBuild, readStatus]);
     }
-    document.querySelectorAll('[data-refresh-linux-runtime], [data-refresh-release]')
+    document.querySelectorAll('[data-refresh-linux-runtime], [data-refresh-nusd-status], [data-refresh-release]')
       .forEach(button => button.addEventListener('click', () => void refresh()));
     window.addEventListener('pagehide', () => { generation++; controller?.abort(); clear('Refresh to load the build record'); });
     window.addEventListener('pageshow', event => { if (event.persisted) void refresh(); });

@@ -27,6 +27,11 @@ function clearApplicationEvidence(message='Loading deployed release…'){
  set('[data-application-generation-metadata]','Unavailable');
  set('[data-application-verification-command]','Load the current manifest to prepare verification.');
  set('[data-application-copy-message]','');
+ set('[data-application-readiness]','Release requirements unavailable');
+ set('[data-application-deployment-receipt]','Unavailable');
+ set('[data-application-settlement-receipt]','Unavailable');
+ set('[data-application-native-packages]','Unavailable');
+ all('[data-application-requirements]').forEach(list=>list.replaceChildren());
  set('[data-application-hash-note]','No manifest response is currently loaded.');
  all('[data-application-download]').forEach(button=>{button.disabled=true;});
  all('[data-application-copy-command]').forEach(button=>{button.disabled=true;});
@@ -70,6 +75,32 @@ function commandForPolicy(){
  return args.join(' ');
 }
 
+function renderReleaseRequirements(data){
+ const receipts=data.nusd_transaction_receipts,readiness=data.nusd_activation_readiness;
+ const text=value=>typeof value==='string'&&value.length<=800?value.replaceAll('_',' '):'Not reported';
+ const receiptText=receipt=>{
+  if(!receipt||typeof receipt!=='object')return 'Not reported in this release';
+  if(receipt.receipt===null&&receipt.transaction_hash===null)return 'Unfilled — awaiting a provider receipt';
+  return 'Release record: '+text(receipt.status)+'; verification record: '+text(receipt.verification?.status)+'. Check the source receipt independently.';
+ };
+ set('[data-application-deployment-receipt]',receiptText(receipts?.deployment));
+ set('[data-application-settlement-receipt]',receiptText(receipts?.settlement));
+ set('[data-application-readiness]',readiness?'At release time: '+text(readiness.status):'No release-time requirements reported');
+ const requirements=Array.isArray(readiness?.blockers)?readiness.blockers.slice(0,30):[];
+ all('[data-application-requirements]').forEach(list=>{
+  const nodes=requirements.map(item=>{
+   const row=document.createElement('li');
+   row.textContent=text(item?.required_evidence)+' ('+text(item?.status)+')';
+   return row;
+  });
+  list.replaceChildren(...nodes);
+ });
+ const native=data.distribution?.native_candidates;
+ set('[data-application-native-packages]',native
+  ?'Android: '+text(native.android?.status)+'. iOS: '+text(native.ios?.status)+'. '+(native.store_publication_verified===false?'Store publication is not verified in this release.':native.store_publication_verified===true?'This release reports verified store publication; confirm the store records.':'Store publication is not reported.')
+  :'Native package records are not included in this release.');
+}
+
 async function refreshApplicationRelease(){
  const generation=++requestGeneration;
  activeController?.abort();const controller=new AbortController();activeController=controller;
@@ -93,6 +124,7 @@ async function refreshApplicationRelease(){
   ]);
   if(generation!==requestGeneration||controller.signal.aborted)return;
   set('[data-application-version]','2.0.0');
+  renderReleaseRequirements(data);
   set('[data-application-build]',data.build_id);
   set('[data-application-manifest-sha]',digest);
   set('[data-application-hash-note]','Calculated from the exact manifest response downloaded during this refresh. This fingerprint alone does not verify a signature.');

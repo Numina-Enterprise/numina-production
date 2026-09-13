@@ -1,11 +1,11 @@
 {
   "schema": "numina.integration.archive.v2",
   "version": "2.0.0",
-  "revision": "runtime-proof-34725802271",
+  "revision": "root-readiness-v2.0.0",
   "archive": "numina-integration-kit-v2.0.0.zip",
-  "bytes": 55125,
-  "sha256": "d0a914661721aa1223a082d4a79519a48cbd8106ca5af1fceb98d938a1b1e649",
-  "packagedAtUtc": "2026-09-13T00:02:47.178081+00:00",
+  "bytes": 56836,
+  "sha256": "8521f3041b9b912e47e0533bdc8681e375f13b406d37cee8f95bafc1bc874672",
+  "packagedAtUtc": "2026-09-13T03:06:55.393986+00:00",
   "sourceFiles": 37,
   "testsRun": false,
   "defaultTools": [
