@@ -7,7 +7,7 @@ import {toolsForProfile} from '../src/tools.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const metadata=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const providerFormats=['openai-responses','openai-chat-completions','anthropic-messages','gemini-interactions','gemini-generate-content'];
-const revision='frontier-production-v2.1.0';
+const revision='frontier-production-v2.2.0';
 const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime_build',
  additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
@@ -26,7 +26,7 @@ const verification={
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
 const distribution={
- livemode:true,frontier:{version:'2.1.0',transport:'stdio-to-streamable-http',script:'bin/control-mcp-stdio.js',endpoint:'https://numinalabs.xyz/api/control/v2/mcp',protocolVersion:'2025-11-25',tokenEnvironmentVariable:'NUMINA_API_TOKEN',a2a:'https://numinalabs.xyz/.well-known/agent-card.json'},
+ livemode:true,frontier:{version:'2.2.0',transport:'stdio-to-streamable-http',script:'bin/control-mcp-stdio.js',endpoint:'https://numinalabs.xyz/api/control/v2/mcp',protocolVersion:'2025-11-25',tokenEnvironmentVariable:'NUMINA_API_TOKEN',a2a:'https://numinalabs.xyz/.well-known/agent-card.json'},
  schema:'numina.integration.distribution.v2',version:metadata.version,revision,
  applicationManifest:'/v2/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,
  defaultOrigin:'https://numinalabs.xyz',defaultProfile:'discovery',

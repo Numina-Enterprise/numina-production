@@ -1,6 +1,6 @@
 {
   "name": "numina",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Numina production architecture, capabilities and canonical journal head.",
   "author": {
     "name": "Numina Labs · SK Consulting LLC"
@@ -11,7 +11,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Numina",
-    "shortDescription": "One head. L3 authority, L4 execution, L5 evidence.",
+    "shortDescription": "One head across five production architecture layers.",
     "longDescription": "Connect Codex to Numina production for live architecture, provider capability and journal-head discovery. Authorized operations use Numina’s separately authenticated control endpoint.",
     "developerName": "Numina Labs",
     "category": "Productivity",
@@ -23,7 +23,7 @@
     "defaultPrompt": [
       "Show Numina’s current production capabilities.",
       "Read Numina’s canonical journal head.",
-      "Explain Numina’s L3, L4 and L5 layers."
+      "Explain Numina’s L1 through L5 layers."
     ],
     "composerIcon": "./assets/icon.png",
     "logo": "./assets/logo.png"

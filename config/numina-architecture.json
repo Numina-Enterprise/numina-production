@@ -34,8 +34,10 @@
   "production_head": null,
   "mint_event": null,
   "pendingRuntimeMigration": "1.9.0-rc26",
-  "frontierVersion": "2.1.0",
+  "frontierVersion": "2.2.0",
   "architectureLayers": {
+    "L1": "Root and state",
+    "L2": "Intent and evidence",
     "L3": "Authority",
     "L4": "Execution",
     "L5": "Canonical evidence"

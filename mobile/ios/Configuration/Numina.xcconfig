@@ -1,0 +1,19 @@
+// SOURCE CANDIDATE ONLY. Confirm the existing App Store app's identifier before release.
+// This proposed identifier is not registered, assigned, or checked for availability.
+PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app
+PRODUCT_NAME = Numina
+MARKETING_VERSION = 2.0.0
+CURRENT_PROJECT_VERSION = 1
+IPHONEOS_DEPLOYMENT_TARGET = 15.0
+TARGETED_DEVICE_FAMILY = 1,2
+SWIFT_VERSION = 5.0
+SDKROOT = iphoneos
+SUPPORTED_PLATFORMS = iphoneos iphonesimulator
+SUPPORTS_MACCATALYST = NO
+GENERATE_INFOPLIST_FILE = NO
+INFOPLIST_FILE = Numina/Info.plist
+// Nothing in this source package may select a team or obtain signing assets.
+CODE_SIGNING_ALLOWED = NO
+CODE_SIGN_STYLE = Manual
+DEVELOPMENT_TEAM =
+CODE_SIGN_IDENTITY =

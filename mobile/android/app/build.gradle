@@ -1,0 +1,31 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'xyz.numinalabs.app'
+    compileSdk 36
+
+    defaultConfig {
+        // Proposed package identity, not a verified Play Console assignment.
+        applicationId 'xyz.numinalabs.app'
+        minSdk 23
+        targetSdk 36
+        versionCode 1
+        versionName '2.0.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes {
+        release {
+            // No generated or embedded signing identity. The release outputs
+            // remain unsigned until the owner supplies their actual signing setup.
+            minifyEnabled false
+            debuggable false
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.7.3'
+}

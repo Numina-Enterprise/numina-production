@@ -1,0 +1,9 @@
+{
+  "status": "requires_actual_store_signing_identity",
+  "package_name_proposed": "xyz.numinalabs.app",
+  "website": "https://numinalabs.xyz",
+  "required_public_path": "/.well-known/assetlinks.json",
+  "actual_app_signing_certificate_sha256": null,
+  "published": false,
+  "notes": "This is a configuration record, not a publishable Digital Asset Links statement. Generate the real statement only after final package identity and actual store app-signing certificate are known. Upload-key and store-key fingerprints can differ."
+}
