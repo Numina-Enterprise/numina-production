@@ -1,6 +1,7 @@
 export function selectService(offers,href){
  const requested=new URL(href).searchParams.get('service');
- const chosen=typeof requested==='string'&&Object.hasOwn(offers,requested)?requested:'diagnostic';
+ const current=({diagnostic:'diagnostic_enterprise',audit:'audit_enterprise'})[requested]??requested;
+ const chosen=typeof current==='string'&&Object.hasOwn(offers,current)?current:Object.keys(offers)[0];
  return {chosen,signInUrl:'/signin-with-chatgpt?return_to='+encodeURIComponent('/app?service='+encodeURIComponent(chosen)+'#request-form')};
 }
 export function offerLabel(offer){

@@ -1,7 +1,9 @@
 export const APP_VERSION='2.0.0';
 export const APP_OFFERS={
- diagnostic:{name:'Operational Agent Diagnostic',amount:150000,currency:'usd',paymentLink:'plink_1UEZzUQdJat0efmTmZFJ5X6b',url:'https://book.stripe.com/fZu8wRb8UfHubiWgSxcbC07',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
- audit:{name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
+ diagnostic_enterprise:{name:'Operational Agent Diagnostic',amount:500000,currency:'usd',paymentLink:'plink_1UFKjOQdJat0efmTjZUbX8v7',url:'https://book.stripe.com/28E6oJgte52Q5YC31HcbC09',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
+ audit_enterprise:{name:'Agentic Systems & Operations Audit',amount:2500000,currency:'usd',paymentLink:'plink_1UFKjlQdJat0efmTGO6ppg0d',url:'https://book.stripe.com/cNi8wRfpadzm1Im9q5cbC0a',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
+ diagnostic:{retired:true,name:'Operational Agent Diagnostic',amount:150000,currency:'usd',paymentLink:'plink_1UEZzUQdJat0efmTmZFJ5X6b',url:'https://book.stripe.com/fZu8wRb8UfHubiWgSxcbC07',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
+ audit:{retired:true,name:'Agentic Systems & Operations Audit',amount:750000,currency:'usd',paymentLink:'plink_1UEZzoQdJat0efmTN8cI8Xat',url:'https://book.stripe.com/3cI9AV7WIfHu5YC9q5cbC08',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
  authorization_check:{name:'Authorization check',amount:null,currency:'nusd',requestOnly:true,description:'Submit the proposed agent action, authorized systems and acceptance criteria for scope review. Intended pricing: NUSD per accepted verification result; price and payment are not activated.'},
  result_access:{name:'Numina Result Access',amount:null,currency:'nusd',requestOnly:true,description:'Describe the API result, its intended use and the access you need. Scope and intended NUSD pricing are reviewed before any paid entitlement. Payment and result unlocking are not activated.'},
  workflow_delivery:{name:'Verified workflow delivery',amount:null,currency:'nusd',requestOnly:true,description:'Define the workflow, measurable outcome and delivery evidence for scope review. Intended pricing: NUSD per accepted outcome; payment and execution are not activated.'}
@@ -11,7 +13,7 @@ export async function appDigest(value){return Array.from(new Uint8Array(await cr
 export function appText(value,min,max){if(typeof value!=='string'||value.trim().length<min||value.trim().length>max||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value))appFail('INVALID_INPUT');return value.trim();}
 export function appIntake(input){
  if(!input||Array.isArray(input)||Object.keys(input).some(k=>!['idempotencyKey','service','title','brief','successCriteria','country','consent'].includes(k)))appFail('INVALID_INPUT');
- if(!/^[a-f0-9-]{36}$/.test(input.idempotencyKey)||!Object.hasOwn(APP_OFFERS,input.service)||!/^[A-Z]{2}$/.test(input.country)||input.consent!==true)appFail('INVALID_INPUT');
+ if(!/^[a-f0-9-]{36}$/.test(input.idempotencyKey)||(!Object.hasOwn(APP_OFFERS,input.service)||APP_OFFERS[input.service].retired)||!/^[A-Z]{2}$/.test(input.country)||input.consent!==true)appFail('INVALID_INPUT');
  return {idempotencyKey:input.idempotencyKey,service:input.service,title:appText(input.title,3,120),brief:appText(input.brief,20,4000),successCriteria:appText(input.successCriteria,10,1500),country:input.country,consent:true};
 }
 export function appPaymentSummary(payments,facts){
