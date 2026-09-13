@@ -102,6 +102,13 @@ export async function reduceFrontier(state,command,actor,now){
     frontierAssert(accounts.length>0,'DESIGNATED_ACCOUNTS_REQUIRED',409);
     f.fundingPlan={schema:'numina.funding-plan.v1',id:data.id,status:'UNFUNDED_PLAN',issuer:actor,createdAt:now,eventId:command.id,reason:data.reason,target:{amount:state.nativeTreasury.balance,unit:'NUSD',basis:'canonical_native_projection',sharedAcrossAccounts:true},accountReferences:accounts.map(account=>({id:account.id,provider:account.provider,accountLabel:account.accountLabel,allocatedAmount:null,providerConfirmed:false})),confirmedFunding:null,externalReceipt:null,externalSubmission:false,treasuryProjectionChanged:false};
     result={status:'FUNDING_PLAN_RECORDED',plan:structuredClone(f.fundingPlan),executionScope:'internal_funding_plan',fundsCreated:false,externalAccountsChanged:false};
+  }else if(command.type==='frontier.funding_declaration'){
+    owner();frontierExact(data,['FUNDED_PLAN','reason']);
+    frontierAssert(data.FUNDED_PLAN===true&&frontierText(data.reason,1000),'INVALID_FUNDING_DECLARATION',400);
+    frontierAssert(f.fundingPlan,'FUNDING_PLAN_REQUIRED',409);
+    frontierAssert(!f.fundingDeclaration,'FUNDING_DECLARATION_ALREADY_RECORDED',409);
+    f.fundingDeclaration={schema:'numina.owner-funding-declaration.v1',planId:f.fundingPlan.id,FUNDED_PLAN:true,source:'owner_declaration',actor,at:now,eventId:command.id,reason:data.reason,bankFundingVerified:false,providerBalancesChanged:false};
+    result={status:'OWNER_FUNDING_DECLARATION_RECORDED',declaration:structuredClone(f.fundingDeclaration),executionScope:'internal_owner_declaration',fundsCreated:false,externalAccountsChanged:false};
   }else if(command.type==='frontier.consolidate'){
     owner();frontierExact(data,[]);const retained=new Map(),superseded=[];
     for(const account of f.accounts){if(account.supersededBy)continue;const identity=stable({provider:account.provider,legalEntity:account.legalEntity,accountLabel:account.accountLabel,providerAccountReference:account.providerAccountReference});const previous=retained.get(identity);if(previous){account.supersededBy=previous.id;superseded.push({id:account.id,retainedId:previous.id});}else retained.set(identity,account);}
