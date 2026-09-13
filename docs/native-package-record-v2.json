@@ -7,23 +7,59 @@
   "packageIdentityRegisteredOrConfirmed": false,
   "hostedWorkspace": "https://numinalabs.xyz/app",
   "android": {
-    "status": "source_only_build_failed",
-    "buildCompletedAtUtc": null,
-    "binaries": [],
+    "status": "unsigned_release_artifacts_built",
+    "buildCompletedAtUtc": "2026-09-13T19:47:34Z",
+    "binaries": [
+      {
+        "platform": "android",
+        "file": "numina-2.0.0-unsigned.aab",
+        "bytes": 3578797,
+        "sha256": "afafedea630b6a83f30e300f6710cfd1a408ed0a4c54128a20e1b3557262ad44",
+        "signed": false,
+        "installable": false,
+        "url": "/downloads/numina-2.0.0-unsigned.aab"
+      },
+      {
+        "platform": "android",
+        "file": "numina-2.0.0-unsigned.apk",
+        "bytes": 3755825,
+        "sha256": "5e8a060d970c2e07ce6cd3fc0f988661c4f7d869c3b9a6c8c075a2074e939c9c",
+        "signed": false,
+        "installable": false,
+        "url": "/downloads/numina-2.0.0-unsigned.apk"
+      }
+    ],
     "signingPerformed": false,
     "deviceInstalled": false,
     "testsRun": false,
     "domainAssociationVerified": false,
-    "storeSubmitted": false
+    "storeSubmitted": false,
+    "compiled": true,
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34778678464",
+    "sourceCommit": "c7ede88e09d1e95139476056b324e7498bc7da4d"
   },
   "ios": {
-    "status": "xcode_source_only",
-    "compiled": false,
+    "status": "unsigned_device_release_built",
+    "compiled": true,
     "signed": false,
     "ipaCreated": false,
     "testsRun": false,
     "storeSubmitted": false,
-    "nativeAuthenticatedSessionSupported": false
+    "nativeAuthenticatedSessionSupported": false,
+    "binaries": [
+      {
+        "platform": "ios",
+        "file": "numina-2.0.0-ios-unsigned-app.zip",
+        "bytes": 61713,
+        "sha256": "ef3fb547e1b96d2f82743dfae5b2ed0bd425d3850f4b4d867cf348756ad25c7a",
+        "signed": false,
+        "installable": false,
+        "url": "/downloads/numina-2.0.0-ios-unsigned-app.zip"
+      }
+    ],
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34778513731",
+    "sourceCommit": "4c74f14302ecf9d1bb9452ef64bea2d269525567",
+    "buildCompletedAtUtc": "2026-09-13T19:43:03Z"
   },
   "sourceArchives": [
     {
@@ -46,5 +82,6 @@
   "sdkBinariesDependencyCachesOrCredentialsIncluded": false,
   "slsaLevelClaimed": null,
   "nusdActivationPerformed": false,
-  "storeListingOrApprovalClaimed": false
+  "storeListingOrApprovalClaimed": false,
+  "recordedAtUtc": "2026-09-13T19:50:20.728Z"
 }
