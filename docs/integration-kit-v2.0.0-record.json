@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "revision": "frontier-production-v2.1.0",
   "archive": "numina-integration-kit-v2.0.0.zip",
-  "bytes": 61335,
-  "sha256": "158d15e0d6e4f6d069ee759e502f78ee3ed945c078900474715e6896e877589b",
-  "packagedAtUtc": "2026-09-13T19:03:26.121374+00:00",
+  "bytes": 61360,
+  "sha256": "a36c01e40aff12c7a54a73d289710ac7f272b8cbbe5e547711e70e288b20de12",
+  "packagedAtUtc": "2026-09-13T19:22:48.199389+00:00",
   "sourceFiles": 39,
   "testsRun": false,
   "defaultTools": [

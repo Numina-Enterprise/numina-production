@@ -117,10 +117,10 @@ export function createRuntimeReleaseUI({
     set('[data-sbom-hash]', ok('supply') ? text(current.supply.data.spdx_sbom_sha256) : 'Unavailable');
     set('[data-provenance-hash]', ok('supply') ? text(current.supply.data.slsa_provenance_sha256) : 'Unavailable');
     set('[data-supply-status]', ok('supply') ? assessed.supplyIdentityMatches ?
-      'Upstream-reported; not independently verified' : 'Reported artifact identity does not match rc26' :
+      'Upstream-reported; not independently verified' : 'Reported artifact identity does not match rc22' :
       current.supply?.state === 'pending' ? 'Checking…' : 'Unavailable');
     set('[data-readiness]', status ? assessed.runtimeStatusMatches ?
-      'Runtime responding · rc26 identity matches' : 'Runtime response identity does not match rc26' :
+      'Runtime responding · rc22 identity matches' : 'Runtime response identity does not match rc22' :
       current.status?.state === 'pending' ? 'Checking…' : 'Unavailable');
     set('[data-signature-status]', assessed.releaseDeclarationVerified ? 'Signed runtime declaration verified' :
       current.attestation?.state === 'pending' ? 'Checking…' : 'Not verified');
@@ -129,17 +129,17 @@ export function createRuntimeReleaseUI({
     let label = 'Unavailable', message = 'No current release manifest is available.';
     if (hasManifest && !assessed.manifestMatches) {
       label = 'Needs attention';
-      message = 'The observed manifest does not match the pinned rc26 release identity.';
+      message = 'The observed manifest does not match the pinned rc22 release identity.';
     } else if (hasManifest) {
       label = assessed.releaseDeclarationVerified ? 'Signed declaration verified' : 'Observed release';
       message = assessed.releaseDeclarationVerified ?
-        'The rc26 release signature verifies against the established production key and binds every displayed manifest field.' :
-        'The response declares the expected rc26 identity. Its signed manifest has not been verified.';
+        'The rc22 runtime declaration verifies against the established production key. Manifest digests are pinned separately; this signature does not cover them.' :
+        'The response declares the expected rc22 identity. Its signed runtime declaration has not been verified.';
       if (failed) message += ' One or more runtime evidence endpoints are unavailable.';
       else if (pending) message += ' Other evidence checks are still running.';
       if ((ok('status') && !assessed.runtimeStatusMatches) || (ok('supply') && !assessed.supplyIdentityMatches)) {
         label = 'Needs attention';
-        message += ' A runtime or supply-chain response does not match the expected rc26 identity.';
+        message += ' A runtime or supply-chain response does not match the expected rc22 identity.';
       }
     } else if (pending) {
       label = 'Checking…';

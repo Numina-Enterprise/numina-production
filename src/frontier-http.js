@@ -4,6 +4,7 @@ import {controlActor,controlBody} from './control-http.js';
 import {createNuminaTreasury} from './native-treasury.js';
 import {FRONTIER_VERSION,FRONTIER_PROVIDERS,frontierState,frontierRequest,frontierDecision,frontierAssert,frontierExact,frontierSign} from './frontier.js';
 import {rateLimit} from './store.js';
+import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 
 const frontierRoutes={principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account'};
 const frontierToolNames={numina_request:'requests',numina_prepare:'prepare',numina_execute:'execute'};
@@ -65,15 +66,40 @@ async function frontierRpc(req,env,actor){
   if(msg.method!=='tools/call')return error(-32601,'Method not found');
   try{const value=await frontierCall(msg.params?.name,msg.params?.arguments,actor,env);return result({content:[{type:'text',text:JSON.stringify(value)}],isError:false});}catch(e){return result({content:[{type:'text',text:JSON.stringify({error:e.code||'SERVICE_UNAVAILABLE'})}],isError:true});}
 }
+async function frontierDiscovery(req,env){
+  const msg=await frontierJson(req),id=msg?.id??null;
+  const error=(code,message)=>frontierResponse({jsonrpc:'2.0',id,error:{code,message}});
+  if(!msg||Array.isArray(msg)||msg.jsonrpc!=='2.0'||typeof msg.method!=='string'||(id!==null&&typeof id!=='string'&&!Number.isSafeInteger(id)))return error(-32600,'Invalid Request');
+  if(!Object.hasOwn(msg,'id'))return new Response(null,{status:202});
+  const result=value=>frontierResponse({jsonrpc:'2.0',id,result:value});
+  const version=req.headers.get('MCP-Protocol-Version');
+  if(version&&version!=='2025-11-25')return error(-32602,'Supported MCP protocol version: 2025-11-25');
+  if(msg.method==='initialize')return result({protocolVersion:'2025-11-25',capabilities:{tools:{listChanged:false}},serverInfo:{name:'numina-discovery',version:FRONTIER_VERSION}});
+  if(msg.method==='ping')return result({});
+  const names={numina_architecture:'Read Numina L3, L4 and L5 architecture layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the current public journal head and revision; does not read private records.'};
+  if(msg.method==='tools/list')return result({tools:Object.entries(names).map(([name,description])=>({name,description,inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false}}))});
+  if(msg.method!=='tools/call')return error(-32601,'Method not found');
+  if(!Object.hasOwn(names,msg.params?.name??'')||!msg.params.arguments||Array.isArray(msg.params.arguments)||typeof msg.params.arguments!=='object'||Object.keys(msg.params.arguments).length)return error(-32602,'Expected a listed tool and empty arguments');
+  let data;
+  if(msg.params.name==='numina_architecture')data=NUMINA_LAYERS;
+  else if(msg.params.name==='numina_capabilities')data={version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,externalExecution:false,privateControl:'/api/control/v2/mcp',treasury:'/api/control/v1/treasury'};
+  else {const row=await readControl(env.DB);data={schema:'numina.public-head.v1',revision:row.revision,head:row.head_hash,stateHash:row.state_hash,journalContinuity:row.eventCount===row.revision+1,scope:'internal journal',financialVerification:false};}
+  return result({content:[{type:'text',text:JSON.stringify(data)}],isError:false});
+}
 export async function frontierHttp(req,env){
   const path=new URL(req.url).pathname;
   try{
+    if(path==='/api/control/v2/architecture'&&req.method==='GET')return frontierResponse(NUMINA_LAYERS);
     if(path==='/.well-known/agent-card.json')return frontierResponse({protocolVersion:'0.3.0',name:'Numina Control',description:'Delegated requests, policy decisions and internal records.',url:new URL('/api/control/v2/a2a',req.url).href,version:FRONTIER_VERSION,preferredTransport:'JSONRPC',capabilities:{streaming:false,pushNotifications:false},defaultInputModes:['application/json'],defaultOutputModes:['application/json'],skills:[{id:'governed-actions',name:'Governed actions',description:'Send one data part containing tool and arguments. Human approvals are recorded separately by the owner.',tags:['policy','provenance']}],securitySchemes:{bearer:{type:'http',scheme:'bearer'}},security:[{bearer:[]}]});
-    if(path==='/api/control/v2/manifest'&&req.method==='GET')return frontierResponse({schema:'numina.frontier.v2',version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,treasury:'/api/control/v1/treasury',mcp:{url:'/api/control/v2/mcp',protocolVersion:'2025-11-25'},a2a:{url:'/api/control/v2/a2a',protocolVersion:'0.3.0'},externalExecution:false});
+    if(path==='/api/control/v2/manifest'&&req.method==='GET')return frontierResponse({schema:'numina.frontier.v2',version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',architecture:'/api/control/v2/architecture',discoveryMcp:'/api/control/v2/discovery-mcp',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,treasury:'/api/control/v1/treasury',mcp:{url:'/api/control/v2/mcp',protocolVersion:'2025-11-25'},a2a:{url:'/api/control/v2/a2a',protocolVersion:'0.3.0'},externalExecution:false});
     if(path==='/api/control/v2/keys'&&req.method==='GET'){const jwk=JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK);return frontierResponse({keys:[{kty:'OKP',crv:'Ed25519',x:jwk.x,kid:await controlHash({crv:jwk.crv,kty:jwk.kty,x:jwk.x})}]});}
     if(!['GET','POST'].includes(req.method))return frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     const now=Math.floor(Date.now()/1000),bucket=await controlHash('frontier:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
     if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
+    if(path==='/api/control/v2/discovery-mcp'){
+      if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
+      return req.method==='POST'?frontierDiscovery(req,env):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
+    }
     if(path==='/api/control/v2/sandbox')return frontierResponse({error:'NOT_FOUND'},404);
     const row=await readControl(env.DB);frontierAssert(row.state.root===env.NUMINA_CONTROL_OWNER,'ROOT_CONFIGURATION_MISMATCH',503);
     const actor=await frontierActor(req,env,row);
