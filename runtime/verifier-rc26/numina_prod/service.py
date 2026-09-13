@@ -20,7 +20,8 @@ from .control_gateway import evaluate_control_request
 from .execution_adapters import provider_catalog,prepare_execution_handoff,bind_external_evidence
 from .circle_agent_adapter import CircleTestnetAdapter,CircleTestnetConfig,PROVIDER_SUBMISSION_TYPE,PROVIDER_RECONCILIATION_TYPE
 from .arc_verification import ArcExternalVerifier,ArcVerificationConfig,EXECUTION_VERIFIED_TYPE
-from .evidence_network import create_evidence_store,normalize_intelligence_evidence,build_evidence_bundle,INTELLIGENCE_EVIDENCE_TYPE,EVIDENCE_BUNDLE_TYPE,REVOCATION_TYPE
+from .evidence_network import create_evidence_store,normalize_intelligence_evidence,build_evidence_bundle,INTELLIGENCE_EVIDENCE_TYPE,EVIDENCE_BUNDLE_TYPE
+from .owner_access import require_owner_access
 from numina.status import StatusWitness,SignedStatusWitness,verify_witness
 from numina.checkpoints import ConstitutionalCheckpoint,SignedCheckpoint,verify_checkpoint
 
@@ -67,17 +68,13 @@ class VerificationJobRequest(BaseModel):
     control_receipt:dict
     handoff_receipt:dict
     submission_receipt:dict
-class RevocationRequest(BaseModel):
-    record_id:str
-    reason:str
-    evidence:dict={}
 
 
 def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
     settings=settings or load_settings()
     if settings.role != "public-verifier":
         settings.data_dir.mkdir(parents=True,exist_ok=True)
-    identity=load_identity(settings.signing_key_file,allow_ephemeral=settings.allow_ephemeral_key)
+    identity=load_identity(settings.signing_key_file,allow_ephemeral=settings.allow_ephemeral_key,der_env=settings.signing_key_der_env,expected_public_key_b64=settings.signing_public_key_b64)
     circle_adapter=CircleTestnetAdapter(CircleTestnetConfig(
         enabled=bool(settings.circle_testnet_submit_enabled),
         cli_path=settings.circle_cli_path,
@@ -124,7 +121,10 @@ def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
         rid=request.headers.get("x-request-id") or uuid.uuid4().hex
         started=time.monotonic()
         try:
+            await require_owner_access(request,settings)
             response=await call_next(request)
+        except HTTPException as exc:
+            response=JSONResponse({"detail":exc.detail,"request_id":rid},status_code=exc.status_code)
         except Exception:
             response=JSONResponse({"detail":"internal error","request_id":rid},status_code=500)
         response.headers["X-Request-ID"]=rid
@@ -349,6 +349,10 @@ def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
     @app.post("/v1/evidence/jobs")
     def create_verification_job(body:VerificationJobRequest):
         if not settings.evidence_network_enabled: raise HTTPException(503,"EVIDENCE_NETWORK_DISABLED")
+        if not settings.arc_verification_enabled: raise HTTPException(503,"VERIFICATION_PROVIDER_DISABLED")
+        for receipt,kind in ((body.control_receipt,"NUMINA_CONTROL_DECISION"),(body.handoff_receipt,"NUMINA_EXECUTION_HANDOFF"),(body.submission_receipt,PROVIDER_SUBMISSION_TYPE)):
+            if not verify_envelope(receipt,expected_public_key_b64=identity.public_key_b64,expected_type=kind):
+                raise HTTPException(400,"INVALID_RECEIPT_CHAIN")
         sub=dict(body.submission_receipt.get("payload") or {}); hand=dict(body.handoff_receipt.get("payload") or {})
         tx=str(sub.get("tx_hash") or ""); hid=str(hand.get("handoff_id") or "")
         if not tx or not hid: raise HTTPException(400,"TX_HASH_AND_HANDOFF_REQUIRED")
@@ -378,15 +382,6 @@ def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
     @app.get("/v1/evidence/transactions/{tx_hash}")
     def transaction_evidence(tx_hash:str):
         return {"tx_hash":tx_hash.lower(),"records":evidence_store.records_for_tx(tx_hash)}
-
-    @app.post("/v1/evidence/revoke")
-    def revoke_evidence(body:RevocationRequest):
-        if not settings.evidence_network_enabled: raise HTTPException(503,"EVIDENCE_NETWORK_DISABLED")
-        payload={"schema":"numina.evidence-revocation.v1","record_id":body.record_id,"reason":body.reason,"evidence":body.evidence,"revoked_at":int(time.time())}
-        receipt=identity.sign(payload,REVOCATION_TYPE)
-        try: record=evidence_store.revoke(record_id=body.record_id,revocation=receipt)
-        except ValueError as exc: raise HTTPException(404,str(exc)) from exc
-        return {"revocation":payload,"receipt":receipt,"record":record}
 
     @app.post("/v1/verify/evidence-bundle")
     def verify_evidence_bundle(envelope:Envelope):
