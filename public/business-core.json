@@ -16,6 +16,7 @@
   },
   "architecture": "/api/control/v2/architecture",
   "head": "/api/control/v2/head",
-  "release": "/v2/release/manifest",
-  "providerEvidenceRequired": true
+  "release": "/v3/release/manifest",
+  "providerEvidenceRequired": true,
+  "sourceAlignment": "/source-alignment.json"
 }

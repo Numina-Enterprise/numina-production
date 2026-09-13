@@ -25,5 +25,6 @@ writeFileSync('dist/server/index.js',source);
 copyFileSync('.openai/hosting.json','dist/.openai/hosting.json');
 if(readdirSync('.').includes('drizzle'))copy('drizzle','dist/.openai/drizzle');
 execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/source-alignment.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/release-manifest.mjs'],{stdio:'inherit'});
 console.log('Built static site and Worker; no third-party runtime dependencies.');

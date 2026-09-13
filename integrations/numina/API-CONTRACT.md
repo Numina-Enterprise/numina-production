@@ -1,10 +1,10 @@
-# Numina 2.0 integration API contract
+# Numina 3.0 integration API contract
 
 This contract describes the integration target, not evidence of deployed mutation endpoints. All private operations require a server-issued, scoped Bearer token. Public discovery status sends no credentials. A request-specific status call remains authenticated. The initial Site exposes non-sensitive discovery while private capabilities stay disabled.
 
 | Method/path | Input | Purpose |
 | --- | --- | --- |
-| GET `/v2/release/manifest` | None | Application 2.x identity, SHA-256-shaped artifact list and separately versioned runtime dependency; server-reported only |
+| GET `/v3/release/manifest` | None | Application 3.x identity (2.x remains accepted for compatibility), SHA-256-shaped artifact list and separately versioned runtime dependency; server-reported only |
 | GET `/api/nusd/v1/status` | None | Identity, backing evidence, capability discovery |
 | GET `/api/app/v1/catalog` | None | Public offers, currency labels, request-only state and scope terms |
 | POST `/api/nusd/v1/quotes` | `service_id`, `units`, `unit`, `idempotency_key` | Server-priced, expiring NUSD quote |
@@ -46,11 +46,11 @@ Server controls remain authoritative: bind quotes and requests to the authentica
 
 ## Application release tool
 
-`numina_application_release` accepts exactly `{}` and calls `GET /v2/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, a 2.x semantic version, corresponding `release:"numina-v<version>"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and a separately versioned `runtime_dependency`. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 2.0 application and kit identities do not rename the rc22 runtime or historical rc20 evidence.
+`numina_application_release` accepts exactly `{}` and calls `GET /v3/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, a 2.x or 3.x semantic version, corresponding `release:"numina-v<version>"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and a separately versioned `runtime_dependency`. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 3.0 application and kit identities do not rename the rc22 runtime or historical rc20 evidence.
 
 ## Execution-runtime build discovery
 
-`numina_runtime_build` accepts exactly `{}` and calls the existing `GET /v2/release/manifest` through the release validator. It returns `application_identity`, `runtime_dependency`, `execution_runtime_build`, `financial_status_sources` and `scope`. Required build fields are product/status, positive integer run_id, run_url, source_commit/builder_commit (40-character lowercase hex), inventory/provenance links, three SHA-256 artifact digests and boolean builder_signed_artifacts_verified/application_started_by_build/production_host_deployment_verified/financial_execution_established labels. These labels remain server-reported. Missing build data produces `RUNTIME_BUILD_UNAVAILABLE`; malformed data produces `INVALID_SERVER_RESPONSE`.
+`numina_runtime_build` accepts exactly `{}` and calls the existing `GET /v3/release/manifest` through the release validator. It returns `application_identity`, `runtime_dependency`, `execution_runtime_build`, `financial_status_sources` and `scope`. Required build fields are product/status, positive integer run_id, run_url, source_commit/builder_commit (40-character lowercase hex), inventory/provenance links, three SHA-256 artifact digests and boolean builder_signed_artifacts_verified/application_started_by_build/production_host_deployment_verified/financial_execution_established labels. These labels remain server-reported. Missing build data produces `RUNTIME_BUILD_UNAVAILABLE`; malformed data produces `INVALID_SERVER_RESPONSE`.
 
 When present, root `nusd_transaction_receipts` and `nusd_activation_readiness` objects are included with their sanitized server-reported contents. An omitted field stays omitted for older v2 manifests; the client creates no fallback record. A present non-object value, including null or an array, produces `INVALID_SERVER_RESPONSE`. Only the object shape is recognized here: the client does not validate the underlying receipt, contract, bank document, activation requirement or any claimed verification status. Empty receipt slots and missing-evidence labels retain their original meaning.
 

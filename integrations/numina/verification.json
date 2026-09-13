@@ -1,13 +1,13 @@
 {
   "schema": "numina.integration.package.v2",
-  "packagedAtUtc": "2026-09-13T19:41:24.992Z",
+  "packagedAtUtc": "2026-09-13T22:25:18.512Z",
   "package": {
     "name": "@numina/nusd-integration",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "private": true
   },
-  "revision": "frontier-production-v2.2.0",
-  "applicationManifest": "https://numinalabs.xyz/v2/release/manifest",
+  "revision": "numina-root-v3.0.0",
+  "applicationManifest": "https://numinalabs.xyz/v3/release/manifest",
   "applicationSchema": "numina.application-release.v2",
   "runtimeBuild": {
     "tool": "numina_runtime_build",

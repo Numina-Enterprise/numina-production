@@ -1,4 +1,4 @@
-# Install Numina integration kit 2.0.0
+# Install Numina integration kit 3.0.0
 
 Extract the ZIP to a trusted directory. Use Node.js 22 or later. The package requires no npm dependency install and is not an npm registry release.
 
@@ -25,7 +25,7 @@ Use the generated provider descriptor from `schemas/` or `providerTools(provider
 
 ## First release read
 
-Call `numina_application_release` with `{}`. It targets `GET /v2/release/manifest`. The application version comes from that response; do not infer deployment success from the kit's own 2.0.0 version. A missing or incompatible server response is an error, not a fabricated fallback.
+Call `numina_application_release` with `{}`. It targets `GET /v3/release/manifest`. The application version comes from that response; do not infer deployment success from the kit's own 3.0.0 version. A missing or incompatible server response is an error, not a fabricated fallback.
 
 ## Credentials and unavailable workflows
 
@@ -33,7 +33,7 @@ Public release/status/network/catalog reads need no token. Keep provider credent
 
 Private status needs a real scoped server-issued Numina token. Quote/request additionally need the verified canonical NUSD asset pin and active server capabilities. They are not presently made available by this distribution. Do not reuse an owner credential to bypass missing onboarding. The package has no mint, transfer, settlement, payment-claim or result-unlock action.
 
-Version 2.0.0 tests were not run. No provider account was configured, installed, certified or submitted as part of packaging.
+Version 3.0.0 tests were not run. No provider account was configured, installed, certified or submitted as part of packaging.
 
 ## Runtime evidence read
 
