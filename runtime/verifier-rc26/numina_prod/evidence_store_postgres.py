@@ -44,7 +44,7 @@ class PostgresEvidenceStore:
         return {'job_id':row['job_id'],'tx_hash':row['tx_hash'],'handoff_id':row['handoff_id'],'request':row['request_json'],'status':row['status'],'attempts':row['attempts'],'next_attempt_at':row['next_attempt_at'],'expires_at':row['expires_at'],'last_error':row['last_error'],'result_record_id':row['result_record_id'],'created_at':row['created_at'],'updated_at':row['updated_at']}
 
     def put_artifact(self,*,state:str,artifact_type:str,artifact:dict,tx_hash:str|None=None,handoff_id:str|None=None)->dict:
-        if state not in {'REPORTED','VERIFIED','REVOKED','PENDING','PREPARED','SUBMITTED','OBSERVED'}:raise ValueError('INVALID_EVIDENCE_STATE')
+        if state not in {'REPORTED','VERIFIED','REVOKED','PENDING','PREPARED','SUBMITTED','OBSERVED','INTELLIGENCE','BUNDLED'}:raise ValueError('INVALID_EVIDENCE_STATE')
         if not isinstance(artifact,dict) or not artifact_type:raise ValueError('EVIDENCE_ARTIFACT_REQUIRED')
         root=_root(artifact);tx=tx_hash.lower() if tx_hash else None
         rid=_root({'state':state,'artifact_type':artifact_type,'artifact_root':root,'tx_hash':tx_hash,'handoff_id':handoff_id})
@@ -67,6 +67,9 @@ class PostgresEvidenceStore:
 
     def revoke(self,*,record_id:str,revocation:dict)->dict:
         with self._connect() as c:
+            prior=c.execute('SELECT * FROM public.numina_evidence_records WHERE record_id=%s FOR UPDATE',(record_id,)).fetchone()
+            if prior is None:raise ValueError('EVIDENCE_RECORD_NOT_FOUND')
+            if prior['revoked']:return self._record(prior)
             row=c.execute('UPDATE public.numina_evidence_records SET revoked=true,revocation_json=%s WHERE record_id=%s RETURNING *',(Jsonb(revocation),record_id)).fetchone()
             if row is None:raise ValueError('EVIDENCE_RECORD_NOT_FOUND')
             return self._record(row)

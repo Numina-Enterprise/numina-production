@@ -12,7 +12,7 @@ Numina is the existing authority root. The website, Numina OS, native clients, i
 
 The canonical root identity is retained in `mobile/signing/release-identities.json`; its head is read at `/api/control/v2/head`. Current control state and treasury are `/api/control/v2/state` and `/api/control/v1/treasury`. A package does not initialize another root or duplicate an account balance.
 
-The product and maintained packages are version 3.0.0. Existing HTTP and receipt schemas retain v1/v2 identifiers for compatibility. Platform certificates retain their actual issuer and status. The active rc22 runtime, frozen v1.8 core, historical build assessments and reconstructed rc26 source retain their original identities.
+The product and maintained packages are version 3.0.0. Existing HTTP and receipt schemas retain v1/v2 identifiers for compatibility. Platform certificates retain their actual issuer and status. The reconstructed rc26 verifier is deployed with its own source and artifact identity. The frozen v1.8 core and historical build assessments retain their original identities. The existing owner, journal, treasury and native signing identities are preserved.
 
 The build runs `scripts/source-alignment.mjs`. It rejects inconsistent maintained versions, stale integration file inventories, changed runtime pins or mismatched Android release identity. The resulting `/source-alignment.json` lists source hashes, the shared routes and L1–L5. Its hash is included in the application artifact inventory.
 

@@ -31,7 +31,7 @@
     {
       "path": "README.md",
       "bytes": 5685,
-      "sha256": "ce96702cd46cb9223967a48b43bdc3efe3fc4f1c834f33f23c2cb644956c90bb"
+      "sha256": "4df45a0a67b3e97e30a9ecdca9c99ae6e961106321099044cd07b5f2592e335a"
     },
     {
       "path": "SECURITY.md",
@@ -156,7 +156,7 @@
     {
       "path": "src/client.js",
       "bytes": 14918,
-      "sha256": "2961fefb251f91e2d4248f79a767d7739d298b283f140e2b8dc68e3fd75fe520"
+      "sha256": "f1c4824ab90ad61918d8b97b4610bdbb7e1d3d4be9108dcee3bf9f5a9673e419"
     },
     {
       "path": "src/index.d.ts",
@@ -180,8 +180,8 @@
     },
     {
       "path": "src/runtime-contract.js",
-      "bytes": 869,
-      "sha256": "ebccbb33f5acb5cf4b518f46f80e2742e708dbf2e31abeece67fb13fa7dc1be9"
+      "bytes": 1163,
+      "sha256": "ab1f7d2b37ccb05ae918ed7fa28140ddf1ebdbcdfabc0c6d85cd690636f3f0d2"
     },
     {
       "path": "src/tools.js",
@@ -191,7 +191,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "1be81eb19ab82891b9eb44ae5cbfe2d8d4a7f7b2e299f6f225807ff68d510e22"
+      "sha256": "436be16e5a3c2d514677534cb99cfb271bea66d83bd553bed64da26e3526a3d9"
     }
   ]
 }
