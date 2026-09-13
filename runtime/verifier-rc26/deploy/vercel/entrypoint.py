@@ -1,6 +1,9 @@
 """Production entrypoint: existing identity, durable evidence, canonical authority."""
-import os
+import os,sys
+from pathlib import Path
 from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode
+
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"verifier"))
 
 os.environ.update({
     "NUMINA_ENV":"production",
