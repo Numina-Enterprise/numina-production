@@ -7,36 +7,39 @@
   "packageIdentityRegisteredOrConfirmed": false,
   "hostedWorkspace": "https://numinalabs.xyz/app",
   "android": {
-    "status": "unsigned_release_artifacts_built",
-    "buildCompletedAtUtc": "2026-09-13T19:47:34Z",
+    "status": "signed_release_artifacts_built",
+    "buildCompletedAtUtc": "2026-09-13T20:27:23Z",
     "binaries": [
       {
+        "file": "numina-2.0.0-release-signed.apk",
+        "bytes": 3797876,
+        "sha256": "28811446b378028d0d1f570a0017f9b91635b2939a10685a84c3bc8a73bb7632",
         "platform": "android",
-        "file": "numina-2.0.0-unsigned.aab",
-        "bytes": 3578797,
-        "sha256": "afafedea630b6a83f30e300f6710cfd1a408ed0a4c54128a20e1b3557262ad44",
-        "signed": false,
-        "installable": false,
-        "url": "/downloads/numina-2.0.0-unsigned.aab"
+        "signed": true,
+        "installable": true,
+        "url": "/downloads/numina-2.0.0-release-signed.apk"
       },
       {
+        "file": "numina-2.0.0-upload-signed.aab",
+        "bytes": 3617107,
+        "sha256": "c8d6d48c42495fb466d6a5ddd7f322a8977e363fe404c1ed7f9baa253ab77d21",
         "platform": "android",
-        "file": "numina-2.0.0-unsigned.apk",
-        "bytes": 3755825,
-        "sha256": "5e8a060d970c2e07ce6cd3fc0f988661c4f7d869c3b9a6c8c075a2074e939c9c",
-        "signed": false,
+        "signed": true,
         "installable": false,
-        "url": "/downloads/numina-2.0.0-unsigned.apk"
+        "url": "/downloads/numina-2.0.0-upload-signed.aab"
       }
     ],
-    "signingPerformed": false,
+    "signingPerformed": true,
     "deviceInstalled": false,
     "testsRun": false,
     "domainAssociationVerified": false,
     "storeSubmitted": false,
     "compiled": true,
-    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34778678464",
-    "sourceCommit": "c7ede88e09d1e95139476056b324e7498bc7da4d"
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34780729273",
+    "sourceCommit": "7d8c4c9582d1055358bb5e68db1fe8cf97421c4c",
+    "signatureVerification": true,
+    "releaseIdentity": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+    "uploadIdentity": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34"
   },
   "ios": {
     "status": "unsigned_device_release_built",
@@ -83,5 +86,5 @@
   "slsaLevelClaimed": null,
   "nusdActivationPerformed": false,
   "storeListingOrApprovalClaimed": false,
-  "recordedAtUtc": "2026-09-13T19:50:20.728Z"
+  "recordedAtUtc": "2026-09-13T20:35:31.582Z"
 }
