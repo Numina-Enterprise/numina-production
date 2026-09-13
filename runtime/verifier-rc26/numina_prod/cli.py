@@ -32,7 +32,6 @@ def main():
     verify_att=deploy_sub.add_parser("verify-attestation")
     verify_att.add_argument("--bundle",required=True)
     verify_att.add_argument("--backend",choices=["cosign","reference"],default="cosign")
-    verify_att.add_argument("--backend",choices=["cosign","reference"],default="cosign")
     verify_att.add_argument("--artifact-sha256",required=True)
     verify_att.add_argument("--identity",action="append",default=[])
     verify_att.add_argument("--oidc-issuer",action="append",default=[])

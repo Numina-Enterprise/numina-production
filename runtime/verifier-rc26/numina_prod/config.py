@@ -49,6 +49,10 @@ class Settings:
     evidence_job_ttl_seconds: int = 3600
     evidence_database_url: str | None = None
     evidence_require_durable: bool = False
+    signing_key_der_env: str | None = None
+    signing_public_key_b64: str | None = None
+    owner_access_url: str | None = None
+    owner_root_hash: str | None = None
 
     @property
     def production(self) -> bool:
@@ -104,6 +108,10 @@ def load_settings() -> Settings:
         evidence_job_ttl_seconds=int(os.getenv("NUMINA_EVIDENCE_JOB_TTL_SECONDS","3600")),
         evidence_database_url=(os.getenv("NUMINA_EVIDENCE_DATABASE_URL") or os.getenv("NUMINA_DATABASE_URL") or os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL")),
         evidence_require_durable=_bool("NUMINA_EVIDENCE_REQUIRE_DURABLE", environment == "production"),
+        signing_key_der_env=os.getenv("NUMINA_SIGNING_KEY_DER_ENV"),
+        signing_public_key_b64=os.getenv("NUMINA_SIGNING_PUBLIC_KEY_B64"),
+        owner_access_url=os.getenv("NUMINA_OWNER_ACCESS_URL"),
+        owner_root_hash=os.getenv("NUMINA_OWNER_ROOT_HASH"),
     )
     if settings.arc_verification_enabled:
         if not settings.arc_rpc_urls:
@@ -114,8 +122,14 @@ def load_settings() -> Settings:
             raise RuntimeError("rc26 independent verifier supports Arc Testnet chain id 5042002 only")
         if not all(url.startswith("https://") for url in settings.arc_rpc_urls):
             raise RuntimeError("NUMINA_ARC_RPC_URLS must use https")
-    if settings.production and settings.signing_key_file is None:
-        raise RuntimeError("production requires NUMINA_SIGNING_KEY_FILE (app bootstrap may materialize it from NUMINA_SIGNING_KEY_B64)")
+    if settings.production and settings.signing_key_file is None and not settings.signing_key_der_env:
+        raise RuntimeError("production requires a persistent file or environment signing key")
+    if settings.signing_key_der_env and (settings.signing_key_file or not settings.signing_public_key_b64):
+        raise RuntimeError("environment signing requires one key source and a public identity pin")
+    if settings.owner_access_url and settings.owner_access_url != "https://numinalabs.xyz/api/control/v2/runtime-access":
+        raise RuntimeError("owner access must use the canonical Numina authority endpoint")
+    if settings.owner_access_url and not settings.owner_root_hash:
+        raise RuntimeError("owner access requires the canonical root fingerprint")
     if settings.production and settings.allow_ephemeral_key:
         raise RuntimeError("production forbids ephemeral signing keys")
     if settings.production and settings.evidence_network_enabled and settings.evidence_require_durable and not settings.evidence_database_url:

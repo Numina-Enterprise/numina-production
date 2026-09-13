@@ -4,7 +4,8 @@ export {RUNTIME_ORIGIN};
 export const RUNTIME_READ_PATHS = new Set([
   '/v1/status', '/v1/control/state', '/v1/release/manifest',
   '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers',
-  '/v2/network/status'
+  '/v2/network/status', '/readyz', '/v1/preflight', '/v1/bootstrap/attestation',
+  '/v1/release/sbom', '/v1/release/build-provenance'
 ]);
 
 function runtimeError(status, error, extra = {}) {

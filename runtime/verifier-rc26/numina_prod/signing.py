@@ -45,7 +45,20 @@ def verify_envelope(envelope:dict, *, expected_public_key_b64:str|None=None, exp
         return False
 
 
-def load_identity(path:Path|None, *, allow_ephemeral:bool)->SigningIdentity:
+def load_identity(path:Path|None, *, allow_ephemeral:bool, der_env:str|None=None, expected_public_key_b64:str|None=None)->SigningIdentity:
+    if der_env:
+        if path is not None:
+            raise RuntimeError("configure exactly one signing key source")
+        try:
+            key=serialization.load_der_private_key(base64.b64decode(os.environ[der_env],validate=True),password=None)
+        except (KeyError,ValueError,TypeError):
+            raise RuntimeError("persistent environment signing key unavailable or invalid") from None
+        if not isinstance(key,Ed25519PrivateKey):
+            raise RuntimeError("signing key must be Ed25519")
+        identity=SigningIdentity(key)
+        if not expected_public_key_b64 or identity.public_key_b64!=expected_public_key_b64:
+            raise RuntimeError("persistent signing key does not match the established public identity")
+        return identity
     if path is None:
         if not allow_ephemeral: raise RuntimeError("signing key required")
         return SigningIdentity(Ed25519PrivateKey.generate())
