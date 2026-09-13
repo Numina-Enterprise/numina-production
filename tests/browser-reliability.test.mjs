@@ -20,6 +20,7 @@ class Element{
  addEventListener(name,fn){this.listeners[name]=fn;}
  setAttribute(){}
  scrollIntoView(){}
+ querySelector(selector){return this.children.find(node=>'#'+node.id===selector)||null;}
  reset(){this.onReset?.();}
  async fire(name,extra={}){return this.listeners[name]?.({preventDefault(){},...extra});}
 }
@@ -32,12 +33,14 @@ function harness(kind,fetcher){
   get('request-form').onReset=()=>{for(const id of ['request-title','request-brief','request-success'])get(id).value='';get('service').value='diagnostic';};
  }
  const window={addEventListener:(name,fn)=>events[name]=fn,location:{assign(){throw new Error('Unexpected navigation in test');}}};
- const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:(name,fn)=>events[name]=fn,
+ const document={getElementById:get,createElement:tag=>new Element(tag),dispatchEvent:event=>events[event.type]?.(event),addEventListener:(name,fn)=>events[name]=fn,
   querySelectorAll:selector=>selector.startsWith('a[')?[]:selector.includes('workspace')?[...nodes.values()].filter(n=>n.tagName==='button'):selector.includes('checkout-button')?[get('checkout-button')]:[]};
- const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,setTimeout,clearTimeout,console,selectService,countryOptions,offerLabel,
+ const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,TextEncoder,CustomEvent,setTimeout,clearTimeout,console,selectService,countryOptions,offerLabel,
   clearTreasuryDocuments(){},async loadTreasuryDocuments(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
  const exports=kind==='app'?'({api,openOrder,loadOrders,savedView,boot,clearSession,get session(){return session;},get selected(){return selected;}})':'({api,refresh,run,clearSession,get snapshot(){return snapshot;}})';
- vm.runInContext(source('http-client.js')+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
+ const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
+ const nativeModule='const {clearNativeTreasury,loadNativeTreasury}=(()=>{'+source('native-treasury.js')+';return {clearNativeTreasury,loadNativeTreasury};})();';
+ vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+nativeModule+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
  return {get,events,subject:context.subject,context,close(){events.pagehide?.();}};
 }
 function order(id,title=id){return {id,title,revision:0,brief:'Private brief '+id,successCriteria:'Private success '+id,service:'diagnostic',country:'US',status:'submitted',isOwner:true,payment:{status:'unconfirmed',gross:0,refunded:0}};}
@@ -95,7 +98,7 @@ test('browser restoration revalidates the app after aborting an in-flight boot',
 test('Control Room clears all private state when background owner authentication expires',async()=>{
  const h=harness('control',async path=>{
   if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{stateIntegrity:true,evidenceHead:true}});
-  if(path.endsWith('/treasury-attestation'))return response({error:'UNAUTHENTICATED'},401);
+  if(path.endsWith('/treasury'))return response({error:'UNAUTHENTICATED'},401);
   return response({projection:'complete',revision:1,state:{requests:[],evidence:[],grants:[{id:'root',subject:'private-owner',resourcePrefix:'record:',scopes:['record.write']}]},decisions:[]});
  });
  try{await settled();assert.equal(h.subject.snapshot,null);assert.equal(h.get('workspace').hidden,true);assert.equal(h.get('grants').textContent,'');assert.equal(h.get('state-proof').textContent,'');assert.equal(h.get('signin').hidden,false);}finally{h.close();}

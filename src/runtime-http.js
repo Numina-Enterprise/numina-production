@@ -1,5 +1,6 @@
-// Public rc22 runtime evidence. Customer identity and provider credentials stay local.
-export const RUNTIME_ORIGIN = 'https://numina-production.vercel.app';
+// Customer identity and provider credentials stay local.
+import {RUNTIME_ORIGIN,RUNTIME_VERSION,EXPECTED_RELEASE} from '../public/runtime-contract.js';
+export {RUNTIME_ORIGIN};
 export const RUNTIME_READ_PATHS = new Set([
   '/v1/status', '/v1/control/state', '/v1/release/manifest',
   '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers',
@@ -38,10 +39,15 @@ export async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 1
     }
     const bytes = new Uint8Array(size); let offset = 0;
     for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
-    JSON.parse(new TextDecoder().decode(bytes));
+    const payload = JSON.parse(new TextDecoder().decode(bytes));
+    const observed = payload?.production_version ?? payload?.state?.release ?? payload?.payload?.production_version ?? payload?.release;
+    const versioned = ['/v1/status','/v1/control/state','/v1/release/manifest','/v1/release/attestation','/v1/execution/providers'].includes(path);
+    if(response.ok && versioned && ![RUNTIME_VERSION,EXPECTED_RELEASE.release].includes(observed)) {
+      return Response.json({error:'RUNTIME_RELEASE_MISMATCH',expected:RUNTIME_VERSION,observed:typeof observed==='string'?observed:null},{status:502,headers:{'Cache-Control':'no-store'}});
+    }
     return new Response(request.method === 'HEAD' ? null : bytes, {status:response.status, headers:{
       'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store',
-      ...(path==='/v2/network/status'?{}:{'X-Numina-Runtime-Release':'1.9.0-rc22'}), 'X-Content-Type-Options':'nosniff'
+      ...(versioned && response.ok?{'X-Numina-Runtime-Release':RUNTIME_VERSION}:{}), 'X-Content-Type-Options':'nosniff'
     }});
   } catch { return runtimeError(controller.signal.aborted ? 504 : 502, 'RUNTIME_SERVICE_UNAVAILABLE'); }
   finally { clearTimeout(timer); if (controller.signal.aborted && reader) void reader.cancel().catch(() => {}); }

@@ -1,0 +1,27 @@
+{
+  "schema": "numina.required-architecture.v1",
+  "classification": "required_contract_not_live_state",
+  "runtime": "1.9.0-rc26",
+  "root_count": 1,
+  "root_lifetime": "perpetual",
+  "lineage_count": 1,
+  "production_environment_count": 1,
+  "execution_inputs": ["Principal", "Authority", "Objective", "Intent"],
+  "execution_result": ["FINAL", "canonical_proof", "head_advancement"],
+  "mandate_concept": false,
+  "valid_execution_route_count": 1,
+  "treasury": {
+    "read_interface": "readTreasury()",
+    "write_interface": "writeTreasury(event)",
+    "unit": "NUSD",
+    "projection": "500000000000000",
+    "authority": "NUMINA",
+    "verification": "VERIFIED",
+    "system_of_record": "NUMINA",
+    "scope": "Numina-native model"
+  },
+  "deployment_verified": false,
+  "canonical_runtime_implementation_verified": false,
+  "production_head": null,
+  "mint_event": null
+}

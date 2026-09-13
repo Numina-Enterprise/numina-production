@@ -1,0 +1,61 @@
+{
+  "schema": "numina.integration.distribution.v2",
+  "version": "2.0.0",
+  "revision": "rc26-alignment-v2.0.0",
+  "applicationManifest": "/v2/release/manifest",
+  "applicationSchema": "numina.application-release.v2",
+  "runtimeBuild": {
+    "tool": "numina_runtime_build",
+    "manifestField": "execution_runtime_build",
+    "additionalManifestFields": [
+      "nusd_transaction_receipts",
+      "nusd_activation_readiness"
+    ],
+    "proofGuide": "EVIDENCE.md",
+    "clientPerformsSignatureVerification": false,
+    "clientPerformsReceiptVerification": false,
+    "clientPerformsReadinessVerification": false
+  },
+  "defaultOrigin": "https://numinalabs.xyz",
+  "defaultProfile": "discovery",
+  "providerFormats": {
+    "openai-responses": {
+      "discovery": "schemas/openai-responses.json",
+      "workflow": "schemas/openai-responses-workflow.json"
+    },
+    "openai-chat-completions": {
+      "discovery": "schemas/openai-chat-completions.json",
+      "workflow": "schemas/openai-chat-completions-workflow.json"
+    },
+    "anthropic-messages": {
+      "discovery": "schemas/anthropic-messages.json",
+      "workflow": "schemas/anthropic-messages-workflow.json"
+    },
+    "gemini-interactions": {
+      "discovery": "schemas/gemini-interactions.json",
+      "workflow": "schemas/gemini-interactions-workflow.json"
+    },
+    "gemini-generate-content": {
+      "discovery": "schemas/gemini-generate-content.json",
+      "workflow": "schemas/gemini-generate-content-workflow.json"
+    }
+  },
+  "mcp": {
+    "transport": "stdio",
+    "command": "node",
+    "script": "bin/mcp-stdio.js",
+    "template": "examples/mcp-host.example.json",
+    "protocols": [
+      "2025-11-25",
+      "2025-06-18"
+    ],
+    "hostedRemoteEndpoint": null
+  },
+  "installation": "INSTALL.md",
+  "compatibility": "COMPATIBILITY.md",
+  "validation": "VALIDATION.md",
+  "applicationSignatureVerification": false,
+  "artifactBytesVerified": false,
+  "installedInProviders": false,
+  "registryPublished": false
+}

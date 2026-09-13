@@ -16,7 +16,7 @@ export async function readControl(db){
   }
   if(index!==row.revision+1||previous!==row.head_hash||lastEvent?.id!==row.mutation_id||lastEvent?.stateHash!==row.state_hash)controlError('EVIDENCE_HEAD_CORRUPT',503);
   for(const node of state.evidence){const {hash,...value}=node;if(await controlHash(value)!==hash)controlError('EVIDENCE_CORRUPT',503);}
-  return {...row,state,eventCount:index};
+  return {...row,state,eventCount:index,journalEvents:events.results.map(entry=>JSON.parse(entry.event_json))};
 }
 export async function bootstrapControl(db,owner,now){
   const count=await db.prepare('SELECT COUNT(*) AS n FROM numina_control_events').first();if(count.n!==0)controlError('ALREADY_INITIALIZED',409);
@@ -30,6 +30,8 @@ export async function bootstrapControl(db,owner,now){
 export async function controlSnapshot(db,actor,now){const row=await readControl(db);if(!row.state.grants.some(g=>g.subject===actor&&grantValid(row.state,g,now)))controlError('AUTHORITY_DENIED',403);
   const allowed=new Set(row.state.requests.filter(r=>actor===row.state.root||authorizeControl(row.state,actor,'record.write',r.wants.resource,now)).map(r=>r.id));
   const visible=structuredClone(row.state);if(actor!==visible.root){visible.requests=visible.requests.filter(r=>allowed.has(r.id));visible.evidence=visible.evidence.filter(e=>allowed.has(e.requestId));visible.records=visible.records.filter(r=>allowed.has(r.requestId));const ids=new Set(visible.grants.filter(g=>g.subject===actor).map(g=>g.id));for(const id of [...ids]){let g=visible.grants.find(g=>g.id===id);while(g?.parent){ids.add(g.parent);g=visible.grants.find(p=>p.id===g.parent);}}visible.grants=visible.grants.filter(g=>ids.has(g.id));}
+  // Treasury projections are exposed only through the canonical readTreasury interface.
+  delete visible.nativeTreasury;
   return {revision:row.revision,stateHash:row.state_hash,evidenceHead:row.head_hash,projection:actor===row.state.root?'complete':'authority-scoped',state:visible,decisions:(await verifiedActions(row.state,row.revision,now,actor)).filter(d=>allowed.has(d.requestId))};
 }
 function controlResult(prior,replayed){const event=typeof prior.event_json==='string'?JSON.parse(prior.event_json):prior.event;return {replayed,event:{id:event.id,revision:event.revision,actor:event.actor,type:event.type,result:event.result},eventHash:prior.hash};}
@@ -38,6 +40,7 @@ export async function commitControl(db,command,actor,now){
   const commandHash=await controlHash(command),prior=await db.prepare('SELECT actor,command_hash,event_json,hash FROM numina_control_events WHERE id=?').bind(command.id).first();
   if(prior){if(prior.actor!==actor||prior.command_hash!==commandHash)controlError('IDEMPOTENCY_CONFLICT',409);return controlResult(prior,true);}
   const row=await readControl(db);if(row.revision>=2048)controlError('EVENT_CAPACITY',409);
+  if(command.type==='treasury'&&command.data?.expectedHead!==row.head_hash)controlError('STALE_TREASURY_HEAD',409);
   const reduced=await reduceControl(row.state,command,actor,row.revision,now),stateHash=await controlHash(reduced.state);
   const event={id:command.id,revision:row.revision+1,actor,at:now,type:command.type,command,commandHash,previous:row.head_hash,stateHash,parents:reduced.parents,result:reduced.result,decisionsHash:await controlHash(reduced.decisions)};const hash=await controlHash(event);
   // Conservative transaction-time fence: no previously active grant/evidence may expire while this command commits.

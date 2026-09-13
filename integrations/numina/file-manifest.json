@@ -1,0 +1,192 @@
+{
+  "schema": "numina.integration.files.v2",
+  "version": "2.0.0",
+  "scope": "Integration source archive; separate from the Numina application artifact identity",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 52,
+      "sha256": "bc7cec8a39b57bf810be25f3f527b61cc90a2f8a7fe787ad4487d2fa9c133d22"
+    },
+    {
+      "path": "API-CONTRACT.md",
+      "bytes": 9523,
+      "sha256": "7610752be96e5601fdc71bb1f25b3ca1ff8fbc32ef48aec84f2be3d666c33884"
+    },
+    {
+      "path": "COMPATIBILITY.md",
+      "bytes": 3407,
+      "sha256": "46fda94894c3c8f9fbc81c1f81f642f4a08fb04334a73da35997744d90aa1c4f"
+    },
+    {
+      "path": "EVIDENCE.md",
+      "bytes": 5321,
+      "sha256": "d6bf25089fe47198d9dece26b8f3800674c3d9804c27ff1041478ef814aca1dc"
+    },
+    {
+      "path": "INSTALL.md",
+      "bytes": 3471,
+      "sha256": "5d320ff9704ac8ff3c85a188cace69e65136e5bb38551be92d9704d10be1c0b7"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5685,
+      "sha256": "3b5ce397db918955258cf2243d8d3dd4a3576be3d4ba2ed89888aedabc7ce0f5"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 3784,
+      "sha256": "8c9f8d59ec880728e17ce6ba984322b53e16c6b85e3f8c276009e9db4884f0f5"
+    },
+    {
+      "path": "VALIDATION.md",
+      "bytes": 2078,
+      "sha256": "61955eee06b9a3c1490bf7b15e2413e84d9818805af73f0ddc936b9dd370ef0a"
+    },
+    {
+      "path": "bin/mcp-stdio.js",
+      "bytes": 502,
+      "sha256": "20345a3f4a02f43e462f16a3a94ef57413d4def6f0f9fe716ffde49a36ea197f"
+    },
+    {
+      "path": "distribution.json",
+      "bytes": 1993,
+      "sha256": "c10be30a3b4463c5ea27b993452d02afa229b4e08f952c06441d7c6ea64eb2b5"
+    },
+    {
+      "path": "examples/mcp-host.example.json",
+      "bytes": 275,
+      "sha256": "cc76746b45db42d1aac4dc515f10768cc0b3d516e587f8ecdcd47a538a594a4b"
+    },
+    {
+      "path": "examples/provider-roundtrips.mjs",
+      "bytes": 3336,
+      "sha256": "77cac820a30183335c62cd5013d4244f9d894496ac8576c63d1ff058f6cf6ca3"
+    },
+    {
+      "path": "history/0.2.0/VALIDATION.md",
+      "bytes": 956,
+      "sha256": "70461362034ac8c48aaac25e0aa057768bb1afebe64cb5c78afd93d02b9a2114"
+    },
+    {
+      "path": "history/0.2.0/file-manifest.json",
+      "bytes": 5700,
+      "sha256": "d6984333b74316b33bc7dfac0e061c1863c4e7cdc2687cd358465b79beedf392"
+    },
+    {
+      "path": "history/0.2.0/verification.json",
+      "bytes": 1329,
+      "sha256": "f56ce397ae38cc8c4ba6cda997dbc3498b753786046a3d17b134b4e5e97e0f9f"
+    },
+    {
+      "path": "package.json",
+      "bytes": 800,
+      "sha256": "11e91d9c2a6976f55c1caa21921cce964fbfc1686d19dabf31164ed8db264a07"
+    },
+    {
+      "path": "schemas/anthropic-messages-workflow.json",
+      "bytes": 5824,
+      "sha256": "1a190eae0f53280ec2931cfb33d0d5c81f557b46638b91da7618a482f500b57a"
+    },
+    {
+      "path": "schemas/anthropic-messages.json",
+      "bytes": 3443,
+      "sha256": "366f46ff437d1b1b097e1ad504a72aa46ec159c8e0d555a7ceae2d1083353695"
+    },
+    {
+      "path": "schemas/gemini-generate-content-workflow.json",
+      "bytes": 6364,
+      "sha256": "d415d0e4bb574a43a73fd0711a58baf8be140feaecfb657517930e7f63d71d32"
+    },
+    {
+      "path": "schemas/gemini-generate-content.json",
+      "bytes": 3719,
+      "sha256": "51d6d05f430e5a0484a4e530a447096f9e8dd32e87e9c3c4ed70a8f63aa1065a"
+    },
+    {
+      "path": "schemas/gemini-interactions-workflow.json",
+      "bytes": 5840,
+      "sha256": "22e48591880137ae31bba3e518961e53ba5aafc63c161a8f6b6bda34275e2273"
+    },
+    {
+      "path": "schemas/gemini-interactions.json",
+      "bytes": 3455,
+      "sha256": "437e67efee2900e196fa40acff0b8348de9ba8d67646231681b972c2455acc73"
+    },
+    {
+      "path": "schemas/openai-chat-completions-workflow.json",
+      "bytes": 6472,
+      "sha256": "661a19fd4ca2d99aba210b3203a5486ded9509c5e77ebd6f564109252a9b7e13"
+    },
+    {
+      "path": "schemas/openai-chat-completions.json",
+      "bytes": 3859,
+      "sha256": "79294185d7a540d6623f017638410974088a700e6a0fa743136f18d6087b795d"
+    },
+    {
+      "path": "schemas/openai-responses-workflow.json",
+      "bytes": 6000,
+      "sha256": "75403f1614070cddf1338d4dfd0fb42d330e7d87383c9a070d7b56a32e0757c2"
+    },
+    {
+      "path": "schemas/openai-responses.json",
+      "bytes": 3575,
+      "sha256": "399d41243aff0ecc9a760fc67ad07d76fc616f84151fa5dac6fb762e493ae1de"
+    },
+    {
+      "path": "schemas/provider-neutral.json",
+      "bytes": 6827,
+      "sha256": "0751252167b0338c26349d76b1f1cc384eba33b7fee934f26ee046de66d5cfc7"
+    },
+    {
+      "path": "scripts/export-tools.js",
+      "bytes": 700,
+      "sha256": "b3c518b6123b3a04768fa11cd0b57f2a084d280959b3324bb61409f1797151d4"
+    },
+    {
+      "path": "scripts/package-distribution.js",
+      "bytes": 4460,
+      "sha256": "62103b1c0a727a7fe55c3c8ed6991cc52ba034be5448a902eab8f6a30858857c"
+    },
+    {
+      "path": "src/client.js",
+      "bytes": 14729,
+      "sha256": "3b805af03266446f56d48c31b5cdcbc2e63450a250920c487cdd54cff4b1d3aa"
+    },
+    {
+      "path": "src/index.d.ts",
+      "bytes": 3269,
+      "sha256": "b6170fd1e9ff4676fc97db33d6bbdf43574dd7efa50734b0a64c2708dec01464"
+    },
+    {
+      "path": "src/index.js",
+      "bytes": 327,
+      "sha256": "116c6465975d3dc8045ec95f45fb2d911a732090ccaf00a4f14556acd9ebdcb8"
+    },
+    {
+      "path": "src/mcp.js",
+      "bytes": 4608,
+      "sha256": "b183d0e1cf2f96c78f5ddbe2bd6f3bf5cdd4f78f6888d411743c90e765321f67"
+    },
+    {
+      "path": "src/provider-adapters.js",
+      "bytes": 5392,
+      "sha256": "a7da06ded78993f59d8dc5e918a9c9a7b9b889aece1d06427739b8a785d466c6"
+    },
+    {
+      "path": "src/runtime-contract.js",
+      "bytes": 755,
+      "sha256": "21a66d89a985baa1f0af5fffd376c0051f6ff71f7649dbc48095b550e609364f"
+    },
+    {
+      "path": "src/tools.js",
+      "bytes": 5796,
+      "sha256": "aaf01747fc722c45fe452e74b8fb991f56458b60610b45271ae50e9cb122d315"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 1929,
+      "sha256": "c87c6dea71ae24ffc3534f748d578f882bbea8464b0e22d731f0cb05a9e64518"
+    }
+  ]
+}

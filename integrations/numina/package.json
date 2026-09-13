@@ -1,0 +1,28 @@
+{
+  "name": "@numina/nusd-integration",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Numina 2.0 release and runtime-build evidence discovery, service catalog and gated workflows for MCP and provider tool APIs; no asset execution.",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./tools": "./src/tools.js",
+    "./providers": "./src/provider-adapters.js",
+    "./mcp": "./src/mcp.js"
+  },
+  "bin": {
+    "numina-nusd-mcp": "./bin/mcp-stdio.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "mcp": "node bin/mcp-stdio.js",
+    "schemas": "node scripts/export-tools.js",
+    "package:build": "node scripts/package-distribution.js"
+  },
+  "license": "UNLICENSED"
+}

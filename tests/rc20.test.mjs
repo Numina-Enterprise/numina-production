@@ -108,25 +108,25 @@ test('old control plane remains reachable and sign-in returns to it',async()=>{
 
 
 
-test('packaged static homepage is rc20 when assets run before the Worker, and preserves the control page',()=>{
+test('packaged homepage loads current runtime verification and preserves the control page',()=>{
 
   const home=readFileSync(new URL('../dist/client/index.html',import.meta.url),'utf8');
 
   const control=readFileSync(new URL('../dist/client/control.html',import.meta.url),'utf8');
 
-  assert.match(home,/id="production-version" data-release-version>v1\.9\.0-rc20/);
+  assert.match(home,/runtime-release-ui[.]js/);
 
   assert.match(home,/data-conformance>Checking…/);
 
   assert.match(home,/href="\/control"/);
 
-  assert.match(control,/<title>Numina — Control plane<\/title>/);
+  assert.match(control,/<title>Numina 2[.]0 — Control plane<\/title>/);
 
   assert.match(control,/href="\/control" aria-current="page"/);
 
   assert.match(control,/src="\/control.js"/);
 
-  for(const asset of ['theme.css','site-shell.css','release-ui.js','release-model.js'])assert.ok(readFileSync(new URL('../dist/client/'+asset,import.meta.url)).length>0);
+  for(const asset of ['theme.css','site-shell.css','runtime-release-ui.js','runtime-release-model.js','runtime-contract.js'])assert.ok(readFileSync(new URL('../dist/client/'+asset,import.meta.url)).length>0);
 
 });
 

@@ -1,0 +1,130 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,rmSync,readFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {database} from '../scripts/sqlite.mjs';
+import {bootstrapControl,readControl,controlSnapshot,commitControl} from '../src/control-store.js';
+import {controlHash,stable} from '../src/control.js';
+import {createNuminaTreasury} from '../src/native-treasury.js';
+import {verifyNativeTreasury} from '../public/native-treasury.js';
+import worker from '../src/worker.js';
+import {NuminaClient} from '../integrations/numina/src/client.js';
+import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
+const owner='email:owner@example.test',key='native-treasury-test-token';
+const now=()=>Math.floor(Date.now()/1000);
+async function fixture(path){const db=database(path);await bootstrapControl(db,owner,now());return db;}
+const treasury=db=>createNuminaTreasury({db,root:owner,principal:owner});
+async function command(db,operation='INITIALIZE',extra={},id='native-init'){
+  const row=await readControl(db);
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare'};
+  return {id,expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:objectives[operation],Intent:{operation,reason:'Isolated test of the Numina-native model',...extra}};
+}
+test('treasury initializes within the existing root, persists and returns actual journal proof',async()=>{
+  const directory=mkdtempSync(join(tmpdir(),'numina-treasury-')),file=join(directory,'treasury.sqlite');let db=await fixture(file);
+  try{
+    const initial=await readControl(db),api=treasury(db);
+    assert.equal((await api.readTreasury()).status,'NOT_INITIALIZED');
+    const event=await command(db),result=await api.writeTreasury(event);
+    assert.equal(result.status,'FINAL');assert.equal(result.projection.balance,'500000000000000');assert.equal(result.projection.unit,'NUSD');
+    for(const field of ['authority','system_of_record'])assert.equal(result.projection[field],'NUMINA');
+    assert.equal(result.projection.verification,'VERIFIED');assert.equal(result.mint_event,null);assert.equal(result.bank_transaction,null);
+    assert.equal(result.head_advancement.previous,initial.head_hash);assert.equal(await controlHash(result.canonical_proof.event),result.canonical_proof.hash);
+    assert.equal((await api.writeTreasury(event)).replayed,true);
+    assert.equal((await readControl(db)).eventCount,2);
+    db.close();db=database(file);
+    const current=await treasury(db).readTreasury();assert.equal(current.root,initial.state.root);assert.equal(current.projection.balance,'500000000000000');assert.equal(await verifyNativeTreasury(current),true);
+    const snapshot=await controlSnapshot(db,owner,now());assert.equal(Object.hasOwn(snapshot.state,'nativeTreasury'),false);
+    const altered=structuredClone(current);altered.projection.balance='1';assert.equal(await verifyNativeTreasury(altered),false);
+  }finally{db.close();rmSync(directory,{recursive:true});}
+});
+test('exact integer updates, stale heads and concurrent writes preserve a single canonical balance',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);await api.writeTreasury(await command(db));
+    const a=await command(db,'ADJUST_PROJECTION',{delta:'9007199254740993'},'a'),b={...a,id:'b',Intent:{...a.Intent,delta:'1'}};
+    const results=await Promise.allSettled([api.writeTreasury(a),api.writeTreasury(b)]);
+    assert.equal(results.filter(result=>result.status==='fulfilled').length,1);
+    const current=await api.readTreasury();assert.equal(current.projection.balance,(500000000000000n+BigInt(results[0].status==='fulfilled'?a.Intent.delta:b.Intent.delta)).toString());
+    assert.equal((await readControl(db)).eventCount,3);
+    await assert.rejects(api.writeTreasury({...a,id:'stale'}),/STALE_TREASURY_HEAD/);
+    await assert.rejects(api.writeTreasury(await command(db,'INITIALIZE',{},'reinitialize')),/TREASURY_ALREADY_INITIALIZED/);
+    for(const delta of ['-999999999999999999999','1.1',1,'-0'])await assert.rejects(api.writeTreasury(await command(db,'ADJUST_PROJECTION',{delta},'invalid-delta')),/TREASURY_BALANCE_OUT_OF_RANGE|INVALID_TREASURY_DELTA/);
+  }finally{db.close();}
+});
+test('treasury prevents authority substitution, unknown fields, replay mutation and failed persistence',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db),init=await command(db);
+    await assert.rejects(createNuminaTreasury({db,root:owner,principal:'email:other@example.test'}).readTreasury(),/TREASURY_AUTHORITY_DENIED/);
+    await assert.rejects(createNuminaTreasury({db,root:'different-root',principal:owner}).writeTreasury(init),/ROOT_CONFIGURATION_MISMATCH/);
+    for(const changed of [{...init,Authority:'OTHER'},{...init,Principal:'OTHER'},{...init,Mandate:'forbidden'},{...init,Intent:{...init.Intent,balance:'1'}}])await assert.rejects(api.writeTreasury(changed),/TREASURY_AUTHORITY_DENIED|INVALID_TREASURY_FIELDS/);
+    await api.writeTreasury(init);
+    await assert.rejects(api.writeTreasury({...init,Intent:{...init.Intent,reason:'different request'}}),/IDEMPOTENCY_CONFLICT/);
+    const next=await command(db,'ADJUST_PROJECTION',{delta:'1'},'storage-failure'),before=await readControl(db),originalBatch=db.batch;
+    let calls=0;db.batch=async statements=>{calls++;if(calls===3)throw Error('simulated write failure');return originalBatch(statements);};
+    await assert.rejects(api.writeTreasury(next),/simulated write failure/);db.batch=originalBatch;
+    assert.equal((await readControl(db)).head_hash,before.head_hash);
+  }finally{db.close();}
+});
+test('prepared mint and bank requests are journaled without changing projection or fabricating receipts',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);await api.writeTreasury(await command(db));
+    for(const [operation,data]of [['PREPARE_MINT',{amount:'100',networkReference:'numina-main',destinationReference:'owner-wallet'}],['PREPARE_BANK_TRANSACTION',{amountMinor:'10000',currency:'USD',destinationReference:'owner-bank'}]]){
+      const result=await api.writeTreasury(await command(db,operation,data,operation));
+      assert.equal(result.transaction_request.status,'PREPARED');assert.equal(result.transaction_request.receipt,null);assert.equal(result.transaction_request.submission_performed,false);
+      assert.equal(result.projection.balance,'500000000000000');assert.equal(result.mint_event,null);assert.equal(result.bank_transaction,null);
+    }
+    const row=await readControl(db);assert.equal(row.eventCount,4);
+    await db.prepare('UPDATE numina_control_events SET event_json=? WHERE id=?').bind('{}','PREPARE_MINT').run();
+    await assert.rejects(api.readTreasury(),/JOURNAL_CORRUPT/);
+  }finally{db.close();}
+});
+test('P/A/O/I execution uses the canonical write path and emits its recorded proof',async()=>{
+  const db=await fixture();try{
+    const event=await command(db),result=await treasury(db).execute(event.Principal,event.Authority,event.Objective,{id:event.id,expectedRevision:event.expectedRevision,expectedHead:event.expectedHead,operation:event.Intent});
+    assert.equal(result.route,'numina.treasury.v1');assert.equal(result.status,'FINAL');assert.equal((await readControl(db)).eventCount,2);
+  }finally{db.close();}
+});
+test('recomputing generic journal hashes cannot bypass replay of the frozen treasury model',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);await api.writeTreasury(await command(db));
+    const row=await readControl(db),event=row.journalEvents.at(-1);
+    row.state.nativeTreasury.balance='1';event.result.projection.balance='1';event.stateHash=await controlHash(row.state);
+    const hash=await controlHash(event);
+    await db.batch([
+      db.prepare('UPDATE numina_control_state SET state_json=?,state_hash=?,head_hash=? WHERE id=1').bind(stable(row.state),event.stateHash,hash),
+      db.prepare('UPDATE numina_control_events SET event_json=?,hash=? WHERE id=?').bind(stable(event),hash,event.id)
+    ]);
+    await readControl(db); // The generic hash chain alone is consistent.
+    await assert.rejects(api.readTreasury(),/TREASURY_REPLAY_MISMATCH/);
+  }finally{db.close();}
+});
+test('integration reads the canonical native record with owner credentials only on the private route',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);await api.writeTreasury(await command(db));const current=await api.readTreasury(),calls=[];
+    const client=new NuminaClient({baseUrl:'https://numina.test',token:key,fetch:async(url,options)=>{
+      calls.push(url);
+      if(url.endsWith('/v2/release/manifest')){
+        assert.equal(options.headers.Authorization,undefined);
+        return Response.json({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'2.0.0',release:'numina-v2.0.0',artifact_digest_algorithm:'sha256',build_id:current.head,artifacts:[{path:'isolated-test',sha256:current.head}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
+      }
+      assert.equal(url,'https://numina.test/api/control/v1/treasury');assert.equal(options.headers.Authorization,'Bearer '+key);return Response.json(current);
+    }});
+    const result=await client.callTool('numina_read_treasury',{});
+    assert.equal(result.data.projection.balance,'500000000000000');assert.equal(result.asset_execution_available,false);assert.equal(result.verification,'server_reported_not_independently_verified');assert.equal(calls.length,2);
+    await assert.rejects(new NuminaClient({baseUrl:'https://numina.test',fetch:()=>{throw Error('must not send');}}).readTreasury(),{code:'SERVER_AUTH_REQUIRED'});
+  }finally{db.close();}
+});
+test('HTTP exposes one treasury write route, checks owner and origin, and redirects the legacy statement',async()=>{
+  const db=await fixture(),env={DB:db,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};
+  const req=(path,body,headers={Authorization:'Bearer '+key})=>new Request('https://numina.test/api/control/v1/'+path,{method:body?'POST':'GET',headers:{...headers,...(body?{'Content-Type':'application/json'}:{})},body:body?stable(body):undefined});
+  try{
+    assert.equal((await worker.fetch(req('treasury',null,{}),env)).status,401);
+    const event=await command(db);
+    assert.equal((await worker.fetch(req('treasury',event,{'oai-authenticated-user-id':'test','oai-authenticated-user-email':'owner@example.test',Origin:'https://wrong.test'}),env)).status,403);
+    const result=await worker.fetch(req('treasury',event),env);assert.equal(result.status,200);assert.equal((await result.json()).status,'FINAL');
+    const read=await worker.fetch(req('treasury'),env);assert.equal(read.headers.get('Cache-Control'),'private, no-store');assert.equal((await read.json()).projection.balance,'500000000000000');
+    const legacy=await worker.fetch(req('treasury-attestation'),env);assert.equal(legacy.status,308);assert.equal(legacy.headers.get('Location'),'/api/control/v1/treasury');
+    const alternate=await worker.fetch(req('commands',{id:'wrong-route',expectedRevision:1,type:'treasury',data:{}}),env);assert.equal(alternate.status,409);assert.equal((await alternate.json()).error,'CANONICAL_TREASURY_ROUTE_REQUIRED');
+    const providerBefore=readFileSync(new URL('../src/stripe-treasury.js',import.meta.url),'utf8');assert.equal(providerBefore.includes('createNuminaTreasury'),false);
+  }finally{db.close();}
+});

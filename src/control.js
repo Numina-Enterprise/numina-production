@@ -1,4 +1,5 @@
 // The only production state machine. No network effects or device-local authority.
+import {reduceTreasuryProjection} from './native-treasury-model.js';
 export const CONTROL_VERSION = '1.0.0';
 export const CONTROL_SCOPES = ['request.create','evidence.attest','evidence.resolve','record.write','authority.delegate'];
 export const CONTROL_ADAPTER = {id:'internal.record.v1',version:1,action:'record.write',externalExecution:false};
@@ -112,6 +113,10 @@ export async function reduceControl(current,command,actor,revision,now) {
     const node={id:command.id,sequence:revision+1,kind:'execution',requestId:request.id,actor,at:now,adapter:CONTROL_ADAPTER.id,adapterVersion:1,parents:[...request.evidence],inputHash:await controlHash(normalized),outcome:'INTERNAL_RECORD_COMMITTED'};
     node.hash=await controlHash(node);state.evidence.push(node);request.evidence.push(node.id);state.records.push({...normalized,requestId:request.id,evidenceId:node.id,at:now});
     request.execution={state:'committed',recordId:request.id};request.verifiedOutcome={scope:'internal.record.v1',evidenceId:node.id,externalExecution:false};parentIds=[node.id];result={requestId:request.id,recordId:request.id,evidenceId:node.id};
+  }else if(command.type==='treasury'){
+    demand(actor===state.root&&grantValid(state,state.grants.find(grant=>grant.id==='root'),now),'TREASURY_AUTHORITY_DENIED',403);
+    const treasury=reduceTreasuryProjection(state.nativeTreasury,data,actor,command.id);
+    state.nativeTreasury=treasury.projection;result=treasury.result;
   }else if(command.type==='reconcile'){
     controlExact(data,[]);demand(state.grants.some(g=>g.subject===actor&&grantValid(state,g,now)),'AUTHORITY_DENIED',403);result={reconciled:true};
   }else controlError('UNKNOWN_COMMAND');

@@ -1,0 +1,182 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_read_treasury",
+      "description": "Read the owner-authenticated canonical Numina-native NUSD treasury through readTreasury(). Requires the rc26 application runtime target and an owner token. Preserve NUMINA authority, system of record and native model verification scope. This tool does not submit transfers or independently verify bank or chain receipts.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_application_release",
+      "description": "Read the Numina application release manifest at /v2/release/manifest. Keep the application version, artifact identity and runtime dependencies distinct. The response is server-reported; this tool does not verify signatures, inspect artifact bytes, install software or activate financial capabilities.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_runtime_build",
+      "description": "Read the application manifest’s execution-runtime build record, source and builder revisions, artifact hashes, evidence links, financial-status source labels and any NUSD receipt/readiness records. All records are server-reported and not independently verified by this tool. It does not verify signatures or receipts, follow links, check live accounts, deploy a host, install a model plugin or establish reserves, transfers or settlement.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_nusd_quote",
+      "description": "Ask the configured authenticated Numina server for a NUSD-denominated quote. Requires server-verified NUSD identity. No purchase, mint, payment, transfer or USD peg is implied.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$"
+          },
+          "units": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,29}$",
+            "description": "Positive integer quantity as text, avoiding floating-point money."
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "idempotency_key": {
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{15,127}$",
+            "description": "Unique operation identifier supplied by the application; reuse exactly for retries of the same request."
+          }
+        },
+        "required": [
+          "service_id",
+          "units",
+          "unit",
+          "idempotency_key"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_nusd_request",
+      "description": "Create an authenticated compute-to-value workflow request against a server quote. It records a request only; it does not approve work, claim payment, unlock a result, mint NUSD or transfer assets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "quote_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "idempotency_key": {
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{15,127}$",
+            "description": "Unique operation identifier supplied by the application; reuse exactly for retries of the same request."
+          }
+        },
+        "required": [
+          "quote_id",
+          "description",
+          "idempotency_key"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_nusd_status",
+      "description": "Read public server-reported NUSD identity, capability and backing status without a token by passing null. A request ID instead requires server authentication for that caller’s private status. Server statements are not independent proof of reserves or a USD peg.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_nusd_network",
+      "description": "Read Numina network policy and NUSD asset identity reported by the public status service. Does not contact blockchain RPC or independently verify network, token, reserves, balances or settlement.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "numina_service_catalog",
+      "description": "Read the public Numina service catalog and preserve its currency and request-only labels. USD amounts are cents; NUSD amounts can be null and are not a USD conversion. Does not open checkout, order, pay, unlock a result or activate a service.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  }
+]

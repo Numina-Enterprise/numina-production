@@ -9,7 +9,7 @@ test('network observation preserves its date without implying issuance or contin
  assert.match(view.detail,/962421430/);
  assert.match(view.observed,/2026-09-12 16:07:17 UTC/);
  assert.match(view.observed,/not continuous monitoring/);
- assert.match(view.asset,/not deployed/);
+ assert.match(view.asset,/No NUSD contract address is reported/);
  for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
  assert.equal(NUSD_POLICY.network_policy.authenticated_rpc_verified,false);
  assert.equal(NUSD_POLICY.treasury_backing.valuation,null);

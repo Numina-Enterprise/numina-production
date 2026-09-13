@@ -21,6 +21,7 @@ class Element{
  removeAttribute(name){delete this[name];}
  getAttribute(name){return this[name]??null;}
  addEventListener(name,handler){this.listeners[name]=handler;}
+ querySelector(selector){return this.children.find(node=>'#'+node.id===selector)||null;}
  reset(){}
 }
 
@@ -34,8 +35,9 @@ function harness(fetcher,{control=false}={}){
  const listen=(name,handler)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(handler);};
  const fire=(name,event={})=>{for(const handler of events.get(name)||[])handler(event);};
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:listen,dispatchEvent:event=>{dispatched.push(event.type);fire(event.type,event);return true;},querySelectorAll:selector=>selector.includes('workspace')?[...nodes.values()].filter(node=>node.tagName==='button'):[]};
- const context=vm.createContext({document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
- vm.runInContext(source('http-client.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
+ const context=vm.createContext({document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
+ const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
+ vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
  return {get,context,subject:context.subject,dispatched,fire,close(){if(control)fire('pagehide');else context.subject.clearStripeTreasury();}};
 }
 function values(h){const items=h.get('stripe-treasury-details').children,rows={};for(let i=0;i<items.length;i+=2)rows[items[i].textContent]=items[i+1].textContent;return rows;}

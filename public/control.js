@@ -1,3 +1,4 @@
+import {clearNativeTreasury,loadNativeTreasury} from './native-treasury.js';
 import {clearTreasuryDocuments,loadTreasuryDocuments} from './treasury-documents.js';
 import {clearStripeTreasury,loadStripeTreasury} from './stripe-treasury.js';
 import {requestJson,createViewScope} from './http-client.js';
@@ -8,16 +9,12 @@ const stable=v=>Array.isArray(v)?'['+v.map(stable).join(',')+']':v&&typeof v==='
 async function api(path,body){const generation=viewScope.generation;try{const value=await requestJson('/api/control/v1/'+path,{headers:body?{'Content-Type':'application/json'}:{},method:body?'POST':'GET',body:body?stable(body):undefined,signal:viewScope.signal});if(!viewScope.isCurrent(generation))throw Object.assign(new Error('Request cancelled.'),{name:'AbortError'});return value;}catch(error){if(!viewScope.isCurrent(generation))throw Object.assign(new Error('Request cancelled.'),{name:'AbortError'});if(error.status===401){clearSession();$('message').textContent='Sign in again to load your current records.';}throw error;}}
 const words=s=>String(s||'Connection unavailable.').toLowerCase().replaceAll('_',' ');
 const el=(tag,text,className)=>{const n=document.createElement(tag);n.textContent=text;if(className)n.className=className;return n;};
-function clearTreasuryStatement(){clearTreasuryDocuments();clearStripeTreasury();treasuryGeneration++;$('treasury-owner-panel').hidden=true;$('treasury-owner-details').replaceChildren();}
+function clearTreasuryStatement(){clearNativeTreasury();clearTreasuryDocuments();clearStripeTreasury();treasuryGeneration++;}
 async function loadTreasuryStatement(){
   if(snapshot?.projection!=='complete')return;
   const generation=treasuryGeneration;
-  try{const statement=await api('treasury-attestation');
-    if(generation!==treasuryGeneration||snapshot?.projection!=='complete')return;
-    if(statement.schema!=='numina.treasury.owner_statement.v1'||statement.classification!=='owner_reported_not_independently_verified')throw new Error('Invalid owner statement');
-    const rows=[['Reported owner',statement.reported_owner],['Reported institution',statement.reported_institution],['Reported account',statement.reported_account_type],['Reported date',statement.reported_as_of],['Owner-reported amount',new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(BigInt(statement.reported_amount_usd))],['Reported custodian',statement.reported_custodian],['Source',statement.source],['Owner evidence statement',statement.owner_reports_evidence_supplied?'Owner reports evidence supplied':'No owner evidence-supply statement recorded'],['Owner-reported financial activity',statement.owner_financial_activity_statement||'No owner activity statement recorded'],['Bank-origin verification','Not completed'],['Independent verification','Not completed'],['Verified reserve amount','Not established'],['Verified allocation','Not established'],['Financial execution','Inactive']];
-    const details=$('treasury-owner-details');details.replaceChildren();for(const [label,value]of rows){details.append(el('dt',label),el('dd',value));}$('treasury-owner-panel').hidden=false;void loadStripeTreasury();void loadTreasuryDocuments().catch(()=>{if(generation===treasuryGeneration)$('document-summary').textContent='Documents unavailable. Use Refresh state to try again.';});
-  }catch{if(generation===treasuryGeneration)clearTreasuryStatement();}
+  void loadNativeTreasury();void loadStripeTreasury();
+  void loadTreasuryDocuments().catch(()=>{if(generation===treasuryGeneration)$('document-summary').textContent='Documents unavailable. Use Refresh state to try again.';});
 }
 function controls(){document.querySelectorAll('#workspace button:not([data-document-control])').forEach(b=>b.disabled=busy||!snapshot);$('refresh').disabled=busy;}
 function clearWorkspace(resetForms=false){

@@ -1,9 +1,9 @@
+import {createNuminaTreasury} from './native-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {readStripeTreasury} from './stripe-treasury.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
 import {readControl,bootstrapControl,controlSnapshot,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
-const OWNER_TREASURY_STATEMENT={"schema":"numina.treasury.owner_statement.v1","classification":"owner_reported_not_independently_verified","source":"User statements in the Numina build conversation; not a bank feed or signed reserve report","reported_owner":"SK Consulting LLC","reported_institution":"Bank of America","reported_account_type":"Savings","reported_as_of":"2026-09-11","reported_currency":"USD","reported_amount_usd":"500000000000000","reported_custodian":"Numina","owner_reports_funding_authorized":true,"owner_reports_evidence_supplied":true,"owner_evidence_statement":"Actual evidence: supplied.","owner_financial_activity_statement":"Treasury transfers and NUSD settlement are active. Funds moved.","bank_evidence_received":false,"independent_verification":"not_completed","verified_reserve_amount_usd":null,"verified_allocation_usd":null,"funds_moved_by_this_record":false,"financial_capabilities_activated":false};
 function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
@@ -56,11 +56,16 @@ export async function controlHttp(req,env){
     if(path==='/api/control/v1/treasury-attestation'){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
-      return controlResponse(OWNER_TREASURY_STATEMENT,200,{'Cache-Control':'private, no-store','Vary':'Cookie, Authorization'});
+      return controlResponse({canonical:'/api/control/v1/treasury'},308,{Location:'/api/control/v1/treasury'});
+    }
+    if(path==='/api/control/v1/treasury'){
+      const treasury=createNuminaTreasury({db:env.DB,principal:actor,root:env.NUMINA_CONTROL_OWNER});
+      if(req.method==='GET')return controlResponse(await treasury.readTreasury());
+      return controlResponse(await treasury.writeTreasury(await controlBody(req)));
     }
     if(path==='/api/control/v1/state'&&req.method==='GET')return controlResponse(await controlSnapshot(env.DB,actor,now));
     if(path==='/api/control/v1/next-action'&&req.method==='GET'){const snapshot=await controlSnapshot(env.DB,actor,now);return controlResponse({revision:snapshot.revision,decisions:snapshot.decisions});}
-    if(path==='/api/control/v1/commands'&&req.method==='POST'){const body=await controlBody(req);return controlResponse(await commitControl(env.DB,body,actor,Math.floor(Date.now()/1000)));}
+    if(path==='/api/control/v1/commands'&&req.method==='POST'){const body=await controlBody(req);if(body.type==='treasury')controlError('CANONICAL_TREASURY_ROUTE_REQUIRED',409);return controlResponse(await commitControl(env.DB,body,actor,Math.floor(Date.now()/1000)));}
     if(path==='/api/control/v1/journal'&&req.method==='GET'){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       const after=Number(new URL(req.url).searchParams.get('after')??-1);if(!Number.isSafeInteger(after)||after< -1)controlError('INVALID_CURSOR',400);

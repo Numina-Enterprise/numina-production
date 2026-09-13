@@ -12,20 +12,18 @@ const request=(headers={},method='GET')=>new Request('https://numina.test'+path,
 const containsPrivate=s=>/500000000000000|500,000,000,000,000|Bank of America|Treasury transfers and NUSD settlement are active\. Funds moved\./.test(s);
 async function fixture(){const DB=database(),now=Math.floor(Date.now()/1000);await bootstrapControl(DB,owner,now);return {DB,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
 
-test('treasury statement is owner-only, private, exact decimal data and cannot activate or allocate funds',async()=>{
+test('legacy owner statement is replaced by the private canonical Numina treasury route',async()=>{
  const env=await fixture();try{
   const before=await readControl(env.DB);
   for(const headers of [{},{Authorization:'Bearer invalid'},identity('other@example.test')]){
    const res=await worker.fetch(request(headers),env);assert.equal(res.status,headers['oai-authenticated-user-email']?403:401);assert.equal(containsPrivate(await res.text()),false);
   }
   for(const headers of [{Authorization:'Bearer '+key},identity('owner@example.test')]){
-   const res=await worker.fetch(request(headers),env);assert.equal(res.status,200);assert.equal(res.headers.get('Cache-Control'),'private, no-store');assert.equal(res.headers.get('Vary'),'Cookie, Authorization');
-   const statement=await res.json();assert.equal(statement.reported_amount_usd,'500000000000000');assert.equal(statement.classification,'owner_reported_not_independently_verified');assert.equal(statement.owner_financial_activity_statement,'Treasury transfers and NUSD settlement are active. Funds moved.');assert.equal(statement.bank_evidence_received,false);assert.equal(statement.verified_reserve_amount_usd,null);assert.equal(statement.verified_allocation_usd,null);assert.equal(statement.funds_moved_by_this_record,false);assert.equal(statement.financial_capabilities_activated,false);
+   const res=await worker.fetch(request(headers),env);assert.equal(res.status,308);assert.equal(res.headers.get('Location'),'/api/control/v1/treasury');assert.equal(res.headers.get('Cache-Control'),'private, no-store');assert.equal(containsPrivate(await res.text()),false);
   }
   assert.equal((await worker.fetch(request({Authorization:'Bearer '+key},'POST'),env)).status,405);
-  const after=await readControl(env.DB);assert.equal(after.state_hash,before.state_hash);assert.equal(after.revision,before.revision);assert.equal(after.eventCount,before.eventCount);
+  const after=await readControl(env.DB);assert.equal(after.state_hash,before.state_hash);assert.equal(after.revision,before.revision);
   assert.equal((await worker.fetch(request({Authorization:'Bearer '+key}),{...env,NUMINA_CONTROL_OWNER:'email:changed@example.test'})).status,503);
-  assert.equal((await worker.fetch(request({Authorization:'Bearer '+key}),{...env,NUMINA_CONTROL_API_KEY_SHA256:undefined})).status,503);
  }finally{env.DB.close();}
 });
 

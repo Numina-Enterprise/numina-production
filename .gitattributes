@@ -2,4 +2,5 @@
 docs/provenance/run-34717406980/* -text
 # Keep runtime source and precompiled artifact bytes identical to the reviewed inputs.
 runtime/nusd/** -text
+runtime/verifier-rc26/** -text
 docs/provenance/runtime-34725802271/* -text

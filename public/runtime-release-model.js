@@ -1,15 +1,5 @@
-// Current runtime evidence is separate from the preserved rc20 release artifacts.
-export const PINNED_RUNTIME_PUBLIC_KEY = 'UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=';
-export const PINNED_RUNTIME_KEY_ID = '3a2fe594a7e10458ae89683f';
-export const EXPECTED_RELEASE = Object.freeze({
-  release: 'core-v1.8+prod-v1.9.0-rc22',
-  core_version: '1.8.0',
-  production_version: '1.9.0-rc22',
-  frozen_core_manifest_root: '5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67',
-  production_files_root: '347823a607fe7d3b03b22699f302d76cfd5b30c25a030b44e8ac9eda1114e357',
-  release_sha256: '38f0d78c92cf3df0591802db2d262658fc6fc8bd9cac9b387262528d1b8bbb52'
-});
-export const RELEASE_ARTIFACT_TYPE = 'NUMINA_DEPLOYMENT_ATTESTATION';
+import {PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,EXPECTED_RELEASE,RELEASE_ARTIFACT_TYPE} from './runtime-contract.js';
+export {PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,EXPECTED_RELEASE,RELEASE_ARTIFACT_TYPE};
 const encoder = new TextEncoder();
 const spkiPrefix = Uint8Array.from([0x30,0x2a,0x30,0x05,0x06,0x03,0x2b,0x65,0x70,0x03,0x21,0x00]);
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -38,7 +28,8 @@ export function rawPublicKey(value) {
 }
 
 export function releaseIdentityMatches(value) {
-  return object(value) && Object.entries(EXPECTED_RELEASE).every(([field, expected]) => value[field] === expected);
+  return object(value) && Object.entries(EXPECTED_RELEASE).every(([field, expected]) => value[field] === expected)
+    && ['production_files_root','build_id'].every(field=>typeof value[field]==='string' && /^[a-f0-9]{64}$/.test(value[field]));
 }
 
 export function receiptEnvelope(value) {
@@ -86,19 +77,21 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const declarationWrapper = value('attestation');
   const declarationBound = !Object.hasOwn(declarationWrapper || {}, 'attestation') ||
     equalJson(declarationWrapper.attestation, declaration);
-  // rc22 signs a declaration of the release name. It does not sign the manifest digest fields.
+  // rc26 signs the release descriptor itself. Bind every manifest field to that signature.
   const releaseSignatureValid = attestation.valid && attestation.envelope.artifact_type === RELEASE_ARTIFACT_TYPE &&
-    declaration?.schema === 'numina.deployment-attestation.v1' && declaration.release === EXPECTED_RELEASE.release &&
-    declaration.runtime_surface === 'live-serverless-control-plane' && declarationBound;
+    releaseIdentityMatches(declaration) && declaration.environment === 'production' && declarationBound &&
+    Object.entries(manifest||{}).every(([field,expected])=>Object.hasOwn(declaration,field)&&equalJson(declaration[field],expected));
   // Exact binding is required. A signature over unrelated state is not proof of the displayed state.
   const controlStateBound = Boolean(controlReceipt.valid && controlReceipt.envelope.artifact_type === 'NUMINA_CONTROL_STATE' &&
     object(control) && Object.hasOwn(control, 'state') && control.state?.schema === 'numina.control-state.v1' &&
     control.state.release === EXPECTED_RELEASE.production_version && equalJson(control.state, controlReceipt.envelope.payload));
   const status = value('status'), supply = value('supply');
-  const runtimeStatusMatches = Boolean(status && ['release','core_version','production_version','release_sha256'].every(field =>
-    status[field] === EXPECTED_RELEASE[field]) && status.frozen_core?.manifest_root === EXPECTED_RELEASE.frozen_core_manifest_root);
-  const supplyIdentityMatches = Boolean(supply && ['release','release_sha256','production_files_root'].every(field =>
-    supply[field] === EXPECTED_RELEASE[field]));
+  const runtimeStatusMatches = Boolean(manifestMatches && releaseIdentityMatches(status) &&
+    status.build_id === manifest.build_id && status.production_files_root === manifest.production_files_root &&
+    status.environment === 'production' && status.frozen_core?.valid === true && status.conformance?.valid === true &&
+    status.frozen_core?.manifest_root === EXPECTED_RELEASE.frozen_core_manifest_root);
+  const supplyIdentityMatches = Boolean(manifestMatches && supply?.valid === true &&
+    ['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>typeof manifest[field]==='string' && /^[a-f0-9]{64}$/.test(manifest[field]) && supply[field]===manifest[field]));
   return {
     manifest, manifestMatches, attestation,
     releaseDeclarationVerified: Boolean(manifestMatches && releaseSignatureValid),
