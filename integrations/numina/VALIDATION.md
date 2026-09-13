@@ -1,17 +1,9 @@
-# Package status — 2.0.0
+# Package status — 3.0.0
 
-No tests, live model-provider calls, SDK examples, MCP host installation or production endpoint checks were run for this version, following the user's instruction.
+This source alignment release uses the Numina 3 application manifest at `/v3/release/manifest`, six default discovery tools and the existing authenticated control MCP bridge. The manifest schema remains `numina.application-release.v2`; protocol/schema versions do not rename the product.
 
-The update changes the kit/MCP version to 2.0.0 and adds a read-only application-release tool linked to `/v2/release/manifest`. Provider descriptors were regenerated from source. The archive and included file manifest have SHA-256 digests computed during packaging.
+Packaging regenerates provider descriptors, distribution metadata, the file inventory and archive digests from the current source. No application tests, sandbox, live model-provider calls, host installation or registry publication are performed by packaging. Source syntax and artifact integrity checks are recorded separately from provider acceptance.
 
-The prior `0.2.0` validation records are retained under `history/0.2.0/`. Their reported 50 passing checks apply to the earlier package, not this 2.0.0 source. The original historical distribution remains separate.
+Historical 0.2.0 validation remains in `history/0.2.0/`. Prior 2.0.0 root-readiness and runtime-build revisions remain historical releases; their checks do not validate this changed archive. The client retains the rc22 runtime identity and all authentication, asset-pinning and activation checks.
 
-Not established: provider acceptance, universal model compatibility, account installation, registry publication, hosted remote MCP, app-store approval, new deployment, signature/artifact verification by this client, NUSD activation, minting, transfers, settlement or independent security review.
-
-## Runtime-evidence packaging revision
-
-This 2.0.0 archive revision adds the fifth discovery tool, numina_runtime_build, using the existing application-manifest route. The provider adapters and MCP protocol set are unchanged. Source syntax and generated JSON are inspected as packaging checks; no test suite, model-provider call, host installation or production deployment is performed here. File and archive hashes identify this revision; earlier 2.0.0 archive hashes do not identify these changed bytes.
-
-## Root-record alignment revision
-
-Revision `root-readiness-v2.0.0` extends the existing runtime-build result with optional root NUSD receipt and activation-readiness objects. It performs structural checks only and explicitly reports that receipt/readiness verification was not performed. Missing optional fields remain absent. The five default read-only discovery tools, version 2.0.0, provider adapters and MCP protocol set remain unchanged. Updated descriptors and file digests are generated from the edited source; this does not validate provider acceptance or publish the package anywhere.
+The source maps to one Numina root through the canonical head, control state and treasury endpoints. An owner funding declaration is an internal journal statement; it does not alter provider balances.

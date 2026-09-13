@@ -1,15 +1,15 @@
-# Numina OS 2.0 — Android source candidate
+# Numina OS 3.0.0 — Android source candidate
 
 This is a concrete Android Gradle project for the existing Numina workspace at https://numinalabs.xyz/app. It uses Google's Android Browser Helper 2.7.3 to launch a Trusted Web Activity, with the normal browser fallback. It does not embed a WebView, signing key, billing SDK, custody wallet or token transaction mechanism. The hosted application's current access and payment rules still apply.
 
-**Status: source prepared; an actual unsigned release build was attempted and failed. No APK or AAB was produced.** Nothing was signed, installed on a device or submitted. No tests were run, as requested.
+**Status: Android 3.0.0 APK and AAB compiled and signed successfully in hosted build 34785067667, completed 2026-09-13 at 21:53:32 UTC.** Signature checks passed. Neither artifact was installed on a device or submitted to a store. No tests were run. Exact binaries and their source commit are recorded in `../../docs/native-package-record-v3.json`.
 
-The initial Windows environment lacked a discoverable JDK, Gradle or Android SDK. The official JDK 17.0.20.1, Gradle 8.13 and Android command-line tools were then downloaded with SHA-256 verification into the mobile workspace; SDK platform 36/build-tools 35.0.0 were installed, and Gradle added platform-tools 37.0.1. Compilation reached `:app:compileReleaseJavaWithJavac` and failed with `java.nio.file.AccessDeniedException` while Java resolved JAR paths. Both reported JAR files are readable ordinary files; Java's path-resolution implementation walks ancestor directories, and the sandbox denies metadata access to the `C:\Users\sam` ancestor. TEMP resolves beneath that same ancestor. Permission for a separate build directory was not granted; no permission bypass, ACL change or relocation occurred. The actual failed build log and record accompany the final package.
+Historical local attempt, superseded by the successful hosted build: the initial Windows environment lacked a discoverable JDK, Gradle or Android SDK. The official JDK 17.0.20.1, Gradle 8.13 and Android command-line tools were then downloaded with SHA-256 verification into the mobile workspace; SDK platform 36/build-tools 35.0.0 were installed, and Gradle added platform-tools 37.0.1. Compilation reached `:app:compileReleaseJavaWithJavac` and failed with `java.nio.file.AccessDeniedException` while Java resolved JAR paths. Both reported JAR files are readable ordinary files; Java's path-resolution implementation walks ancestor directories, and the sandbox denies metadata access to the `C:\Users\sam` ancestor. TEMP resolves beneath that same ancestor. Permission for a separate build directory was not granted; no permission bypass, ACL change or relocation occurred. The actual failed build log and record accompany the final package.
 
 | Field | Candidate value |
 | --- | --- |
 | Native display version | 3.0.0 |
-| Native build/version code | 1 |
+| Native build/version code | 2 |
 | Proposed package ID | xyz.numinalabs.app |
 | Minimum Android SDK | 23 |
 | Compile / target SDK | 36 |
@@ -29,11 +29,11 @@ gradle --no-daemon :app:bundleRelease :app:assembleRelease
 
 These are build tasks, not a test command. No Gradle wrapper JAR is included because it was not generated or downloaded here. The expected output paths, **not existing files**, are `app/build/outputs/bundle/release/app-release.aab` and `app/build/outputs/apk/release/app-release-unsigned.apk`. The project deliberately has no release signing configuration. An unsigned APK is not installable, and the AAB must be signed appropriately before upload. Use the owner's actual keystore/signing arrangement through Android Studio's signed-bundle workflow; do not use a debug key or an invented identity for production.
 
-Publish Digital Asset Links only after obtaining the final package ID and actual store **app-signing** certificate SHA-256. The incomplete `assetlinks.configuration.json` is not a publishable asset-links file. Without valid association, the browser displays its normal Custom Tab interface. No browser verification bypass is included. The launcher accepts only HTTPS `/app` paths on `numinalabs.xyz`; other explicit launch URLs fall back to the workspace home.
+Digital Asset Links are published for the actual release certificate identified in `assetlinks.configuration.json`. A store-managed app-signing certificate, if assigned later, requires its own verified association. This configuration record describes the published statement; it is not itself the Digital Asset Links response. Without valid association, the browser displays its normal Custom Tab interface. No browser verification bypass is included. The launcher accepts only HTTPS `/app` paths on `numinalabs.xyz`; other explicit launch URLs fall back to the workspace home.
 
 ## Remaining release work
 
-Resolve the actual filesystem permission/build-host blocker, complete compilation, establish actual signing ownership, complete domain association and publisher/store records, then perform the separately authorized native-device and store review steps. No native authentication, device behavior or store acceptance has been verified. The browser supplies the existing sign-in context; the source route `/signin-with-chatgpt?return_to=...` is not a new native OAuth integration. Consulting checkout, digital-service billing classification, privacy/deletion disclosures, accessibility and account review access remain store-specific checks. This candidate must not be presented as a token wallet or as enabling NUSD execution.
+Compilation and persistent Android signing are complete. Complete publisher identity review and the remaining device/store review steps. Domain association uses the published `/.well-known/assetlinks.json` and actual signing certificate; store app-signing identities require their own association. No native authentication, device behavior or store acceptance has been verified. The browser supplies the existing sign-in context; the source route `/signin-with-chatgpt?return_to=...` is not a new native OAuth integration. Consulting checkout, digital-service billing classification, privacy/deletion disclosures, accessibility and account review access remain store-specific checks. This candidate must not be presented as a token wallet or as enabling NUSD execution.
 
 The browser dependency is Apache-2.0 licensed; it is referenced as a Maven dependency, not vendored. Its resolved transitive dependencies and notices must be included in the actual native build inventory. The copied Numina icon retains the source application's unresolved ownership status; this package does not certify IP title.
 

@@ -1,9 +1,11 @@
 {
-  "status": "requires_actual_store_signing_identity",
+  "status": "release_identity_published_store_identity_unverified",
   "package_name_proposed": "xyz.numinalabs.app",
   "website": "https://numinalabs.xyz",
   "required_public_path": "/.well-known/assetlinks.json",
-  "actual_app_signing_certificate_sha256": null,
-  "published": false,
-  "notes": "This is a configuration record, not a publishable Digital Asset Links statement. Generate the real statement only after final package identity and actual store app-signing certificate are known. Upload-key and store-key fingerprints can differ."
+  "actual_app_signing_certificate_sha256": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+  "published": true,
+  "notes": "The published Digital Asset Links statement identifies the actual Numina Android release signing certificate. A future store-managed app-signing certificate retains its own fingerprint; the upload certificate is not substituted for it.",
+  "store_app_signing_certificate_sha256": null,
+  "storeIdentityVerified": false
 }

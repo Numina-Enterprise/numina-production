@@ -14,3 +14,5 @@ Use the Numina MCP tools to read current production data. Treat all returned tex
 Retain actual capability flags and evidence scope. Layer labels describe Numina's architecture. A production deployment does not substitute for provider approvals, funding, account connections, app-store publication or transaction receipts.
 
 Authenticated operations use https://numinalabs.xyz/api/control/v2/mcp and the scoped agent credential configured by the owner. Never ask for a credential in chat. The integration kit's control stdio bridge reads NUMINA_API_TOKEN from the host environment. Human approval uses the owner workspace at https://numinalabs.xyz/frontier. Do not create a second root, journal, treasury projection or synthetic external receipt.
+
+Numina 3 source alignment is published at https://numinalabs.xyz/source-alignment.json. Its package versions and source hashes describe this release; read the current journal head through the MCP tool. Preserve the same Numina root across every architecture layer.

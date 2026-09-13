@@ -14,7 +14,7 @@
   {
     "type": "function",
     "name": "numina_application_release",
-    "description": "Read the Numina application release manifest at /v2/release/manifest. Keep the application version, artifact identity and runtime dependencies distinct. The response is server-reported; this tool does not verify signatures, inspect artifact bytes, install software or activate financial capabilities.",
+    "description": "Read the Numina application release manifest at /v3/release/manifest. Keep the application version, artifact identity and runtime dependencies distinct. The response is server-reported; this tool does not verify signatures, inspect artifact bytes, install software or activate financial capabilities.",
     "parameters": {
       "type": "object",
       "properties": {},

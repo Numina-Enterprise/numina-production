@@ -1,12 +1,12 @@
 # iOS release inputs still required
 
-Status: source candidate only, September 12, 2026. None of these inputs is represented as approved, completed, or store-assigned.
+Status updated September 13, 2026: the unsigned 3.0.0 device package compiled in hosted run 34785069076. Apple-issued distribution signing and store publication remain unverified.
 
 | Input | Current state / action needed |
 | --- | --- |
-| macOS + Xcode | Absent on this Windows host; compile and review the source on a supported Mac. |
-| Store identity | Proposed `xyz.numinalabs.app`; confirm the identifier of any existing Numina app before changing it. Version 3.0.0 and build 1 are candidates. |
-| Signing and distribution | No Apple team, signing certificate, provisioning profile, app record, archive or IPA. The owner configures authorized signing before device distribution. |
+| macOS + Xcode | Hosted macOS/Xcode compilation completed; device behavior and release review remain outstanding. |
+| Store identity | Proposed `xyz.numinalabs.app`; confirm the identifier of any existing Numina app before changing it. The compiled version is 3.0.0 with build number 2. |
+| Signing and distribution | The owner-approved CSR and owner-reported issuance are recorded in `../signing/release-identities.json`. Apple issuance, active membership and a usable provisioning profile are not verified; no signed IPA exists. |
 | Native sign-in | Browser continuation is implemented. Returning a signed-in session to the native app is not implemented or verified. |
 | Native utility | This is a hosted-web wrapper. Apple guideline 4.2 requires sufficient app functionality beyond merely repackaging a website. This source does not establish review eligibility. |
 | Branding | Add an approved iOS app-icon asset catalog, including store artwork, then configure `ASSETCATALOG_COMPILER_APPICON_NAME`. Existing web icons are not asserted to meet iOS release requirements. |
