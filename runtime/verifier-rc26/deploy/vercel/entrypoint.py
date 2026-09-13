@@ -1,5 +1,6 @@
 """Production entrypoint: existing identity, durable evidence, canonical authority."""
 import os,sys
+import certifi
 from pathlib import Path
 from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode
 
@@ -31,7 +32,7 @@ os.environ.update({
 database_url=os.getenv("NUMINA_EVIDENCE_DATABASE_URL") or os.getenv("DATABASE_URL")
 if database_url:
     parts=urlsplit(database_url)
-    query=dict(parse_qsl(parts.query));query.update(sslmode="verify-full",sslrootcert="system")
+    query=dict(parse_qsl(parts.query));query.update(sslmode="verify-full",sslrootcert=certifi.where())
     os.environ["NUMINA_EVIDENCE_DATABASE_URL"]=urlunsplit(parts._replace(query=urlencode(query)))
 
 from numina_prod.service import app
