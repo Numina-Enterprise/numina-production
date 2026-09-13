@@ -5,8 +5,8 @@
   "files": [
     {
       "path": ".gitignore",
-      "bytes": 57,
-      "sha256": "0930cdba012211e965644c2efcfaf957a568b9db5a5f491be735121bb6640530"
+      "bytes": 52,
+      "sha256": "bc7cec8a39b57bf810be25f3f527b61cc90a2f8a7fe787ad4487d2fa9c133d22"
     },
     {
       "path": "API-CONTRACT.md",
@@ -15,8 +15,8 @@
     },
     {
       "path": "COMPATIBILITY.md",
-      "bytes": 3407,
-      "sha256": "b3f09d546a44acef7d5025d975cdb2bae52546ef784db8ce80fed4b3c27ad9ad"
+      "bytes": 3382,
+      "sha256": "0dc6b2524ad044c79293bf0d42acbe7900a667dd6532420a0415b648c1b3e0c2"
     },
     {
       "path": "EVIDENCE.md",
@@ -25,8 +25,8 @@
     },
     {
       "path": "INSTALL.md",
-      "bytes": 3911,
-      "sha256": "250c7dc5d6c9744533ff5b914704ebb55b0a6f4201cd8ac74d805db765574669"
+      "bytes": 3870,
+      "sha256": "1da9ddf09e19887096103e28cc94f3603bcda44dbbb701900476ca8b99d48319"
     },
     {
       "path": "README.md",
@@ -35,8 +35,8 @@
     },
     {
       "path": "SECURITY.md",
-      "bytes": 3801,
-      "sha256": "c2e819a878ea770f1a35d535fe44702f7f2ba01328a42e24de91fe6cf422d8a1"
+      "bytes": 3784,
+      "sha256": "6809ac4e9336bcd3e887ae3e09c92f1255968ca65f1e350c18ee01e11b1a91cd"
     },
     {
       "path": "VALIDATION.md",
@@ -50,8 +50,8 @@
     },
     {
       "path": "bin/mcp-stdio.js",
-      "bytes": 512,
-      "sha256": "7c36014bea3cdad290501a2460121348af6e7c688c2ec3fda1084edc8e1a339d"
+      "bytes": 502,
+      "sha256": "20345a3f4a02f43e462f16a3a94ef57413d4def6f0f9fe716ffde49a36ea197f"
     },
     {
       "path": "distribution.json",
@@ -60,28 +60,28 @@
     },
     {
       "path": "examples/mcp-host.example.json",
-      "bytes": 287,
-      "sha256": "f1bd783fe3f97aac117a135c3155fe7b94e4b35ab973e4ce6a60f132dcdeaf1d"
+      "bytes": 275,
+      "sha256": "cc76746b45db42d1aac4dc515f10768cc0b3d516e587f8ecdcd47a538a594a4b"
     },
     {
       "path": "examples/provider-roundtrips.mjs",
-      "bytes": 3387,
-      "sha256": "fe5840298d0920b803727a864a6d75a7b5f1fa66d413f971287e3f3a7be1a508"
+      "bytes": 3336,
+      "sha256": "77cac820a30183335c62cd5013d4244f9d894496ac8576c63d1ff058f6cf6ca3"
     },
     {
       "path": "history/0.2.0/VALIDATION.md",
-      "bytes": 965,
-      "sha256": "b20275ab1597d428dba46fc7be8eff1d63703fccf20ce2baca7082b84e44aadd"
+      "bytes": 956,
+      "sha256": "70461362034ac8c48aaac25e0aa057768bb1afebe64cb5c78afd93d02b9a2114"
     },
     {
       "path": "history/0.2.0/file-manifest.json",
-      "bytes": 5881,
-      "sha256": "5385f4056bb76481a7541440d296ee57f3c330c3d0b2a94bbad0ffe262637ac1"
+      "bytes": 5700,
+      "sha256": "d6984333b74316b33bc7dfac0e061c1863c4e7cdc2687cd358465b79beedf392"
     },
     {
       "path": "history/0.2.0/verification.json",
-      "bytes": 1378,
-      "sha256": "979bd0ba86d17b95e111741cb3b639d2c080e0396d7dab91b663747a850f5054"
+      "bytes": 1329,
+      "sha256": "f56ce397ae38cc8c4ba6cda997dbc3498b753786046a3d17b134b4e5e97e0f9f"
     },
     {
       "path": "package.json",
@@ -145,8 +145,8 @@
     },
     {
       "path": "scripts/export-tools.js",
-      "bytes": 709,
-      "sha256": "77dc4595be27ac4c45c771de92ac041cdf4b108a25b16e7065b2537f3a1c94d0"
+      "bytes": 700,
+      "sha256": "b3c518b6123b3a04768fa11cd0b57f2a084d280959b3324bb61409f1797151d4"
     },
     {
       "path": "scripts/package-distribution.js",
@@ -160,13 +160,13 @@
     },
     {
       "path": "src/index.d.ts",
-      "bytes": 3316,
-      "sha256": "35bd82a90cd17d8f938ecc59495032eba645feefdb5d93c96fe8a96141ae6760"
+      "bytes": 3269,
+      "sha256": "b6170fd1e9ff4676fc97db33d6bbdf43574dd7efa50734b0a64c2708dec01464"
     },
     {
       "path": "src/index.js",
-      "bytes": 330,
-      "sha256": "392f9c7264f18fbfdf7cfd4b2ef904f6c67670b76da9190c2e9a4aa5afec63d0"
+      "bytes": 327,
+      "sha256": "116c6465975d3dc8045ec95f45fb2d911a732090ccaf00a4f14556acd9ebdcb8"
     },
     {
       "path": "src/mcp.js",
@@ -175,8 +175,8 @@
     },
     {
       "path": "src/provider-adapters.js",
-      "bytes": 5475,
-      "sha256": "9df91a9c0eb8cfb298f94156b08479dc5b02f0d71f2d9e25ec87d690a7a67538"
+      "bytes": 5392,
+      "sha256": "a7da06ded78993f59d8dc5e918a9c9a7b9b889aece1d06427739b8a785d466c6"
     },
     {
       "path": "src/runtime-contract.js",
@@ -191,7 +191,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "20fafa7a1edbfa4046479ae02639241d03c1792ac89388685026f2cb3866513b"
+      "sha256": "1be81eb19ab82891b9eb44ae5cbfe2d8d4a7f7b2e299f6f225807ff68d510e22"
     }
   ]
 }
