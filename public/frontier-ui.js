@@ -19,6 +19,14 @@ function treasuryActions(t){
   }
   const identities=t.accounts.map(a=>canonical({provider:a.provider,legalEntity:a.legalEntity,accountLabel:a.accountLabel,providerAccountReference:a.providerAccountReference}));
   if(new Set(identities).size<identities.length){const b=node('button','Consolidate duplicate references');b.className='button secondary';b.onclick=async()=>{b.disabled=true;try{const latest=await api('state');await api('treasury/consolidate',{id:crypto.randomUUID(),expectedRevision:latest.revision,data:{}});await refresh();}catch(e){$('#treasury-status').textContent=e.message;b.disabled=false;}};target.append(b);}
+  const policyTarget=$('#treasury-policy');if(policyTarget){policyTarget.replaceChildren();
+    api('treasury/policy').then(record=>{
+      policyTarget.append(node('h3','Singular NUSD treasury policy'),node('p','Stripe Treasury and Bank of America Savings are designated backing sources. Provider balances keep their original currency; reserve allocation and redemption evidence remain explicit.'));
+      const link=node('a','Read policy and evidence status ↗');link.href='/api/control/v2/treasury/policy';policyTarget.append(link);
+      if(record.activation.policyHash===record.policyHash){policyTarget.append(node('p','Owner policy recorded · '+record.policy.id));return;}
+      const b=node('button','Record reserve designation policy');b.className='button secondary';b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{const latest=await api('state');await api('treasury/policy',{id:crypto.randomUUID(),expectedRevision:latest.revision,data:{policyId:record.policy.id,policyHash:record.policyHash}});await refresh();}catch(e){$('#treasury-status').textContent=e.message;b.disabled=false;}};policyTarget.append(b);
+    }).catch(()=>policyTarget.append(node('p','Treasury policy status is unavailable.')));
+  }
   const form=node('form','');form.className='account-link-form';
   function field(label,name,required=true){const l=node('label',label);const input=document.createElement('input');input.name=name;input.required=required;input.maxLength=256;l.append(input);form.append(l);return input;}
   const selectLabel=node('label','Provider');const select=document.createElement('select');select.name='provider';for(const [value,label]of [['stripe','Stripe Treasury'],['bank-of-america','Bank of America']]){const o=node('option',label);o.value=value;select.append(o);}selectLabel.append(select);form.append(selectLabel);
@@ -28,7 +36,7 @@ function treasuryActions(t){
   target.append(node('h3','Designate a business account'),node('p','Record its relationship to Numina. Provider ownership, balances and submission permissions keep their verified status.'),form);
 }
 async function refresh(){
-  $('#treasury-actions')?.replaceChildren();
+  $('#treasury-actions')?.replaceChildren();$('#treasury-policy')?.replaceChildren();
   $('#refresh').disabled=true;
   await refreshControlRoom();
   try{const m=await api('manifest');$('#frontier-status').textContent=m.livemode?'Production · Live mode · '+m.version:'Production configuration unavailable';$('#providers').replaceChildren(...m.providers.map(p=>{const n=node('article','');n.append(node('h3',p.id),node('p',p.submission?'Internal records available':'Handoff preparation available; provider submission not connected'));return n;}));}catch{$('#frontier-status').textContent='Production status unavailable';}
