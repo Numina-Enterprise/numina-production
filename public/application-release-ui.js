@@ -90,7 +90,7 @@ function renderReleaseRequirements(data){
  };
  set('[data-application-deployment-receipt]',receiptText(receipts?.deployment));
  set('[data-application-settlement-receipt]',receiptText(receipts?.settlement));
- set('[data-application-readiness]',readiness?'At release time: '+text(readiness.status):'No release-time requirements reported');
+ set('[data-application-readiness]',readiness?'NUSD activation: '+text(readiness.status):'No release-time requirements reported');
  const requirements=Array.isArray(readiness?.blockers)?readiness.blockers.slice(0,30):[];
  all('[data-application-requirements]').forEach(list=>{
   const nodes=requirements.map(item=>{

@@ -1,0 +1,40 @@
+{
+  "schema": "numina.android-signed-build.v1",
+  "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+  "runId": "34785067667",
+  "packageIdentity": "xyz.numinalabs.app",
+  "identities": {
+    "release": {
+      "alias": "numina-release",
+      "algorithm": "RSA-3072 / SHA-256",
+      "certificateFile": "numina-android-release.pem",
+      "sha256": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+      "issuer": "self-signed Android application identity",
+      "expiresAt": "2056-09-05T20:17:29+00:00"
+    },
+    "upload": {
+      "alias": "numina-upload",
+      "algorithm": "RSA-3072 / SHA-256",
+      "certificateFile": "numina-android-upload.pem",
+      "sha256": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
+      "issuer": "self-signed Android application identity",
+      "expiresAt": "2056-09-05T20:17:29+00:00"
+    }
+  },
+  "artifacts": [
+    {
+      "file": "numina-3.0.0-release-signed.apk",
+      "bytes": 3797876,
+      "sha256": "7f6455541cb0191efd5e2227f959b9dfb26bb8ccc04e1f21da5e710a281edf8b"
+    },
+    {
+      "file": "numina-3.0.0-upload-signed.aab",
+      "bytes": 3617114,
+      "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550"
+    }
+  ],
+  "signatureVerification": true,
+  "deviceInstalled": false,
+  "storeSubmitted": false,
+  "testsRun": false
+}
