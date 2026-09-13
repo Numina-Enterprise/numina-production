@@ -21,6 +21,7 @@ export async function loadStripeTreasury(){
         rows.push([label+' '+currency.toUpperCase(),amount===null?'Not provided by Stripe':amount.formatted]);
       }
     }
+    if(data.provider_nusd_balance){rows.push(['Stripe NUSD currency record',data.provider_nusd_balance.status==='not_reported'?'Not reported by Stripe':'Provider currency reported; token identity and precision require verification']);}
     rows.push(['Checked',new Date(data.observed_at).toLocaleString()],['Transfers from Numina','Not connected'],['NUSD settlement','Not connected']);
     const details=stripeElement('stripe-treasury-details');details.replaceChildren();for(const [label,value]of rows)details.append(stripeNode('dt',label),stripeNode('dd',value));
     const link=stripeElement('stripe-treasury-dashboard');link.href=dashboard.href;link.hidden=false;
