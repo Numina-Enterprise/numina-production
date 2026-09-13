@@ -38,3 +38,6 @@ Version 2.0.0 tests were not run. No provider account was configured, installed,
 ## Runtime evidence read
 
 Call numina_runtime_build with an empty JSON object. This reads the same public application manifest and returns its execution-runtime record and evidence links. RUNTIME_BUILD_UNAVAILABLE means that the current server manifest has no execution-runtime record; it is not a zero balance or an unsuccessful contract transaction. Signature and artifact verification remain separate, described in [EVIDENCE.md](EVIDENCE.md). No owner-only financial endpoints are accessed.
+
+## Production control v2
+Set NUMINA_API_TOKEN to your provisioned owner or delegated agent token, then use node bin/control-mcp-stdio.js as your MCP host command. It connects only to the production endpoint at https://numinalabs.xyz/api/control/v2/mcp. Live mode is enabled; no sandbox is provided. The existing discovery client is retained. See https://numinalabs.xyz/downloads/Frontier-v2.md for owner provisioning and human approvals.

@@ -1,12 +1,12 @@
 {
   "schema": "numina.integration.archive.v2",
   "version": "2.0.0",
-  "revision": "rc26-alignment-v2.0.0",
+  "revision": "frontier-production-v2.1.0",
   "archive": "numina-integration-kit-v2.0.0.zip",
-  "bytes": 59822,
-  "sha256": "a385d5a561ea8bf7577a2c72c33f14ca51b6563104bad5f4e87d2def267e1ceb",
-  "packagedAtUtc": "2026-09-13T08:23:38.447442+00:00",
-  "sourceFiles": 38,
+  "bytes": 61335,
+  "sha256": "158d15e0d6e4f6d069ee759e502f78ee3ed945c078900474715e6896e877589b",
+  "packagedAtUtc": "2026-09-13T19:03:26.121374+00:00",
+  "sourceFiles": 39,
   "testsRun": false,
   "defaultTools": [
     "numina_read_treasury",
@@ -19,5 +19,6 @@
   "applicationManifest": "https://numinalabs.xyz/v2/release/manifest",
   "providerInstallationPerformed": false,
   "registryPublicationPerformed": false,
-  "sitePublicationPerformedByThisPackageStep": false
+  "sitePublicationPerformedByThisPackageStep": false,
+  "livemode": true
 }

@@ -5,7 +5,7 @@ import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from '.
 import {readControl,bootstrapControl,controlSnapshot,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
 function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
-async function controlActor(req,env){
+export async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
   const auth=req.headers.get('authorization');
   if(auth){if(!auth.startsWith('Bearer ')||await controlHash(auth.slice(7))!==env.NUMINA_CONTROL_API_KEY_SHA256)controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}
@@ -14,7 +14,7 @@ async function controlActor(req,env){
   if(!id||!email)controlError('UNAUTHENTICATED',401);
   return 'email:'+email.trim().toLowerCase();
 }
-async function controlBody(req){
+export async function controlBody(req){
   if(req.headers.get('content-type')?.split(';')[0]!=='application/json'||req.headers.has('content-encoding'))controlError('JSON_REQUIRED',415);
   const reader=req.body?.getReader();if(!reader)controlError('EMPTY_BODY',400);const chunks=[];let bytes=0;const deadline=Date.now()+5000;
   for(;;){let timer;let chunk;try{chunk=await Promise.race([reader.read(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Object.assign(new Error('BODY_TIMEOUT'),{code:'BODY_TIMEOUT',status:408})),Math.max(1,deadline-Date.now()));})]);}finally{clearTimeout(timer);}if(chunk.done)break;bytes+=chunk.value.byteLength;if(bytes>16384){await reader.cancel();controlError('BODY_TOO_LARGE',413);}chunks.push(chunk.value);}
@@ -65,7 +65,7 @@ export async function controlHttp(req,env){
     }
     if(path==='/api/control/v1/state'&&req.method==='GET')return controlResponse(await controlSnapshot(env.DB,actor,now));
     if(path==='/api/control/v1/next-action'&&req.method==='GET'){const snapshot=await controlSnapshot(env.DB,actor,now);return controlResponse({revision:snapshot.revision,decisions:snapshot.decisions});}
-    if(path==='/api/control/v1/commands'&&req.method==='POST'){const body=await controlBody(req);if(body.type==='treasury')controlError('CANONICAL_TREASURY_ROUTE_REQUIRED',409);return controlResponse(await commitControl(env.DB,body,actor,Math.floor(Date.now()/1000)));}
+    if(path==='/api/control/v1/commands'&&req.method==='POST'){const body=await controlBody(req);if(body.type==='treasury')controlError('CANONICAL_TREASURY_ROUTE_REQUIRED',409);if(body.type?.startsWith('frontier.'))controlError('CANONICAL_FRONTIER_ROUTE_REQUIRED',409);return controlResponse(await commitControl(env.DB,body,actor,Math.floor(Date.now()/1000)));}
     if(path==='/api/control/v1/journal'&&req.method==='GET'){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       const after=Number(new URL(req.url).searchParams.get('after')??-1);if(!Number.isSafeInteger(after)||after< -1)controlError('INVALID_CURSOR',400);

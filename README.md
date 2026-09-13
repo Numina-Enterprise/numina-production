@@ -1,3 +1,7 @@
+# Production frontier update
+
+The 2.1.0 control extension uses live mode and the existing canonical journal. See [Frontier v2](docs/Frontier-v2.md). Runtime rc26 migration remains a separate incomplete dependency. Further tests were skipped at the owner's request.
+
 # Numina 2.0
 
 This working tree targets runtime 1.9.0-rc26. Production cutover is pending: the recovered rc26 package is incomplete and the Vercel production service still reports rc22. See [rc26 alignment and blockers](RC26-ALIGNMENT.md). A configured target does not establish deployment or a live treasury balance.
