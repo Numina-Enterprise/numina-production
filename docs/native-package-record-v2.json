@@ -1,0 +1,50 @@
+{
+  "schema": "numina.native-package.v1",
+  "packagedAtUtc": "2026-09-12T19:26:35.417968+00:00",
+  "applicationVersion": "2.0.0",
+  "versionCode": 1,
+  "proposedPackageIdentity": "xyz.numinalabs.app",
+  "packageIdentityRegisteredOrConfirmed": false,
+  "hostedWorkspace": "https://numinalabs.xyz/app",
+  "android": {
+    "status": "source_only_build_failed",
+    "buildCompletedAtUtc": null,
+    "binaries": [],
+    "signingPerformed": false,
+    "deviceInstalled": false,
+    "testsRun": false,
+    "domainAssociationVerified": false,
+    "storeSubmitted": false
+  },
+  "ios": {
+    "status": "xcode_source_only",
+    "compiled": false,
+    "signed": false,
+    "ipaCreated": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "nativeAuthenticatedSessionSupported": false
+  },
+  "sourceArchives": [
+    {
+      "platform": "android",
+      "file": "numina-os-2.0.0-android-source.zip",
+      "bytes": 13305,
+      "sha256": "46d0c780fcfbe5d15d22fb31a98b179f455514b994a590ba6bcfc78e2f43537c",
+      "kind": "source_archive",
+      "installable": false
+    },
+    {
+      "platform": "ios",
+      "file": "numina-os-2.0.0-ios-source.zip",
+      "bytes": 12930,
+      "sha256": "de0d7047af5190b30f0b39f42776c922d392a0732960d6f6b616d353c4e31b05",
+      "kind": "source_archive",
+      "installable": false
+    }
+  ],
+  "sdkBinariesDependencyCachesOrCredentialsIncluded": false,
+  "slsaLevelClaimed": null,
+  "nusdActivationPerformed": false,
+  "storeListingOrApprovalClaimed": false
+}
