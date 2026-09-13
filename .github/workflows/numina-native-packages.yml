@@ -1,6 +1,11 @@
 name: Numina native production packages
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        type: choice
+        default: all
+        options: [all, android, ios]
 permissions:
   contents: read
 concurrency:
@@ -8,6 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   android:
+    if: ${{ inputs.platform != 'ios' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -25,7 +31,7 @@ jobs:
           unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
       - name: Compile release packages
         run: |
-          sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-36' 'build-tools;35.0.0'
           "$RUNNER_TEMP/gradle-8.13/bin/gradle" --no-daemon --console=plain -p mobile/android :app:bundleRelease :app:assembleRelease
           mkdir -p packages
           cp mobile/android/app/build/outputs/bundle/release/app-release.aab packages/numina-2.0.0-unsigned.aab
@@ -38,6 +44,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
   ios:
+    if: ${{ inputs.platform != 'android' }}
     runs-on: macos-latest
     timeout-minutes: 20
     steps:
