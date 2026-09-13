@@ -123,6 +123,11 @@ export async function frontierHttp(req,env){
     if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_REQUIRED',403);
     if(['/api/control/v2/mcp','/api/control/v2/a2a'].includes(path))return req.method==='POST'?frontierRpc(req,env,actor):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     const route=path.slice('/api/control/v2/'.length);
+    if(route==='runtime-access'&&req.method==='GET'){
+      frontierAssert(actor===row.state.root,'OWNER_REQUIRED',403);
+      frontierAssert(req.headers.get('authorization')?.startsWith('Bearer '),'BEARER_REQUIRED',401);
+      return frontierResponse({schema:'numina.runtime-access.v1',owner:true,rootHash:await controlHash(row.state.root),scope:'runtime:evidence',observedAt:now});
+    }
     if(route==='decisions/batch'&&req.method==='POST'){
       const body=await controlBody(req);frontierExact(body,['requestIds']);
       frontierAssert(Array.isArray(body.requestIds)&&body.requestIds.length>0&&body.requestIds.length<=100&&body.requestIds.every(id=>typeof id==='string')&&new Set(body.requestIds).size===body.requestIds.length,'INVALID_DECISION_BATCH',400);

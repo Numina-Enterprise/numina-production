@@ -19,7 +19,7 @@ def production_files_root()->str:
         p=ROOT/base
         if not p.exists():continue
         for f in sorted(x for x in p.rglob("*") if x.is_file() and "__pycache__" not in x.parts):
-            included.append((str(f.relative_to(ROOT)),sha256(f.read_bytes()).hexdigest()))
+            included.append((f.relative_to(ROOT).as_posix(),sha256(f.read_bytes()).hexdigest()))
     for name in ["Dockerfile","requirements.production.txt","requirements.public-verifier.txt","requirements.authority-node.txt","PRODUCTION.md"]:
         f=ROOT/name
         if f.exists():included.append((name,sha256(f.read_bytes()).hexdigest()))
