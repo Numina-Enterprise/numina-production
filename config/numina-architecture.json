@@ -1,13 +1,22 @@
 {
   "schema": "numina.required-architecture.v1",
   "classification": "required_contract_not_live_state",
-  "runtime": "1.9.0-rc26",
+  "runtime": "1.9.0-rc22",
   "root_count": 1,
   "root_lifetime": "perpetual",
   "lineage_count": 1,
   "production_environment_count": 1,
-  "execution_inputs": ["Principal", "Authority", "Objective", "Intent"],
-  "execution_result": ["FINAL", "canonical_proof", "head_advancement"],
+  "execution_inputs": [
+    "Principal",
+    "Authority",
+    "Objective",
+    "Intent"
+  ],
+  "execution_result": [
+    "FINAL",
+    "canonical_proof",
+    "head_advancement"
+  ],
   "mandate_concept": false,
   "valid_execution_route_count": 1,
   "treasury": {
@@ -23,5 +32,13 @@
   "deployment_verified": false,
   "canonical_runtime_implementation_verified": false,
   "production_head": null,
-  "mint_event": null
+  "mint_event": null,
+  "pendingRuntimeMigration": "1.9.0-rc26",
+  "frontierVersion": "2.1.0",
+  "architectureLayers": {
+    "L3": "Authority",
+    "L4": "Execution",
+    "L5": "Canonical evidence"
+  },
+  "architectureManifest": "/api/control/v2/architecture"
 }

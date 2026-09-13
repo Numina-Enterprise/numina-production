@@ -3,7 +3,7 @@
     "functionDeclarations": [
       {
         "name": "numina_read_treasury",
-        "description": "Read the owner-authenticated canonical Numina-native NUSD treasury through readTreasury(). Requires the rc26 application runtime target and an owner token. Preserve NUMINA authority, system of record and native model verification scope. This tool does not submit transfers or independently verify bank or chain receipts.",
+        "description": "Read the owner-authenticated canonical Numina-native NUSD treasury through readTreasury(). Requires the production application and its owner token. Preserve NUMINA authority, system of record and native model verification scope. This tool does not submit transfers or independently verify bank or chain receipts.",
         "parametersJsonSchema": {
           "type": "object",
           "properties": {},

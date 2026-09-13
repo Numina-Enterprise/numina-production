@@ -32,6 +32,7 @@ export async function controlSnapshot(db,actor,now){const row=await readControl(
   const visible=structuredClone(row.state);if(actor!==visible.root){visible.requests=visible.requests.filter(r=>allowed.has(r.id));visible.evidence=visible.evidence.filter(e=>allowed.has(e.requestId));visible.records=visible.records.filter(r=>allowed.has(r.requestId));const ids=new Set(visible.grants.filter(g=>g.subject===actor).map(g=>g.id));for(const id of [...ids]){let g=visible.grants.find(g=>g.id===id);while(g?.parent){ids.add(g.parent);g=visible.grants.find(p=>p.id===g.parent);}}visible.grants=visible.grants.filter(g=>ids.has(g.id));}
   // Treasury projections are exposed only through the canonical readTreasury interface.
   delete visible.nativeTreasury;
+  delete visible.frontier;
   return {revision:row.revision,stateHash:row.state_hash,evidenceHead:row.head_hash,projection:actor===row.state.root?'complete':'authority-scoped',state:visible,decisions:(await verifiedActions(row.state,row.revision,now,actor)).filter(d=>allowed.has(d.requestId))};
 }
 function controlResult(prior,replayed){const event=typeof prior.event_json==='string'?JSON.parse(prior.event_json):prior.event;return {replayed,event:{id:event.id,revision:event.revision,actor:event.actor,type:event.type,result:event.result},eventHash:prior.hash};}
@@ -44,7 +45,7 @@ export async function commitControl(db,command,actor,now){
   const reduced=await reduceControl(row.state,command,actor,row.revision,now),stateHash=await controlHash(reduced.state);
   const event={id:command.id,revision:row.revision+1,actor,at:now,type:command.type,command,commandHash,previous:row.head_hash,stateHash,parents:reduced.parents,result:reduced.result,decisionsHash:await controlHash(reduced.decisions)};const hash=await controlHash(event);
   // Conservative transaction-time fence: no previously active grant/evidence may expire while this command commits.
-  const validUntil=Math.min(now+5,...row.state.grants.filter(g=>g.expiresAt>now).map(g=>g.expiresAt),...row.state.evidence.filter(e=>e.expiresAt>now).map(e=>e.expiresAt));
+  const validUntil=Math.min(now+5,...row.state.grants.filter(g=>g.expiresAt>now).map(g=>g.expiresAt),...row.state.evidence.filter(e=>e.expiresAt>now).map(e=>e.expiresAt),...(row.state.frontier?.policies||[]).filter(p=>p.expiresAt>now).map(p=>p.expiresAt),...(row.state.frontier?.approvals||[]).filter(a=>a.expiresAt>now).map(a=>a.expiresAt));
   let failure;try{await db.batch([
     db.prepare('UPDATE numina_control_state SET revision=?,state_json=?,state_hash=?,head_hash=?,mutation_id=? WHERE id=1 AND revision=? AND head_hash=? AND ? > unixepoch()').bind(event.revision,stable(reduced.state),stateHash,hash,command.id,row.revision,row.head_hash,validUntil),
     db.prepare('INSERT INTO numina_control_events(id,revision,actor,command_hash,event_json,hash) SELECT ?,?,?,?,?,? FROM numina_control_state WHERE id=1 AND mutation_id=? AND head_hash=? AND NOT EXISTS(SELECT 1 FROM numina_control_events WHERE id=?)').bind(command.id,event.revision,actor,commandHash,stable(event),hash,command.id,hash,command.id)

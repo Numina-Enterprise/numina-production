@@ -4,6 +4,7 @@ import {routeRc20} from './rc20.js';
 import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
 import {nusdHttp} from './nusd-http.js';
+import {frontierHttp} from './frontier-http.js';
 const security={"X-Numina-Version":"2.0.0","X-Numina-Profile":"numina-production","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
@@ -15,6 +16,8 @@ export default {
   try{
    // Retired public test surfaces stay closed even if an environment is misconfigured.
    if(path.startsWith('/api/v0.1/')||['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path))return finish(response({error:'REFERENCE_RUNTIME_RETIRED',message:'Use the production workspace, internal authority controls or release documentation.',workspace:'/app',documentation:'/core'},410));
+   if(path.startsWith('/api/control/v2/')||path==='/.well-known/agent-card.json')return finish(await frontierHttp(req,env));
+   if(path==='/frontier'||path==='/frontier/')return finish(await env.ASSETS.fetch(new Request(new URL('/frontier.html',req.url),req)));
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));
    if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));

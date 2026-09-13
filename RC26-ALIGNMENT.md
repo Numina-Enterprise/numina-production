@@ -1,6 +1,8 @@
-# rc26 alignment
+# rc26 migration record
 
-The active client target is `public/runtime-contract.js`. The HTTP gateway, browser evidence verification, application manifest and packaged integration client consume this contract. Application/mobile-web version 2.0.0 is separate from runtime 1.9.0-rc26. Native wrappers continue to load the same hosted application. Historical rc20/rc22 evidence retains its original identity. Retired `site.js`, `release-ui.js` and `release-model.js` are excluded from the deployed assets; their source and historical test fixtures remain available. This engineering runbook is not a public downloadable runtime record.
+Production alignment on 2026-09-13: the shared client contract is pinned to the observed rc22 dependency, with its existing key and manifest digests. Frontier control 2.1.0 runs on the production application journal. The rc26 migration described below remains pending; it is not represented as a running dependency.
+
+The shared production client target is `public/runtime-contract.js`. The HTTP gateway, browser evidence verification, application manifest and packaged integration client consume this contract. Application/mobile-web version 2.0.0 is separate from the running rc22 dependency and the pending rc26 migration. Native wrappers continue to load the same hosted application. Historical rc20/rc22 evidence retains its original identity. Retired `site.js`, `release-ui.js` and `release-model.js` are excluded from the deployed assets; their source and historical test fixtures remain available. This engineering runbook is not a public downloadable runtime record.
 
 ## Release validation
 
