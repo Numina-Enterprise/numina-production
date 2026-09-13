@@ -89,7 +89,7 @@ export class NuminaClient {
       data.artifacts.some(artifact=>!object(artifact)||!text(artifact.path,1,2048)||typeof artifact.sha256!=='string'||!/^[a-f0-9]{64}$/.test(artifact.sha256))||
       !object(data.runtime_dependency)||!text(data.runtime_dependency.version,1,128))fail('INVALID_SERVER_RESPONSE');
     if(data.runtime_dependency.version!==EXPECTED_RELEASE.production_version || data.runtime_dependency.release!==EXPECTED_RELEASE.release)fail('RUNTIME_RELEASE_MISMATCH');
-    // Preserve application identity and require the shared rc26 runtime target.
+    // Preserve application identity and require the shared rc22 runtime target.
     // Schema recognition is not signature, artifact, deployment or reserve verification.
     return this.#wrap(data);
   }

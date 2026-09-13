@@ -2,7 +2,7 @@
   "id": "/app",
   "name": "Numina OS 2.0 — Operations workspace",
   "short_name": "Numina OS",
-  "description": "Numina 2.0: service requests, payment evidence and agent operations.",
+  "description": "Numina operations, delegated agents, approvals and canonical treasury records.",
   "start_url": "/app",
   "scope": "/app",
   "display": "standalone",

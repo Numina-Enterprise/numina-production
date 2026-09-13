@@ -1,10 +1,14 @@
+# Production frontier update
+
+The 2.1.0 control extension uses live mode and the existing canonical journal. See [Frontier v2](docs/Frontier-v2.md). Runtime rc26 migration remains a separate incomplete dependency. Further tests were skipped at the owner's request.
+
 # Numina 2.0
 
-This working tree targets runtime 1.9.0-rc26. Production cutover is pending: the recovered rc26 package is incomplete and the Vercel production service still reports rc22. See [rc26 alignment and blockers](RC26-ALIGNMENT.md). A configured target does not establish deployment or a live treasury balance.
+Production uses the rc22 runtime with its pinned key and manifest identity. The L3 authority, L4 execution and L5 canonical-evidence layers run as frontier control 2.1.0 on the application journal. The recovered rc26 package remains an incomplete future migration. See [rc26 alignment and blockers](RC26-ALIGNMENT.md). A configured target does not establish deployment or a live treasury balance.
 
 Numina 2.0.0 serves the website, Numina OS operations workspace and installable mobile web app at https://numinalabs.xyz. Existing application and control APIs remain at `/api/app/v1` and `/api/control/v1`; the application manifest is `/v2/release/manifest`. No data migration is required for this application release.
 
-The authenticated read-only Numina node observation is available at `/v2/network/status`. The control-plane runtime target is a separately identified v1.9.0-rc26 dependency. Node connectivity does not establish financial execution, token issuance, reserves or redemption.
+The authenticated read-only Numina node observation is available at `/v2/network/status`. The control-plane runtime target is a separately identified v1.9.0-rc22 dependency. Node connectivity does not establish financial execution, token issuance, reserves or redemption.
 
 The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(event)` on the existing control journal. The former owner-statement endpoint redirects to it. See [native treasury implementation](NATIVE-TREASURY.md) for initialization, P/A/O/I execution and proof scope.
 

@@ -1,12 +1,12 @@
 {
   "schema": "numina.integration.package.v2",
-  "packagedAtUtc": "2026-09-13T08:23:38.377Z",
+  "packagedAtUtc": "2026-09-13T19:22:48.119Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "2.0.0",
     "private": true
   },
-  "revision": "rc26-alignment-v2.0.0",
+  "revision": "frontier-production-v2.1.0",
   "applicationManifest": "https://numinalabs.xyz/v2/release/manifest",
   "applicationSchema": "numina.application-release.v2",
   "runtimeBuild": {

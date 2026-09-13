@@ -1,0 +1,77 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/api/control/v2/:path*",
+      "destination": "https://numinalabs.xyz/api/control/v2/:path*"
+    },
+    {
+      "source": "/.well-known/agent-card.json",
+      "destination": "https://numinalabs.xyz/.well-known/agent-card.json"
+    },
+    {
+      "source": "/frontier",
+      "destination": "https://numinalabs.xyz/frontier"
+    },
+    {
+      "source": "/v2/network/status",
+      "destination": "/api/node-connection"
+    },
+    {
+      "source": "/status",
+      "destination": "/status.html"
+    },
+    {
+      "source": "/v1/status",
+      "destination": "/api/status"
+    },
+    {
+      "source": "/v1/control/state",
+      "destination": "/api/control-state"
+    },
+    {
+      "source": "/v1/control/evaluate",
+      "destination": "/api/control-evaluate"
+    },
+    {
+      "source": "/v1/execution/providers",
+      "destination": "/api/providers"
+    },
+    {
+      "source": "/v1/execution/prepare",
+      "destination": "/api/execution-prepare"
+    },
+    {
+      "source": "/v1/execution/evidence/bind",
+      "destination": "/api/evidence-bind"
+    },
+    {
+      "source": "/v1/release/manifest",
+      "destination": "/api/manifest"
+    },
+    {
+      "source": "/v1/release/supply-chain",
+      "destination": "/api/supply-chain"
+    },
+    {
+      "source": "/v1/release/attestation",
+      "destination": "/api/attestation"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
+}

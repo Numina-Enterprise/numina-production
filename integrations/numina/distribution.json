@@ -1,7 +1,17 @@
 {
+  "livemode": true,
+  "frontier": {
+    "version": "2.1.0",
+    "transport": "stdio-to-streamable-http",
+    "script": "bin/control-mcp-stdio.js",
+    "endpoint": "https://numinalabs.xyz/api/control/v2/mcp",
+    "protocolVersion": "2025-11-25",
+    "tokenEnvironmentVariable": "NUMINA_API_TOKEN",
+    "a2a": "https://numinalabs.xyz/.well-known/agent-card.json"
+  },
   "schema": "numina.integration.distribution.v2",
   "version": "2.0.0",
-  "revision": "rc26-alignment-v2.0.0",
+  "revision": "frontier-production-v2.1.0",
   "applicationManifest": "/v2/release/manifest",
   "applicationSchema": "numina.application-release.v2",
   "runtimeBuild": {

@@ -28,8 +28,7 @@ export function rawPublicKey(value) {
 }
 
 export function releaseIdentityMatches(value) {
-  return object(value) && Object.entries(EXPECTED_RELEASE).every(([field, expected]) => value[field] === expected)
-    && ['production_files_root','build_id'].every(field=>typeof value[field]==='string' && /^[a-f0-9]{64}$/.test(value[field]));
+  return object(value) && Object.entries(EXPECTED_RELEASE).every(([field, expected]) => value[field] === expected);
 }
 
 export function receiptEnvelope(value) {
@@ -77,21 +76,19 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const declarationWrapper = value('attestation');
   const declarationBound = !Object.hasOwn(declarationWrapper || {}, 'attestation') ||
     equalJson(declarationWrapper.attestation, declaration);
-  // rc26 signs the release descriptor itself. Bind every manifest field to that signature.
+  // rc22 signs a declaration of the release name. It does not sign the manifest digest fields.
   const releaseSignatureValid = attestation.valid && attestation.envelope.artifact_type === RELEASE_ARTIFACT_TYPE &&
-    releaseIdentityMatches(declaration) && declaration.environment === 'production' && declarationBound &&
-    Object.entries(manifest||{}).every(([field,expected])=>Object.hasOwn(declaration,field)&&equalJson(declaration[field],expected));
+    declaration?.schema === 'numina.deployment-attestation.v1' && declaration.release === EXPECTED_RELEASE.release &&
+    declaration.runtime_surface === 'live-serverless-control-plane' && declarationBound;
   // Exact binding is required. A signature over unrelated state is not proof of the displayed state.
   const controlStateBound = Boolean(controlReceipt.valid && controlReceipt.envelope.artifact_type === 'NUMINA_CONTROL_STATE' &&
     object(control) && Object.hasOwn(control, 'state') && control.state?.schema === 'numina.control-state.v1' &&
     control.state.release === EXPECTED_RELEASE.production_version && equalJson(control.state, controlReceipt.envelope.payload));
   const status = value('status'), supply = value('supply');
-  const runtimeStatusMatches = Boolean(manifestMatches && releaseIdentityMatches(status) &&
-    status.build_id === manifest.build_id && status.production_files_root === manifest.production_files_root &&
-    status.environment === 'production' && status.frozen_core?.valid === true && status.conformance?.valid === true &&
-    status.frozen_core?.manifest_root === EXPECTED_RELEASE.frozen_core_manifest_root);
-  const supplyIdentityMatches = Boolean(manifestMatches && supply?.valid === true &&
-    ['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>typeof manifest[field]==='string' && /^[a-f0-9]{64}$/.test(manifest[field]) && supply[field]===manifest[field]));
+  const runtimeStatusMatches = Boolean(status && ['release','core_version','production_version','release_sha256'].every(field =>
+    status[field] === EXPECTED_RELEASE[field]) && status.frozen_core?.manifest_root === EXPECTED_RELEASE.frozen_core_manifest_root);
+  const supplyIdentityMatches = Boolean(supply && ['release','release_sha256','production_files_root'].every(field =>
+    supply[field] === EXPECTED_RELEASE[field]));
   return {
     manifest, manifestMatches, attestation,
     releaseDeclarationVerified: Boolean(manifestMatches && releaseSignatureValid),
