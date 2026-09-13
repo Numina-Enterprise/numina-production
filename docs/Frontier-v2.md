@@ -44,3 +44,7 @@ Further tests were skipped at the owner's request. Build completion and producti
 ## Architecture and adoption
 
 Numina L3 (authority), L4 (execution) and L5 (canonical evidence) share one journal. See [Architecture-layers.md](Architecture-layers.md). Public MCP discovery is available at `/api/control/v2/discovery-mcp`; it reads architecture, capabilities and the current head without authentication. The Codex plugin uses that endpoint. Private operations remain at `/api/control/v2/mcp`. The web app runs on desktop and mobile browsers; native-store status is recorded separately.
+
+## Policy decision batches
+
+POST `/api/control/v2/decisions/batch` with canonical JSON `{"requestIds":["request-id"]}`. At most 100 unique request IDs are evaluated from one authorized state snapshot. The response includes revision, head, observation time and decisions. The control room uses one batch call for the displayed queue; a 50-request queue reduces decision HTTP calls from 50 to 1. Execution still re-evaluates policy and current authority at commit time. No wall-clock speedup benchmark is claimed.
