@@ -34,8 +34,8 @@ jobs:
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-36' 'build-tools;35.0.0'
           "$RUNNER_TEMP/gradle-8.13/bin/gradle" --no-daemon --console=plain -p mobile/android :app:bundleRelease :app:assembleRelease
           mkdir -p packages
-          cp mobile/android/app/build/outputs/bundle/release/app-release.aab packages/numina-2.0.0-unsigned.aab
-          cp mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk packages/numina-2.0.0-unsigned.apk
+          cp mobile/android/app/build/outputs/bundle/release/app-release.aab packages/numina-3.0.0-unsigned.aab
+          cp mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk packages/numina-3.0.0-unsigned.apk
           sha256sum packages/* > packages/SHA256SUMS
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -55,7 +55,7 @@ jobs:
         run: |
           xcodebuild -project mobile/ios/Numina.xcodeproj -scheme Numina -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/NuminaDerived" CODE_SIGNING_ALLOWED=NO build
           mkdir -p packages
-          ditto -c -k --sequesterRsrc --keepParent "$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app" packages/numina-2.0.0-ios-unsigned-app.zip
+          ditto -c -k --sequesterRsrc --keepParent "$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app" packages/numina-3.0.0-ios-unsigned-app.zip
           shasum -a 256 packages/* > packages/SHA256SUMS
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
