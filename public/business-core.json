@@ -1,0 +1,21 @@
+{
+  "schema": "numina.business-core.v1",
+  "name": "Numina",
+  "operator": "SK Consulting LLC",
+  "positioning": "Blockchain and authority infrastructure for the agent economy",
+  "mission": "Unify agents, software, code, assets, liquidity, verification and evidence through one governed system.",
+  "dimensions": {
+    "agents": "Identity, delegated authority and bounded intent",
+    "softwareAndCode": "Applications, integrations, plugins and verifiable releases",
+    "blockchain": "Numina network connectivity and evidence of confirmed on-chain activity",
+    "moneyAndAssets": "One Numina-native NUSD projection, designated funding sources and provider-reported assets",
+    "liquidity": "Funding plans, asset allocation and confirmed settlement evidence",
+    "time": "Policy expiry, ordered journal events and evidence timestamps",
+    "space": "Network, system, resource and jurisdiction scope",
+    "verificationAndEvidence": "Policy decisions, human approvals and cryptographically bound provenance"
+  },
+  "architecture": "/api/control/v2/architecture",
+  "head": "/api/control/v2/head",
+  "release": "/v2/release/manifest",
+  "providerEvidenceRequired": true
+}

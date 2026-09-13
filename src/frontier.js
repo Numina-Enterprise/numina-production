@@ -93,6 +93,15 @@ export async function reduceFrontier(state,command,actor,now){
     frontierAssert(!policies.length||policy.version>policies.at(-1).version,'TREASURY_POLICY_VERSION_CONFLICT',409);
     policies.push({...structuredClone(policy),hash,issuer:actor,recordedAt:now,eventId:command.id});
     result={status:'OWNER_POLICY_RECORDED',policyId:policy.id,policyHash:hash,treasuryRoute:'/api/control/v1/treasury',projectionChanged:false,externalAccountsChanged:false,reservesVerified:false,redemptionActivated:false};
+  }else if(command.type==='frontier.funding_plan'){
+    owner();frontierExact(data,['id','reason']);
+    frontierAssert(frontierId(data.id)&&frontierText(data.reason,1000),'INVALID_FUNDING_PLAN',400);
+    frontierAssert(state.nativeTreasury?.balance,'TREASURY_NOT_INITIALIZED',409);
+    frontierAssert(!f.fundingPlan,'FUNDING_PLAN_ALREADY_RECORDED',409);
+    const accounts=f.accounts.filter(account=>!account.supersededBy);
+    frontierAssert(accounts.length>0,'DESIGNATED_ACCOUNTS_REQUIRED',409);
+    f.fundingPlan={schema:'numina.funding-plan.v1',id:data.id,status:'UNFUNDED_PLAN',issuer:actor,createdAt:now,eventId:command.id,reason:data.reason,target:{amount:state.nativeTreasury.balance,unit:'NUSD',basis:'canonical_native_projection',sharedAcrossAccounts:true},accountReferences:accounts.map(account=>({id:account.id,provider:account.provider,accountLabel:account.accountLabel,allocatedAmount:null,providerConfirmed:false})),confirmedFunding:null,externalReceipt:null,externalSubmission:false,treasuryProjectionChanged:false};
+    result={status:'FUNDING_PLAN_RECORDED',plan:structuredClone(f.fundingPlan),executionScope:'internal_funding_plan',fundsCreated:false,externalAccountsChanged:false};
   }else if(command.type==='frontier.consolidate'){
     owner();frontierExact(data,[]);const retained=new Map(),superseded=[];
     for(const account of f.accounts){if(account.supersededBy)continue;const identity=stable({provider:account.provider,legalEntity:account.legalEntity,accountLabel:account.accountLabel,providerAccountReference:account.providerAccountReference});const previous=retained.get(identity);if(previous){account.supersededBy=previous.id;superseded.push({id:account.id,retainedId:previous.id});}else retained.set(identity,account);}

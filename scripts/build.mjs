@@ -9,6 +9,8 @@ for(const p of ['dist/client','dist/server','dist/.openai','dist/client/download
 for(const name of readdirSync('dist'))if(statSync('dist/'+name).isFile())unlinkSync('dist/'+name);
 function copy(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=from+'/'+n,b=to+'/'+n;statSync(a).isDirectory()?copy(a,b):copyFileSync(a,b);}}
 copy('public','dist/client');copy('docs','dist/client/downloads');
+// The homepage and frontier share the same canonical control-room document.
+copyFileSync('public/frontier.html','dist/client/index.html');
 copyFileSync('mobile/signing/release-identities.json','dist/client/identity.json');
 for(const name of ['release-identities.json','numina-android-release.pem','numina-android-upload.pem','numina-ios-distribution.csr'])copyFileSync('mobile/signing/'+name,'dist/client/downloads/'+name);
 for(const name of ['site.js','release-ui.js','release-model.js','downloads/RC26-ALIGNMENT.md']){try{unlinkSync('dist/client/'+name);}catch(error){if(error.code!=='ENOENT')throw error;}}
