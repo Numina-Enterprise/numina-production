@@ -1,9 +1,11 @@
-# Numina L3, L4 and L5
+# Numina L1 through L5
 
-Numina implements three functional architecture layers over one control journal. The layer numbers describe the architecture.
+Numina implements five functional architecture layers over one control journal. The layer numbers describe the architecture.
 
 | Layer | Responsibility | Current production scope |
 | --- | --- | --- |
+| L1 — Root and state | Perpetual root, journal, head and connected network observation | One existing root and head; blockchain observations retain their provider evidence |
+| L2 — Intent and evidence | Principal / Authority / Objective / Intent, scoped requests and lineage | Existing authenticated control state and evidence references |
 | L3 — Authority | Agent identity, delegated authority, policy and human decisions | ALLOW / DENY / ESCALATE; approval bound to the request and immutable policy version |
 | L4 — Execution | Requests, provider orchestration, MCP and A2A | Authorized internal records can reach FINAL; external adapters prepare handoffs |
 | L5 — Canonical evidence | Provenance, journal head and the singular NUSD projection | Ed25519 receipts bind internal journal events; owner-authenticated treasury reads the same canonical lineage |

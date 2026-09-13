@@ -1,7 +1,7 @@
 {
   "livemode": true,
   "frontier": {
-    "version": "2.1.0",
+    "version": "2.2.0",
     "transport": "stdio-to-streamable-http",
     "script": "bin/control-mcp-stdio.js",
     "endpoint": "https://numinalabs.xyz/api/control/v2/mcp",
@@ -11,7 +11,7 @@
   },
   "schema": "numina.integration.distribution.v2",
   "version": "2.0.0",
-  "revision": "frontier-production-v2.1.0",
+  "revision": "frontier-production-v2.2.0",
   "applicationManifest": "/v2/release/manifest",
   "applicationSchema": "numina.application-release.v2",
   "runtimeBuild": {
