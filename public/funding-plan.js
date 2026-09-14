@@ -1,6 +1,9 @@
 const node=(tag,text)=>{const n=document.createElement(tag);n.textContent=text;return n;};
 export async function renderFundingPlan(target,treasury,api,refresh){
   target.replaceChildren(node('h3','Canonical funding plan'));
+  const evidence=node('button','Read signed treasury evidence');evidence.className='button secondary';
+  evidence.onclick=async()=>{evidence.disabled=true;try{const receipt=await api('treasury/evidence');const details=node('details','');details.open=true;details.append(node('summary','Native proof, provider observation and supporting documents'),node('p','This Numina signature binds the captured records. Bank funding has its own verification status.'),node('pre',JSON.stringify(receipt,null,2)));target.append(details);}catch(error){target.append(node('p',error.message));}finally{evidence.disabled=false;}};
+  target.append(evidence);
   const plan=treasury.fundingPlan;
   if(!plan){
     target.append(node('p','Record one funding target from the canonical NUSD projection, shared across the designated accounts. Numina binds the plan, journal event and signature in one receipt.'));
