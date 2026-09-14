@@ -33,6 +33,8 @@
       "script": "examples/nvidia-nim.mjs",
       "setup": "examples/NVIDIA.md",
       "windowsBootstrap": "examples/setup-nvidia-wsl.ps1",
+      "localLauncher": "examples/start-nvidia-nim.sh",
+      "endpointVerifier": "examples/verify-nvidia-nim.mjs",
       "providerPolicy": "examples/nvidia-provider-policy.json",
       "protocol": "openai-chat-completions",
       "profile": "discovery",
