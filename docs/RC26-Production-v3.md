@@ -1,9 +1,7 @@
-# Numina v3 and rc26 production
+# Numina v3 rc26 production
 
-The reconstructed Python rc26 verifier is deployed as dpl_BPA8FFKKCaWSn9EJVyWjQfZcrXz1, from source 9922f2ada9fe1b3908ee4651d2c85b16a60316b1. Its runtime build is 9045c08a5cef72d6fc5b5b15a4c46e5186a0f67f25c7bae606fe9094d122508b. The full signed descriptor is available through /v1/release/attestation.
+Runtime deployment dpl_CZn5UMq3fcBYcEZ8j5yLRmDc6874 uses source fd9f2274355bb5dc3c057d0d92301239a47e2012 and build 1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f. The signed core binding joins the preserved v1.8.0 frozen core to the canonical Numina root under rc26.
 
-The existing Ed25519 release identity is retained. All 105 frozen-core files match their recorded hashes. The historical 309-case report belongs to rc20 and the unchanged core; no new conformance run is claimed. SBOM and source assembly provenance match the deployed artifact contents, with no SLSA level claimed.
+The authenticated evidence revocation route is restored and retains original records and first revocation receipts. Its authorization, size limits, retries, concurrency and signature binding have focused regression coverage. No production record was revoked.
 
-Evidence uses the existing PostgreSQL tables over verified TLS. The public revocation route is removed. Stored records, historical revocations and the canonical Numina journal remain intact. Evidence writes require the existing owner bearer identity through /api/control/v2/runtime-access. External handoffs remain prepared until supported authenticated execution and confirming evidence are available.
-
-This release does not create bank funds, establish reserves, deploy an NUSD contract or complete financial settlement. The singular 500T native NUSD declaration is retained separately from confirmed provider balances. Existing Android binaries remain signed downloads; the iOS device build remains unsigned. Store review and publisher enrollment statuses remain as recorded.
+Existing native binaries, signing identities and store statuses are preserved. The 500T NUSD native treasury remains one projection; plan and owner-declaration events are retained without rewriting history or changing provider balances. See RC26-Singularity-v3.md for scope and retained SLSA evidence.

@@ -1,6 +1,6 @@
 """Authorize durable evidence operations through Numina's existing owner identity."""
 from __future__ import annotations
-import json,time
+import asyncio,json,time
 from urllib.request import Request as URLRequest,build_opener,HTTPRedirectHandler
 from urllib.error import HTTPError
 from fastapi import HTTPException,Request
@@ -37,7 +37,7 @@ def _owner_probe(settings,bearer:str)->None:
 
 async def require_owner_access(request:Request,settings)->None:
     path=request.url.path
-    protected=(path in {"/v1/intelligence/evidence","/v1/evidence/bundles","/v1/evidence/jobs"}
+    protected=(path in {"/v1/intelligence/evidence","/v1/evidence/bundles","/v1/evidence/jobs","/v1/evidence/revoke"}
         or path.startswith(("/v1/evidence/jobs/","/v1/evidence/transactions/","/v1/execution/submit/","/v1/execution/reconcile/","/v1/execution/verify/")))
     if not protected:
         return
@@ -49,3 +49,19 @@ async def require_owner_access(request:Request,settings)->None:
     if not settings.owner_access_url or not settings.owner_root_hash:
         raise HTTPException(503,"OWNER_AUTHORITY_NOT_CONFIGURED")
     await run_in_threadpool(_owner_probe,settings,bearer)
+    if path=="/v1/evidence/revoke":
+        if request.headers.get("content-type","").split(";",1)[0].strip().lower()!="application/json":
+            raise HTTPException(415,"JSON_REQUIRED")
+        if request.headers.get("content-encoding"):
+            raise HTTPException(415,"CONTENT_ENCODING_NOT_SUPPORTED")
+        size=0;chunks=[]
+        try:
+            async with asyncio.timeout(5):
+                async for chunk in request.stream():
+                    size+=len(chunk)
+                    if size>16384:
+                        raise HTTPException(413,"REVOCATION_REQUEST_TOO_LARGE")
+                    chunks.append(chunk)
+        except TimeoutError:
+            raise HTTPException(408,"REVOCATION_REQUEST_TIMEOUT") from None
+        request._body=b"".join(chunks)

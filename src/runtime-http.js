@@ -1,11 +1,12 @@
 // Customer identity and provider credentials stay local.
 import {RUNTIME_ORIGIN,RUNTIME_VERSION,EXPECTED_RELEASE} from '../public/runtime-contract.js';
+import {routeRuntimeRevocation} from './runtime-revocation.js';
 export {RUNTIME_ORIGIN};
 export const RUNTIME_READ_PATHS = new Set([
   '/v1/status', '/v1/control/state', '/v1/release/manifest',
   '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers',
   '/v2/network/status', '/readyz', '/v1/preflight', '/v1/bootstrap/attestation',
-  '/v1/release/sbom', '/v1/release/build-provenance'
+  '/v1/release/sbom', '/v1/release/build-provenance', '/v1/release/core-binding'
 ]);
 
 function runtimeError(status, error, extra = {}) {
@@ -14,6 +15,7 @@ function runtimeError(status, error, extra = {}) {
 
 export async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 12000) {
   const path = new URL(request.url).pathname;
+  if(path==='/v1/evidence/revoke')return routeRuntimeRevocation(request,upstreamFetch);
   if (!RUNTIME_READ_PATHS.has(path)) return null;
   if (!['GET','HEAD'].includes(request.method)) return runtimeError(405, 'METHOD_NOT_ALLOWED', {Allow:'GET, HEAD'});
   const controller = new AbortController();
