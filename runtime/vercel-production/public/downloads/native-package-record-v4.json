@@ -98,16 +98,16 @@
     {
       "platform": "android",
       "file": "numina-os-4.0.0-android-source.zip",
-      "bytes": 12204,
-      "sha256": "429d609de5e4c2a8746cb0759a04b33d8049f1c826dc88767b2ec59bac539452",
+      "bytes": 12207,
+      "sha256": "4fde9df9a1776b7b712e2ebb3afb0168ef17884ad7dc52bd4b19536d715c9f68",
       "kind": "source_archive",
       "installable": false
     },
     {
       "platform": "ios",
       "file": "numina-os-4.0.0-ios-source.zip",
-      "bytes": 41267,
-      "sha256": "ff738846915c4eee7f42cd7630859c14fcd3f07362e6641ee083107b248a1589",
+      "bytes": 41270,
+      "sha256": "b4a1ab5bbc4e6fe24a0f4c8cc157a4d6ce7d1d40c7343f05575cee5711df0616",
       "kind": "source_archive",
       "installable": false
     }
@@ -117,6 +117,6 @@
     "record": "/downloads/native-package-record-v3.json",
     "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
   },
-  "sourcePackagedAtUtc": "2026-09-14T19:13:31.325512+00:00",
+  "sourcePackagedAtUtc": "2026-09-14T21:03:36.453363+00:00",
   "nativeDistributionPolicy": "Retain Android 3.0.0 binaries. Reuse the iOS executable with v4 bundle metadata; Apple signing and both hosted publications require successful provider operations."
 }

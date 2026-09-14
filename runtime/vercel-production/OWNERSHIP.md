@@ -12,5 +12,5 @@ Public access to these sources does not itself grant a copyright or trademark li
 
 Historical signed artifacts and frozen source records retain their original bytes and notices. This notice accompanies maintained sources; it does not claim that older binaries have been rebuilt or re-signed.
 
-Rights contact: skott34@gmail.com
+Rights contact: skott34@numinalabs.xyz
 Published notice: https://numinalabs.xyz/ownership

@@ -1,5 +1,7 @@
 # Numina integration kit 4.0.0
 
+Business, integration and support inquiries: [skott34@numinalabs.xyz](mailto:skott34@numinalabs.xyz). Scope work through [Numina services](https://numinalabs.xyz/services) and track accepted requests in [Numina OS](https://numinalabs.xyz/app#service-work).
+
 JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 4.0** through [its application manifest](https://numinalabs.xyz/v4/release/manifest). The application and kit have separate artifact identities. The application's **rc26 runtime dependency** and historical rc20 evidence retain their original versions.
 
 This archive is an integration deliverable. It does not install itself into provider accounts, create a hosted MCP endpoint or establish compatibility with every LLM.

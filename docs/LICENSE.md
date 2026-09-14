@@ -10,4 +10,4 @@ Third-party components and contributions retain their own notices and licenses. 
 
 Numina™ and related claimed marks are identified in OWNERSHIP.md. No trademark registration, patent grant, copyright registration or contributor assignment is asserted by this notice.
 
-Rights contact: skott34@gmail.com
+Rights contact: skott34@numinalabs.xyz
