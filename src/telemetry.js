@@ -18,7 +18,12 @@ export function telemetryRoute(path) {
 export function createTelemetry({service = 'numina-web', clock = () => performance.now(), now = () => Date.now(),
   emit = value => console.log(JSON.stringify(value))} = {}) {
   if (!['numina-web', 'numina-node-gateway', 'numina-verifier'].includes(service)) throw Error('INVALID_TELEMETRY_SERVICE');
-  const started = now(), instanceId = crypto.randomUUID(), windows = new Map();
+  const windows = new Map();
+  let started = null, instanceId = null;
+  // Worker startup cannot generate randomness; initialize on the first request.
+  function initialize() {
+    if (instanceId === null) { instanceId = crypto.randomUUID(); started = now(); }
+  }
   let active = 0, peak = 0, completed = 0, loggingFailures = 0;
   function prune(time) {
     const minute = Math.floor(time / 60000);
@@ -33,6 +38,7 @@ export function createTelemetry({service = 'numina-web', clock = () => performan
   }
   return {
     begin({path = '/', method = 'GET', log = true, phase = 'response_created'} = {}) {
+      initialize();
       const requestId = crypto.randomUUID(), start = clock(), route = telemetryRoute(path);
       const safeMethod = TELEMETRY_METHODS.has(method) ? method : 'OTHER';
       active++; peak = Math.max(peak, active);
@@ -58,6 +64,7 @@ export function createTelemetry({service = 'numina-web', clock = () => performan
       }};
     },
     snapshot() {
+      initialize();
       const time = now(), minute = prune(time), histogram = Array(TELEMETRY_BOUNDS_MS.length + 1).fill(0);
       let count = 0, errors = 0, limited = 0, aborted = 0, durationMs = 0;
       for (const row of windows.values()) {

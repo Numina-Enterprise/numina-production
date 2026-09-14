@@ -4,7 +4,12 @@ import {TELEMETRY_BOUNDS_MS, TELEMETRY_VERSION} from './telemetry.js';
 
 // Admission and observation share one process-local counter. No circuit or owner data is retained.
 export function createQuantumWorkloadTelemetry({now=()=>Date.now(),clock=()=>performance.now(),emit=value=>console.log(JSON.stringify(value))}={}) {
-  const started=now(),instanceId=crypto.randomUUID(),buckets=new Map();
+  const buckets=new Map();
+  let started=null,instanceId=null;
+  // Defer request-scoped runtime operations until a handler uses telemetry.
+  function initialize() {
+    if(instanceId===null){instanceId=crypto.randomUUID();started=now();}
+  }
   let active=0,rateMinute=-1,rateCount=0,loggingFailures=0;
   function minuteAt(time) {
     const minute=Math.floor(time/60000);
@@ -29,6 +34,7 @@ export function createQuantumWorkloadTelemetry({now=()=>Date.now(),clock=()=>per
   }
   return {
     begin({log=true}={}) {
+      initialize();
       const time=now(),row=bucket(time);
       const reason=active>=NUMINA_QUANTUM_LIMITS.concurrentPerProcess?'concurrency_limited'
         :rateCount>=NUMINA_QUANTUM_LIMITS.requestsPerMinutePerProcess?'rate_limited':null;
@@ -63,6 +69,7 @@ export function createQuantumWorkloadTelemetry({now=()=>Date.now(),clock=()=>per
       }};
     },
     snapshot() {
+      initialize();
       const time=now(),minute=minuteAt(time);
       const sum={admitted:0,completed:0,succeeded:0,failed:0,invalid:0,concurrencyLimited:0,rateLimited:0,qubits:0,gates:0,shots:0,computeMs:0};
       let peakActive=active;const histogram=Array(TELEMETRY_BOUNDS_MS.length+1).fill(0);
