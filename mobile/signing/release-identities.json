@@ -3,7 +3,7 @@
   "createdAt": "2026-09-13T20:17:29.240057+00:00",
   "legalEntity": "SK Consulting LLC",
   "packageIdentity": "xyz.numinalabs.app",
-  "googlePlayPackageRegistered": false,
+  "googlePlayPackageRegistered": true,
   "privateKeyStorage": "GitHub Actions encrypted secret NUMINA_RELEASE_SIGNING_VAULT; no private keys in source or local files",
   "android": {
     "release": {
@@ -21,6 +21,13 @@
       "sha256": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
       "issuer": "self-signed Android application identity",
       "expiresAt": "2056-09-05T20:17:29+00:00"
+    },
+    "playAppSigning": {
+      "sha256": "32:0E:E1:C6:E0:7C:2D:82:3E:8E:28:A4:F6:46:0C:73:DF:8A:55:2A:00:42:B6:AA:31:18:57:52:50:54:F4:1C",
+      "issuer": "Google Play App Signing",
+      "observedAtUtc": "2026-09-14T16:14:50.488Z",
+      "source": "Authenticated Google Play Console Digital Asset Links JSON",
+      "storeReleaseSubmitted": false
     }
   },
   "apple": {
