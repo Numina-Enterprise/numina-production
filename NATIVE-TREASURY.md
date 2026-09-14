@@ -29,7 +29,7 @@ Prepared mint and bank requests do not change the native balance. They remain `P
 
 No schema migration is required. An existing control root is required; treasury reads return `NOT_INITIALIZED` until the first authorized treasury write. Reads never initialize or overwrite a record. Initialization adds one event to the existing journal and is rejected once the native treasury exists. Existing provider account observations and uploaded files are retained as reference records; the legacy hardcoded owner bank statement has been removed from the active application.
 
-The canonical native treasury was initialized in production at journal revision 124. The current supported runtime remains rc22; the incomplete recovered rc26 package has not been promoted. Production initialization uses the owner control room and the existing journal.
+The canonical native treasury was initialized in production at journal revision 124. The current application release is Numina v4 with the retained rc26 verifier runtime. Production initialization uses the owner control room and the existing journal; deploying the application does not reinitialize the treasury or mint tokens.
 
 ## Versioned reserve designation
 
@@ -41,4 +41,4 @@ The owner designates Stripe Treasury and the SK Consulting LLC Bank of America S
 
 Existing regression coverage includes persistence across restart, exact large-integer arithmetic, duplicate IDs, competing revisions/heads, authority and origin checks, initialization replay, state/journal corruption, failed persistence, browser proof checking, canonical routing and prepared-request semantics. No test suite was run for this production update, as requested. Build, syntax and artifact checks were performed.
 
-The application and canonical native treasury are live. This does not establish a completed migration of every archived core abstraction. The preserved v1.8 reference source and missing rc26 production package still require review and integration. Existing journal/state capacity limits remain enforced rather than silently creating a new root.
+The application and canonical native treasury are live. The retained rc26 verifier includes the preserved v1.8 frozen core; its historical provenance remains unchanged. The blockchain journal and NUSD capability status are served from the canonical production service. Token minting, redemption and external settlement remain subject to their actual activation and provider-evidence requirements. Existing journal/state capacity limits remain enforced rather than silently creating a new root.
