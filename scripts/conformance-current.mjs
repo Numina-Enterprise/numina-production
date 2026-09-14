@@ -7,10 +7,10 @@ const version=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)
 const get=async path=>{const response=await fetch(origin+path,{signal:AbortSignal.timeout(15000),redirect:'error'});assert.equal(response.status,200,path);return response;};
 const results=[];
 const check=(name,fn)=>{fn();results.push({name,pass:true});};
-const manifestBytes=await (await get('/v3/release/manifest')).text(),manifest=JSON.parse(manifestBytes);
+const manifestBytes=await (await get('/v'+version.split('.')[0]+'/release/manifest')).text(),manifest=JSON.parse(manifestBytes);
 check('current application identity',()=>{assert.equal(manifest.version,version);assert.equal(manifest.schema,'numina.application-release.v2');assert.match(manifest.build_id,/^[0-9a-f]{64}$/);});
 check('one root across five layers',()=>{assert.equal(manifest.source_alignment.root,'NUMINA');assert.deepEqual(manifest.source_alignment.layers,['L1','L2','L3','L4','L5']);assert.equal(manifest.core_release_binding.rootCount,1);assert.ok(manifest.core_release_binding.release.endsWith(RUNTIME_VERSION));});
-for(const path of ['/v2/release/manifest','/downloads/application-release-v3.json','/downloads/application-release-v2.json']){
+for(const path of ['/v2/release/manifest','/v3/release/manifest','/v4/release/manifest','/downloads/application-release-v4.json','/downloads/application-release-v3.json','/downloads/application-release-v2.json']){
  const bytes=await (await get(path)).text();check('identical manifest alias '+path,()=>assert.equal(bytes,manifestBytes));
 }
 const architecture=await (await get('/api/control/v2/architecture')).json();

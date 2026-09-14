@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {nvidiaNimRoundTrip,nimEndpoint} from '../integrations/numina/examples/nvidia-nim.mjs';
 import {EXPECTED_RELEASE} from '../integrations/numina/src/runtime-contract.js';
-const manifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'3.0.0',release:'numina-v3.0.0',artifact_digest_algorithm:'sha256',build_id:'0'.repeat(64),artifacts:[{path:'test-fixture',sha256:'1'.repeat(64)}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
+const manifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',artifact_digest_algorithm:'sha256',build_id:'0'.repeat(64),artifacts:[{path:'test-fixture',sha256:'1'.repeat(64)}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
 const call=(id='call1',name='numina_application_release')=>({id,type:'function',function:{name,arguments:'{}'}});
 function harness(calls=[call()],release=manifest()){
  const requests=[],reads=[],configs=[];
@@ -24,7 +24,7 @@ test('NIM discovery binds rc26, retains tool call IDs and limits the model round
  assert.equal(h.requests[1].messages[2].tool_call_id,'call1');
  assert.ok(h.requests.every(r=>r.max_tokens===512&&r.stream===false&&r.model==='test-model'));
  assert.ok(h.requests[0].tools.every(t=>!['numina_nusd_request','numina_nusd_quote'].includes(t.function.name)));
- assert.ok(h.reads.every(r=>r.url==='https://numinalabs.xyz/v3/release/manifest'&&!r.options.headers.Authorization&&r.options.method==='GET'));
+ assert.ok(h.reads.every(r=>r.url==='https://numinalabs.xyz/v4/release/manifest'&&!r.options.headers.Authorization&&r.options.method==='GET'));
  assert.deepEqual(h.configs,[{baseURL:'https://nim.example.test/v1',maxRetries:0,timeout:15000}]);
 });
 test('NIM cannot reach the model when the application reports a different runtime',async()=>{

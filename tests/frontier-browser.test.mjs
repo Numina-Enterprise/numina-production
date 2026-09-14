@@ -37,8 +37,8 @@ function harness(view,override=()=>null){
     else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'}};
     else if(path.endsWith('/stripe-treasury'))return Response.json({error:'Unavailable'},{status:503});
     else if(path.endsWith('/state'))body={revision:1,requests:[]};
-    else if(path==='/v3/release/manifest')body={version:'3.0.0',frontier:{version:'3.0.0'},distribution:{codex_plugin:{version:'3.0.0'}}};
-    else body={livemode:true,version:'3.0.0',providers:[]};
+    else if(path==='/v4/release/manifest')body={version:'4.0.0',frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}};
+    else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
   };
   const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},NUMINA_LAYERS:{layers:[]}});

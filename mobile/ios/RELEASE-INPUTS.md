@@ -1,6 +1,8 @@
 # iOS release inputs still required
 
-Status updated September 13, 2026: the unsigned 3.0.0 device package compiled in hosted run 34785069076. Apple-issued distribution signing and store publication remain unverified.
+Current source is 4.0.0 with build number 3; compilation and signing are pending.
+
+Historical status updated September 13, 2026: the unsigned 3.0.0 device package compiled in hosted run 34785069076. Apple-issued distribution signing and store publication remain unverified.
 
 | Input | Current state / action needed |
 | --- | --- |

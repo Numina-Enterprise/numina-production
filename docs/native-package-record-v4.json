@@ -1,0 +1,58 @@
+{
+  "schema": "numina.native-package.v1",
+  "proposedPackageIdentity": "xyz.numinalabs.app",
+  "packageIdentityRegisteredOrConfirmed": false,
+  "hostedWorkspace": "https://numinalabs.xyz/app",
+  "sdkBinariesDependencyCachesOrCredentialsIncluded": false,
+  "slsaLevelClaimed": null,
+  "nusdActivationPerformed": false,
+  "storeListingOrApprovalClaimed": false,
+  "applicationVersion": "4.0.0",
+  "versionCode": 3,
+  "android": {
+    "status": "source_updated_build_pending",
+    "binaries": [],
+    "compiled": false,
+    "signingPerformed": false,
+    "signatureVerification": false,
+    "deviceInstalled": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "releaseIdentity": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+    "uploadIdentity": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34"
+  },
+  "ios": {
+    "status": "source_updated_build_pending",
+    "binaries": [],
+    "compiled": false,
+    "signed": false,
+    "ipaCreated": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "nativeAuthenticatedSessionSupported": false
+  },
+  "sourceArchives": [
+    {
+      "platform": "android",
+      "file": "numina-os-4.0.0-android-source.zip",
+      "bytes": 10534,
+      "sha256": "e57d552c3e58070edb73de23fac1a2ef62f3698a2587c20b9c302794b59c8fac",
+      "kind": "source_archive",
+      "installable": false
+    },
+    {
+      "platform": "ios",
+      "file": "numina-os-4.0.0-ios-source.zip",
+      "bytes": 39475,
+      "sha256": "1f500548fec1ee6b929e2844586b5bcb0284d4645f372fb4f9ee72b7a8ebb818",
+      "kind": "source_archive",
+      "installable": false
+    }
+  ],
+  "previousRelease": {
+    "version": "3.0.0",
+    "record": "/downloads/native-package-record-v3.json",
+    "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
+  },
+  "sourcePackagedAtUtc": "2026-09-14T18:31:27.427824+00:00"
+}

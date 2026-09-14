@@ -6,7 +6,7 @@ import {EXPECTED_RELEASE} from '../integrations/numina/src/runtime-contract.js';
 function harness(mode='ok'){
  const calls=[],numinaCalls=[];let models=0;
  const options={endpoint:'https://nim.example.test/v1',model:'test-model',apiKey:'fixture-secret',
-  numinaFetch:async(url,init)=>{numinaCalls.push({url,init});return Response.json({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'3.0.0',release:'numina-v3.0.0',artifact_digest_algorithm:'sha256',build_id:'0'.repeat(64),artifacts:[{path:'fixture',sha256:'1'.repeat(64)}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});},
+  numinaFetch:async(url,init)=>{numinaCalls.push({url,init});return Response.json({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',artifact_digest_algorithm:'sha256',build_id:'0'.repeat(64),artifacts:[{path:'fixture',sha256:'1'.repeat(64)}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});},
   fetchImpl:async(url,init)=>{
    calls.push({url,init});
    if(mode==='offline')throw Error('fixture-secret provider failure');
@@ -17,7 +17,7 @@ function harness(mode='ok'){
    models++;
    const model=(mode==='misrouted-first'&&models===1)||(mode==='misrouted-second'&&models===2)?'different':'test-model';
    if(models===1)return Response.json({model,choices:[{message:mode==='no-tool'?{role:'assistant',content:'I am ready'}:{role:'assistant',tool_calls:[{id:'call1',type:'function',function:{name:'numina_application_release',arguments:'{}'}}]}}]});
-   return Response.json({model,choices:[{message:mode==='unfinished'?{role:'assistant',content:null,tool_calls:[{id:'more'}]}:{role:'assistant',content:'Numina 3.0.0'}}]});
+   return Response.json({model,choices:[{message:mode==='unfinished'?{role:'assistant',content:null,tool_calls:[{id:'more'}]}:{role:'assistant',content:'Numina 4.0.0'}}]});
   }};
  return {options,calls,numinaCalls};
 }

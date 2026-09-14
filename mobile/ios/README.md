@@ -1,6 +1,8 @@
-# Numina 3.0.0 — iOS source candidate
+# Numina 4.0.0 — iOS source candidate
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
+
+Current v4 source compilation, Apple signing and store submission are pending. See `../../docs/native-package-record-v4.json`.
 
 ## Candidate settings
 
@@ -8,12 +10,12 @@ This folder contains a native SwiftUI/WKWebView Xcode project that opens `https:
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 3.0.0 / 2 |
+| Version / build | 4.0.0 / 3 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
 
-For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 2 must also be checked against any existing release history.
+For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 3 must also be checked against any existing release history.
 
 ## Included behavior
 
@@ -49,7 +51,7 @@ The app icon asset catalog now contains an opaque 1024-pixel rendering of the ex
 
 Apple documents persistent storage in [WKWebsiteDataStore](https://developer.apple.com/documentation/webkit/wkwebsitedatastore). Current review requirements and privacy details were checked against the official sources linked in `RELEASE-INPUTS.md`.
 
-## Current v3 build record
+## Historical v3 build record
 
 Hosted build 34867504707 compiled the unsigned device release with its AppIcon successfully on 2026-09-14 at 16:16:32 UTC from commit `fd01df039f9e920afa29361a0df32709faa7dd08`. The downloaded artifact contains Assets.car and AppIcon metadata for iPhone and iPad. The unsigned app ZIP is downloadable; no signed IPA or App Store submission exists. Exact hashes, the prior build, and remaining signing status are in `../../docs/native-package-record-v3.json`. The earlier preparation record above is historical.
 

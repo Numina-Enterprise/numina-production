@@ -23,7 +23,7 @@
   },
   "architecture": "/api/control/v2/architecture",
   "head": "/api/control/v2/head",
-  "release": "/v3/release/manifest",
+  "release": "/v4/release/manifest",
   "treasuryEvidence": {
     "route": "/api/control/v2/treasury/evidence",
     "access": "authenticated_owner",

@@ -1,6 +1,6 @@
-# Package status — 3.0.0
+# Package status — 4.0.0
 
-This source alignment release uses the Numina 3 application manifest at `/v3/release/manifest`, six default discovery tools and the existing authenticated control MCP bridge. The manifest schema remains `numina.application-release.v2`; protocol/schema versions do not rename the product.
+This source alignment release uses the Numina 4 application manifest at `/v4/release/manifest`, six default discovery tools and the existing authenticated control MCP bridge. The manifest schema remains `numina.application-release.v2`; protocol/schema versions do not rename the product.
 
 Packaging regenerates provider descriptors, distribution metadata, the file inventory and archive digests from the current source. No application tests, live model-provider calls, host installation or registry publication are performed by packaging. Source syntax and artifact integrity checks are recorded separately from provider acceptance.
 

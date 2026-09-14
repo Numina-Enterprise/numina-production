@@ -152,9 +152,9 @@ test('integration reads the canonical native record with owner credentials only 
     const api=treasury(db);await api.writeTreasury(await command(db));const current=await api.readTreasury(),calls=[];
     const client=new NuminaClient({baseUrl:'https://numina.test',token:key,fetch:async(url,options)=>{
       calls.push(url);
-      if(url.endsWith('/v3/release/manifest')){
+      if(url.endsWith('/v4/release/manifest')){
         assert.equal(options.headers.Authorization,undefined);
-        return Response.json({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'3.0.0',release:'numina-v3.0.0',artifact_digest_algorithm:'sha256',build_id:current.head,artifacts:[{path:'isolated-test',sha256:current.head}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
+        return Response.json({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',artifact_digest_algorithm:'sha256',build_id:current.head,artifacts:[{path:'isolated-test',sha256:current.head}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
       }
       assert.equal(url,'https://numina.test/api/control/v1/treasury');assert.equal(options.headers.Authorization,'Bearer '+key);return Response.json(current);
     }});

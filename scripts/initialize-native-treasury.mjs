@@ -13,7 +13,7 @@ async function read(path,authorized=false){
   if(!response.ok)throw Error('Treasury preparation failed: HTTP '+response.status);
   return response.json();
 }
-const application=await read('/v2/release/manifest');
+const application=await read('/v4/release/manifest');
 if(application.runtime_dependency?.version!==EXPECTED_RELEASE.production_version||application.runtime_dependency?.release!==EXPECTED_RELEASE.release)throw Error('Application does not target configured production');
 const current=await read('/api/control/v1/treasury',true);
 if(current.status==='READY'){console.log('Canonical treasury is already initialized; no write attempted.');process.exit(0);}

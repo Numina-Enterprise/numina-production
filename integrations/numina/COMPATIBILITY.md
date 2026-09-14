@@ -1,6 +1,6 @@
-# Numina 3.0 compatibility
+# Numina 4.0 compatibility
 
-Documentation reviewed September 12, 2026. The formats below are implemented in source and generated descriptors. **No 3.0 tests or live provider acceptance checks were run.** The older 0.2.0 checks remain historical evidence only.
+Documentation reviewed September 12, 2026. The formats below are implemented in source and generated descriptors. **No 4.0 tests or live provider acceptance checks were run.** The older 0.2.0 checks remain historical evidence only.
 
 | Interface | Host registration | Result format |
 | --- | --- | --- |
