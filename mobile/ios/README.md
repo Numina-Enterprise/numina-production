@@ -45,7 +45,7 @@ Before a signed archive, the owner must confirm the app identity, configure thei
 
 Prepared on Windows, September 12, 2026. `xcodebuild`, `swift`, and `plutil` were not available on PATH. The project was not compiled, launched, tested, signed, archived, validated in Xcode, or submitted. No tests or test target were added. No Apple account, signing credential, key generation, paid service, or hosted-site mutation was used. Source inspection is not a successful native build.
 
-The app icon asset catalog and final privacy manifest are intentionally not claimed complete. The project's unconfigured icon permits source preparation but is a release blocker. No `.ipa`, `.xcarchive`, signing material, or simulated store receipt is included.
+The app icon asset catalog now contains an opaque 1024-pixel rendering of the existing Numina mark and is configured in the Xcode target. The final privacy manifest and store review remain release inputs. No `.ipa`, `.xcarchive`, signing material, or simulated store receipt is included.
 
 Apple documents persistent storage in [WKWebsiteDataStore](https://developer.apple.com/documentation/webkit/wkwebsitedatastore). Current review requirements and privacy details were checked against the official sources linked in `RELEASE-INPUTS.md`.
 

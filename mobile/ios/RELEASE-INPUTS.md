@@ -9,7 +9,7 @@ Status updated September 13, 2026: the unsigned 3.0.0 device package compiled in
 | Signing and distribution | The owner-approved CSR and owner-reported issuance are recorded in `../signing/release-identities.json`. Apple issuance, active membership and a usable provisioning profile are not verified; no signed IPA exists. |
 | Native sign-in | Browser continuation is implemented. Returning a signed-in session to the native app is not implemented or verified. |
 | Native utility | This is a hosted-web wrapper. Apple guideline 4.2 requires sufficient app functionality beyond merely repackaging a website. This source does not establish review eligibility. |
-| Branding | Add an approved iOS app-icon asset catalog, including store artwork, then configure `ASSETCATALOG_COMPILER_APPICON_NAME`. Existing web icons are not asserted to meet iOS release requirements. |
+| Branding | The AppIcon catalog contains the existing Numina vector mark rendered as an opaque 1024-pixel PNG, and the Xcode target selects it. Compile the catalog and inspect the resulting app before submission. |
 | Privacy | Review the hosted application, sign-in, hosting/storage providers, Google Fonts, payment provider and any other data flows. Complete accurate App Store privacy disclosures and any applicable privacy-manifest declarations. No blanket “data not collected” statement is supplied. |
 | Privacy policy | `/privacy` is linked in the native menu. Confirm that the published notice covers the distributed iOS experience and all actual data flows. |
 | Account deletion | Saved web privacy source says automated account deletion is unavailable. Determine and implement the required in-app deletion route where account creation is offered. |
