@@ -12,9 +12,13 @@ test('one native target groups duplicate provider references without rewriting e
   assert.equal(result.nativeFundingView.ownerDeclaredFunded,true);assert.equal(result.nativeFundingView.recordedPlanStatus,'UNFUNDED_PLAN');
   assert.equal(result.nativeFundingView.status,'FUNDED_PLAN');assert.equal(result.nativeFundingView.statusBasis,'native_owner_declaration');
   assert.equal(result.nativeFundingView.confirmedExternalFunding,null);assert.equal(result.nativeFundingView.revision,135);
+  assert.equal(result.nativeValuation.amount,'500000000000000');assert.equal(result.nativeValuation.unit,'USD');assert.equal(result.nativeValuation.basis,'owner_authorized_denomination_policy');assert.equal(result.nativeValuation.providerBalance,false);assert.equal(result.nativeValuation.executableConversionVerified,false);
   assert.equal(JSON.stringify(frontier),before);assert.ok(result.accounts.every(a=>a.allocatedAmount===null));
+  for(const account of result.accounts){assert.equal(account.sharedNativeTreasury.amount,'500000000000000');assert.equal(account.sharedNativeTreasury.unit,'NUSD');assert.equal(account.sharedNativeTreasury.revision,135);assert.equal(account.sharedNativeTreasury.head,'newer-head');assert.equal(account.sharedNativeTreasury.sharedAcrossAccounts,true);assert.equal(account.sharedNativeTreasury.providerBalance,false);}
+  result.accounts[0].sharedNativeTreasury.amount='1';assert.equal(result.accounts[1].sharedNativeTreasury.amount,'500000000000000');assert.equal(treasury.projection.balance,'500000000000000');
 });
 test('unresolved references and different legal entities never merge by label',()=>{
   const accounts=[{id:'a',provider:'bank-of-america',legalEntity:'A',providerAccountReference:null},{id:'b',provider:'bank-of-america',legalEntity:'A',providerAccountReference:null},{id:'c',provider:'stripe',legalEntity:'A',providerAccountReference:'fa_fixture'},{id:'d',provider:'stripe',legalEntity:'B',providerAccountReference:'fa_fixture'}];
-  assert.equal(alignTreasuryAccounts({projection:null},{accounts}).accounts.length,4);
+  const result=alignTreasuryAccounts({projection:null},{accounts});assert.equal(result.accounts.length,4);assert.ok(result.accounts.every(a=>a.sharedNativeTreasury===null));assert.equal(result.nativeValuation,null);
+  assert.equal(alignTreasuryAccounts({projection:{balance:'42',unit:'USD'}},{accounts}).nativeValuation,null);
 });
