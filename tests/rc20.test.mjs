@@ -123,7 +123,8 @@ test('packaged homepage links current runtime verification and preserves the con
 
   assert.match(home,/href="\/control"/);
 
-  assert.match(control,/<title>Numina 3 — Control plane<\/title>/);
+  const applicationMajor=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8')).version.split('.')[0];
+  assert.ok(control.includes('<title>Numina '+applicationMajor+' — Control plane</title>'));
 
   assert.match(control,/href="\/control" aria-current="page"/);
 
