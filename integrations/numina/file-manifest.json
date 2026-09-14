@@ -60,13 +60,13 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 2722,
-      "sha256": "ef934e2a62a65540175e1541d90b82ba15927f190646b18ffe0825a709112f4c"
+      "bytes": 2837,
+      "sha256": "b87ffcff706f1a9855458220e0a1d3e9c2423ae78ce0f96e5f1cfa49dc529ce7"
     },
     {
       "path": "examples/NVIDIA.md",
-      "bytes": 3715,
-      "sha256": "075c94ab9c1fb93e338dd5271c6db175d474058bbbaf78e3226ac9ce1c063eb3"
+      "bytes": 6496,
+      "sha256": "9dcfe012c31f8c18772ba615feb40db6d79d35187fd24aced18b9535f5236b71"
     },
     {
       "path": "examples/mcp-host.example.json",
@@ -102,6 +102,16 @@
       "path": "examples/setup-nvidia-wsl.ps1",
       "bytes": 2158,
       "sha256": "6d1e2464aa2292c26ff40ef66276eb5cec828ed2d5adaab4a18c084934cfc60c"
+    },
+    {
+      "path": "examples/start-nvidia-nim.sh",
+      "bytes": 2721,
+      "sha256": "313e18c2c2c48488ccd3dc0f7f79a5d03a600a0aecdaca53c6cecc3f963150aa"
+    },
+    {
+      "path": "examples/verify-nvidia-nim.mjs",
+      "bytes": 5351,
+      "sha256": "fff60201da4689caffe2d2125b690f87704090a16745353bfa8a9ae853c54354"
     },
     {
       "path": "history/0.2.0/VALIDATION.md",
@@ -185,8 +195,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 5115,
-      "sha256": "1baed3dde2a71be4a43b1b3d33efff067fa12fae5abbab36613308103fd9a35a"
+      "bytes": 5210,
+      "sha256": "fabfee0ec53cb56c273e4945e6e753627561f42bb1c2cca3326f2e811c0f2d22"
     },
     {
       "path": "src/client.js",
@@ -231,7 +241,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "2f2a243c5bc74f8e7af6dd34ba4cc2652c6afd46df751f8daf0f35c4c1428fbd"
+      "sha256": "39b66f9f058d95ddf914ff2b4dc42c0e5a25dc988a150943c523f0120a99b03a"
     }
   ]
 }

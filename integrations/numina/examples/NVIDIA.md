@@ -35,4 +35,33 @@ Run the included Windows bootstrap in stages using PowerShell 7:
 
 The script follows [NVIDIA's WSL setup](https://docs.nvidia.com/nim/wsl2/1.0.0/getting-started.html), installs Podman and NVIDIA Container Toolkit inside Ubuntu, and generates CDI GPU access. It does not restart Windows, change the Windows display driver, download a model, or open an unauthenticated public port. `nvidia-provider-policy.json` defines Numina as provider for the owner-enrolled GeForce RTX target group; membership is not a blanket model-compatibility assertion or NVIDIA authorization.
 
-References: [NIM tools and MCP](https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html), [NIM 1.15 support matrix](https://docs.nvidia.com/nim/large-language-models/1.15.0/supported-models.html), [NVIDIA product-specific terms](https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+## Start and observe the selected local NIM
+
+In the GPU-enabled Ubuntu distribution, `start-nvidia-nim.sh` provides `check`, `pull`, `profiles` and `start` stages. It prompts for the NGC key without echo and keeps registry login in a temporary auth file. The NIM process receives the key for model download; restrict container administration to trusted operators because container environment variables are visible to them. No key is included in the archive or passed on a command line.
+
+Authenticate in [NGC](https://org.ngc.nvidia.com/account/api-keys), select the authorized organization and obtain a key with the required Catalog permissions. Verify the intended model's license separately. Resolve its actual registry digest and select a supported 64-character model profile from `profiles`; do not copy a digest from a different Numina artifact.
+
+```bash
+bash start-nvidia-nim.sh check
+# Set NUMINA_NIM_IMAGE to the reviewed nvcr.io/nim/...@sha256:... reference.
+bash start-nvidia-nim.sh pull
+bash start-nvidia-nim.sh profiles
+# Set NIM_MODEL_PROFILE to the chosen compatible profile digest.
+bash start-nvidia-nim.sh start
+```
+
+The start stage binds only `127.0.0.1:8000`, uses a dedicated cache volume and refuses to replace an existing `numina-nim` container. It never changes Numina's root or treasury. Model initialization can take time; container startup is not a readiness result.
+
+Use Node.js 24+ on a host that can reach that loopback listener:
+
+```bash
+export NUMINA_NIM_BASE_URL=http://127.0.0.1:8000/v1
+export NUMINA_NIM_MODEL=meta/llama-3.1-8b-instruct
+node verify-nvidia-nim.mjs nim-readiness.json
+```
+
+This fresh observation checks both health endpoints, the exact model ID and a completed discovery-tool round trip against the existing Numina release. It exits nonzero on failure and writes each result separately without saving provider credentials or model output. It refuses to overwrite an existing observation. `NVIDIA_API_KEY` is optional for an authenticated HTTPS gateway and is sent only to the configured NIM endpoint; `NGC_API_KEY` is for registry/model access and is not automatically reused as an inference credential.
+
+Public multi-user enablement remains a separate operation: verify the applicable NVIDIA subscription/program license, covered hardware and model rights, then validate the TLS gateway, per-user authorization, tenant isolation and resource limits. An endpoint check or builder-signed Numina source statement cannot verify an NVIDIA entitlement. The probe therefore always leaves public-service readiness false; it makes no treasury write or financial submission.
+
+References: [NGC keys](https://docs.nvidia.com/ngc/latest/ngc-user-guide.html), [NIM 1.8 startup](https://docs.nvidia.com/nim/large-language-models/1.8.0/getting-started.html), [NIM tools and MCP](https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html), [NIM 1.15 support matrix](https://docs.nvidia.com/nim/large-language-models/1.15.0/supported-models.html), [NVIDIA product-specific terms](https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).

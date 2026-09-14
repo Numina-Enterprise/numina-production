@@ -1,12 +1,12 @@
 {
   "schema": "numina.integration.archive.v2",
   "version": "3.0.0",
-  "revision": "numina-root-v3.0.0",
+  "revision": "numina-v3-production",
   "archive": "numina-integration-kit-v3.0.0.zip",
-  "bytes": 72040,
-  "sha256": "1b0ebc9cbaf26c9b1068832aec91b5d551e3de12abaceecc993bcef74e9a1c86",
-  "packagedAtUtc": "2026-09-14T16:17:53.054682+00:00",
-  "sourceFiles": 47,
+  "bytes": 77260,
+  "sha256": "8964dce1ca8a28a2d69539552270a7807345e27159c1eb1cc943c593ed2f3339",
+  "packagedAtUtc": "2026-09-14T16:53:29.494047+00:00",
+  "sourceFiles": 49,
   "testsRun": false,
   "defaultTools": [
     "numina_read_treasury",
