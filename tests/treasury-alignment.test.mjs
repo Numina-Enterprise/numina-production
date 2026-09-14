@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {alignTreasuryAccounts} from '../src/treasury-alignment.js';
+import {alignTreasuryAccounts,canonicalTreasuryReference} from '../src/treasury-alignment.js';
 test('one native target groups duplicate provider references without rewriting evidence',()=>{
   const treasury={revision:135,head:'newer-head',verification_scope:'Numina-native model and journal integrity',projection:{balance:'500000000000000',unit:'NUSD'}};
   const frontier={accounts:[{id:'stripe-first',provider:'stripe',legalEntity:'SK Consulting LLC',providerAccountReference:'fa_fixture',accountLabel:'Stripe Treasury',linkedAt:1},{id:'bank',provider:'bank-of-america',legalEntity:'SK Consulting LLC',providerAccountReference:null,accountLabel:'Savings',linkedAt:2},{id:'stripe-second',provider:'stripe',legalEntity:'SK Consulting LLC',providerAccountReference:'fa_fixture',accountLabel:'Bank of America Savings',linkedAt:3}],fundingPlan:{status:'UNFUNDED_PLAN',eventId:'plan-fixture',target:{amount:'500000000000000',unit:'NUSD'},confirmedFunding:null},fundingDeclaration:{FUNDED_PLAN:true,eventId:'declaration-fixture'}};
@@ -16,6 +16,17 @@ test('one native target groups duplicate provider references without rewriting e
   assert.equal(JSON.stringify(frontier),before);assert.ok(result.accounts.every(a=>a.allocatedAmount===null));
   for(const account of result.accounts){assert.equal(account.sharedNativeTreasury.amount,'500000000000000');assert.equal(account.sharedNativeTreasury.unit,'NUSD');assert.equal(account.sharedNativeTreasury.revision,135);assert.equal(account.sharedNativeTreasury.head,'newer-head');assert.equal(account.sharedNativeTreasury.sharedAcrossAccounts,true);assert.equal(account.sharedNativeTreasury.providerBalance,false);}
   result.accounts[0].sharedNativeTreasury.amount='1';assert.equal(result.accounts[1].sharedNativeTreasury.amount,'500000000000000');assert.equal(treasury.projection.balance,'500000000000000');
+});
+test('one stable treasury identity spans accounts and revisions without joining roots or units',()=>{
+  const treasury={root:'email:owner@example.test',revision:135,head:'a'.repeat(64),projection:{balance:'500000000000000',unit:'NUSD'}};
+  const canonical=canonicalTreasuryReference(treasury),later=canonicalTreasuryReference({...treasury,revision:136,head:'b'.repeat(64)});
+  assert.equal(canonical.id,later.id);assert.notEqual(canonical.head,later.head);
+  assert.notEqual(canonical.id,canonicalTreasuryReference({...treasury,root:'email:another@example.test'}).id);
+  assert.equal(canonicalTreasuryReference({...treasury,root:null}),null);
+  assert.equal(canonicalTreasuryReference({...treasury,projection:{unit:'USD',balance:'500000000000000'}}),null);
+  const view=alignTreasuryAccounts(treasury,{accounts:[{id:'a',provider:'stripe',legalEntity:'A'},{id:'b',provider:'bank-of-america',legalEntity:'A'}]});
+  for(const account of view.accounts){assert.equal(account.treasuryRef.id,canonical.id);assert.equal(Object.hasOwn(account.treasuryRef,'amount'),false);assert.equal(account.treasuryRef.evidenceRoute,canonical.evidence.route);}
+  assert.equal(view.canonicalTreasury.accounting.balanceCount,1);assert.equal(view.canonicalTreasury.accounting.providerCurrenciesCombined,false);
 });
 test('unresolved references and different legal entities never merge by label',()=>{
   const accounts=[{id:'a',provider:'bank-of-america',legalEntity:'A',providerAccountReference:null},{id:'b',provider:'bank-of-america',legalEntity:'A',providerAccountReference:null},{id:'c',provider:'stripe',legalEntity:'A',providerAccountReference:'fa_fixture'},{id:'d',provider:'stripe',legalEntity:'B',providerAccountReference:'fa_fixture'}];

@@ -24,7 +24,23 @@
   "architecture": "/api/control/v2/architecture",
   "head": "/api/control/v2/head",
   "release": "/v3/release/manifest",
-  "treasuryEvidence": {"route":"/api/control/v2/treasury/evidence","access":"authenticated_owner","fundingStatus":"server_observed_evidence_required"},
+  "treasuryEvidence": {
+    "route": "/api/control/v2/treasury/evidence",
+    "access": "authenticated_owner",
+    "fundingStatus": "server_observed_evidence_required",
+    "canonicalView": "/api/control/v2/treasury/accounts",
+    "referenceSchema": "numina.treasury.canonical-reference.v1",
+    "coverage": [
+      "provider_observations",
+      "reserve_allocation",
+      "redemption",
+      "funding",
+      "supporting_documents"
+    ],
+    "nativeTreasuryRecordCount": 1,
+    "recordsSchema": "numina.treasury.record-sources.v1",
+    "recordSeparation": "Each provider balance, currency, reserve allocation and redemption record retains its own source and verification status"
+  },
   "providerEvidenceRequired": true,
   "sourceAlignment": "/source-alignment.json"
 }
