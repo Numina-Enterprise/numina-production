@@ -66,16 +66,16 @@
     {
       "platform": "android",
       "file": "numina-os-3.0.0-android-source.zip",
-      "bytes": 9179,
-      "sha256": "bf8f4a1737e3b5a3eab2433fe095b21d0d7a88dd59681f4ff03c459c7003191c",
+      "bytes": 10257,
+      "sha256": "0d90b75981e150e0cfe601f3da30b25838371b697c99c4262aadb3060765d51a",
       "kind": "source_archive",
       "installable": false
     },
     {
       "platform": "ios",
       "file": "numina-os-3.0.0-ios-source.zip",
-      "bytes": 13610,
-      "sha256": "578bdfa9917e1ddeeff09e5ff3d532cd76a833c5fe4af0cbc07c3c224b21022d",
+      "bytes": 14646,
+      "sha256": "c0011e661879d2445292c1c4e19e9a66cb2b1b554dfb71b75bf909a197b6442e",
       "kind": "source_archive",
       "installable": false
     }
@@ -86,5 +86,5 @@
   "storeListingOrApprovalClaimed": false,
   "packagedAtUtc": "2026-09-13T21:49:52.493007+00:00",
   "recordedAtUtc": "2026-09-13T21:56:35.907Z",
-  "sourcePackagedAtUtc": "2026-09-14T00:43:57.812558+00:00"
+  "sourcePackagedAtUtc": "2026-09-14T04:51:03.991365+00:00"
 }

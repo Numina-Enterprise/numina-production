@@ -25,6 +25,7 @@ const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join('')
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const record={
  brand:{name:'Numina',slogan:'Intelligence in motion.'},
+ intellectual_property:{owner:'SK Consulting LLC',record:'/ownership.json',notice:'/ownership',source_notice:'/OWNERSHIP.md',scope:'Numina-owned material',third_party_licenses_retained:true},
  core_release_binding:{endpoint:'/v1/release/core-binding',release:EXPECTED_RELEASE.release,coreVersion:EXPECTED_RELEASE.core_version,frozenCoreManifestRoot:EXPECTED_RELEASE.frozen_core_manifest_root,rootCount:1},
  evidence_revocation:{endpoint:'/v1/evidence/revoke',method:'POST',authentication:'existing_owner_bearer',required:['record_id','reason'],bulkSupported:false,originalRecordsRetained:true,firstSignedRevocationRetained:true},
  native_treasury_alignment:{endpoint:'/api/control/v2/treasury/accounts',access:'owner_authenticated',unit:'NUSD',aggregation:'one native projection shared across account views',originalSignedEventsRetained:true,externalFundingCreatedByRelease:false},
@@ -35,7 +36,7 @@ const record={
  livemode:true,environment:'production',architecture:{layers:['L1','L2','L3','L4','L5'],manifest:'/api/control/v2/architecture',head:'/api/control/v1/health'},frontier:{version:'3.0.0',discoveryMcp:'/api/control/v2/discovery-mcp',workspace:'/control-room',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},
  product:'Numina',version:JSON.parse(readFileSync('package.json')).version,release:'numina-v3.0.0',
  release_channel:'production',build_id:root,artifact_digest_algorithm:'sha256',
- artifact_digest_method:'SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes the two generated release manifests',
+ artifact_digest_method:'SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes the three generated release manifest aliases',
  workerSha256:artifacts.find(file=>file.path==='server/index.js').sha256,
  surfaces:['website','Numina OS','installable mobile web app'],
  treasury_records:{policy:'/api/control/v2/treasury/policy',view:'/control',access:'owner_authenticated',canonical_native:'/api/control/v1/treasury',read_interface:'readTreasury()',write_interface:'writeTreasury(event)',authority:'NUMINA',system_of_record:'NUMINA',unit:'NUSD',legacy_statement_redirect:'/api/control/v1/treasury-attestation',provider_balances:'/api/control/v1/stripe-treasury',supporting_documents:'/api/control/v1/treasury-documents',signed_evidence:'/api/control/v2/treasury/evidence',canonical_account_view:'/api/control/v2/treasury/accounts',canonical_reference_schema:'numina.treasury.canonical-reference.v1',evidence_coverage:['provider_observations','reserve_allocation','redemption','funding','supporting_documents'],evidence_tool:'numina_treasury_evidence',evidence_access:'authenticated_owner',record_sources_shared_with:'Numina OS',aggregation:'one canonical Numina-native projection; provider observations are reference records'},

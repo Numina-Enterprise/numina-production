@@ -1,7 +1,7 @@
 {
   "name": "numina",
   "version": "3.0.0",
-  "description": "Numina production architecture, capabilities and canonical journal head.",
+  "description": "Intelligence in motion. Read Numina OS architecture, capabilities and canonical journal head.",
   "author": {
     "name": "Numina Labs · SK Consulting LLC"
   },
@@ -11,8 +11,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Numina",
-    "shortDescription": "One head across five production architecture layers.",
-    "longDescription": "Connect Codex to Numina production for live architecture, provider capability and journal-head discovery. Authorized operations use Numina’s separately authenticated control endpoint.",
+    "shortDescription": "One core, one root and five architecture layers.",
+    "longDescription": "Connect Codex to Numina OS 3 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint.",
     "developerName": "Numina Labs",
     "category": "Productivity",
     "capabilities": [
