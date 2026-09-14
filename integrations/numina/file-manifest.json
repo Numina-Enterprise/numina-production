@@ -25,8 +25,8 @@
     },
     {
       "path": "INSTALL.md",
-      "bytes": 3870,
-      "sha256": "1da9ddf09e19887096103e28cc94f3603bcda44dbbb701900476ca8b99d48319"
+      "bytes": 3846,
+      "sha256": "0292a4ea26b7a70e2c19c6ec0b129c6fccba5f7a814194010450a0861a79b475"
     },
     {
       "path": "OWNERSHIP.md",
@@ -45,8 +45,8 @@
     },
     {
       "path": "VALIDATION.md",
-      "bytes": 1170,
-      "sha256": "65e81d7443d461f0bb46904ffb7b63d352ed8d9d7fc3b36353ff25b9c4aaa772"
+      "bytes": 1161,
+      "sha256": "1bf1e2d9a8e1fb5e2f7501193f350f252027e118f20cacc8f5f64cf09282e69d"
     },
     {
       "path": "bin/control-mcp-stdio.js",
@@ -241,7 +241,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "8d045a872608acc0a08c2f13e256b5b6191b265628372ccc41d71f8cb2ae9128"
+      "sha256": "4380f5990068e8e346449fbd6c549b57f6c3c8e7b1758aada58f42e40ab0437a"
     }
   ]
 }
