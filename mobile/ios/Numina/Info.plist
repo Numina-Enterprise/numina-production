@@ -11,6 +11,11 @@
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
     <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>NuminaRuntimeVersion</key><string>$(NUMINA_RUNTIME_VERSION)</string>
+    <key>NuminaCoreVersion</key><string>$(NUMINA_CORE_VERSION)</string>
+    <key>NuminaFrozenCoreRoot</key><string>$(NUMINA_FROZEN_CORE_ROOT)</string>
+    <key>NuminaApplicationManifest</key><string>$(NUMINA_APPLICATION_MANIFEST)</string>
+    <key>NuminaTelemetryEndpoint</key><string>$(NUMINA_TELEMETRY_ENDPOINT)</string>
     <key>NSHumanReadableCopyright</key><string>Copyright © 2026 SK Consulting LLC. Numina™. All rights reserved in Numina-owned material.</string>
     <key>LSRequiresIPhoneOS</key><true/>
     <key>UIApplicationSceneManifest</key>

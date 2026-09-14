@@ -1,15 +1,31 @@
 import Foundation
 
 enum AppConfiguration {
-    static let startURL = URL(string: "https://numinalabs.xyz/app")!
-    static let privacyURL = URL(string: "https://numinalabs.xyz/privacy")!
-    static let supportURL = URL(string: "https://numinalabs.xyz/contact")!
+    static let runtimeVersion = Bundle.main.object(forInfoDictionaryKey: "NuminaRuntimeVersion") as? String ?? "Not available"
+    static let coreVersion = Bundle.main.object(forInfoDictionaryKey: "NuminaCoreVersion") as? String ?? "Not available"
+    static let origin = URL(string: "https://numinalabs.xyz")!
+    static let startURL = origin.appendingPathComponent("app")
+    static let frontierURL = origin.appendingPathComponent("frontier")
+    static let privacyURL = origin.appendingPathComponent("privacy")
+    static let supportURL = origin.appendingPathComponent("contact")
+    static let runtimeMetricsURL: URL = {
+        var components = URLComponents(url: frontierURL, resolvingAgainstBaseURL: false)!
+        components.fragment = "runtime-metrics"
+        return components.url!
+    }()
 
     static func isFirstParty(_ url: URL) -> Bool {
         url.scheme?.lowercased() == "https"
-            && url.host?.lowercased() == "numinalabs.xyz"
+            && url.host?.lowercased() == origin.host?.lowercased()
             && (url.port == nil || url.port == 443)
             && url.user == nil && url.password == nil
+    }
+
+    static func diagnosticRoute(_ url: URL) -> String {
+        guard isFirstParty(url) else { return "External navigation" }
+        // Never retain query strings, fragments, or arbitrary private resource paths.
+        let publicRoutes = ["/", "/app", "/frontier", "/privacy", "/contact", "/control"]
+        return publicRoutes.contains(url.path) ? url.path : "Other first-party page"
     }
 
     static func isBrowserSignIn(_ url: URL) -> Bool {

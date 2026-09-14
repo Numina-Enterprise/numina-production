@@ -31,9 +31,9 @@
     }
   },
   "apple": {
-    "status": "owner_approved_certificate_request",
+    "status": "developer_registration_user_reported_signing_unverified",
     "distributionCertificateIssued": false,
-    "developerMembershipActive": false,
+    "developerMembershipActive": null,
     "csrFile": "numina-ios-distribution.csr",
     "ownerApproval": {
       "status": "APPROVED",
@@ -47,6 +47,15 @@
       "source": "owner_statement",
       "reportedAt": "2026-09-13T20:22:29.275Z",
       "independentlyVerified": false
+    },
+    "developerRegistration": {
+      "status": "user_reported_complete",
+      "providerVerified": false
+    },
+    "csrVerification": {
+      "sha256": "2bd430bc0bfeca147d345057d0855260431dbe179db98baff50b4c88a2729688",
+      "requestSignatureVerified": true,
+      "verifiedAtUtc": "2026-09-14T23:06:03Z"
     }
   },
   "canonicalIdentity": {

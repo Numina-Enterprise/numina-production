@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 @MainActor
 struct ContentView: View {
@@ -42,6 +43,8 @@ struct ContentView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button("Workspace", action: model.home)
+                        Button("Frontier", action: model.frontier)
+                        Button("Runtime & Quantum", action: model.openRuntimeMetrics)
                         Button("Reload", action: model.retry)
                         Button("Open in Browser", action: model.openBrowserWorkspace)
                         Button("System Status") { showingSystemStatus = true }
@@ -54,7 +57,7 @@ struct ContentView: View {
             }
             .onAppear(perform: model.start)
             .sheet(isPresented: $showingSystemStatus) {
-                NativeSystemStatusView()
+                NativeSystemStatusView(model: model)
             }
             .alert(item: $model.externalLink) { link in
                 Alert(title: Text(link.title), message: Text(link.message),
@@ -67,98 +70,54 @@ struct ContentView: View {
 }
 
 
-private struct NativeStatusCheck: Identifiable {
-    let id = UUID()
-    let name: String
-    let url: URL
-    var responseCode: Int? = nil
-    var succeeded = false
-}
-
+// Displays the existing web view's observations. It issues no independent probes.
 @MainActor
-private final class NativeSystemStatusModel: ObservableObject {
-    @Published var checks: [NativeStatusCheck] = [
-        .init(name: "Workspace", url: AppConfiguration.startURL),
-        .init(name: "Privacy", url: AppConfiguration.privacyURL),
-        .init(name: "Support", url: AppConfiguration.supportURL),
-        .init(name: "NUSD status API", url: URL(string: "https://numinalabs.xyz/api/nusd/v1/status")!),
-        .init(name: "Node status API", url: URL(string: "https://numinalabs.xyz/v2/network/status")!)
-    ]
-    @Published var isChecking = false
-    @Published var checkedAt: Date?
-
-    func refresh() {
-        guard !isChecking else { return }
-        isChecking = true
-        Task {
-            var next = checks
-            await withTaskGroup(of: (Int, Int?, Bool).self) { group in
-                for (index, check) in next.enumerated() {
-                    group.addTask {
-                        var request = URLRequest(url: check.url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 12)
-                        request.httpMethod = "GET"
-                        do {
-                            let (_, response) = try await URLSession.shared.data(for: request)
-                            let code = (response as? HTTPURLResponse)?.statusCode
-                            return (index, code, code.map { (200..<400).contains($0) } ?? false)
-                        } catch {
-                            return (index, nil, false)
-                        }
-                    }
-                }
-                for await (index, code, succeeded) in group {
-                    next[index].responseCode = code
-                    next[index].succeeded = succeeded
-                }
-            }
-            checks = next
-            checkedAt = Date()
-            isChecking = false
-        }
-    }
-}
-
 private struct NativeSystemStatusView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var model = NativeSystemStatusModel()
+    @ObservedObject var model: HostedAppModel
 
     var body: some View {
         NavigationView {
             List {
                 Section("App") {
-                    LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
-                    LabeledContent("Build", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown")
-                    LabeledContent("iOS", value: UIDevice.current.systemVersion)
-                    LabeledContent("Device", value: UIDevice.current.model)
+                    detail("Version", Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
+                    detail("Build", Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown")
+                    detail("Runtime dependency", AppConfiguration.runtimeVersion)
+                    detail("Core dependency", AppConfiguration.coreVersion)
+                    detail("iOS", UIDevice.current.systemVersion)
+                    detail("Device", UIDevice.current.model)
                 }
-
                 Section {
-                    ForEach(model.checks) { check in
-                        HStack {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(check.name).font(.body.weight(.medium))
-                                Text(check.url.path.isEmpty ? "/" : check.url.path)
-                                    .font(.caption).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if model.isChecking && check.responseCode == nil {
-                                ProgressView()
-                            } else {
-                                Image(systemName: check.succeeded ? "checkmark.circle.fill" : "exclamationmark.circle")
-                                    .accessibilityLabel(check.succeeded ? "Available" : "Unavailable")
-                            }
-                        }
+                    detail("Page state", model.pageObservation.phase)
+                    detail("Route", model.pageObservation.route)
+                    detail("HTTP response", model.pageObservation.httpStatus.map { String($0) } ?? "Not observed")
+                    if let time = model.pageObservation.responseAt {
+                        detail("Response observed", time.formatted(date: .abbreviated, time: .standard))
+                    }
+                    if let time = model.pageObservation.completedAt {
+                        detail("Navigation finished", time.formatted(date: .abbreviated, time: .standard))
+                    }
+                    if let category = model.pageObservation.failureCategory {
+                        detail("Failure category", category)
                     }
                 } header: {
-                    Text("First-party availability")
+                    Text("This web view")
                 } footer: {
-                    Text("These checks report whether Numina first-party HTTPS endpoints respond. They do not verify asset backing, signing, settlement, custody, or external-provider state.")
+                    Text("Observed from the existing page navigation, not a separate health probe. A loaded page does not establish API success, authenticated access, or quantum hardware execution.")
                 }
-
-                if let checkedAt = model.checkedAt {
-                    Section("Last checked") {
-                        Text(checkedAt.formatted(date: .abbreviated, time: .standard))
+                Section {
+                    Button("Open Runtime & Quantum") {
+                        dismiss()
+                        model.openRuntimeMetrics()
                     }
+                    Button("Continue Runtime & Quantum in Browser") {
+                        dismiss()
+                        model.openBrowserRuntimeMetrics()
+                    }
+                } header: {
+                    Text("Canonical owner metrics")
+                } footer: {
+                    Text("Opens Frontier's shared runtime panel. HTTP metrics, simulator workload and IBM configuration use the existing owner-only endpoint. Browser sign-in stays in the browser; no credentials are copied into this app.")
                 }
             }
             .navigationTitle("System Status")
@@ -166,12 +125,17 @@ private struct NativeSystemStatusView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Done") { dismiss() }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Refresh", action: model.refresh).disabled(model.isChecking)
-                }
             }
-            .onAppear(perform: model.refresh)
         }
         .navigationViewStyle(.stack)
+    }
+
+    private func detail(_ label: String, _ value: String) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(label)
+            Spacer(minLength: 12)
+            Text(value).foregroundStyle(.secondary).multilineTextAlignment(.trailing)
+        }
+        .accessibilityElement(children: .combine)
     }
 }

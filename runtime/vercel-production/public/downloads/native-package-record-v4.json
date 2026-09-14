@@ -92,7 +92,11 @@
       "sites": "https://numinalabs.xyz/downloads/numina-4.0.0-ios-unsigned-app.zip",
       "vercel": "https://numina-production.vercel.app/downloads/numina-4.0.0-ios-unsigned-app.zip"
     },
-    "hostPublicationVerified": false
+    "hostPublicationVerified": false,
+    "sourceBuildNumber": 5,
+    "sourceInputsSha256": "02127de6194c00b2e7fd5ec3d46d63877a3d86ce5b14803839d54108ba33658b",
+    "signingInputMatchesCurrentSource": false,
+    "sourceAlignmentScope": "current_source_package_not_native_build"
   },
   "sourceArchives": [
     {
@@ -106,10 +110,14 @@
     {
       "platform": "ios",
       "file": "numina-os-4.0.0-ios-source.zip",
-      "bytes": 41270,
-      "sha256": "b4a1ab5bbc4e6fe24a0f4c8cc157a4d6ce7d1d40c7343f05575cee5711df0616",
+      "bytes": 54986,
+      "sha256": "2c46f464686e3d48d3fd5fa20abdb0cdf3d28808d55a800bfbf8a9ea5ef78e0d",
       "kind": "source_archive",
-      "installable": false
+      "installable": false,
+      "sourceBuildNumber": 5,
+      "sourceInputsSha256": "02127de6194c00b2e7fd5ec3d46d63877a3d86ce5b14803839d54108ba33658b",
+      "sourceTextNormalization": "utf8_lf_binary_unchanged",
+      "packagedAtUtc": "2026-09-14T23:12:21.989636+00:00"
     }
   ],
   "previousRelease": {
@@ -118,5 +126,6 @@
     "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
   },
   "sourcePackagedAtUtc": "2026-09-14T21:03:36.453363+00:00",
-  "nativeDistributionPolicy": "Retain Android 3.0.0 binaries. Reuse the iOS executable with v4 bundle metadata; Apple signing and both hosted publications require successful provider operations."
+  "nativeDistributionPolicy": "Historical binaries retain their exact bytes and build evidence. Current iOS source requires a fresh compile and matching signing input.",
+  "iosSourcePackagedAtUtc": "2026-09-14T23:12:21.989636+00:00"
 }

@@ -20,6 +20,15 @@ struct ExternalLink: Identifiable {
     }
 }
 
+struct HostedPageObservation {
+    var phase = "Not loaded"
+    var route = "Not observed"
+    var httpStatus: Int?
+    var responseAt: Date?
+    var completedAt: Date?
+    var failureCategory: String?
+}
+
 @MainActor
 final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WKUIDelegate {
     let webView: WKWebView
@@ -27,6 +36,8 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     @Published var canGoBack = false
     @Published var failure: String?
     @Published var externalLink: ExternalLink?
+    @Published private(set) var pageObservation = HostedPageObservation()
+    private var observedNavigation: WKNavigation?
     private var hasStarted = false
     private var lastPageURL = AppConfiguration.startURL
     private var retryPageURL = AppConfiguration.startURL
@@ -67,6 +78,9 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
 
     func retry() { load(retryPageURL) }
     func home() { load(AppConfiguration.startURL) }
+    func frontier() { load(AppConfiguration.frontierURL) }
+    func openRuntimeMetrics() { load(AppConfiguration.runtimeMetricsURL) }
+    func openBrowserRuntimeMetrics() { openExternal(AppConfiguration.runtimeMetricsURL) }
     func back() { if webView.canGoBack { failure = nil; webView.goBack() } }
 
     func openBrowserWorkspace() {
@@ -101,6 +115,8 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
             // Intercept before a web-view OAuth cookie/state is created. Starting the
             // first-party sign-in URL in the browser keeps that entire flow together.
             externalLink = ExternalLink(url: url, isSignIn: true)
+            observedNavigation = nil
+            pageObservation = HostedPageObservation(phase: "Browser sign-in required")
             isLoading = false
             decisionHandler(.cancel)
             return
@@ -153,18 +169,29 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
         guard let url = navigationResponse.response.url, AppConfiguration.isFirstParty(url) else {
             decisionHandler(.cancel)
             isLoading = false
+            pageObservation = HostedPageObservation(phase: "Blocked response", failureCategory: "untrusted_destination")
             failure = "This page cannot be displayed in the app. You can continue in your browser."
             return
         }
-        if let response = navigationResponse.response as? HTTPURLResponse, response.statusCode >= 400 {
-            decisionHandler(.cancel)
-            isLoading = false
-            failure = "Numina could not load this page. Try again shortly."
-            return
+        pageObservation.route = AppConfiguration.diagnosticRoute(url)
+        if let response = navigationResponse.response as? HTTPURLResponse {
+            pageObservation.httpStatus = response.statusCode
+            pageObservation.responseAt = Date()
+            pageObservation.phase = "Response received"
+            if response.statusCode >= 400 {
+                decisionHandler(.cancel)
+                isLoading = false
+                pageObservation.phase = "HTTP error"
+                pageObservation.failureCategory = "http_error"
+                failure = "Numina could not load this page. Try again shortly."
+                return
+            }
         }
         guard navigationResponse.canShowMIMEType else {
             decisionHandler(.cancel)
             isLoading = false
+            pageObservation.phase = "Browser continuation required"
+            pageObservation.failureCategory = "unsupported_content"
             failure = "Open the workspace in your browser to download this file."
             return
         }
@@ -172,11 +199,16 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        observedNavigation = navigation
+        pageObservation = HostedPageObservation(phase: "Loading")
         isLoading = true
         failure = nil
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard let navigation = navigation, navigation === observedNavigation else { return }
+        pageObservation.phase = "Page navigation finished"
+        pageObservation.completedAt = Date()
         isLoading = false
         canGoBack = webView.canGoBack
         if canRetryCurrentNavigation, let url = webView.url,
@@ -187,10 +219,12 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        guard let navigation = navigation, navigation === observedNavigation else { return }
         showLoadFailure(error)
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        guard let navigation = navigation, navigation === observedNavigation else { return }
         showLoadFailure(error)
     }
 
@@ -200,11 +234,25 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
         if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled { return }
         isLoading = false
         canGoBack = webView.canGoBack
+        pageObservation.phase = "Navigation failed"
+        pageObservation.completedAt = nil
+        if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorTimedOut {
+            pageObservation.failureCategory = "timeout"
+        } else if nsError.domain == NSURLErrorDomain &&
+                    [NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost].contains(nsError.code) {
+            pageObservation.failureCategory = "connectivity"
+        } else {
+            pageObservation.failureCategory = "navigation_error"
+        }
         failure = "Numina could not connect. Check your connection and try again. Sign-in and current records need an internet connection."
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         isLoading = false
+        observedNavigation = nil
+        pageObservation.phase = "Web content process terminated"
+        pageObservation.failureCategory = "web_content_process"
+        pageObservation.completedAt = nil
         failure = "The page stopped responding. Reload to continue."
     }
 
