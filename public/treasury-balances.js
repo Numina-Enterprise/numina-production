@@ -5,10 +5,12 @@ export async function renderTreasuryBalances(target,treasury){
   const heading=item('h3','Designated funding sources');
   const sharedProjection=treasury?.treasury?.projection?.balance;
   const nativeText=sharedProjection?BigInt(sharedProjection).toLocaleString()+' NUSD · shared canonical record':'Unavailable';
+  const valuation=treasury?.nativeValuation;
+  const declaredUsd=valuation?.basis==='owner_authorized_denomination_policy'&&valuation.unit==='USD'?BigInt(valuation.amount).toLocaleString()+' USD · shared declared value':'Unavailable';
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');stripe.append(item('h4','Stripe Treasury'),item('p','Reading the connected financial account…'));
   const bank=item('article','');bank.append(item('h4','Bank of America Savings'),item('p','SK Consulting LLC'));
-  const bankRows=item('dl','');detail(bankRows,'Numina native treasury',nativeText);detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
+  const bankRows=item('dl','');detail(bankRows,'Numina native treasury',nativeText);detail(bankRows,'Declared USD value (1:1 policy)',declaredUsd);detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
   grid.append(stripe,bank);
   target.append(heading,grid,item('p','Reconciliation is incomplete. The native NUSD projection has no verified allocation to these accounts. A funding gap cannot be calculated until bank balances, asset eligibility and allocation are verified.'));
   try{
@@ -17,7 +19,7 @@ export async function renderTreasuryBalances(target,treasury){
     const record=await response.json();
     if(record.schema!=='numina.stripe.treasury.v1'||record.account?.livemode!==true)throw Error('Invalid observation');
     stripe.replaceChildren(item('h4','Stripe Treasury'),item('p',record.account.name));
-    const list=item('dl','');detail(list,'Numina native treasury',nativeText);
+    const list=item('dl','');detail(list,'Numina native treasury',nativeText);detail(list,'Declared USD value (1:1 policy)',declaredUsd);
     for(const [bucket,label] of [['available','Available'],['inbound_pending','Incoming'],['outbound_pending','Outgoing']]){
       for(const currency of ['usd','usdc'])detail(list,label+' '+currency.toUpperCase(),record.balances?.[bucket]?.[currency]?.formatted??'Not reported');
     }
@@ -25,5 +27,5 @@ export async function renderTreasuryBalances(target,treasury){
     detail(list,'Observed at',record.observed_at);stripe.append(list);
     const evidence=item('details','');evidence.append(item('summary','Provider evidence'));
     const source=item('dl','');detail(source,'Financial account',record.account.id);detail(source,'Provider request',record.provider_request_id??'Not supplied');detail(source,'Connection','Read-only live account');evidence.append(source);stripe.append(evidence);
-  }catch{stripe.replaceChildren(item('h4','Stripe Treasury'),item('p','Live balance unavailable. Refresh to request a new provider observation.'));}
+  }catch{stripe.replaceChildren(item('h4','Stripe Treasury'));const list=item('dl','');detail(list,'Numina native treasury',nativeText);detail(list,'Declared USD value (1:1 policy)',declaredUsd);stripe.append(list,item('p','Live provider balance unavailable. Refresh to request a new provider observation.'));}
 }
