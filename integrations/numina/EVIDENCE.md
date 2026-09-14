@@ -1,6 +1,6 @@
-# Runtime build evidence — integration kit 3.0.0
+# Runtime build evidence — integration kit 4.0.0
 
-This archive revision is `numina-root-v3.0.0`. The kit can read evidence labels and available NUSD receipt/readiness records from the [Numina application manifest](https://numinalabs.xyz/v3/release/manifest). It does not perform signature, receipt or readiness verification itself. Application release, rc26 control-plane runtime and the Linux execution image have separate identities and evidence scopes. This revision does not replace the retained runtime build evidence below.
+This archive revision is `numina-root-v4.0.0`. The kit can read evidence labels and available NUSD receipt/readiness records from the [Numina application manifest](https://numinalabs.xyz/v4/release/manifest). It does not perform signature, receipt or readiness verification itself. Application release, rc26 control-plane runtime and the Linux execution image have separate identities and evidence scopes. This revision does not replace the retained runtime build evidence below.
 
 ## Read through a provider or local MCP host
 

@@ -21,7 +21,7 @@ shutil.copyfile(source/'deploy/vercel/vercel.json',destination/'vercel.json')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
 (destination/'.python-version').write_text('3.12\n',encoding='utf-8')
-(destination/'package.json').write_text(json.dumps({'name':'numina-production','version':'3.0.0','private':True,'type':'module'})+'\n',encoding='utf-8')
+(destination/'package.json').write_text(json.dumps({'name':'numina-production','version':json.loads((repo/'runtime/vercel-production/package.json').read_text())['version'],'private':True,'type':'module'})+'\n',encoding='utf-8')
 (destination/'.vercel').mkdir()
 shutil.copyfile(repo/'runtime/vercel-production/.vercel/project.json',destination/'.vercel/project.json')
 

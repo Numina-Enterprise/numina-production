@@ -1,6 +1,6 @@
 {
   "name": "numina",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Intelligence in motion. Read Numina OS architecture, capabilities and canonical journal head.",
   "author": {
     "name": "Numina Labs · SK Consulting LLC"
@@ -12,7 +12,7 @@
   "interface": {
     "displayName": "Numina",
     "shortDescription": "One core, one root and five architecture layers.",
-    "longDescription": "Connect Codex to Numina OS 3 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint.",
+    "longDescription": "Connect Codex to Numina OS 4 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint.",
     "developerName": "Numina Labs",
     "category": "Productivity",
     "capabilities": [

@@ -7,6 +7,7 @@ read = lambda p: json.loads(p.read_text(encoding='utf-8'))
 write = lambda p, value: p.write_text(json.dumps(value, indent=2)+'\n', encoding='utf-8', newline='\n')
 sha = lambda data: hashlib.sha256(data).hexdigest()
 version = read(root/'package.json')['version']
+major = version.split('.')[0]
 now = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 def package(source, name, prefix, paths):
@@ -41,8 +42,8 @@ record = {'schema':'numina.integration.archive.v2','version':version,'revision':
 write(root/f'docs/integration-kit-v{version}-record.json',record)
 source = root/'integrations/codex/numina'
 plugin = package(source,f'numina-codex-plugin-{version}.zip','numina',[p for p in source.rglob('*') if p.is_file()])
-write(root/'docs/codex-plugin-v3-record.json',{'version':version,**plugin,'publication':'download_available_after_deployment','marketplacePublicationVerified':False})
-native = read(root/'docs/native-package-record-v3.json')
+write(root/f'docs/codex-plugin-v{major}-record.json',{'version':version,**plugin,'publication':'download_available_after_deployment','marketplacePublicationVerified':False})
+native = read(root/f'docs/native-package-record-v{major}.json')
 native['sourceArchives'] = []
 for platform in ['android','ios']:
     source = root/'mobile'/platform
@@ -50,5 +51,5 @@ for platform in ['android','ios']:
     item = package(source,f'numina-os-{version}-{platform}-source.zip',f'numina-os-{version}-{platform}',paths)
     native['sourceArchives'].append({'platform':platform,**item,'kind':'source_archive','installable':False})
 native['sourcePackagedAtUtc'] = now
-write(root/'docs/native-package-record-v3.json',native)
+write(root/f'docs/native-package-record-v{major}.json',native)
 print(json.dumps({'version':version,'integration':record,'plugin':plugin,'nativeSources':native['sourceArchives'],'nativeBinariesChanged':False,'applicationTestsRun':False}))

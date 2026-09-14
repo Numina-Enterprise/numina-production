@@ -5,7 +5,7 @@ import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
 import {nusdHttp} from './nusd-http.js';
 import {frontierHttp} from './frontier-http.js';
-const security={"X-Numina-Version":"3.0.0","X-Numina-Profile":"numina-production","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
+const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
@@ -25,9 +25,9 @@ export default {
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/services'+url.search+'#pricing'}}));
    }
-   if(['/v2/release/manifest','/v3/release/manifest'].includes(path)){
+   if(['/v2/release/manifest','/v3/release/manifest','/v4/release/manifest'].includes(path)){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
-    const artifact=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v2.json',req.url),{method:req.method}));
+    const artifact=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:req.method}));
     const headers=new Headers(artifact.headers);headers.set('Cache-Control','no-store');return finish(new Response(artifact.body,{status:artifact.status,headers}));
    }
    const runtime=await routeRuntime(req);if(runtime)return finish(runtime);

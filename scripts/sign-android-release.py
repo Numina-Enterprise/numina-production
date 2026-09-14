@@ -2,6 +2,7 @@
 import base64, hashlib, json, os, pathlib, subprocess, tempfile
 
 root=pathlib.Path(__file__).resolve().parent.parent
+version=json.loads((root/'package.json').read_text())['version']
 vault=json.loads(os.environ['NUMINA_RELEASE_SIGNING_VAULT'])
 signing=json.loads((root/'mobile/signing/release-identities.json').read_text())
 child_env={k:v for k,v in os.environ.items() if k!='NUMINA_RELEASE_SIGNING_VAULT'}
@@ -27,13 +28,13 @@ with tempfile.TemporaryDirectory(prefix='numina-signing-',dir=os.environ.get('RU
         actual=hashlib.sha256(base64.b64decode(''.join(line for line in certificate.splitlines() if not line.startswith('-----')))).hexdigest()
         if actual!=signing['android'][purpose]['sha256'].replace(':','').lower():raise RuntimeError('Signing certificate differs from the committed public identity')
     key,password,alias=credentials['upload']
-    bundle=packages/'numina-3.0.0-upload-signed.aab'
+    bundle=packages/f'numina-{version}-upload-signed.aab'
     run(['jarsigner','-keystore',key,'-storetype','PKCS12','-storepass:file',password,'-keypass:file',password,'-sigalg','SHA256withRSA','-digestalg','SHA-256','-signedjar',bundle,root/'mobile/android/app/build/outputs/bundle/release/app-release.aab',alias])
     run(['jarsigner','-verify',bundle])
     aligned=tmp/'aligned.apk'
     run([sdk/'zipalign','-P','16','-f','4',root/'mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk',aligned])
     key,password,alias=credentials['release']
-    apk=packages/'numina-3.0.0-release-signed.apk'
+    apk=packages/f'numina-{version}-release-signed.apk'
     run([sdk/'apksigner','sign','--ks',key,'--ks-type','PKCS12','--ks-key-alias',alias,'--ks-pass','file:'+str(password),'--key-pass','file:'+str(password),'--out',apk,aligned])
     verified=run([sdk/'apksigner','verify','--verbose','--print-certs',apk])
     expected=signing['android']['release']['sha256'].replace(':','').lower()

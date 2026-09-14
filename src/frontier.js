@@ -1,7 +1,7 @@
 import {stable,controlHash,controlError,authorizeControl,normalizeRecord} from './control.js';
 import {NUMINA_TREASURY_POLICIES} from './treasury-policy.js';
 
-export const FRONTIER_VERSION='3.0.0';
+export const FRONTIER_VERSION='4.0.0';
 export const FRONTIER_PROVIDERS=[
   {id:'internal.record.v1',kind:'internal',submission:true},
   ...['circle','arc','ripple','fireblocks','anchorage','bitgo','copper','stripe','bank-of-america','trm','chainalysis','elliptic','government'].map(id=>({id,kind:['trm','chainalysis','elliptic'].includes(id)?'intelligence':'external',submission:false}))

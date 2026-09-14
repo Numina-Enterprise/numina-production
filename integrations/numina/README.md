@@ -1,6 +1,6 @@
-# Numina integration kit 3.0.0
+# Numina integration kit 4.0.0
 
-JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 3.0** through [its application manifest](https://numinalabs.xyz/v3/release/manifest). The application and kit have separate artifact identities. The application's **rc26 runtime dependency** and historical rc20 evidence retain their original versions.
+JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 4.0** through [its application manifest](https://numinalabs.xyz/v4/release/manifest). The application and kit have separate artifact identities. The application's **rc26 runtime dependency** and historical rc20 evidence retain their original versions.
 
 This archive is an integration deliverable. It does not install itself into provider accounts, create a hosted MCP endpoint or establish compatibility with every LLM.
 

@@ -21,7 +21,7 @@
     },
     "version": {
       "type": "string",
-      "pattern": "^[23]\\.[0-9]+\\.[0-9]+$"
+      "pattern": "^[234]\\.[0-9]+\\.[0-9]+$"
     },
     "build_id": {
       "type": "string",
