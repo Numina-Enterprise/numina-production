@@ -13,7 +13,7 @@
   "apple": {
     "teamId": null,
     "teamIdEnvironmentVariable": "NUMINA_APPLE_TEAM_ID",
-    "teamStatus": "apple_issued_team_not_configured",
+    "teamStatus": "developer_registration_user_reported_team_id_not_configured",
     "distributionMethod": "app-store",
     "workflow": ".github/workflows/numina-ios-signing.yml",
     "runner": "macos-latest",

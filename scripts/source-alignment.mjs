@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {checkIOSRelease, iosInputSnapshot} from './ios-release.mjs';
 import {createHash} from 'node:crypto';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
@@ -18,7 +19,11 @@ for(const [name,value] of Object.entries(versions))if(value!==version)throw Erro
 if(match('integrations/numina/src/mcp.js',/serverInfo:\{name:'numina-nusd-integration',version:'([^']+)'/)!==version)throw Error('MCP server identity version mismatch');
 const androidBuild=Number(match('mobile/android/app/build.gradle',/versionCode (\d+)/));
 const iosBuild=Number(match('mobile/ios/Configuration/Numina.xcconfig',/CURRENT_PROJECT_VERSION = (\d+)/));
-if(androidBuild!==native.versionCode||iosBuild!==native.versionCode)throw Error('Native build number mismatch');
+if(androidBuild!==native.versionCode)throw Error('Android source build number mismatch');
+const iosIdentity=checkIOSRelease();
+if(iosBuild!==iosIdentity.buildNumber)throw Error('iOS source build number mismatch');
+// Platform source counters are separate from historical packaged binary metadata.
+const iosSourceInputs=iosInputSnapshot();
 if(NUMINA_LAYERS.rootCount!==1||NUMINA_LAYERS.lineageCount!==1||NUMINA_LAYERS.productionEnvironmentCount!==1||NUMINA_LAYERS.layers.map(v=>v.id).join(',')!=='L1,L2,L3,L4,L5')throw Error('Canonical architecture mismatch');
 const root=identities.canonicalIdentity;
 if(root.name!=='Numina'||root.authority!=='NUMINA'||!/^[a-f0-9]{64}$/.test(root.rootHash)||root.headUrl!=='https://numinalabs.xyz/api/control/v2/head')throw Error('Canonical root identity mismatch');
@@ -51,6 +56,11 @@ for(const file of frozenEntries)if(digest(fs.readFileSync(frozenPath+'/'+file.pa
 const inputs=['package.json','src/app-core.js','src/frontier.js','public/architecture-layers.js','public/business-core.json','public/runtime-contract.js','integrations/numina/package.json','integrations/numina/file-manifest.json','integrations/numina/distribution.json','integrations/codex/numina/.codex-plugin/plugin.json','mobile/android/app/build.gradle','mobile/ios/Configuration/Numina.xcconfig','mobile/signing/release-identities.json','runtime/vercel-production/package.json'];
 const record={schema:'numina.source-alignment.v1',product:'Numina',version,environment:'production',root:{...root,count:1,lineageCount:1,state:'/api/control/v2/state',treasury:'/api/control/v1/treasury'},architecture:NUMINA_LAYERS.layers,versions,nativeBuildNumber:native.versionCode,interfaces:{applicationRelease:applicationManifest,architecture:'/api/control/v2/architecture',controlMcp:'/api/control/v2/mcp',discoveryMcp:'/api/control/v2/discovery-mcp',a2a:'/.well-known/agent-card.json'},sourceInputs:inputs.map(path=>({path,sha256:digest(fs.readFileSync(path))})),preservedDependencies:{activeRuntime:EXPECTED_RELEASE,reconstructedRc26:{path:'runtime/verifier-rc26',sourcePolicy:'owner-editable',productionMigrationCompleted:EXPECTED_RELEASE.production_version==='1.9.0-rc26'},frozenCore:{path:frozenPath,sourcePolicy:'preserved_exact_bytes',version:EXPECTED_RELEASE.core_version,manifestRoot:EXPECTED_RELEASE.frozen_core_manifest_root,releaseBinding:'/v1/release/core-binding',includedInRelease:EXPECTED_RELEASE.release}},checks:{maintainedVersionsMatch:true,integrationInventoryMatches:true,canonicalRootCount:1,runtimePinsMatch:true,androidIdentityMatches:true},scope:'Maintained source and package alignment with the existing Numina root. Current journal state is read through the canonical head endpoint.'};
 record.root.owner=business.ownerIdentity;
+record.nativeBuildNumberScope='legacy_native_package_record_not_current_ios_source';
+record.nativeSourceBuildNumbers={android:androidBuild,ios:iosBuild};
+record.iosSource={...iosIdentity,sourceInputs:iosSourceInputs};
+record.sourceInputs.push(...iosSourceInputs.inputs.map(({path,sha256})=>({path,sha256})));
+record.checks.iosSourceIdentityMatches=true;
 record.preservedDependencies.frozenCore.manifestPath=frozenManifest;
 record.preservedDependencies.frozenCore.verifiedFiles=frozenEntries.length;
 record.preservedDependencies.historicalCoreSource={path:'vendor/numina-core-v1.8',sourcePolicy:'historical_checkout',exactByteBinding:false};

@@ -55,4 +55,7 @@ write(root/f'docs/native-package-record-v{major}.json',native)
 mirror = root/'runtime/vercel-production/public/downloads'
 if mirror.exists():
     (mirror/f'native-package-record-v{major}.json').write_bytes((root/f'docs/native-package-record-v{major}.json').read_bytes())
+# Refresh the iOS-specific source fingerprint after general source packaging.
+subprocess.run([__import__('sys').executable,'scripts/package-ios-source.py'],cwd=root,check=True)
+native = read(root/f'docs/native-package-record-v{major}.json')
 print(json.dumps({'version':version,'integration':record,'plugin':plugin,'nativeSources':native['sourceArchives'],'nativeBinariesChanged':False,'applicationTestsRun':False}))

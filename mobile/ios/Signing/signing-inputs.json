@@ -1,0 +1,46 @@
+{
+  "schema": "numina.apple-signing-inputs.v1",
+  "classification": "configuration_requirements_not_provider_receipt",
+  "legalEntity": "SK Consulting LLC",
+  "product": "Numina",
+  "applicationVersion": "4.0.0",
+  "sourceBuildNumber": 5,
+  "proposedBundleIdentifier": "xyz.numinalabs.app",
+  "bundleRegisteredWithApple": null,
+  "appleTeamId": null,
+  "appStoreConnectAppId": null,
+  "developerRegistration": {
+    "status": "user_reported_complete",
+    "providerVerified": false
+  },
+  "csr": {
+    "file": "Numina-Distribution.certSigningRequest",
+    "sha256": "2bd430bc0bfeca147d345057d0855260431dbe179db98baff50b4c88a2729688",
+    "requestSignatureVerified": true,
+    "appleIssuanceVerified": false,
+    "keyRotated": false,
+    "privateKeyRetrieved": false,
+    "existingKeyStorageReference": "NUMINA_RELEASE_SIGNING_VAULT (source record; not accessed)"
+  },
+  "distributionCertificate": {
+    "status": "not_verified",
+    "sha256": null,
+    "serialNumber": null,
+    "expiresAt": null
+  },
+  "provisioningProfile": {
+    "status": "not_verified",
+    "uuid": null,
+    "name": null,
+    "expiresAt": null
+  },
+  "repositoryVariable": "NUMINA_APPLE_TEAM_ID",
+  "requiredSecrets": [
+    "NUMINA_APPLE_DISTRIBUTION_P12_BASE64",
+    "NUMINA_APPLE_DISTRIBUTION_P12_PASSWORD",
+    "NUMINA_APPLE_PROVISIONING_PROFILE_BASE64"
+  ],
+  "secretsConfigured": null,
+  "signedIPA": null,
+  "appStoreSubmission": null
+}

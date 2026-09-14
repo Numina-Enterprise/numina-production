@@ -9,3 +9,12 @@ dist/
 
 .vercel/
 .openai/publishing/
+
+# Private Apple signing inputs and native build output
+*.p12
+*.p8
+*.mobileprovision
+*.key
+*.local.xcconfig
+packages/
+*.xcarchive/

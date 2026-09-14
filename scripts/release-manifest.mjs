@@ -1,4 +1,5 @@
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
+import {checkIOSRelease,iosInputSnapshot} from './ios-release.mjs';
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -10,6 +11,9 @@ const integrationArchive=readFileSync('docs/'+integrationFile);
 const integrationRecord=JSON.parse(readFileSync('docs/integration-kit-v'+version+'-record.json'));
 if(integrationRecord.sha256!==digest(integrationArchive)||integrationRecord.bytes!==integrationArchive.length)throw Error('Integration archive does not match its inventory');
 const nativePackage=JSON.parse(readFileSync('docs/'+nativeRecordFile));
+const iosIdentity=checkIOSRelease(),iosInputs=iosInputSnapshot();
+const iosSourceArchive=nativePackage.sourceArchives.find(item=>item.platform==='ios');
+if(iosSourceArchive?.sourceInputsSha256!==iosInputs.sha256||nativePackage.ios.sourceBuildNumber!==iosIdentity.buildNumber)throw Error('iOS source archive is stale; repackage the current iOS sources before generating a release');
 if(nativePackage.applicationVersion!==JSON.parse(readFileSync('package.json')).version)throw Error('Native source package version differs from application');
 for(const platform of ['android','ios'])for(const artifact of nativePackage[platform].binaries){
  const bytes=readFileSync('docs/'+artifact.file);

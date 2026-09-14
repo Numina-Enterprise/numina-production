@@ -11,7 +11,21 @@ ROOT=Path(__file__).resolve().parent.parent
 def require(ok, message):
     if not ok: raise RuntimeError(message)
 def sha(data): return hashlib.sha256(data).hexdigest()
+def current_source_build(settings, record):
+    match = re.search(r'^CURRENT_PROJECT_VERSION = (\d+)$', settings, re.MULTILINE)
+    require(match is not None, 'Current iOS source build is missing.')
+    build = int(match.group(1))
+    ios = record['ios']
+    require(ios.get('currentSourceCompiled') is True, 'CURRENT_IOS_SOURCE_NOT_COMPILED: retained binaries must not be signed as current source.')
+    require(ios.get('sourceBuildNumber') == build and ios.get('binaryVersionCode') == build,
+            'CURRENT_IOS_SIGNING_INPUT_MISMATCH: build a matching current-source bundle first.')
+    require(ios.get('signingInputMatchesCurrentSource') is True, 'CURRENT_IOS_SIGNING_INPUT_NOT_VERIFIED')
+    return build
+
 def main():
+    source_version=json.loads((ROOT/'package.json').read_text())['version']
+    source_record=json.loads((ROOT/f'docs/native-package-record-v{source_version.split(".")[0]}.json').read_text())
+    build_number=current_source_build((ROOT/'mobile/ios/Configuration/Numina.xcconfig').read_text(), source_record)
     require(platform.system()=='Darwin', 'Apple signing requires the configured macOS runner.')
     policy=json.loads((ROOT/'mobile/signing/distribution-policy.json').read_text())
     names=policy['apple']['secrets']
@@ -53,7 +67,7 @@ def main():
         payload=work/'Payload';payload.mkdir()
         run(['ditto','-x','-k',archive,payload],'Bundle extraction')
         app=payload/'Numina.app'; app_info=plistlib.loads((app/'Info.plist').read_bytes())
-        require(app_info.get('CFBundleIdentifier')==policy['packageIdentity'] and app_info.get('CFBundleShortVersionString')==version and str(app_info.get('CFBundleVersion'))==str(record['versionCode']), 'Bundle identity or version differs from the release.')
+        require(app_info.get('CFBundleIdentifier')==policy['packageIdentity'] and app_info.get('CFBundleShortVersionString')==version and str(app_info.get('CFBundleVersion'))==str(build_number), 'Bundle identity or version differs from the release.')
         require(not list(app.rglob('*.framework')) and not list(app.rglob('*.appex')) and not (app/'Frameworks').exists(), 'Nested code requires a separately reviewed signing order.')
         executable=app/app_info['CFBundleExecutable']
         original_executable_sha=sha(executable.read_bytes())
@@ -77,7 +91,7 @@ def main():
             output.mkdir(parents=True)
             ipa=output/f'numina-{version}-app-store-signed.ipa'
             run(['ditto','-c','-k','--keepParent',payload,ipa],'Signed IPA packaging')
-            result={'schema':'numina.ios-signing-result.v1','version':version,'buildNumber':record['versionCode'],'bundleIdentifier':policy['packageIdentity'],'teamId':team,'certificateSha1':identity,'profileUuid':info['UUID'],'inputArchiveSha256':artifact['sha256'],'inputExecutableSha256':original_executable_sha,'signedExecutableSha256':sha(executable.read_bytes()),'file':ipa.name,'sha256':sha(ipa.read_bytes()),'bytes':ipa.stat().st_size,'signed':True,'signatureVerification':True,'distributionMethod':'app-store','directDeviceInstallable':False,'storeSubmitted':False,'deviceInstalled':False,'testsRun':False,'nativeCompilationPerformed':False,'sourceCommit':os.environ.get('GITHUB_SHA'),'runId':os.environ.get('GITHUB_RUN_ID')}
+            result={'schema':'numina.ios-signing-result.v1','version':version,'buildNumber':build_number,'bundleIdentifier':policy['packageIdentity'],'teamId':team,'certificateSha1':identity,'profileUuid':info['UUID'],'inputArchiveSha256':artifact['sha256'],'inputExecutableSha256':original_executable_sha,'signedExecutableSha256':sha(executable.read_bytes()),'file':ipa.name,'sha256':sha(ipa.read_bytes()),'bytes':ipa.stat().st_size,'signed':True,'signatureVerification':True,'distributionMethod':'app-store','directDeviceInstallable':False,'storeSubmitted':False,'deviceInstalled':False,'testsRun':False,'nativeCompilationPerformed':False,'sourceCommit':os.environ.get('GITHUB_SHA'),'runId':os.environ.get('GITHUB_RUN_ID')}
             (output/'signing-result.json').write_text(json.dumps(result,indent=2)+'\n')
             print(json.dumps({'file':ipa.name,'sha256':result['sha256'],'signed':True,'storeSubmitted':False}))
         finally:
