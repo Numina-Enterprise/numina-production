@@ -33,9 +33,15 @@ test('owner-only evidence is signed, snapshot-bound and preserves the original j
     assert.equal(await frontierVerify(receipt,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),true);
     const p=receipt.payload;assert.equal(p.head,before.head_hash);assert.equal(p.revision,before.revision);assert.equal(p.evidenceHash,await controlHash(p.source));
     assert.equal(p.source.nativeTreasury.projection.balance,'500000000000000');assert.equal(p.source.providerObservation.record.balances.available.usd.value,12500);
+    assert.equal(p.source.canonicalTreasury.id,'numina:treasury:'+encodeURIComponent(owner));
+    assert.equal(p.records.nativeTreasury.verification.status,'VERIFIED');assert.equal(p.records.providerBalances.verification.status,'AUTHENTICATED_OBSERVATION');
+    assert.equal(p.records.providerBalances.source,'/source/providerObservation');assert.equal(p.records.bankFunding.verification.status,'BANK_PROVIDER_NOT_CONNECTED');
+    assert.equal(p.records.reserveAllocation.source,null);assert.equal(p.records.redemption.source,null);
+    assert.equal(p.records.reserveAllocation.verification.status,'NOT_VERIFIED');assert.equal(p.records.redemption.verification.status,'NOT_VERIFIED');
     assert.equal(p.fundingVerification.actual_funding,false);assert.equal(p.fundingVerification.bankConfirmation.verified,false);assert.equal(p.source.supportingDocuments.complete,true);
     assert.equal((await readControl(env.DB)).head_hash,before.head_hash);assert.equal(JSON.stringify(receipt).includes(env.NUMINA_STRIPE_TREASURY_READ_KEY),false);
     const altered=structuredClone(receipt);altered.payload.fundingVerification.actual_funding=true;assert.equal(await frontierVerify(altered,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),false);
+    const combined=structuredClone(receipt);combined.payload.records.reserveAllocation=combined.payload.records.nativeTreasury;assert.equal(await frontierVerify(combined,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),false);
   }finally{globalThis.fetch=original;env.DB.close();}
 });
 
@@ -77,5 +83,6 @@ test('owner claims and uploaded-document metadata cannot promote actual funding'
   const frontier={fundingDeclaration:{FUNDED_PLAN:true,bankFundingVerified:true},accounts:[]};
   const payload=await treasuryEvidencePayload({treasury,frontier,providerObservation:{status:'UNAVAILABLE',record:null},supportingDocuments:{record:{documents:[{bank_issuer_verified:true}]}},capturedAt:'2026-01-01T00:00:00Z'});
   assert.equal(payload.fundingVerification.actual_funding,false);assert.equal(payload.fundingVerification.ownerDeclaredFunded,true);assert.equal(payload.fundingVerification.allocatedReservesVerified,false);
+  assert.equal(payload.records.providerBalances.verification.status,'UNAVAILABLE');assert.equal(payload.records.reserveAllocation.verification.status,'NOT_VERIFIED');assert.equal(payload.records.redemption.verification.status,'NOT_VERIFIED');
   treasury.projection.balance='1';assert.equal(payload.source.nativeTreasury.projection.balance,'500000000000000');assert.equal(payload.evidenceHash,await controlHash(payload.source));
 });

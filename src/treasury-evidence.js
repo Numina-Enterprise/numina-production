@@ -4,15 +4,23 @@ import {createNuminaTreasury} from './native-treasury.js';
 import {readStripeTreasury} from './stripe-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {frontierState,frontierSign} from './frontier.js';
+import {canonicalTreasuryReference} from './treasury-alignment.js';
 
 export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
 
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
-  const source=structuredClone({nativeTreasury:treasury,ownerDeclaration:frontier.fundingDeclaration??null,
+  const source=structuredClone({nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
     fundingPlan:frontier.fundingPlan??null,accountReferences:frontier.accounts??[],providerObservation,supportingDocuments});
   return {schema:'numina.treasury.evidence-snapshot.v1',scope:'Numina-native journal integrity and server-observed supporting records',
     issuer:'NUMINA',root:treasury.root,revision:treasury.revision,head:treasury.head,capturedAt,
     evidenceHash:await controlHash(source),source,
+    records:{schema:'numina.treasury.record-sources.v1',
+      nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:treasury.status==='READY'&&treasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
+      providerBalances:{source:'/source/providerObservation',issuer:'Stripe',verification:{status:providerObservation?.status==='OBSERVED'&&providerObservation.authentication==='server_held_stripe_read_credential'?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'Provider-reported amounts in their original currencies; no cross-currency aggregation'}},
+      bankFunding:{source:'/fundingVerification/bankConfirmation',issuer:null,verification:{status:'BANK_PROVIDER_NOT_CONNECTED',scope:'Bank-issued funding confirmation'}},
+      reserveAllocation:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Reserve ownership and allocation to this treasury'}},
+      redemption:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Executable redemption rights and confirmed redemption evidence'}},
+      supportingDocuments:{source:'/source/supportingDocuments',issuer:null,verification:{status:supportingDocuments?.status==='OBSERVED'?'OWNER_UPLOADED_UNVERIFIED':'UNAVAILABLE',scope:'Stored document metadata; issuer and contents are not verified'}}},
     fundingVerification:{actual_funding:false,status:'NOT_VERIFIED',
       bankConfirmation:{status:'BANK_PROVIDER_NOT_CONNECTED',verified:false,bankIssuedReceipt:null},
       ownerDeclaredFunded:frontier.fundingDeclaration?.FUNDED_PLAN===true,
