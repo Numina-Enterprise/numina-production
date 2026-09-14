@@ -11,7 +11,9 @@
     },
     "./tools": "./src/tools.js",
     "./providers": "./src/provider-adapters.js",
-    "./mcp": "./src/mcp.js"
+    "./mcp": "./src/mcp.js",
+    "./quantum": "./src/quantum.js",
+    "./quantum-backend": "./src/quantum-backend.js"
   },
   "bin": {
     "numina-control-mcp": "./bin/control-mcp-stdio.js",
@@ -25,5 +27,6 @@
     "schemas": "node scripts/export-tools.js",
     "package:build": "node scripts/package-distribution.js"
   },
-  "license": "UNLICENSED"
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Numina \u00b7 SK Consulting LLC"
 }

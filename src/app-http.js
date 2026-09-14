@@ -96,5 +96,5 @@ export async function appHttp(req,env){
    ]);const updated=await appOrder(env.DB,row.id,actor);if(updated.last_mutation!==mutation)appFail('REVISION_CONFLICT',409);return appResponse({order:await appOrderView(env.DB,updated,actor)});
   }
   return appResponse({error:'METHOD_NOT_ALLOWED'},405);
- }catch(error){const code=error.code||'SERVICE_UNAVAILABLE';console.log(JSON.stringify({event:'app_error',route:path.slice(0,100),code}));return appResponse({error:code},error.status||503,code==='RATE_LIMITED'?{'Retry-After':'60'}:{});}
+ }catch(error){const code=error.code||'SERVICE_UNAVAILABLE';return appResponse({error:code},error.status||503,code==='RATE_LIMITED'?{'Retry-After':'60'}:{});}
 }

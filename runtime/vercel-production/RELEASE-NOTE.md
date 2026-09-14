@@ -1,3 +1,3 @@
 # Production control gateway
 
-Preserves the established rc22 read and preparation APIs. New v2 requests route to the existing Numina website control journal. The 2.1.0 extension does not relabel the historical rc22 artifact hashes or test records. Production live mode is reported by the v2 manifest. No rc26 migration, provider submission or tests are performed by this gateway update.
+The active v4 deployment is assembled with scripts/package-rc26.py from the preserved rc26 verifier. The generated ASGI entrypoint adds bounded-route HTTP telemetry; the Node connection endpoint uses the same event schema. Owner operations, including Numina's classical quantum simulator, route to the canonical Sites application. Historical rc22 gateway modules remain for archive context and are not assembled into the active verifier. Deployment and hardware connection status must come from the providers, not this source note.

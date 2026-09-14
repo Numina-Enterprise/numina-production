@@ -12,6 +12,6 @@ jobs:
       id-token: write
       attestations: write
     # Immutable reviewed Numina builder.
-    uses: skott34-dot/numina-builder/.github/workflows/numina-site-builder.yml@0cfa7fe33400405cb83311734354873d069c4389
+    uses: skott34-dot/numina-builder/.github/workflows/numina-site-builder.yml@23a223bcbd3818eb2fc685ea2580b6e5a7dfdf03
     # No secrets: inherit. No inputs. No production deployment is authorized by
     # a successful build alone; the independent verification policy must pass.

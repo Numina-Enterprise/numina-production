@@ -1,3 +1,4 @@
+import {observeHttp} from '../lib/http-telemetry.mjs';
 // Public, read-only provider observations. No request input selects an RPC method,
 // endpoint, account or credential. Use this only in the Node.js server runtime.
 const PINNED_RPC_URL = 'https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/';
@@ -206,6 +207,7 @@ export async function observeNode({ env = process.env, fetcher = globalThis.fetc
 }
 
 export default async function handler(request, response) {
+  observeHttp(request, response);
   response.setHeader('Content-Type', 'application/json; charset=utf-8');
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('CDN-Cache-Control', 'no-store');
