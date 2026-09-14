@@ -7,7 +7,8 @@
       "namespace": "android_app",
       "package_name": "xyz.numinalabs.app",
       "sha256_cert_fingerprints": [
-        "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA"
+        "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+        "32:0E:E1:C6:E0:7C:2D:82:3E:8E:28:A4:F6:46:0C:73:DF:8A:55:2A:00:42:B6:AA:31:18:57:52:50:54:F4:1C"
       ]
     }
   }
