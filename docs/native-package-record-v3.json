@@ -86,8 +86,8 @@
     {
       "platform": "android",
       "file": "numina-os-3.0.0-android-source.zip",
-      "bytes": 10451,
-      "sha256": "47d09abc59ffa5dfc41c97a663deb94a2b6f698e16d57a0cfeb48bd6ffebd3e4",
+      "bytes": 10454,
+      "sha256": "490d05da6d371062478dcc12cc8b2474f33b8478f39c69979fa548613926538f",
       "kind": "source_archive",
       "installable": false
     },
@@ -106,5 +106,5 @@
   "storeListingOrApprovalClaimed": false,
   "packagedAtUtc": "2026-09-13T21:49:52.493007+00:00",
   "recordedAtUtc": "2026-09-13T21:56:35.907Z",
-  "sourcePackagedAtUtc": "2026-09-14T16:17:53.054682+00:00"
+  "sourcePackagedAtUtc": "2026-09-14T18:24:30.919915+00:00"
 }

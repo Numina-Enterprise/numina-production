@@ -1,6 +1,6 @@
 # Numina production control v2
 
-Production origin: https://numinalabs.xyz. Workspace: `/frontier`. Capability manifest: `/api/control/v2/manifest`. This release uses `livemode: true`. No sandbox route is provided.
+Production origin: https://numinalabs.xyz. Workspace: `/frontier`. Capability manifest: `/api/control/v2/manifest`. This release uses `livemode: true`.
 
 The existing control root, state, journal and `readTreasury()` / `writeTreasury(event)` remain canonical. Frontier records extend that same state. This release does not replace historical rc22/rc26 attestations or claim a new core-runtime release.
 
