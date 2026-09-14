@@ -1,0 +1,46 @@
+{
+  "schema": "numina.distribution-policy.v1",
+  "authority": "NUMINA",
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5"
+  ],
+  "packageIdentity": "xyz.numinalabs.app",
+  "rootIdentity": "/identity.json",
+  "apple": {
+    "teamId": null,
+    "teamIdEnvironmentVariable": "NUMINA_APPLE_TEAM_ID",
+    "teamStatus": "apple_issued_team_not_configured",
+    "distributionMethod": "app-store",
+    "workflow": ".github/workflows/numina-ios-signing.yml",
+    "runner": "macos-latest",
+    "secrets": [
+      "NUMINA_APPLE_DISTRIBUTION_P12_BASE64",
+      "NUMINA_APPLE_DISTRIBUTION_P12_PASSWORD",
+      "NUMINA_APPLE_PROVISIONING_PROFILE_BASE64"
+    ],
+    "credentialScope": "GitHub Actions signing job only; never distributed to application layers"
+  },
+  "hosts": [
+    {
+      "provider": "Sites",
+      "origin": "https://numinalabs.xyz"
+    },
+    {
+      "provider": "Vercel",
+      "origin": "https://numina-production.vercel.app"
+    }
+  ],
+  "scope": "One shared distribution policy across five architecture layers. An Apple Team ID is issued by Apple and is separate from the Numina authority root.",
+  "distributionTeam": {
+    "name": "Numina",
+    "authority": "NUMINA",
+    "scope": "Numina-native distribution ownership",
+    "rootIdentity": "/identity.json",
+    "count": 1,
+    "sharedAcrossLayers": true
+  }
+}

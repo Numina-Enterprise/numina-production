@@ -52,4 +52,7 @@ for platform in ['android','ios']:
     native['sourceArchives'].append({'platform':platform,**item,'kind':'source_archive','installable':False})
 native['sourcePackagedAtUtc'] = now
 write(root/f'docs/native-package-record-v{major}.json',native)
+mirror = root/'runtime/vercel-production/public/downloads'
+if mirror.exists():
+    (mirror/f'native-package-record-v{major}.json').write_bytes((root/f'docs/native-package-record-v{major}.json').read_bytes())
 print(json.dumps({'version':version,'integration':record,'plugin':plugin,'nativeSources':native['sourceArchives'],'nativeBinariesChanged':False,'applicationTestsRun':False}))

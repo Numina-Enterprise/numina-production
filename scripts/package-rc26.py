@@ -20,6 +20,9 @@ shutil.copyfile(source/'deploy/vercel/entrypoint.py',destination/'api/index.py')
 shutil.copyfile(source/'deploy/vercel/vercel.json',destination/'vercel.json')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
+# Publish the same recorded native downloads alongside the unchanged verifier.
+public_assets=repo/'runtime/vercel-production/public'
+if public_assets.exists():shutil.copytree(public_assets,destination/'public')
 (destination/'.python-version').write_text('3.12\n',encoding='utf-8')
 (destination/'package.json').write_text(json.dumps({'name':'numina-production','version':json.loads((repo/'runtime/vercel-production/package.json').read_text())['version'],'private':True,'type':'module'})+'\n',encoding='utf-8')
 (destination/'.vercel').mkdir()

@@ -2,7 +2,7 @@
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
-The v4 distribution retains the existing unsigned 3.0.0 binary without modification. The 4.0.0 source has not been compiled. Apple signing and store submission remain pending. See `../../docs/native-package-record-v4.json`.
+The v4 distribution reuses the existing iOS executable with bundle version 4.0.0 and build number 3. Only Info.plist version metadata is updated; no native compilation is claimed. The archive remains unsigned. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v4.json`.
 
 ## Candidate settings
 

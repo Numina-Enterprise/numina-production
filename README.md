@@ -20,7 +20,7 @@ Runtime signing keys, provider credentials and private records belong only in pr
 
 ## Distribution
 
-The mobile web app is served at `/app`. The v4 distribution reuses the existing native 3.0.0 binaries byte-for-byte; their original versions, signing status and hashes are referenced in docs/native-package-record-v4.json. Android and iOS source candidates are 4.0.0 with build number 3 and have not been compiled. Prior 3.0.0 device binaries retain their exact hashes and build evidence in docs/native-package-record-v3.json. Native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
+The mobile web app is served at `/app`. The v4 distribution retains Android 3.0.0 binaries and reuses the iOS executable with v4 bundle metadata. Actual input/output hashes and signing status are in docs/native-package-record-v4.json. The shared Numina distribution team policy and macOS signing host workflow are described in mobile/signing/APPLE-SIGNING.md. Android and iOS source candidates are 4.0.0 with build number 3 and have not been compiled. Prior 3.0.0 device binaries retain their exact hashes and build evidence in docs/native-package-record-v3.json. Native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
 
 ## Source and rights
 
