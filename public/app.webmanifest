@@ -1,10 +1,10 @@
 {
   "id": "/app",
-  "name": "Numina OS 3 — Operations workspace",
+  "name": "Numina OS 3 — One connected operating system",
   "short_name": "Numina OS",
-  "description": "Intelligence in motion. Enterprise workflows, agent approvals, delivery and treasury records in Numina OS.",
+  "description": "Intelligence in motion. One root and five architecture layers connect service work, agent authority, treasury records, integrations and release evidence.",
   "start_url": "/app",
-  "scope": "/app",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#07080c",
   "theme_color": "#07080c",
@@ -38,14 +38,24 @@
   "prefer_related_applications": false,
   "shortcuts": [
     {
-      "name": "Request consulting",
-      "short_name": "Consulting",
-      "url": "/app?service=diagnostic#request-form"
+      "name": "Service work",
+      "short_name": "Work",
+      "url": "/app#service-work"
     },
     {
-      "name": "Result access scope",
-      "short_name": "Result access",
-      "url": "/app?service=result_access#request-form"
+      "name": "Agent control",
+      "short_name": "Agents",
+      "url": "/frontier"
+    },
+    {
+      "name": "Treasury records",
+      "short_name": "Treasury",
+      "url": "/control#native-treasury-panel"
+    },
+    {
+      "name": "Apps and plugins",
+      "short_name": "Integrations",
+      "url": "/integrations"
     }
   ]
 }
