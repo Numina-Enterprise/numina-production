@@ -2,7 +2,7 @@
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
-The v4 distribution reuses the existing iOS executable with bundle version 4.0.0 and build number 3. Only Info.plist version metadata is updated; no native compilation is claimed. The archive remains unsigned. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v4.json`.
+The v4 distribution source now targets bundle version 4.0.0 and build number 4. Only Info.plist version metadata is updated; no native compilation is claimed. The archive remains unsigned. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v4.json`.
 
 ## Candidate settings
 
@@ -10,17 +10,17 @@ The v4 distribution reuses the existing iOS executable with bundle version 4.0.0
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 4.0.0 / 3 |
+| Version / build | 4.0.0 / 4 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
 
-For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 3 must also be checked against any existing release history.
+For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 4 must also be checked against any existing release history.
 
 ## Included behavior
 
 - Opens the hosted workspace with first-party HTTPS navigation restricted to the exact `numinalabs.xyz` host and default HTTPS port. Subframes may use HTTPS. External top-level HTTPS, telephone and email links ask before opening the system handler. Other schemes and plain HTTP navigation are canceled. External form POST bodies are never forwarded into a browser URL.
-- Contains native back, workspace, reload, browser, privacy and support controls. First-party new-window links reuse the same web view. WebKit performs normal certificate validation; there are no transport exceptions or certificate bypasses.
+- Contains native back, workspace, reload, browser, privacy and support controls. A native System Status sheet checks first-party workspace/status endpoints with URLSession and labels those checks strictly as HTTPS availability, not financial or external-provider evidence. First-party new-window links reuse the same web view. WebKit performs normal certificate validation; there are no transport exceptions or certificate bypasses.
 - Shows loading and page/network failure screens with retry. Retry loads a page with GET, without automatically repeating a submission. This does not provide offline private records, offline sign-in or queued transactions. Errors returned inside the hosted app's own JavaScript remain the hosted app's responsibility.
 - Uses WebKit's persistent website-data store for its own cookies/cache. It has no analytics SDK, native JavaScript bridge, credential reader, push registration, native payment code, wallet integration, camera access or microphone access.
 - Opens the existing `/privacy` and `/contact` pages from the native menu. No privacy claim about the hosted service is inferred from the absence of a native analytics SDK.

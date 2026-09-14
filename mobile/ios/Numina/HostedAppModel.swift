@@ -29,6 +29,8 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     @Published var externalLink: ExternalLink?
     private var hasStarted = false
     private var lastPageURL = AppConfiguration.startURL
+    private var retryPageURL = AppConfiguration.startURL
+    private var canRetryCurrentNavigation = false
 
     override init() {
         let configuration = WKWebViewConfiguration()
@@ -55,11 +57,15 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     func load(_ url: URL) {
         guard AppConfiguration.isFirstParty(url), !AppConfiguration.isBrowserSignIn(url) else { return }
         failure = nil
-        // Retry is a fresh page GET; it never replays a submitted form or payment request.
-        webView.load(URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 30))
+        // Remember this attempted page even when navigation fails before didFinish.
+        retryPageURL = url
+        // Retry builds a fresh GET and never reuses a submission's method or body.
+        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 30)
+        request.httpMethod = "GET"
+        webView.load(request)
     }
 
-    func retry() { load(lastPageURL) }
+    func retry() { load(retryPageURL) }
     func home() { load(AppConfiguration.startURL) }
     func back() { if webView.canGoBack { failure = nil; webView.goBack() } }
 
@@ -100,6 +106,14 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
             return
         }
         if AppConfiguration.isFirstParty(url) {
+            // Track only body-free page GETs for retry, not form submissions.
+            let request = navigationAction.request
+            let method = request.httpMethod?.uppercased() ?? "GET"
+            canRetryCurrentNavigation = method == "GET"
+                && request.httpBody == nil && request.httpBodyStream == nil
+                && navigationAction.navigationType != .formSubmitted
+                && navigationAction.navigationType != .formResubmitted
+            retryPageURL = canRetryCurrentNavigation ? url : lastPageURL
             decisionHandler(.allow)
             return
         }
@@ -165,8 +179,10 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isLoading = false
         canGoBack = webView.canGoBack
-        if let url = webView.url, AppConfiguration.isFirstParty(url), !AppConfiguration.isBrowserSignIn(url) {
+        if canRetryCurrentNavigation, let url = webView.url,
+           AppConfiguration.isFirstParty(url), !AppConfiguration.isBrowserSignIn(url) {
             lastPageURL = url
+            retryPageURL = url
         }
     }
 
