@@ -23,7 +23,7 @@ test('services and pricing combine scope, terms and the existing enterprise requ
   const html=read('services.html');
   for(const id of ['pricing','book','implementation','delivery'])assert.equal([...html.matchAll(new RegExp('id="'+id+'"','g'))].length,1,id);
   for(const service of ['diagnostic_enterprise','audit_enterprise'])assert.equal([...html.matchAll(new RegExp('/app\\?service='+service+'#request-form','g'))].length,1,service);
-  for(const text of ['$5,000','$25,000','International requests are reviewed before checkout','Customer acceptance','Enterprise and global programs'])assert.ok(html.includes(text),text);
+  for(const text of ['$5,000','$25,000','International requests are reviewed before checkout','customer acceptance','Enterprise Integration','Frontier Program'])assert.ok(html.includes(text),text);
   assert.doesNotMatch(read('sitemap.xml'),/numinalabs.xyz\/pricing/);
 });
 
