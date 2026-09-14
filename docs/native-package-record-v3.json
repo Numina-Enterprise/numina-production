@@ -44,8 +44,8 @@
     "binaries": [
       {
         "file": "numina-3.0.0-ios-unsigned-app.zip",
-        "bytes": 61714,
-        "sha256": "ce5eec4e65d66f89c81e97f93cbac8b5ed4cd6144758592b0d2dccbd18103bf6",
+        "bytes": 85852,
+        "sha256": "d2186332922a26a84e8f3e0ee9ee3a55cdd08d60cfcf4f6e46a07fea082e6616",
         "platform": "ios",
         "signed": false,
         "installable": false,
@@ -58,24 +58,44 @@
     "testsRun": false,
     "storeSubmitted": false,
     "nativeAuthenticatedSessionSupported": false,
-    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34785069076",
-    "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
-    "buildCompletedAtUtc": "2026-09-13T21:52:23Z"
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34867504707",
+    "sourceCommit": "fd01df039f9e920afa29361a0df32709faa7dd08",
+    "buildCompletedAtUtc": "2026-09-14T16:16:32Z",
+    "previousBuilds": [
+      {
+        "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34785069076",
+        "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+        "buildCompletedAtUtc": "2026-09-13T21:52:23Z",
+        "binaries": [
+          {
+            "file": "numina-3.0.0-ios-unsigned-app.zip",
+            "bytes": 61714,
+            "sha256": "ce5eec4e65d66f89c81e97f93cbac8b5ed4cd6144758592b0d2dccbd18103bf6",
+            "platform": "ios",
+            "signed": false,
+            "installable": false,
+            "url": "/downloads/numina-3.0.0-ios-unsigned-app.zip"
+          }
+        ]
+      }
+    ],
+    "appIconCompiled": true,
+    "appIconName": "AppIcon"
   },
   "sourceArchives": [
     {
       "platform": "android",
       "file": "numina-os-3.0.0-android-source.zip",
-      "bytes": 10257,
-      "sha256": "0d90b75981e150e0cfe601f3da30b25838371b697c99c4262aadb3060765d51a",
+      "bytes": 10451,
+      "sha256": "47d09abc59ffa5dfc41c97a663deb94a2b6f698e16d57a0cfeb48bd6ffebd3e4",
       "kind": "source_archive",
       "installable": false
     },
     {
       "platform": "ios",
       "file": "numina-os-3.0.0-ios-source.zip",
-      "bytes": 14646,
-      "sha256": "c0011e661879d2445292c1c4e19e9a66cb2b1b554dfb71b75bf909a197b6442e",
+      "bytes": 39405,
+      "sha256": "efe375f929e4d1d86dbf6b033c9e55ab1382f9363eda9f0726977b7065fa99f8",
       "kind": "source_archive",
       "installable": false
     }
@@ -86,5 +106,5 @@
   "storeListingOrApprovalClaimed": false,
   "packagedAtUtc": "2026-09-13T21:49:52.493007+00:00",
   "recordedAtUtc": "2026-09-13T21:56:35.907Z",
-  "sourcePackagedAtUtc": "2026-09-14T15:44:59.837482+00:00"
+  "sourcePackagedAtUtc": "2026-09-14T16:17:53.054682+00:00"
 }
