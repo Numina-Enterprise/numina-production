@@ -34,6 +34,26 @@ Logs contain no raw paths, query strings, IPs, user identifiers, authorization h
 
 Vercel's active rc26 assembly is created with scripts/package-rc26.py. Its generated entrypoint wraps the preserved ASGI app; the 105 frozen core files remain unchanged. The old rc22 gateway files are historical and are not the telemetry deployment target.
 
+## Publishing telemetry and recovery
+
+Run `npm run publish:source -- github` or `npm run publish:source -- sites` from the committed Numina repository using the host's existing publishing credentials. The Sites owner workflow obtains the short-lived repository credential and supplies its Authorization header through per-process Git configuration. Keep credentials out of command arguments, files and source. The exported `publishGit({cwd, target, env, reportDirectory})` function also supports the existing Numina builder repository with target `builder`.
+
+The publisher accepts only the configured Numina HTTPS repositories. It requires a clean repository and pins the exact local commit when updating `refs/heads/main`. It never force pushes. A Git success is followed by a remote revision read; source publication is verified only when the full remote commit matches the requested commit. Hosting still requires saving the matching artifact, deploying it and checking the provider's deployment result.
+
+Each run writes a private JSON report under ignored `.openai/publishing/`, or the caller's private report directory. The report captures actual per-command exit codes, timeouts, durations, bounded failure categories, source and observed remote commits, and actual push and retry counts. Raw command output, credentials, environment values and treasury balances are excluded. These records are local observations, not builder-signed attestations or provider receipts. Reports are not served by `/api/ops/v1/telemetry` and are not included in the hosted build.
+
+| Publishing signal | Report field | Recovery |
+| --- | --- | --- |
+| Command result | steps[].exitCode, failure, timedOut | Identify the failed operation without claiming a successful exit |
+| Access or authentication denial | access_denied, proxy_denied, authentication | Restore access through the host or provider's owning controls; no automatic retry |
+| DNS, TLS or connection failure | dns, tls, connection_failed | Diagnose the configured host; keep certificate verification enabled |
+| Temporary failure | timeout, connection_reset, temporary_http_failure | Read the remote revision first; retry once after two seconds only if that read succeeds and differs |
+| Ambiguous acceptance | push_outcome_unconfirmed | Reconcile with the provider before repeating the write |
+| Accepted but unverified source | push_accepted_verification_unavailable | Restore the remote read; do not call the deployment complete |
+| Source alignment | sourceCommit, remoteCommit, sourcePushVerified | Save and deploy only the matching source and artifact |
+
+A generic connection failure does not prove a permissions fault. Separately observed operating-system errors, such as Windows socket error 10013, belong in host diagnostics. Telemetry does not change network policy, grant provider access, or repair missing credentials. Git operations retain the host's configured HTTPS and proxy behavior. Each command has a 30-second deadline; retries are bounded to two total push attempts. No application test suite runs as part of publishing.
+
 ## Provider-neutral quantum compute
 
 The connected **Numina state-vector backend** runs bounded classical simulation at **POST /api/ops/v1/quantum/measure**. **GET /api/ops/v1/quantum/capabilities** reports its configured state. Both require the existing authenticated owner. A measurement request uses canonical JSON and the prepared request fields (id, Principal, Authority, Objective, Intent); Principal must match the authenticated owner and Authority must be NUMINA. Session-based writes also require a matching Origin header.

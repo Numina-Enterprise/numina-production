@@ -60,6 +60,18 @@
       "action": "respect_backend_limits_and_cost_budget"
     }
   ],
+  "publishing": {
+    "schema": "numina.publishing-telemetry.v1",
+    "scope": "local_publishing_process",
+    "script": "scripts/publish-with-telemetry.mjs",
+    "reportDirectory": ".openai/publishing/",
+    "servedByOwnerEndpoint": false,
+    "metrics": ["metrics.gitCommands", "metrics.gitFailures", "metrics.pushAttempts", "metrics.retries", "metrics.totalDurationMs"],
+    "perCommand": ["steps[].stage", "steps[].exitCode", "steps[].durationMs", "steps[].failure", "steps[].timedOut"],
+    "maximumPushAttempts": 2,
+    "sourcePushRequiresMatchingRemoteCommit": true,
+    "sourcePushEstablishesDeployment": false
+  },
   "automaticScalingEnabled": false,
   "treasuryWrites": false,
   "quantum": {

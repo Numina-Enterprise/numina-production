@@ -61,7 +61,7 @@ record.treasury=sharedTreasury;
 record.requiredArchitecture=requiredArchitecture;
 record.checks.requiredArchitectureMatches=true;
 record.sourceInputs.push(...['config/numina-architecture.json','src/native-treasury-model.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
-record.hostRouting={canonicalApplicationOrigin:'https://numinalabs.xyz',verifierOrigin:'https://numina-production.vercel.app',treasuryRoute:sharedTreasury.route,applicationManifest,providerObservationRoute:'/api/control/v1/stripe-treasury',independentTreasuryCreated:false};
+record.hostRouting={canonicalApplicationOrigin:'https://numinalabs.xyz',verifierOrigin:'https://numina-production.vercel.app',treasuryRoute:sharedTreasury.route,applicationManifest,providerObservationRoute:'/api/control/v1/stripe-treasury',telemetryMetricMap:'/telemetry-metrics.json',telemetryGuide:'/downloads/Telemetry-and-Quantum.md',independentTreasuryCreated:false};
 record.sourceInputs.push({path:'scripts/package-rc26.py',sha256:digest(fs.readFileSync('scripts/package-rc26.py'))});
 const distribution=json('mobile/signing/distribution-policy.json');
 if(distribution.distributionTeam?.name!=='Numina'||distribution.distributionTeam.authority!=='NUMINA'||distribution.distributionTeam.count!==1||distribution.layers.join(',')!=='L1,L2,L3,L4,L5'||NUMINA_LAYERS.distribution?.policy!=='/downloads/distribution-policy.json')throw Error('Distribution must share the Numina root across all layers');
@@ -75,6 +75,8 @@ if(read('src/quantum-backend.js').replace('../integrations/numina/src/quantum.js
 if(read('src/telemetry.js')!==read('runtime/vercel-production/lib/telemetry.mjs'))throw Error('Gateway telemetry copy is stale');
 if(match('src/telemetry.js',/TELEMETRY_VERSION = '([^']+)'/)!==version)throw Error('Telemetry version differs');
 record.telemetry={schema:'numina.telemetry.v1',endpoint:'/api/ops/v1/telemetry',access:'authenticated_owner',metricsGuide:'/downloads/Telemetry-and-Quantum.md',scope:'process_local_with_provider_log_aggregation',automaticScalingEnabled:false};
+record.publishingTelemetry={schema:'numina.publishing-telemetry.v1',script:'scripts/publish-with-telemetry.mjs',scope:'local_publishing_process',remoteRevisionRequired:true,maximumPushAttempts:2,deploymentInferredFromPush:false};
+record.sourceInputs.push({path:'scripts/publish-with-telemetry.mjs',sha256:digest(fs.readFileSync('scripts/publish-with-telemetry.mjs'))});
 record.quantum={adapter:'@numina/nusd-integration/quantum',backend:'numina-statevector',mode:'classical_simulator',endpoint:'/api/ops/v1/quantum/measure',hardwareExecutionVerified:false};
 record.sourceInputs.push(...['src/telemetry.js','src/telemetry-http.js','src/quantum-backend.js','src/quantum-http.js','runtime/vercel-production/lib/telemetry.mjs','runtime/vercel-production/numina_telemetry.py','integrations/numina/src/quantum.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 const noticeTargets=['public','docs','integrations/numina','integrations/codex/numina','mobile/android','mobile/ios','runtime/vercel-production','runtime/vercel-production/public/downloads'];
