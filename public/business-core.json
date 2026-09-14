@@ -24,6 +24,7 @@
   "architecture": "/api/control/v2/architecture",
   "head": "/api/control/v2/head",
   "release": "/v3/release/manifest",
+  "treasuryEvidence": {"route":"/api/control/v2/treasury/evidence","access":"authenticated_owner","fundingStatus":"server_observed_evidence_required"},
   "providerEvidenceRequired": true,
   "sourceAlignment": "/source-alignment.json"
 }
