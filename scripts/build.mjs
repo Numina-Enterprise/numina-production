@@ -9,6 +9,9 @@ for(const p of ['dist/client','dist/server','dist/.openai','dist/client/download
 for(const name of readdirSync('dist'))if(statSync('dist/'+name).isFile())unlinkSync('dist/'+name);
 function copy(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=from+'/'+n,b=to+'/'+n;statSync(a).isDirectory()?copy(a,b):copyFileSync(a,b);}}
 copy('public','dist/client');copy('docs','dist/client/downloads');
+// Sites serves matching static files before Worker routes. Let the Worker own
+// the old pricing address so its redirect retains query parameters.
+unlinkSync('dist/client/pricing.html');
 // The homepage and frontier share the same canonical control-room document.
 copyFileSync('public/frontier.html','dist/client/index.html');
 copyFileSync('mobile/signing/release-identities.json','dist/client/identity.json');
