@@ -6,21 +6,21 @@ from pathlib import Path
 from fastapi import FastAPI,HTTPException,Request
 from fastapi.responses import JSONResponse,FileResponse,PlainTextResponse
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel,Field,field_validator,ConfigDict
 from prometheus_client import Counter,Histogram,generate_latest,CONTENT_TYPE_LATEST
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 from .config import load_settings
 from .frozen import ROOT,verify_frozen_core
 from .signing import load_identity,verify_envelope
-from .release import release_status,release_descriptor
+from .release import release_status,release_descriptor,core_release_binding
 from .supply_chain import verify_supply_chain_artifacts
 from .preflight import run_preflight
 from .control_gateway import evaluate_control_request
 from .execution_adapters import provider_catalog,prepare_execution_handoff,bind_external_evidence
 from .circle_agent_adapter import CircleTestnetAdapter,CircleTestnetConfig,PROVIDER_SUBMISSION_TYPE,PROVIDER_RECONCILIATION_TYPE
 from .arc_verification import ArcExternalVerifier,ArcVerificationConfig,EXECUTION_VERIFIED_TYPE
-from .evidence_network import create_evidence_store,normalize_intelligence_evidence,build_evidence_bundle,INTELLIGENCE_EVIDENCE_TYPE,EVIDENCE_BUNDLE_TYPE
+from .evidence_network import create_evidence_store,normalize_intelligence_evidence,build_evidence_bundle,INTELLIGENCE_EVIDENCE_TYPE,EVIDENCE_BUNDLE_TYPE,REVOCATION_TYPE
 from .owner_access import require_owner_access
 from numina.status import StatusWitness,SignedStatusWitness,verify_witness
 from numina.checkpoints import ConstitutionalCheckpoint,SignedCheckpoint,verify_checkpoint
@@ -68,6 +68,17 @@ class VerificationJobRequest(BaseModel):
     control_receipt:dict
     handoff_receipt:dict
     submission_receipt:dict
+class RevocationRequest(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    record_id:str=Field(pattern=r"^[0-9a-f]{64}$")
+    reason:str=Field(min_length=1,max_length=1000)
+    evidence:dict=Field(default_factory=dict)
+
+    @field_validator("reason")
+    @classmethod
+    def reason_required(cls,value):
+        if not value.strip():raise ValueError("REVOCATION_REASON_REQUIRED")
+        return value.strip()
 
 
 def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
@@ -141,6 +152,9 @@ def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
         path=request.url.path
         if path.startswith(("/v1/status","/v1/control/state","/v1/release/","/v1/preflight","/readyz","/status")):
             response.headers["Cache-Control"]="no-store"
+        if path=="/v1/evidence/revoke":
+            response.headers["Cache-Control"]="private, no-store"
+            response.headers["Vary"]="Authorization, Origin"
         REQUESTS.labels(request.method,path,str(response.status_code)).inc();LATENCY.labels(request.method,path).observe(duration)
         return response
 
@@ -184,6 +198,12 @@ def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
 
     @app.get("/v1/status")
     def status():return release_status(settings)
+
+    @app.get("/v1/release/core-binding")
+    def core_binding():
+        descriptor=release_descriptor(settings)
+        payload={**core_release_binding(settings),"build_id":descriptor["build_id"],"production_files_root":descriptor["production_files_root"]}
+        return {"binding":payload,"receipt":identity.sign(payload,"NUMINA_CORE_RELEASE_BINDING")}
 
     @app.get("/v1/capabilities")
     def capabilities():
@@ -382,6 +402,25 @@ def create_app(settings=None, *, arc_rpc_transport=None)->FastAPI:
     @app.get("/v1/evidence/transactions/{tx_hash}")
     def transaction_evidence(tx_hash:str):
         return {"tx_hash":tx_hash.lower(),"records":evidence_store.records_for_tx(tx_hash)}
+
+    @app.post("/v1/evidence/revoke")
+    def revoke_evidence(body:RevocationRequest):
+        if not settings.evidence_network_enabled:raise HTTPException(503,"EVIDENCE_NETWORK_DISABLED")
+        existing=evidence_store.get_record(body.record_id)
+        if existing is None:raise HTTPException(404,"EVIDENCE_RECORD_NOT_FOUND")
+        if existing["revoked"]:
+            record=existing
+        else:
+            payload={"schema":"numina.evidence-revocation.v1","record_id":body.record_id,
+                "artifact_root":existing["artifact_root"],"artifact_type":existing["artifact_type"],
+                "reason":body.reason,"evidence":body.evidence,"revoked_at":int(time.time()),
+                "authority_root":settings.owner_root_hash,"record_retained":True}
+            receipt=identity.sign(payload,REVOCATION_TYPE)
+            try:record=evidence_store.revoke(record_id=body.record_id,revocation=receipt)
+            except ValueError as exc:raise HTTPException(404,str(exc)) from exc
+        # Return the first persisted receipt, including after a concurrent retry.
+        stored=record["revocation"]
+        return {"revocation":stored["payload"],"receipt":stored,"record":record}
 
     @app.post("/v1/verify/evidence-bundle")
     def verify_evidence_bundle(envelope:Envelope):
