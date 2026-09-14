@@ -42,5 +42,37 @@
     "recordSeparation": "Each provider balance, currency, reserve allocation and redemption record retains its own source and verification status"
   },
   "providerEvidenceRequired": true,
-  "sourceAlignment": "/source-alignment.json"
+  "sourceAlignment": "/source-alignment.json",
+  "procurementAuthorization": {
+    "schema": "numina.owner-authorization.v1",
+    "source": "owner_instruction",
+    "status": "OWNER_AUTHORIZED",
+    "creditUsageAuthorized": true,
+    "scope": [
+      "Numina OS",
+      "website",
+      "plugin",
+      "release provenance"
+    ],
+    "execution": "Use existing authorized provider access and available credits",
+    "providerBillingObservation": null
+  },
+  "intellectualProperty": {
+    "owner": "SK Consulting LLC",
+    "notice": "/ownership",
+    "record": "/ownership.json",
+    "sourceNotice": "/OWNERSHIP.md",
+    "scope": "Numina-owned material",
+    "thirdPartyLicensesRetained": true
+  },
+  "original_plan_status": "FUNDED_PLAN",
+  "fundingPlanDeclaration": {
+    "source": "owner_instruction",
+    "statusField": "original_plan_status",
+    "scope": "Original funding-plan declaration",
+    "providerObservationRoute": "/api/control/v1/stripe-treasury",
+    "fundingEvidenceRoute": "/api/control/v2/treasury/evidence",
+    "changesProviderBalances": false,
+    "establishesExternalSettlement": false
+  }
 }

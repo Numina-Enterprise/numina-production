@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/NuminaLaunchTheme">
         <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
+        <meta-data android:name="xyz.numinalabs.OWNERSHIP_NOTICE" android:resource="@string/numina_ownership_notice" />
         <activity android:name="com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity" android:exported="false">
             <meta-data android:name="android.support.customtabs.trusted.MANAGE_SPACE_URL" android:value="https://numinalabs.xyz/app" />
         </activity>
