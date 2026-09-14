@@ -36,12 +36,21 @@ test('owner-only evidence is signed, snapshot-bound and preserves the original j
     assert.equal(p.source.canonicalTreasury.id,'numina:treasury:'+encodeURIComponent(owner));
     assert.equal(p.records.nativeTreasury.verification.status,'VERIFIED');assert.equal(p.records.providerBalances.verification.status,'AUTHENTICATED_OBSERVATION');
     assert.equal(p.records.providerBalances.source,'/source/providerObservation');assert.equal(p.records.bankFunding.verification.status,'BANK_PROVIDER_NOT_CONNECTED');
+    const currencies=p.records.providerBalances.currencies;
+    assert.equal(currencies.usd.precision,2);assert.equal(currencies.usdc.precision,6);assert.equal(currencies.nusd.precision,null);
+    assert.equal(currencies.usd.balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
+    assert.equal(currencies.usdc.balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
+    assert.equal(currencies.usd.balances.inbound_pending.verification.status,'NOT_REPORTED');
+    assert.equal(currencies.nusd.verification.status,'NOT_REPORTED');
+    assert.equal(currencies.usdc.balances.available.source,'/source/providerObservation/record/balances/available/usdc');
+    assert.equal(Object.hasOwn(currencies.usdc.balances.available,'value'),false);
     assert.equal(p.records.reserveAllocation.source,null);assert.equal(p.records.redemption.source,null);
     assert.equal(p.records.reserveAllocation.verification.status,'NOT_VERIFIED');assert.equal(p.records.redemption.verification.status,'NOT_VERIFIED');
     assert.equal(p.fundingVerification.actual_funding,false);assert.equal(p.fundingVerification.bankConfirmation.verified,false);assert.equal(p.source.supportingDocuments.complete,true);
     assert.equal((await readControl(env.DB)).head_hash,before.head_hash);assert.equal(JSON.stringify(receipt).includes(env.NUMINA_STRIPE_TREASURY_READ_KEY),false);
     const altered=structuredClone(receipt);altered.payload.fundingVerification.actual_funding=true;assert.equal(await frontierVerify(altered,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),false);
     const combined=structuredClone(receipt);combined.payload.records.reserveAllocation=combined.payload.records.nativeTreasury;assert.equal(await frontierVerify(combined,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),false);
+    const changedCurrency=structuredClone(receipt);changedCurrency.payload.records.providerBalances.currencies.usd.balances.inbound_pending.verification.status='AUTHENTICATED_OBSERVATION';assert.equal(await frontierVerify(changedCurrency,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),false);
   }finally{globalThis.fetch=original;env.DB.close();}
 });
 
@@ -85,4 +94,32 @@ test('owner claims and uploaded-document metadata cannot promote actual funding'
   assert.equal(payload.fundingVerification.actual_funding,false);assert.equal(payload.fundingVerification.ownerDeclaredFunded,true);assert.equal(payload.fundingVerification.allocatedReservesVerified,false);
   assert.equal(payload.records.providerBalances.verification.status,'UNAVAILABLE');assert.equal(payload.records.reserveAllocation.verification.status,'NOT_VERIFIED');assert.equal(payload.records.redemption.verification.status,'NOT_VERIFIED');
   treasury.projection.balance='1';assert.equal(payload.source.nativeTreasury.projection.balance,'500000000000000');assert.equal(payload.evidenceHash,await controlHash(payload.source));
+});
+
+test('reported provider NUSD and negative balances retain their own sources without proving native asset identity',async()=>{
+  const env=await fixture(),original=globalThis.fetch;
+  globalThis.fetch=async()=>{const value=await provider().json();value.balance.available.usd.value=-12500;value.balance.available.nusd={currency:'nusd',value:500};return Response.json(value);};
+  try{
+    const receipt=await (await worker.fetch(req(),env)).json(),p=receipt.payload,currencies=p.records.providerBalances.currencies;
+    assert.equal(p.source.providerObservation.record.balances.available.usd.value,-12500);
+    assert.equal(currencies.usd.balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
+    assert.equal(currencies.nusd.verification.status,'ASSET_NOT_VERIFIED');assert.equal(currencies.nusd.precision,null);
+    assert.equal(currencies.nusd.balances.available.verification.status,'ASSET_NOT_VERIFIED');
+    assert.equal(currencies.nusd.balances.available.source,'/source/providerObservation/record/provider_nusd_balance/buckets/available');
+    assert.equal(currencies.nusd.balances.inbound_pending.verification.status,'NOT_REPORTED');
+    assert.equal(currencies.nusd.balances.inbound_pending.source,null);
+    assert.equal(p.fundingVerification.actual_funding,false);assert.equal(p.source.nativeTreasury.projection.balance,'500000000000000');
+    assert.equal(await frontierVerify(receipt,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),true);
+  }finally{globalThis.fetch=original;env.DB.close();}
+});
+
+test('an observation label alone cannot authenticate currency or balance records',async()=>{
+  for(const observation of [{status:'UNAVAILABLE',record:null},{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:{schema:'owner_assertion',balances:{available:{usd:{currency:'usd',value:500000000000000}}}}}]){
+    const p=await treasuryEvidencePayload({treasury:{root:owner},frontier:{},providerObservation:observation,supportingDocuments:null,capturedAt:'2026-01-01T00:00:00Z'});
+    assert.equal(p.records.providerBalances.verification.status,'UNAVAILABLE');
+    for(const currency of Object.values(p.records.providerBalances.currencies)){
+      assert.equal(currency.source,null);assert.equal(currency.verification.status,'UNAVAILABLE');
+      for(const balance of Object.values(currency.balances)){assert.equal(balance.source,null);assert.equal(balance.verification.status,'UNAVAILABLE');}
+    }
+  }
 });
