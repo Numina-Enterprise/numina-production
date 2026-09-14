@@ -13,3 +13,7 @@ The public source package can be installed through a Codex marketplace. This arc
 No native-store or third-party marketplace publication is implied by this package. Numina's architecture layers share one canonical control journal. Production account connections and approvals retain their own actual status.
 
 Release alignment: Numina 3.0.0 / rc26 singularity. The signed core-to-root binding is at https://numinalabs.xyz/v1/release/core-binding. The preserved 1.8.0 frozen core retains its original identity. The public MCP tools remain read-only. Evidence revocation uses the separate owner-authenticated POST /v1/evidence/revoke and retains stored artifacts.
+
+Website and OS: Intelligence in motion. One core, one root, five architecture layers. The current application release is available at https://numinalabs.xyz/v3/release/manifest.
+
+Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.
