@@ -1,0 +1,122 @@
+{
+  "schema": "numina.native-package.v1",
+  "proposedPackageIdentity": "xyz.numinalabs.app",
+  "packageIdentityRegisteredOrConfirmed": false,
+  "hostedWorkspace": "https://numinalabs.xyz/app",
+  "sdkBinariesDependencyCachesOrCredentialsIncluded": false,
+  "slsaLevelClaimed": null,
+  "nusdActivationPerformed": false,
+  "storeListingOrApprovalClaimed": false,
+  "applicationVersion": "4.0.0",
+  "versionCode": 3,
+  "android": {
+    "status": "retained_v3_signed_binaries",
+    "binaries": [
+      {
+        "file": "numina-3.0.0-release-signed.apk",
+        "bytes": 3797876,
+        "sha256": "7f6455541cb0191efd5e2227f959b9dfb26bb8ccc04e1f21da5e710a281edf8b",
+        "platform": "android",
+        "signed": true,
+        "installable": true,
+        "url": "/downloads/numina-3.0.0-release-signed.apk"
+      },
+      {
+        "file": "numina-3.0.0-upload-signed.aab",
+        "bytes": 3617114,
+        "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550",
+        "platform": "android",
+        "signed": true,
+        "installable": false,
+        "url": "/downloads/numina-3.0.0-upload-signed.aab"
+      }
+    ],
+    "compiled": true,
+    "signingPerformed": true,
+    "deviceInstalled": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "signatureVerification": true,
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34785067667",
+    "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+    "buildCompletedAtUtc": "2026-09-13T21:53:32Z",
+    "releaseIdentity": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+    "uploadIdentity": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
+    "binaryApplicationVersion": "3.0.0",
+    "binaryVersionCode": 2,
+    "sourceApplicationVersion": "4.0.0",
+    "currentSourceCompiled": false,
+    "reusedWithoutModification": true,
+    "sourceRecord": "/downloads/native-package-record-v3.json",
+    "reuseScope": "Existing native launcher opens the hosted Numina workspace; this release does not recompile, re-sign, relabel or verify installation of the binary."
+  },
+  "ios": {
+    "status": "unsigned_v4_bundle_prepared",
+    "binaries": [
+      {
+        "file": "numina-4.0.0-ios-unsigned-app.zip",
+        "bytes": 85728,
+        "sha256": "f56e239ec6ffb91f265975211885c8f49eb738344e25721c1ec7f86264d82baa",
+        "platform": "ios",
+        "signed": false,
+        "installable": false,
+        "url": "/downloads/numina-4.0.0-ios-unsigned-app.zip"
+      }
+    ],
+    "binaryApplicationVersion": "4.0.0",
+    "binaryVersionCode": 3,
+    "sourceApplicationVersion": "4.0.0",
+    "currentSourceCompiled": false,
+    "compiled": false,
+    "signed": false,
+    "ipaCreated": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "nativeAuthenticatedSessionSupported": false,
+    "preparation": {
+      "method": "update_unsigned_bundle_version_metadata",
+      "changedEntries": [
+        "Numina.app/Info.plist"
+      ],
+      "nativeCompilationPerformed": false,
+      "inputFile": "numina-3.0.0-ios-unsigned-app.zip",
+      "inputSha256": "d2186332922a26a84e8f3e0ee9ee3a55cdd08d60cfcf4f6e46a07fea082e6616",
+      "inputBuildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34867504707",
+      "inputSourceCommit": "fd01df039f9e920afa29361a0df32709faa7dd08",
+      "executableSha256": "27c8f779d3546ef4e0d6820b9ff34f4247b21a1b710a42b73e68fc650c6fca72",
+      "executableBytesUnchanged": true
+    },
+    "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
+    "distributionPolicy": "/downloads/distribution-policy.json",
+    "hostedArtifactPaths": {
+      "sites": "https://numinalabs.xyz/downloads/numina-4.0.0-ios-unsigned-app.zip",
+      "vercel": "https://numina-production.vercel.app/downloads/numina-4.0.0-ios-unsigned-app.zip"
+    },
+    "hostPublicationVerified": false
+  },
+  "sourceArchives": [
+    {
+      "platform": "android",
+      "file": "numina-os-4.0.0-android-source.zip",
+      "bytes": 10581,
+      "sha256": "d89e0ffc7c2500c35281df5fb94a88fac300bbbb51b195891ccdeb578527d6e8",
+      "kind": "source_archive",
+      "installable": false
+    },
+    {
+      "platform": "ios",
+      "file": "numina-os-4.0.0-ios-source.zip",
+      "bytes": 39660,
+      "sha256": "8623a631f58903cd0d9a18b00572e7d91ac04f2e3887b00059326c365d2d4a12",
+      "kind": "source_archive",
+      "installable": false
+    }
+  ],
+  "previousRelease": {
+    "version": "3.0.0",
+    "record": "/downloads/native-package-record-v3.json",
+    "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
+  },
+  "sourcePackagedAtUtc": "2026-09-14T18:43:16.779803+00:00",
+  "nativeDistributionPolicy": "Retain Android 3.0.0 binaries. Reuse the iOS executable with v4 bundle metadata; Apple signing and both hosted publications require successful provider operations."
+}
