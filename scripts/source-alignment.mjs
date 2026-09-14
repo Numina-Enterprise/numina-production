@@ -61,6 +61,8 @@ record.treasury=sharedTreasury;
 record.requiredArchitecture=requiredArchitecture;
 record.checks.requiredArchitectureMatches=true;
 record.sourceInputs.push(...['config/numina-architecture.json','src/native-treasury-model.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
+record.hostRouting={canonicalApplicationOrigin:'https://numinalabs.xyz',verifierOrigin:'https://numina-production.vercel.app',treasuryRoute:sharedTreasury.route,applicationManifest,providerObservationRoute:'/api/control/v1/stripe-treasury',independentTreasuryCreated:false};
+record.sourceInputs.push({path:'scripts/package-rc26.py',sha256:digest(fs.readFileSync('scripts/package-rc26.py'))});
 const distribution=json('mobile/signing/distribution-policy.json');
 if(distribution.distributionTeam?.name!=='Numina'||distribution.distributionTeam.authority!=='NUMINA'||distribution.distributionTeam.count!==1||distribution.layers.join(',')!=='L1,L2,L3,L4,L5'||NUMINA_LAYERS.distribution?.policy!=='/downloads/distribution-policy.json')throw Error('Distribution must share the Numina root across all layers');
 record.distribution={...NUMINA_LAYERS.distribution,appleTeamStatus:distribution.apple.teamStatus};

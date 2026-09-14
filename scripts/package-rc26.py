@@ -26,7 +26,13 @@ entrypoint+='from numina_telemetry import NuminaTelemetryASGI\napp=NuminaTelemet
 shutil.copyfile(repo/'runtime/vercel-production/numina_telemetry.py',destination/'numina_telemetry.py')
 shutil.copytree(repo/'runtime/vercel-production/lib',destination/'lib',ignore=shutil.ignore_patterns('numina.js'))
 vercel_config=json.loads((source/'deploy/vercel/vercel.json').read_text())
-vercel_config['rewrites'].insert(0,{'source':'/api/ops/v1/:path*','destination':'https://numinalabs.xyz/api/ops/v1/:path*'})
+application_version=json.loads((repo/'package.json').read_text(encoding='utf-8'))['version']
+application_major=application_version.split('.')[0]
+canonical_paths=['/api/control/v1/:path*','/api/app/v1/:path*','/api/ops/v1/:path*','/source-alignment.json']
+canonical_paths += ['/v'+major+'/release/manifest' for major in dict.fromkeys(['2','3',application_major])]
+# All application and treasury records belong to the existing Sites journal.
+# The retained verifier still serves its own /v1 runtime identity and receipts.
+vercel_config['rewrites']=[{'source':path,'destination':'https://numinalabs.xyz'+path} for path in canonical_paths]+vercel_config['rewrites']
 (destination/'vercel.json').write_text(json.dumps(vercel_config,indent=2)+'\n',encoding='utf-8')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
@@ -74,4 +80,4 @@ check=verify_supply_chain_artifacts(build_id=identity['build_id'],production_fil
 if not check['valid']:raise SystemExit('Source inventory binding failed')
 descriptor=release_descriptor(settings)
 (artifacts/'assembled-release.json').write_text(json.dumps(descriptor,indent=2,sort_keys=True)+'\n',encoding='utf-8')
-print(json.dumps({'directory':str(destination),'build':descriptor,'frozenFiles':frozen.checked,'sourceFiles':len(entries),'newTestsRun':False,'projectLinked':project_link.exists(),'telemetryWrapperIncluded':True},indent=2))
+print(json.dumps({'directory':str(destination),'build':descriptor,'frozenFiles':frozen.checked,'sourceFiles':len(entries),'newTestsRun':False,'projectLinked':project_link.exists(),'telemetryWrapperIncluded':True,'canonicalApplicationRoutes':canonical_paths},indent=2))
