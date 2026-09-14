@@ -1,5 +1,7 @@
 # Numina plugin 4.0.0
 
+Business, partnership and support contact: [skott34@numinalabs.xyz](mailto:skott34@numinalabs.xyz). [Explore services](https://numinalabs.xyz/services) or [track an existing request](https://numinalabs.xyz/app#service-work).
+
 Read the live Numina architecture, capabilities and canonical journal head in Codex. The bundled HTTP MCP connection needs no account token and performs no writes. Requires a host supporting MCP Streamable HTTP, protocol 2025-11-25.
 
 Production workspace: https://numinalabs.xyz/app

@@ -30,8 +30,8 @@
     },
     {
       "path": "LICENSE.md",
-      "bytes": 1205,
-      "sha256": "30a6d99634a3010b7636aad89f98a424de88ace7e602333b1c6b74a35381e1c5"
+      "bytes": 1210,
+      "sha256": "ef793b4563210568ac5afc60563de3c1dc9a18475171391cebb94a7845d3cb6e"
     },
     {
       "path": "NOTICE.md",
@@ -40,13 +40,13 @@
     },
     {
       "path": "OWNERSHIP.md",
-      "bytes": 1538,
-      "sha256": "ab7518af3ae3209303c712d1c0dfb999085ee5f4aad29ba35ced6f38c853ec60"
+      "bytes": 1543,
+      "sha256": "fbab0d68245f37abe44a06d98135b9ec89e57867c38998da4e8165feca8cef43"
     },
     {
       "path": "README.md",
-      "bytes": 6714,
-      "sha256": "3cce3f96084428b3715907af98bc4fd745591d8dadce83e8fb20e9416a540c08"
+      "bytes": 6971,
+      "sha256": "07f0c7f7702c1f1fc917beb2ea5fcae3028cab1838a8affa3a6e73bada53e44e"
     },
     {
       "path": "SECURITY.md",
@@ -271,7 +271,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "1faceb396223cc6f2729223a16093597dd6b35fd0a17368dbb8cdf887fe9dd8c"
+      "sha256": "9d03b9d614c43ece55acabfd4882a538959f429f688fafdf6a098e6319c23aa9"
     }
   ]
 }

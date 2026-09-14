@@ -28,11 +28,14 @@ shutil.copytree(repo/'runtime/vercel-production/lib',destination/'lib',ignore=sh
 vercel_config=json.loads((source/'deploy/vercel/vercel.json').read_text())
 application_version=json.loads((repo/'package.json').read_text(encoding='utf-8'))['version']
 application_major=application_version.split('.')[0]
-canonical_paths=['/api/control/v1/:path*','/api/app/v1/:path*','/api/ops/v1/:path*','/source-alignment.json','/telemetry-metrics.json','/downloads/Telemetry-and-Quantum.md']
+canonical_paths=['/api/control/v1/:path*','/api/app/v1/:path*','/api/ops/v1/:path*','/source-alignment.json','/telemetry-metrics.json','/downloads/:path*']
 canonical_paths += ['/v'+major+'/release/manifest' for major in dict.fromkeys(['2','3',application_major])]
 # All application and treasury records belong to the existing Sites journal.
 # The retained verifier still serves its own /v1 runtime identity and receipts.
 vercel_config['rewrites']=[{'source':path,'destination':'https://numinalabs.xyz'+path} for path in canonical_paths]+vercel_config['rewrites']
+# Business entry points share the canonical website and its current contact details.
+for path in ['/contact','/services','/app','/integrations','/privacy','/ownership']:
+    vercel_config.setdefault('redirects',[]).append({'source':path,'destination':'https://numinalabs.xyz'+path,'permanent':False})
 (destination/'vercel.json').write_text(json.dumps(vercel_config,indent=2)+'\n',encoding='utf-8')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
