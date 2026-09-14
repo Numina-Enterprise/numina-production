@@ -14,3 +14,4 @@ runtime/vercel-production/package.json -text
 config/numina-architecture.json -text
 docs/treasury-client-alignment.md -text
 scripts/package-rc26.py -text
+scripts/publish-with-telemetry.mjs -text

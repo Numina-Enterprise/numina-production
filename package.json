@@ -11,7 +11,8 @@
     "test": "node --test tests/*.test.mjs",
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
-    "check:runtime": "node scripts/check-runtime.mjs"
+    "check:runtime": "node scripts/check-runtime.mjs",
+    "publish:source": "node scripts/publish-with-telemetry.mjs"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Numina \u00b7 SK Consulting LLC"
