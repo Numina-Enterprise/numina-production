@@ -78,6 +78,34 @@
     "backend": "numina-statevector",
     "kind": "classical_simulator",
     "endpoint": "/api/ops/v1/quantum/measure",
-    "hardwareConnected": false
+    "hardwareConnected": false,
+    "ibm": {
+      "provider": "ibm_quantum",
+      "configurationField": "quantum.ibm",
+      "connectionEndpoint": "/api/ops/v1/quantum/ibm/connection",
+      "access": "authenticated_owner",
+      "scope": "authenticated_backend_discovery",
+      "observations": ["observedAt", "providerApiAuthenticated", "connected", "selectedBackend", "backends", "durationMs", "failedStage", "providerHttpStatus"],
+      "jobSubmissionEnabled": false,
+      "treasuryWrites": false
+    },
+    "workload": {
+      "schema": "numina.quantum-workload.v1",
+      "field": "quantum.workload",
+      "scope": "current_process_only",
+      "metrics": [
+        {"signal": "active_jobs", "field": "activeJobs", "action": "compare_with_limits.concurrentPerProcess"},
+        {"signal": "minute_admissions", "field": "admittedThisMinute", "action": "compare_with_limits.requestsPerMinutePerProcess"},
+        {"signal": "concurrency_rejections", "field": "window.concurrencyLimited", "action": "review_stateless_compute_capacity"},
+        {"signal": "rate_rejections", "field": "window.rateLimited", "action": "review_quantum_request_rate_policy"},
+        {"signal": "service_failures", "field": "window.failureRate", "action": "investigate_quantum_failures"},
+        {"signal": "completed_work", "fields": ["window.completedQubits", "window.completedGates", "window.completedShots"], "action": "compare_workload_size_before_changing_capacity"},
+        {"signal": "compute_latency", "field": "window.computeHistogram", "action": "merge_bucket_counts_before_computing_fleet_percentiles"},
+        {"signal": "logging_failures", "field": "loggingFailures", "action": "repair_log_pipeline"}
+      ],
+      "minimumCapacitySamples": 20,
+      "automaticScalingEnabled": false,
+      "fleetAggregationRequired": true
+    }
   }
 }
