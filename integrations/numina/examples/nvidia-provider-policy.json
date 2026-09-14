@@ -1,0 +1,30 @@
+{
+  "schema": "numina.nvidia.provider-policy.v1",
+  "provider": "NUMINA",
+  "targetGroup": "numina-geforce-rtx",
+  "gpuFamily": "GeForce RTX",
+  "scope": "owner-enrolled devices only",
+  "deploymentStatus": "configuration_only",
+  "numinaOrigin": "https://numinalabs.xyz",
+  "layers": ["L1", "L2", "L3", "L4", "L5"],
+  "rootCount": 1,
+  "canonicalExecution": "execute(P,A,O,I)",
+  "readTreasury": "readTreasury()",
+  "writeTreasury": "writeTreasury(event)",
+  "modelSelection": "explicit per-device validated profile",
+  "automaticEnrollment": false,
+  "allModelsCompatible": false,
+  "publicMultiUserService": {
+    "enabled": false,
+    "endpoint": null,
+    "entitlementVerified": false,
+    "requires": [
+      "applicable NVIDIA service entitlement",
+      "registered GPU host and compatible model profile",
+      "immutable image and model revisions",
+      "TLS and per-user authorization",
+      "tenant isolation, request and resource limits",
+      "healthy endpoint and completed model/tool round trip"
+    ]
+  }
+}
