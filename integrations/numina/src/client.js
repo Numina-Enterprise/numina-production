@@ -1,3 +1,4 @@
+import {verifyTreasuryRecord} from './treasury-proof.js';
 import {EXPECTED_RELEASE} from './runtime-contract.js';
 const ID=/^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
 const KEY=/^[A-Za-z0-9][A-Za-z0-9_-]{15,127}$/;
@@ -74,8 +75,7 @@ export class NuminaClient {
     validateArguments('numina_read_treasury',input);this.#requireAuth();
     await this.release({});
     const data=await this.#send('/treasury');
-    if(data.schema!=='numina.treasury.v1'||data.route!=='numina.treasury.v1'||!['READY','NOT_INITIALIZED'].includes(data.status))fail('INVALID_SERVER_RESPONSE');
-    if(data.status==='READY'&&(!object(data.projection)||data.projection.unit!=='NUSD'||data.projection.authority!=='NUMINA'||data.projection.system_of_record!=='NUMINA'||data.projection.verification!=='VERIFIED'||typeof data.projection.balance!=='string'||!/^(0|[1-9][0-9]{0,77})$/.test(data.projection.balance)||!object(data.canonical_proof)))fail('INVALID_SERVER_RESPONSE');
+    if(!await verifyTreasuryRecord(data,{allowUninitialized:true}))fail('INVALID_TREASURY_PROOF');
     return this.#wrap(data);
   }
   async release(input={}){
