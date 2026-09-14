@@ -17,3 +17,5 @@ The product and maintained packages are version 3.0.0. Existing HTTP and receipt
 The build runs `scripts/source-alignment.mjs`. It rejects inconsistent maintained versions, stale integration file inventories, changed runtime pins or mismatched Android release identity. The resulting `/source-alignment.json` lists source hashes, the shared routes and L1–L5. Its hash is included in the application artifact inventory.
 
 After editing distributed sources, run `python scripts/package-distributions.py`, then `node scripts/build.mjs`. Packaging regenerates integration metadata, plugin and native source archives and verifies their bytes. Existing native binaries retain their exact builder/source records. Recompile when native executable inputs change. These commands do not run application tests, submit store applications or create financial receipts.
+
+The rc26 singularity binding and restored owner-authenticated revocation route are documented in RC26-Singularity-v3.md. The native treasury remains one 500T NUSD projection with original signed history preserved.

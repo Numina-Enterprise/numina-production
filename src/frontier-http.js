@@ -6,6 +6,7 @@ import {FRONTIER_VERSION,FRONTIER_PROVIDERS,frontierState,frontierRequest,fronti
 import {rateLimit} from './store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_TREASURY_POLICY_V2} from './treasury-policy.js';
+import {alignTreasuryAccounts} from './treasury-alignment.js';
 
 const frontierRoutes={principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
 const frontierToolNames={numina_request:'requests',numina_prepare:'prepare',numina_execute:'execute'};
@@ -144,7 +145,9 @@ export async function frontierHttp(req,env){
     if(route.startsWith('receipts/')&&req.method==='GET')return frontierResponse(await frontierReceipt(env.DB,route.slice(9),actor,env));
     if(route==='treasury/accounts'&&req.method==='GET'){
       frontierAssert(actor===row.state.root,'OWNER_REQUIRED',403);
-      return frontierResponse({treasury:await createNuminaTreasury({db:env.DB,principal:actor,root:row.state.root}).readTreasury(),accounts:frontierState(row.state).accounts.filter(a=>!a.supersededBy),supersededReferences:frontierState(row.state).accounts.filter(a=>a.supersededBy),providerObservationRoute:'/api/control/v1/stripe-treasury',bankObservationStatus:'NOT_CONNECTED',fundingPlan:frontierState(row.state).fundingPlan??null,fundingDeclaration:frontierState(row.state).fundingDeclaration??null});
+      const treasury=await createNuminaTreasury({db:env.DB,principal:actor,root:row.state.root}).readTreasury();
+      frontierAssert(treasury.revision===row.revision&&treasury.head===row.head_hash,'TREASURY_SNAPSHOT_CHANGED',409);
+      return frontierResponse(alignTreasuryAccounts(treasury,frontierState(row.state)));
     }
     if(Object.hasOwn(frontierRoutes,route)&&req.method==='POST')return frontierResponse(await frontierMutate(route,await controlBody(req),actor,env));
     return frontierResponse({error:'NOT_FOUND'},404);

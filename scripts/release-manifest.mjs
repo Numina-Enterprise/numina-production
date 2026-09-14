@@ -24,6 +24,10 @@ const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const record={
+ brand:{name:'Numina',slogan:'Intelligence in motion.'},
+ core_release_binding:{endpoint:'/v1/release/core-binding',release:EXPECTED_RELEASE.release,coreVersion:EXPECTED_RELEASE.core_version,frozenCoreManifestRoot:EXPECTED_RELEASE.frozen_core_manifest_root,rootCount:1},
+ evidence_revocation:{endpoint:'/v1/evidence/revoke',method:'POST',authentication:'existing_owner_bearer',required:['record_id','reason'],bulkSupported:false,originalRecordsRetained:true,firstSignedRevocationRetained:true},
+ native_treasury_alignment:{endpoint:'/api/control/v2/treasury/accounts',access:'owner_authenticated',unit:'NUSD',aggregation:'one native projection shared across account views',originalSignedEventsRetained:true,externalFundingCreatedByRelease:false},
  source_alignment:{manifest:'/source-alignment.json',root:'NUMINA',layers:['L1','L2','L3','L4','L5']},
  recorded_release_evidence:releaseEvidence,
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',

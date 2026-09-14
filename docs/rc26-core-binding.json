@@ -1,0 +1,28 @@
+{
+  "application_version": "3.0.0",
+  "canonical_root_hash": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+  "core_version": "1.8.0",
+  "frozen_core_checked_files": 105,
+  "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+  "frozen_core_valid": true,
+  "frozen_source_policy": "preserved_exact_bytes",
+  "historical_conformance_relabelled": false,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5"
+  ],
+  "lineage_count": 1,
+  "product": "Numina",
+  "production_version": "1.9.0-rc26",
+  "release": "core-v1.8+prod-v1.9.0-rc26",
+  "release_series": "rc26",
+  "root_count": 1,
+  "schema": "numina.rc26.core-binding.v1",
+  "scope": "One rc26 release binds the preserved core and canonical Numina root; no financial execution or reserve verification is established.",
+  "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+  "production_files_root": "0890f3a837d26ee445b5ad9d311387e119ee564949a439cfe325b47fb32762fd",
+  "signedBinding": "/v1/release/core-binding"
+}

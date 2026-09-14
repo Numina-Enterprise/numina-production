@@ -63,9 +63,12 @@ class EvidenceStore:
         with self._connect() as c:return [self._record(r) for r in c.execute('SELECT * FROM evidence_records WHERE tx_hash=? ORDER BY created_at,record_id',(tx_hash.lower(),)).fetchall()]
     def revoke(self,*,record_id:str,revocation:dict)->dict:
         with self._connect() as c:
-            if not c.execute('SELECT 1 FROM evidence_records WHERE record_id=?',(record_id,)).fetchone():raise ValueError('EVIDENCE_RECORD_NOT_FOUND')
+            c.execute('BEGIN IMMEDIATE')
+            prior=c.execute('SELECT * FROM evidence_records WHERE record_id=?',(record_id,)).fetchone()
+            if not prior:raise ValueError('EVIDENCE_RECORD_NOT_FOUND')
+            if prior['revoked']:return self._record(prior)
             c.execute('UPDATE evidence_records SET revoked=1,revocation_json=? WHERE record_id=?',(json.dumps(revocation,sort_keys=True),record_id))
-        return self.get_record(record_id)
+            return self._record(c.execute('SELECT * FROM evidence_records WHERE record_id=?',(record_id,)).fetchone())
     def create_job(self,*,tx_hash:str,handoff_id:str,request_payload:dict,ttl_seconds:int=3600)->dict:
         now=int(time.time());tx=tx_hash.lower();jid=_root({'tx_hash':tx,'handoff_id':handoff_id,'request_root':_root(request_payload)})
         with self._connect() as c:
