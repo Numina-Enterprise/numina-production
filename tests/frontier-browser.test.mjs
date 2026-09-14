@@ -18,13 +18,13 @@ class Element{
   set textContent(value){this._text=String(value);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
 }
-async function accountView(){
+async function accountView(funding={}){
   const db=database(),owner='email:owner@example.test';
   try{
     await bootstrapControl(db,owner,Math.floor(Date.now()/1000));const row=await readControl(db);
     const treasury=createNuminaTreasury({db,root:owner,principal:owner});
     await treasury.writeTreasury({id:'ui-treasury',expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.initialize',Intent:{operation:'INITIALIZE',reason:'Isolated UI fixture'}});
-    return alignTreasuryAccounts(await treasury.readTreasury(),{accounts:[{id:'existing',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing reference',providerAccountReference:'original-reference'}]});
+    return alignTreasuryAccounts(await treasury.readTreasury(),{accounts:[{id:'existing',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing reference',providerAccountReference:'original-reference'}],...funding});
   }finally{db.close();}
 }
 function harness(view,override=()=>null){
@@ -49,6 +49,18 @@ function harness(view,override=()=>null){
 test('frontier rejects a mixed treasury account snapshot before rendering native balances',async()=>{
   const view=await accountView();view.accounts[0].sharedNativeTreasury.amount='1';const h=harness(view);
   try{await settled();assert.match(h.get('#treasury-status').textContent,/could not be verified/);for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);}finally{h.close();}
+});
+
+test('funding panel displays the current native declaration while retaining the signed original plan',async()=>{
+  const view=await accountView({fundingPlan:{id:'canonical-plan',status:'UNFUNDED_PLAN',eventId:'original-event'},fundingDeclaration:{FUNDED_PLAN:true,eventId:'owner-event'}}),before=structuredClone(view),h=harness(view);
+  try{
+    await settled();const panel=h.get('#funding-plan').textContent;
+    assert.match(panel,/Current native funding status · FUNDED_PLAN · Owner declaration/);
+    assert.match(panel,/Original plan status · UNFUNDED_PLAN/);
+    assert.match(panel,/500,000,000,000,000 NUSD/);
+    assert.match(panel,/Read signed plan receipt/);assert.match(panel,/Read signed owner declaration/);
+    assert.deepEqual(view,before);
+  }finally{h.close();}
 });
 
 test('frontier session loss clears records and ignores a late treasury response',async()=>{

@@ -56,9 +56,17 @@ test('account views share one checked balance without changing stored references
       v=>v.accounts[0].treasuryRef.id='wrong-root',v=>v.accounts[0].sharedNativeTreasury.amount='1',
       v=>v.accounts[1].sharedNativeTreasury.revision++,v=>v.accounts[0].sharedNativeTreasury.providerBalance=true,
       v=>v.nativeValuation.amount='1',v=>v.nativeValuation.executableConversionVerified=true,
-      v=>v.nativeFundingView.head='a'.repeat(64),v=>v.nativeFundingView.nativeTarget.unit='USD'
+      v=>v.nativeFundingView.head='a'.repeat(64),v=>v.nativeFundingView.nativeTarget.unit='USD',
+      v=>v.nativeFundingView.status='FUNDED_PLAN',v=>v.nativeFundingView.statusBasis='native_owner_declaration',
+      v=>v.nativeFundingView.ownerDeclaredFunded=true,v=>v.nativeFundingView.ownerDeclarationEventId='unrelated',
+      v=>v.nativeFundingView.recordedPlanStatus='FUNDED_PLAN',v=>v.nativeFundingView.recordedPlanEventId='unrelated',
+      v=>v.nativeFundingView.confirmedExternalFunding={amount:'500000000000000',unit:'USDC'},v=>v.nativeFundingView.externalReceipt={id:'unrelated'}
     ]){const changed=structuredClone(view);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false);}
     assert.deepEqual(frontier,before);
+    const funded=alignTreasuryAccounts(await api.readTreasury(),{...frontier,fundingPlan:{status:'UNFUNDED_PLAN',eventId:'original-plan'},fundingDeclaration:{FUNDED_PLAN:true,eventId:'owner-declaration'}});
+    assert.equal(await verifyTreasuryAccountView(funded),true);
+    assert.equal(funded.nativeFundingView.status,'FUNDED_PLAN');assert.equal(funded.fundingPlan.status,'UNFUNDED_PLAN');
+    funded.nativeFundingView.status='UNFUNDED_PLAN';assert.equal(await verifyTreasuryAccountView(funded),false);
   }finally{db.close();}
 });
 test('treasury initializes within the existing root, persists and returns actual journal proof',async()=>{

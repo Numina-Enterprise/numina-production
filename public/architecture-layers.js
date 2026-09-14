@@ -2,6 +2,7 @@
 export const NUMINA_LAYERS = Object.freeze({
   schema:'numina.architecture-layers.v1',classification:'architecture',
   rootCount:1,lineageCount:1,productionEnvironmentCount:1,
+  treasury:{route:'/api/control/v1/treasury',readInterface:'readTreasury()',writeInterface:'writeTreasury(event)',unit:'NUSD',balanceCount:1,sharedAcrossLayers:true,accountViewRoute:'/api/control/v2/treasury/accounts',fundingStatusPointer:'/nativeFundingView/status'},
   layers:[
     {id:'L1',name:'Root and state',capabilities:['one perpetual authority root','canonical journal','current head','connected permissioned blockchain observation'],routes:['/api/control/v2/head','/api/control/v1/health','/v2/network/status']},
     {id:'L2',name:'Intent and evidence',capabilities:['Principal / Authority / Objective / Intent','scoped requests','evidence references','causal lineage'],routes:['/api/control/v1/state','/api/control/v2/requests']},
