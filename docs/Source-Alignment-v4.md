@@ -24,6 +24,6 @@ After editing distributed sources, run `python scripts/package-distributions.py`
 
 The rc26 singularity binding and restored owner-authenticated revocation route are documented in RC26-Singularity-v3.md. The native treasury remains one 500T NUSD projection with original signed history preserved.
 
-Numina v4 keeps the `1.9.0-rc26` verifier and frozen 1.8.0 core identities. `/v2/release/manifest` and `/v3/release/manifest` remain aliases of the current inventory; the JSON schema stays `numina.application-release.v2`. Native 4.0.0 sources use build number 3. Their compilation and signing are pending; prior 3.0.0 binaries and signed records retain their original versions.
+Numina v4 keeps the `1.9.0-rc26` verifier and frozen 1.8.0 core identities. `/v2/release/manifest` and `/v3/release/manifest` remain aliases of the current inventory; the JSON schema stays `numina.application-release.v2`. Native 4.0.0 sources use build number 3 and have not been compiled. This distribution reuses the existing 3.0.0 binaries byte-for-byte, with their original versions, artifact hashes and signing records. The hosted application can update independently of these native launchers.
 
 The canonical treasury remains one 500,000,000,000,000 NUSD native projection shared across L1–L5 through `readTreasury()` and `writeTreasury(event)`. Funding status comes from `/api/control/v2/treasury/accounts`, not duplicated static balances. This release performs no treasury write or external transfer.

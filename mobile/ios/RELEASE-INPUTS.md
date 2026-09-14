@@ -1,6 +1,6 @@
 # iOS release inputs still required
 
-Current source is 4.0.0 with build number 3; compilation and signing are pending.
+Current source is 4.0.0 with build number 3 and has not been compiled. The distribution reuses the existing unsigned 3.0.0 artifact; Apple signing remains pending.
 
 Historical status updated September 13, 2026: the unsigned 3.0.0 device package compiled in hosted run 34785069076. Apple-issued distribution signing and store publication remain unverified.
 

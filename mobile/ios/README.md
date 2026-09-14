@@ -2,7 +2,7 @@
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
-Current v4 source compilation, Apple signing and store submission are pending. See `../../docs/native-package-record-v4.json`.
+The v4 distribution retains the existing unsigned 3.0.0 binary without modification. The 4.0.0 source has not been compiled. Apple signing and store submission remain pending. See `../../docs/native-package-record-v4.json`.
 
 ## Candidate settings
 
