@@ -48,9 +48,13 @@ The `numina_runtime_build` tool reads `execution_runtime_build` from the existin
 
 The client performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc26 control-plane runtime and separately built Linux execution image retain their separate identities. This read-only addition does not change the six default discovery tools, install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
 
+## NVIDIA NIM
+
+The host adapter in [examples/nvidia-nim.mjs](examples/nvidia-nim.mjs) uses the existing Chat Completions protocol and the shared rc26 identity. [NVIDIA setup](examples/NVIDIA.md) includes Windows/WSL container bootstrap stages and the Numina GeForce RTX provider policy. Device enrollment, model compatibility, registry access, live inference and public-service entitlement require separate verification; the downloadable configuration does not establish them.
+
 ## Package status
 
-Version 3.0.0 was packaged **without running tests**, as requested. Earlier 0.2.0 validation is preserved in `history/0.2.0/`; it does not validate these changes. See [VALIDATION.md](VALIDATION.md) and `verification.json` for scope. Schema generation and file/archive hashing are packaging operations, not provider acceptance evidence.
+Packaging does not run tests; validation runs separately in the repository test suite. Earlier 0.2.0 validation is preserved in `history/0.2.0/` and applies only to that version. See [VALIDATION.md](VALIDATION.md) and `verification.json` for scope. Schema generation and file/archive hashing are packaging operations, not provider acceptance evidence.
 
 See [COMPATIBILITY.md](COMPATIBILITY.md) for supported formats and official references, [API-CONTRACT.md](API-CONTRACT.md) for exact routes, and [SECURITY.md](SECURITY.md) for credential and activation boundaries. No account installation, registry publication, provider API call, new token or financial transaction was performed by this package update.
 

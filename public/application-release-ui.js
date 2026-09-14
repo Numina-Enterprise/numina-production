@@ -5,13 +5,13 @@ export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  signerRepository:'skott34-dot/numina-builder',
  signerRepositoryId:1367645630,
  signerWorkflow:'.github/workflows/numina-site-builder.yml',
- signerSha:'4a7210c10fcfa79436018e8ba337244402661036', // Published immutable builder reviewed in the linked artifact assessment.
+ signerSha:'abcbe17487b7b1c5be0d29485e76d1779103c66a', // Current production workflow pin; no signature result is inferred from this policy.
  sourceSha:null, // Optional additional approved source pin; never infer it from an unsigned response.
  predicateType:'https://slsa.dev/provenance/v1',
  oidcIssuer:'https://token.actions.githubusercontent.com'
 });
 
-const MANIFEST_PATH='/v2/release/manifest';
+const MANIFEST_PATH='/v3/release/manifest';
 const MAX_MANIFEST_BYTES=1024*1024;
 const all=selector=>document.querySelectorAll(selector);
 const set=(selector,value)=>all(selector).forEach(element=>{element.textContent=value;});
@@ -67,7 +67,7 @@ async function readManifestBytes(response){
 function commandForPolicy(){
  const policy=APPLICATION_PROVENANCE_POLICY;
  if(!/^[0-9a-f]{40}$/.test(policy.signerSha||''))return '';
- const args=['gh attestation verify application-release-v2.json',
+ const args=['gh attestation verify application-release-v3.json',
   '--hostname github.com','--repo '+policy.sourceRepository,
   '--signer-workflow '+policy.signerRepository+'/'+policy.signerWorkflow,
   '--signer-digest '+policy.signerSha,
@@ -156,7 +156,7 @@ async function refreshApplicationRelease(){
 
 all('[data-application-download]').forEach(button=>button.addEventListener('click',()=>{
  if(!downloadUrl||button.disabled)return;
- const link=document.createElement('a');link.href=downloadUrl;link.download='application-release-v2.json';
+ const link=document.createElement('a');link.href=downloadUrl;link.download='application-release-v3.json';
  document.body.append(link);link.click();link.remove();
 }));
 all('[data-application-copy-command]').forEach(button=>button.addEventListener('click',async()=>{

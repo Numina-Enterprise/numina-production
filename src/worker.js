@@ -21,6 +21,10 @@ export default {
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));
    if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));
+   if(['/pricing','/pricing/','/pricing.html'].includes(path)){
+    if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
+    return finish(new Response(null,{status:308,headers:{Location:'/services'+url.search+'#pricing'}}));
+   }
    if(['/v2/release/manifest','/v3/release/manifest'].includes(path)){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     const artifact=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v2.json',req.url),{method:req.method}));
