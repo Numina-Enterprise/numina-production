@@ -18,7 +18,7 @@ function receipt(artifact_type,payload){
   return {...preimage,algorithm:'Ed25519',public_key:pinnedKey,signature:sign(null,Buffer.from(canonical(preimage)),keys.privateKey).toString('base64')};
 }
 function fixtures(){
-  const manifest={...EXPECTED_RELEASE,build_id:hash('build'),production_files_root:hash('production'),spdx_sbom_sha256:hash('sbom'),slsa_provenance_sha256:hash('provenance')};
+  const manifest={...EXPECTED_RELEASE};
   const status={...manifest,environment:'production',frozen_core:{valid:true,manifest_root:EXPECTED_RELEASE.frozen_core_manifest_root},conformance:{valid:true}};
   const state={schema:'numina.control-state.v1',release:RUNTIME_VERSION};
   const values={manifest,status,attestation:receipt(RELEASE_ARTIFACT_TYPE,status),control:{state,receipt:receipt('NUMINA_CONTROL_STATE',state)},supply:{valid:true,spdx_sbom_sha256:manifest.spdx_sbom_sha256,slsa_provenance_sha256:manifest.slsa_provenance_sha256}};
@@ -81,11 +81,11 @@ test('runtime gateway marks only successful versioned rc26 responses',async()=>{
 });
 
 function appManifest(version=RUNTIME_VERSION){
-  return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'2.0.0',release:'numina-v2.0.0',artifact_digest_algorithm:'sha256',build_id:hash('application'),artifacts:[{path:'server/index.js',sha256:hash('worker')}],runtime_dependency:{version,release:'core-v1.8+prod-v'+version}};
+  return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'3.0.0',release:'numina-v3.0.0',artifact_digest_algorithm:'sha256',build_id:hash('application'),artifacts:[{path:'server/index.js',sha256:hash('worker')}],runtime_dependency:{version,release:'core-v1.8+prod-v'+version}};
 }
 test('packaged integration requires rc26 while retaining server-reported evidence classification',async()=>{
   const client=payload=>new NuminaClient({baseUrl:'https://numina.test',token:'private-test-token',fetch:async(url,options)=>{
-    assert.equal(url,'https://numina.test/v2/release/manifest');assert.equal(options.headers.Authorization,undefined);return Response.json(payload);
+    assert.equal(url,'https://numina.test/v3/release/manifest');assert.equal(options.headers.Authorization,undefined);return Response.json(payload);
   }});
   const result=await client(appManifest()).release();
   assert.equal(result.verification,'server_reported_not_independently_verified');
