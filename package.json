@@ -10,7 +10,7 @@
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs",
     "start": "node scripts/serve.mjs",
-    "conformance": "node scripts/conformance.mjs",
+    "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs"
   }
 }
