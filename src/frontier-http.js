@@ -118,7 +118,6 @@ export async function frontierHttp(req,env){
       if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
       return req.method==='POST'?frontierDiscovery(req,env):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     }
-    if(path==='/api/control/v2/sandbox')return frontierResponse({error:'NOT_FOUND'},404);
     const row=await readControl(env.DB);frontierAssert(row.state.root===env.NUMINA_CONTROL_OWNER,'ROOT_CONFIGURATION_MISMATCH',503);
     const actor=await frontierActor(req,env,row);
     frontierAssert(actor===row.state.root||frontierState(row.state).principals.some(p=>p.id===actor&&!p.revoked),'AUTHORITY_DENIED',403);
