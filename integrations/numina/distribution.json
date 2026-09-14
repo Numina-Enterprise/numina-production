@@ -28,6 +28,17 @@
   },
   "defaultOrigin": "https://numinalabs.xyz",
   "defaultProfile": "discovery",
+  "hostExamples": {
+    "nvidiaNim": {
+      "script": "examples/nvidia-nim.mjs",
+      "setup": "examples/NVIDIA.md",
+      "windowsBootstrap": "examples/setup-nvidia-wsl.ps1",
+      "providerPolicy": "examples/nvidia-provider-policy.json",
+      "protocol": "openai-chat-completions",
+      "profile": "discovery",
+      "liveAcceptanceVerified": false
+    }
+  },
   "providerFormats": {
     "openai-responses": {
       "discovery": "schemas/openai-responses.json",

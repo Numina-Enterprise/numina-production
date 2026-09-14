@@ -30,6 +30,7 @@ const distribution={
  schema:'numina.integration.distribution.v2',version:metadata.version,revision,
  applicationManifest:'/v3/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,
  defaultOrigin:'https://numinalabs.xyz',defaultProfile:'discovery',
+ hostExamples:{nvidiaNim:{script:'examples/nvidia-nim.mjs',setup:'examples/NVIDIA.md',windowsBootstrap:'examples/setup-nvidia-wsl.ps1',providerPolicy:'examples/nvidia-provider-policy.json',protocol:'openai-chat-completions',profile:'discovery',liveAcceptanceVerified:false}},
  providerFormats:Object.fromEntries(providerFormats.map(name=>[name,{discovery:'schemas/'+name+'.json',workflow:'schemas/'+name+'-workflow.json'}])),
  mcp:{transport:'stdio',command:'node',script:'bin/mcp-stdio.js',template:'examples/mcp-host.example.json',protocols:verification.mcpProtocolsImplemented,hostedRemoteEndpoint:null},
  installation:'INSTALL.md',compatibility:'COMPATIBILITY.md',validation:'VALIDATION.md',
