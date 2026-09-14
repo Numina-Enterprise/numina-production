@@ -46,7 +46,7 @@ Server controls remain authoritative: bind quotes and requests to the authentica
 
 ## Application release tool
 
-`numina_application_release` accepts exactly `{}` and calls `GET /v3/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, a 2.x or 3.x semantic version, corresponding `release:"numina-v<version>"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and a separately versioned `runtime_dependency`. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 3.0 application and kit identities do not rename the rc22 runtime or historical rc20 evidence.
+`numina_application_release` accepts exactly `{}` and calls `GET /v3/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, a 2.x or 3.x semantic version, corresponding `release:"numina-v<version>"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and a separately versioned `runtime_dependency`. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 3.0 application and kit identities do not rename the rc26 runtime or historical rc20 evidence.
 
 ## Execution-runtime build discovery
 
@@ -58,4 +58,4 @@ The wrapper always retains `server_reported_not_independently_verified` and `ass
 
 ## Canonical Numina-native treasury
 
-`client.readTreasury()` and `numina_read_treasury` require the owner token and read `/api/control/v1/treasury` after validating the rc22 application dependency. Balances remain exact integer NUSD strings with NUMINA authority and system of record. The client preserves the native verification scope and returns server-reported evidence. It never follows the legacy owner-statement redirect or submits financial transactions.
+`client.readTreasury()` and `numina_read_treasury` require the owner token and read `/api/control/v1/treasury` after validating the rc26 application dependency. Balances remain exact integer NUSD strings with NUMINA authority and system of record. The client preserves the native verification scope and returns server-reported evidence. It never follows the legacy owner-statement redirect or submits financial transactions.

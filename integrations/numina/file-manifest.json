@@ -11,7 +11,7 @@
     {
       "path": "API-CONTRACT.md",
       "bytes": 9571,
-      "sha256": "939436e86b1d93f1168bb5e1d81985b5ed217142732d9e5f8aeff926467e5d76"
+      "sha256": "86a0061d7502a88a2f6f09d5b295d4edb5e4b94a75af22ac001676a54be2d416"
     },
     {
       "path": "COMPATIBILITY.md",
@@ -21,7 +21,7 @@
     {
       "path": "EVIDENCE.md",
       "bytes": 5356,
-      "sha256": "efd56af7eabe2231b017cee42c41251dd87e4547868146af94442cb131e8e264"
+      "sha256": "965d50d21e0a07314b394385acde218cfe3cd87b147f501c4aea367e35cfead5"
     },
     {
       "path": "INSTALL.md",
@@ -30,8 +30,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5685,
-      "sha256": "4df45a0a67b3e97e30a9ecdca9c99ae6e961106321099044cd07b5f2592e335a"
+      "bytes": 6026,
+      "sha256": "05ff4ae3cd177495f593578c35073c40acd07de4575f9c89d17ec10688ceeb4c"
     },
     {
       "path": "SECURITY.md",
@@ -41,7 +41,7 @@
     {
       "path": "VALIDATION.md",
       "bytes": 1170,
-      "sha256": "bba4a4ac5e048a1c870613ea8f81f828173d7c3f8fe987dfb682bd2bcb4f6c10"
+      "sha256": "65e81d7443d461f0bb46904ffb7b63d352ed8d9d7fc3b36353ff25b9c4aaa772"
     },
     {
       "path": "bin/control-mcp-stdio.js",
@@ -181,7 +181,7 @@
     {
       "path": "src/runtime-contract.js",
       "bytes": 1163,
-      "sha256": "ab1f7d2b37ccb05ae918ed7fa28140ddf1ebdbcdfabc0c6d85cd690636f3f0d2"
+      "sha256": "3364e7530eb2668f1dc956ca1b50f36cb7c2cba1ea8df1b0691838f1c00000e7"
     },
     {
       "path": "src/tools.js",
@@ -191,7 +191,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "436be16e5a3c2d514677534cb99cfb271bea66d83bd553bed64da26e3526a3d9"
+      "sha256": "88390e5a1bae732b51625cf7842a87c2aed93ddb654820f62da34f444d83991f"
     }
   ]
 }

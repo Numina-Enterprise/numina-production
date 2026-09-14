@@ -7,6 +7,19 @@ from .frozen import ROOT,verify_frozen_core
 from .conformance import load_result
 from .schema_contract import SCHEMA_VERSION,SCHEMA_NAME
 
+def core_release_binding(settings)->dict:
+    frozen=verify_frozen_core()
+    return {
+        "schema":"numina.rc26.core-binding.v1","product":"Numina","application_version":"3.0.0",
+        "release":settings.release,"production_version":PRODUCTION_VERSION,"release_series":"rc26",
+        "canonical_root_hash":"51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+        "root_count":1,"lineage_count":1,"layers":["L1","L2","L3","L4","L5"],
+        "core_version":CORE_VERSION,"frozen_core_manifest_root":frozen.manifest_root,
+        "frozen_core_valid":frozen.valid,"frozen_core_checked_files":frozen.checked,
+        "frozen_source_policy":"preserved_exact_bytes","historical_conformance_relabelled":False,
+        "scope":"One rc26 release binds the preserved core and canonical Numina root; no financial execution or reserve verification is established."
+    }
+
 
 def _artifact_hash(name:str)->str|None:
     p=ROOT/"artifacts"/name
@@ -54,6 +67,7 @@ def build_identity(settings)->dict:
     frozen=verify_frozen_core();conf=load_result();prod_root=production_files_root()
     stable={
         "product":"Numina Economic Authority Infrastructure",
+        "core_release_binding":core_release_binding(settings),
         "core_version":CORE_VERSION,
         "production_version":PRODUCTION_VERSION,
         "release":settings.release,
