@@ -1,6 +1,8 @@
+import {requestJson} from './http-client.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
-export async function renderTreasuryBalances(target,treasury){
+export async function renderTreasuryBalances(target,treasury,{signal}={}){
+  if(signal?.aborted)return;
   target.replaceChildren();
   const heading=item('h3','Designated funding sources');
   const sharedProjection=treasury?.treasury?.projection?.balance;
@@ -14,9 +16,8 @@ export async function renderTreasuryBalances(target,treasury){
   grid.append(stripe,bank);
   target.append(heading,grid,item('p','Reconciliation is incomplete. The native NUSD projection has no verified allocation to these accounts. A funding gap cannot be calculated until bank balances, asset eligibility and allocation are verified.'));
   try{
-    const response=await fetch('/api/control/v1/stripe-treasury',{credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(12000)});
-    if(!response.ok)throw Error('Provider observation unavailable');
-    const record=await response.json();
+    const record=await requestJson('/api/control/v1/stripe-treasury',{signal,timeoutMs:12000});
+    if(signal?.aborted)return;
     if(record.schema!=='numina.stripe.treasury.v1'||record.account?.livemode!==true)throw Error('Invalid observation');
     stripe.replaceChildren(item('h4','Stripe Treasury'),item('p',record.account.name));
     const list=item('dl','');detail(list,'Numina native treasury',nativeText);detail(list,'Declared USD value (1:1 policy)',declaredUsd);
@@ -27,5 +28,5 @@ export async function renderTreasuryBalances(target,treasury){
     detail(list,'Observed at',record.observed_at);stripe.append(list);
     const evidence=item('details','');evidence.append(item('summary','Provider evidence'));
     const source=item('dl','');detail(source,'Financial account',record.account.id);detail(source,'Provider request',record.provider_request_id??'Not supplied');detail(source,'Connection','Read-only live account');evidence.append(source);stripe.append(evidence);
-  }catch{stripe.replaceChildren(item('h4','Stripe Treasury'));const list=item('dl','');detail(list,'Numina native treasury',nativeText);detail(list,'Declared USD value (1:1 policy)',declaredUsd);stripe.append(list,item('p','Live provider balance unavailable. Refresh to request a new provider observation.'));}
+  }catch(error){if(signal?.aborted)return;if(error.status===401||error.status===403){document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}stripe.replaceChildren(item('h4','Stripe Treasury'));const list=item('dl','');detail(list,'Numina native treasury',nativeText);detail(list,'Declared USD value (1:1 policy)',declaredUsd);stripe.append(list,item('p','Live provider balance unavailable. Refresh to request a new provider observation.'));}
 }

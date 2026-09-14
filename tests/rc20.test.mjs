@@ -108,19 +108,22 @@ test('old control plane remains reachable and sign-in returns to it',async()=>{
 
 
 
-test('packaged homepage loads current runtime verification and preserves the control page',()=>{
+test('packaged homepage links current runtime verification and preserves the control page',()=>{
 
   const home=readFileSync(new URL('../dist/client/index.html',import.meta.url),'utf8');
 
   const control=readFileSync(new URL('../dist/client/control.html',import.meta.url),'utf8');
 
-  assert.match(home,/runtime-release-ui[.]js/);
+  assert.match(home,/frontier-ui[.]js/);
+  assert.match(home,/href="\/build"/);
+  const build=readFileSync(new URL('../dist/client/build.html',import.meta.url),'utf8');
+  assert.match(build,/runtime-release-ui[.]js/);
 
-  assert.match(home,/data-conformance>Checking…/);
+  assert.match(build,/data-conformance>Checking…/);
 
   assert.match(home,/href="\/control"/);
 
-  assert.match(control,/<title>Numina 2[.]0 — Control plane<\/title>/);
+  assert.match(control,/<title>Numina 3 — Control plane<\/title>/);
 
   assert.match(control,/href="\/control" aria-current="page"/);
 
