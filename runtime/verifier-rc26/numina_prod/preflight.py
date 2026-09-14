@@ -71,7 +71,7 @@ def run_preflight(settings)->dict:
         checks.append({"name":"evidence-datastore","ok":evidence_ok,"backend":backend,"durable":durable})
         if not evidence_ok:failures.append("EVIDENCE_DATASTORE_NOT_READY")
         owner_ok=bool(settings.owner_access_url and settings.owner_root_hash)
-        checks.append({"name":"evidence-owner-authentication","ok":owner_ok,"scope":"runtime:evidence","revocation_route_exposed":False})
+        checks.append({"name":"evidence-owner-authentication","ok":owner_ok,"scope":"runtime:evidence","revocation_route_exposed":True,"records_retained":True})
         if not owner_ok:failures.append("OWNER_AUTHORITY_NOT_CONFIGURED")
 
     datastore=None

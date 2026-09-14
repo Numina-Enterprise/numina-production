@@ -7,14 +7,16 @@ export async function renderFundingPlan(target,treasury,api,refresh){
     const button=node('button','Record authorized funding plan');button.className='button secondary';button.disabled=!treasury.treasury.projection;
     button.onclick=async()=>{if(button.disabled)return;button.disabled=true;try{const latest=await api('state');await api('treasury/funding',{id:crypto.randomUUID(),expectedRevision:latest.revision,data:{id:'numina-canonical-funding-v1',reason:'Owner-authorized funding plan for the singular NUSD treasury across designated business accounts; external funding remains unconfirmed.'}});await refresh();}catch(error){target.append(node('p',error.message));button.disabled=false;}};target.append(button);return;
   }
-  target.append(node('p',BigInt(plan.target.amount).toLocaleString()+' '+plan.target.unit+' · Shared canonical funding plan'));
+  const nativeTarget=treasury.nativeFundingView?.nativeTarget??plan.target;
+  target.append(node('p',BigInt(nativeTarget.amount).toLocaleString()+' '+nativeTarget.unit+' · One native treasury shared across account views'));
+  target.append(node('p','Original plan status · '+plan.status));
   target.append(node('p','Numina record · '+plan.id+' · Journal event '+plan.eventId));
   const button=node('button','Read signed plan receipt');button.className='button secondary';
   button.onclick=async()=>{button.disabled=true;try{const receipt=await api('receipts/'+plan.eventId);const details=node('details','');details.open=true;details.append(node('summary','Internal funding-plan provenance'),node('pre',JSON.stringify(receipt,null,2)));target.append(details);}catch(error){target.append(node('p',error.message));button.disabled=false;}};
   target.append(button);
   const declaration=treasury.fundingDeclaration;
   if(declaration){
-    target.append(node('p','Owner declaration · FUNDED_PLAN = true'));
+    target.append(node('p','Native treasury · FUNDED_PLAN = true · Owner declaration'));
     const proof=node('button','Read signed owner declaration');proof.className='button secondary';
     proof.onclick=async()=>{proof.disabled=true;try{const receipt=await api('receipts/'+declaration.eventId);const details=node('details','');details.open=true;details.append(node('summary','Owner-declaration provenance'),node('pre',JSON.stringify(receipt,null,2)));target.append(details);}catch(error){target.append(node('p',error.message));proof.disabled=false;}};target.append(proof);
   }else{

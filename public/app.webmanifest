@@ -2,7 +2,7 @@
   "id": "/app",
   "name": "Numina OS 3 — Operations workspace",
   "short_name": "Numina OS",
-  "description": "Numina operations, delegated agents, approvals and canonical treasury records.",
+  "description": "Intelligence in motion. Enterprise workflows, agent approvals, delivery and treasury records in Numina OS.",
   "start_url": "/app",
   "scope": "/app",
   "display": "standalone",

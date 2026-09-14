@@ -53,3 +53,7 @@ The client performs no independent signature check and does not follow evidence 
 Version 3.0.0 was packaged **without running tests**, as requested. Earlier 0.2.0 validation is preserved in `history/0.2.0/`; it does not validate these changes. See [VALIDATION.md](VALIDATION.md) and `verification.json` for scope. Schema generation and file/archive hashing are packaging operations, not provider acceptance evidence.
 
 See [COMPATIBILITY.md](COMPATIBILITY.md) for supported formats and official references, [API-CONTRACT.md](API-CONTRACT.md) for exact routes, and [SECURITY.md](SECURITY.md) for credential and activation boundaries. No account installation, registry publication, provider API call, new token or financial transaction was performed by this package update.
+
+## rc26 singularity alignment
+
+The signed core/root binding is available at `/v1/release/core-binding`. Owner-authenticated evidence revocation is restored at `POST /v1/evidence/revoke`; it marks an existing record revoked while retaining its artifact and first signed revocation receipt. This kit does not invoke that route automatically.
