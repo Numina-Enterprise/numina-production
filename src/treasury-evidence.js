@@ -1,12 +1,38 @@
 import {controlHash,controlError} from './control.js';
 import {readControl} from './control-store.js';
 import {createNuminaTreasury} from './native-treasury.js';
-import {readStripeTreasury} from './stripe-treasury.js';
+import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT} from './stripe-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {frontierState,frontierSign} from './frontier.js';
 import {canonicalTreasuryReference} from './treasury-alignment.js';
 
 export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
+
+function treasuryProviderRecords(observation){
+  const record=observation?.record,base='/source/providerObservation/record';
+  const authenticated=observation?.status==='OBSERVED'&&observation.authentication==='server_held_stripe_read_credential'
+    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='Stripe'&&record.connection==='read_only'
+    &&record.account?.id===STRIPE_TREASURY_FINANCIAL_ACCOUNT&&record.account.livemode===true
+    &&['open','closed'].includes(record.account.status)&&Array.isArray(record.reported_currencies);
+  const currencies={};
+  for(const currency of ['usd','usdc','nusd']){
+    const native=currency==='nusd',reported=authenticated&&record.reported_currencies?.includes(currency)===true;
+    const status=!authenticated?'UNAVAILABLE':!reported?'NOT_REPORTED':native?'ASSET_NOT_VERIFIED':'AUTHENTICATED_OBSERVATION';
+    const balances={};
+    for(const bucket of ['available','inbound_pending','outbound_pending']){
+      const amount=native?record?.provider_nusd_balance?.buckets?.[bucket]:record?.balances?.[bucket]?.[currency];
+      const present=amount!==null&&amount!==undefined;
+      const valid=present&&amount.currency===currency&&Number.isSafeInteger(amount.value);
+      balances[bucket]={source:authenticated&&(native?present:true)?`${base}/${native?'provider_nusd_balance/buckets/'+bucket:'balances/'+bucket+'/'+currency}`:null,
+        verification:{status:!authenticated?'UNAVAILABLE':!present?'NOT_REPORTED':!valid||!reported?'NOT_VERIFIED':native?'ASSET_NOT_VERIFIED':'AUTHENTICATED_OBSERVATION',
+          scope:native?'Provider-reported units; token identity and precision are not verified':'Provider-reported amount in its original currency and balance bucket'}};
+    }
+    currencies[currency]={source:authenticated?`${base}/${native?'provider_nusd_balance':'reported_currencies'}`:null,precision:native?null:currency==='usd'?2:6,
+      verification:{status,scope:native?'Provider currency label; no verified link to the Numina-native asset':'Provider-reported currency code'},balances};
+  }
+  // References only: amounts remain in the captured provider source, with no aggregation.
+  return {source:'/source/providerObservation',issuer:'Stripe',verification:{status:authenticated?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'Provider-reported amounts in their original currencies; no cross-currency aggregation'},currencies};
+}
 
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
   const source=structuredClone({nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
@@ -16,7 +42,7 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
     evidenceHash:await controlHash(source),source,
     records:{schema:'numina.treasury.record-sources.v1',
       nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:treasury.status==='READY'&&treasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
-      providerBalances:{source:'/source/providerObservation',issuer:'Stripe',verification:{status:providerObservation?.status==='OBSERVED'&&providerObservation.authentication==='server_held_stripe_read_credential'?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'Provider-reported amounts in their original currencies; no cross-currency aggregation'}},
+      providerBalances:treasuryProviderRecords(source.providerObservation),
       bankFunding:{source:'/fundingVerification/bankConfirmation',issuer:null,verification:{status:'BANK_PROVIDER_NOT_CONNECTED',scope:'Bank-issued funding confirmation'}},
       reserveAllocation:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Reserve ownership and allocation to this treasury'}},
       redemption:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Executable redemption rights and confirmed redemption evidence'}},
