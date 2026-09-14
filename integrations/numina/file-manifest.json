@@ -20,8 +20,8 @@
     },
     {
       "path": "EVIDENCE.md",
-      "bytes": 5356,
-      "sha256": "965d50d21e0a07314b394385acde218cfe3cd87b147f501c4aea367e35cfead5"
+      "bytes": 5900,
+      "sha256": "9c615bf87ff8ebc227a471f4ce849c00d3bd4c765dc9bd6520c400c1add98b49"
     },
     {
       "path": "INSTALL.md",
@@ -160,8 +160,8 @@
     },
     {
       "path": "src/client.js",
-      "bytes": 14918,
-      "sha256": "f1c4824ab90ad61918d8b97b4610bdbb7e1d3d4be9108dcee3bf9f5a9673e419"
+      "bytes": 14535,
+      "sha256": "937f50fa48d21699295867004b0d483d5e1bd18ca74970ebd227a7bc3c338efb"
     },
     {
       "path": "src/index.d.ts",
@@ -194,9 +194,14 @@
       "sha256": "0343416bbf127a59c778545782d989b49cabcf2921ec9fcf43000ad8550944c7"
     },
     {
+      "path": "src/treasury-proof.js",
+      "bytes": 6709,
+      "sha256": "f46a76039a5cd2fbedec6611321739644557e2b7b15b47a49fec0d83a5e8f95a"
+    },
+    {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "fcbc14c788a5f5359cf08232329135fc1e1dc8fd622ae39a369a95f5d4cb41f5"
+      "sha256": "907267711af45f0756021896fdc5a460362b570ad807e92bb9f43f6b02941039"
     }
   ]
 }
