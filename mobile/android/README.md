@@ -17,7 +17,7 @@ Historical local attempt, superseded by the successful hosted build: the initial
 | Gradle / JDK | 8.13 / 17 |
 | Browser integration | com.google.androidbrowserhelper:androidbrowserhelper:2.7.3 |
 
-The package ID is a proposed code setting, not a store-issued identity. Confirm it against the actual Play/Samsung record before signing; future updates must preserve the real package identity and use an acceptable increasing version code. The application release 3.0.0 does not rename the separately observed rc22 backend dependency.
+Google Play Console confirms the package `xyz.numinalabs.app`; Samsung registration remains unverified. Future updates must preserve this identity and use an acceptable increasing version code. The application release 3.0.0 uses the separately pinned rc26 verifier runtime.
 
 ## Build the release artifacts
 
@@ -29,7 +29,7 @@ gradle --no-daemon :app:bundleRelease :app:assembleRelease
 
 These are build tasks, not a test command. No Gradle wrapper JAR is included because it was not generated or downloaded here. The expected output paths, **not existing files**, are `app/build/outputs/bundle/release/app-release.aab` and `app/build/outputs/apk/release/app-release-unsigned.apk`. The project deliberately has no release signing configuration. An unsigned APK is not installable, and the AAB must be signed appropriately before upload. Use the owner's actual keystore/signing arrangement through Android Studio's signed-bundle workflow; do not use a debug key or an invented identity for production.
 
-Digital Asset Links are published for the actual release certificate identified in `assetlinks.configuration.json`. A store-managed app-signing certificate, if assigned later, requires its own verified association. This configuration record describes the published statement; it is not itself the Digital Asset Links response. Without valid association, the browser displays its normal Custom Tab interface. No browser verification bypass is included. The launcher accepts only HTTPS `/app` paths on `numinalabs.xyz`; other explicit launch URLs fall back to the workspace home.
+Digital Asset Links are published for the actual release certificate identified in `assetlinks.configuration.json`. The Google Play-issued app-signing fingerprint is also included, as observed in the authenticated console on September 14, 2026. This configuration record describes the published statement; it is not itself the Digital Asset Links response. Without valid association, the browser displays its normal Custom Tab interface. No browser verification bypass is included. The launcher accepts only HTTPS `/app` paths on `numinalabs.xyz`; other explicit launch URLs fall back to the workspace home.
 
 ## Remaining release work
 

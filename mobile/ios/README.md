@@ -45,12 +45,12 @@ Before a signed archive, the owner must confirm the app identity, configure thei
 
 Prepared on Windows, September 12, 2026. `xcodebuild`, `swift`, and `plutil` were not available on PATH. The project was not compiled, launched, tested, signed, archived, validated in Xcode, or submitted. No tests or test target were added. No Apple account, signing credential, key generation, paid service, or hosted-site mutation was used. Source inspection is not a successful native build.
 
-The app icon asset catalog and final privacy manifest are intentionally not claimed complete. The project's unconfigured icon permits source preparation but is a release blocker. No `.ipa`, `.xcarchive`, signing material, or simulated store receipt is included.
+The app icon asset catalog now contains an opaque 1024-pixel rendering of the existing Numina mark and is configured in the Xcode target. The final privacy manifest and store review remain release inputs. No `.ipa`, `.xcarchive`, signing material, or simulated store receipt is included.
 
 Apple documents persistent storage in [WKWebsiteDataStore](https://developer.apple.com/documentation/webkit/wkwebsitedatastore). Current review requirements and privacy details were checked against the official sources linked in `RELEASE-INPUTS.md`.
 
 ## Current v3 build record
 
-Hosted build 34785069076 compiled the unsigned device release successfully on 2026-09-13 at 21:52:23 UTC from commit `7e0de0c9e789cb9ab6aa499e891235b56510eb84`. The unsigned app ZIP is downloadable; no signed IPA or App Store submission exists. Exact hashes and remaining signing status are in `../../docs/native-package-record-v3.json`. The earlier preparation record above is historical.
+Hosted build 34867504707 compiled the unsigned device release with its AppIcon successfully on 2026-09-14 at 16:16:32 UTC from commit `fd01df039f9e920afa29361a0df32709faa7dd08`. The downloaded artifact contains Assets.car and AppIcon metadata for iPhone and iPad. The unsigned app ZIP is downloadable; no signed IPA or App Store submission exists. Exact hashes, the prior build, and remaining signing status are in `../../docs/native-package-record-v3.json`. The earlier preparation record above is historical.
 
 Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.

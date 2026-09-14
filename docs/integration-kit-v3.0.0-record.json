@@ -3,9 +3,9 @@
   "version": "3.0.0",
   "revision": "numina-root-v3.0.0",
   "archive": "numina-integration-kit-v3.0.0.zip",
-  "bytes": 72038,
-  "sha256": "83df4de98cf942d9d9e1ded3cbc9085da9d1ba2e9d173f1e368044bbb2e8ec77",
-  "packagedAtUtc": "2026-09-14T15:44:59.837482+00:00",
+  "bytes": 72040,
+  "sha256": "1b0ebc9cbaf26c9b1068832aec91b5d551e3de12abaceecc993bcef74e9a1c86",
+  "packagedAtUtc": "2026-09-14T16:17:53.054682+00:00",
   "sourceFiles": 47,
   "testsRun": false,
   "defaultTools": [
