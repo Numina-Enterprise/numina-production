@@ -16,7 +16,7 @@ if(match('integrations/numina/src/mcp.js',/serverInfo:\{name:'numina-nusd-integr
 const androidBuild=Number(match('mobile/android/app/build.gradle',/versionCode (\d+)/));
 const iosBuild=Number(match('mobile/ios/Configuration/Numina.xcconfig',/CURRENT_PROJECT_VERSION = (\d+)/));
 if(androidBuild!==native.versionCode||iosBuild!==native.versionCode)throw Error('Native build number mismatch');
-if(NUMINA_LAYERS.rootCount!==1||NUMINA_LAYERS.lineageCount!==1||NUMINA_LAYERS.layers.map(v=>v.id).join(',')!=='L1,L2,L3,L4,L5')throw Error('Canonical architecture mismatch');
+if(NUMINA_LAYERS.rootCount!==1||NUMINA_LAYERS.lineageCount!==1||NUMINA_LAYERS.productionEnvironmentCount!==1||NUMINA_LAYERS.layers.map(v=>v.id).join(',')!=='L1,L2,L3,L4,L5')throw Error('Canonical architecture mismatch');
 const root=identities.canonicalIdentity;
 if(root.name!=='Numina'||root.authority!=='NUMINA'||!/^[a-f0-9]{64}$/.test(root.rootHash)||root.headUrl!=='https://numinalabs.xyz/api/control/v2/head')throw Error('Canonical root identity mismatch');
 if(read('public/runtime-contract.js')!==read('integrations/numina/src/runtime-contract.js'))throw Error('Runtime identity differs between website and integration');
@@ -28,6 +28,9 @@ const assetLinks=json('public/.well-known/assetlinks.json').find(v=>v.target?.pa
 if(!assetLinks?.target.sha256_cert_fingerprints.includes(identities.android.release.sha256))throw Error('Android source identity differs from published domain association');
 if(integration.applicationManifest!=='/v3/release/manifest'||json('public/business-core.json').head!=='/api/control/v2/head')throw Error('Source uses a different canonical endpoint');
 const business=json('public/business-core.json');
+const sharedTreasury=NUMINA_LAYERS.treasury,fundingView=business.fundingPlanDeclaration;
+if(sharedTreasury?.route!=='/api/control/v1/treasury'||sharedTreasury.readInterface!=='readTreasury()'||sharedTreasury.writeInterface!=='writeTreasury(event)'||sharedTreasury.unit!=='NUSD'||sharedTreasury.balanceCount!==1||sharedTreasury.sharedAcrossLayers!==true||sharedTreasury.accountViewRoute!=='/api/control/v2/treasury/accounts'||sharedTreasury.fundingStatusPointer!=='/nativeFundingView/status')throw Error('Architecture must reference one canonical native treasury');
+if(business.treasuryEvidence?.nativeTreasuryRecordCount!==1||business.treasuryEvidence.canonicalView!==sharedTreasury.accountViewRoute||fundingView?.source!=='canonical_treasury_view'||fundingView.route!==sharedTreasury.accountViewRoute||fundingView.statusPointer!==sharedTreasury.fundingStatusPointer||fundingView.access!=='authenticated_owner'||Object.hasOwn(business,'original_plan_status')||Object.hasOwn(fundingView,'statusField'))throw Error('Business funding metadata must read the current canonical treasury view');
 if(business.ownerIdentity?.name!==root.name||business.ownerIdentity?.authority!==root.authority||business.ownerIdentity?.rootHash!==root.rootHash||business.ownerIdentity?.authentication!=='existing_authenticated_root')throw Error('Owner identity differs from the canonical Numina root');
 const frozenPath='runtime/verifier-rc26',frozenManifest=frozenPath+'/FROZEN-CORE-v1.8.sha256';
 const frozenBytes=fs.readFileSync(frozenManifest);
@@ -45,6 +48,8 @@ record.preservedDependencies.historicalCoreSource={path:'vendor/numina-core-v1.8
 record.checks.ownerMatchesRoot=true;
 record.checks.frozenCoreBytesMatch=true;
 record.checks.treasuryVerifierMatches=true;
+record.treasury=sharedTreasury;
+record.checks.treasuryReferencesMatch=true;
 record.sourceInputs.push(...['public/treasury-proof.js','integrations/numina/src/treasury-proof.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 fs.mkdirSync('dist/client',{recursive:true});fs.writeFileSync('dist/client/source-alignment.json',JSON.stringify(record,null,2)+'\n');
 console.log('Source alignment verified: Numina '+version+', one root, L1–L5, '+inputs.length+' source identities.');

@@ -235,13 +235,13 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 6709,
-      "sha256": "f46a76039a5cd2fbedec6611321739644557e2b7b15b47a49fec0d83a5e8f95a"
+      "bytes": 7514,
+      "sha256": "ba4e4ebfdf793fb78564168ebad38a019a7ffce3c639143eae40522914565a1e"
     },
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "39b66f9f058d95ddf914ff2b4dc42c0e5a25dc988a150943c523f0120a99b03a"
+      "sha256": "8d045a872608acc0a08c2f13e256b5b6191b265628372ccc41d71f8cb2ae9128"
     }
   ]
 }

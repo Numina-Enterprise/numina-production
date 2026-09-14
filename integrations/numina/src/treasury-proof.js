@@ -37,6 +37,10 @@ export async function verifyTreasuryAccountView(view) {
     const t = view.treasury, p = t.projection, ref = view.canonicalTreasury, funding = view.nativeFundingView;
     const route = '/api/control/v1/treasury', evidenceRoute = '/api/control/v2/treasury/evidence';
     if (funding?.schema !== 'numina.treasury.native-funding-view.v1' || funding.head !== t.head || funding.revision !== t.revision || funding.treasuryProjectionChanged !== false || funding.verificationScope !== t.verification_scope) return false;
+    const plan = view.fundingPlan, declaration = view.fundingDeclaration, ownerDeclared = declaration?.FUNDED_PLAN === true;
+    if (funding.status !== (ownerDeclared ? 'FUNDED_PLAN' : plan?.status ?? 'NOT_RECORDED') || funding.statusBasis !== (ownerDeclared ? 'native_owner_declaration' : 'recorded_plan') || funding.ownerDeclaredFunded !== ownerDeclared) return false;
+    if (funding.recordedPlanStatus !== (plan?.status ?? null) || funding.recordedPlanEventId !== (plan?.eventId ?? null) || funding.ownerDeclarationEventId !== (declaration?.eventId ?? null)) return false;
+    if (treasuryCanonical(funding.confirmedExternalFunding) !== treasuryCanonical(plan?.confirmedFunding ?? null) || treasuryCanonical(funding.externalReceipt) !== treasuryCanonical(plan?.externalReceipt ?? null)) return false;
     if (p) {
       if (ref?.schema !== 'numina.treasury.canonical-reference.v1' || ref.id !== 'numina:treasury:' + encodeURIComponent(t.root) || ref.root !== t.root || ref.head !== t.head || ref.revision !== t.revision || ref.route !== route || ref.evidence?.route !== evidenceRoute) return false;
       if (ref.native?.amount !== p.balance || ref.native.unit !== p.unit || ref.native.eventId !== p.last_event_id || ref.native.verificationScope !== t.verification_scope || ref.accounting?.balanceCount !== 1 || ref.accounting.providerCurrenciesCombined !== false || ref.accounting.providerBalancesChanged !== false) return false;

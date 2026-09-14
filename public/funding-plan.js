@@ -13,6 +13,7 @@ export async function renderFundingPlan(target,treasury,api,refresh,{signal}={})
   }
   const nativeTarget=treasury.nativeFundingView?.nativeTarget??plan.target;
   target.append(node('p',BigInt(nativeTarget.amount).toLocaleString()+' '+nativeTarget.unit+' · One native treasury shared across account views'));
+  target.append(node('p','Current native funding status · '+treasury.nativeFundingView.status+' · '+(treasury.nativeFundingView.ownerDeclaredFunded?'Owner declaration':'Recorded plan')));
   target.append(node('p','Original plan status · '+plan.status));
   target.append(node('p','Numina record · '+plan.id+' · Journal event '+plan.eventId));
   const button=node('button','Read signed plan receipt');button.className='button secondary';
@@ -20,7 +21,7 @@ export async function renderFundingPlan(target,treasury,api,refresh,{signal}={})
   target.append(button);
   const declaration=treasury.fundingDeclaration;
   if(declaration){
-    target.append(node('p','Native treasury · FUNDED_PLAN = true · Owner declaration'));
+    target.append(node('p','Owner declaration · Journal event '+declaration.eventId));
     const proof=node('button','Read signed owner declaration');proof.className='button secondary';
     proof.onclick=async()=>{proof.disabled=true;try{const receipt=await readReceipt('receipts/'+declaration.eventId);const details=node('details','');details.open=true;details.append(node('summary','Owner-declaration provenance'),node('pre',JSON.stringify(receipt,null,2)));target.append(details);}catch(error){if(signal?.aborted)return;target.append(node('p',error.message));proof.disabled=false;}};target.append(proof);
   }else{
