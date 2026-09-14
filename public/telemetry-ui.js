@@ -20,6 +20,22 @@ async function refreshTelemetry() {
       ['Capacity signals',result.capacity.status==='insufficient_data'?'Collect at least 100 requests':result.capacity.signals.length?result.capacity.signals.map(x=>x.replaceAll('_',' ')).join(' · '):'Within configured thresholds'],
       ['Quantum backend',result.quantum?.connected?'Numina simulator connected · classical compute':'Simulator disabled or unavailable']
     ];
+    const quantum=result.quantum?.workload;
+    if(quantum?.schema==='numina.quantum-workload.v1'&&quantum.scope==='current_process_only') {
+      const q=quantum.window;
+      fields.push(
+        ['Active quantum jobs',number(quantum.activeJobs)+' / '+number(quantum.limits.concurrentPerProcess)],
+        ['Quantum jobs admitted this minute',number(quantum.admittedThisMinute)+' / '+number(quantum.limits.requestsPerMinutePerProcess)],
+        ['Completed quantum jobs',number(q.succeeded)+' succeeded · '+number(q.failed)+' failed'],
+        ['Quantum concurrency rejections',number(q.concurrencyLimited)],
+        ['Quantum rate-limit rejections',number(q.rateLimited)],
+        ['Completed simulator shots',number(q.completedShots)+' · '+number(q.shotsPerSecond)+' per second'],
+        ['p95 quantum compute time',q.p95AboveLargestBucket?'> 60,000 ms':q.p95ComputeUpperBoundMs===null?'No observations':'≤ '+number(q.p95ComputeUpperBoundMs)+' ms'],
+        ['Quantum capacity signals',quantum.capacity.status==='insufficient_data'?'Collect at least 20 workload observations':quantum.capacity.signals.length?quantum.capacity.signals.map(x=>x.replaceAll('_',' ')).join(' · '):'Within configured thresholds']
+      );
+    } else fields.push(['Quantum workload metrics','Not available from this deployment']);
+    const ibm=result.quantum?.ibm;
+    fields.push(['IBM QPU access',ibm?.configured?'Credentials configured; connection requires an authenticated provider read':ibm?.configurationError?'Configuration needs attention':'Not configured in this deployment']);
     for(const [label,value]of fields){const term=document.createElement('dt'),detail=document.createElement('dd');term.textContent=label;detail.textContent=value;values.append(term,detail);}
     summary.textContent='Observed '+new Date(result.observedAt).toLocaleString()+'. Current runtime instance only; fleet totals require aggregated provider logs.';
   } catch(error) {
