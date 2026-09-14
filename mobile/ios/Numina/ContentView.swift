@@ -125,6 +125,13 @@ private struct NativeSystemStatusView: View {
     var body: some View {
         NavigationView {
             List {
+                Section("App") {
+                    LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
+                    LabeledContent("Build", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown")
+                    LabeledContent("iOS", value: UIDevice.current.systemVersion)
+                    LabeledContent("Device", value: UIDevice.current.model)
+                }
+
                 Section {
                     ForEach(model.checks) { check in
                         HStack {
