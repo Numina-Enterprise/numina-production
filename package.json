@@ -12,5 +12,7 @@
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs"
-  }
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Numina \u00b7 SK Consulting LLC"
 }

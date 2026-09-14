@@ -29,9 +29,19 @@
       "sha256": "a03dd65d99259748bb8ec59c81972b4200331b2a7d65c10e72c255222ba803f3"
     },
     {
+      "path": "LICENSE.md",
+      "bytes": 1205,
+      "sha256": "30a6d99634a3010b7636aad89f98a424de88ace7e602333b1c6b74a35381e1c5"
+    },
+    {
+      "path": "NOTICE.md",
+      "bytes": 1247,
+      "sha256": "f9ba92913ecf4732efeabb41135b9a9ca1d2b1146e80d7dae37ec2807a58a991"
+    },
+    {
       "path": "OWNERSHIP.md",
-      "bytes": 1461,
-      "sha256": "95a395b3df10e7e6896d5c490fa46aabdad97c523aed56b50b55df6a553cac43"
+      "bytes": 1538,
+      "sha256": "ab7518af3ae3209303c712d1c0dfb999085ee5f4aad29ba35ced6f38c853ec60"
     },
     {
       "path": "README.md",
@@ -94,6 +104,16 @@
       "sha256": "77cac820a30183335c62cd5013d4244f9d894496ac8576c63d1ff058f6cf6ca3"
     },
     {
+      "path": "examples/quantum-measurement.mjs",
+      "bytes": 904,
+      "sha256": "48bbe9d28b795124b3ad166c33f49b26e878bbaccfdb1e4183fe24fd1b1151d3"
+    },
+    {
+      "path": "examples/quantum.mjs",
+      "bytes": 544,
+      "sha256": "c538a9f986231def2e86f98fbb01bbf6108ad7a576249fd69a64a2b43c15ff02"
+    },
+    {
       "path": "examples/setup-nvidia-container.sh",
       "bytes": 1287,
       "sha256": "d373935a628c39140bde057d2fad51f6dd9eac276c3ca20980cfd1fa9df690ae"
@@ -130,8 +150,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 828,
-      "sha256": "f805547266b59bf50a3d53f87d081b9418ec417ea1978527eb54a43a403da4af"
+      "bytes": 980,
+      "sha256": "00ebde2f3e90ba576573f76465768997aba9dbfd5d19ae045933258f61eeda83"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -195,8 +215,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 5215,
-      "sha256": "55bdd22220ced90cea8eb5250f31f05bb0622efa2c5c0ba574596ed33400a830"
+      "bytes": 5240,
+      "sha256": "77bf02bc3aa1a0ef80c32e81e3f5698d7ba26761ad4421674eb0bcd8ecacdaec"
     },
     {
       "path": "src/client.js",
@@ -224,6 +244,16 @@
       "sha256": "a7da06ded78993f59d8dc5e918a9c9a7b9b889aece1d06427739b8a785d466c6"
     },
     {
+      "path": "src/quantum-backend.js",
+      "bytes": 4278,
+      "sha256": "bb4088d8fe3e3729c673e0f2b70eff31443ce1fac4626c3ff35e61c822a269c4"
+    },
+    {
+      "path": "src/quantum.js",
+      "bytes": 9332,
+      "sha256": "d0ce3e42543a721ee44ff6c7b7fb71a8220e9290529a3c70828dbec0feb9a8fb"
+    },
+    {
       "path": "src/runtime-contract.js",
       "bytes": 1163,
       "sha256": "3364e7530eb2668f1dc956ca1b50f36cb7c2cba1ea8df1b0691838f1c00000e7"
@@ -241,7 +271,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "3d14d7bd1efcece21c1a008101f421c9a35bbbb4a5895bb6d98f451eb83c32b6"
+      "sha256": "1faceb396223cc6f2729223a16093597dd6b35fd0a17368dbb8cdf887fe9dd8c"
     }
   ]
 }

@@ -72,5 +72,5 @@ export async function controlHttp(req,env){
       const rows=await env.DB.prepare('SELECT event_json,hash FROM numina_control_events WHERE revision>? ORDER BY revision LIMIT 100').bind(after).all();return controlResponse({events:rows.results.map(r=>({event:JSON.parse(r.event_json),hash:r.hash})),next:rows.results.length?JSON.parse(rows.results.at(-1).event_json).revision:null});
     }
     return controlResponse({error:'NOT_FOUND'},404);
-  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;console.log(JSON.stringify({event:'control_error',route:path.replace(/\/treasury-documents\/[^/]+/,'/treasury-documents/:id'),code,status}));return controlResponse({status:'unavailable',error:code},status);}
+  }catch(error){const code=error.code||'DEPENDENCY_UNAVAILABLE',status=error.status||503;return controlResponse({status:'unavailable',error:code},status);}
 }

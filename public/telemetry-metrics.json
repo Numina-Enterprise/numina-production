@@ -1,0 +1,71 @@
+{
+  "schema": "numina.metric-map.v1",
+  "version": "4.0.0",
+  "ownerEndpoint": "/api/ops/v1/telemetry",
+  "scope": "current_process_only",
+  "guide": "/downloads/Telemetry-and-Quantum.md",
+  "metrics": [
+    {
+      "signal": "traffic",
+      "field": "window.requestsPerSecond",
+      "unit": "requests_per_second",
+      "action": "size_stateless_capacity"
+    },
+    {
+      "signal": "latency",
+      "field": "window.histogram",
+      "unit": "milliseconds",
+      "action": "merge_bucket_counts_before_computing_fleet_percentiles"
+    },
+    {
+      "signal": "server_errors",
+      "field": "window.errorRate",
+      "unit": "ratio",
+      "threshold": 0.01,
+      "action": "investigate_dependencies"
+    },
+    {
+      "signal": "throttling",
+      "field": "window.rateLimitedRate",
+      "unit": "ratio",
+      "threshold": 0.05,
+      "action": "review_capacity_and_rate_policy"
+    },
+    {
+      "signal": "concurrency",
+      "field": "activeRequests",
+      "unit": "requests",
+      "action": "compare_with_provider_quota"
+    },
+    {
+      "signal": "aborted",
+      "field": "window.aborted",
+      "unit": "requests",
+      "action": "investigate_incomplete_responses"
+    },
+    {
+      "signal": "logging_failures",
+      "field": "loggingFailures",
+      "unit": "events",
+      "action": "repair_log_pipeline"
+    },
+    {
+      "signal": "quantum_work",
+      "eventSchema": "numina.quantum-metric.v1",
+      "fields": [
+        "qubits",
+        "gates",
+        "shots"
+      ],
+      "action": "respect_backend_limits_and_cost_budget"
+    }
+  ],
+  "automaticScalingEnabled": false,
+  "treasuryWrites": false,
+  "quantum": {
+    "backend": "numina-statevector",
+    "kind": "classical_simulator",
+    "endpoint": "/api/ops/v1/quantum/measure",
+    "hardwareConnected": false
+  }
+}

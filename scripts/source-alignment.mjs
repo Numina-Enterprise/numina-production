@@ -59,5 +59,15 @@ if(read('mobile/signing/distribution-policy.json')!==read('runtime/vercel-produc
 record.sourceInputs.push({path:'mobile/signing/distribution-policy.json',sha256:digest(fs.readFileSync('mobile/signing/distribution-policy.json'))});
 record.checks.treasuryReferencesMatch=true;
 record.sourceInputs.push(...['public/treasury-proof.js','integrations/numina/src/treasury-proof.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
+if(read('src/quantum-backend.js').replace('../integrations/numina/src/quantum.js','./quantum.js')!==read('integrations/numina/src/quantum-backend.js'))throw Error('Packaged quantum backend differs');
+if(read('src/telemetry.js')!==read('runtime/vercel-production/lib/telemetry.mjs'))throw Error('Gateway telemetry copy is stale');
+if(match('src/telemetry.js',/TELEMETRY_VERSION = '([^']+)'/)!==version)throw Error('Telemetry version differs');
+record.telemetry={schema:'numina.telemetry.v1',endpoint:'/api/ops/v1/telemetry',access:'authenticated_owner',metricsGuide:'/downloads/Telemetry-and-Quantum.md',scope:'process_local_with_provider_log_aggregation',automaticScalingEnabled:false};
+record.quantum={adapter:'@numina/nusd-integration/quantum',backend:'numina-statevector',mode:'classical_simulator',endpoint:'/api/ops/v1/quantum/measure',hardwareExecutionVerified:false};
+record.sourceInputs.push(...['src/telemetry.js','src/telemetry-http.js','src/quantum-backend.js','src/quantum-http.js','runtime/vercel-production/lib/telemetry.mjs','runtime/vercel-production/numina_telemetry.py','integrations/numina/src/quantum.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
+const noticeTargets=['public','docs','integrations/numina','integrations/codex/numina','mobile/android','mobile/ios','runtime/vercel-production','runtime/vercel-production/public/downloads'];
+for(const dir of noticeTargets)for(const name of ['OWNERSHIP.md','LICENSE.md','NOTICE.md'])if(read(name)!==read(dir+'/'+name))throw Error('Stale ownership notice: '+dir+'/'+name);
+record.intellectualProperty={product:'Numina',statedOwner:'SK Consulting LLC',ownershipNotice:'/downloads/OWNERSHIP.md',license:'/downloads/LICENSE.md',thirdPartyNotices:'/downloads/NOTICE.md',noticeCopiesMatch:true,registrationVerified:false,legalOwnershipAuditPerformed:false};
+record.sourceInputs.push(...['OWNERSHIP.md','LICENSE.md','NOTICE.md'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 fs.mkdirSync('dist/client',{recursive:true});fs.writeFileSync('dist/client/source-alignment.json',JSON.stringify(record,null,2)+'\n');
 console.log('Source alignment verified: Numina '+version+', one root, L1–L5, '+inputs.length+' source identities.');

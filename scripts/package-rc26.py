@@ -9,6 +9,8 @@ destination=Path(sys.argv[1]).resolve()
 if destination.exists():
     raise SystemExit('Choose a new assembly directory; existing artifacts are retained.')
 destination.mkdir(parents=True)
+for notice in ['OWNERSHIP.md','LICENSE.md','NOTICE.md']:
+    shutil.copyfile(repo/notice,destination/notice)
 runtime=destination/'verifier'
 for path in source.rglob('*'):
     if not path.is_file() or '__pycache__' in path.parts or path.suffix=='.pyc':continue
@@ -16,8 +18,16 @@ for path in source.rglob('*'):
     if relative.parts[0]=='artifacts':continue
     target=runtime/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
 (destination/'api').mkdir()
-shutil.copyfile(source/'deploy/vercel/entrypoint.py',destination/'api/index.py')
-shutil.copyfile(source/'deploy/vercel/vercel.json',destination/'vercel.json')
+entrypoint=(source/'deploy/vercel/entrypoint.py').read_text()
+entrypoint+='\n# Deployment telemetry wraps the retained rc26 ASGI application.\n'
+entrypoint+='sys.path.insert(0,str(Path(__file__).resolve().parents[1]))\n'
+entrypoint+='from numina_telemetry import NuminaTelemetryASGI\napp=NuminaTelemetryASGI(app)\n'
+(destination/'api/index.py').write_text(entrypoint,encoding='utf-8')
+shutil.copyfile(repo/'runtime/vercel-production/numina_telemetry.py',destination/'numina_telemetry.py')
+shutil.copytree(repo/'runtime/vercel-production/lib',destination/'lib',ignore=shutil.ignore_patterns('numina.js'))
+vercel_config=json.loads((source/'deploy/vercel/vercel.json').read_text())
+vercel_config['rewrites'].insert(0,{'source':'/api/ops/v1/:path*','destination':'https://numinalabs.xyz/api/ops/v1/:path*'})
+(destination/'vercel.json').write_text(json.dumps(vercel_config,indent=2)+'\n',encoding='utf-8')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
 # Publish the same recorded native downloads alongside the unchanged verifier.
@@ -25,8 +35,10 @@ public_assets=repo/'runtime/vercel-production/public'
 if public_assets.exists():shutil.copytree(public_assets,destination/'public')
 (destination/'.python-version').write_text('3.12\n',encoding='utf-8')
 (destination/'package.json').write_text(json.dumps({'name':'numina-production','version':json.loads((repo/'runtime/vercel-production/package.json').read_text())['version'],'private':True,'type':'module'})+'\n',encoding='utf-8')
-(destination/'.vercel').mkdir()
-shutil.copyfile(repo/'runtime/vercel-production/.vercel/project.json',destination/'.vercel/project.json')
+project_link=repo/'runtime/vercel-production/.vercel/project.json'
+if project_link.exists():
+    (destination/'.vercel').mkdir()
+    shutil.copyfile(project_link,destination/'.vercel/project.json')
 
 sys.path.insert(0,str(runtime))
 from numina_prod.frozen import verify_frozen_core
@@ -62,4 +74,4 @@ check=verify_supply_chain_artifacts(build_id=identity['build_id'],production_fil
 if not check['valid']:raise SystemExit('Source inventory binding failed')
 descriptor=release_descriptor(settings)
 (artifacts/'assembled-release.json').write_text(json.dumps(descriptor,indent=2,sort_keys=True)+'\n',encoding='utf-8')
-print(json.dumps({'directory':str(destination),'build':descriptor,'frozenFiles':frozen.checked,'sourceFiles':len(entries),'newTestsRun':False},indent=2))
+print(json.dumps({'directory':str(destination),'build':descriptor,'frozenFiles':frozen.checked,'sourceFiles':len(entries),'newTestsRun':False,'projectLinked':project_link.exists(),'telemetryWrapperIncluded':True},indent=2))

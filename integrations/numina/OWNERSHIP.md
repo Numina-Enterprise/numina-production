@@ -2,7 +2,7 @@
 
 Copyright © 2026 SK Consulting LLC. All rights reserved in Numina-owned material.
 
-Numina is operated by SK Consulting LLC. SK Consulting LLC is the stated owner of the Numina software, original documentation, designs and other intellectual property it owns. This notice applies to maintained Numina OS, website, control-plane, integration, plugin and native application sources, including production and development distributions.
+Numina is operated by SK Consulting LLC. SK Consulting LLC is the stated owner of the Numina software, original documentation, designs and other intellectual property it owns. This notice applies to maintained Numina OS, website, control-plane, integration, plugin and native application sources, telemetry, quantum adapters, classical circuit simulation and build tooling, including production and development distributions.
 
 Numina™, Numina Labs™, Numina OS™, Numina Result Access™, Numina USD™ and NUSD™ are trademarks claimed by SK Consulting LLC. The ™ designation does not assert trademark registration.
 
