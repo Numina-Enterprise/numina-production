@@ -2,7 +2,14 @@
   "schema": "numina.business-core.v1",
   "name": "Numina",
   "operator": "SK Consulting LLC",
-  "positioning": "Blockchain and authority infrastructure for the agent economy",
+  "slogan": "Intelligence in motion.",
+  "ownerIdentity": {
+    "name": "Numina",
+    "authority": "NUMINA",
+    "rootHash": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+    "authentication": "existing_authenticated_root"
+  },
+  "positioning": "Enterprise services, software, intelligence and blockchain across the global economy",
   "mission": "Unify agents, software, code, assets, liquidity, verification and evidence through one governed system.",
   "dimensions": {
     "agents": "Identity, delegated authority and bounded intent",
