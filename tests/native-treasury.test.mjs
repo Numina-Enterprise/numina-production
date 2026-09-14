@@ -8,6 +8,8 @@ import {bootstrapControl,readControl,controlSnapshot,commitControl} from '../src
 import {controlHash,stable} from '../src/control.js';
 import {createNuminaTreasury} from '../src/native-treasury.js';
 import {verifyNativeTreasury} from '../public/native-treasury.js';
+import {verifyTreasuryRecord,verifyTreasuryAccountView} from '../public/treasury-proof.js';
+import {alignTreasuryAccounts} from '../src/treasury-alignment.js';
 import worker from '../src/worker.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
@@ -20,6 +22,45 @@ async function command(db,operation='INITIALIZE',extra={},id='native-init'){
   const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare'};
   return {id,expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:objectives[operation],Intent:{operation,reason:'Isolated test of the Numina-native model',...extra}};
 }
+
+test('clients bind proof to the root, command, revision and current event head',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);
+    const empty=await api.readTreasury();assert.equal(await verifyTreasuryRecord(empty),false);assert.equal(await verifyTreasuryRecord(empty,{allowUninitialized:true}),true);
+    await api.writeTreasury(await command(db));const current=await api.readTreasury();
+    for(const mutate of [
+      v=>v.root='email:another-root@example.test',v=>v.revision=0,v=>v.head='a'.repeat(64),
+      v=>v.canonical_proof.event.commandHash='a'.repeat(64),v=>v.canonical_proof.event.command.data.Authority='OTHER',
+      v=>v.canonical_proof.event.command.expectedRevision=22,v=>v.canonical_proof.event.command.data.expectedHead='a'.repeat(64),
+      v=>v.canonical_proof.event.command.data.Principal='email:other@example.test',
+    ]){
+      const changed=structuredClone(current);mutate(changed);
+      // Even a newly computed outer event digest cannot detach its metadata binding.
+      changed.canonical_proof.hash=await controlHash(changed.canonical_proof.event);
+      assert.equal(await verifyTreasuryRecord(changed),false);
+    }
+    await commitControl(db,{id:'unrelated-event',expectedRevision:current.revision,type:'reconcile',data:{}},owner,now());
+    const later=await api.readTreasury();assert.notEqual(later.head,later.canonical_proof.hash);assert.equal(await verifyTreasuryRecord(later),true);
+  }finally{db.close();}
+});
+
+test('account views share one checked balance without changing stored references',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db),frontier={accounts:[{id:'one',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing label',providerAccountReference:'existing-reference'},{id:'two',provider:'bank-of-america',legalEntity:'Owner',accountLabel:'Existing bank label',providerAccountReference:null}]};
+    const before=structuredClone(frontier);
+    assert.equal(await verifyTreasuryAccountView(alignTreasuryAccounts(await api.readTreasury(),frontier)),true);
+    await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
+    assert.equal(await verifyTreasuryAccountView(view),true);assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
+    for(const mutate of [
+      v=>v.canonicalTreasury.root='wrong-root',v=>v.canonicalTreasury.head='a'.repeat(64),
+      v=>v.accounts[0].treasuryRef.id='wrong-root',v=>v.accounts[0].sharedNativeTreasury.amount='1',
+      v=>v.accounts[1].sharedNativeTreasury.revision++,v=>v.accounts[0].sharedNativeTreasury.providerBalance=true,
+      v=>v.nativeValuation.amount='1',v=>v.nativeValuation.executableConversionVerified=true,
+      v=>v.nativeFundingView.head='a'.repeat(64),v=>v.nativeFundingView.nativeTarget.unit='USD'
+    ]){const changed=structuredClone(view);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false);}
+    assert.deepEqual(frontier,before);
+  }finally{db.close();}
+});
 test('treasury initializes within the existing root, persists and returns actual journal proof',async()=>{
   const directory=mkdtempSync(join(tmpdir(),'numina-treasury-')),file=join(directory,'treasury.sqlite');let db=await fixture(file);
   try{
@@ -111,6 +152,8 @@ test('integration reads the canonical native record with owner credentials only 
     }});
     const result=await client.callTool('numina_read_treasury',{});
     assert.equal(result.data.projection.balance,'500000000000000');assert.equal(result.asset_execution_available,false);assert.equal(result.verification,'server_reported_not_independently_verified');assert.equal(calls.length,2);
+    current.root='email:substituted-root@example.test';
+    await assert.rejects(client.readTreasury(),{code:'INVALID_TREASURY_PROOF'});
     await assert.rejects(new NuminaClient({baseUrl:'https://numina.test',fetch:()=>{throw Error('must not send');}}).readTreasury(),{code:'SERVER_AUTH_REQUIRED'});
   }finally{db.close();}
 });
