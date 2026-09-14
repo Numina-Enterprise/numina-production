@@ -20,6 +20,7 @@ if(NUMINA_LAYERS.rootCount!==1||NUMINA_LAYERS.lineageCount!==1||NUMINA_LAYERS.la
 const root=identities.canonicalIdentity;
 if(root.name!=='Numina'||root.authority!=='NUMINA'||!/^[a-f0-9]{64}$/.test(root.rootHash)||root.headUrl!=='https://numinalabs.xyz/api/control/v2/head')throw Error('Canonical root identity mismatch');
 if(read('public/runtime-contract.js')!==read('integrations/numina/src/runtime-contract.js'))throw Error('Runtime identity differs between website and integration');
+if(read('public/treasury-proof.js')!==read('integrations/numina/src/treasury-proof.js'))throw Error('Treasury verification differs between website and integration');
 const inventory=json('integrations/numina/file-manifest.json');
 if(inventory.version!==version)throw Error('Integration inventory version mismatch');
 for(const file of inventory.files){const bytes=fs.readFileSync('integrations/numina/'+file.path);if(bytes.length!==file.bytes||digest(bytes)!==file.sha256)throw Error('Stale packaged integration source: '+file.path);}
@@ -43,5 +44,7 @@ record.preservedDependencies.frozenCore.verifiedFiles=frozenEntries.length;
 record.preservedDependencies.historicalCoreSource={path:'vendor/numina-core-v1.8',sourcePolicy:'historical_checkout',exactByteBinding:false};
 record.checks.ownerMatchesRoot=true;
 record.checks.frozenCoreBytesMatch=true;
+record.checks.treasuryVerifierMatches=true;
+record.sourceInputs.push(...['public/treasury-proof.js','integrations/numina/src/treasury-proof.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 fs.mkdirSync('dist/client',{recursive:true});fs.writeFileSync('dist/client/source-alignment.json',JSON.stringify(record,null,2)+'\n');
 console.log('Source alignment verified: Numina '+version+', one root, L1–L5, '+inputs.length+' source identities.');

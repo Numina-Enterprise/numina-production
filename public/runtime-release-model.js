@@ -78,8 +78,8 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
     equalJson(declarationWrapper.attestation, declaration);
   // rc26 signs the complete descriptor, including source and artifact hashes.
   const releaseSignatureValid = attestation.valid && attestation.envelope.artifact_type === RELEASE_ARTIFACT_TYPE &&
-    releaseIdentityMatches(declaration) && declarationBound && Object.keys(EXPECTED_RELEASE).every(field =>
-      declaration[field] === manifest?.[field]);
+    releaseIdentityMatches(declaration) && declaration.environment === 'production' && declarationBound &&
+    object(manifest) && Object.keys(manifest).every(field => Object.hasOwn(declaration, field) && equalJson(declaration[field], manifest[field]));
   // Exact binding is required. A signature over unrelated state is not proof of the displayed state.
   const controlStateBound = Boolean(controlReceipt.valid && controlReceipt.envelope.artifact_type === 'NUMINA_CONTROL_STATE' &&
     object(control) && Object.hasOwn(control, 'state') && control.state?.schema === 'numina.control-state.v1' &&

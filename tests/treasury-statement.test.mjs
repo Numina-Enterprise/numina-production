@@ -43,7 +43,8 @@ test('broad record delegation cannot reveal the owner bank statement through a s
  }finally{env.DB.close();}
 });
 
-test('published browser assets contain no private reported bank or balance details',()=>{
+test('published assets contain no owner test credential or unsupported transfer confirmation',()=>{
+ const containsPrivate=s=>s.includes(key)||s.includes('Treasury transfers and NUSD settlement are active. Funds moved.');
  const visit=directory=>{for(const entry of readdirSync(directory,{withFileTypes:true})){const file=directory+'/'+entry.name;if(entry.isDirectory())visit(file);else assert.equal(containsPrivate(readFileSync(file).toString('utf8')),false,file);}};
  visit(new URL('../dist/client',import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,'$1'));
 });
