@@ -1,7 +1,7 @@
 {
   "schema": "numina.required-architecture.v1",
   "classification": "required_contract_not_live_state",
-  "runtime": "1.9.0-rc22",
+  "runtime": "1.9.0-rc26",
   "root_count": 1,
   "root_lifetime": "perpetual",
   "lineage_count": 1,
@@ -27,14 +27,22 @@
     "authority": "NUMINA",
     "verification": "VERIFIED",
     "system_of_record": "NUMINA",
-    "scope": "Numina-native model"
+    "scope": "Numina-native",
+    "route": "/api/control/v1/treasury",
+    "balance_count": 1,
+    "shared_across_layers": true,
+    "account_view_route": "/api/control/v2/treasury/accounts",
+    "funding_status_pointer": "/nativeFundingView/status",
+    "provider_observation_route": "/api/control/v1/stripe-treasury",
+    "provider_balances_combined": false,
+    "provider_balances_changed_by_build": false
   },
   "deployment_verified": false,
   "canonical_runtime_implementation_verified": false,
   "production_head": null,
   "mint_event": null,
-  "pendingRuntimeMigration": "1.9.0-rc26",
-  "frontierVersion": "3.0.0",
+  "pendingRuntimeMigration": null,
+  "frontierVersion": "4.0.0",
   "architectureLayers": {
     "L1": "Root and state",
     "L2": "Intent and evidence",
@@ -43,6 +51,7 @@
     "L5": "Canonical evidence"
   },
   "architectureManifest": "/api/control/v2/architecture",
-  "applicationVersion": "3.0.0",
+  "applicationVersion": "4.0.0",
+  "applicationManifest": "/v4/release/manifest",
   "reconstructedSources": "preserved_unchanged"
 }

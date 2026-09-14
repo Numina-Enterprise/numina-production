@@ -11,3 +11,5 @@ public/** -text
 src/** -text
 package.json -text
 runtime/vercel-production/package.json -text
+config/numina-architecture.json -text
+docs/treasury-client-alignment.md -text
