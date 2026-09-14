@@ -41,7 +41,7 @@ const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).sort((a
  const relative=dir+'/'+entry.name;return entry.isDirectory()?walk(relative):[relative];
 });
 const files=[
- 'package.json','.gitignore','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
+ 'package.json','.gitignore','OWNERSHIP.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
  'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
 ].sort();
 const fileManifest={schema:'numina.integration.files.v2',version:metadata.version,scope:'Integration source archive; separate from the Numina application artifact identity',files:files.map(relative=>{

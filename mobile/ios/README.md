@@ -52,3 +52,5 @@ Apple documents persistent storage in [WKWebsiteDataStore](https://developer.app
 ## Current v3 build record
 
 Hosted build 34785069076 compiled the unsigned device release successfully on 2026-09-13 at 21:52:23 UTC from commit `7e0de0c9e789cb9ab6aa499e891235b56510eb84`. The unsigned app ZIP is downloadable; no signed IPA or App Store submission exists. Exact hashes and remaining signing status are in `../../docs/native-package-record-v3.json`. The earlier preparation record above is historical.
+
+Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.

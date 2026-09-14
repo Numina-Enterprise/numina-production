@@ -29,9 +29,14 @@
       "sha256": "1da9ddf09e19887096103e28cc94f3603bcda44dbbb701900476ca8b99d48319"
     },
     {
+      "path": "OWNERSHIP.md",
+      "bytes": 1461,
+      "sha256": "95a395b3df10e7e6896d5c490fa46aabdad97c523aed56b50b55df6a553cac43"
+    },
+    {
       "path": "README.md",
-      "bytes": 6026,
-      "sha256": "05ff4ae3cd177495f593578c35073c40acd07de4575f9c89d17ec10688ceeb4c"
+      "bytes": 6210,
+      "sha256": "520c5d3c18b704105039647c203129a8157b5dbd0a746a3d7306eb6ca6277b5c"
     },
     {
       "path": "SECURITY.md",
@@ -150,8 +155,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 4825,
-      "sha256": "c38e633c279e40747bad183e51cd5bfcbce3990fa93d4514e5a4d137f63078c6"
+      "bytes": 4840,
+      "sha256": "bb983985df670e15fbaba47d05260debda0ec20ed7b17599f9c70e182eb8c429"
     },
     {
       "path": "src/client.js",
@@ -191,7 +196,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "88390e5a1bae732b51625cf7842a87c2aed93ddb654820f62da34f444d83991f"
+      "sha256": "fcbc14c788a5f5359cf08232329135fc1e1dc8fd622ae39a369a95f5d4cb41f5"
     }
   ]
 }

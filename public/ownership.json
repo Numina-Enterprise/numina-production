@@ -1,0 +1,33 @@
+{
+  "schema": "numina.ownership.v1",
+  "owner": "SK Consulting LLC",
+  "product": "Numina",
+  "copyright": "Copyright © 2026 SK Consulting LLC. All rights reserved in Numina-owned material.",
+  "trademarks": [
+    "Numina™",
+    "Numina Labs™",
+    "Numina OS™",
+    "Numina Result Access™",
+    "Numina USD™",
+    "NUSD™"
+  ],
+  "trademarkDesignation": "TM",
+  "scope": "Numina-owned software, original documentation, designs and branding",
+  "surfaces": [
+    "Numina OS",
+    "website",
+    "control plane",
+    "integrations",
+    "plugins",
+    "native application sources"
+  ],
+  "environments": [
+    "production",
+    "development"
+  ],
+  "thirdPartyRights": "Retained under their respective licenses and notices",
+  "historicalSignedArtifacts": "Original bytes and notices retained",
+  "notice": "/ownership",
+  "sourceNotice": "/OWNERSHIP.md",
+  "rightsContact": "skott34@gmail.com"
+}
