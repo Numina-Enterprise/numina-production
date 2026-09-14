@@ -35,8 +35,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 6210,
-      "sha256": "520c5d3c18b704105039647c203129a8157b5dbd0a746a3d7306eb6ca6277b5c"
+      "bytes": 6702,
+      "sha256": "98d03c17bbfd0f51057677d5236e480ffcd585b2a8d1c81d2dc566b0e9c25ab5"
     },
     {
       "path": "SECURITY.md",
@@ -60,8 +60,13 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 2356,
-      "sha256": "368c7d31faedd040950f9d52ca4ed97adc722b4dfb5e64475552d21c844475a3"
+      "bytes": 2722,
+      "sha256": "ef934e2a62a65540175e1541d90b82ba15927f190646b18ffe0825a709112f4c"
+    },
+    {
+      "path": "examples/NVIDIA.md",
+      "bytes": 3715,
+      "sha256": "075c94ab9c1fb93e338dd5271c6db175d474058bbbaf78e3226ac9ce1c063eb3"
     },
     {
       "path": "examples/mcp-host.example.json",
@@ -69,9 +74,34 @@
       "sha256": "cc76746b45db42d1aac4dc515f10768cc0b3d516e587f8ecdcd47a538a594a4b"
     },
     {
+      "path": "examples/nvidia-local.example.json",
+      "bytes": 986,
+      "sha256": "ed6ef8420a217930d4400cc260e79833b4673a865a769175486d0d46b7e3486e"
+    },
+    {
+      "path": "examples/nvidia-nim.mjs",
+      "bytes": 2047,
+      "sha256": "94167f4685f77338be286fac87187ec2f6dcbfc081ba66698ccb43e1202a0eb2"
+    },
+    {
+      "path": "examples/nvidia-provider-policy.json",
+      "bytes": 1027,
+      "sha256": "4bce887ea0874abb9d5dc762e774dba38f0cf94bc7689d36b84f15aa96820d01"
+    },
+    {
       "path": "examples/provider-roundtrips.mjs",
       "bytes": 3336,
       "sha256": "77cac820a30183335c62cd5013d4244f9d894496ac8576c63d1ff058f6cf6ca3"
+    },
+    {
+      "path": "examples/setup-nvidia-container.sh",
+      "bytes": 1287,
+      "sha256": "d373935a628c39140bde057d2fad51f6dd9eac276c3ca20980cfd1fa9df690ae"
+    },
+    {
+      "path": "examples/setup-nvidia-wsl.ps1",
+      "bytes": 2158,
+      "sha256": "6d1e2464aa2292c26ff40ef66276eb5cec828ed2d5adaab4a18c084934cfc60c"
     },
     {
       "path": "history/0.2.0/VALIDATION.md",
@@ -155,8 +185,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 4840,
-      "sha256": "bb983985df670e15fbaba47d05260debda0ec20ed7b17599f9c70e182eb8c429"
+      "bytes": 5115,
+      "sha256": "1baed3dde2a71be4a43b1b3d33efff067fa12fae5abbab36613308103fd9a35a"
     },
     {
       "path": "src/client.js",
@@ -201,7 +231,7 @@
     {
       "path": "verification.json",
       "bytes": 1926,
-      "sha256": "907267711af45f0756021896fdc5a460362b570ad807e92bb9f43f6b02941039"
+      "sha256": "5974c118337698e4591ec55db187e254cb5719d46162aff7d6246fad3ad82947"
     }
   ]
 }

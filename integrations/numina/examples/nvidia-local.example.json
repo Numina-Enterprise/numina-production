@@ -1,0 +1,28 @@
+{
+  "schema": "numina.nvidia.target.v1",
+  "name": "numina-nvidia",
+  "deviceGroup": "numina-nvidia-local",
+  "deploymentStatus": "configuration_only",
+  "audience": "local_owner_only",
+  "endpoint": "http://127.0.0.1:8000/v1",
+  "model": "meta/llama-3.1-8b-instruct",
+  "candidateImage": "nvcr.io/nim/meta/llama-3.1-8b-instruct:1.8.0-RTX",
+  "approvedImageDigest": null,
+  "profile": "discovery",
+  "numinaOrigin": "https://numinalabs.xyz",
+  "architectureLayer": "L4",
+  "automaticApply": false,
+  "providerConnectivityVerified": false,
+  "health": {
+    "live": "/v1/health/live",
+    "ready": "/v1/health/ready",
+    "models": "/v1/models"
+  },
+  "requiredBeforeStart": [
+    "WSL2 Ubuntu and supported container runtime",
+    "NVIDIA Container Toolkit and GPU visibility",
+    "Existing authorized NVIDIA registry credentials and applicable terms",
+    "Verified model profile and immutable image digest",
+    "Loopback-only listener; verify models and tool-call round trip"
+  ]
+}

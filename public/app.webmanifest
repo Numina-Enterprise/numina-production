@@ -1,8 +1,8 @@
 {
   "id": "/app",
-  "name": "Numina OS 3 — One connected operating system",
+  "name": "Numina OS 3 \u2014 One connected operating system",
   "short_name": "Numina OS",
-  "description": "Intelligence in motion. One root and five architecture layers connect service work, agent authority, treasury records, integrations and release evidence.",
+  "description": "Intelligence in Motion. One Numina workspace for service work, agent authority, treasury records and integrations.",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
