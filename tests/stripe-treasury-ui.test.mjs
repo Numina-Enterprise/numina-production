@@ -37,7 +37,7 @@ function harness(fetcher,{control=false}={}){
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:listen,dispatchEvent:event=>{dispatched.push(event.type);fire(event.type,event);return true;},querySelectorAll:selector=>selector.includes('workspace')?[...nodes.values()].filter(node=>node.tagName==='button'):[]};
  const context=vm.createContext({document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
  const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
- vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
+ vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('treasury-amount.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
  return {get,context,subject:context.subject,dispatched,fire,close(){if(control)fire('pagehide');else context.subject.clearStripeTreasury();}};
 }
 function values(h){const items=h.get('stripe-treasury-details').children,rows={};for(let i=0;i<items.length;i+=2)rows[items[i].textContent]=items[i+1].textContent;return rows;}
@@ -79,6 +79,22 @@ test('invalid Stripe execution or balance data cannot be presented as a current 
  for(const corrupt of [fixture=>fixture.transfer_execution=true,fixture=>delete fixture.balances.available.usd]){
   const fixture=stripeFixture();corrupt(fixture);const h=harness(async()=>response(fixture));
   try{await h.subject.loadStripeTreasury();assertCleared(h);assert.match(h.get('stripe-treasury-message').textContent,/could not be checked/);}finally{h.close();}
+ }
+});
+
+test('Stripe Treasury renders exact large integer strings without rounding a cent or micro-unit',async()=>{
+ const fixture=stripeFixture();
+ fixture.balances.available.usd={currency:'usd',value:'50000000000000001',formatted:'$500,000,000,000,000.01'};
+ fixture.balances.available.usdc={currency:'usdc',value:'500000000000000000001',formatted:'500,000,000,000,000.000001 USDC'};
+ const h=harness(async()=>response(fixture));
+ try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Available USD'],'$500,000,000,000,000.01');assert.equal(values(h)['Available USDC'],'500,000,000,000,000.000001 USDC');}finally{h.close();}
+});
+
+test('noncanonical or already rounded large amounts cannot populate the Stripe view',async()=>{
+ for(const value of ['01','-0','1e20','1.5','9'.repeat(79),9007199254740992]){
+  const fixture=stripeFixture();fixture.balances.available.usd.value=value;
+  const h=harness(async()=>response(fixture));
+  try{await h.subject.loadStripeTreasury();assertCleared(h);}finally{h.close();}
  }
 });
 
