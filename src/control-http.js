@@ -10,7 +10,8 @@ export async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
   const auth=req.headers.get('authorization');
   if(auth){if(!auth.startsWith('Bearer ')||await controlHash(auth.slice(7))!==env.NUMINA_CONTROL_API_KEY_SHA256)controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}
-  // These two identity headers are set and overwritten by the Sites dispatcher.
+  // Identity is supplied by Sites or the verified reviewer middleware. Reviewers
+  // retain their distinct principal and do not inherit the production root.
   const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
   if(!id||!email)controlError('UNAUTHENTICATED',401);
   return 'email:'+email.trim().toLowerCase();

@@ -3,6 +3,24 @@
 const treasuryHash = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const treasuryText = value => typeof value === 'string' && value.length > 0;
 const treasuryRevision = value => Number.isSafeInteger(value) && value >= 0;
+// Release metadata describes these checks and binds the exact distributed bytes.
+// It does not attest the server, a provider balance, or a deployment.
+export function treasuryClientVerificationManifest(verifierSha256) {
+  if (!treasuryHash(verifierSha256)) throw Error('Invalid treasury verifier SHA-256');
+  return {
+    schema: 'numina.treasury.client-verification.v1',
+    canonicalTreasury: '/api/control/v1/treasury',
+    accountView: '/api/control/v2/treasury/accounts',
+    accountAlignmentSchema: 'numina.treasury.account-view.v1',
+    verifier: {browser: '/treasury-proof.js', integration: 'src/treasury-proof.js', sha256: verifierSha256},
+    checks: ['canonical_journal_record', 'shared_native_projection', 'revision_and_head',
+      'distinct_account_groups', 'source_reference_membership', 'retained_provider_identity_and_ownership_claims',
+      'superseded_references', 'funding_view_source_consistency'],
+    verificationScope: 'authenticated_response_internal_consistency',
+    independentProviderVerification: false,
+    financialExecutionEnabled: false
+  };
+}
 function treasuryCanonical(value) {
   if (value === null || typeof value === 'string' || typeof value === 'boolean') return JSON.stringify(value);
   if (typeof value === 'number' && Number.isSafeInteger(value) && !Object.is(value, -0)) return JSON.stringify(value);
@@ -31,9 +49,56 @@ export async function verifyTreasuryRecord(data, {allowUninitialized = false} = 
   } catch { return false; }
 }
 
+// Account rows are a read-only grouping of the retained references. Checking the
+// balance alone must not let duplicate rows or changed ownership claims pass.
+function treasuryAccountSourcesMatch(view) {
+  const references = view.accountReferences, groups = new Map(), byId = new Map();
+  if (!Array.isArray(references) || !Array.isArray(view.supersededReferences)) return false;
+  const identity = account => account.providerAccountReference
+    ? treasuryCanonical([account.provider, account.legalEntity, account.providerAccountReference])
+    : treasuryCanonical(['unresolved', account.id]);
+  for (const reference of references) {
+    if (!reference || !treasuryText(reference.id) || byId.has(reference.id) || !treasuryText(reference.provider) || !treasuryText(reference.legalEntity)) return false;
+    byId.set(reference.id, reference);
+    if (reference.supersededBy) continue;
+    const key = identity(reference);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(reference);
+  }
+  const superseded = references.filter(reference => reference.supersededBy);
+  if (treasuryCanonical(view.supersededReferences) !== treasuryCanonical(superseded)) return false;
+  const count = references.length - superseded.length, alignment = view.accountAlignment;
+  if (alignment?.schema !== 'numina.treasury.account-view.v1' || alignment.sourceReferenceCount !== count || alignment.distinctAccountViews !== groups.size || alignment.duplicateReferenceCount !== count - groups.size || alignment.storedReferencesChanged !== false || alignment.aggregation !== 'one shared native projection; no account amounts added' || view.accounts.length !== groups.size) return false;
+  const derived = new Set(['sourceReferences', 'labelConflict', 'treasuryRef', 'nativeTreasuryRoute', 'sharedNativeProjection', 'sharedNativeTreasury', 'allocatedAmount']);
+  const sourceFields = ['id', 'accountLabel', 'provider', 'providerAccountReference'], seen = new Set();
+  for (const account of view.accounts) {
+    const original = byId.get(account?.id);
+    if (!original || original.supersededBy) return false;
+    const key = identity(original), sources = groups.get(key);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    // All non-derived fields retain the original owner designation, including
+    // provider identity, labels, observations and providerOwnershipVerified.
+    for (const field of new Set([...Object.keys(original), ...Object.keys(account)])) {
+      if (derived.has(field)) continue;
+      if (Object.hasOwn(original, field) !== Object.hasOwn(account, field) || treasuryCanonical(original[field]) !== treasuryCanonical(account[field])) return false;
+    }
+    if (!Array.isArray(account.sourceReferences) || account.sourceReferences.length !== sources.length || account.labelConflict !== (new Set(sources.map(source => source.accountLabel)).size > 1)) return false;
+    const sourceIds = new Set();
+    for (const source of account.sourceReferences) {
+      if (!source || sourceIds.has(source.id) || Object.keys(source).some(field => !sourceFields.includes(field))) return false;
+      const originalSource = byId.get(source.id);
+      if (!originalSource || originalSource.supersededBy || identity(originalSource) !== key || sourceFields.some(field => source[field] !== originalSource[field])) return false;
+      sourceIds.add(source.id);
+    }
+  }
+  return seen.size === groups.size;
+}
+
 export async function verifyTreasuryAccountView(view) {
   try {
     if (!await verifyTreasuryRecord(view?.treasury, {allowUninitialized: true}) || !Array.isArray(view.accounts)) return false;
+    if (!treasuryAccountSourcesMatch(view)) return false;
     const t = view.treasury, p = t.projection, ref = view.canonicalTreasury, funding = view.nativeFundingView;
     const route = '/api/control/v1/treasury', evidenceRoute = '/api/control/v2/treasury/evidence';
     if (funding?.schema !== 'numina.treasury.native-funding-view.v1' || funding.head !== t.head || funding.revision !== t.revision || funding.treasuryProjectionChanged !== false || funding.verificationScope !== t.verification_scope) return false;

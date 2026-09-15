@@ -31,8 +31,8 @@ function clearApplicationEvidence(message='Loading deployed release…'){
  set('[data-application-deployment-receipt]','Unavailable');
  set('[data-application-settlement-receipt]','Unavailable');
  set('[data-application-native-packages]','Unavailable');
- set('[data-application-production-record]','Unavailable');
- set('[data-application-funding-record]','Unavailable');
+ set('[data-application-production-record]','Historical publication record unavailable');
+ set('[data-application-funding-record]','Historical funding-plan record unavailable');
  all('[data-application-requirements]').forEach(list=>list.replaceChildren());
  set('[data-application-hash-note]','No manifest response is currently loaded.');
  all('[data-application-download]').forEach(button=>{button.disabled=true;});
@@ -80,9 +80,10 @@ function commandForPolicy(){
 function renderReleaseRequirements(data){
  const receipts=data.nusd_transaction_receipts,readiness=data.nusd_activation_readiness;
  const evidence=data.recorded_release_evidence;
- set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Sites version '+evidence.website.version+' published · Vercel '+evidence.runtime.status+' · Source '+evidence.sourceCommit:'No publication record included');
- set('[data-application-funding-record]',evidence?.fundingPlan?.status==='FUNDING_PLAN_RECORDED'?'Numina journal revision '+evidence.fundingPlan.revision+' · Event '+evidence.fundingPlan.eventId:'No funding-plan record included');
  const text=value=>typeof value==='string'&&value.length<=800?value.replaceAll('_',' '):'Not reported';
+ // This retained record predates the current inventory, including in legacy manifests.
+ set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Historical publication record · Sites version '+evidence.website.version+' · Vercel '+text(evidence.runtime?.status)+' · Source '+text(evidence.sourceCommit)+'. This record does not verify deployment of the current build.':'No historical publication record included');
+ set('[data-application-funding-record]',evidence?.fundingPlan?.status==='FUNDING_PLAN_RECORDED'?'Historical funding-plan record · Numina journal revision '+evidence.fundingPlan.revision+' · Event '+text(evidence.fundingPlan.eventId):'No historical funding-plan record included');
  const receiptText=receipt=>{
   if(!receipt||typeof receipt!=='object')return 'Not reported in this release';
   if(receipt.receipt===null&&receipt.transaction_hash===null)return 'No completed transaction recorded';

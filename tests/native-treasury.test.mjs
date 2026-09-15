@@ -71,6 +71,53 @@ test('account views share one checked balance without changing stored references
     funded.nativeFundingView.status='UNFUNDED_PLAN';assert.equal(await verifyTreasuryAccountView(funded),false);
   }finally{db.close();}
 });
+test('account alignment rejects changed groups and provider claims before and after initialization',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db),frontier={accounts:[
+      {id:'stripe-alias',provider:'stripe',legalEntity:'Owner',accountLabel:'Alternate label',providerAccountReference:'fa_existing',linkedAt:3,source:'owner_designation',providerOwnershipVerified:false},
+      {id:'retired',provider:'bank-of-america',legalEntity:'Owner',accountLabel:'Retired reference',providerAccountReference:'bank_old',linkedAt:0,source:'owner_designation',providerOwnershipVerified:false,supersededBy:'bank'},
+      {id:'bank',provider:'bank-of-america',legalEntity:'Owner',accountLabel:'Savings',providerAccountReference:null,linkedAt:2,source:'owner_designation',providerOwnershipVerified:false},
+      {id:'stripe-primary',provider:'stripe',legalEntity:'Owner',accountLabel:'Stripe Treasury',providerAccountReference:'fa_existing',linkedAt:1,source:'owner_designation',providerOwnershipVerified:false}
+    ]};
+    const before=structuredClone(frontier);
+    for(const initialized of [false,true]){
+      if(initialized)await api.writeTreasury(await command(db));
+      const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
+      assert.equal(await verifyTreasuryAccountView(view),true);
+      assert.deepEqual(view.accounts.map(a=>a.id),['stripe-primary','bank']);
+      assert.deepEqual(view.accounts[0].sourceReferences.map(a=>a.id),['stripe-primary','stripe-alias']);
+      assert.equal(view.accounts[0].labelConflict,true);
+      assert.equal(view.accountAlignment.sourceReferenceCount,3);
+      assert.equal(view.accountAlignment.distinctAccountViews,2);
+      assert.equal(view.accountAlignment.duplicateReferenceCount,1);
+      assert.deepEqual(view.supersededReferences,[before.accounts[1]]);
+      if(!initialized){assert.equal(view.treasury.status,'NOT_INITIALIZED');assert.equal(view.canonicalTreasury,null);assert.ok(view.accounts.every(a=>a.sharedNativeTreasury===null));}
+      const mutations=[
+        ['duplicate account group',v=>v.accounts.push(structuredClone(v.accounts[0]))],
+        ['omitted account group',v=>v.accounts.pop()],
+        ['source count',v=>v.accountAlignment.sourceReferenceCount++],
+        ['distinct count',v=>v.accountAlignment.distinctAccountViews++],
+        ['duplicate count',v=>v.accountAlignment.duplicateReferenceCount=0],
+        ['changed source reference',v=>v.accounts[0].sourceReferences[1].providerAccountReference='fa_other'],
+        ['omitted source reference',v=>v.accounts[0].sourceReferences.pop()],
+        ['duplicate source reference',v=>v.accounts[0].sourceReferences.push(structuredClone(v.accounts[0].sourceReferences[0]))],
+        ['hidden label conflict',v=>v.accounts[0].labelConflict=false],
+        ['changed provider',v=>v.accounts[0].provider='bank-of-america'],
+        ['changed legal entity',v=>v.accounts[0].legalEntity='Another owner'],
+        ['changed account identity',v=>v.accounts[0].providerAccountReference='fa_other'],
+        ['changed ownership verification',v=>v.accounts[0].providerOwnershipVerified=true],
+        ['changed designation source',v=>v.accounts[0].source='provider_confirmation'],
+        ['superseded reference shown as active',v=>v.accounts.push({...structuredClone(v.accounts[1]),...structuredClone(v.supersededReferences[0])})],
+        ['superseded inventory omitted',v=>v.supersededReferences=[]]
+      ];
+      const accepted=[];
+      for(const [name,mutate]of mutations){const changed=structuredClone(view);mutate(changed);if(await verifyTreasuryAccountView(changed))accepted.push(name);}
+      assert.deepEqual(accepted,[],(initialized?'READY':'NOT_INITIALIZED')+' view accepted inconsistent account metadata');
+      assert.deepEqual(frontier,before);
+    }
+  }finally{db.close();}
+});
+
 test('treasury initializes within the existing root, persists and returns actual journal proof',async()=>{
   const directory=mkdtempSync(join(tmpdir(),'numina-treasury-')),file=join(directory,'treasury.sqlite');let db=await fixture(file);
   try{

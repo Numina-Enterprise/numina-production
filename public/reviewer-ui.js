@@ -1,0 +1,5 @@
+import {requestJson} from './http-client.js';
+const form=document.getElementById('reviewer-login'),notice=document.getElementById('reviewer-notice');
+const messages={INVALID_REVIEW_CREDENTIALS:'The reviewer username or password is incorrect.',RATE_LIMITED:'Too many sign-in attempts. Wait one minute before trying again.',REVIEW_SIGN_IN_REQUIRED:'Sign in with the review account first.',REVIEW_ACCESS_UNAVAILABLE:'Reviewer access is not available yet. Please try again later.'};
+async function post(path,body){return requestJson('/api/reviewer/v1/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});}
+if(form)form.addEventListener('submit',async event=>{event.preventDefault();const button=form.querySelector('button');button.disabled=true;notice.textContent='Signing in…';try{await post('login',{username:form.elements.username.value,password:form.elements.password.value});form.elements.password.value='';location.assign('/app');}catch(error){notice.textContent=messages[error.code]||'Sign-in could not be completed. Please try again.';}finally{button.disabled=false;}});
