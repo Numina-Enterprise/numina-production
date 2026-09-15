@@ -35,7 +35,7 @@ export const NUSD_CONVERSION_WORKFLOW=freezeNusdRedemption({
    sameChainRequired:true,canonicalUsdcIdentityVerified:false,bridgeImplemented:false,initiallyPaused:true,participantAuthorizationRequired:true},
  usd:{contract:'NuminaUSDRedemption',operation:'requestRedemption',nusdDecimals:6,usdDecimals:2,
    nusdBaseUnitsPerUsdCent:'10000',subCentRounding:false,bankSubmissionImplemented:false,
-   settlementModel:'separate_bank_payment_with_distinct_confirmer_attestation',receiptScope:'off_chain_evidence_reference_not_bank_verification',
+   settlementModel:'separate_bank_payment_with_distinct_confirmer_attestation',historicalOperatorSeparation:true,receiptScope:'off_chain_evidence_reference_not_bank_verification',
    burnAfterPaidAttestation:true,refundAfterFailedAttestation:true,processingTimeoutRefund:false,initiallyPaused:true},
  treasury:{route:'/api/control/v1/treasury',balanceCount:1,journalChangedByCompilation:false,declaredBalanceUsedAsUsdcLiquidity:false},
  activation:{contractDeploymentVerified:false,reservesVerified:false,bankAdapterConnected:false,financialExecutionEnabled:false},
