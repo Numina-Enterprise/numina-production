@@ -142,5 +142,12 @@
       "security": "/security",
       "connectionVerification": "not_established_by_this_record"
     }
-  ]
+  ],
+  "connections": {
+    "workspace": "/connections",
+    "manifest": "/api/connections/v1/manifest",
+    "mode": "browser_session_read_checks",
+    "automaticFinancialOperations": false,
+    "reportIncludesPrivateResponseBodies": false
+  }
 }

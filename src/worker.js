@@ -1,3 +1,4 @@
+import {connectionsHttp} from './connections-http.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-v18.js';
 import {controlHttp} from './control-http.js';
 import {routeRc20} from './rc20.js';
@@ -19,6 +20,7 @@ export default {
   const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   if(path==='/api/connections/v1/manifest')return finish(await connectionsHttp(req,env));
    if(path==='/api/ops/v1/telemetry')return finish(await telemetryHttp(req,env));
    if(path.startsWith('/api/ops/v1/quantum/'))return finish(await quantumHttp(req,env));
    // Retired public test surfaces stay closed even if an environment is misconfigured.
