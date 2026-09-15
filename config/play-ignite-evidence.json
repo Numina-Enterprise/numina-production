@@ -33,7 +33,7 @@
     ],
     "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected.",
     "contentRating": "IARC Completed; saved September 15, 2026 at 3:46 PM Central after owner approved Terms of Use. ESRB Everyone; PEGI 3; Brazil 14+; Germany 16+; generic, Russia and South Korea 3+. Users Interact and In-App Purchases. Certificate ID not displayed.",
-    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, and account/data deletion URLs accepted. Save draft displayed Your changes have been saved. Data types and handling remain incomplete."
+    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, account/data deletion URLs, and nine source-observed data types saved as draft: email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content, diagnostics. Handling and provider flows remain incomplete; no final submission."
   },
   "targetAudience": {
     "ownerChoice": "Adults 18 and older",
@@ -138,6 +138,7 @@
     "classification": "document_management_not_operating_authority",
     "providerEvidenceSupplied": false,
     "ownerStatement": "Financial services are live; I will provide provider, license and terms evidence",
-    "ownerStatementVerified": false
+    "ownerStatementVerified": false,
+    "approvalEvidence": "/downloads/Numina-Financial-Approval-Evidence.md"
   }
 }
