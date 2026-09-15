@@ -28,9 +28,16 @@
     "declarationsSaved": [
       "No health features",
       "Does not use advertising ID",
-      "Does not contain ads"
+      "Does not contain ads",
+      "Not developed by or on behalf of a government; Console displayed Change saved; not submitted for review"
     ],
     "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected."
+  },
+  "targetAudience": {
+    "ownerChoice": "Adults 18 and older",
+    "confirmedDate": "2026-09-15",
+    "consoleSaved": false,
+    "blocker": "Console requires the Sign in details declaration before starting the Target audience and content questionnaire. Dedicated reusable reviewer access has not been supplied or tested."
   },
   "reportedFinancialScope": {
     "source": "Owner answered all to records/service payments, transfers/hold/trade/redeem money or crypto, and borrowing/earned wages; owner subsequently confirmed yes, numina does all",
@@ -52,11 +59,11 @@
     },
     "appContent": {
       "status": "blocked",
-      "detail": "Sign in details, content rating, target audience, Data safety, Government apps and Financial features remain incomplete."
+      "detail": "Five declarations still need attention: Sign in details, content rating, target audience, Data safety and Financial features. Government apps saved as No. Owner selected adults 18+, but Console blocks the audience questionnaire until Sign in details is complete."
     },
     "reviewerAccess": {
       "status": "blocked",
-      "detail": "Working restricted-feature reviewer access and instructions have not been supplied or tested."
+      "detail": "Working restricted-feature reviewer access and instructions have not been supplied or tested. Console says reviewers cannot create accounts or use their own existing accounts and requires a full-access attestation. No credentials or full-access claim were submitted."
     },
     "financialScope": {
       "status": "blocked",
