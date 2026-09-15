@@ -12,6 +12,8 @@ The only HTTP write route is `POST /api/control/v1/treasury`. `GET` on that rout
 
 Writes use canonical JSON, owner authentication, origin checks for cookie-authenticated requests, a stable operation ID, and the existing revision and head as concurrency conditions. The transaction commits the state and journal event atomically. A result is `FINAL` only after that record is confirmed. It includes the exact committed event, computed SHA-256 proof and recorded head advancement. These are internal journal proofs, not provider signatures. A retry reuses the entire event unchanged; changing it under the same ID is rejected.
 
+The service captures the complete canonical event before its first asynchronous storage operation. Changing the caller's object while a write is pending cannot change that attempt. Generic direct `commitControl` calls reject treasury commands, as does the generic HTTP command route. The treasury service uses the same atomic state-and-journal transaction internally.
+
 ## Supported operations
 
 | Objective | Intent operation | Additional fields | Effect |
@@ -33,12 +35,12 @@ The canonical native treasury was initialized in production at journal revision 
 
 ## Versioned reserve designation
 
-`GET /api/control/v2/treasury/policy` publishes the policy content, SHA-256 digest and current owner adoption event. Owner-only POST records its fixed policy ID and digest through the existing signed journal. New versions are appended to `src/treasury-policy.js`; existing catalog entries must never change because historical replay depends on their exact content. The original frozen native projection and its historical reducer remain unchanged.
+`GET /api/control/v2/treasury/policy` publishes the policy content, SHA-256 digest and current owner adoption event. Owner-only POST records its fixed policy ID and digest through the existing hash-linked journal. New versions are appended to `src/treasury-policy.js`; existing catalog entries must never change because historical replay depends on their exact content. The original frozen native projection and its historical reducer remain unchanged.
 
 The owner designates Stripe Treasury and the SK Consulting LLC Bank of America Savings Account as backing sources. There is one NUSD projection. USD and USDC observations retain their provider currency, exact integer amounts and source timestamps. A provider-reported NUSD currency, if one appears, is surfaced separately pending precision and asset-identity verification; USD/USDC are never renamed NUSD. Policy adoption does not modify provider accounts, mark reserve coverage verified or activate redemption.
 
 ## Validation and remaining scope
 
-Existing regression coverage includes persistence across restart, exact large-integer arithmetic, duplicate IDs, competing revisions/heads, authority and origin checks, initialization replay, state/journal corruption, failed persistence, browser proof checking, canonical routing and prepared-request semantics. No test suite was run for this production update, as requested. Build, syntax and artifact checks were performed.
+Existing regression coverage includes persistence across restart, exact large-integer arithmetic, duplicate IDs, competing revisions/heads, authority and origin checks, initialization replay, state/journal corruption, failed persistence, browser proof checking, canonical routing and prepared-request semantics. The 2026-09-15 validation ran all 234 JavaScript tests successfully, including regressions for caller mutation, generic direct writes and rollback when journal insertion fails. Quantum simulator and telemetry checks are included; these local tests do not establish hardware execution or production deployment.
 
 The application and canonical native treasury are live. The retained rc26 verifier includes the preserved v1.8 frozen core; its historical provenance remains unchanged. The blockchain journal and NUSD capability status are served from the canonical production service. Token minting, redemption and external settlement remain subject to their actual activation and provider-evidence requirements. Existing journal/state capacity limits remain enforced rather than silently creating a new root.

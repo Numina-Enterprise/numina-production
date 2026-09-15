@@ -133,6 +133,43 @@ test('P/A/O/I execution uses the canonical write path and emits its recorded pro
     assert.equal(result.route,'numina.treasury.v1');assert.equal(result.status,'FINAL');assert.equal((await readControl(db)).eventCount,2);
   }finally{db.close();}
 });
+
+test('treasury freezes the complete caller event before asynchronous storage work',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db),event=await command(db),original=structuredClone(event);
+    const pending=api.writeTreasury(event);
+    event.Intent.reason='Changed after writeTreasury started';
+    const result=await pending;
+    assert.deepEqual(result.canonical_proof.event.command.data.Intent,original.Intent);
+    assert.equal((await api.writeTreasury(original)).replayed,true);
+    await assert.rejects(api.writeTreasury(event),/IDEMPOTENCY_CONFLICT/);
+  }finally{db.close();}
+});
+
+test('generic direct control commits cannot write a treasury event',async()=>{
+  const db=await fixture();try{
+    const event=await command(db);
+    const genericCommand={id:event.id,expectedRevision:event.expectedRevision,type:'treasury',data:{
+      Principal:event.Principal,Authority:event.Authority,Objective:event.Objective,
+      Intent:event.Intent,expectedHead:event.expectedHead}};
+    await assert.rejects(commitControl(db,genericCommand,owner,now()),/CANONICAL_TREASURY_ROUTE_REQUIRED/);
+    assert.equal((await treasury(db).readTreasury()).status,'NOT_INITIALIZED');
+    assert.equal((await treasury(db).writeTreasury(event)).status,'FINAL');
+  }finally{db.close();}
+});
+
+test('journal insertion failure rolls back the state and an exact retry commits once',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db),event=await command(db),before=await readControl(db),prepare=db.prepare;
+    db.prepare=sql=>prepare(sql.startsWith('INSERT INTO numina_control_events')
+      ?sql.replace('numina_control_events','missing_journal_table'):sql);
+    await assert.rejects(api.writeTreasury(event),/missing_journal_table/);
+    db.prepare=prepare;
+    assert.equal((await readControl(db)).head_hash,before.head_hash);
+    assert.equal((await api.writeTreasury(event)).status,'FINAL');
+    assert.equal((await readControl(db)).eventCount,2);
+  }finally{db.close();}
+});
 test('recomputing generic journal hashes cannot bypass replay of the frozen treasury model',async()=>{
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
