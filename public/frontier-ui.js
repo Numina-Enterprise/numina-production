@@ -57,6 +57,7 @@ async function refresh(){
   const generation=frontierScope.generation,signal=frontierScope.signal;
   const isCurrent=()=>frontierScope.isCurrent(generation);
   const readApi=(path,body)=>api(path,body,{signal});
+  void refreshApplicationIdentity(signal,isCurrent);
   $('#refresh').disabled=true;
   $('#treasury-status').textContent='Reading the canonical treasury…';
   try{
@@ -97,4 +98,12 @@ async function refresh(){
 }
 const layers=$('#architecture-layers');if(layers)layers.replaceChildren(...NUMINA_LAYERS.layers.map(layer=>{const card=node('article','');card.append(node('h3',layer.id+' · '+layer.name),node('p',layer.capabilities.join(' · ')));return card;}));
 $('#refresh').onclick=refresh;refresh();
-fetch('/v4/release/manifest',{cache:'no-store',credentials:'omit'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(r=>{$('#core-release-status').textContent='Numina OS '+r.version+' · Control room '+r.frontier.version+' · Plugin '+r.distribution.codex_plugin.version+' · Production';}).catch(()=>{$('#core-release-status').textContent='Current release information is unavailable. Open Build & trust for recorded releases.';});
+async function refreshApplicationIdentity(signal,isCurrent){
+  $('#core-release-status').textContent='Checking the current Numina build…';
+  try{
+    const r=await requestJson('/v4/release/manifest',{cache:'no-store',credentials:'omit',redirect:'error',signal});
+    if(!isCurrent())return;
+    if(r.schema!=='numina.application-release.v2'||r.schema_version!==2||r.product!=='Numina'||r.version!=='4.0.0'||r.release!=='numina-v4.0.0'||!/^[a-f0-9]{64}$/.test(r.build_id)||r.frontier?.version!=='4.0.0'||r.distribution?.codex_plugin?.version!=='4.0.0')throw Error('Current application release required');
+    $('#core-release-status').textContent='Numina OS 4.0.0 · Control room 4.0.0 · Plugin 4.0.0 · Build '+r.build_id;
+  }catch{if(isCurrent())$('#core-release-status').textContent='Current release information is unavailable. Refresh to load the current build.';}
+}

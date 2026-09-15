@@ -10,8 +10,8 @@
     },
     {
       "path": "API-CONTRACT.md",
-      "bytes": 9583,
-      "sha256": "eb586f4fc8a8227090a33579853716191ce3fdf16d188babfe780c6851d36a5c"
+      "bytes": 10024,
+      "sha256": "1cc3abbcd0517677470e79d171668333009daee525f27105eafa03194a3daa0e"
     },
     {
       "path": "COMPATIBILITY.md",
@@ -220,8 +220,8 @@
     },
     {
       "path": "src/client.js",
-      "bytes": 14996,
-      "sha256": "a9a2008329a72a0984d6f0a2893923fc03d3ead5792f2783093ef923c344a0a5"
+      "bytes": 15095,
+      "sha256": "daed165e82610250466c8b64c1bd354277a75a08e41e96f7b4139202d6015a45"
     },
     {
       "path": "src/index.d.ts",
@@ -276,7 +276,7 @@
     {
       "path": "verification.json",
       "bytes": 2018,
-      "sha256": "0358549ce9b1d60701cb9cae4a141a52f870bb896b4dc1e2668eea24d2d4894b"
+      "sha256": "dfd30f810f289760bfae1bcf9c068e650f853c1f994a994757e277856299c2b0"
     }
   ]
 }
