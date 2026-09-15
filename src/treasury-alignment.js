@@ -7,7 +7,7 @@ export function canonicalTreasuryReference(treasury){
     root:treasury.root,revision:treasury.revision??null,head:treasury.head??null,route:'/api/control/v1/treasury',
     native:{amount:projection.balance,unit:projection.unit,eventId:projection.last_event_id??null,verificationScope:treasury.verification_scope??null},
     evidence:{route:'/api/control/v2/treasury/evidence',access:'authenticated_owner',scope:'separate source records linked to the native treasury',
-      providerObservation:'/source/providerObservation',reserveAllocation:'/fundingVerification/allocatedReservesVerified',redemption:'/fundingVerification/redemptionVerified',funding:'/fundingVerification/actual_funding',supportingDocuments:'/source/supportingDocuments'},
+      providerObservation:'/source/providerObservation',reserveAllocation:'/fundingVerification/allocatedReservesVerified',redemption:'/fundingVerification/redemptionVerified',funding:'/fundingVerification/actual_funding',supportingDocuments:'/source/supportingDocuments',reconciliation:'/reconciliation'},
     accounting:{balanceCount:1,providerCurrenciesCombined:false,providerBalancesChanged:false}};
 }
 export function alignTreasuryAccounts(treasury,frontier){
