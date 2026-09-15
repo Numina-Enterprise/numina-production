@@ -11,7 +11,7 @@ test('procurement is discoverable across public clients without granting treasur
   try{
     await bootstrapControl(db,owner,Math.floor(Date.now()/1000));
     const before=await readControl(db);
-    for(const route of ['/api/control/v2/architecture','/api/control/v2/manifest','/api/app/v1/catalog']){
+    for(const route of ['/api/control/v1/manifest','/api/control/v2/architecture','/api/control/v2/manifest','/api/app/v1/catalog']){
       const response=await built.fetch(new Request('https://numina.test'+route),env);
       assert.equal(response.status,200,route);
       const body=await response.json();
