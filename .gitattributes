@@ -17,3 +17,9 @@ docs/treasury-client-alignment.md -text
 scripts/package-rc26.py -text
 scripts/publish-with-telemetry.mjs -text
 scripts/connect-ibm-quantum.mjs -text
+# Preserve byte equality between source modules, gateway copies and ownership notices.
+runtime/vercel-production/** -text
+OWNERSHIP.md -text
+LICENSE.md -text
+NOTICE.md -text
+docs/Numina-Security.md -text
