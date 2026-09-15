@@ -63,6 +63,21 @@ test('unauthorized, cross-origin and caller-supplied funding flags are rejected 
   }finally{globalThis.fetch=original;env.DB.close();}
 });
 
+test('signed provider observations retain large amounts exactly without establishing reserve allocation',async()=>{
+  const env=await fixture(),original=globalThis.fetch;
+  globalThis.fetch=async()=>new Response((await provider().text()).replace('12500','50000000000000001').replace('"value":0,"currency":"usdc"','"value":500000000000000000001,"currency":"usdc"'));
+  try{
+    const before=await readControl(env.DB),response=await worker.fetch(req(),env),receipt=await response.json();
+    assert.equal(response.status,200);assert.equal(await frontierVerify(receipt,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),true);
+    const p=receipt.payload,available=p.source.providerObservation.record.balances.available;
+    assert.equal(available.usd.value,'50000000000000001');assert.equal(available.usdc.value,'500000000000000000001');
+    for(const currency of ['usd','usdc'])assert.equal(p.records.providerBalances.currencies[currency].balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
+    assert.equal(p.evidenceHash,await controlHash(p.source));assert.equal(p.source.nativeTreasury.projection.balance,'500000000000000');
+    assert.equal(p.fundingVerification.actual_funding,false);assert.equal(p.fundingVerification.allocatedReservesVerified,false);
+    assert.equal((await readControl(env.DB)).head_hash,before.head_hash);
+  }finally{globalThis.fetch=original;env.DB.close();}
+});
+
 test('MCP and A2A return the same owner-only evidence schema without granting delegated access',async()=>{
   const env=await fixture(),original=globalThis.fetch;globalThis.fetch=async()=>provider();
   try{

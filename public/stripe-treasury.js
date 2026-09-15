@@ -1,4 +1,5 @@
 import {requestJson,createViewScope} from './http-client.js';
+import {isTreasuryMinorInteger} from './treasury-amount.js';
 const stripeElement=id=>document.getElementById(id),stripeScope=createViewScope();
 const stripeNode=(tag,text)=>{const node=document.createElement(tag);node.textContent=text;return node;};
 export function clearStripeTreasury(){
@@ -17,7 +18,7 @@ export async function loadStripeTreasury(){
     for(const [bucket,label]of [['available','Available'],['inbound_pending','Incoming pending'],['outbound_pending','Outgoing pending']]){
       for(const currency of ['usd','usdc']){
         const amount=data.balances?.[bucket]?.[currency];
-        if(amount!==null&&(!amount||amount.currency!==currency||!Number.isSafeInteger(amount.value)||typeof amount.formatted!=='string'||amount.formatted.length>80))throw Error('Invalid Stripe balance');
+        if(amount!==null&&(!amount||amount.currency!==currency||!isTreasuryMinorInteger(amount.value)||typeof amount.formatted!=='string'||amount.formatted.length>112))throw Error('Invalid Stripe balance');
         rows.push([label+' '+currency.toUpperCase(),amount===null?'Not provided by Stripe':amount.formatted]);
       }
     }

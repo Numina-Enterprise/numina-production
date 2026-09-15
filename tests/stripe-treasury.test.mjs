@@ -108,17 +108,17 @@ test('missing, unsafe or unpinned Treasury configuration never contacts a provid
 
 test('malformed or non-live FinancialAccounts fail without exposing provider fields',async()=>{
  const cases=[null,[],{...financialAccount(),id:'fa_differentaccount'},{...financialAccount(),object:'treasury.financial_account'},{...financialAccount(),livemode:false},{...financialAccount(),type:'payments'},{...financialAccount(),status:'invented'},{...financialAccount(),balance:[]},{...financialAccount(),balance:{available:[]}}];
- for(const malformed of [{currency:'usd',value:1.25},{currency:'usd',value:'100'},{currency:'usd',value:Number.MAX_SAFE_INTEGER+1},{currency:'usdc',value:100},{currency:'usd',value:null}]){const account=financialAccount();account.balance.available.usd=malformed;cases.push(account);}
+ for(const malformed of [{currency:'usd',value:1.25},{currency:'usd',value:'100'},{currency:'usd',value:'9007199254740993'},{currency:'usdc',value:100},{currency:'usd',value:null}]){const account=financialAccount();account.balance.available.usd=malformed;cases.push(account);}
  for(const account of cases)await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>providerResponse(account)}),'STRIPE_TREASURY_INVALID_RESPONSE',502);
  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>new Response('<html>'+canary+'</html>',{headers:{'Content-Type':'application/json'}})}),'STRIPE_TREASURY_INVALID_RESPONSE',502);
  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>providerResponse({...financialAccount(),oversized:'x'.repeat(65537)})}),'STRIPE_TREASURY_INVALID_RESPONSE',502);
 });
 
-test('raw Treasury JSON rejects rounded fractions, underflow and unsafe integers before parsing',async()=>{
+test('raw Treasury JSON rejects fractions, exponents, negative zero and oversized integers',async()=>{
  // Replace a quoted placeholder so JavaScript cannot round the fixture first.
  const account=financialAccount();account.balance.available.usd.value='RAW_AMOUNT_TOKEN';
  const template=JSON.stringify(account);
- const invalidTokens=['9007199254740991.4','-9007199254740991.4','1.000000000000000000000000000000000001','0.'+'0'.repeat(330)+'1','1e-400','9007199254740992','9007199254740993','-9007199254740992','1.0','1e0'];
+ const invalidTokens=['9007199254740991.4','-9007199254740991.4','1.000000000000000000000000000000000001','0.'+'0'.repeat(330)+'1','1e-400','9'.repeat(79),'-0','1.0','1e0'];
  for(const token of invalidTokens){
   const raw=template.replace('"RAW_AMOUNT_TOKEN"',token);
   await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>new Response(raw,{headers:{'Content-Type':'application/json'}})}),'STRIPE_TREASURY_INVALID_RESPONSE',502);
@@ -136,6 +136,35 @@ test('Treasury raw-number validation preserves safe integer boundaries and treat
  assert.equal(result.balances.available.usd.value,Number.MAX_SAFE_INTEGER);assert.equal(numericText(result.balances.available.usd.formatted),'90071992547409.91');
  assert.equal(result.balances.available.usdc.value,-Number.MAX_SAFE_INTEGER);assert.equal(numericText(result.balances.available.usdc.formatted),'-9007199254.740991');
  assert.equal(result.transfer_execution,false);assert.equal(result.nusd_settlement,false);
+});
+
+test('raw large provider amounts retain every minor unit, currency and sign',async()=>{
+ const fixture=financialAccount();fixture.balance.available.usd.value='RAW_USD';fixture.balance.available.usdc.value='RAW_USDC';
+ fixture.balance.inbound_pending.nusd={currency:'nusd',value:'RAW_NUSD'};
+ const raw=JSON.stringify(fixture).replace('"RAW_USD"','50000000000000000').replace('"RAW_USDC"','500000000000000000000').replace('"RAW_NUSD"','9007199254740993');
+ const result=await readStripeTreasury(config(),{fetcher:async()=>new Response(raw)});
+ assert.deepEqual(result.balances.available.usd,{currency:'usd',value:'50000000000000000',formatted:'$500,000,000,000,000.00'});
+ assert.deepEqual(result.balances.available.usdc,{currency:'usdc',value:'500000000000000000000',formatted:'500,000,000,000,000.000000 USDC'});
+ assert.equal(result.provider_nusd_balance.buckets.inbound_pending.value,'9007199254740993');
+ assert.equal(result.provider_nusd_balance.tokenIdentityVerified,false);assert.equal(result.provider_nusd_balance.precision,null);
+ assert.equal(result.balances.outbound_pending.usd.value,0);assert.equal(result.transfer_execution,false);
+ const values=[];
+ for(const token of ['9007199254740992','9007199254740993','-9007199254740993']){
+  const body=JSON.stringify(fixture).replace('"RAW_USD"',token).replace('"RAW_USDC"','0').replace('"RAW_NUSD"','0');
+  const read=await readStripeTreasury(config(),{fetcher:async()=>new Response(body)});values.push(read.balances.available.usd.value);
+  if(token[0]==='-')assert.equal(read.balances.available.usd.formatted,'-$90,071,992,547,409.93');
+ }
+ assert.deepEqual(values,['9007199254740992','9007199254740993','-9007199254740993']);
+});
+
+test('lossless parsing cannot reinterpret quoted markers or repair malformed numeric keys',async()=>{
+ const fixture=financialAccount();fixture.display_name='__numina_exact_integer_0__';fixture.metadata.escaped='__numina_exact_integer_1__';fixture.balance.available.usd.value='RAW';
+ const raw=JSON.stringify(fixture).replace('"RAW"','9007199254740993').replace('"__numina_exact_integer_1__"','"\\u005f_numina_exact_integer_1__"');
+ const result=await readStripeTreasury(config(),{fetcher:async()=>new Response(raw)});
+ assert.equal(result.account.name,'__numina_exact_integer_0__');assert.equal(result.balances.available.usd.value,'9007199254740993');
+ for(const malformed of [raw.replace('"display_name":','9007199254740993:'),raw.replace('9007199254740993','09007199254740993')]){
+  await rejectsWith(readStripeTreasury(config(),{fetcher:async()=>new Response(malformed)}),'STRIPE_TREASURY_INVALID_RESPONSE',502);
+ }
 });
 
 test('Stripe errors and redirects are sanitized and cannot forward credentials to a new destination',async()=>{

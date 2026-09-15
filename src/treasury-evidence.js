@@ -5,6 +5,7 @@ import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT} from './stripe-tre
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {frontierState,frontierSign} from './frontier.js';
 import {canonicalTreasuryReference} from './treasury-alignment.js';
+import {isTreasuryMinorInteger} from '../public/treasury-amount.js';
 
 export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
 
@@ -22,7 +23,7 @@ function treasuryProviderRecords(observation){
     for(const bucket of ['available','inbound_pending','outbound_pending']){
       const amount=native?record?.provider_nusd_balance?.buckets?.[bucket]:record?.balances?.[bucket]?.[currency];
       const present=amount!==null&&amount!==undefined;
-      const valid=present&&amount.currency===currency&&Number.isSafeInteger(amount.value);
+      const valid=present&&amount.currency===currency&&isTreasuryMinorInteger(amount.value);
       balances[bucket]={source:authenticated&&(native?present:true)?`${base}/${native?'provider_nusd_balance/buckets/'+bucket:'balances/'+bucket+'/'+currency}`:null,
         verification:{status:!authenticated?'UNAVAILABLE':!present?'NOT_REPORTED':!valid||!reported?'NOT_VERIFIED':native?'ASSET_NOT_VERIFIED':'AUTHENTICATED_OBSERVATION',
           scope:native?'Provider-reported units; token identity and precision are not verified':'Provider-reported amount in its original currency and balance bucket'}};
