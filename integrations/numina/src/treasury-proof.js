@@ -3,6 +3,24 @@
 const treasuryHash = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const treasuryText = value => typeof value === 'string' && value.length > 0;
 const treasuryRevision = value => Number.isSafeInteger(value) && value >= 0;
+// Release metadata describes these checks and binds the exact distributed bytes.
+// It does not attest the server, a provider balance, or a deployment.
+export function treasuryClientVerificationManifest(verifierSha256) {
+  if (!treasuryHash(verifierSha256)) throw Error('Invalid treasury verifier SHA-256');
+  return {
+    schema: 'numina.treasury.client-verification.v1',
+    canonicalTreasury: '/api/control/v1/treasury',
+    accountView: '/api/control/v2/treasury/accounts',
+    accountAlignmentSchema: 'numina.treasury.account-view.v1',
+    verifier: {browser: '/treasury-proof.js', integration: 'src/treasury-proof.js', sha256: verifierSha256},
+    checks: ['canonical_journal_record', 'shared_native_projection', 'revision_and_head',
+      'distinct_account_groups', 'source_reference_membership', 'retained_provider_identity_and_ownership_claims',
+      'superseded_references', 'funding_view_source_consistency'],
+    verificationScope: 'authenticated_response_internal_consistency',
+    independentProviderVerification: false,
+    financialExecutionEnabled: false
+  };
+}
 function treasuryCanonical(value) {
   if (value === null || typeof value === 'string' || typeof value === 'boolean') return JSON.stringify(value);
   if (typeof value === 'number' && Number.isSafeInteger(value) && !Object.is(value, -0)) return JSON.stringify(value);

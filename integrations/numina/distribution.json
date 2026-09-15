@@ -1,4 +1,28 @@
 {
+  "treasury_client_verification": {
+    "schema": "numina.treasury.client-verification.v1",
+    "canonicalTreasury": "/api/control/v1/treasury",
+    "accountView": "/api/control/v2/treasury/accounts",
+    "accountAlignmentSchema": "numina.treasury.account-view.v1",
+    "verifier": {
+      "browser": "/treasury-proof.js",
+      "integration": "src/treasury-proof.js",
+      "sha256": "45be18985605af0409ac87d0c237577e7ff5ac728a92f22db639c4a884eb3cb3"
+    },
+    "checks": [
+      "canonical_journal_record",
+      "shared_native_projection",
+      "revision_and_head",
+      "distinct_account_groups",
+      "source_reference_membership",
+      "retained_provider_identity_and_ownership_claims",
+      "superseded_references",
+      "funding_view_source_consistency"
+    ],
+    "verificationScope": "authenticated_response_internal_consistency",
+    "independentProviderVerification": false,
+    "financialExecutionEnabled": false
+  },
   "denomination_policy": {
     "schema": "numina.denomination-policy.v1",
     "id": "numina-usd-usdc-nusd-parity-2026-09-15",
@@ -60,7 +84,8 @@
       "nusd_transaction_receipts",
       "nusd_activation_readiness",
       "denomination_policy",
-      "contract_record"
+      "contract_record",
+      "treasury_client_verification"
     ],
     "proofGuide": "EVIDENCE.md",
     "clientPerformsSignatureVerification": false,

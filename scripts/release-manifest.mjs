@@ -2,6 +2,7 @@ import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
+import {treasuryClientVerificationManifest} from '../public/treasury-proof.js';
 import {checkIOSRelease,iosInputSnapshot} from './ios-release.mjs';
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -50,6 +51,8 @@ const record={
  native_treasury_alignment:{endpoint:'/api/control/v2/treasury/accounts',access:'owner_authenticated',unit:'NUSD',aggregation:'one native projection shared across account views',originalSignedEventsRetained:true,externalFundingCreatedByRelease:false},
  source_alignment:{manifest:'/source-alignment.json',root:'NUMINA',layers:['L1','L2','L3','L4','L5']},
  recorded_release_evidence:releaseEvidence,
+ recorded_release_evidence_context:{classification:'historical',source:'/downloads/release-evidence-2026-09-13.json',latestReleaseManifest:'/v'+major+'/release/manifest',currentNativeDistribution:'/downloads/'+nativeRecordFile,deploymentOfCurrentBuildVerified:false},
+ treasury_client_verification:treasuryClientVerificationManifest(digest(readFileSync('public/treasury-proof.js'))),
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
  schema:'numina.application-release.v2',schema_version:2,
  livemode:true,environment:'production',architecture:{layers:['L1','L2','L3','L4','L5'],manifest:'/api/control/v2/architecture',head:'/api/control/v2/head'},frontier:{version,discoveryMcp:'/api/control/v2/discovery-mcp',workspace:'/control-room',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},
