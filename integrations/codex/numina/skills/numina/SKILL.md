@@ -18,3 +18,7 @@ Authenticated operations use https://numinalabs.xyz/api/control/v2/mcp and the s
 Numina 4 source alignment is published at https://numinalabs.xyz/source-alignment.json. Its package versions and source hashes describe this release; read the current journal head through the MCP tool. Preserve the same Numina root across every architecture layer.
 
 The public `numina_capabilities` response publishes `procurement_usage` and its policy scope. Use this flag for owner-authorized procurement workflows under existing permissions. It does not supply payment authorization, funds, provider receipts, or permission to bypass human approvals.
+
+## Shared denomination policy
+
+Read `denomination_policy` from the live `numina_architecture` or `numina_capabilities` response. Numina declares **1 NUSD = 1 USDC = 1 USD** across L1–L5 and the hosted application. This is one native balance with declared equivalent values; keep provider balances, asset identity and execution status as reported. A declaration does not establish external reserves or a completed conversion.

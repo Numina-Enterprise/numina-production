@@ -4,12 +4,13 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import './export-tools.js'; // Generate descriptors only; this script never runs tests or requests.
 import {toolsForProfile} from '../src/tools.js';
+import {NUMINA_DENOMINATION_POLICY} from '../src/treasury-valuation.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const metadata=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const providerFormats=['openai-responses','openai-chat-completions','anthropic-messages','gemini-interactions','gemini-generate-content'];
 const revision='numina-root-v'+metadata.version;
 const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime_build',
- additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness'],proofGuide:'EVIDENCE.md',
+ additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
 const verification={
  schema:'numina.integration.package.v2',packagedAtUtc:new Date().toISOString(),
@@ -26,6 +27,7 @@ const verification={
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
 const distribution={
+ denomination_policy:NUMINA_DENOMINATION_POLICY,
  procurement_usage:true,procurementPolicy:'/business-core.json',
  livemode:true,frontier:{version:metadata.version,transport:'stdio-to-streamable-http',script:'bin/control-mcp-stdio.js',endpoint:'https://numinalabs.xyz/api/control/v2/mcp',protocolVersion:'2025-11-25',tokenEnvironmentVariable:'NUMINA_API_TOKEN',a2a:'https://numinalabs.xyz/.well-known/agent-card.json'},
  schema:'numina.integration.distribution.v2',version:metadata.version,revision,

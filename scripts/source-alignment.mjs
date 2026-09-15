@@ -1,3 +1,5 @@
+import {isDeepStrictEqual} from 'node:util';
+import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import fs from 'node:fs';
 import {checkIOSRelease, iosInputSnapshot} from './ios-release.mjs';
 import {createHash} from 'node:crypto';
@@ -29,6 +31,7 @@ const root=identities.canonicalIdentity;
 if(root.name!=='Numina'||root.authority!=='NUMINA'||!/^[a-f0-9]{64}$/.test(root.rootHash)||root.headUrl!=='https://numinalabs.xyz/api/control/v2/head')throw Error('Canonical root identity mismatch');
 if(read('public/runtime-contract.js')!==read('integrations/numina/src/runtime-contract.js'))throw Error('Runtime identity differs between website and integration');
 if(read('public/treasury-proof.js')!==read('integrations/numina/src/treasury-proof.js'))throw Error('Treasury verification differs between website and integration');
+if(read('public/treasury-valuation.js')!==read('integrations/numina/src/treasury-valuation.js'))throw Error('Treasury valuation policy differs between website and integration');
 const inventory=json('integrations/numina/file-manifest.json');
 if(inventory.version!==version)throw Error('Integration inventory version mismatch');
 for(const file of inventory.files){const bytes=fs.readFileSync('integrations/numina/'+file.path);if(bytes.length!==file.bytes||digest(bytes)!==file.sha256)throw Error('Stale packaged integration source: '+file.path);}
@@ -71,6 +74,9 @@ record.preservedDependencies.historicalCoreSource={path:'vendor/numina-core-v1.8
 record.checks.ownerMatchesRoot=true;
 record.checks.frozenCoreBytesMatch=true;
 record.checks.treasuryVerifierMatches=true;
+for(const [name,record] of Object.entries({architecture:NUMINA_LAYERS,business,integration}))if(!isDeepStrictEqual(record.denomination_policy,NUMINA_DENOMINATION_POLICY))throw Error('Declared denomination policy differs: '+name);
+record.denomination_policy=NUMINA_DENOMINATION_POLICY;record.checks.denominationPolicyMatches=true;
+record.sourceInputs.push({path:'public/treasury-valuation.js',sha256:digest(fs.readFileSync('public/treasury-valuation.js'))});
 record.treasury=sharedTreasury;
 record.requiredArchitecture=requiredArchitecture;
 record.checks.requiredArchitectureMatches=true;

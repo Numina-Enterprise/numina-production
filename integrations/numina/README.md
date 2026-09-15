@@ -20,7 +20,7 @@ This archive is an integration deliverable. It does not install itself into prov
 
 Every operation targets the operator-configured Numina HTTPS origin. Public reads send no credentials. The new release tool requires `schema:"numina.application-release.v2"`, recognized application identity fields and SHA-256-shaped artifact digests. It preserves the server response; **it does not verify signatures, retrieve artifact bytes or independently attest deployment**.
 
-NUSD remains an intended compute-to-value denomination with a declared 1:1 USD target. This kit establishes no issued token, dollar reserves, market price or redeemability. It cannot mint, transfer, settle, manage custody, confirm payments or unlock results. Existing quote/request gates require server authentication, a configured canonical asset pin, verified asset evidence and enabled server capabilities. Selecting a tool profile cannot activate these services.
+NUSD remains an intended compute-to-value denomination with the declared policy **1 NUSD = 1 USDC = 1 USD**. The status, network and release tools retain `denomination_policy` from the configured server. This kit establishes no issued token, dollar reserves, market price or redeemability. It cannot mint, transfer, settle, manage custody, confirm payments or unlock results. Existing quote/request gates require server authentication, a configured canonical asset pin, verified asset evidence and enabled server capabilities. Selecting a tool profile cannot activate these services.
 
 ## Start locally
 

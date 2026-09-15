@@ -1,7 +1,9 @@
+import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 // Numina's functional architecture layers, all sharing the canonical control journal.
 export const NUMINA_LAYERS = Object.freeze({
   schema:'numina.architecture-layers.v1',classification:'architecture',
   rootCount:1,lineageCount:1,productionEnvironmentCount:1,
+  denomination_policy:NUMINA_DENOMINATION_POLICY,
   procurement_usage:true,
   procurement:Object.freeze({policy:'/business-core.json',authorization:'owner_authorized_existing_workflows',scope:'Numina software, service requests and provider handoff preparation',permissions:'existing_owner_and_delegated_permissions',paymentEvidence:'provider_confirmation_required',automaticPurchasing:false}),
   distribution:{team:'Numina',authority:'NUMINA',teamCount:1,sharedAcrossLayers:true,policy:'/downloads/distribution-policy.json'},
