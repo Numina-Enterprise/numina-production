@@ -10,7 +10,7 @@ const metadata=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')
 const providerFormats=['openai-responses','openai-chat-completions','anthropic-messages','gemini-interactions','gemini-generate-content'];
 const revision='numina-root-v'+metadata.version;
 const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime_build',
- additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy'],proofGuide:'EVIDENCE.md',
+ additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
 const verification={
  schema:'numina.integration.package.v2',packagedAtUtc:new Date().toISOString(),

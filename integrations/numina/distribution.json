@@ -59,7 +59,8 @@
     "additionalManifestFields": [
       "nusd_transaction_receipts",
       "nusd_activation_readiness",
-      "denomination_policy"
+      "denomination_policy",
+      "contract_record"
     ],
     "proofGuide": "EVIDENCE.md",
     "clientPerformsSignatureVerification": false,

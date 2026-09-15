@@ -1,3 +1,4 @@
+import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
@@ -40,6 +41,7 @@ const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join('')
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const record={
  denomination_policy:NUMINA_DENOMINATION_POLICY,
+ contract_record:NUSD_CONTRACT_RECORD,
  procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,
  brand:{name:'Numina',slogan:'Intelligence in motion.'},
  intellectual_property:{owner:'SK Consulting LLC',record:'/ownership.json',notice:'/ownership',source_notice:'/OWNERSHIP.md',scope:'Numina-owned material',third_party_licenses_retained:true},

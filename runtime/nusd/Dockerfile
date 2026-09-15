@@ -15,7 +15,7 @@ RUN mkdir -p /var/lib/numina/journal /var/lib/numina/manifests \
 COPY --from=dependencies /runtime-dependencies/node_modules ./node_modules
 COPY package.json package-lock.json ./
 COPY runtime-entrypoint.mjs ./
-COPY scripts/managed-deployment.mjs scripts/validate-deployment.mjs scripts/verify-network.mjs ./scripts/
+COPY scripts/managed-deployment.mjs scripts/validate-deployment.mjs scripts/verify-network.mjs scripts/token-artifact.mjs ./scripts/
 COPY contracts/NuminaUSD.sol ./contracts/NuminaUSD.sol
 COPY artifacts/NuminaUSD.json ./artifacts/NuminaUSD.json
 COPY licenses/ ./licenses/
