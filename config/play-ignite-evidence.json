@@ -31,13 +31,17 @@
       "Does not contain ads",
       "Not developed by or on behalf of a government; Console displayed Change saved; not submitted for review"
     ],
-    "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected."
+    "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected.",
+    "contentRating": "IARC Completed; saved September 15, 2026 at 3:46 PM Central after owner approved Terms of Use. ESRB Everyone; PEGI 3; Brazil 14+; Germany 16+; generic, Russia and South Korea 3+. Users Interact and In-App Purchases. Certificate ID not displayed.",
+    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, and account/data deletion URLs accepted. Save draft displayed Your changes have been saved. Data types and handling remain incomplete."
   },
   "targetAudience": {
     "ownerChoice": "Adults 18 and older",
     "confirmedDate": "2026-09-15",
     "consoleSaved": false,
-    "blocker": "Console requires Sign in details before the audience questionnaire. The verified reviewer credentials and truthful own-record instructions were entered, but Add failed while the full-access checkbox remained unchecked. No full-access attestation or saved declaration was made."
+    "blocker": "Console requires Sign in details before the audience questionnaire. The verified reviewer credentials and truthful own-record instructions were entered, but Add failed while the full-access checkbox remained unchecked. No full-access attestation or saved declaration was made.",
+    "minimumAge": 18,
+    "sourceNotice": "Every maintained public HTML footer states: 18+ · Adults only. You must be 18 or older to use Numina. Hosted Android/iOS surfaces inherit this notice; no age-verification gate or completed Play audience declaration is claimed."
   },
   "reportedFinancialScope": {
     "source": "Owner answered all to records/service payments, transfers/hold/trade/redeem money or crypto, and borrowing/earned wages; owner subsequently confirmed yes, numina does all",
@@ -59,11 +63,11 @@
     },
     "appContent": {
       "status": "blocked",
-      "detail": "Five declarations still need attention: Sign in details, content rating, target audience, Data safety and Financial features. Government apps saved as No. Owner selected adults 18+, but Console blocks the audience questionnaire until Sign in details is complete."
+      "detail": "Four declarations still need attention: Sign in details, target audience, Data safety and Financial features. IARC content ratings completed and saved. Owner selected adults 18+; the audience questionnaire was rechecked and still requires Sign in details first."
     },
     "reviewerAccess": {
       "status": "blocked",
-      "detail": "Production reviewer login at https://numinalabs.xyz/reviewer verified on 2026-09-15. Its own request persisted; live Stripe checkout opened; the request is cancelled at revision 1 with confirmed payments and refunds both $0. Play Add returned Your changes could not be saved and required its full-access checkbox. Own-record access does not include operator administration or other customer records, so the full-access attestation remains unchecked and the declaration is not saved."
+      "detail": "Reusable production reviewer login and own-record workflow verified; live checkout observed, no payment submitted. Play credentials remain unsaved because full access to all reviewable features and any paid content has not been established for the required attestation. Own-record isolation does not itself require exposing other customer records or owner credentials."
     },
     "financialScope": {
       "status": "blocked",
@@ -71,7 +75,7 @@
     },
     "dataSafety": {
       "status": "blocked",
-      "detail": "Confirm provider/AI data flows, IP-derived location, retention periods, deletion fulfillment and declarations for the hosted application."
+      "detail": "Initial collection/security/OAuth/deletion-link answers saved as draft. Complete data types and handling after confirming provider/AI flows, relevant IP-derived location, retention and deletion operations."
     },
     "billingClassification": {
       "status": "blocked",
