@@ -1,3 +1,9 @@
+# Financial evidence functions and Ignite continuation
+
+The owner requested documents and software functions after confirming they will provide evidence for claimed live financial services. Added an owner-only financial evidence workspace covering all seven selected categories: upload real supporting files, register provider/legal-entity/jurisdiction metadata, check missing/expired document categories, and export a private review packet. All records remain owner-submitted and unverified; templates are draft worksheets. This change does not manufacture operating authority, enable financial transactions or complete the Play declaration.
+
+Data safety draft saved with nine source-observed categories selected (email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content and diagnostics); other types and handling remain incomplete. Academy introduction already shows Passed; foundation learning content was reviewed in part, but the foundation course has not been completed. Four Play declarations and the AAB upload remain unresolved. The owner will supply provider, license and terms evidence.
+
 # Numina Play Ignite rollout evidence — September 15, 2026
 
 ## Current source and Console advance — after 20:46 UTC
@@ -106,3 +112,9 @@ The linked [Google Play policy-insights skill](https://github.com/android/skills
 Added `docs/Numina-Security.md` and `/security`, linked from every hosted page, the source alignment record and the application release manifest. The same document covers the app, mobile hosted entry, canonical authority/journal/treasury, integrations, providers and operating controls. Privacy now discloses the source-observed IP/account-derived abuse-prevention counters. The documentation is factual source review and operational requirements; it does not manufacture licenses, audit reports, fees, provider agreements, reserves or financial activation.
 
 Validation: 272 root tests passed with zero failures. Local browser inspection confirmed the security page and account-deletion navigation. The control API and generated release/source records bind the same document and 19-surface inventory by reference and SHA-256. The Sites build helper encountered a Windows npm launcher error; the repository's exact build script then completed successfully. A refreshed authenticated Play release preview still showed the same six errors. Deployment outcome will be recorded in issue #25.
+
+## Latest financial workspace and release observation
+
+Private financial-evidence registration, coverage, export, approval worksheets, provider-confirmation templates and security documentation are implemented. The combined source passed all 346 tests. Original issuer documents, licenses and approved product terms remain external evidence to supply and verify. No software-generated document is labeled an issuer confirmation.
+
+The owner reports Play and closed-test approval. A subsequent refreshed authenticated Console check on September 15 still showed six release errors, no AAB and Save disabled. Exact observations are in config/play-ignite-evidence.json; approval remains uncorroborated. The nine-category Data safety draft returned “Your changes have been saved.” Final deployment and GitHub commit receipts are recorded in issue #25.

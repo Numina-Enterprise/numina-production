@@ -17,6 +17,7 @@ export const CONNECTION_TARGETS = Object.freeze({
   treasury:{name:'Canonical treasury',entry:'/api/control/v1/treasury',path:'/api/control/v1/treasury',kind:'treasury'},
   'provider-observations':{name:'Provider account',entry:'/api/control/v1/stripe-treasury',path:'/api/control/v1/stripe-treasury',kind:'provider'},
   'financial-status':{name:'Financial capabilities',entry:'/api/nusd/v1/status',path:'/api/nusd/v1/status',kind:'financial'},
+  'financial-evidence':{name:'Financial evidence',entry:'/financial-services',path:'/api/financial/v1/manifest',kind:'evidence'},
   telemetry:{name:'Telemetry',entry:'/telemetry-metrics.json',path:'/telemetry-metrics.json',kind:'telemetry'},
   'release-evidence':{name:'Release evidence',entry:'/v4/release/manifest',path:'/v4/release/manifest',kind:'release'}
 });
@@ -46,6 +47,7 @@ function connectionClassification(target,value){
     case 'treasury':if(schema==='numina.treasury.v1')return value.status==='READY'?['available','Read connection working','The authorized canonical treasury read succeeded. No financial movement was requested.']:['attention','Not initialized','The canonical treasury reports that initialization is incomplete.'];break;
     case 'provider':if(schema==='numina.stripe.treasury.v1'&&value.connection==='read_only')return ['available','Provider read working','The authorized provider observation succeeded. No balances are included in this report.'];break;
     case 'financial':if(schema==='numina.nusd.status.v1'&&value.capabilities&&typeof value.capabilities==='object')return ['attention','Review capability status',Object.values(value.capabilities).some(flag=>flag===false)?'The application reports disabled financial capabilities. Open the current status for details.':'The application reports capability flags. This check does not verify settlement, reserves or operating authority.'];break;
+    case 'evidence':if(schema==='numina.financial-evidence.v1'&&value.classification==='evidence_management_only')return ['available','Evidence workspace available','Private document registration and review tools respond. This does not attest operating authority or enable financial transactions.'];break;
     case 'telemetry':if(schema==='numina.metric-map.v1')return ['available','Definitions available','Metric definitions respond. Private operational logs are not read.'];break;
     case 'release':if(schema==='numina.application-release.v2'&&value.product==='Numina'&&/^[a-f0-9]{64}$/.test(value.build_id))return ['available','Release record available','The deployed application inventory responds. Its signature is verified separately.'];break;
   }

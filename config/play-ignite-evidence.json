@@ -33,7 +33,7 @@
     ],
     "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected.",
     "contentRating": "IARC Completed; saved September 15, 2026 at 3:46 PM Central after owner approved Terms of Use. ESRB Everyone; PEGI 3; Brazil 14+; Germany 16+; generic, Russia and South Korea 3+. Users Interact and In-App Purchases. Certificate ID not displayed.",
-    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, and account/data deletion URLs accepted. Save draft displayed Your changes have been saved. Data types and handling remain incomplete."
+    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, account/data deletion URLs, and nine source-observed data types saved as draft: email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content, diagnostics. Handling and provider flows remain incomplete; no final submission."
   },
   "targetAudience": {
     "ownerChoice": "Adults 18 and older",
@@ -129,5 +129,40 @@
       "currency": "USD",
       "submittedByAgent": false
     }
+  },
+  "financialEvidenceWorkspace": {
+    "path": "/financial-services",
+    "manifest": "/api/financial/v1/manifest",
+    "operatingGuide": "/downloads/Numina-Financial-Services.md",
+    "draftTemplates": "/downloads/Numina-Financial-Document-Templates.md",
+    "classification": "document_management_not_operating_authority",
+    "providerEvidenceSupplied": false,
+    "ownerStatement": "Financial services are live; I will provide provider, license and terms evidence",
+    "ownerStatementVerified": false,
+    "approvalEvidence": "/downloads/Numina-Financial-Approval-Evidence.md"
+  },
+  "latestConsoleObservation": {
+    "observedAt": "2026-09-15T21:37:28.758Z",
+    "ownerStatement": "play approval confirmed and closed-test release is approved",
+    "ownerStatementVerified": false,
+    "developerId": "5063096330623196321",
+    "appId": "4972203847314297095",
+    "package": "xyz.numinalabs.app",
+    "trackId": "4698819995703750940",
+    "release": "1",
+    "page": "Create closed testing release / Preview and confirm",
+    "saveEnabled": false,
+    "bundlePresent": false,
+    "errors": [
+      "You need to upload an APK or Android App Bundle for this app.",
+      "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
+      "Add a full description to save",
+      "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
+      "This release does not add or remove any app bundles.",
+      "You must let us know whether your app includes any financial features."
+    ],
+    "dataSafetyDraftSaved": true,
+    "dataSafetyToast": "Your changes have been saved",
+    "scope": "Refreshed authenticated Console UI observation. The owner approval report has not been corroborated by this release."
   }
 }
