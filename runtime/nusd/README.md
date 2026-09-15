@@ -22,6 +22,18 @@ No arguments validate the included incomplete template and return a structured l
 
 The token starts paused. Constructor issuance is separate from the existing native treasury projection and must be explicitly specified; the recorded native 500T balance does not automatically select the token supply. After a user-signed token deployment, confirm its chain, receipt, runtime, roles, supply and pause state. Only then prepare the settlement contract using that verified token address. `NuminaSettlement` transfers existing NUSD; it does not convert it to USDC or submit bank deposits.
 
+### Inspect constructor data while reviews are open
+
+Reviewers can inspect and simulate exact creation data before completing independent and operational reviews:
+
+```sh
+node scripts/prepare-review-draft.mjs /path/request.json --output /path/review-draft.json
+```
+
+This offline command still validates the cap, initial supply, recipient, distinct roles, delay, policy bytes/hash and pinned artifact. It tolerates missing review references solely for producing a `numina.nusd.transaction-review-draft.v1` artifact. The result includes the unresolved review list, exact data and hashes, `submissionApproved: false`, and no signer, nonce, fees, signature or receipt. Even populated review strings do not make a preview approved. Existing different output is never replaced; identical retries reuse the same file.
+
+The ordinary validator and managed deployment adapter retain their review requirements. A review draft is not a managed execution manifest and cannot be passed to the adapter as one. Completing an assessment with a failed or evidence-required finding does not clear the corresponding production review. No review-preparation command contacts an RPC provider, reads wallet keys, signs, submits or updates the native treasury.
+
 ## Provision distinct local role wallets on Windows
 
 `scripts/provision-wallets.mjs` creates four independent cryptographically random keys, verifies their encrypted keystores, and assigns their public addresses to an existing request. Supply the requested recipient explicitly. It changes only the role and recipient fields; rerunning with the same vault restores the same addresses. It refuses to replace existing different assignments or overwrite a private vault.
