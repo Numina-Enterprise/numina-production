@@ -141,6 +141,13 @@
       "access": "public release inventory",
       "security": "/security",
       "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "financial-evidence",
+      "entry": "/financial-services",
+      "access": "public instructions; authenticated owner-only documents and records",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
     }
   ],
   "connections": {

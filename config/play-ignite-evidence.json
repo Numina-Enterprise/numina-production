@@ -129,5 +129,15 @@
       "currency": "USD",
       "submittedByAgent": false
     }
+  },
+  "financialEvidenceWorkspace": {
+    "path": "/financial-services",
+    "manifest": "/api/financial/v1/manifest",
+    "operatingGuide": "/downloads/Numina-Financial-Services.md",
+    "draftTemplates": "/downloads/Numina-Financial-Document-Templates.md",
+    "classification": "document_management_not_operating_authority",
+    "providerEvidenceSupplied": false,
+    "ownerStatement": "Financial services are live; I will provide provider, license and terms evidence",
+    "ownerStatementVerified": false
   }
 }

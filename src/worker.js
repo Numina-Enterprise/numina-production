@@ -1,3 +1,4 @@
+import {financialEvidenceHttp} from './financial-evidence.js';
 import {reviewerHttp,reviewerContext} from './reviewer.js';
 import {connectionsHttp} from './connections-http.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-v18.js';
@@ -32,6 +33,7 @@ export default {
     if(review){req=review.req;env=review.env;}
 
    }
+   if(path.startsWith('/api/financial/v1/'))return finish(await financialEvidenceHttp(req,env));
    if(path==='/api/connections/v1/manifest')return finish(await connectionsHttp(req,env));
    if(path==='/api/ops/v1/telemetry')return finish(await telemetryHttp(req,env));
    if(path.startsWith('/api/ops/v1/quantum/'))return finish(await quantumHttp(req,env));
