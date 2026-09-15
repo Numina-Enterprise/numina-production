@@ -6,6 +6,7 @@ import {checkIOSRelease, iosInputSnapshot} from './ios-release.mjs';
 import {createHash} from 'node:crypto';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
+import {treasuryClientVerificationManifest} from '../public/treasury-proof.js';
 import {NUMINA_TREASURY_MODEL,NUMINA_TREASURY_INITIAL_BALANCE} from '../src/native-treasury-model.js';
 const read=p=>fs.readFileSync(p,'utf8');
 const json=p=>JSON.parse(read(p));
@@ -32,6 +33,8 @@ const root=identities.canonicalIdentity;
 if(root.name!=='Numina'||root.authority!=='NUMINA'||!/^[a-f0-9]{64}$/.test(root.rootHash)||root.headUrl!=='https://numinalabs.xyz/api/control/v2/head')throw Error('Canonical root identity mismatch');
 if(read('public/runtime-contract.js')!==read('integrations/numina/src/runtime-contract.js'))throw Error('Runtime identity differs between website and integration');
 if(read('public/treasury-proof.js')!==read('integrations/numina/src/treasury-proof.js'))throw Error('Treasury verification differs between website and integration');
+const treasuryClientVerification=treasuryClientVerificationManifest(digest(fs.readFileSync('public/treasury-proof.js')));
+if(!isDeepStrictEqual(integration.treasury_client_verification,treasuryClientVerification))throw Error('Integration treasury verification manifest is stale');
 if(read('public/treasury-valuation.js')!==read('integrations/numina/src/treasury-valuation.js'))throw Error('Treasury valuation policy differs between website and integration');
 const inventory=json('integrations/numina/file-manifest.json');
 if(inventory.version!==version)throw Error('Integration inventory version mismatch');
@@ -64,7 +67,7 @@ record.root.owner=business.ownerIdentity;
 record.procurement_usage=NUMINA_LAYERS.procurement_usage;
 record.procurement=NUMINA_LAYERS.procurement;
 record.checks.procurementUsageMatches=true;
-record.nativeBuildNumberScope='legacy_native_package_record_not_current_ios_source';
+record.nativeBuildNumberScope='android_package_version_code';
 record.nativeSourceBuildNumbers={android:androidBuild,ios:iosBuild};
 record.iosSource={...iosIdentity,sourceInputs:iosSourceInputs};
 record.sourceInputs.push(...iosSourceInputs.inputs.map(({path,sha256})=>({path,sha256})));
@@ -75,6 +78,7 @@ record.preservedDependencies.historicalCoreSource={path:'vendor/numina-core-v1.8
 record.checks.ownerMatchesRoot=true;
 record.checks.frozenCoreBytesMatch=true;
 record.checks.treasuryVerifierMatches=true;
+record.treasury_client_verification=treasuryClientVerification;
 for(const [name,record] of Object.entries({architecture:NUMINA_LAYERS,business,integration}))if(!isDeepStrictEqual(record.denomination_policy,NUMINA_DENOMINATION_POLICY))throw Error('Declared denomination policy differs: '+name);
 record.denomination_policy=NUMINA_DENOMINATION_POLICY;record.checks.denominationPolicyMatches=true;
 record.sourceInputs.push({path:'public/treasury-valuation.js',sha256:digest(fs.readFileSync('public/treasury-valuation.js'))});
@@ -114,7 +118,7 @@ record.sourceInputs.push(...['OWNERSHIP.md','LICENSE.md','NOTICE.md'].map(path=>
 // iOS packaging retains its separately declared LF-normalized submanifest.
 record.security={connections:'/connections',connectionManifest:'/api/connections/v1/manifest',surfaces:'/security-surfaces.json',surfacesSha256:digest(fs.readFileSync('public/security-surfaces.json')),documentation:'/security',controlModel:'/downloads/Numina-Security.md',sha256:digest(fs.readFileSync('docs/Numina-Security.md')),scope:'one canonical Numina security and financial control model',independentCertificationEstablished:false};
 record.sourceInputs.push({path:'docs/Numina-Security.md',sha256:record.security.sha256},{path:'public/security-surfaces.json',sha256:record.security.surfacesSha256});
-record.sourceInputs.push(...['public/connection-model.js','public/connections-ui.js','src/connections-http.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
+record.sourceInputs.push(...['public/connection-model.js','public/connections-ui.js','src/connections-http.js','src/reviewer.js','public/reviewer-ui.js','public/reviewer-session-ui.js','public/reviewer.html','public/reviewer.css'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 const topLevelInputPaths=[...new Set([...record.sourceInputs.map(file=>file.path),
   'scripts/source-alignment.mjs','docs/Source-Alignment-v4.md'])].sort();
 function captureAlignmentInputs(){return topLevelInputPaths.map(path=>{
