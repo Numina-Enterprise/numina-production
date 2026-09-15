@@ -7,6 +7,8 @@ __pycache__/
 .env.local
 node_modules/
 runtime/nusd/artifacts/unsigned-deployment.json
+**/role-wallets.private.json
+**/*.keystore.json
 dist/
 
 .vercel/
