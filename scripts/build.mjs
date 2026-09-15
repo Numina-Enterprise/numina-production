@@ -2,6 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,u
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
+import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
 execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inherit'});
 // Fail before producing web artifacts if the iOS/runtime release binding has drifted.
@@ -9,9 +10,9 @@ execFileSync(process.execPath,['scripts/ios-release.mjs','check'],{stdio:'inheri
 // Source safeguards can pass while Play upload, declarations and device checks remain blocked.
 execFileSync(process.execPath,['scripts/check-play-readiness.mjs','--source-only'],{stdio:'inherit'});
 if(readFileSync('public/runtime-contract.js','utf8')!==readFileSync('integrations/numina/src/runtime-contract.js','utf8'))throw Error('Integration runtime contract is stale; sync and repackage the integration kit before building');
+// Rebuild from current source so retired assets and migrations cannot survive an overlay.
+resetBuildOutput(fileURLToPath(root));
 for(const p of ['dist/client','dist/server','dist/.openai','dist/client/downloads'])mkdirSync(p,{recursive:true});
-// Remove obsolete files from the former static-root build; assets have one source, dist/client.
-for(const name of readdirSync('dist'))if(statSync('dist/'+name).isFile())unlinkSync('dist/'+name);
 function copy(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=from+'/'+n,b=to+'/'+n;statSync(a).isDirectory()?copy(a,b):copyFileSync(a,b);}}
 copy('public','dist/client');copy('docs','dist/client/downloads');
 // Sites serves matching static files before Worker routes. Let the Worker own
