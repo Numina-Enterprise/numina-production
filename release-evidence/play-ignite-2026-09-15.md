@@ -13,6 +13,13 @@ This is a dated observation record, not a certification or a live status endpoin
 - Saved a Financial features draft with the seven owner-reported categories: direct personal lending, loan facilitation, earned wage advances, mobile payments/digital wallets, money transfers, crypto wallet and crypto exchange. Documentation remains incomplete. The U.S. crypto form requests a legal entity and FinCEN MSB plus state money-transmitter registration, banking license, or an applicable exemption. The personal-loan form requests lender business names/relationships and a lawful-business attestation. No registrations, exemptions or legal attestations were fabricated or selected.
 - Store title, short description and full description were saved as a draft. Console still requires an icon, 1024 × 500 feature graphic and at least two phone/tablet screenshots before accepting the listing.
 
+### Additional Console observations at 19:34 UTC
+
+- Saved **No** for Government apps, consistent with Numina being developed by SK Consulting LLC. Console displayed **Change saved. Send for review in Publishing overview.** The outstanding declaration count fell from six to five. This is a saved draft, not review approval.
+- The owner selected **Adults 18 and older**. This choice is recorded but not saved in Console: the target-audience page requires completion of Sign in details before starting its questionnaire.
+- Sign in details requires working reusable reviewer access. Its form states that reviewers cannot create accounts or use their own existing accounts, and requires a claim that the supplied details give full access. No dedicated reviewer credentials have been supplied or tested. The inspected form was left unsaved; no access attestation was made.
+- Content ratings, Data safety, financial documentation, store assets and the existing AAB upload gate remain unresolved. No additional review submission or release publication occurred.
+
 ## Artifact identity and upload blocker
 
 The candidate remains **numina-3.0.0-upload-signed.aab**, version 3.0.0 / code 2, 3,617,114 bytes, SHA-256 `d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550`.
