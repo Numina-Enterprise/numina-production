@@ -16,6 +16,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const valuationRows=list=>{detail(list,'Declared USD value (1:1 policy)',declaredUsd);detail(list,'Declared USDC value (1:1 policy)',declaredUsdc);};
   const summary=item('article','');summary.className='treasury-balances canonical-treasury-summary';
   const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);valuationRows(summaryRows);
+  detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
   summary.append(item('h3','One canonical treasury balance'),item('p','Numina declared valuation: '+NUMINA_DENOMINATION_POLICY.expression+'. These are three denominations of one native balance, counted once.'),summaryRows,canonicalLink());
   target.append(summary);
