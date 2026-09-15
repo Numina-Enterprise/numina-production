@@ -10,6 +10,7 @@ import {verifyTreasuryAccountView} from '../public/treasury-proof.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+const applicationManifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64),frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}});
 async function settled(){for(let i=0;i<8;i++)await new Promise(r=>setTimeout(r,0));}
 class Element{
   constructor(){this.children=[];this._text='';}
@@ -37,7 +38,7 @@ function harness(view,override=()=>null){
     else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'}};
     else if(path.endsWith('/stripe-treasury'))return Response.json({error:'Unavailable'},{status:503});
     else if(path.endsWith('/state'))body={revision:1,requests:[]};
-    else if(path==='/v4/release/manifest')body={version:'4.0.0',frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}};
+    else if(path==='/v4/release/manifest')body=applicationManifest();
     else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
   };
@@ -45,6 +46,29 @@ function harness(view,override=()=>null){
   vm.runInContext(source('http-client.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
   return {get,events,subject:context.subject,close(){events.pagehide?.();}};
 }
+
+test('frontier displays only current application identities and refreshes without stale responses',async()=>{
+  const view=await accountView(),old=deferred();let calls=0;
+  const h=harness(view,(path,options)=>{
+    if(path!=='/v4/release/manifest')return null;
+    assert.equal(options.cache,'no-store');assert.equal(options.credentials,'omit');assert.equal(options.redirect,'error');
+    return ++calls===1?old.promise:Response.json({...applicationManifest(),build_id:'b'.repeat(64)});
+  });
+  try{
+    await settled();await h.subject.refresh();await settled();
+    assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
+    old.resolve(Response.json(applicationManifest()));await settled();
+    assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
+  }finally{h.close();}
+});
+
+test('frontier rejects older, missing and mixed application release metadata',async()=>{
+  const view=await accountView();
+  for(const change of [{version:'3.0.0',release:'numina-v3.0.0'},{schema:'unknown'},{build_id:null},{frontier:{version:'3.0.0'}},{distribution:{codex_plugin:{version:'3.0.0'}}}]){
+    const h=harness(view,path=>path==='/v4/release/manifest'?Response.json({...applicationManifest(),...change}):null);
+    try{await settled();assert.match(h.get('#core-release-status').textContent,/Current release information is unavailable/);assert.doesNotMatch(h.get('#core-release-status').textContent,/Production|Build [a-f0-9]{64}/);}finally{h.close();}
+  }
+});
 
 test('frontier rejects a mixed treasury account snapshot before rendering native balances',async()=>{
   const view=await accountView();view.accounts[0].sharedNativeTreasury.amount='1';const h=harness(view);

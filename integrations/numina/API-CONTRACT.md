@@ -4,7 +4,7 @@ This contract describes the integration target, not evidence of deployed mutatio
 
 | Method/path | Input | Purpose |
 | --- | --- | --- |
-| GET `/v4/release/manifest` | None | Application 4.x identity (2.x and 3.x remain accepted for compatibility), SHA-256-shaped artifact list and separately versioned runtime dependency; server-reported only |
+| GET `/v4/release/manifest` | None | Current application 4.0.0 identity, SHA-256-shaped artifact list and separately pinned rc26 runtime dependency; server-reported only |
 | GET `/api/nusd/v1/status` | None | Identity, backing evidence, capability discovery |
 | GET `/api/app/v1/catalog` | None | Public offers, currency labels, request-only state and scope terms |
 | POST `/api/nusd/v1/quotes` | `service_id`, `units`, `unit`, `idempotency_key` | Server-priced, expiring NUSD quote |
@@ -46,7 +46,7 @@ Server controls remain authoritative: bind quotes and requests to the authentica
 
 ## Application release tool
 
-`numina_application_release` accepts exactly `{}` and calls `GET /v4/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, a 2.x, 3.x or 4.x semantic version, corresponding `release:"numina-v<version>"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and a separately versioned `runtime_dependency`. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 4.0 application and kit identities do not rename the rc26 runtime or historical rc20 evidence.
+`numina_application_release` accepts exactly `{}` and calls `GET /v4/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, `version:"4.0.0"`, `release:"numina-v4.0.0"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and the separately pinned rc26 `runtime_dependency`. Older application versions are rejected. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 4.0 application and kit identities do not rename the rc26 runtime or historical rc20 evidence.
 
 ## Execution-runtime build discovery
 
@@ -59,3 +59,6 @@ The wrapper always retains `server_reported_not_independently_verified` and `ass
 ## Canonical Numina-native treasury
 
 `client.readTreasury()` and `numina_read_treasury` require the owner token and read `/api/control/v1/treasury` after validating the rc26 application dependency. Balances remain exact integer NUSD strings with NUMINA authority and system of record. The client preserves the native verification scope and returns server-reported evidence. It never follows the legacy owner-statement redirect or submits financial transactions.
+# Current application build
+
+Release reads use the canonical `/v4/release/manifest` with `cache: no-store`, without a cached fallback. The client requires Numina application 4.0.0 and its separately pinned rc26 runtime dependency. Older application versions returned by the current route fail with `APPLICATION_RELEASE_MISMATCH`. The returned `build_id` identifies the server's current inventory; this lookup does not independently attest deployment or provider funds.
