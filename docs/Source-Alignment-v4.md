@@ -24,6 +24,12 @@ After editing distributed sources, run `python scripts/package-distributions.py`
 
 The rc26 singularity binding and restored owner-authenticated revocation route are documented in RC26-Singularity-v3.md. The native treasury remains one 500T NUSD projection with original signed history preserved.
 
-Numina v4 keeps the `1.9.0-rc26` verifier and frozen 1.8.0 core identities. `/v2/release/manifest` and `/v3/release/manifest` remain aliases of the current inventory; the JSON schema stays `numina.application-release.v2`. Native 4.0.0 sources use build number 3 and have not been compiled. This distribution retains Android 3.0.0 binaries and reuses the iOS executable with v4 bundle version metadata; its original build and changed archive hashes are recorded explicitly. The hosted application can update independently of these native launchers.
+Numina v4 keeps the `1.9.0-rc26` verifier and frozen 1.8.0 core identities. `/v2/release/manifest` and `/v3/release/manifest` remain aliases of the current inventory; the JSON schema stays `numina.application-release.v2`. Maintained source is Android 4.0.0 / build 3 and iOS 4.0.0 / build 5. The iOS source package and generated release binding describe build 5; the retained unsigned iOS binary remains its recorded build 3. Android 3.0.0 binaries also retain their existing versions and hashes. Packaging does not compile, re-sign or relabel those binaries. A current native release requires a fresh compilation and its own signing/upload evidence. The hosted application can update independently of the native launchers.
 
 The canonical treasury remains one 500,000,000,000,000 NUSD native projection shared across L1–L5 through `readTreasury()` and `writeTreasury(event)`. Funding status comes from `/api/control/v2/treasury/accounts`, not duplicated static balances. This release performs no treasury write or external transfer.
+
+## Source-input hash scopes
+
+The top-level `sourceInputs` array in `/source-alignment.json` has one entry per path, in ascending order, with the byte count and SHA-256 of the exact checkout bytes (`sourceInputHashMode: raw_file_bytes`). Its nested `iosSource.sourceInputs` submanifest separately declares UTF-8/LF text normalization for portable iOS packaging. Never compare a normalized digest to raw Windows file bytes without applying that declared representation. No source or certificate-request bytes are changed to reconcile these two scopes.
+
+The local generator reports source consistency only. It does not attest a public deployment, a native compile, an App Store upload, or a treasury/account update. Historical release evidence and preserved binary artifacts are not regenerated as current execution evidence.
