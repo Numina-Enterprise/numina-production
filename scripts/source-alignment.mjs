@@ -112,8 +112,9 @@ record.intellectualProperty={product:'Numina',statedOwner:'SK Consulting LLC',ow
 record.sourceInputs.push(...['OWNERSHIP.md','LICENSE.md','NOTICE.md'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 // Top-level identity describes exact checkout bytes, once per path.
 // iOS packaging retains its separately declared LF-normalized submanifest.
-record.security={surfaces:'/security-surfaces.json',surfacesSha256:digest(fs.readFileSync('public/security-surfaces.json')),documentation:'/security',controlModel:'/downloads/Numina-Security.md',sha256:digest(fs.readFileSync('docs/Numina-Security.md')),scope:'one canonical Numina security and financial control model',independentCertificationEstablished:false};
+record.security={connections:'/connections',connectionManifest:'/api/connections/v1/manifest',surfaces:'/security-surfaces.json',surfacesSha256:digest(fs.readFileSync('public/security-surfaces.json')),documentation:'/security',controlModel:'/downloads/Numina-Security.md',sha256:digest(fs.readFileSync('docs/Numina-Security.md')),scope:'one canonical Numina security and financial control model',independentCertificationEstablished:false};
 record.sourceInputs.push({path:'docs/Numina-Security.md',sha256:record.security.sha256},{path:'public/security-surfaces.json',sha256:record.security.surfacesSha256});
+record.sourceInputs.push(...['public/connection-model.js','public/connections-ui.js','src/connections-http.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 const topLevelInputPaths=[...new Set([...record.sourceInputs.map(file=>file.path),
   'scripts/source-alignment.mjs','docs/Source-Alignment-v4.md'])].sort();
 function captureAlignmentInputs(){return topLevelInputPaths.map(path=>{

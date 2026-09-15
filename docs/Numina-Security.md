@@ -132,6 +132,12 @@ The September 15 local build and root test suite passed **272 tests**, including
 
 Reference frameworks for a subsequent independent review are [NIST SSDF](https://csrc.nist.gov/projects/ssdf) and [OWASP ASVS](https://github.com/OWASP/ASVS). Listing them is not a conformance claim.
 
+### Connection checks in the application
+
+The `/connections` workspace reads the canonical registry through `/api/connections/v1/manifest`; the public discovery MCP exposes the same inventory with `numina_connections`. Its fixed same-origin checks cover all 19 surfaces with at most four concurrent requests, an eight-second deadline per check, manual redirect handling and a 1 MiB JSON limit. Only the two MCP interfaces receive a fixed initialization request; operational tools and agent messages are never invoked. Each protected endpoint retains its existing authorization.
+
+The page distinguishes available pages, read connections, discovery metadata, package records, access requirements, errors and disabled financial capabilities. Native records do not establish device installation or store publication. Exported observations contain fixed interface paths, status, times and HTTP codes; private payloads, balances, account identifiers and credentials are omitted. Reports are local, unsigned observations. No persistent provider connection or new financial authority is created by a check.
+
 ## 10. Incident response and continuity runbook
 
 This is the operating procedure to exercise and evidence; a completed drill or staffed response SLA is not yet documented.
