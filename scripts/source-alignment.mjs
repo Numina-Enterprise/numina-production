@@ -96,5 +96,27 @@ const noticeTargets=['public','docs','integrations/numina','integrations/codex/n
 for(const dir of noticeTargets)for(const name of ['OWNERSHIP.md','LICENSE.md','NOTICE.md'])if(read(name)!==read(dir+'/'+name))throw Error('Stale ownership notice: '+dir+'/'+name);
 record.intellectualProperty={product:'Numina',statedOwner:'SK Consulting LLC',ownershipNotice:'/downloads/OWNERSHIP.md',license:'/downloads/LICENSE.md',thirdPartyNotices:'/downloads/NOTICE.md',noticeCopiesMatch:true,registrationVerified:false,legalOwnershipAuditPerformed:false};
 record.sourceInputs.push(...['OWNERSHIP.md','LICENSE.md','NOTICE.md'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
+// Top-level identity describes exact checkout bytes, once per path.
+// iOS packaging retains its separately declared LF-normalized submanifest.
+const topLevelInputPaths=[...new Set([...record.sourceInputs.map(file=>file.path),
+  'scripts/source-alignment.mjs','docs/Source-Alignment-v4.md'])].sort();
+function captureAlignmentInputs(){return topLevelInputPaths.map(path=>{
+  if(path.startsWith('/')||path.includes('\\')||path.split('/').includes('..'))throw Error('Invalid alignment input path');
+  const metadata=fs.lstatSync(path);
+  if(!metadata.isFile()||metadata.isSymbolicLink())throw Error('Invalid alignment input: '+path);
+  const bytes=fs.readFileSync(path);
+  return {path,bytes:bytes.length,sha256:digest(bytes)};
+});}
+const firstInputCapture=captureAlignmentInputs();
+if(JSON.stringify(captureAlignmentInputs())!==JSON.stringify(firstInputCapture))throw Error('Alignment inputs changed during capture');
+record.sourceInputs=firstInputCapture;
+record.sourceInputCount=firstInputCapture.length;
+record.sourceInputHashMode='raw_file_bytes';
+record.sourceInputOrdering='unique_path_ascending';
+record.sourceInputCaptureScope='two matching reads; not an atomic filesystem snapshot';
+record.normalizedSubmanifest={path:'/iosSource/sourceInputs',hashMode:'utf8_lf_binary_unchanged',scope:'iOS source archive only'};
+record.classification='local_source_alignment_not_deployment_attestation';
+record.generatorEffects={applicationExecuted:false,nativeCompiled:false,applicationTestsRun:false,
+  deploymentPerformed:false,treasuryOrProviderWrites:false};
 fs.mkdirSync('dist/client',{recursive:true});fs.writeFileSync('dist/client/source-alignment.json',JSON.stringify(record,null,2)+'\n');
-console.log('Source alignment verified: Numina '+version+', one root, L1–L5, '+inputs.length+' source identities.');
+console.log('Source alignment verified: Numina '+version+', one root, L1-L5, '+record.sourceInputCount+' unique source inputs; native builds and deployment not performed.');
