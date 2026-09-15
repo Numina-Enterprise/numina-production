@@ -19,3 +19,7 @@ Release alignment: Numina 4.0.0 / rc26 singularity. The signed core-to-root bind
 Website and OS: Intelligence in motion. One core, one root, five architecture layers. The current application release is available at https://numinalabs.xyz/v4/release/manifest.
 
 Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.
+
+## Procurement usage
+
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

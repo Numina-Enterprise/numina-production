@@ -78,3 +78,7 @@ Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks c
 ## Signing document package
 
 See `Signing/README.md`. The package preserves the existing CSR and provides templates only; actual Apple team/certificate/profile values remain required. The legacy signing script rejects historical or uncompiled current-source inputs. Repackage with `python scripts/package-ios-source.py` after source changes; this updates source evidence only, never native build evidence.
+
+## Procurement usage
+
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

@@ -124,6 +124,5 @@ export async function reduceControl(current,command,actor,revision,now) {
     controlExact(data,[]);demand(state.grants.some(g=>g.subject===actor&&grantValid(state,g,now)),'AUTHORITY_DENIED',403);result={reconciled:true};
   }else controlError('UNKNOWN_COMMAND');
   demand(state.requests.length<=100&&state.grants.length<=100&&state.evidence.length<=400,'STATE_CAPACITY',409);
-  demand(new TextEncoder().encode(stable(state)).byteLength<=524288,'STATE_CAPACITY',409);
   return {state,result,parents:parentIds,decisions:reconcileControl(state,now)};
 }

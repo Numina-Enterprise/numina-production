@@ -42,3 +42,7 @@ The browser dependency is Apache-2.0 licensed; it is referenced as a Maven depen
 Primary references, checked 2026-09-12: [Android Browser Helper release](https://github.com/GoogleChrome/android-browser-helper/releases/tag/android-browser-helper-2.7.3), [TWA architecture and domain association](https://developer.chrome.com/docs/android/trusted-web-activity/quick-start), [AGP 8.13 compatibility](https://developer.android.com/build/releases/agp-8-13-0-release-notes), [official launcher implementation](https://github.com/GoogleChrome/android-browser-helper/blob/android-browser-helper-2.7.3/androidbrowserhelper/src/main/java/com/google/androidbrowserhelper/trusted/LauncherActivity.java).
 
 Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.
+
+## Procurement usage
+
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

@@ -1,4 +1,6 @@
 {
+  "procurement_usage": true,
+  "procurementPolicy": "/business-core.json",
   "livemode": true,
   "frontier": {
     "version": "4.0.0",

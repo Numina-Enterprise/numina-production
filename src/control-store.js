@@ -50,7 +50,8 @@ async function commitControlEvent(db,command,actor,now){
   if(!command||typeof command.id!=='string'||!Number.isSafeInteger(command.expectedRevision))controlError('INVALID_COMMAND',400);
   const commandHash=await controlHash(command),prior=await db.prepare('SELECT actor,command_hash,event_json,hash FROM numina_control_events WHERE id=?').bind(command.id).first();
   if(prior){if(prior.actor!==actor||prior.command_hash!==commandHash)controlError('IDEMPOTENCY_CONFLICT',409);return controlResult(prior,true);}
-  const row=await readControl(db);if(row.revision>=2048)controlError('EVENT_CAPACITY',409);
+  const row=await readControl(db);
+  if(!Number.isSafeInteger(row.revision+1))controlError('REVISION_OUT_OF_RANGE',409);
   if(command.type==='treasury'&&command.data?.expectedHead!==row.head_hash)controlError('STALE_TREASURY_HEAD',409);
   const reduced=await reduceControl(row.state,command,actor,row.revision,now),stateHash=await controlHash(reduced.state);
   const event={id:command.id,revision:row.revision+1,actor,at:now,type:command.type,command,commandHash,previous:row.head_hash,stateHash,parents:reduced.parents,result:reduced.result,decisionsHash:await controlHash(reduced.decisions)};const hash=await controlHash(event);

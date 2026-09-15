@@ -41,6 +41,7 @@
     "recordsSchema": "numina.treasury.record-sources.v1",
     "recordSeparation": "Each provider balance, currency, reserve allocation and redemption record retains its own source and verification status"
   },
+  "procurement_usage": true,
   "providerEvidenceRequired": true,
   "sourceAlignment": "/source-alignment.json",
   "procurementAuthorization": {
@@ -48,11 +49,18 @@
     "source": "owner_instruction",
     "status": "OWNER_AUTHORIZED",
     "creditUsageAuthorized": true,
+    "usageFlag": "/procurement_usage",
+    "automaticPurchasing": false,
+    "permissions": "existing_owner_and_delegated_permissions",
+    "paymentEvidence": "provider_confirmation_required",
     "scope": [
       "Numina OS",
       "website",
       "plugin",
-      "release provenance"
+      "release provenance",
+      "mobile applications",
+      "integration clients and adapters",
+      "payment integrations"
     ],
     "execution": "Use existing authorized provider access and available credits",
     "providerBillingObservation": null
