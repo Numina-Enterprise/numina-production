@@ -37,7 +37,7 @@
     "ownerChoice": "Adults 18 and older",
     "confirmedDate": "2026-09-15",
     "consoleSaved": false,
-    "blocker": "Console requires the Sign in details declaration before the target audience questionnaire. Dedicated production reviewer access is implemented and locally tested; deployment, browser verification and Console submission are still pending."
+    "blocker": "Console requires Sign in details before the audience questionnaire. The verified reviewer credentials and truthful own-record instructions were entered, but Add failed while the full-access checkbox remained unchecked. No full-access attestation or saved declaration was made."
   },
   "reportedFinancialScope": {
     "source": "Owner answered all to records/service payments, transfers/hold/trade/redeem money or crypto, and borrowing/earned wages; owner subsequently confirmed yes, numina does all",
@@ -63,7 +63,7 @@
     },
     "reviewerAccess": {
       "status": "blocked",
-      "detail": "A dedicated production customer login is implemented with access limited to its own records and existing live checkout. All 306 tests passed, including own-record isolation, owner denial, cookie tampering, expiry and login rate limits. Live deployment, browser verification and Play credential submission are pending. No full-access attestation has been submitted."
+      "detail": "Production reviewer login at https://numinalabs.xyz/reviewer verified on 2026-09-15. Its own request persisted; live Stripe checkout opened; the request is cancelled at revision 1 with confirmed payments and refunds both $0. Play Add returned Your changes could not be saved and required its full-access checkbox. Own-record access does not include operator administration or other customer records, so the full-access attestation remains unchecked and the declaration is not saved."
     },
     "financialScope": {
       "status": "blocked",
@@ -105,8 +105,25 @@
     "rootAccess": false,
     "otherCustomerAccess": false,
     "sessionSeconds": 28800,
-    "credentialLocation": "Sites secret configuration; reviewer password supplied privately to Play Console after verification",
-    "liveVerified": false,
-    "consoleSaved": false
+    "credentialLocation": "Password digest and session key in Sites secret configuration. Reusable password entered privately in the pending Play Console form; not committed or included in public documentation.",
+    "liveVerified": true,
+    "consoleSaved": false,
+    "fullAccessAttestation": false,
+    "verifiedOn": "2026-09-15",
+    "deploymentVersion": 76,
+    "verificationRequest": {
+      "id": "n_8f390f76-d02d-4a7e-8d02-8e87ff7ee1ff",
+      "status": "cancelled",
+      "revision": 1,
+      "confirmedPaymentsMinor": 0,
+      "confirmedRefundsMinor": 0
+    },
+    "checkoutObserved": {
+      "provider": "Stripe",
+      "service": "Operational Agent Diagnostic",
+      "amountMinor": 500000,
+      "currency": "USD",
+      "submittedByAgent": false
+    }
   }
 }
