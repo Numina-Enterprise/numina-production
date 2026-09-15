@@ -1,0 +1,94 @@
+{
+  "schema": "numina.play-ignite-evidence.v1",
+  "observedDate": "2026-09-15",
+  "issue": "https://github.com/skott34-dot/numina-production/issues/25",
+  "packageName": "xyz.numinalabs.app",
+  "developerAccountId": "5063096330623196321",
+  "appId": "4972203847314297095",
+  "sourceReviewCommit": "3f429a79082a00776423241be1862a2f91d61953",
+  "sourceReviewVersion": "4.0.0",
+  "candidate": {
+    "file": "numina-3.0.0-upload-signed.aab",
+    "versionName": "3.0.0",
+    "versionCode": 2,
+    "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+    "runId": "34785067667",
+    "bytes": 3617114,
+    "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550",
+    "localHashVerified": true,
+    "signatureEvidence": "docs/android-signed-build-record-v3.json"
+  },
+  "playAppSigningSha256": "32:0E:E1:C6:E0:7C:2D:82:3E:8E:28:A4:F6:46:0C:73:DF:8A:55:2A:00:42:B6:AA:31:18:57:52:50:54:F4:1C",
+  "confirmed": {
+    "igniteEnrollment": "Welcome email received 2026-09-15T18:34:06Z; Academy path shows In Progress",
+    "academyLinked": "Academy displayed Account successfully connected",
+    "publisherIdentity": "Your identity has been verified email received 2026-09-14T05:32Z",
+    "packageRegistration": "Play developer verification shows xyz.numinalabs.app Registered, with three Verified keys",
+    "closedTestDraft": "Alpha track 4698819995703750940, release 1; United States and one owner tester saved",
+    "declarationsSaved": [
+      "No health features",
+      "Does not use advertising ID",
+      "Does not contain ads"
+    ],
+    "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected."
+  },
+  "reportedFinancialScope": {
+    "source": "Owner answered all to records/service payments, transfers/hold/trade/redeem money or crypto, and borrowing/earned wages; owner subsequently confirmed yes, numina does all",
+    "verification": "unresolved",
+    "discrepancy": "Reviewed service API rejects NUSD payment/execution; redemption policy has executionEnabled false; no lending/EWA flow located. Owner scope is not proof of operational activation or licensing."
+  },
+  "gates": {
+    "upload": {
+      "status": "blocked",
+      "detail": "Chrome file chooser returned Not allowed; file URL access was not enabled. No bundles in Play library."
+    },
+    "playValidation": {
+      "status": "blocked",
+      "detail": "Six release errors remain; no server-side bundle, SDK or signing validation yet."
+    },
+    "storeListing": {
+      "status": "blocked",
+      "detail": "Text saved as draft; icon, 1024x500 feature graphic and at least two phone/tablet screenshots missing in Console."
+    },
+    "appContent": {
+      "status": "blocked",
+      "detail": "Sign in details, content rating, target audience, Data safety, Government apps and Financial features remain incomplete."
+    },
+    "reviewerAccess": {
+      "status": "blocked",
+      "detail": "Working restricted-feature reviewer access and instructions have not been supplied or tested."
+    },
+    "financialScope": {
+      "status": "blocked",
+      "detail": "Draft saved. Play requests lending partner business names/relationships and a lawful-business attestation; US crypto requires legal entity and FinCEN MSB plus state money-transmitter registration, banking license, or a documented applicable exemption. No such evidence provided. Reconcile reported scope with shipped behavior and supply actual fees, repayment/APR and holder terms."
+    },
+    "dataSafety": {
+      "status": "blocked",
+      "detail": "Confirm provider/AI data flows, IP-derived location, retention periods, deletion fulfillment and declarations for the hosted application."
+    },
+    "billingClassification": {
+      "status": "blocked",
+      "detail": "Classify consulting checkout and any digital/NUSD services against current Play payment requirements."
+    },
+    "deviceInstall": {
+      "status": "not_run",
+      "detail": "No Play-distributed physical-device installation performed."
+    },
+    "twa": {
+      "status": "blocked",
+      "detail": "Source contains the observed Play signing fingerprint; live assetlinks browser request was blocked by client. Device association remains unverified."
+    },
+    "closedTestPublication": {
+      "status": "not_run",
+      "detail": "Alpha remains inactive, draft. No review submission or publication."
+    }
+  },
+  "consoleErrors": [
+    "You need to upload an APK or Android App Bundle for this app.",
+    "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
+    "Add a full description to save",
+    "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
+    "This release does not add or remove any app bundles.",
+    "You must let us know whether your app includes any financial features."
+  ]
+}
