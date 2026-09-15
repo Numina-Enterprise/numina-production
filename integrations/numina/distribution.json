@@ -85,6 +85,7 @@
       "nusd_activation_readiness",
       "denomination_policy",
       "contract_record",
+      "mint_workflow",
       "treasury_client_verification"
     ],
     "proofGuide": "EVIDENCE.md",

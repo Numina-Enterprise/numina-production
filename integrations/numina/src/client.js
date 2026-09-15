@@ -114,7 +114,7 @@ export class NuminaClient {
       ['builder_signed_artifacts_verified','application_started_by_build','production_host_deployment_verified','financial_execution_established'].some(key=>typeof build[key]!=='boolean')||
       !object(data.financial_status_sources)||!object(data.scope))fail('INVALID_SERVER_RESPONSE');
     const rootRecords={};
-    for(const field of ['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','treasury_client_verification']){
+    for(const field of ['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','treasury_client_verification']){
       // Older v2 manifests may omit these records. Never synthesize evidence or
       // turn an absent readiness record into a positive or negative assertion.
       if(!Object.hasOwn(data,field))continue;
@@ -136,7 +136,8 @@ export class NuminaClient {
     if(data.network_policy!==undefined&&data.network_policy!==null&&!object(data.network_policy))fail('INVALID_SERVER_RESPONSE');
     if(data.denomination_policy!==undefined&&!object(data.denomination_policy))fail('INVALID_SERVER_RESPONSE');
     if(data.contract_record!==undefined&&!object(data.contract_record))fail('INVALID_SERVER_RESPONSE');
-    return this.#wrap({...(data.contract_record===undefined?{}:{contract_record:data.contract_record}),...(data.denomination_policy===undefined?{}:{denomination_policy:data.denomination_policy}),network_policy:data.network_policy??null,asset:data.asset??null,
+    if(data.mint_workflow!==undefined&&!object(data.mint_workflow))fail('INVALID_SERVER_RESPONSE');
+    return this.#wrap({...(data.contract_record===undefined?{}:{contract_record:data.contract_record}),...(data.mint_workflow===undefined?{}:{mint_workflow:data.mint_workflow}),...(data.denomination_policy===undefined?{}:{denomination_policy:data.denomination_policy}),network_policy:data.network_policy??null,asset:data.asset??null,
       asset_verification:data.asset_verification??null,capabilities:data.capabilities??null,
       blockchain_rpc_checked:false,independently_verified:false});
   }

@@ -14,9 +14,22 @@ export const NUSD_REDEMPTION_POLICIES=Object.freeze({
   [NUSD_REDEMPTION_PROPOSAL_V2.policy_id]:freezeNusdRedemption(NUSD_REDEMPTION_PROPOSAL_V2),
   [NUSD_REDEMPTION_POLICY.policy_id]:freezeNusdRedemption(NUSD_REDEMPTION_POLICY)
 });
+export const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
+ schema:'numina.nusd.mint-workflow.v1',
+ status:'implemented_unsigned_preparation_available',
+ contract:{name:'NuminaUSD',decimals:6,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',initiallyPaused:true,sourceSha256:NUSD_CONTRACT_RECORD.contracts[0].source.sha256,artifactSha256:NUSD_CONTRACT_RECORD.contracts[0].artifact.sha256},
+ nativeJournal:{route:'/api/control/v1/treasury',objective:'treasury.mint.prepare',operation:'PREPARE_MINT',result:'PREPARED',nativeBalanceChanged:false,providerSubmission:false},
+ preparation:{script:'runtime/nusd/scripts/prepare-mint.mjs',requestSchema:'numina.nusd.mint.request.v1',outputSchema:'numina.nusd.unsigned-mint-review-draft.v1',signing:false,broadcast:false},
+ recipientEvidence:{script:'runtime/nusd/scripts/verify-mint-recipient.mjs',requestSchema:'numina.nusd.recipient-evidence-request.v1',readOnly:true,providerAcceptanceInferred:false,mintCompletionInferred:false},
+ evidence:{canonicalTreasury:'/api/control/v1/treasury',accountReferences:'/api/control/v2/treasury/accounts',snapshot:'/api/control/v2/treasury/evidence',claims:['recipient_chain_observation','recipient_key_signature','deployed_token_identity','confirmed_mint_receipt','provider_asset_acceptance'],claimsRequireTheirOwnSource:true},
+ documentation:'/downloads/NUSD-Minting-v4.md',
+ execution:{contractDeploymentVerified:false,completedMintVerified:false,providerAcceptanceVerified:false},
+ scope:'Contract minting and offline preparation are implemented. A native journal request, recipient observation, authorization or reference string does not establish completed token issuance or provider acceptance.'
+});
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
  contract_record:NUSD_CONTRACT_RECORD,
+ mint_workflow:NUSD_MINT_WORKFLOW,
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  treasury_policy:'/api/control/v2/treasury/policy',
  native_treasury:{source:'/api/control/v1/treasury',unit:'NUSD',authority:'NUMINA',system_of_record:'NUMINA',access:'owner_authenticated'},
@@ -41,6 +54,9 @@ export const NUSD_POLICY={
 export async function nusdHttp(req){
  const path=new URL(req.url).pathname;
  const headers={'Content-Type':'application/json','Cache-Control':'no-store'};
+ if(path==='/api/nusd/v1/mint-workflow')return req.method==='GET'
+  ?new Response(JSON.stringify(NUSD_MINT_WORKFLOW),{headers})
+  :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
  if(path==='/api/nusd/v1/contracts')return req.method==='GET'
   ?new Response(JSON.stringify(NUSD_CONTRACT_RECORD),{headers})
   :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
