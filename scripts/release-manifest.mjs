@@ -78,5 +78,6 @@ const record={
  artifacts
 };
 record.security={connections:'/connections',connectionManifest:'/api/connections/v1/manifest',surfaces:'/security-surfaces.json',surfacesSha256:digest(readFileSync('public/security-surfaces.json')),documentation:'/security',controlModel:'/downloads/Numina-Security.md',sha256:digest(readFileSync('docs/Numina-Security.md')),scope:'one canonical Numina security and financial control model',independentCertificationEstablished:false};
+record.security.financialEvidence={workspace:'/financial-services',manifest:'/api/financial/v1/manifest',approvalPack:'/downloads/Numina-Financial-Approval-Evidence.md',approvalPackSha256:digest(readFileSync('docs/Numina-Financial-Approval-Evidence.md')),classification:'software_evidence_not_financial_approval'};
 for(const file of manifestAliases)writeFileSync('dist/client/downloads/'+file,JSON.stringify(record,null,2)+'\n');
 console.log('Generated Numina '+record.version+' application release identity: '+record.build_id);
