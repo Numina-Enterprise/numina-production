@@ -1,13 +1,13 @@
 {
   "schema": "numina.financial-software-verification.v1",
-  "recordedAt": "2026-09-15T21:31:15.073Z",
-  "testedSourceCommit": "5ce1133633f4f9f8a1c7c25809dbc0c9bfb0048f",
+  "recordedAt": "2026-09-15T21:37:28.721Z",
+  "testedSourceCommit": "f3866c3451e97c27f14dc6f07b1360fc4d7fc5db",
   "scope": "Local automated software tests with fixtures. Not a regulator, provider or Play approval.",
   "command": "node --test tests/*.test.mjs",
   "tests": 346,
   "passed": 346,
   "failed": 0,
-  "originalTestOutputSha256": "d62f5797d2b587cf5616ff5750060abd256dec9a43405a31c4d48af9cd64006b",
+  "originalTestOutputSha256": "6a16e2d28df3b44a698c3d5408abce7e35603962663ffedbca9e9a66192fab80",
   "claims": {
     "fileReceiptValidationTested": true,
     "privateOwnerIsolationTested": true,
@@ -53,5 +53,5 @@
       "sha256": "69a64dab4af5cfd1012927736ef575cb21b0eda7a66b45e65c056b5aceb8c059"
     }
   ],
-  "note": "Full test run preceded final document links and manifest metadata; final build and focused checks are recorded with deployment in issue #25."
+  "note": "Full 346-test run includes the combined financial workspace, mint preparation, provider templates and matching release/source security metadata. This verification record and the refreshed Console observation were added afterwards; final build and focused metadata checks are recorded with deployment in issue #25."
 }

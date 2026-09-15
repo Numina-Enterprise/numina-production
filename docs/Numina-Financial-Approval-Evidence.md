@@ -54,7 +54,7 @@ The local browser preview verified the owner form and seven service categories a
 
 ## Reviewer walkthrough currently established
 
-1. Open https://numinalabs.xyz/reviewer using the dedicated credentials supplied privately to Play.
+1. Open https://numinalabs.xyz/reviewer using the dedicated credentials prepared for Play (the Console access declaration is still unsaved).
 2. Sign in without a ChatGPT account or one-time password. Session cookies last eight hours; sign in again as needed.
 3. Open Numina OS, create a clearly labeled service request, reopen it and inspect its own activity history.
 4. The observed consulting checkout is live and can charge money. Do not purchase to obtain review access. The previously observed verification request is cancelled with no confirmed payments or refunds.
@@ -69,3 +69,7 @@ Use the [eight document worksheets](Numina-Financial-Document-Templates.md) to c
 Current workstream: [Google Play Academy Ignite — closed testing release, issue #25](https://github.com/skott34-dot/numina-production/issues/25).
 
 Primary policy references: [Financial declaration](https://support.google.com/googleplay/android-developer/answer/13849271), [Financial Services](https://support.google.com/googleplay/android-developer/answer/9876821), [Crypto wallets and exchanges](https://support.google.com/googleplay/android-developer/answer/16329703), [Data safety](https://support.google.com/googleplay/android-developer/answer/10787469), [review access](https://support.google.com/googleplay/android-developer/answer/15748846).
+
+## Latest Console observation
+
+The owner reported Play and closed-test approval on September 15, 2026. A subsequent refreshed authenticated Console page for the package and Alpha release above still showed six errors, no app bundle, and Save disabled. The errors require an AAB, completed Dashboard setup, a full description, a release that adds a bundle and supports upgrades, and the financial-features declaration. The owner report is retained separately; approval has not been corroborated in this release. Data safety displayed “Your changes have been saved” for the nine-type draft; handling and final submission remain incomplete.
