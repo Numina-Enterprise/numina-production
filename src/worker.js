@@ -21,6 +21,10 @@ export default {
   const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   if(path==='/favicon.ico'){
+    if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
+    return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));
+   }
    if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));
    if(path.startsWith('/api/')){
     const review=await reviewerContext(req,env);
