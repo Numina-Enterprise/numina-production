@@ -144,6 +144,16 @@ On September 15, 2026 at 19:30:18–19:30:21 UTC, the version 74 Connections wor
 
 This dated observation does not establish availability for another account or future request, external installation, financial operating authority, reserves, settlement or Play approval. It exercised reads and protocol initialization only. The corresponding Connections release passed 287 automated tests before publication. Source and deployment references are retained in the dated connection record and GitHub issue #25.
 
+### Dedicated production reviewer access
+
+The owner authorized a dedicated Google Play reviewer account and explicitly limited it to its own production records. `/reviewer` provides reusable sign-in without a personal ChatGPT account or one-time code. It is a customer identity, not the canonical owner or an operator. The existing service-order ownership checks control listing, reads, changes and checkout; another customer's records and owner-only treasury views remain inaccessible.
+
+The reviewer password is generated with 256 bits of randomness. Only its SHA-256 digest is configured on the server. A separate random HMAC key signs host-bound eight-hour sessions in a `Secure`, `HttpOnly`, `SameSite=Strict`, `__Host-` cookie. Login accepts at most 2 KiB with a five-second deadline, requires a matching Origin and allows at most 12 attempts per minute per IP-derived bucket. Unknown, expired, duplicate or modified review cookies fail closed instead of falling back to an existing owner session. Login does not create orders, payment facts, owner grants or a second treasury.
+
+Checkout uses the same live Stripe destination and eligibility rules as a normal customer request. Opening checkout does not establish payment; payment status still requires verified provider events. The reviewer credential does not enable NUSD execution or waive financial activation requirements. Server credentials remain on the server; they are not included in reviewer responses or instructions.
+
+The runtime setting `NUMINA_REVIEW_RECORD_SCOPE` must be `own`; broader values are rejected. Set `NUMINA_REVIEW_ENABLED` to `false` to disable access. Rotate `NUMINA_REVIEW_SESSION_KEY` to invalidate existing sessions permanently, and rotate the password digest and update Play Console together when changing the reusable credential. The reviewer account has a stable internal subject so its records retain the same ownership after credential rotation. Credentials must not be committed, published in evidence or copied into issue comments.
+
 ## 10. Incident response and continuity runbook
 
 This is the operating procedure to exercise and evidence; a completed drill or staffed response SLA is not yet documented.
