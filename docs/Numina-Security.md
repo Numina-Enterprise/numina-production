@@ -154,6 +154,8 @@ Checkout uses the same live Stripe destination and eligibility rules as a normal
 
 The runtime setting `NUMINA_REVIEW_RECORD_SCOPE` must be `own`; broader values are rejected. Set `NUMINA_REVIEW_ENABLED` to `false` to disable access. Rotate `NUMINA_REVIEW_SESSION_KEY` to invalidate existing sessions permanently, and rotate the password digest and update Play Console together when changing the reusable credential. The reviewer account has a stable internal subject so its records retain the same ownership after credential rotation. Credentials must not be committed, published in evidence or copied into issue comments.
 
+Observed September 15, 2026 on production version 76: reviewer sign-in succeeded on the canonical domain; an account-owned request persisted; its live Stripe checkout displayed the diagnostic; the request ended cancelled with zero confirmed payments and refunds. Automated tests verified rejection of other-customer access, owner operations, forged or expired cookies, widened scope and owner-header inheritance. Play Console did not save the entered credentials because its full-access attestation remained unchecked. These observations do not claim store approval, payment completion or access to private owner records.
+
 ## 10. Incident response and continuity runbook
 
 This is the operating procedure to exercise and evidence; a completed drill or staffed response SLA is not yet documented.
