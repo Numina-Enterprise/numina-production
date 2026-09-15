@@ -42,7 +42,7 @@ function harness(view,override=()=>null){
     return Response.json(body);
   };
   const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},NUMINA_LAYERS:{layers:[]}});
-  vm.runInContext(source('http-client.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
+  vm.runInContext(source('http-client.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
   return {get,events,subject:context.subject,close(){events.pagehide?.();}};
 }
 
@@ -57,7 +57,7 @@ test('funding panel displays the current native declaration while retaining the 
     await settled();const panel=h.get('#funding-plan').textContent;
     assert.match(panel,/Current native funding status · FUNDED_PLAN · Owner declaration/);
     assert.match(panel,/Original plan status · UNFUNDED_PLAN/);
-    assert.match(panel,/500,000,000,000,000 NUSD/);
+    assert.match(panel,/View the canonical native treasury/);assert.doesNotMatch(panel,/500,000,000,000,000/);assert.match(h.get('#treasury-balances').textContent,/500,000,000,000,000 NUSD/);
     assert.match(panel,/Read signed plan receipt/);assert.match(panel,/Read signed owner declaration/);
     assert.deepEqual(view,before);
   }finally{h.close();}
@@ -71,7 +71,7 @@ test('frontier session loss clears records and ignores a late treasury response'
 test('a refreshed frontier ignores an older pending snapshot and preserves account labels',async()=>{
   const view=await accountView(),pending=deferred();let reads=0;
   const h=harness(view,path=>path.endsWith('/treasury/accounts')&&reads++===0?pending.promise:null);
-  try{await settled();await h.subject.refresh();assert.match(h.get('#accounts').textContent,/Existing reference/);const old=structuredClone(view);old.accounts[0].accountLabel='Stale response';pending.resolve(Response.json(old));await settled();assert.doesNotMatch(h.get('#accounts').textContent,/Stale response/);assert.match(h.get('#accounts').textContent,/500,000,000,000,000 NUSD/);}finally{h.close();}
+  try{await settled();await h.subject.refresh();assert.match(h.get('#accounts').textContent,/Existing reference/);const old=structuredClone(view);old.accounts[0].accountLabel='Stale response';pending.resolve(Response.json(old));await settled();assert.doesNotMatch(h.get('#accounts').textContent,/Stale response/);assert.match(h.get('#accounts').textContent,/View the canonical native treasury/);assert.doesNotMatch(h.get('#accounts').textContent,/500,000,000,000,000/);}finally{h.close();}
 });
 
 test('late provider reads cannot restore balances after frontier access is lost',async()=>{
