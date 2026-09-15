@@ -17,3 +17,5 @@ Refreshes and loss of owner access cancel pending reads and clear private record
 The rc26 release display also requires a production declaration that signs every displayed manifest field. An unsigned extra field or a staging declaration cannot pass the release check. The runtime's pinned identity remains unchanged.
 
 The frozen starting projection remains 500,000,000,000,000 NUSD, Authority NUMINA, Verification VERIFIED, System of record NUMINA, within the Numina-native model. This software update performs no treasury write or account-reference mutation.
+
+The 2026-09-15 runtime reference reconciliation is recorded in `runtime-pin-reconciliation-2026-09-15.json`. Only the two inventory/provenance hashes changed: both match retained assembly bytes and the complete live descriptor signed by the already-pinned runtime key. Runtime build, production source root, frozen core and signing key remain unchanged. This is a verified runtime observation, not a new Vercel deployment receipt.
