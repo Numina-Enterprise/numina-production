@@ -110,6 +110,16 @@ export function assessFinancialStatus(data) {
   const source=data.contract_record===undefined
     ?{source:'Contract source record unavailable','source-scope':''}
     :contractSourcePresentation(data.contract_record);
+  const mint=data.mint_workflow;
+  const token=data.contract_record?.contracts?.find(contract=>contract.name==='NuminaUSD');
+  if(mint!==undefined&&(mint?.schema!=='numina.nusd.mint-workflow.v1'||
+    mint.status!=='implemented_unsigned_preparation_available'||
+    mint.contract?.authorizationFunction!=='authorizeIssuance'||mint.contract?.mintFunction!=='mintAuthorized'||
+    mint.contract?.sourceSha256!==token?.source?.sha256||mint.contract?.artifactSha256!==token?.artifact?.sha256||
+    !['authorizeIssuance','mintAuthorized'].every(name=>token?.implemented_operations?.issuance?.includes(name))||
+    mint.preparation?.signing!==false||mint.preparation?.broadcast!==false||
+    mint.recipientEvidence?.readOnly!==true||mint.recipientEvidence?.providerAcceptanceInferred!==false||
+    mint.recipientEvidence?.mintCompletionInferred!==false))throw Error('Mint workflow unavailable');
   return {
     state: 'Current application status received',
     contract: data.asset.contract === null ? (data.contract_record?'No deployed address reported · compiled contract sources available':'No contract address reported') : data.asset.contract,
@@ -118,6 +128,7 @@ export function assessFinancialStatus(data) {
     pricing: data.service_pricing.status.replaceAll('_', ' '),
     ...Object.fromEntries(capabilities.map(name => [name,
       data.capabilities[name] ? 'Enabled by application' : 'Not enabled by application'])),
+    ...(mint&&!data.capabilities.mint?{mint:'Implemented in contract · unsigned preparation available · wallet execution unverified'}:{}),
     ...source,
     checked: 'Status response fetched ' + new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC') + '.',
   };
