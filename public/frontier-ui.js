@@ -2,7 +2,7 @@ import {requestJson,createViewScope} from './http-client.js';
 import {verifyTreasuryAccountView} from './treasury-proof.js';
 import {refreshControlRoom} from './control-room.js';
 import {renderFundingPlan} from './funding-plan.js';
-import {renderTreasuryBalances} from './treasury-balances.js';
+import {renderTreasuryBalances,renderNativeAccountReference} from './treasury-balances.js';
 const $=s=>document.querySelector(s);
 import {NUMINA_LAYERS} from './architecture-layers.js';
 const canonical=v=>v===null||typeof v!=='object'?JSON.stringify(v):Array.isArray(v)?'['+v.map(canonical).join(',')+']':'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}';
@@ -91,7 +91,7 @@ async function refresh(){
       if(!isCurrent())return;
       treasuryActions(t,readApi,isCurrent);
       $('#treasury-status').textContent=t.treasury.projection?'Native journal verified · Revision '+t.treasury.revision:'Canonical treasury is not initialized';
-      $('#accounts').replaceChildren(...t.accounts.map(a=>{const row=node('p',a.legalEntity+' · '+a.provider+' · '+a.accountLabel+' · '+(a.providerOwnershipVerified?'Provider verified':'Owner designated'));if(a.sharedNativeTreasury){const link=node('a','View the canonical native treasury ↗');link.href='/api/control/v1/treasury';row.append(node('span',' · '),link);}return row;}));
+      $('#accounts').replaceChildren(...t.accounts.map(a=>{const row=node('article','');row.append(node('p',a.legalEntity+' · '+a.provider+' · '+a.accountLabel+' · '+(a.providerOwnershipVerified?'Provider verified':'Owner designated')));if(a.sharedNativeTreasury){row.append(renderNativeAccountReference(t));const link=node('a','View the canonical native treasury ↗');link.href='/api/control/v1/treasury';row.append(link);}return row;}));
       await Promise.all([renderTreasuryBalances($('#treasury-balances'),t,{signal}),renderFundingPlan($('#funding-plan'),t,api,refresh,{signal})]);
     }catch{if(!isCurrent())return;for(const selector of privatePanels.filter(s=>s!=='#requests'))$(selector)?.replaceChildren();$('#treasury-status').textContent='Treasury records could not be verified. Refresh to read the current canonical record.';}
   }finally{if(isCurrent())$('#refresh').disabled=false;}
