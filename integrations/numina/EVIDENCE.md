@@ -14,6 +14,8 @@ RUNTIME_BUILD_UNAVAILABLE means the current manifest does not include this recor
 
 ## Recorded runtime build
 
+The optional `treasury_client_verification` field is also retained by `runtimeBuild()`. It describes the shared client verifier, canonical treasury/account routes and exact verifier SHA-256. The integration distribution contains the same descriptor, bound by its file inventory. Receiving this metadata does not perform the checks, fetch the owner treasury, or independently verify provider balances. Historical publication evidence embedded in the application manifest remains historical; the generated build requires its own deployment receipt.
+
 The retained [GitHub run 34725802271, attempt 1](https://github.com/skott34-dot/numina-production/actions/runs/34725802271/attempts/1) completed successfully on September 12, 2026. Separate GitHub CLI verification results recorded successful verification of all three artifact subjects against:
 
 - Source: skott34-dot/numina-production at 2b0be57996c70e8fda49199d1d649fe3faf0e0d3.

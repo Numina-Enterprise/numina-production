@@ -13,6 +13,45 @@
     "assurance"
   ],
   "properties": {
+    "recorded_release_evidence_context": {
+      "type": "object",
+      "required": ["classification", "source", "latestReleaseManifest", "currentNativeDistribution", "deploymentOfCurrentBuildVerified"],
+      "properties": {
+        "classification": {"const": "historical"},
+        "source": {"type": "string"},
+        "latestReleaseManifest": {"type": "string"},
+        "currentNativeDistribution": {"type": "string"},
+        "deploymentOfCurrentBuildVerified": {"const": false}
+      },
+      "description": "Context for retained historical receipts. They do not verify deployment of this generated build.",
+      "additionalProperties": false
+    },
+    "treasury_client_verification": {
+      "type": "object",
+      "required": ["schema", "canonicalTreasury", "accountView", "accountAlignmentSchema", "verifier", "checks", "verificationScope", "independentProviderVerification", "financialExecutionEnabled"],
+      "properties": {
+        "schema": {"const": "numina.treasury.client-verification.v1"},
+        "canonicalTreasury": {"const": "/api/control/v1/treasury"},
+        "accountView": {"const": "/api/control/v2/treasury/accounts"},
+        "accountAlignmentSchema": {"const": "numina.treasury.account-view.v1"},
+        "verifier": {
+          "type": "object",
+          "required": ["browser", "integration", "sha256"],
+          "properties": {
+            "browser": {"const": "/treasury-proof.js"},
+            "integration": {"const": "src/treasury-proof.js"},
+            "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+          },
+          "additionalProperties": false
+        },
+        "checks": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "verificationScope": {"const": "authenticated_response_internal_consistency"},
+        "independentProviderVerification": {"const": false},
+        "financialExecutionEnabled": {"const": false}
+      },
+      "description": "Exact client verifier bytes and internal consistency checks; no independent provider or deployment attestation.",
+      "additionalProperties": false
+    },
     "procurement_usage": {
       "type": "boolean",
       "description": "Owner-authorized use of existing procurement workflows; separate from provider payment execution."
