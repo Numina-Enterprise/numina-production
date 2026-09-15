@@ -24,5 +24,10 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   const sourceName='contracts/NuminaSettlement.sol',source=fs.readFileSync(path.join(root,sourceName),'utf8');
   const artifact=compileSource(sourceName,source,'NuminaSettlement');
   fs.writeFileSync(path.join(root,'artifacts/NuminaSettlement.json'),JSON.stringify(artifact,null,2)+'\n');
-  console.log('Compiled NuminaSettlement for London EVM; no network transaction.');
+  for(const [name,schema] of [['NuminaUSDCConversion','numina.nusd.usdc-conversion-candidate.v1'],['NuminaUSDRedemption','numina.nusd.usd-redemption-candidate.v1']]){
+    const candidate=compileSource('contracts/'+name+'.sol',fs.readFileSync(path.join(root,'contracts',name+'.sol'),'utf8'),name);
+    candidate.schema=schema;
+    fs.writeFileSync(path.join(root,'artifacts',name+'.json'),JSON.stringify(candidate,null,2)+'\n');
+  }
+  console.log('Compiled settlement, USDC conversion and USD redemption candidates for London EVM; no network transaction.');
 }

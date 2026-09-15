@@ -4,10 +4,28 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NUSD_CONTRACT_RECORD as record} from '../public/nusd-contract-record.js';
 import {createNusdContractRecord,contractDescriptor} from '../scripts/nusd-contract-record.mjs';
-import {nusdHttp,NUSD_POLICY,NUSD_MINT_WORKFLOW} from '../src/nusd-http.js';
+import {nusdHttp,NUSD_POLICY,NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW} from '../src/nusd-http.js';
 import {contractSourcePresentation,assessFinancialStatus} from '../public/runtime-build-ui.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
 const read=path=>fs.readFileSync(new URL('../'+path,import.meta.url));
+
+test('conversion workflow binds both compiled contracts and preserves disabled live money movement',async()=>{
+ const route='https://numina.test/api/nusd/v1/conversion-workflow';
+ const response=await nusdHttp(new Request(route));assert.equal(response.status,200);
+ assert.deepEqual(await response.json(),NUSD_CONVERSION_WORKFLOW);
+ assert.equal(NUSD_CONVERSION_WORKFLOW.contracts.length,2);
+ for(const contract of NUSD_CONVERSION_WORKFLOW.contracts)assert.deepEqual(contract,record.contracts.find(c=>c.id===contract.id));
+ for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(new Request(route,{method}))).status,405);
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.sameChainRequired,true);
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.bridgeImplemented,false);
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usd.bankSubmissionImplemented,false);
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usd.nusdBaseUnitsPerUsdCent,'10000');
+ assert.equal(NUSD_CONVERSION_WORKFLOW.treasury.balanceCount,1);
+ assert.equal(NUSD_CONVERSION_WORKFLOW.activation.financialExecutionEnabled,false);
+ assert.deepEqual(NUSD_POLICY.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
+ const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+ assert.deepEqual(release.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
+});
 test('contract records hash exact downloadable artifacts and never supply invented deployment identities',()=>{
   assert.deepEqual(createNusdContractRecord().record,record);
   for(const contract of record.contracts){

@@ -153,6 +153,160 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "transaction_hash": null,
         "receipt": null
       }
+    },
+    {
+      "id": "nusd_usdc_conversion",
+      "name": "NuminaUSDCConversion",
+      "status": "compiled_not_deployed",
+      "source": {
+        "repository_path": "runtime/nusd/contracts/NuminaUSDCConversion.sol",
+        "url": "/downloads/contracts/NuminaUSDCConversion.sol",
+        "sha256": "18bcf180243b83c8ec8b3b7c6d4fc0a03a5ae7ffd16523ae6a5d66007071132a",
+        "bytes": 7450,
+        "encoding": "UTF-8",
+        "line_endings": "LF"
+      },
+      "artifact": {
+        "repository_path": "runtime/nusd/artifacts/NuminaUSDCConversion.json",
+        "url": "/downloads/contracts/NuminaUSDCConversion.json",
+        "sha256": "85c1e263add0ee19a9c2e35405aa7ebac2f9537d709f59ed41c57c37f1e2cdb2",
+        "bytes": 99149,
+        "encoding": "UTF-8",
+        "line_endings": "LF"
+      },
+      "compiler": {
+        "version": "0.8.37+commit.f401782d.Emscripten.clang",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "london",
+          "metadata": {
+            "bytecodeHash": "ipfs"
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode.object",
+                "evm.deployedBytecode.object",
+                "metadata"
+              ]
+            }
+          }
+        }
+      },
+      "implemented_operations": {
+        "conversion": [
+          "quote",
+          "convert",
+          "conversions"
+        ],
+        "liquidity": [
+          "addLiquidity",
+          "removeLiquidity"
+        ],
+        "token_identity": [
+          "nusd",
+          "usdc"
+        ],
+        "administration": [
+          "pause",
+          "unpause",
+          "grantRole",
+          "revokeRole"
+        ]
+      },
+      "verification": {
+        "source_hash_matches_artifact": true,
+        "independent_security_audit": false,
+        "chain_receipt_verified": false
+      },
+      "deployment": {
+        "status": "not_verified",
+        "expected_chain_id": "962421430",
+        "contract_address": null,
+        "transaction_hash": null,
+        "receipt": null
+      }
+    },
+    {
+      "id": "nusd_usd_redemption",
+      "name": "NuminaUSDRedemption",
+      "status": "compiled_not_deployed",
+      "source": {
+        "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
+        "url": "/downloads/contracts/NuminaUSDRedemption.sol",
+        "sha256": "6fb5d4c8461c6900e36be10fb1720c937e3396b21952e37edbfaca17cd2a5916",
+        "bytes": 11510,
+        "encoding": "UTF-8",
+        "line_endings": "LF"
+      },
+      "artifact": {
+        "repository_path": "runtime/nusd/artifacts/NuminaUSDRedemption.json",
+        "url": "/downloads/contracts/NuminaUSDRedemption.json",
+        "sha256": "05162c19a1e119d8350947e8848c9c791cbf129cb0d715b69a130d3164d3942e",
+        "bytes": 119964,
+        "encoding": "UTF-8",
+        "line_endings": "LF"
+      },
+      "compiler": {
+        "version": "0.8.37+commit.f401782d.Emscripten.clang",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "london",
+          "metadata": {
+            "bytecodeHash": "ipfs"
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode.object",
+                "evm.deployedBytecode.object",
+                "metadata"
+              ]
+            }
+          }
+        }
+      },
+      "implemented_operations": {
+        "redemption": [
+          "quoteUsdCents",
+          "requestRedemption",
+          "cancel",
+          "beginPayment",
+          "attestBankOutcome",
+          "claimRefund",
+          "redemptions",
+          "totalEscrowedNusd"
+        ],
+        "token_identity": [
+          "nusd"
+        ],
+        "administration": [
+          "pause",
+          "unpause",
+          "grantRole",
+          "revokeRole"
+        ]
+      },
+      "verification": {
+        "source_hash_matches_artifact": true,
+        "independent_security_audit": false,
+        "chain_receipt_verified": false
+      },
+      "deployment": {
+        "status": "not_verified",
+        "expected_chain_id": "962421430",
+        "contract_address": null,
+        "transaction_hash": null,
+        "receipt": null
+      }
     }
   ],
   "financial_execution": {
@@ -163,5 +317,5 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "usdc_conversion": false,
     "external_deposits": false
   },
-  "scope": "Compiled NUSD token and NUSD settlement source. A successful token settlement moves existing NUSD only. Source and artifact hashes do not establish deployed contracts, reserves, USDC conversion or external deposits."
+  "scope": "Compiled NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow candidates. USD settlement requires a separate bank payment and a trusted confirmer attestation. Source and artifact hashes do not establish deployed contracts, reserves, activated conversion or external deposits."
 });
