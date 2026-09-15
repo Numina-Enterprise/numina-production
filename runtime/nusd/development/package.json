@@ -7,7 +7,7 @@
   "engines": { "node": "24.x" },
   "scripts": {
     "compile": "node compile.mjs",
-    "test": "node --test ../../../tests/nusd-contract*.mjs"
+    "test": "node --test ../../../tests/nusd-contract*.mjs ../../../tests/nusd-conversion.test.mjs"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "5.4.0",

@@ -84,6 +84,10 @@ record.denomination_policy=NUMINA_DENOMINATION_POLICY;record.checks.denomination
 record.sourceInputs.push({path:'public/treasury-valuation.js',sha256:digest(fs.readFileSync('public/treasury-valuation.js'))});
 record.sourceInputs.push(...['public/treasury-amount.js','public/stripe-treasury.js','src/stripe-treasury.js','src/treasury-evidence.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 record.contract_record=NUSD_CONTRACT_RECORD;
+record.sourceInputs.push(...['NuminaUSDCConversion','NuminaUSDRedemption'].flatMap(name=>[
+  'runtime/nusd/contracts/'+name+'.sol','runtime/nusd/artifacts/'+name+'.json'
+]).map(path=>({path,sha256:digest(fs.readFileSync(path))})));
+record.sourceInputs.push({path:'docs/NUSD-Conversion-Contracts.md',sha256:digest(fs.readFileSync('docs/NUSD-Conversion-Contracts.md'))});
 record.sourceInputs.push(...['public/nusd-contract-record.js','scripts/nusd-contract-record.mjs','runtime/nusd/contracts/NuminaUSD.sol','runtime/nusd/artifacts/NuminaUSD.json','runtime/nusd/contracts/NuminaSettlement.sol','runtime/nusd/artifacts/NuminaSettlement.json'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 record.treasury=sharedTreasury;
 record.requiredArchitecture=requiredArchitecture;
