@@ -81,8 +81,8 @@ function assessBuild(review, inventory) {
 export function contractSourcePresentation(record) {
   if(record?.schema!=='numina.nusd.contract-record.v1'||record.status!=='compiled_not_deployed'||
     record.url!=='/api/nusd/v1/contracts'||record.native_treasury!=='/api/control/v1/treasury'||
-    !Array.isArray(record.contracts)||record.contracts.length!==2||
-    record.contracts.map(contract=>contract.name).join(',')!=='NuminaUSD,NuminaSettlement'||
+    !Array.isArray(record.contracts)||record.contracts.length!==4||
+    record.contracts.map(contract=>contract.name).join(',')!=='NuminaUSD,NuminaSettlement,NuminaUSDCConversion,NuminaUSDRedemption'||
     !object(record.financial_execution)||
     !['issuance','transfer','nusd_settlement','usd_redemption','usdc_conversion','external_deposits']
       .every(name=>record.financial_execution[name]===false))throw Error('Contract source record unavailable');
@@ -97,8 +97,8 @@ export function contractSourcePresentation(record) {
         !Number.isSafeInteger(file.bytes)||file.bytes<1)throw Error('Contract source record unavailable');
     }
   }
-  return {source:'NUSD token and NUSD settlement source compiled · deployment unverified',
-    'source-scope':'Issuance, transfer and NUSD settlement operations are implemented in the contract source. No deployed contract, live issuance, USD/USDC conversion or external deposit is established by this record.'};
+  return {source:'NUSD token, settlement and 1:1 conversion source compiled · deployment unverified',
+    'source-scope':'Contract source implements issuance, token settlement, 1:1 exchange using deposited USDC, and USD redemption escrow with separate bank-outcome attestations. Deployment, funding, live conversion and external deposits remain unverified.'};
 }
 
 export function assessFinancialStatus(data) {
