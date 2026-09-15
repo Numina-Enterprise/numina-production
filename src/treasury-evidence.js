@@ -38,19 +38,37 @@ function treasuryProviderRecords(observation){
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
   const source=structuredClone({nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
     fundingPlan:frontier.fundingPlan??null,accountReferences:frontier.accounts??[],providerObservation,supportingDocuments});
-  return {schema:'numina.treasury.evidence-snapshot.v1',scope:'Numina-native journal integrity and server-observed supporting records',
-    issuer:'NUMINA',root:treasury.root,revision:treasury.revision,head:treasury.head,capturedAt,
-    evidenceHash:await controlHash(source),source,
-    records:{schema:'numina.treasury.record-sources.v1',
-      nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:treasury.status==='READY'&&treasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
+  const records={schema:'numina.treasury.record-sources.v1',
+      nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:source.nativeTreasury.status==='READY'&&source.nativeTreasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
       providerBalances:treasuryProviderRecords(source.providerObservation),
       bankFunding:{source:'/fundingVerification/bankConfirmation',issuer:null,verification:{status:'BANK_PROVIDER_NOT_CONNECTED',scope:'Bank-issued funding confirmation'}},
       reserveAllocation:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Reserve ownership and allocation to this treasury'}},
       redemption:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Executable redemption rights and confirmed redemption evidence'}},
-      supportingDocuments:{source:'/source/supportingDocuments',issuer:null,verification:{status:supportingDocuments?.status==='OBSERVED'?'OWNER_UPLOADED_UNVERIFIED':'UNAVAILABLE',scope:'Stored document metadata; issuer and contents are not verified'}}},
+      supportingDocuments:{source:'/source/supportingDocuments',issuer:null,verification:{status:source.supportingDocuments?.status==='OBSERVED'?'OWNER_UPLOADED_UNVERIFIED':'UNAVAILABLE',scope:'Stored document metadata; issuer and contents are not verified'}}};
+  const canonical=source.canonicalTreasury,native=source.nativeTreasury;
+  const canonicalReady=records.nativeTreasury.verification.status==='VERIFIED'&&canonical!==null
+    &&Number.isSafeInteger(canonical.revision)&&canonical.revision>=0&&typeof canonical.head==='string'&&/^[a-f0-9]{64}$/.test(canonical.head);
+  const treasuryRef=canonicalReady?{id:canonical.id,source:'/source/canonicalTreasury',nativeUnit:canonical.native.unit,amountSource:'/source/canonicalTreasury/native/amount'}:null;
+  // Reconciliation references this captured snapshot; it cannot create an allocation or submit funds.
+  const reconciliation={schema:'numina.treasury.reconciliation.v1',status:'NOT_RECONCILED',capturedAt,
+    canonicalTreasury:{source:'/source/canonicalTreasury',id:canonicalReady?canonical.id:null,route:'/api/control/v1/treasury',
+      revision:native.revision??null,head:native.head??null,status:native.status==='NOT_INITIALIZED'?'NOT_INITIALIZED':canonicalReady?'VERIFIED':'NOT_VERIFIED'},
+    records:{nativeTreasury:{source:'/records/nativeTreasury',status:records.nativeTreasury.verification.status,treasuryRef:structuredClone(treasuryRef)},
+      stripe:{source:'/records/providerBalances',status:records.providerBalances.verification.status,currencies:structuredClone(records.providerBalances.currencies),treasuryRef:structuredClone(treasuryRef)},
+      bank:{source:'/records/bankFunding',status:records.bankFunding.verification.status,treasuryRef:structuredClone(treasuryRef)},
+      supportingDocuments:{source:'/records/supportingDocuments',status:records.supportingDocuments.verification.status,complete:source.supportingDocuments?.complete===true,treasuryRef:structuredClone(treasuryRef)}},
+    depositReadiness:{status:'NOT_READY',submissionPerformed:false,receipt:null,externalSubmissionImplemented:false,
+      requiredEvidence:[
+        {id:'funding_source',status:'NOT_VERIFIED',description:'Authenticated available source funds identifying the account, asset and exact amount'},
+        {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
+        {id:'provider_acceptance',status:'NOT_VERIFIED',description:'Provider acceptance of the source asset, network and destination'}],
+      settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
+  return {schema:'numina.treasury.evidence-snapshot.v1',scope:'Numina-native journal integrity and server-observed supporting records',
+    issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,
+    evidenceHash:await controlHash(source),source,records,reconciliation,
     fundingVerification:{actual_funding:false,status:'NOT_VERIFIED',
       bankConfirmation:{status:'BANK_PROVIDER_NOT_CONNECTED',verified:false,bankIssuedReceipt:null},
-      ownerDeclaredFunded:frontier.fundingDeclaration?.FUNDED_PLAN===true,
+      ownerDeclaredFunded:source.ownerDeclaration?.FUNDED_PLAN===true,
       allocatedReservesVerified:false,redemptionVerified:false,settlementVerified:false,
       requiredEvidence:'Authenticated settled funding evidence identifying the account, asset, amount and allocation to this treasury'},
     receiptScope:'Numina signs its observation snapshot. The signature does not authenticate a bank issuer or establish funding.',

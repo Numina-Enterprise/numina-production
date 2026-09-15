@@ -20,6 +20,8 @@ Record a completed settlement only from its actual transaction reference and rec
 
 ## Review and storage
 
+In the control room, choose **Read treasury reconciliation and evidence** to read a fresh snapshot. Its reconciliation section links the native treasury identity, revision and head to the captured provider source records. It reports each currency's evidence status and the remaining deposit requirements. The section does not add balances across references or initiate a transfer. A changed treasury snapshot must be refreshed before it can be displayed with that account view.
+
 The existing owner-only document route is `/api/control/v1/treasury-documents`; the evidence snapshot is `/api/control/v2/treasury/evidence`. Uploading an authentic source document creates a file-storage receipt with unverified issuer status. This template adds no automatic provider verifier or new treasury write route.
 
 Capture owner approval separately from issuer authentication, amount verification, allocation verification, provider asset acceptance and completed settlement. Leave each unsupported field unverified. Signing and submission remain with the owner's wallet or provider.
