@@ -37,6 +37,16 @@ export async function controlSnapshot(db,actor,now){const row=await readControl(
 }
 function controlResult(prior,replayed){const event=typeof prior.event_json==='string'?JSON.parse(prior.event_json):prior.event;return {replayed,event:{id:event.id,revision:event.revision,actor:event.actor,type:event.type,result:event.result},eventHash:prior.hash};}
 export async function commitControl(db,command,actor,now){
+  if(command?.type==='treasury')controlError('CANONICAL_TREASURY_ROUTE_REQUIRED',409);
+  return commitControlEvent(db,command,actor,now);
+}
+// Internal storage entry point for the bound treasury service; the atomic journal path is shared.
+export async function commitTreasuryControl(db,command,actor,now){
+  if(command?.type!=='treasury')controlError('INVALID_TREASURY_COMMAND',400);
+  return commitControlEvent(db,command,actor,now);
+}
+async function commitControlEvent(db,command,actor,now){
+  try{command=JSON.parse(stable(command));}catch{controlError('INVALID_CANONICAL_VALUE',400);}
   if(!command||typeof command.id!=='string'||!Number.isSafeInteger(command.expectedRevision))controlError('INVALID_COMMAND',400);
   const commandHash=await controlHash(command),prior=await db.prepare('SELECT actor,command_hash,event_json,hash FROM numina_control_events WHERE id=?').bind(command.id).first();
   if(prior){if(prior.actor!==actor||prior.command_hash!==commandHash)controlError('IDEMPOTENCY_CONFLICT',409);return controlResult(prior,true);}
