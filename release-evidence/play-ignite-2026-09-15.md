@@ -1,3 +1,9 @@
+# Financial evidence functions and Ignite continuation
+
+The owner requested documents and software functions after confirming they will provide evidence for claimed live financial services. Added an owner-only financial evidence workspace covering all seven selected categories: upload real supporting files, register provider/legal-entity/jurisdiction metadata, check missing/expired document categories, and export a private review packet. All records remain owner-submitted and unverified; templates are draft worksheets. This change does not manufacture operating authority, enable financial transactions or complete the Play declaration.
+
+Data safety draft saved with verified email address, user IDs and device/other IDs selected; other types and handling remain incomplete. Academy introduction already shows Passed; foundation learning content was reviewed in part, but the foundation course has not been completed. Four Play declarations and the AAB upload remain unresolved. The owner will supply provider, license and terms evidence.
+
 # Numina Play Ignite rollout evidence — September 15, 2026
 
 ## Current source and Console advance — after 20:46 UTC
