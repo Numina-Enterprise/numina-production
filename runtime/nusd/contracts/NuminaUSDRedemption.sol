@@ -30,6 +30,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
     struct Redemption {
         uint256 amountNusd;
         uint256 usdCents;
+        address paymentOperator;
         bytes32 destinationCommitment;
         bytes32 paymentReference;
         bytes32 evidenceHash;
@@ -117,6 +118,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
         if (item.status != Status.Requested) revert InvalidState();
         if (usedPaymentReferences[paymentReference]) revert ReferenceAlreadyUsed();
         usedPaymentReferences[paymentReference] = true;
+        item.paymentOperator = msg.sender;
         item.paymentReference = paymentReference;
         item.status = Status.Processing;
         emit PaymentProcessing(holder, operationId, paymentReference);
@@ -130,6 +132,8 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
         bytes32 evidenceHash, uint256 usdCents, bool paid)
         external onlyRole(CONFIRMER_ROLE) whenNotPaused nonReentrant {
         Redemption storage item = redemptions[holder][operationId];
+        // Bind separation to this payment's initiator, including after governance rotates roles.
+        if (msg.sender == item.paymentOperator) revert RoleConflict();
         if (paymentReference == bytes32(0) || evidenceHash == bytes32(0) || usdCents != item.usdCents) {
             revert InvalidRequest();
         }

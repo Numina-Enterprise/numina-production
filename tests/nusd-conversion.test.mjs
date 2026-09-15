@@ -167,6 +167,17 @@ test('failed USD payments restore the exact escrow once; failed token movement p
  assert.equal(await f.escrow.totalEscrowedNusd(),0n);assert.equal((await sent(f.escrow.connect(f.holder).claimRefund(id('claim')))).logs.length,0);
 });
 
+test('role rotation cannot let a payment initiator confirm its own existing request',async t=>{
+ const f=await fixture(t);await f.enable();await f.request();await f.begin();
+ assert.equal((await f.escrow.redemptions(f.a[4],id('claim'))).paymentOperator,f.a[1]);
+ await sent(f.escrow.revokeRole(await f.escrow.OPERATOR_ROLE(),f.a[1]));
+ await sent(f.escrow.grantRole(await f.escrow.CONFIRMER_ROLE(),f.a[1]));
+ for(const paid of [true,false])await assert.rejects(f.escrow.connect(f.operator).attestBankOutcome.staticCall(f.a[4],id('claim'),id('payment'),id('self-confirmation'),1000n,paid));
+ assert.equal((await f.escrow.redemptions(f.a[4],id('claim'))).status,2n);
+ assert.equal(await f.escrow.usedEvidenceHashes(id('self-confirmation')),false);
+ await f.attest();assert.equal((await f.escrow.redemptions(f.a[4],id('claim'))).status,3n);
+});
+
 test('a paused token cannot be recorded as burned; an unsuccessful finalization does not consume evidence',async t=>{
  const f=await fixture(t);await f.enable();await f.request();await f.begin();await sent(f.nusd.connect(f.pauser).pause());
  await assert.rejects(f.attest());assert.equal((await f.escrow.redemptions(f.a[4],id('claim'))).status,2n);
