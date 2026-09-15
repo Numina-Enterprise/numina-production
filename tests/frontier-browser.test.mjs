@@ -109,7 +109,7 @@ test('frontier session loss clears records and ignores a late treasury response'
 test('a refreshed frontier ignores an older pending snapshot and preserves account labels',async()=>{
   const view=await accountView(),pending=deferred();let reads=0;
   const h=harness(view,path=>path.endsWith('/treasury/accounts')&&reads++===0?pending.promise:null);
-  try{await settled();await h.subject.refresh();assert.match(h.get('#accounts').textContent,/Existing reference/);const old=structuredClone(view);old.accounts[0].accountLabel='Stale response';pending.resolve(Response.json(old));await settled();assert.doesNotMatch(h.get('#accounts').textContent,/Stale response/);assert.match(h.get('#accounts').textContent,/View the canonical native treasury/);assert.doesNotMatch(h.get('#accounts').textContent,/500,000,000,000,000/);}finally{h.close();}
+  try{await settled();await h.subject.refresh();assert.match(h.get('#accounts').textContent,/Existing reference/);const old=structuredClone(view);old.accounts[0].accountLabel='Stale response';pending.resolve(Response.json(old));await settled();assert.doesNotMatch(h.get('#accounts').textContent,/Stale response/);assert.match(h.get('#accounts').textContent,/View the canonical native treasury/);assert.match(h.get('#accounts').textContent,/500,000,000,000,000 NUSD/);assert.match(h.get('#accounts').textContent,/same canonical balance, counted once/);}finally{h.close();}
 });
 
 test('late provider reads cannot restore balances after frontier access is lost',async()=>{
