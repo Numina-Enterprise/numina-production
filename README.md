@@ -20,6 +20,10 @@ Runtime signing keys, provider credentials and private records belong only in pr
 
 ## Distribution
 
+### Google Play Ignite
+
+The authenticated rollout observations and unresolved declarations are tracked in [the September 15 evidence record](release-evidence/play-ignite-2026-09-15.md) and [issue #25](https://github.com/skott34-dot/numina-production/issues/25). `node scripts/check-play-readiness.mjs` checks source safeguards and reports remaining release evidence gates; it exits 1 while the release remains blocked. Builds run the source-only checks. To also verify the exact staged candidate bytes, use `node scripts/check-play-readiness.mjs --source-only --aab PATH_TO_AAB`. Current hosted source is 4.0.0; the requested upload candidate remains 3.0.0.
+
 The mobile web app is served at `/app`. The v4 distribution retains Android 3.0.0 binaries and reuses the iOS executable with v4 bundle metadata. Actual input/output hashes and signing status are in docs/native-package-record-v4.json. The shared Numina distribution team policy and macOS signing host workflow are described in mobile/signing/APPLE-SIGNING.md. Android and iOS source candidates are 4.0.0 with build number 3 and have not been compiled. Prior 3.0.0 device binaries retain their exact hashes and build evidence in docs/native-package-record-v3.json. Native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
 
 ## Source and rights
@@ -31,3 +35,7 @@ The production GitHub repository is private. GitHub source, build logs and workf
 ## Source alignment
 
 Read [the source map](docs/Source-Alignment-v4.md). `node scripts/build.mjs` validates maintained package versions and generates `/source-alignment.json` from their actual source. Run `python scripts/package-distributions.py` after changing integration, plugin or native source files, then build. The existing root, journal and native treasury routes remain authoritative across L1–L5. Historical evidence and reconstructed runtime sources retain their own identities.
+
+## Security
+
+Numina maintains [one security and financial control model](docs/Numina-Security.md), available from every website interface at https://numinalabs.xyz/security. The document covers implemented controls, evidence, incident response and the operating requirements that remain unverified.

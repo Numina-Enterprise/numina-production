@@ -1,0 +1,33 @@
+{
+  "schema": "numina.nusd.deployment.request.v2",
+  "network": {
+    "chainId": 962421430,
+    "name": "Numina blockchain",
+    "finalityPolicy": null
+  },
+  "supplyCapNusd": null,
+  "initialSupplyNusd": null,
+  "initialRecipient": null,
+  "roles": {
+    "admin": null,
+    "issuer": null,
+    "minter": null,
+    "pauser": null
+  },
+  "adminDelaySeconds": null,
+  "issuer": {
+    "legalEntity": "SK Consulting LLC",
+    "approvedPolicyFile": null,
+    "policySha256": null
+  },
+  "reviewRecords": {
+    "independentSecurityAudit": null,
+    "authorizedIssuerAndJurisdictions": null,
+    "custodianAndReserveEvidence": null,
+    "redeemabilityTermsAndOperations": null,
+    "financialCrimeAndSanctionsControls": null,
+    "independentRoleKeyCustody": null,
+    "incidentAndPauseRecovery": null,
+    "applicationSettlementAndFulfillmentReview": null
+  }
+}

@@ -8,7 +8,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export function validateDeployment(file) {
   const absolute = path.resolve(file);
-  const config = JSON.parse(fs.readFileSync(absolute, 'utf8'));
+  let config, requestSha256;
+  try {
+    const requestBytes = fs.readFileSync(absolute);
+    requestSha256 = crypto.createHash('sha256').update(requestBytes).digest('hex');
+    config = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(requestBytes));
+    if (!config || typeof config !== 'object' || Array.isArray(config)) throw new Error();
+  } catch {
+    return { config: null, errors: ['Deployment request must be a readable JSON object file'] };
+  }
   const errors = [];
   if (config.schema !== 'numina.nusd.deployment.request.v2') errors.push('Deployment schema numina.nusd.deployment.request.v2 is required');
   const required = (value, label) => {
@@ -56,12 +64,15 @@ export function validateDeployment(file) {
     'redeemabilityTermsAndOperations', 'financialCrimeAndSanctionsControls', 'independentRoleKeyCustody',
     'incidentAndPauseRecovery', 'applicationSettlementAndFulfillmentReview'
   ]) required(config.reviewRecords?.[key], `Review record: ${key}`);
-  return { config, cap, initialSupply, initialRecipient, roles, policyHash, errors };
+  return { config, cap, initialSupply, initialRecipient, roles, policyHash, requestSha256, errors };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const file = process.argv[2] || path.join(root, 'deployment.template.json');
   const checked = validateDeployment(file);
+  if (process.argv.length > 3 && (process.argv[3] !== '--output' || !process.argv[4] || process.argv.length > 5)) {
+    checked.errors.push('Use: validate-deployment.mjs [request.json] [--output unsigned.json]');
+  }
   if (checked.errors.length) {
     console.log(JSON.stringify({ valid: false, broadcast: false, errors: checked.errors }, null, 2));
     process.exitCode = 1;
@@ -83,9 +94,15 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       initialSupplyBaseUnits: checked.initialSupply.toString(), initialRecipient: checked.initialRecipient,
       constructorIssuanceRequested: checked.initialSupply > 0n, initiallyPaused: true,
       sourceSha256: artifact.sourceSha256, compiler: artifact.compiler,
-      artifactSha256: TOKEN_ARTIFACT_SHA256
+      artifactSha256: TOKEN_ARTIFACT_SHA256,
+      requestSha256: checked.requestSha256,
+      supplyCapNusd: checked.config.supplyCapNusd, supplyCapBaseUnits: checked.cap.toString(),
+      roles: checked.roles, adminDelaySeconds: checked.config.adminDelaySeconds,
+      issuerPolicySha256: checked.policyHash,
+      transactionHash: null, deployedAddress: null, receipt: null
     };
-    const destination = path.join(root, 'artifacts/unsigned-deployment.json');
+    const destination = process.argv[4] ? path.resolve(process.argv[4]) : path.join(root, 'artifacts/unsigned-deployment.json');
+    fs.mkdirSync(path.dirname(destination), { recursive: true });
     fs.writeFileSync(destination, JSON.stringify(result, null, 2) + '\n');
     console.log(JSON.stringify({ valid: true, broadcast: false, output: destination }));
   }
