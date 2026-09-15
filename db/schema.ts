@@ -24,3 +24,6 @@ export const appWebhookEvents=sqliteTable('numina_app_webhook_events',{
 export const appRate=sqliteTable('numina_app_rate',{
  bucket:text('bucket').notNull(),window:integer('window').notNull(),count:integer('count').notNull()
 },table=>[primaryKey({columns:[table.bucket,table.window]}),index('numina_app_rate_window').on(table.window)]);
+
+// Dedicated reviewer authentication limiter; all service records stay in production.
+export const reviewLoginRate=sqliteTable('numina_review_login_rate',{bucket:text('bucket').notNull(),window:integer('window').notNull(),count:integer('count').notNull()},table=>[primaryKey({columns:[table.bucket,table.window]})]);

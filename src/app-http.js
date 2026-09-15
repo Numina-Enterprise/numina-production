@@ -11,7 +11,7 @@ async function appBody(req){try{return JSON.parse(await appReadRaw(req));}catch(
 async function appActor(req,env){
  const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
  if(!id||!email||id.length>250||email.length>320)appFail('SIGN_IN_REQUIRED',401);
- return {id,email:email.trim().toLowerCase(),operator:env.NUMINA_CONTROL_OWNER==='email:'+email.trim().toLowerCase()};
+ return {id,email:email.trim().toLowerCase(),operator:env.NUMINA_REVIEW_SESSION!==true&&env.NUMINA_CONTROL_OWNER==='email:'+email.trim().toLowerCase(),reviewer:env.NUMINA_REVIEW_SESSION===true};
 }
 async function appRate(db,key,max,now){await db.prepare('DELETE FROM numina_app_rate WHERE window<?').bind(Math.floor(now/60)-2).run();const row=await db.prepare('INSERT INTO numina_app_rate (bucket,window,count) VALUES (?,?,1) ON CONFLICT(bucket,window) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(key,Math.floor(now/60),max).first();if(!row)appFail('RATE_LIMITED',429);}
 async function appOrder(db,id,actor){const row=await db.prepare('SELECT * FROM numina_service_orders WHERE id=?').bind(id).first();if(!row||(!actor.operator&&row.owner_subject!==actor.id))appFail('NOT_FOUND',404);return row;}
@@ -55,7 +55,7 @@ export async function appHttp(req,env){
   if(path==='/api/app/v1/health'&&req.method==='GET'){const row=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders WHERE id=?').bind('__readiness__').first();return appResponse({status:row?'ready':'unavailable',storage:'D1',version:APP_VERSION,paymentConfirmation:env.NUMINA_STRIPE_WEBHOOK_SECRET?'configured':'not_configured',stablecoinExecution:false});}
   if(path==='/api/app/v1/catalog'&&req.method==='GET')return appResponse({denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,offers:Object.fromEntries(Object.entries(APP_OFFERS).filter(([,offer])=>!offer.retired)),operator:'SK Consulting LLC',initialCheckoutCountry:'US',internationalRequests:'review_before_checkout',scopeTerms:'Payment reserves the service. Scope, scheduling, authorized access and confidentiality must be confirmed before work begins. Production implementation and third-party costs are excluded unless separately agreed. If Numina cannot accept the engagement, payment will be refunded.'});
   const actor=await appActor(req,env);
-  if(path==='/api/app/v1/session'&&req.method==='GET')return appResponse({email:actor.email,operator:actor.operator});
+  if(path==='/api/app/v1/session'&&req.method==='GET')return appResponse({email:actor.email,operator:actor.operator,...(actor.reviewer?{reviewer:true,scope:'production-own-records'}:{})});
   await appRate(env.DB,await appDigest(actor.id+':'+req.method),req.method==='POST'?40:120,now);
   if(req.method==='POST'&&req.headers.get('origin')!==url.origin)appFail('ORIGIN_REQUIRED',403);
   if(path==='/api/app/v1/orders'&&req.method==='POST'){

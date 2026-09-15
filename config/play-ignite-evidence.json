@@ -37,7 +37,7 @@
     "ownerChoice": "Adults 18 and older",
     "confirmedDate": "2026-09-15",
     "consoleSaved": false,
-    "blocker": "Console requires the Sign in details declaration before starting the Target audience and content questionnaire. Dedicated reusable reviewer access has not been supplied or tested."
+    "blocker": "Console requires the Sign in details declaration before the target audience questionnaire. Dedicated production reviewer access is implemented and locally tested; deployment, browser verification and Console submission are still pending."
   },
   "reportedFinancialScope": {
     "source": "Owner answered all to records/service payments, transfers/hold/trade/redeem money or crypto, and borrowing/earned wages; owner subsequently confirmed yes, numina does all",
@@ -63,7 +63,7 @@
     },
     "reviewerAccess": {
       "status": "blocked",
-      "detail": "Working restricted-feature reviewer access and instructions have not been supplied or tested. Console says reviewers cannot create accounts or use their own existing accounts and requires a full-access attestation. No credentials or full-access claim were submitted."
+      "detail": "A dedicated production customer login is implemented with access limited to its own records and existing live checkout. All 306 tests passed, including own-record isolation, owner denial, cookie tampering, expiry and login rate limits. Live deployment, browser verification and Play credential submission are pending. No full-access attestation has been submitted."
     },
     "financialScope": {
       "status": "blocked",
@@ -97,5 +97,16 @@
     "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
     "This release does not add or remove any app bundles.",
     "You must let us know whether your app includes any financial features."
-  ]
+  ],
+  "reviewerAccess": {
+    "scope": "production-own-records",
+    "ownerAuthorized": true,
+    "checkout": "existing-live-checkout",
+    "rootAccess": false,
+    "otherCustomerAccess": false,
+    "sessionSeconds": 28800,
+    "credentialLocation": "Sites secret configuration; reviewer password supplied privately to Play Console after verification",
+    "liveVerified": false,
+    "consoleSaved": false
+  }
 }
