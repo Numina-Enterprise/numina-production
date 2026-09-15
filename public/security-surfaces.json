@@ -1,0 +1,146 @@
+{
+  "schema": "numina.security-surfaces.v1",
+  "system": "Numina",
+  "authority": "NUMINA",
+  "rootCount": 1,
+  "canonicalTreasury": "/api/control/v1/treasury",
+  "documentation": "/security",
+  "controlModel": "/downloads/Numina-Security.md",
+  "classification": "source_declared_surface_inventory_not_live_connection_attestation",
+  "scope": "One security model for existing Numina entry points. This record does not provision integrations, grant authority, activate financial execution or establish third-party installation.",
+  "surfaces": [
+    {
+      "id": "website",
+      "entry": "/",
+      "access": "public",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "application",
+      "entry": "/app",
+      "access": "public shell; authenticated account operations",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "services",
+      "entry": "/services",
+      "access": "public catalogue; authenticated account operations",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "frontier",
+      "entry": "/frontier",
+      "access": "public shell; owner or delegated authority operations",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "control",
+      "entry": "/control",
+      "access": "owner or delegated authority operations",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "application-api",
+      "entry": "/api/app/v1",
+      "access": "per-route account authorization",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "control-api",
+      "entry": "/api/control/v2/manifest",
+      "access": "public manifest; per-route authority checks",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "mcp-discovery",
+      "entry": "/api/control/v2/discovery-mcp",
+      "access": "public read-only discovery",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "mcp-operations",
+      "entry": "/api/control/v2/mcp",
+      "access": "authenticated owner or delegated principal",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "a2a",
+      "entry": "/.well-known/agent-card.json",
+      "access": "public card; authenticated operations",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "integration-kit",
+      "entry": "/integrations",
+      "access": "public distribution; credentials supplied by authorized operator",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "android",
+      "entry": "/downloads/native-package-record-v4.json",
+      "access": "hosted app identity; native/store validation tracked separately",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "ios",
+      "entry": "/downloads/native-package-record-v4.json",
+      "access": "hosted app identity; native/store validation tracked separately",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "runtime-verifier",
+      "entry": "/core",
+      "access": "public read interface; privileged operations require runtime authority",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "treasury",
+      "entry": "/api/control/v1/treasury",
+      "access": "authenticated authority",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "provider-observations",
+      "entry": "/api/control/v1/stripe-treasury",
+      "access": "authenticated authority; provider configuration required",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "financial-status",
+      "entry": "/api/nusd/v1/status",
+      "access": "public capability status",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "telemetry",
+      "entry": "/telemetry-metrics.json",
+      "access": "public metric definitions; private logs require operator access",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
+      "id": "release-evidence",
+      "entry": "/v4/release/manifest",
+      "access": "public release inventory",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    }
+  ]
+}
