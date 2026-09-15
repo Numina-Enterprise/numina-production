@@ -21,3 +21,19 @@ node scripts/validate-deployment.mjs /path/request.json --output /path/unsigned-
 No arguments validate the included incomplete template and return a structured list of missing inputs. A valid request produces creation data bound to its exact request and pinned artifact hashes, with explicit cap, issuance, recipient and role information. The command never contacts an RPC provider, signs, broadcasts, estimates fees, writes the native treasury or creates a transaction receipt. Record presence checks do not verify the underlying reviews.
 
 The token starts paused. Constructor issuance is separate from the existing native treasury projection and must be explicitly specified; the recorded native 500T balance does not automatically select the token supply. After a user-signed token deployment, confirm its chain, receipt, runtime, roles, supply and pause state. Only then prepare the settlement contract using that verified token address. `NuminaSettlement` transfers existing NUSD; it does not convert it to USDC or submit bank deposits.
+
+## Provision distinct local role wallets on Windows
+
+`scripts/provision-wallets.mjs` creates four independent cryptographically random keys, verifies their encrypted keystores, and assigns their public addresses to an existing request. Supply the requested recipient explicitly. It changes only the role and recipient fields; rerunning with the same vault restores the same addresses. It refuses to replace existing different assignments or overwrite a private vault.
+
+```sh
+node scripts/provision-wallets.mjs /private/request.json /private/new-vault "COMPUTER\\owner" 0xTreasuryRecipient
+```
+
+The local provisioning/backup tools require Node 24 and Python 3 on Windows (set `NUMINA_WALLET_PYTHON` to a Python executable if it is not on PATH). The Python bridge invokes native Windows security APIs directly; it does not change PowerShell execution policy. The vault must be outside Git checkouts and public/outputs/dist directories. Web3 Secret Storage v3 keystores use ethers' default scrypt encryption with a random 256-bit password. Windows DPAPI LocalMachine protects that password, and a verified non-inherited NTFS ACL limits the vault directory and private file to the named Windows owner, its creating account and SYSTEM. Local administrators can recover access. This deliberately supports an owner account different from a sandbox creator; CurrentUser protection under the sandbox account would not give the owner recovery access. LocalMachine protection relies on file access control. Never upload the private vault or include it in source, artifacts or a hosted runtime.
+
+The four addresses have separate private keys but share one host and custody boundary. Their creation does not satisfy `independentRoleKeyCustody`, select a deployment sender, fund gas, change token supply, verify the network, or authorize a reserve claim. Those input/review fields remain unchanged. Only a public assignment manifest is written alongside the deployment request; no private key or password is printed.
+
+Run `python scripts/backup-wallets.py --vault /private/vault --destination /private/new-backup --owner-account "COMPUTER\\owner"` as the named Windows owner to make portable encrypted keystore backups. The helper prompts locally for a new password twice and passes it through a private process pipe, never command arguments. Retain this password separately from the backup. Until a portable backup is created and checked by the owner, recovery depends on this Windows installation and its protected vault. No recovery phrase is generated. The backup tool never signs or broadcasts a transaction.
+
+Windows references: [DPAPI protection scope](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.dataprotectionscope) and [ethers encrypted JSON wallets](https://docs.ethers.org/v6/api/wallet/).

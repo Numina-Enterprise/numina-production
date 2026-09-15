@@ -36,6 +36,10 @@ The production GitHub repository is private. GitHub source, build logs and workf
 
 Read [the source map](docs/Source-Alignment-v4.md). `node scripts/build.mjs` validates maintained package versions and generates `/source-alignment.json` from their actual source. Run `python scripts/package-distributions.py` after changing integration, plugin or native source files, then build. The existing root, journal and native treasury routes remain authoritative across L1–L5. Historical evidence and reconstructed runtime sources retain their own identities.
 
+## Connections
+
+Open `/connections` to run current-session read checks across all 19 registered surfaces, follow their existing routes and export sanitized outcomes. The public manifest is `/api/connections/v1/manifest`; MCP discovery exposes the same registry through `numina_connections`. Checks use fixed same-origin destinations, bounded responses and deadlines. Initialization checks never call operational tools. Private responses are reduced to status before export. Existing endpoint authorization remains authoritative.
+
 ## Security
 
 Numina maintains [one security and financial control model](docs/Numina-Security.md), available from every website interface at https://numinalabs.xyz/security. The document covers implemented controls, evidence, incident response and the operating requirements that remain unverified.
