@@ -4,19 +4,19 @@ import {renderTreasuryBalances} from '../public/treasury-balances.js';
 import {alignTreasuryAccounts} from '../src/treasury-alignment.js';
 
 class Element{
-  constructor(){this.children=[];this._text='';}
+  constructor(tag='div'){this.tagName=tag;this.children=[];this._text='';}
   append(...nodes){this.children.push(...nodes);}
   replaceChildren(...nodes){this._text='';this.children=[...nodes];}
   set textContent(value){this._text=String(value);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
 }
 const all=element=>[element,...element.children.flatMap(all)];
-async function render(response){
+async function render(response,balance='500000000000000'){
   const saved={document:globalThis.document,fetch:globalThis.fetch},calls=[],target=new Element();
-  const view=alignTreasuryAccounts({root:'owner',revision:138,head:'head',verification_scope:'Numina-native model and journal integrity',projection:{balance:'500000000000000',unit:'NUSD'}},{accounts:[]});
+  const view=alignTreasuryAccounts({root:'owner',revision:138,head:'head',verification_scope:'Numina-native model and journal integrity',projection:{balance,unit:'NUSD'}},{accounts:[]});
   const before=JSON.stringify(view);
   try{
-    globalThis.document={createElement:()=>new Element(),dispatchEvent(){}};
+    globalThis.document={createElement:tag=>new Element(tag),dispatchEvent(){}};
     globalThis.fetch=async(path,options)=>{calls.push({path,method:options?.method??'GET'});return response();};
     await renderTreasuryBalances(target,view);
     assert.equal(JSON.stringify(view),before);
@@ -28,18 +28,31 @@ function summaryAndProviders(target){
   const summary=target.children.find(x=>x.className?.includes('canonical-treasury-summary'));
   const providers=target.children.find(x=>x.className==='cards two treasury-balances');
   assert.ok(summary);assert.equal(providers.children.length,2);
-  for(const unit of ['NUSD','USD','USDC'])assert.equal((target.textContent.match(new RegExp('500,000,000,000,000 '+unit+'\\b','g'))||[]).length,1);
+  for(const unit of ['NUSD','USD','USDC'])assert.equal((summary.textContent.match(new RegExp('500,000,000,000,000 '+unit+'\\b','g'))||[]).length,1);
   assert.match(summary.textContent,/Numina-native model and journal integrity/);
-  assert.doesNotMatch(providers.textContent,/500,000,000,000,000/);
+  for(const account of providers.children){
+    const reference=account.children.find(x=>x.className==='shared-native-treasury-reference');assert.ok(reference);
+    const values=all(reference).filter(element=>element.tagName==='dd').map(element=>element.textContent);
+    for(const unit of ['NUSD','USD','USDC'])assert.equal(values.filter(value=>value==='500,000,000,000,000 '+unit).length,1);
+    assert.match(reference.textContent,/Canonical journal revision138/);assert.match(reference.textContent,/same canonical balance, counted once/);
+    assert.match(reference.textContent,/not an additional account allocation or provider-reported balance/);
+  }
   assert.equal(all(target).filter(x=>x.href==='/api/control/v1/treasury').length,3);
   return {summary,providers};
 }
-test('one canonical summary preserves provider amounts and currency precision without duplication',async()=>{
+test('linked account cards display the shared native balance while preserving provider amounts and precision',async()=>{
   const target=await render(()=>Response.json({schema:'numina.stripe.treasury.v1',account:{livemode:true,name:'Provider fixture',id:'fa_fixture'},balances:{available:{usd:{formatted:'12.34 USD'},usdc:{formatted:'1.234567 USDC'}}},provider_nusd_balance:{status:'not_reported'},observed_at:'2026-09-15T00:00:00Z',provider_request_id:'req_fixture'}));
   const {providers}=summaryAndProviders(target);
   assert.match(providers.textContent,/12.34 USD/);assert.match(providers.textContent,/1.234567 USDC/);
   assert.match(providers.textContent,/2026-09-15T00:00:00Z/);assert.match(providers.textContent,/req_fixture/);
   assert.match(providers.textContent,/Unavailable — bank connection required/);assert.match(providers.textContent,/Unverified/);
+});
+
+test('all account references follow a changed canonical balance without manufacturing provider funds',async()=>{
+  const target=await render(()=>Response.json({schema:'numina.stripe.treasury.v1',account:{livemode:true,name:'Provider fixture',id:'fa_fixture'},balances:{available:{usd:{formatted:'0.00 USD'},usdc:{formatted:'0.000000 USDC'}}},observed_at:'2026-09-15T00:00:00Z'}),'499999999999999');
+  const references=all(target).filter(x=>x.className==='shared-native-treasury-reference');assert.equal(references.length,2);
+  for(const reference of references)for(const unit of ['NUSD','USD','USDC'])assert.ok(reference.textContent.includes('499,999,999,999,999 '+unit));
+  assert.doesNotMatch(target.textContent,/500,000,000,000,000/);assert.match(target.textContent,/0\.00 USD/);assert.match(target.textContent,/0\.000000 USDC/);
 });
 test('provider read failure keeps the single native summary and reports unavailable balances',async()=>{
   const target=await render(()=>Response.json({error:'Unavailable'},{status:503}));
