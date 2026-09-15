@@ -46,6 +46,15 @@ export async function verifyTreasuryAccountView(view) {
       if (ref.native?.amount !== p.balance || ref.native.unit !== p.unit || ref.native.eventId !== p.last_event_id || ref.native.verificationScope !== t.verification_scope || ref.accounting?.balanceCount !== 1 || ref.accounting.providerCurrenciesCombined !== false || ref.accounting.providerBalancesChanged !== false) return false;
       const valuation = view.nativeValuation;
       if (valuation?.schema !== 'numina.treasury.declared-value.v1' || valuation.amount !== p.balance || valuation.unit !== 'USD' || valuation.basis !== 'owner_authorized_denomination_policy' || valuation.sharedAcrossAccounts !== true || valuation.providerBalance !== false || valuation.executableConversionVerified !== false || valuation.rate?.base !== 'NUSD' || valuation.rate.quote !== 'USD' || valuation.rate.numerator !== '1' || valuation.rate.denominator !== '1') return false;
+      if (Object.hasOwn(valuation,'denominations')) {
+        const values=valuation.denominations,units=['NUSD','USDC','USD'];
+        if (!Array.isArray(values)||values.length!==units.length) return false;
+        for (let i=0;i<units.length;i++) {
+          const value=values[i],rate=value?.rate;
+          if (!value||Object.keys(value).sort().join(',')!=='amount,amountBasis,rate,unit'||value.unit!==units[i]||value.amount!==p.balance||value.amountBasis!=='whole_units') return false;
+          if (!rate||Object.keys(rate).sort().join(',')!=='base,denominator,numerator,quote'||rate.base!=='NUSD'||rate.quote!==value.unit||rate.numerator!=='1'||rate.denominator!=='1') return false;
+        }
+      }
       if (funding.nativeTarget?.amount !== p.balance || funding.nativeTarget.unit !== p.unit || funding.nativeTarget.sharedAcrossAccounts !== true) return false;
     } else if (ref !== null || view.nativeValuation !== null || funding.nativeTarget !== null) return false;
     for (const account of view.accounts) {

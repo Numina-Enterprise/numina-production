@@ -1,3 +1,4 @@
+import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from '../public/treasury-valuation.js';
 // Read projection only. Historical account references and signed events remain intact.
 export function canonicalTreasuryReference(treasury){
   const projection=treasury?.projection;
@@ -12,7 +13,7 @@ export function canonicalTreasuryReference(treasury){
 export function alignTreasuryAccounts(treasury,frontier){
   const projection=treasury.projection,plan=frontier.fundingPlan??null,declaration=frontier.fundingDeclaration??null;
   const canonicalTreasury=canonicalTreasuryReference(treasury);
-  const nativeValuation=projection?.unit==='NUSD'?{schema:'numina.treasury.declared-value.v1',amount:projection.balance,unit:'USD',rate:{base:'NUSD',quote:'USD',numerator:'1',denominator:'1'},basis:'owner_authorized_denomination_policy',sharedAcrossAccounts:true,providerBalance:false,executableConversionVerified:false}:null;
+  const nativeValuation=projection?.unit==='NUSD'?{schema:'numina.treasury.declared-value.v1',amount:projection.balance,unit:'USD',rate:{base:'NUSD',quote:'USD',numerator:'1',denominator:'1'},basis:'owner_authorized_denomination_policy',sharedAcrossAccounts:true,providerBalance:false,executableConversionVerified:false,denominations:declaredTreasuryDenominations(projection.balance)}:null;
   const sharedNativeTreasury=projection?{schema:'numina.treasury.shared-balance-reference.v1',authority:projection.authority??'NUMINA',systemOfRecord:'NUMINA',amount:projection.balance,unit:projection.unit,revision:treasury.revision,head:treasury.head,eventId:projection.last_event_id??null,verificationScope:treasury.verification_scope,sharedAcrossAccounts:true,providerBalance:false}:null;
   const references=structuredClone(frontier.accounts??[]);
   const groups=new Map();
@@ -28,7 +29,7 @@ export function alignTreasuryAccounts(treasury,frontier){
     treasuryRef:canonicalTreasury?{id:canonicalTreasury.id,route:canonicalTreasury.route,evidenceRoute:canonicalTreasury.evidence.route}:null,
     nativeTreasuryRoute:'/api/control/v1/treasury',sharedNativeProjection:true,sharedNativeTreasury:structuredClone(sharedNativeTreasury),allocatedAmount:null
   }));
-  return {treasury,canonicalTreasury,nativeValuation,accounts,accountReferences:references,
+  return {treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,accounts,accountReferences:references,
     supersededReferences:references.filter(account=>account.supersededBy),
     accountAlignment:{schema:'numina.treasury.account-view.v1',sourceReferenceCount:active.length,distinctAccountViews:accounts.length,
       duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one shared native projection; no account amounts added'},
