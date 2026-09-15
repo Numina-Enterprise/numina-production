@@ -138,6 +138,12 @@ The `/connections` workspace reads the canonical registry through `/api/connecti
 
 The page distinguishes available pages, read connections, discovery metadata, package records, access requirements, errors and disabled financial capabilities. Native records do not establish device installation or store publication. Exported observations contain fixed interface paths, status, times and HTTP codes; private payloads, balances, account identifiers and credentials are omitted. Reports are local, unsigned observations. No persistent provider connection or new financial authority is created by a check.
 
+### Dated production connection observation
+
+On September 15, 2026 at 19:30:18–19:30:21 UTC, the version 74 Connections workspace completed all 19 checks in the existing authenticated browser session: **18 responding and 1 needing attention**. Account-service health, the control manifest, both MCP initialization requests, A2A discovery, distribution records, the pinned runtime, authorized treasury/provider reads, telemetry definitions and the release record responded, along with the five page checks. Financial capability status reported disabled operations and correctly remained marked for attention. Private response bodies, balances and account identifiers were not copied into this evidence.
+
+This dated observation does not establish availability for another account or future request, external installation, financial operating authority, reserves, settlement or Play approval. It exercised reads and protocol initialization only. The corresponding Connections release passed 287 automated tests before publication. Source and deployment references are retained in the dated connection record and GitHub issue #25.
+
 ## 10. Incident response and continuity runbook
 
 This is the operating procedure to exercise and evidence; a completed drill or staffed response SLA is not yet documented.
