@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { getAddress, parseUnits, ZeroAddress, ContractFactory } from 'ethers';
+import { loadTokenArtifact, TOKEN_ARTIFACT_SHA256 } from './token-artifact.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export function validateDeployment(file) {
@@ -65,9 +66,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log(JSON.stringify({ valid: false, broadcast: false, errors: checked.errors }, null, 2));
     process.exitCode = 1;
   } else {
-    // Compilation is a development CLI operation, not an import-time runtime dependency.
-    const { compile } = await import('./compile.mjs');
-    const artifact = compile();
+    // Runtime contains the exact reviewed artifact, not a compiler or mutable build dependencies.
+    const artifact = loadTokenArtifact();
     const factory = new ContractFactory(artifact.abi, artifact.bytecode);
     const data = (await factory.getDeployTransaction(
       checked.cap, checked.initialSupply, checked.initialRecipient,
@@ -82,7 +82,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       broadcast: false, initialSupplyNusd: checked.config.initialSupplyNusd,
       initialSupplyBaseUnits: checked.initialSupply.toString(), initialRecipient: checked.initialRecipient,
       constructorIssuanceRequested: checked.initialSupply > 0n, initiallyPaused: true,
-      sourceSha256: artifact.sourceSha256, compiler: artifact.compiler
+      sourceSha256: artifact.sourceSha256, compiler: artifact.compiler,
+      artifactSha256: TOKEN_ARTIFACT_SHA256
     };
     const destination = path.join(root, 'artifacts/unsigned-deployment.json');
     fs.writeFileSync(destination, JSON.stringify(result, null, 2) + '\n');

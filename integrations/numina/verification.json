@@ -1,6 +1,6 @@
 {
   "schema": "numina.integration.package.v2",
-  "packagedAtUtc": "2026-09-15T09:36:41.337Z",
+  "packagedAtUtc": "2026-09-15T10:01:53.108Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",
@@ -15,7 +15,8 @@
     "additionalManifestFields": [
       "nusd_transaction_receipts",
       "nusd_activation_readiness",
-      "denomination_policy"
+      "denomination_policy",
+      "contract_record"
     ],
     "proofGuide": "EVIDENCE.md",
     "clientPerformsSignatureVerification": false,

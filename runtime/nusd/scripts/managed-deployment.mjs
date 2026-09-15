@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { ContractFactory, getAddress, getCreateAddress, keccak256 } from 'ethers';
 import { validateDeployment } from './validate-deployment.mjs';
 import { verifyNetwork } from './verify-network.mjs';
+import { validateTokenArtifact } from './token-artifact.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REQUEST_SCHEMA = 'numina.managed-deployment.request.v2';
@@ -234,7 +235,7 @@ async function reviewedDeployment(deploymentConfigPath, execution) {
   const artifactBytes = readFile(path.join(ROOT, 'artifacts', 'NuminaUSD.json'));
   if (sha256(artifactBytes) !== execution.reviewedArtifactSha256) throw fail('REVIEW_MISMATCH');
   let artifact;
-  try { artifact = JSON.parse(artifactBytes.toString('utf8')); }
+  try { artifact = validateTokenArtifact(artifactBytes, readFile(path.join(ROOT, 'contracts', 'NuminaUSD.sol'))); }
   catch { throw fail('REVIEW_MISMATCH'); }
   const actualSourceHash = sha256(readFile(path.join(ROOT, 'contracts', 'NuminaUSD.sol')));
   if (artifact.schema !== 'numina.nusd.contract-candidate.v2' || artifact.contractName !== 'NuminaUSD' || artifact.sourceName !== 'contracts/NuminaUSD.sol' ||

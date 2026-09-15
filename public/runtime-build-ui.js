@@ -78,20 +78,47 @@ function assessBuild(review, inventory) {
   };
 }
 
-function assessFinancialStatus(data) {
+export function contractSourcePresentation(record) {
+  if(record?.schema!=='numina.nusd.contract-record.v1'||record.status!=='compiled_not_deployed'||
+    record.url!=='/api/nusd/v1/contracts'||record.native_treasury!=='/api/control/v1/treasury'||
+    !Array.isArray(record.contracts)||record.contracts.length!==2||
+    record.contracts.map(contract=>contract.name).join(',')!=='NuminaUSD,NuminaSettlement'||
+    !object(record.financial_execution)||
+    !['issuance','transfer','nusd_settlement','usd_redemption','usdc_conversion','external_deposits']
+      .every(name=>record.financial_execution[name]===false))throw Error('Contract source record unavailable');
+  for(const contract of record.contracts){
+    if(contract.status!=='compiled_not_deployed'||contract.verification?.source_hash_matches_artifact!==true||
+      contract.verification?.chain_receipt_verified!==false||contract.deployment?.status!=='not_verified'||
+      contract.deployment.contract_address!==null||contract.deployment.transaction_hash!==null||contract.deployment.receipt!==null||
+      !short(contract.compiler?.version)||contract.compiler.settings?.evmVersion!=='london')throw Error('Contract source record unavailable');
+    for(const [key,extension]of [['source','sol'],['artifact','json']]){
+      const file=contract[key];
+      if(file?.url!==`/downloads/contracts/${contract.name}.${extension}`||!/^([a-f0-9]{64})$/.test(file.sha256||'')||
+        !Number.isSafeInteger(file.bytes)||file.bytes<1)throw Error('Contract source record unavailable');
+    }
+  }
+  return {source:'NUSD token and NUSD settlement source compiled · deployment unverified',
+    'source-scope':'Issuance, transfer and NUSD settlement operations are implemented in the contract source. No deployed contract, live issuance, USD/USDC conversion or external deposit is established by this record.'};
+}
+
+export function assessFinancialStatus(data) {
   if (data.schema !== 'numina.nusd.status.v1' || data.asset?.symbol !== 'NUSD'
     || !object(data.capabilities) || !capabilities.every(name => typeof data.capabilities[name] === 'boolean')
     || !(data.asset.contract === null || /^0x[0-9a-fA-F]{40}$/.test(data.asset.contract || ''))
     || !short(data.asset_verification?.status) || !short(data.treasury_backing?.status)
     || !short(data.service_pricing?.status)) throw Error('Financial status unavailable');
+  const source=data.contract_record===undefined
+    ?{source:'Contract source record unavailable','source-scope':''}
+    :contractSourcePresentation(data.contract_record);
   return {
     state: 'Current application status received',
-    contract: data.asset.contract === null ? 'No contract address reported' : data.asset.contract,
+    contract: data.asset.contract === null ? (data.contract_record?'No deployed address reported · compiled contract sources available':'No contract address reported') : data.asset.contract,
     identity: data.asset_verification.status.replaceAll('_', ' '),
     backing: data.treasury_backing.status.replaceAll('_', ' '),
     pricing: data.service_pricing.status.replaceAll('_', ' '),
     ...Object.fromEntries(capabilities.map(name => [name,
       data.capabilities[name] ? 'Enabled by application' : 'Not enabled by application'])),
+    ...source,
     checked: 'Status response fetched ' + new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC') + '.',
   };
 }
@@ -108,7 +135,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     const financial = value => Object.entries(value).forEach(([key, text]) => set('data-linux-financial-' + key, text));
     function clear(message) {
       proof({ state: message, detail: 'Open the dated build records below to inspect the evidence.', recorded: '', source: 'Unavailable', builder: 'Unavailable', image: 'Unavailable' });
-      financial(Object.fromEntries(['state', 'contract', 'identity', 'backing', 'pricing', ...capabilities]
+      financial(Object.fromEntries(['state', 'contract', 'identity', 'backing', 'pricing', 'source', 'source-scope', ...capabilities]
         .map(key => [key, key === 'state' ? 'Current application status unknown' : 'Unknown'])));
       financial({ checked: '' });
     }

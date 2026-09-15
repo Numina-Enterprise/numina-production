@@ -1,4 +1,5 @@
 import {isDeepStrictEqual} from 'node:util';
+import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import fs from 'node:fs';
 import {checkIOSRelease, iosInputSnapshot} from './ios-release.mjs';
@@ -77,6 +78,8 @@ record.checks.treasuryVerifierMatches=true;
 for(const [name,record] of Object.entries({architecture:NUMINA_LAYERS,business,integration}))if(!isDeepStrictEqual(record.denomination_policy,NUMINA_DENOMINATION_POLICY))throw Error('Declared denomination policy differs: '+name);
 record.denomination_policy=NUMINA_DENOMINATION_POLICY;record.checks.denominationPolicyMatches=true;
 record.sourceInputs.push({path:'public/treasury-valuation.js',sha256:digest(fs.readFileSync('public/treasury-valuation.js'))});
+record.contract_record=NUSD_CONTRACT_RECORD;
+record.sourceInputs.push(...['public/nusd-contract-record.js','scripts/nusd-contract-record.mjs','runtime/nusd/contracts/NuminaUSD.sol','runtime/nusd/artifacts/NuminaUSD.json','runtime/nusd/contracts/NuminaSettlement.sol','runtime/nusd/artifacts/NuminaSettlement.json'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 record.treasury=sharedTreasury;
 record.requiredArchitecture=requiredArchitecture;
 record.checks.requiredArchitectureMatches=true;
