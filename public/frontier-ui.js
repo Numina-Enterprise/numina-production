@@ -89,8 +89,8 @@ async function refresh(){
       if(!await verifyTreasuryAccountView(t))throw Error('Treasury records are inconsistent.');
       if(!isCurrent())return;
       treasuryActions(t,readApi,isCurrent);
-      $('#treasury-status').textContent=t.treasury.projection?BigInt(t.treasury.projection.balance).toLocaleString()+' NUSD · Native projection':'Canonical treasury is not initialized';
-      $('#accounts').replaceChildren(...t.accounts.map(a=>node('p',a.legalEntity+' · '+a.provider+' · '+a.accountLabel+' · '+(a.providerOwnershipVerified?'Provider verified':'Owner designated')+(a.sharedNativeTreasury?' · Numina native treasury (shared): '+BigInt(a.sharedNativeTreasury.amount).toLocaleString()+' '+a.sharedNativeTreasury.unit:''))));
+      $('#treasury-status').textContent=t.treasury.projection?'Native journal verified · Revision '+t.treasury.revision:'Canonical treasury is not initialized';
+      $('#accounts').replaceChildren(...t.accounts.map(a=>{const row=node('p',a.legalEntity+' · '+a.provider+' · '+a.accountLabel+' · '+(a.providerOwnershipVerified?'Provider verified':'Owner designated'));if(a.sharedNativeTreasury){const link=node('a','View the canonical native treasury ↗');link.href='/api/control/v1/treasury';row.append(node('span',' · '),link);}return row;}));
       await Promise.all([renderTreasuryBalances($('#treasury-balances'),t,{signal}),renderFundingPlan($('#funding-plan'),t,api,refresh,{signal})]);
     }catch{if(!isCurrent())return;for(const selector of privatePanels.filter(s=>s!=='#requests'))$(selector)?.replaceChildren();$('#treasury-status').textContent='Treasury records could not be verified. Refresh to read the current canonical record.';}
   }finally{if(isCurrent())$('#refresh').disabled=false;}

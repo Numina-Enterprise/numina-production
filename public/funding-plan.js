@@ -11,8 +11,7 @@ export async function renderFundingPlan(target,treasury,api,refresh,{signal}={})
     const button=node('button','Record authorized funding plan');button.className='button secondary';button.disabled=!treasury.treasury.projection;
     button.onclick=async()=>{if(button.disabled)return;button.disabled=true;try{const latest=await api('state');await api('treasury/funding',{id:crypto.randomUUID(),expectedRevision:latest.revision,data:{id:'numina-canonical-funding-v1',reason:'Owner-authorized funding plan for the singular NUSD treasury across designated business accounts; external funding remains unconfirmed.'}});await refresh();}catch(error){if(signal?.aborted)return;target.append(node('p',error.message));button.disabled=false;}};target.append(button);return;
   }
-  const nativeTarget=treasury.nativeFundingView?.nativeTarget??plan.target;
-  target.append(node('p',BigInt(nativeTarget.amount).toLocaleString()+' '+nativeTarget.unit+' · One native treasury shared across account views'));
+  const treasuryLink=node('a','View the canonical native treasury ↗');treasuryLink.href='/api/control/v1/treasury';target.append(treasuryLink);
   target.append(node('p','Current native funding status · '+treasury.nativeFundingView.status+' · '+(treasury.nativeFundingView.ownerDeclaredFunded?'Owner declaration':'Recorded plan')));
   target.append(node('p','Original plan status · '+plan.status));
   target.append(node('p','Numina record · '+plan.id+' · Journal event '+plan.eventId));
