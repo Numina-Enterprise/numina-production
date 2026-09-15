@@ -265,8 +265,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 8222,
-      "sha256": "fbd98ffe0e3d15dd221eb7ec6ee7a3e643abb40bb9d07e7472fff8b15945d458"
+      "bytes": 11695,
+      "sha256": "4243113478feecb953f05612e7a8ed7800ca1c8cf23ccbb1c37427fad5b2a172"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -276,7 +276,7 @@
     {
       "path": "verification.json",
       "bytes": 1980,
-      "sha256": "85da3f815d2425ad2e199b0aea34f5f60596590896c3e276c6b2aa6c4282f759"
+      "sha256": "283c077c0ed0cbcc261350bfc703de14970e2b1ec79d64c9cb14316be8d3c0cc"
     }
   ]
 }

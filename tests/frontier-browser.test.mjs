@@ -18,12 +18,12 @@ class Element{
   set textContent(value){this._text=String(value);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
 }
-async function accountView(funding={}){
+async function accountView(funding={},initialized=true){
   const db=database(),owner='email:owner@example.test';
   try{
     await bootstrapControl(db,owner,Math.floor(Date.now()/1000));const row=await readControl(db);
     const treasury=createNuminaTreasury({db,root:owner,principal:owner});
-    await treasury.writeTreasury({id:'ui-treasury',expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.initialize',Intent:{operation:'INITIALIZE',reason:'Isolated UI fixture'}});
+    if(initialized)await treasury.writeTreasury({id:'ui-treasury',expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.initialize',Intent:{operation:'INITIALIZE',reason:'Isolated UI fixture'}});
     return alignTreasuryAccounts(await treasury.readTreasury(),{accounts:[{id:'existing',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing reference',providerAccountReference:'original-reference'}],...funding});
   }finally{db.close();}
 }
@@ -49,6 +49,20 @@ function harness(view,override=()=>null){
 test('frontier rejects a mixed treasury account snapshot before rendering native balances',async()=>{
   const view=await accountView();view.accounts[0].sharedNativeTreasury.amount='1';const h=harness(view);
   try{await settled();assert.match(h.get('#treasury-status').textContent,/could not be verified/);for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);}finally{h.close();}
+});
+
+test('frontier never renders provider verification substituted for an owner designation',async()=>{
+  for(const initialized of [false,true]){
+    const view=await accountView({accounts:[{id:'existing',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing reference',providerAccountReference:'original-reference',source:'owner_designation',providerOwnershipVerified:false}]},initialized);
+    view.accounts[0].providerOwnershipVerified=true;
+    const h=harness(view);
+    try{
+      await settled();
+      assert.doesNotMatch(h.get('#accounts').textContent,/Provider verified/);
+      assert.match(h.get('#treasury-status').textContent,/could not be verified/);
+      for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);
+    }finally{h.close();}
+  }
 });
 
 test('funding panel displays the current native declaration while retaining the signed original plan',async()=>{
