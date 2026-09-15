@@ -1,5 +1,16 @@
 # Numina Play Ignite rollout evidence — September 15, 2026
 
+## Current source and Console advance — after 20:46 UTC
+
+- The owner requires adults 18 and older. All 24 maintained public HTML pages now end with **18+ · Adults only. You must be 18 or older to use Numina.** This includes Numina OS, Control, Frontier, reviewer access and the public website. The Android and iOS wrappers load the hosted pages. This is a clear usage requirement; it does not implement age verification or imply that the Play audience declaration is saved.
+- IARC content ratings are **Completed** in Play Console, saved September 15, 2026 at 3:46 PM Central after the owner approved the separate IARC agreement. Regional results: ESRB Everyone, PEGI 3, Brazil 14+, Germany 16+, and generic/Russia/South Korea 3+. Interactive elements are Users Interact and In-App Purchases. No certificate ID was displayed.
+- The questionnaire accounts for private service-request text and response notes, hosted catalog content and purchasable services/deliverables. No public sharing, precise-location sharing, gambling rewards or active transferable-asset issuance was observed in the reviewed app. Ratings describe content and do not change the owner's 18+ target audience.
+- Data safety basics were saved as a draft: collection Yes, encrypted transport Yes, OAuth and the published account/data deletion request links. Google validated the URLs. Data-type/use details, provider processing and retention/deletion evidence remain incomplete.
+- **Four declarations remain:** Sign in details, Target audience and content, Data safety and Financial features. The audience questionnaire was rechecked and still requires Sign in details. The reviewer's own-record isolation remains; full access to all reviewable functionality and any paid content must be established before the full-access attestation is made.
+- The working production reviewer account, live checkout observation and version 77 deployment are recorded in issue 25. No payment was submitted by the agent. The original signed AAB remains unchanged and unuploaded. No Play review, publication or device installation is claimed.
+
+This section supersedes older reviewer-availability, rating and declaration-count statements below. Final source/deployment receipts are recorded in [issue 25](https://github.com/skott34-dot/numina-production/issues/25).
+
 Workstream: [issue #25](https://github.com/skott34-dot/numina-production/issues/25).
 This is a dated observation record, not a certification or a live status endpoint.
 
