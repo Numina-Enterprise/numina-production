@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NUSD_CONTRACT_RECORD as record} from '../public/nusd-contract-record.js';
 import {createNusdContractRecord,contractDescriptor} from '../scripts/nusd-contract-record.mjs';
-import {nusdHttp,NUSD_POLICY} from '../src/nusd-http.js';
+import {nusdHttp,NUSD_POLICY,NUSD_MINT_WORKFLOW} from '../src/nusd-http.js';
 import {contractSourcePresentation,assessFinancialStatus} from '../public/runtime-build-ui.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
 const read=path=>fs.readFileSync(new URL('../'+path,import.meta.url));
@@ -33,4 +33,46 @@ test('integration retains the contract source record without interpreting it as 
   assert.deepEqual((await client.network()).data.contract_record,record);
   const build=await client.runtimeBuild();assert.deepEqual(build.data.contract_record,record);assert.equal(build.asset_execution_available,false);
   include=false;assert.equal(Object.hasOwn((await client.network()).data,'contract_record'),false);assert.equal(Object.hasOwn((await client.runtimeBuild()).data,'contract_record'),false);
+});
+
+test('mint workflow reports implemented preparation while receipt and provider claims remain evidence-bound',async()=>{
+  const r=await nusdHttp(new Request('https://numina.test/api/nusd/v1/mint-workflow'));
+  assert.equal(r.status,200);assert.deepEqual(await r.json(),NUSD_MINT_WORKFLOW);
+  for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(new Request('https://numina.test/api/nusd/v1/mint-workflow',{method}))).status,405);
+  assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.route,'/api/control/v1/treasury');
+  assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.nativeBalanceChanged,false);
+  assert.equal(NUSD_MINT_WORKFLOW.preparation.broadcast,false);
+  assert.equal(NUSD_MINT_WORKFLOW.recipientEvidence.providerAcceptanceInferred,false);
+  assert.match(assessFinancialStatus(NUSD_POLICY).mint,/Implemented in contract.*unsigned preparation/);
+  const unsafe=structuredClone(NUSD_POLICY);unsafe.mint_workflow.preparation.broadcast=true;
+  assert.throws(()=>assessFinancialStatus(unsafe),/Mint workflow unavailable/);
+  const mismatched=structuredClone(NUSD_POLICY);mismatched.mint_workflow.contract.artifactSha256='0'.repeat(64);
+  assert.throws(()=>assessFinancialStatus(mismatched),/Mint workflow unavailable/);
+  const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+  assert.deepEqual(release.mint_workflow,NUSD_MINT_WORKFLOW);
+});
+
+test('integration retains optional mint workflow metadata without activating execution',async()=>{
+  const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+  let workflow=NUSD_MINT_WORKFLOW;
+  const calls=[];
+  const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async(url,options)=>{
+    calls.push({url,method:options.method});
+    return Response.json(url.endsWith('/status')?{schema:'numina.nusd.status.v1',mint_workflow:workflow}:{...release,mint_workflow:workflow});
+  }});
+  const network=await client.network(),build=await client.runtimeBuild();
+  assert.deepEqual(network.data.mint_workflow,NUSD_MINT_WORKFLOW);
+  assert.deepEqual(build.data.mint_workflow,NUSD_MINT_WORKFLOW);
+  for(const result of [network,build])assert.equal(result.asset_execution_available,false);
+  assert.equal(network.data.blockchain_rpc_checked,false);assert.equal(network.data.independently_verified,false);
+  assert.equal(build.data.receipt_verification_performed,false);assert.equal(build.data.readiness_verification_performed,false);
+  workflow=undefined;
+  assert.equal(Object.hasOwn((await client.network()).data,'mint_workflow'),false);
+  assert.equal(Object.hasOwn((await client.runtimeBuild()).data,'mint_workflow'),false);
+  for(const invalid of [null,[],true,'implemented']){
+    workflow=invalid;
+    await assert.rejects(client.network(),error=>error.code==='INVALID_SERVER_RESPONSE');
+    await assert.rejects(client.runtimeBuild(),error=>error.code==='INVALID_SERVER_RESPONSE');
+  }
+  assert.ok(calls.every(call=>call.method==='GET'&&['https://numina.test/api/nusd/v1/status','https://numina.test/v4/release/manifest'].includes(call.url)));
 });
