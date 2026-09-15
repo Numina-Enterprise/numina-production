@@ -1,3 +1,4 @@
+import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from './treasury-valuation.js';
 import {verifyTreasuryRecord} from './treasury-proof.js';
 import {requestJson,createViewScope} from './http-client.js';
 const nativeTreasuryScope=createViewScope();
@@ -22,10 +23,12 @@ export async function loadNativeTreasury(){
     }
     if(!nativeTreasuryScope.isCurrent(generation))return;
     const p=data.projection,details=nativeTreasuryElement('native-treasury-details');
-    for(const [label,value]of [['Balance',new Intl.NumberFormat('en-US').format(BigInt(p.balance))+' '+p.unit],['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
+    const format=value=>new Intl.NumberFormat('en-US').format(BigInt(value));
+    const declaredValues=declaredTreasuryDenominations(p.balance).filter(v=>v.unit!=='NUSD').map(v=>['Declared '+v.unit+' value',format(v.amount)+' '+v.unit]);
+    for(const [label,value]of [['Balance',format(p.balance)+' '+p.unit],['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],...declaredValues,['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
       for(const [tag,text]of [['dt',label],['dd',value]]){const node=document.createElement(tag);node.textContent=text;details.append(node);}
     }
-    nativeTreasuryElement('native-treasury-message').textContent='Numina-native treasury. Model and journal record checked.';
+    nativeTreasuryElement('native-treasury-message').textContent='Numina-native treasury. Model and journal record checked. Declared equivalents describe this same balance; provider funding and conversion require their own evidence.';
   }catch(error){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearNativeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}

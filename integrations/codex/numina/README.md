@@ -23,3 +23,7 @@ Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks c
 ## Procurement usage
 
 The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.
+
+## Shared denomination policy
+
+Read `denomination_policy` from the live `numina_architecture` or `numina_capabilities` response. Numina declares **1 NUSD = 1 USDC = 1 USD** across L1–L5 and the hosted application. This is one native balance with declared equivalent values; keep provider balances, asset identity and execution status as reported. A declaration does not establish external reserves or a completed conversion.

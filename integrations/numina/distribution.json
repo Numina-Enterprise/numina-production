@@ -1,4 +1,41 @@
 {
+  "denomination_policy": {
+    "schema": "numina.denomination-policy.v1",
+    "id": "numina-usd-usdc-nusd-parity-2026-09-15",
+    "basis": "owner_authorized_denomination_policy",
+    "scope": "declared_valuation",
+    "expression": "1 NUSD = 1 USDC = 1 USD",
+    "referenceUnit": "USD",
+    "units": [
+      "NUSD",
+      "USDC",
+      "USD"
+    ],
+    "rates": [
+      {
+        "base": "NUSD",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      {
+        "base": "USDC",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      {
+        "base": "USD",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      }
+    ],
+    "preserveCurrencyIdentity": true,
+    "providerBalancesChanged": false,
+    "reserveVerificationEstablished": false,
+    "executableConversionVerified": false
+  },
   "procurement_usage": true,
   "procurementPolicy": "/business-core.json",
   "livemode": true,
@@ -21,7 +58,8 @@
     "manifestField": "execution_runtime_build",
     "additionalManifestFields": [
       "nusd_transaction_receipts",
-      "nusd_activation_readiness"
+      "nusd_activation_readiness",
+      "denomination_policy"
     ],
     "proofGuide": "EVIDENCE.md",
     "clientPerformsSignatureVerification": false,
