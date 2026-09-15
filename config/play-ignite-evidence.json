@@ -140,5 +140,29 @@
     "ownerStatement": "Financial services are live; I will provide provider, license and terms evidence",
     "ownerStatementVerified": false,
     "approvalEvidence": "/downloads/Numina-Financial-Approval-Evidence.md"
+  },
+  "latestConsoleObservation": {
+    "observedAt": "2026-09-15T21:37:28.758Z",
+    "ownerStatement": "play approval confirmed and closed-test release is approved",
+    "ownerStatementVerified": false,
+    "developerId": "5063096330623196321",
+    "appId": "4972203847314297095",
+    "package": "xyz.numinalabs.app",
+    "trackId": "4698819995703750940",
+    "release": "1",
+    "page": "Create closed testing release / Preview and confirm",
+    "saveEnabled": false,
+    "bundlePresent": false,
+    "errors": [
+      "You need to upload an APK or Android App Bundle for this app.",
+      "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
+      "Add a full description to save",
+      "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
+      "This release does not add or remove any app bundles.",
+      "You must let us know whether your app includes any financial features."
+    ],
+    "dataSafetyDraftSaved": true,
+    "dataSafetyToast": "Your changes have been saved",
+    "scope": "Refreshed authenticated Console UI observation. The owner approval report has not been corroborated by this release."
   }
 }
