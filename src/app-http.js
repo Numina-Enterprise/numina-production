@@ -1,3 +1,4 @@
+import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {APP_VERSION,APP_OFFERS,appFail,appDigest,appText,appIntake,appPaymentSummary,appTransition,appVerifyStripe} from './app-core.js';
 function appResponse(value,status=200,headers={}){return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Vary':'Cookie','X-Numina-App-Version':APP_VERSION,...headers}});}
 async function appReadRaw(req,max=16384){
@@ -52,7 +53,7 @@ export async function appHttp(req,env){
   if(path==='/api/app/v1/stripe-webhook'){if(req.method!=='POST')return appResponse({error:'METHOD_NOT_ALLOWED'},405,{Allow:'POST'});return await appWebhook(req,env);}
   if(!['GET','POST'].includes(req.method))return appResponse({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, POST'});
   if(path==='/api/app/v1/health'&&req.method==='GET'){const row=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders WHERE id=?').bind('__readiness__').first();return appResponse({status:row?'ready':'unavailable',storage:'D1',version:APP_VERSION,paymentConfirmation:env.NUMINA_STRIPE_WEBHOOK_SECRET?'configured':'not_configured',stablecoinExecution:false});}
-  if(path==='/api/app/v1/catalog'&&req.method==='GET')return appResponse({offers:Object.fromEntries(Object.entries(APP_OFFERS).filter(([,offer])=>!offer.retired)),operator:'SK Consulting LLC',initialCheckoutCountry:'US',internationalRequests:'review_before_checkout',scopeTerms:'Payment reserves the service. Scope, scheduling, authorized access and confidentiality must be confirmed before work begins. Production implementation and third-party costs are excluded unless separately agreed. If Numina cannot accept the engagement, payment will be refunded.'});
+  if(path==='/api/app/v1/catalog'&&req.method==='GET')return appResponse({procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,offers:Object.fromEntries(Object.entries(APP_OFFERS).filter(([,offer])=>!offer.retired)),operator:'SK Consulting LLC',initialCheckoutCountry:'US',internationalRequests:'review_before_checkout',scopeTerms:'Payment reserves the service. Scope, scheduling, authorized access and confidentiality must be confirmed before work begins. Production implementation and third-party costs are excluded unless separately agreed. If Numina cannot accept the engagement, payment will be refunded.'});
   const actor=await appActor(req,env);
   if(path==='/api/app/v1/session'&&req.method==='GET')return appResponse({email:actor.email,operator:actor.operator});
   await appRate(env.DB,await appDigest(actor.id+':'+req.method),req.method==='POST'?40:120,now);

@@ -65,3 +65,7 @@ See [COMPATIBILITY.md](COMPATIBILITY.md) for supported formats and official refe
 The signed core/root binding is available at `/v1/release/core-binding`. Owner-authenticated evidence revocation is restored at `POST /v1/evidence/revoke`; it marks an existing record revoked while retaining its artifact and first signed revocation receipt. This kit does not invoke that route automatically.
 
 Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.
+
+## Procurement usage
+
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

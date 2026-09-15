@@ -13,6 +13,10 @@
     "assurance"
   ],
   "properties": {
+    "procurement_usage": {
+      "type": "boolean",
+      "description": "Owner-authorized use of existing procurement workflows; separate from provider payment execution."
+    },
     "schema": {
       "const": "numina.application-release.v2"
     },

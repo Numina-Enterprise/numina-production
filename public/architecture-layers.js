@@ -2,6 +2,8 @@
 export const NUMINA_LAYERS = Object.freeze({
   schema:'numina.architecture-layers.v1',classification:'architecture',
   rootCount:1,lineageCount:1,productionEnvironmentCount:1,
+  procurement_usage:true,
+  procurement:Object.freeze({policy:'/business-core.json',authorization:'owner_authorized_existing_workflows',scope:'Numina software, service requests and provider handoff preparation',permissions:'existing_owner_and_delegated_permissions',paymentEvidence:'provider_confirmation_required',automaticPurchasing:false}),
   distribution:{team:'Numina',authority:'NUMINA',teamCount:1,sharedAcrossLayers:true,policy:'/downloads/distribution-policy.json'},
   treasury:{route:'/api/control/v1/treasury',readInterface:'readTreasury()',writeInterface:'writeTreasury(event)',unit:'NUSD',balanceCount:1,sharedAcrossLayers:true,accountViewRoute:'/api/control/v2/treasury/accounts',fundingStatusPointer:'/nativeFundingView/status'},
   layers:[

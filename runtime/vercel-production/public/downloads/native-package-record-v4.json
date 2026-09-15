@@ -94,7 +94,7 @@
     },
     "hostPublicationVerified": false,
     "sourceBuildNumber": 5,
-    "sourceInputsSha256": "1a95ce3c7293d2d6ab31f6bbf57ad5f7a9202aa876b83d6a7594a5fd006da32e",
+    "sourceInputsSha256": "7fb729bf20add06ea17472fb3e6bc58ca1f9b800109b1a1920dd7188039b00a8",
     "signingInputMatchesCurrentSource": false,
     "sourceAlignmentScope": "current_source_package_not_native_build"
   },
@@ -102,22 +102,22 @@
     {
       "platform": "android",
       "file": "numina-os-4.0.0-android-source.zip",
-      "bytes": 12207,
-      "sha256": "4fde9df9a1776b7b712e2ebb3afb0168ef17884ad7dc52bd4b19536d715c9f68",
+      "bytes": 12417,
+      "sha256": "ad4576514621b38282db68753eec23d7e13d953f852d620d914043dc8bd17f97",
       "kind": "source_archive",
       "installable": false
     },
     {
       "platform": "ios",
       "file": "numina-os-4.0.0-ios-source.zip",
-      "bytes": 54985,
-      "sha256": "cf4af9d5b6b098b73d29f6294ef0671174d31761c5ece21272331910cf73bd9f",
+      "bytes": 55180,
+      "sha256": "744e69b8d727d0b7d000d4c59cd8d39a4833a9a679625e4dfa56fdd3c6ebf5a1",
       "kind": "source_archive",
       "installable": false,
       "sourceBuildNumber": 5,
-      "sourceInputsSha256": "1a95ce3c7293d2d6ab31f6bbf57ad5f7a9202aa876b83d6a7594a5fd006da32e",
+      "sourceInputsSha256": "7fb729bf20add06ea17472fb3e6bc58ca1f9b800109b1a1920dd7188039b00a8",
       "sourceTextNormalization": "utf8_lf_binary_unchanged",
-      "packagedAtUtc": "2026-09-15T08:03:40.918317+00:00"
+      "packagedAtUtc": "2026-09-15T08:19:52.091458+00:00"
     }
   ],
   "previousRelease": {
@@ -125,7 +125,7 @@
     "record": "/downloads/native-package-record-v3.json",
     "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
   },
-  "sourcePackagedAtUtc": "2026-09-15T08:03:39.392121+00:00",
+  "sourcePackagedAtUtc": "2026-09-15T08:19:50.573460+00:00",
   "nativeDistributionPolicy": "Historical binaries retain their exact bytes and build evidence. Current iOS source requires a fresh compile and matching signing input.",
-  "iosSourcePackagedAtUtc": "2026-09-15T08:03:40.918317+00:00"
+  "iosSourcePackagedAtUtc": "2026-09-15T08:19:52.091458+00:00"
 }

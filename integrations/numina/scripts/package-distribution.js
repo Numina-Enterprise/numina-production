@@ -26,6 +26,7 @@ const verification={
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
 const distribution={
+ procurement_usage:true,procurementPolicy:'/business-core.json',
  livemode:true,frontier:{version:metadata.version,transport:'stdio-to-streamable-http',script:'bin/control-mcp-stdio.js',endpoint:'https://numinalabs.xyz/api/control/v2/mcp',protocolVersion:'2025-11-25',tokenEnvironmentVariable:'NUMINA_API_TOKEN',a2a:'https://numinalabs.xyz/.well-known/agent-card.json'},
  schema:'numina.integration.distribution.v2',version:metadata.version,revision,
  applicationManifest:'/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,

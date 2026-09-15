@@ -1,6 +1,6 @@
 {
   "schema": "numina.integration.package.v2",
-  "packagedAtUtc": "2026-09-15T08:03:39.851Z",
+  "packagedAtUtc": "2026-09-15T08:19:51.022Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",
