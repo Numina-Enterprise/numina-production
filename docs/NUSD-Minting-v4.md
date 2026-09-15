@@ -22,6 +22,8 @@ A chain observation or matching signature does not establish token receipt capab
 
 ## One native treasury, asset-specific destinations
 
+Use the [provider confirmation request](/downloads/Provider-Confirmation-Request-v4.md) to collect actual provider balance, allocation and settlement evidence. Owner approval and provider confirmation are recorded separately.
+
 The account references remain at `/api/control/v2/treasury/accounts`, and the native journal uses only `/api/control/v1/treasury`. `PREPARE_MINT` records a `PREPARED` request and leaves the native NUSD projection unchanged. Its journal proof confirms that internal record; it is not an on-chain mint receipt.
 
 The existing NUSD native projection, Stripe USDC destination and Bank of America USD account retain their own units and destination references. The declared 1:1 policy does not change a provider balance or make a bank account an EVM address. This release performs no treasury write, token issuance, conversion or external deposit.
