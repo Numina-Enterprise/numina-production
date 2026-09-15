@@ -26,10 +26,26 @@ export const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
  execution:{contractDeploymentVerified:false,completedMintVerified:false,providerAcceptanceVerified:false},
  scope:'Contract minting and offline preparation are implemented. A native journal request, recipient observation, authorization or reference string does not establish completed token issuance or provider acceptance.'
 });
+export const NUSD_CONVERSION_WORKFLOW=freezeNusdRedemption({
+ schema:'numina.nusd.conversion-workflow.v1',status:'compiled_not_deployed',
+ rate:{nusd:'1',usd:'1',usdc:'1',basis:'fixed_contract_arithmetic',liveQuote:false},
+ contracts:NUSD_CONTRACT_RECORD.contracts.filter(contract=>['nusd_usdc_conversion','nusd_usd_redemption'].includes(contract.id)),
+ usdc:{contract:'NuminaUSDCConversion',operation:'convert',directions:['NUSD_TO_USDC','USDC_TO_NUSD'],
+   inputDecimals:6,outputDecimals:6,feeBaseUnits:'0',liquiditySource:'actual_contract_held_output_tokens',
+   sameChainRequired:true,canonicalUsdcIdentityVerified:false,bridgeImplemented:false,initiallyPaused:true,participantAuthorizationRequired:true},
+ usd:{contract:'NuminaUSDRedemption',operation:'requestRedemption',nusdDecimals:6,usdDecimals:2,
+   nusdBaseUnitsPerUsdCent:'10000',subCentRounding:false,bankSubmissionImplemented:false,
+   settlementModel:'separate_bank_payment_with_distinct_confirmer_attestation',historicalOperatorSeparation:true,receiptScope:'off_chain_evidence_reference_not_bank_verification',
+   burnAfterPaidAttestation:true,refundAfterFailedAttestation:true,processingTimeoutRefund:false,initiallyPaused:true},
+ treasury:{route:'/api/control/v1/treasury',balanceCount:1,journalChangedByCompilation:false,declaredBalanceUsedAsUsdcLiquidity:false},
+ activation:{contractDeploymentVerified:false,reservesVerified:false,bankAdapterConnected:false,financialExecutionEnabled:false},
+ documentation:'/downloads/NUSD-Conversion-Contracts.md'
+});
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
  contract_record:NUSD_CONTRACT_RECORD,
  mint_workflow:NUSD_MINT_WORKFLOW,
+ conversion_workflow:NUSD_CONVERSION_WORKFLOW,
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  treasury_policy:'/api/control/v2/treasury/policy',
  native_treasury:{source:'/api/control/v1/treasury',unit:'NUSD',authority:'NUMINA',system_of_record:'NUMINA',access:'owner_authenticated'},
@@ -56,6 +72,9 @@ export async function nusdHttp(req){
  const headers={'Content-Type':'application/json','Cache-Control':'no-store'};
  if(path==='/api/nusd/v1/mint-workflow')return req.method==='GET'
   ?new Response(JSON.stringify(NUSD_MINT_WORKFLOW),{headers})
+  :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
+ if(path==='/api/nusd/v1/conversion-workflow')return req.method==='GET'
+  ?new Response(JSON.stringify(NUSD_CONVERSION_WORKFLOW),{headers})
   :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
  if(path==='/api/nusd/v1/contracts')return req.method==='GET'
   ?new Response(JSON.stringify(NUSD_CONTRACT_RECORD),{headers})

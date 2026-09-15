@@ -181,6 +181,10 @@ Current open decisions include: actual financial operating scope and authority; 
 
 ## Financial evidence workspace — September 15, 2026
 
+### NUSD conversion candidates
+
+The [1:1 conversion contract security guide](https://numinalabs.xyz/downloads/NUSD-Conversion-Contracts.md) documents the new same-chain USDC inventory exchange and USD redemption escrow. It covers role separation, explicit holder eligibility, actual output liquidity, precision, atomic rollback, idempotency, reentrancy, claim/refund states and the off-chain bank-confirmation trust boundary. The [software record](https://numinalabs.xyz/api/nusd/v1/conversion-workflow) reports compiled candidates with deployment, reserves and financial activation unverified. No compiler or website deployment creates funds, moves the native treasury, proves a bank outcome or activates a provider write route.
+
 The [financial evidence workspace](https://numinalabs.xyz/financial-services) uses the existing authenticated root and private supporting-document store. Its new register stores immutable, hash-addressed JSON document packets in the existing private object bucket. No customer data, owner credentials, provider metadata or document counts are exposed by its public manifest. Reviewer sessions are explicitly denied access to private financial evidence.
 
 Functions cover document upload, provider/entity/jurisdiction registration, declared expiry and document coverage checks, and private review-packet export. Source references are never fetched. Browser writes require the exact origin; canonical JSON, existing rate limits and bounded body reads apply. File receipts refer to real stored bytes, not invented document identifiers. Identical retries return the original registration. Corrections create another immutable entry.

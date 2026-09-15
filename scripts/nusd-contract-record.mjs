@@ -14,6 +14,14 @@ const specifications = [
   {id:'nusd_settlement', name:'NuminaSettlement', schema:'numina.nusd.settlement-candidate.v1', operations:{
     nusd_settlement:['settle','settlements'], token_identity:['nusd'],
   }},
+  {id:'nusd_usdc_conversion', name:'NuminaUSDCConversion', schema:'numina.nusd.usdc-conversion-candidate.v1', operations:{
+    conversion:['quote','convert','conversions'], liquidity:['addLiquidity','removeLiquidity'],
+    token_identity:['nusd','usdc'], administration:['pause','unpause','grantRole','revokeRole'],
+  }},
+  {id:'nusd_usd_redemption', name:'NuminaUSDRedemption', schema:'numina.nusd.usd-redemption-candidate.v1', operations:{
+    redemption:['quoteUsdCents','requestRedemption','cancel','beginPayment','attestBankOutcome','claimRefund','redemptions','totalEscrowedNusd'],
+    token_identity:['nusd'], administration:['pause','unpause','grantRole','revokeRole'],
+  }},
 ];
 
 // Source uses LF UTF-8. Preserve compiler artifact bytes exactly, including the
@@ -59,7 +67,7 @@ export function createNusdContractRecord(read=readFileSync) {
     contracts:entries.map(entry=>entry.descriptor),
     financial_execution:{issuance:false,transfer:false,nusd_settlement:false,usd_redemption:false,
       usdc_conversion:false,external_deposits:false},
-    scope:'Compiled NUSD token and NUSD settlement source. A successful token settlement moves existing NUSD only. Source and artifact hashes do not establish deployed contracts, reserves, USDC conversion or external deposits.',
+    scope:'Compiled NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow candidates. USD settlement requires a separate bank payment and a trusted confirmer attestation. Source and artifact hashes do not establish deployed contracts, reserves, activated conversion or external deposits.',
   }};
 }
 
