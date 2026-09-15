@@ -91,6 +91,7 @@ test('packaged integration requires rc26 while retaining server-reported evidenc
   assert.equal(result.verification,'server_reported_not_independently_verified');
   assert.equal(result.data.runtime_dependency.version,RUNTIME_VERSION);
   await assert.rejects(client(appManifest('1.9.0-rc22')).release(),{code:'RUNTIME_RELEASE_MISMATCH'});
+  for(const version of ['2.0.0','3.0.0','4.0.0-rc1'])await assert.rejects(client({...appManifest(),version,release:'numina-v'+version}).release(),{code:'APPLICATION_RELEASE_MISMATCH'});
 });
 
 test('integration distribution contains the same release contract as the browser and gateway',()=>{

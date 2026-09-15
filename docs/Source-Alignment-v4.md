@@ -37,3 +37,9 @@ The canonical treasury remains one 500,000,000,000,000 NUSD native projection sh
 The top-level `sourceInputs` array in `/source-alignment.json` has one entry per path, in ascending order, with the byte count and SHA-256 of the exact checkout bytes (`sourceInputHashMode: raw_file_bytes`). Its nested `iosSource.sourceInputs` submanifest separately declares UTF-8/LF text normalization for portable iOS packaging. Never compare a normalized digest to raw Windows file bytes without applying that declared representation. No source or certificate-request bytes are changed to reconcile these two scopes.
 
 The local generator reports source consistency only. It does not attest a public deployment, a native compile, an App Store upload, or a treasury/account update. Historical release evidence and preserved binary artifacts are not regenerated as current execution evidence.
+
+## Current-build use
+
+Active release reads use `/v4/release/manifest` with caching disabled. The integration client requires application 4.0.0 and the separately pinned rc26 dependency; older application releases returned on that route are rejected. The control room validates the current application, control and plugin versions plus the build identity before displaying them, and refreshes that identity with the workspace. A failed or superseded read cannot restore an old current-build label.
+
+The installed web app requires a live connection. Its service worker removes prior Numina app caches and uses network requests with `cache: no-store`; it does not fall back to stored executable files after a failed request. This policy takes effect when the updated service worker activates; an already open document must reload to execute newly published code. Native launchers continue to open the canonical hosted application. Compatibility release aliases resolve the same current inventory, while explicitly historical artifacts retain their original identities.
