@@ -1,5 +1,5 @@
 {
-  "git": { "deploymentEnabled": false },
+  "git": { "deploymentEnabled": true },
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
@@ -24,30 +24,9 @@
     { "source": "/v4/release/manifest", "destination": "/api/application-release" }
   ],
   "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-      ]
-    },
-    {
-      "source": "/v(1|2|3|4)/release/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
-    },
-    {
-      "source": "/v1/frontier/readiness",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
-    },
-    {
-      "source": "/v1/deployment/provenance",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
-    }
+    { "source": "/(.*)", "headers": [ { "key": "X-Content-Type-Options", "value": "nosniff" }, { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" } ] },
+    { "source": "/v(1|2|3|4)/release/(.*)", "headers": [ { "key": "Cache-Control", "value": "no-store" } ] },
+    { "source": "/v1/frontier/readiness", "headers": [ { "key": "Cache-Control", "value": "no-store" } ] },
+    { "source": "/v1/deployment/provenance", "headers": [ { "key": "Cache-Control", "value": "no-store" } ] }
   ]
 }
