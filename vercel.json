@@ -7,6 +7,7 @@
     { "source": "/api/control/v2/:path*", "destination": "https://numinalabs.xyz/api/control/v2/:path*" },
     { "source": "/.well-known/agent-card.json", "destination": "https://numinalabs.xyz/.well-known/agent-card.json" },
     { "source": "/v1/frontier/readiness", "destination": "/api/application-release?mode=frontier-readiness" },
+    { "source": "/v1/deployment/provenance", "destination": "/api/application-release?mode=deployment-provenance" },
     { "source": "/v2/network/status", "destination": "/api/node-connection" },
     { "source": "/v2/network/deployment-estimate", "destination": "/api/deployment-estimate" },
     { "source": "/v1/status", "destination": "/api/status" },
@@ -38,6 +39,12 @@
     },
     {
       "source": "/v1/frontier/readiness",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/v1/deployment/provenance",
       "headers": [
         { "key": "Cache-Control", "value": "no-store" }
       ]
