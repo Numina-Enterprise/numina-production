@@ -8,6 +8,7 @@
   <link rel="canonical" href="https://numinalabs.xyz/treasury-simulation"><link rel="icon" href="/favicon.svg">
   <link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/site-shell.css"><link rel="stylesheet" href="/treasury-simulation.css">
   <script type="module" src="/treasury-simulation-ui.js"></script>
+  <link rel="stylesheet" href="/company-simulation.css"><script type="module" src="/company-simulation-ui.js"></script>
 <link rel="stylesheet" href="/motion.css"></head>
 <body>
   <a class="skip" href="#main">Skip to simulation</a>
@@ -18,6 +19,17 @@
       <h1 id="simulation-title">One supply.<br>Three treasury views.</h1>
       <p class="simulation-lead">Explore the owner-approved 500T NUSD review at a model rate of <strong>1 NUSD = 1 USDC = 1 USD</strong>. Move a single allocation between simulated accounts and see every amount reconcile.</p>
       <p class="simulation-scope">This session runs in your browser. Its balances and transfers are simulated; production accounts and the native journal are unchanged. Reloading starts a fresh session.</p>
+    </section>
+    <section class="company-simulation" aria-labelledby="company-simulation-title">
+      <span class="simulation-label">SIMULATED COMPANY SCENARIO</span>
+      <h2 id="company-simulation-title">Numina ranks #1 in this simulated scenario.</h2>
+      <p>In this modeled software market, Numina has the largest simulated annual software revenue. Each company appears once; treasury account views are not added to company revenue.</p>
+      <p class="company-simulation-scope" id="company-simulation-scope">All figures below are synthetic scenario inputs. They are not actual company revenue, a real-market ranking, treasury balances or provider evidence. This view does not change production accounts, supply proposals or fees.</p>
+      <div class="company-simulation-table"><table aria-describedby="company-simulation-scope">
+        <caption>Simulated annual software revenue · Scenario year 1 · USD scenario units</caption>
+        <thead><tr><th scope="col">Scenario rank</th><th scope="col">Modeled company</th><th scope="col">Simulated annual revenue</th></tr></thead>
+        <tbody id="company-simulation-rows"><tr class="company-simulation-leader"><td>1</td><td>Numina</td><td>1,000,000,000,000.00</td></tr><tr><td>2</td><td>Simulated peer A</td><td>750,000,000,000.00</td></tr><tr><td>3</td><td>Simulated peer B</td><td>500,000,000,000.00</td></tr><tr><td>4</td><td>Simulated peer C</td><td>250,000,000,000.00</td></tr></tbody>
+      </table></div>
     </section>
     <section class="simulation-total" aria-labelledby="total-title"><div><span id="total-title">TOTAL MODEL VALUE · COUNTED ONCE</span><strong>500,000,000,000,000 <small>NUSD equivalent</small></strong></div><span id="simulation-invariant" role="status">Loading model…</span></section>
     <section aria-label="Simulated treasury allocations" class="simulation-accounts">

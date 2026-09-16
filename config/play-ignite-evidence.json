@@ -1,22 +1,22 @@
 {
   "schema": "numina.play-ignite-evidence.v1",
-  "observedDate": "2026-09-15",
+  "observedDate": "2026-09-16",
   "issue": "https://github.com/skott34-dot/numina-production/issues/25",
   "packageName": "xyz.numinalabs.app",
   "developerAccountId": "5063096330623196321",
   "appId": "4972203847314297095",
-  "sourceReviewCommit": "3f429a79082a00776423241be1862a2f91d61953",
+  "sourceReviewCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
   "sourceReviewVersion": "4.0.0",
   "candidate": {
-    "file": "numina-3.0.0-upload-signed.aab",
-    "versionName": "3.0.0",
-    "versionCode": 2,
-    "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
-    "runId": "34785067667",
-    "bytes": 3617114,
-    "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550",
+    "file": "numina-4.0.0-upload-signed.aab",
+    "versionName": "4.0.0",
+    "versionCode": 3,
+    "sourceCommit": "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
+    "runId": "34947973846",
+    "bytes": 3617288,
+    "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896",
     "localHashVerified": true,
-    "signatureEvidence": "docs/android-signed-build-record-v3.json"
+    "signatureEvidence": "docs/android-signed-build-record-v4.json"
   },
   "playAppSigningSha256": "32:0E:E1:C6:E0:7C:2D:82:3E:8E:28:A4:F6:46:0C:73:DF:8A:55:2A:00:42:B6:AA:31:18:57:52:50:54:F4:1C",
   "confirmed": {
@@ -24,7 +24,7 @@
     "academyLinked": "Academy displayed Account successfully connected",
     "publisherIdentity": "Your identity has been verified email received 2026-09-14T05:32Z",
     "packageRegistration": "Play developer verification shows xyz.numinalabs.app Registered, with three Verified keys",
-    "closedTestDraft": "Alpha track 4698819995703750940, release 1; United States and one owner tester saved",
+    "closedTestDraft": "Alpha release 1 saved as 4.0.0 - Ignite closed test, with updated notes. Track inactive; no bundle uploaded.",
     "declarationsSaved": [
       "No health features",
       "Does not use advertising ID",
@@ -33,15 +33,22 @@
     ],
     "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected.",
     "contentRating": "IARC Completed; saved September 15, 2026 at 3:46 PM Central after owner approved Terms of Use. ESRB Everyone; PEGI 3; Brazil 14+; Germany 16+; generic, Russia and South Korea 3+. Users Interact and In-App Purchases. Certificate ID not displayed.",
-    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, account/data deletion URLs, and nine source-observed data types saved as draft: email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content, diagnostics. Handling and provider flows remain incomplete; no final submission."
+    "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, account/data deletion URLs, and nine source-observed data types saved as draft: email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content, diagnostics. Handling and provider flows remain incomplete; no final submission.",
+    "currentConsoleTaskStatus": {
+      "observedAt": "2026-09-16T22:46:03Z",
+      "completed": 10,
+      "total": 11,
+      "outstanding": "Store listing",
+      "scope": "Observed Console task completion labels; declaration contents and provider claims were not independently verified by this check."
+    }
   },
   "targetAudience": {
     "ownerChoice": "Adults 18 and older",
     "confirmedDate": "2026-09-15",
-    "consoleSaved": false,
-    "blocker": "Console requires Sign in details before the audience questionnaire. The verified reviewer credentials and truthful own-record instructions were entered, but Add failed while the full-access checkbox remained unchecked. No full-access attestation or saved declaration was made.",
+    "consoleSaved": true,
+    "blocker": null,
     "minimumAge": 18,
-    "sourceNotice": "Every maintained public HTML footer states: 18+ · Adults only. You must be 18 or older to use Numina. Hosted Android/iOS surfaces inherit this notice; no age-verification gate or completed Play audience declaration is claimed."
+    "sourceNotice": "Hosted application carries the 18+ notice. Console Target audience task is complete; no physical age verification is claimed."
   },
   "reportedFinancialScope": {
     "source": "Owner answered all to records/service payments, transfers/hold/trade/redeem money or crypto, and borrowing/earned wages; owner subsequently confirmed yes, numina does all",
@@ -51,31 +58,32 @@
   "gates": {
     "upload": {
       "status": "blocked",
-      "detail": "Chrome file chooser returned Not allowed; file URL access was not enabled. No bundles in Play library."
+      "detail": "Chrome fileChooser.setFiles returned Not allowed; no bundle uploaded"
     },
     "playValidation": {
       "status": "blocked",
-      "detail": "Six release errors remain; no server-side bundle, SDK or signing validation yet."
+      "detail": "Five release errors remain; bundle, SDK and signing acceptance are not verified."
     },
     "storeListing": {
       "status": "blocked",
-      "detail": "Text saved as draft; icon, 1024x500 feature graphic and at least two phone/tablet screenshots missing in Console."
+      "detail": "Full description and 18+ notice exist in the saved draft. Required icon, feature graphic and phone screenshots remain missing; final listing review is incomplete."
     },
     "appContent": {
-      "status": "blocked",
-      "detail": "Four declarations still need attention: Sign in details, target audience, Data safety and Financial features. IARC content ratings completed and saved. Owner selected adults 18+; the audience questionnaire was rechecked and still requires Sign in details first."
+      "status": "confirmed",
+      "detail": "Console shows all app-content setup tasks complete. This confirms task labels, not independent validation of declaration contents.",
+      "evidence": "Authenticated Play Dashboard observed September 16, 2026: 10 of 11 setup tasks complete; only Store listing remains. docs/Numina-App-Deployment-Status-2026-09-16.json"
     },
     "reviewerAccess": {
       "status": "blocked",
-      "detail": "Reusable production reviewer login and own-record workflow verified; live checkout observed, no payment submitted. Play credentials remain unsaved because full access to all reviewable features and any paid content has not been established for the required attestation. Own-record isolation does not itself require exposing other customer records or owner credentials."
+      "detail": "Sign in details task is complete in Console. Prior own-record login and checkout observations are retained; full reviewable-feature coverage has not been independently revalidated."
     },
     "financialScope": {
       "status": "blocked",
-      "detail": "Draft saved. Play requests lending partner business names/relationships and a lawful-business attestation; US crypto requires legal entity and FinCEN MSB plus state money-transmitter registration, banking license, or a documented applicable exemption. No such evidence provided. Reconcile reported scope with shipped behavior and supply actual fees, repayment/APR and holder terms."
+      "detail": "Financial features task is complete in Console. Provider relationships, applicable operating authority and terms remain subject to original evidence verification; a task label does not establish them."
     },
     "dataSafety": {
       "status": "blocked",
-      "detail": "Initial collection/security/OAuth/deletion-link answers saved as draft. Complete data types and handling after confirming provider/AI flows, relevant IP-derived location, retention and deletion operations."
+      "detail": "Data safety task is complete in Console. Provider data flows, purposes, retention and deletion accuracy were not independently revalidated."
     },
     "billingClassification": {
       "status": "blocked",
@@ -99,8 +107,7 @@
     "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
     "Add a full description to save",
     "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
-    "This release does not add or remove any app bundles.",
-    "You must let us know whether your app includes any financial features."
+    "This release does not add or remove any app bundles."
   ],
   "reviewerAccess": {
     "scope": "production-own-records",
@@ -109,10 +116,10 @@
     "rootAccess": false,
     "otherCustomerAccess": false,
     "sessionSeconds": 28800,
-    "credentialLocation": "Password digest and session key in Sites secret configuration. Reusable password entered privately in the pending Play Console form; not committed or included in public documentation.",
+    "credentialLocation": "Sites secret configuration and saved Play Console access declaration; credentials were not read or changed during the September 16 check.",
     "liveVerified": true,
-    "consoleSaved": false,
-    "fullAccessAttestation": false,
+    "consoleSaved": true,
+    "fullAccessAttestation": null,
     "verifiedOn": "2026-09-15",
     "deploymentVersion": 76,
     "verificationRequest": {
@@ -142,15 +149,13 @@
     "approvalEvidence": "/downloads/Numina-Financial-Approval-Evidence.md"
   },
   "latestConsoleObservation": {
-    "observedAt": "2026-09-15T21:37:28.758Z",
-    "ownerStatement": "play approval confirmed and closed-test release is approved",
-    "ownerStatementVerified": false,
+    "observedAt": "2026-09-16T22:46:03Z",
     "developerId": "5063096330623196321",
     "appId": "4972203847314297095",
     "package": "xyz.numinalabs.app",
     "trackId": "4698819995703750940",
     "release": "1",
-    "page": "Create closed testing release / Preview and confirm",
+    "page": "Closed-test preview, Dashboard and default store listing",
     "saveEnabled": false,
     "bundlePresent": false,
     "errors": [
@@ -158,11 +163,52 @@
       "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
       "Add a full description to save",
       "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
-      "This release does not add or remove any app bundles.",
-      "You must let us know whether your app includes any financial features."
+      "This release does not add or remove any app bundles."
     ],
-    "dataSafetyDraftSaved": true,
-    "dataSafetyToast": "Your changes have been saved",
-    "scope": "Refreshed authenticated Console UI observation. The owner approval report has not been corroborated by this release."
-  }
+    "draftSaved": true,
+    "setupCompleted": 10,
+    "setupTotal": 11,
+    "scope": "Authenticated Console observations; no Google review, publication or physical device installation."
+  },
+  "historicalObservations": [
+    {
+      "candidate": {
+        "file": "numina-3.0.0-upload-signed.aab",
+        "versionName": "3.0.0",
+        "versionCode": 2,
+        "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+        "runId": "34785067667",
+        "bytes": 3617114,
+        "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550",
+        "localHashVerified": true,
+        "signatureEvidence": "docs/android-signed-build-record-v3.json"
+      },
+      "latestConsoleObservation": {
+        "observedAt": "2026-09-15T21:37:28.758Z",
+        "ownerStatement": "play approval confirmed and closed-test release is approved",
+        "ownerStatementVerified": false,
+        "developerId": "5063096330623196321",
+        "appId": "4972203847314297095",
+        "package": "xyz.numinalabs.app",
+        "trackId": "4698819995703750940",
+        "release": "1",
+        "page": "Create closed testing release / Preview and confirm",
+        "saveEnabled": false,
+        "bundlePresent": false,
+        "errors": [
+          "You need to upload an APK or Android App Bundle for this app.",
+          "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
+          "Add a full description to save",
+          "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
+          "This release does not add or remove any app bundles.",
+          "You must let us know whether your app includes any financial features."
+        ],
+        "dataSafetyDraftSaved": true,
+        "dataSafetyToast": "Your changes have been saved",
+        "scope": "Refreshed authenticated Console UI observation. The owner approval report has not been corroborated by this release."
+      },
+      "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected.",
+      "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, account/data deletion URLs, and nine source-observed data types saved as draft: email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content, diagnostics. Handling and provider flows remain incomplete; no final submission."
+    }
+  ]
 }

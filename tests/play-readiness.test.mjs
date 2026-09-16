@@ -44,8 +44,10 @@ test('source safeguards and historical AAB binding do not claim Play readiness',
   assert.equal(result.readyForSubmission,false);
   assert.equal(result.rolloutComplete,false);
   assert.equal(result.sourceVersion,'4.0.0');
-  assert.equal(result.candidateVersion,'3.0.0');
-  assert.equal(result.submissionBlockers.length,8);
+  assert.equal(result.candidateVersion,'4.0.0');
+  assert.deepEqual(result.submissionBlockers.map(item=>item.id),['upload','playValidation','storeListing','reviewerAccess','financialScope','dataSafety','billingClassification']);
+  assert.equal(record.gates.appContent.status,'confirmed');
+  assert.equal(record.historicalObservations[0].candidate.versionName,'3.0.0');
   assert.equal(result.completionBlockers.length,3);
 });
 test('submission readiness does not require publication or a Play-installed device beforehand',()=>{
