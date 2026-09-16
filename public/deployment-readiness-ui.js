@@ -66,7 +66,7 @@ $('prepare-deployment').addEventListener('click',async()=>{
   if(!scope.isCurrent(generation)||draft!==draftGeneration)return;
   if(result.review.status==='BLOCKED'){$('preparation-summary').textContent='Preparation blocked: '+result.review.issues.map(item=>item.message).join(' ');return;}
   prepared=result;
-  $('preparation-summary').textContent='500,000,000,000,000 NUSD · '+result.review.constructor.initialRecipient+' · '+((result.review.constructorData.length-2)/2)+' creation bytes. '+(result.transactionDraft?'Unsigned transaction draft included. Network, fees, wallet control and reviews remain unverified.':'Constructor encoded. Complete the network and fee fields to include an unsigned transaction draft. Missing: '+result.missingTransactionInputs.join(', ')+'.');
+  $('preparation-summary').textContent='500,000,000,000,000 NUSD · '+result.review.constructor.initialRecipient+' · '+((result.review.constructorData.length-2)/2)+' creation bytes. '+(result.transactionDraft?'Unsigned request included. Your wallet assigns the nonce before signing. Network, fees, wallet control and reviews remain unverified.':'Constructor encoded. Complete the network and fee fields to include an unsigned transaction draft. Missing: '+result.missingTransactionInputs.join(', ')+'.');
   notice('Prepared locally. Download the review bundle; no transaction has been signed or submitted.');
  }catch{if(scope.isCurrent(generation)&&draft===draftGeneration)$('preparation-summary').textContent='Could not prepare these inputs. Check address checksums, published files and the total fee budget, then try again.';}
  finally{if(scope.isCurrent(generation)&&draft===draftGeneration){preparing=false;renderInputs();}}

@@ -1,0 +1,30 @@
+{
+  "schema": "numina.requested-asset-fee.v1",
+  "status": "OWNER_CONFIRMED_NETWORK_FEE_NOT_PAID",
+  "feeName": "Numina network gas fee",
+  "ratePercent": "0.000000000005",
+  "unitInterpretation": "percentage_continuing_prior_explicit_percentage_instructions",
+  "basisNUSD": "1500000000000000",
+  "basis": "requested_1500T_total_initial_supply",
+  "tokenDecimals": 6,
+  "feeNUSD": "75",
+  "feeBaseUnits": "75000000",
+  "calculation": "1500000000000000 * 0.000000000005 / 100 = 75",
+  "requestedDeductionAsset": "NUSD",
+  "verification": {
+    "status": "owner_confirmed",
+    "source": "explicit_owner_statement",
+    "statement": "it is the verified numina network gas fee, update the software",
+    "independentNodeQuoteVerified": false,
+    "providerReceipt": null
+  },
+  "actualNetworkGasQuote": null,
+  "networkFeeAssetVerified": false,
+  "nusdGasPaymentSupported": null,
+  "deductionPerformed": false,
+  "signed": false,
+  "broadcast": false,
+  "minted": false,
+  "receipt": null,
+  "scope": "Owner-confirmed Numina network fee schedule and exact calculation. Independent node quote and payment receipt are not attached; no fee reservation, balance change or funded settlement is recorded."
+}
