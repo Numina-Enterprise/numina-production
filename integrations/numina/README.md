@@ -12,6 +12,8 @@ This archive is an integration deliverable. It does not install itself into prov
 | --- | --- | --- |
 | `numina_application_release` | Discovery | GET application release, artifact list and separately versioned dependencies |
 | `numina_runtime_build` | Discovery | Read execution-runtime build claims, proof links and available root NUSD receipt/readiness records |
+| `numina_read_treasury` | Discovery | Read the canonical native treasury with owner authentication |
+| `numina_provider_routes` | Discovery | Read owner-authenticated provider route observations; no acceptance, funding or transfer inference |
 | `numina_nusd_status` | Discovery | Public status with `request_id:null`; private request status requires authentication |
 | `numina_nusd_network` | Discovery | Read the reported network policy through NUSD status; no blockchain RPC |
 | `numina_service_catalog` | Discovery | Read offers, currencies and request-only qualifications |
@@ -34,7 +36,7 @@ const release = await numina.release({});
 const status = await numina.status({request_id:null});
 const catalog = await numina.catalog();
 
-const tools = providerTools('openai-responses'); // Five discovery tools.
+const tools = providerTools('openai-responses'); // Seven discovery tools; owner reads require a token.
 // Register tools with your configured model host.
 // Dispatch only completed calls authorized by that host:
 const results = await executeProviderCalls('openai-responses', completedCalls, numina);
@@ -48,7 +50,13 @@ The low-level `openAIChatTools()` and `openAIResponsesTools()` retain their earl
 
 The `numina_runtime_build` tool reads `execution_runtime_build` from the existing application manifest. It preserves source and builder revisions, artifact hashes, proof links and financial-status source labels. Revision `root-readiness-v2.0.0` also includes `nusd_transaction_receipts` and `nusd_activation_readiness` when the root manifest supplies them. Missing fields stay omitted. These are server-reported records, with no independent receipt or readiness verification by the client; a recorded claim or empty slot does not prove deployment, backing or settlement.
 
-The client performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc26 control-plane runtime and separately built Linux execution image retain their separate identities. This read-only addition does not change the six default discovery tools, install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
+The runtime-build tool performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc26 control-plane runtime and separately built Linux execution image retain their separate identities. Discovery does not install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
+
+## Provider route observations
+
+`client.readProviderRoutes({})` and `numina_provider_routes` require an owner token and read `/api/control/v2/treasury/provider-routes`. The client preserves the server's provider currency, settlement currency, network, destination, observation time and completeness. An active USDC route is not NUSD acceptance, available source funds or a completed deposit. NUSD asset acceptance remains unverified in this response version. The tool contacts only the configured Numina server and cannot submit deposits or change balances.
+
+Public network and runtime-build discovery retain the optional `provider_routing` metadata without fetching private route observations.
 
 ## NVIDIA NIM
 

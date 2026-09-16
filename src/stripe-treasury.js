@@ -3,6 +3,13 @@ import {isTreasuryMinorInteger,formatTreasuryProviderAmount} from '../public/tre
 export const STRIPE_TREASURY_ACCOUNT='acct_1UEEPnQdJat0efmT';
 export const STRIPE_TREASURY_FINANCIAL_ACCOUNT='fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu';
 const STRIPE_TREASURY_VERSION='2026-08-26.preview';
+export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes';
+export const NUSD_PROVIDER_ROUTING=Object.freeze({
+  schema:'numina.nusd.provider-routing.v1',route:TREASURY_PROVIDER_ROUTES,method:'GET',access:'owner_authenticated',
+  provider:'Stripe',mode:'live_read_only',canonicalTreasury:'/api/control/v1/treasury',
+  acceptanceScope:'Exact provider-reported currency, network and destination; token identity requires separate verification',
+  nusdAcceptanceVerified:false,transferExecution:false,documentation:'/downloads/NUSD-Provider-Routing.md'
+});
 function stripeTreasuryError(code,status){return Object.assign(new Error(code),{code,status});}
 function stripeTreasuryDiagnostic(value){try{console.log(JSON.stringify(value));}catch{}}
 function stripeTreasuryExceptionCategory(error){
@@ -82,5 +89,51 @@ export async function readStripeTreasury(env,{fetcher=(...args)=>globalThis.fetc
       return {schema:'numina.stripe.treasury.v1',provider:'Stripe',connection:'read_only',account:{id,name:typeof value.display_name==='string'&&value.display_name.trim()?value.display_name.trim().slice(0,160):'Financial account',status:value.status,livemode:true},balances,reported_currencies:reportedCurrencies,provider_nusd_balance:providerNusd,treasury_policy:'/api/control/v2/treasury/policy',observed_at:new Date().toISOString(),provider_request_id:header('request-id'),provider_api_version:header('stripe-version'),dashboard_url:'https://dashboard.stripe.com/'+STRIPE_TREASURY_ACCOUNT+'/treasury',transfer_execution:false,nusd_settlement:false};
     })()
   ]);}catch(error){if(['STRIPE_TREASURY_UNAVAILABLE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;stripeTreasuryDiagnostic({event:'stripe_treasury_runtime_error',stage,response_received:stage!=='fetch_pending',category:stripeTreasuryExceptionCategory(error),error_name:['Error','TypeError','RangeError','AbortError','NetworkError','SecurityError','NotSupportedError'].includes(error?.name)?error.name:'OtherError'});throw stripeTreasuryError('STRIPE_TREASURY_UNAVAILABLE',503);}
+  finally{clearTimeout(timer);controller.abort();}
+}
+
+// Read existing destinations only. This never creates a FinancialAddress or submits funds.
+export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThis.fetch(...args),timeoutMs=8000}={}){
+  const deadline=Date.now()+timeoutMs;
+  const account=await readStripeTreasury(env,{fetcher,timeoutMs});
+  const controller=new AbortController();let timer;
+  try{return await Promise.race([
+    new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(stripeTreasuryError('STRIPE_TREASURY_TIMEOUT',504));},Math.max(1,deadline-Date.now()));}),
+    (async()=>{
+      // No client-selected URL, account, include fields or pagination URL is followed.
+      const response=await fetcher('https://api.stripe.com/v2/money_management/financial_addresses?financial_account='+STRIPE_TREASURY_FINANCIAL_ACCOUNT+'&limit=50',{
+        method:'GET',redirect:'manual',signal:controller.signal,headers:{Authorization:'Bearer '+env.NUMINA_STRIPE_TREASURY_READ_KEY,'Stripe-Version':STRIPE_TREASURY_VERSION,Accept:'application/json','Cache-Control':'no-store',Pragma:'no-cache'}
+      });
+      if(!response.ok||response.redirected){void response.body?.cancel().catch(()=>{});throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);}
+      const page=await stripeTreasuryJson(response);
+      const invalid=()=>{throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE',502);};
+      if(!page||!Array.isArray(page.data)||page.data.length>50||!Object.hasOwn(page,'next_page_url')||!(page.next_page_url===null||typeof page.next_page_url==='string'&&page.next_page_url.length>0))invalid();
+      const routes=[],ids=new Set();let excluded=0,unclassified=0;
+      const code=value=>typeof value==='string'&&/^[a-z][a-z0-9_]{1,63}$/.test(value);
+      const reference=value=>typeof value==='string'&&/^[A-Za-z0-9:._-]{1,256}$/.test(value);
+      for(const item of page.data){
+        if(!item||item.object!=='v2.money_management.financial_address'||typeof item.id!=='string'||!/^finaddr_[A-Za-z0-9]{1,100}$/.test(item.id)||ids.has(item.id)||item.financial_account!==STRIPE_TREASURY_FINANCIAL_ACCOUNT||item.livemode!==true||!['active','archived','failed','pending'].includes(item.status)||!code(item.currency)||!code(item.settlement_currency))invalid();
+        ids.add(item.id);
+        // Banking details and unsupported credential types never enter this response.
+        if(['us_bank_account','gb_bank_account'].includes(item.credentials?.type)){excluded++;continue;}
+        if(item.credentials?.type!=='crypto_wallet'){unclassified++;continue;}
+        const wallet=item.credentials.crypto_wallet;
+        if(!wallet||!reference(wallet.address)||!code(wallet.network)||!(wallet.memo===null||reference(wallet.memo)))invalid();
+        routes.push({id:item.id,currency:item.currency,settlement_currency:item.settlement_currency,status:item.status,
+          network:wallet.network,address:wallet.address,memo:wallet.memo,
+          provider_reported_active:account.account.status==='open'&&item.status==='active'});
+      }
+      const complete=page.next_page_url===null&&unclassified===0;
+      const requestId=response.headers.get('request-id');
+      return {schema:'numina.treasury.provider-routes.v1',provider:'Stripe',connection:'read_only',
+        financial_account:STRIPE_TREASURY_FINANCIAL_ACCOUNT,account_status:account.account.status,
+        source:'GET /v2/money_management/financial_addresses',observed_at:new Date().toISOString(),
+        provider_request_id:requestId&&/^[A-Za-z0-9._-]{1,100}$/.test(requestId)?requestId:null,
+        provider_api_version:STRIPE_TREASURY_VERSION,complete,excluded_non_crypto_records:excluded,unclassified_records:unclassified,routes,
+        nusd:{status:page.data.some(item=>item.currency==='nusd')?'ASSET_IDENTITY_NOT_VERIFIED':complete?'NOT_REPORTED':'OBSERVATION_INCOMPLETE',provider_acceptance_verified:false},
+        canonical_treasury:'/api/control/v1/treasury',transfer_execution:false,submission_performed:false,receipt:null,
+        scope:'Authenticated provider route observation only. A listed destination does not establish NUSD token identity, available source funds, conversion, reserve allocation or settlement.'};
+    })()
+  ]);}catch(error){if(['STRIPE_PROVIDER_ROUTES_UNAVAILABLE','STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);}
   finally{clearTimeout(timer);controller.abort();}
 }

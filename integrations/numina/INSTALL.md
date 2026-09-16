@@ -13,7 +13,7 @@ Use `examples/mcp-host.example.json` as a template. Replace the script placehold
 }
 ```
 
-Launch command: `node`; argument: that absolute script path. Restart/reload the host according to its instructions. The host should initialize the supported MCP revision and discover five tools, including `numina_application_release`. This is an installation procedure, not a record that an installation was performed.
+Launch command: `node`; argument: that absolute script path. Restart/reload the host according to its instructions. The host should initialize the supported MCP revision and discover seven tools, including `numina_application_release` and the owner-only `numina_provider_routes`. This is an installation procedure, not a record that an installation was performed.
 
 The process communicates over stdio; an interactive shell may appear silent while awaiting JSON-RPC. Diagnostics use stderr. Host configuration formats vary. A remote-only host needs a separately implemented and authorized remote service; do not enter the Numina website URL as a claimed MCP endpoint.
 
@@ -31,9 +31,9 @@ Call `numina_application_release` with `{}`. It targets `GET /v4/release/manifes
 
 Public release/status/network/catalog reads need no token. Keep provider credentials in the host; this kit never sends them to Numina. Do not place secrets in prompts, model arguments, browser/mobile bundles or this archive.
 
-Private status needs a real scoped server-issued Numina token. Quote/request additionally need the verified canonical NUSD asset pin and active server capabilities. They are not presently made available by this distribution. Do not reuse an owner credential to bypass missing onboarding. The package has no mint, transfer, settlement, payment-claim or result-unlock action.
+Private status needs a real scoped server-issued Numina token. Native treasury and provider-route reads require owner authorization. Quote/request additionally need the verified canonical NUSD asset pin and active server capabilities. They are not presently made available by this distribution. Do not reuse an owner credential to bypass missing onboarding. The package has no mint, transfer, settlement, payment-claim or result-unlock action.
 
-Version 4.0.0 tests were not run. No provider account was configured, installed, certified or submitted as part of packaging.
+Packaging does not run tests. No provider account is configured, installed, certified or submitted by packaging. See VALIDATION.md for source validation scope.
 
 ## Runtime evidence read
 

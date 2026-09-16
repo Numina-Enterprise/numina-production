@@ -43,6 +43,30 @@ function harness(fetcher,{control=false}={}){
 function values(h){const items=h.get('stripe-treasury-details').children,rows={};for(let i=0;i<items.length;i+=2)rows[items[i].textContent]=items[i+1].textContent;return rows;}
 function assertCleared(h){assert.equal(h.get('stripe-treasury-details').children.length,0);assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.equal(h.get('stripe-treasury-dashboard').getAttribute('href'),null);}
 
+test('deposit route check displays exact provider currency and network without claiming NUSD acceptance',async()=>{
+ const calls=[],routes={schema:'numina.treasury.provider-routes.v1',provider:'Stripe',connection:'read_only',complete:true,
+  routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],
+  nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,receipt:null};
+ const h=harness(async path=>{calls.push(path);return response(path.endsWith('/provider-routes')?routes:stripeFixture());});
+ try{
+  await h.subject.loadStripeTreasury();assert.equal(calls.length,1);
+  const [button,result]=h.get('stripe-treasury-details').children.at(-1).children;
+  await button.onclick();assert.equal(calls.at(-1),'/api/control/v2/treasury/provider-routes');
+  assert.match(result.textContent,/USDC · base · Provider reports active · 0x1234567890/);
+  assert.match(result.textContent,/has not listed an NUSD deposit route/);assert.match(result.textContent,/No deposit was submitted/);
+  routes.nusd.provider_acceptance_verified=true;
+  await button.onclick();assert.match(result.textContent,/could not be checked/);assert.doesNotMatch(result.textContent,/0x1234567890/);
+ }finally{h.close();}
+});
+
+test('a late provider route observation cannot restore cleared owner data',async()=>{
+ const pending=deferred(),h=harness(path=>path.endsWith('/provider-routes')?pending.promise:Promise.resolve(response(stripeFixture())));
+ try{
+  await h.subject.loadStripeTreasury();const [button]=h.get('stripe-treasury-details').children.at(-1).children;
+  const loading=button.onclick();h.subject.clearStripeTreasury();pending.resolve(response({}));await loading;assertCleared(h);
+ }finally{h.close();}
+});
+
 test('Stripe Treasury renders confirmed zero balances separately from an omitted currency',async()=>{
  const fixture=stripeFixture();fixture.balances.inbound_pending.usdc=null;
  const h=harness(async()=>response(fixture));

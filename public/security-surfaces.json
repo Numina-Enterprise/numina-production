@@ -10,6 +10,13 @@
   "scope": "One security model for existing Numina entry points. This record does not provision integrations, grant authority, activate financial execution or establish third-party installation.",
   "surfaces": [
     {
+      "id": "provider-routes",
+      "entry": "/api/control/v2/treasury/provider-routes",
+      "access": "authenticated owner; read-only provider configuration required",
+      "security": "/security",
+      "connectionVerification": "not_established_by_this_record"
+    },
+    {
       "id": "website",
       "entry": "/",
       "access": "public",

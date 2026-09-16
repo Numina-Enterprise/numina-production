@@ -1,7 +1,7 @@
 import {controlHash,controlError} from './control.js';
 import {readControl} from './control-store.js';
 import {createNuminaTreasury} from './native-treasury.js';
-import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT} from './stripe-treasury.js';
+import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT,TREASURY_PROVIDER_ROUTES} from './stripe-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {frontierState,frontierSign} from './frontier.js';
 import {canonicalTreasuryReference} from './treasury-alignment.js';
@@ -61,7 +61,7 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
       requiredEvidence:[
         {id:'funding_source',status:'NOT_VERIFIED',description:'Authenticated available source funds identifying the account, asset and exact amount'},
         {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
-        {id:'provider_acceptance',status:'NOT_VERIFIED',description:'Provider acceptance of the source asset, network and destination'}],
+        {id:'provider_acceptance',status:'NOT_VERIFIED',observationRoute:TREASURY_PROVIDER_ROUTES,description:'Provider acceptance of the source asset, network and destination; read current provider routes separately'}],
       settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
   return {schema:'numina.treasury.evidence-snapshot.v1',scope:'Numina-native journal integrity and server-observed supporting records',
     issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,

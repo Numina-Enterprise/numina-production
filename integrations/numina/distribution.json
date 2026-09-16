@@ -86,12 +86,22 @@
       "denomination_policy",
       "contract_record",
       "mint_workflow",
+      "provider_routing",
       "treasury_client_verification"
     ],
     "proofGuide": "EVIDENCE.md",
     "clientPerformsSignatureVerification": false,
     "clientPerformsReceiptVerification": false,
     "clientPerformsReadinessVerification": false
+  },
+  "providerRoutes": {
+    "tool": "numina_provider_routes",
+    "method": "GET",
+    "endpoint": "/api/control/v2/treasury/provider-routes",
+    "access": "authenticated_owner",
+    "schema": "numina.treasury.provider-routes.v1",
+    "clientPerformsProviderAcceptanceVerification": false,
+    "transferExecution": false
   },
   "defaultOrigin": "https://numinalabs.xyz",
   "defaultProfile": "discovery",

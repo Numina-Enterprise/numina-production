@@ -6,6 +6,7 @@ This contract describes the integration target, not evidence of deployed mutatio
 | --- | --- | --- |
 | GET `/v4/release/manifest` | None | Current application 4.0.0 identity, SHA-256-shaped artifact list and separately pinned rc26 runtime dependency; server-reported only |
 | GET `/api/nusd/v1/status` | None | Identity, backing evidence, capability discovery |
+| GET `/api/control/v2/treasury/provider-routes` | None; owner authentication | Current server-observed provider routes and NUSD acceptance scope; no deposit submission |
 | GET `/api/app/v1/catalog` | None | Public offers, currency labels, request-only state and scope terms |
 | POST `/api/nusd/v1/quotes` | `service_id`, `units`, `unit`, `idempotency_key` | Server-priced, expiring NUSD quote |
 | POST `/api/nusd/v1/requests` | `quote_id`, `description`, `idempotency_key` | Create an authenticated workflow request only |
@@ -62,3 +63,13 @@ The wrapper always retains `server_reported_not_independently_verified` and `ass
 # Current application build
 
 Release reads use the canonical `/v4/release/manifest` with `cache: no-store`, without a cached fallback. The client requires Numina application 4.0.0 and its separately pinned rc26 runtime dependency. Older application versions returned by the current route fail with `APPLICATION_RELEASE_MISMATCH`. The returned `build_id` identifies the server's current inventory; this lookup does not independently attest deployment or provider funds.
+
+## Provider route observations
+
+`client.readProviderRoutes({})` and `numina_provider_routes` accept exactly an empty object and require an owner token. They make one authenticated GET to `/api/control/v2/treasury/provider-routes` on the configured Numina origin, without caller-selected provider URLs, account IDs, destinations or acceptance flags.
+
+The response uses `schema:"numina.treasury.provider-routes.v1"`, `provider:"Stripe"`, `connection:"read_only"`, a FinancialAccount reference, account status, observation time, completeness and at most 50 crypto routes. Each route retains its identifier, currency, settlement currency, status, network, address, memo and `provider_reported_active` value. NUSD status is `NOT_REPORTED`, `OBSERVATION_INCOMPLETE` or `ASSET_IDENTITY_NOT_VERIFIED`; `provider_acceptance_verified` stays false. Execution fields must remain `submission_performed:false`, `receipt:null` and `transfer_execution:false`.
+
+Response validation recognizes structure and preserves the server's source scope. The wrapper remains `server_reported_not_independently_verified` with `asset_execution_available:false`. Neither route availability nor a provider currency label establishes Numina token identity, reserve allocation, funding, conversion or settlement. The client does not contact Stripe directly or follow returned addresses and links.
+
+Public `network()` and `runtimeBuild()` discovery retain an optional `provider_routing` object from the status and release response. Missing metadata stays omitted, malformed metadata is rejected, and the discovery calls do not follow its owner-only route.
