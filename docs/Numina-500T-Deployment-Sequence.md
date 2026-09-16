@@ -4,6 +4,8 @@ Status: preparation and simulation. No production deployment, signature, broadca
 
 The [preparation package](Numina-500T-Deployment-Handoff.zip) contains the v3 token request, three dependent input sheets, receipt-verification checklists and a machine-readable list of unresolved inputs. ZIP SHA-256: `858a8efd985be4b19c9b8a4df90a6d0145b61a0c39354759d5afa83a284a2afd`.
 
+The [preparation tools](Numina-500T-Preparation-Tools.zip) add the matching eight-argument encoder, a read-only RPC observer, receipt consistency checks and eight review-evidence intake records. Start with `tool/README.md` inside that archive. Its [package record](numina-500t-preparation-tools-record.json) provides the exact hash. These tools cannot replace owner wallet selection, independent reviews or provider-origin evidence.
+
 ## 1. Resolve and encode the exact request
 
 - Verify the intended network identity through its authenticated RPC, including chain ID and genesis block hash. Confirm the signing sender, nonce, fee asset, gas estimate and fee budget on that network.

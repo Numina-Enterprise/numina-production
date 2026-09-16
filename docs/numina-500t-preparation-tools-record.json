@@ -1,0 +1,20 @@
+{
+  "schema": "numina.nusd.preparation-tools-package.v1",
+  "url": "/downloads/Numina-500T-Preparation-Tools.zip",
+  "sha256": "9304f2f3e0a72c2a8db857ad0ee3557523eccfac0b61db3d39e33626b40baeea",
+  "bytes": 116292,
+  "files": 46,
+  "node": "24.x",
+  "dependency": {
+    "ethers": "6.15.0"
+  },
+  "toolFunctions": [
+    "offline_constructor_encoding",
+    "read_only_network_observation",
+    "supplied_receipt_consistency_checks"
+  ],
+  "productionReady": false,
+  "financialExecution": false,
+  "walletCreated": false,
+  "reviewAttestationsCreated": false
+}
