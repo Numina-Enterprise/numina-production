@@ -37,7 +37,7 @@ jobs:
           NODE
       - name: Validate application build
         run: npm run build
-      - name: Validate root routes, release identities and frontier readiness
+      - name: Validate root routes, release identities and provenance-bound readiness
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync,readdirSync} from 'node:fs';
@@ -47,43 +47,33 @@ jobs:
           const config=JSON.parse(readFileSync('vercel.json','utf8'));
           if(config.git?.deploymentEnabled!==false) throw new Error('manual deployment gate must remain false in source');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
-          for(const source of ['/v1/frontier/readiness','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) {
-            if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
-          }
-          if(rewrites.get('/v1/frontier/readiness')!=='/api/application-release?mode=frontier-readiness') throw new Error('frontier readiness bypasses consolidated verifier');
-          for(const source of ['/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) {
-            if(rewrites.get(source)!=='/api/application-release') throw new Error('application release alias bypasses validation proxy: '+source);
-          }
+          for(const source of ['/v1/frontier/readiness','/v1/deployment/provenance','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
+          if(rewrites.get('/v1/frontier/readiness')!=='/api/application-release?mode=frontier-readiness') throw new Error('frontier readiness bypasses verifier');
+          if(rewrites.get('/v1/deployment/provenance')!=='/api/application-release?mode=deployment-provenance') throw new Error('deployment provenance bypasses verifier');
+          for(const source of ['/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) if(rewrites.get(source)!=='/api/application-release') throw new Error('application release alias bypasses validation proxy: '+source);
           const files=readdirSync('api').filter(name=>/\.(?:js|mjs)$/.test(name)).sort();
           if(files.length!==12) throw new Error('expected 12 root API adapters, found '+files.length);
-          for(const file of files){
-            const mod=await import(pathToFileURL(resolve('api',file)).href);
-            if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);
-          }
+          for(const file of files){const mod=await import(pathToFileURL(resolve('api',file)).href);if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);}
           const {EXPECTED_RELEASE,RELEASE_ARTIFACT_TYPE}=await import(pathToFileURL(resolve('public/runtime-contract.js')).href);
           const require=createRequire(import.meta.url);
           const {RELEASE_IDENTITY}=require(resolve('runtime/vercel-production/lib/numina.js'));
           if(Object.keys(RELEASE_IDENTITY).length!==Object.keys(EXPECTED_RELEASE).length) throw new Error('runtime identity field set differs from pinned contract');
-          for(const [field,expected] of Object.entries(EXPECTED_RELEASE)) {
-            if(RELEASE_IDENTITY[field]!==expected) throw new Error('runtime identity drift: '+field);
-          }
+          for(const [field,expected] of Object.entries(EXPECTED_RELEASE)) if(RELEASE_IDENTITY[field]!==expected) throw new Error('runtime identity drift: '+field);
           if(JSON.stringify(RELEASE_IDENTITY).includes('rc22')) throw new Error('legacy rc22 identity survived runtime alignment');
-          const {validateApplicationRelease,evaluateFrontierReadiness}=await import(pathToFileURL(resolve('api/application-release.mjs')).href);
+          const {validateApplicationRelease,evaluateFrontierReadiness,validateDeploymentProvenance}=await import(pathToFileURL(resolve('api/application-release.mjs')).href);
           const application={schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'ci-build',runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};
           validateApplicationRelease(application);
+          const deployment={schema:'numina.deployment-provenance.v1',environment:'production',deployment_id:'dpl_1234567890',deployment_url:'https://numina-production-example.vercel.app',git_commit_sha:'0123456789abcdef0123456789abcdef01234567',git_commit_ref:'main',runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
+          if(!validateDeploymentProvenance(deployment)) throw new Error('valid deployment provenance rejected');
           const controlState={schema:'numina.control-state.v1',release:EXPECTED_RELEASE.production_version,runtime_controls_configurable:true,real_funds_enabled:false,employer_ip_enabled:false,public_execution_api_enabled:false,public_execution_route_exposed:false};
-          const records={
-            application,
-            manifest:{...EXPECTED_RELEASE,runtime_surface:'live-serverless-control-plane'},
-            attestation:{artifact_type:RELEASE_ARTIFACT_TYPE,payload:{...EXPECTED_RELEASE,environment:'production',role:'public-verifier'}},
-            supply:{valid:true,release:EXPECTED_RELEASE.release,production_files_root:EXPECTED_RELEASE.production_files_root,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256},
-            control:{state:controlState,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:controlState}}
-          };
+          const records={application,manifest:{...EXPECTED_RELEASE,runtime_surface:'live-serverless-control-plane'},attestation:{artifact_type:RELEASE_ARTIFACT_TYPE,payload:{...EXPECTED_RELEASE,environment:'production',role:'public-verifier'}},supply:{valid:true,release:EXPECTED_RELEASE.release,production_files_root:EXPECTED_RELEASE.production_files_root,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256},control:{state:controlState,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:controlState}},deployment};
           const verifyEnvelope=(envelope,type)=>envelope?.artifact_type===type;
           const ready=evaluateFrontierReadiness(records,{verifyEnvelope});
-          if(!ready.ready) throw new Error('matching rc26 observation did not establish frontier readiness');
+          if(!ready.ready||!ready.checks.deployment_provenance_complete) throw new Error('provenance-bound rc26 observation did not establish frontier readiness');
+          const noProvenance=evaluateFrontierReadiness({...records,deployment:null},{verifyEnvelope});
+          if(noProvenance.ready||noProvenance.checks.deployment_provenance_complete) throw new Error('frontier readiness did not fail closed without deployment provenance');
           const openControl={...controlState,public_execution_api_enabled:true};
           const unsafe=evaluateFrontierReadiness({...records,control:{state:openControl,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:openControl}}},{verifyEnvelope});
           if(unsafe.ready||unsafe.checks.execution_boundary_closed) throw new Error('frontier readiness did not fail closed when public execution opened');
-          console.log('Validated consolidated '+files.length+'-function Vercel topology, exact rc26 identity parity, application release proxy and fail-closed frontier readiness on Node '+process.versions.node+'.');
+          console.log('Validated 12-function topology, exact rc26 identity, deployment provenance and fail-closed frontier readiness on Node '+process.versions.node+'.');
           NODE
