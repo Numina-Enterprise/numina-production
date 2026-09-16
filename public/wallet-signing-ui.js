@@ -69,7 +69,7 @@ export function mountWalletSigning({doc=document,win=window,loadReview=loadSigni
  };
  const dispose=()=>{if(!alive)return;alive=false;generation++;loading.abort();win.clearTimeout(expiryTimer);client?.dispose();client=null;profile=null;quote=null;connected=false;maximum.value='';for(const button of [connect,clear,estimate,exportButton])button.disabled=true;maximum.disabled=true;$('signing-quote').hidden=true;for(const id of ['signing-gas-limit','signing-gas-price','signing-total','signing-balance','signing-observed'])$(id).textContent='';$('signing-connection').textContent='No wallet connected.';win.removeEventListener('pagehide',dispose);};
  win.addEventListener('pagehide',dispose,{once:true});
- $('wallet-availability').textContent=availability()?'A browser wallet is available. Connect only the selected treasury account.':'No browser wallet is available here. Open this page in the browser containing your Numina-compatible wallet.';
+ $('wallet-availability').textContent=availability()?'A browser wallet is available. Connect only the selected treasury account.':'No browser wallet is available here. If you created your wallet inside Numina, use the saved-backup section above.';
  render();
  const ready=(async()=>{try{
   const review=await loadReview(loading.signal);if(!alive)return;profile=review;
