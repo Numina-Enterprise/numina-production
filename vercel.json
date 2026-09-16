@@ -1,5 +1,5 @@
 {
-  "git": { "deploymentEnabled": false },
+  "git": { "deploymentEnabled": true },
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
