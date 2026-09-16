@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 7
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_EVIDENCE_API: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1
+      NUMINA_EVIDENCE_API: https://ep-shiny-resonance-augq0orh.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
