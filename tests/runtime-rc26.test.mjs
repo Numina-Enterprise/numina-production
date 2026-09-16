@@ -68,15 +68,29 @@ test('runtime gateway rejects an older release and missing version without forwa
   }
 });
 
-test('runtime gateway marks only successful versioned rc26 responses',async()=>{
+test('runtime gateway marks only successful release-bound rc26 responses',async()=>{
   for(const [path,payload,expected] of [
-    ['/v1/status',{production_version:RUNTIME_VERSION},RUNTIME_VERSION],
+    ['/v1/status',{...EXPECTED_RELEASE},RUNTIME_VERSION],
     ['/v1/control/state',{state:{release:RUNTIME_VERSION}},RUNTIME_VERSION],
-    ['/v1/release/attestation',{payload:{production_version:RUNTIME_VERSION}},RUNTIME_VERSION],
+    ['/v1/release/attestation',{payload:{...EXPECTED_RELEASE}},RUNTIME_VERSION],
+    ['/v1/release/supply-chain',{valid:true,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256},RUNTIME_VERSION],
     ['/v2/network/status',{status:'unavailable'},null]
   ]){
     const response=await routeRuntime(new Request('https://numina.test'+path),async()=>Response.json(payload));
     assert.equal(response.status,200);assert.equal(response.headers.get('X-Numina-Runtime-Release'),expected);
+  }
+});
+
+test('runtime gateway rejects artifact identity drift even when the rc26 version matches',async()=>{
+  for(const [path,payload] of [
+    ['/v1/status',{...EXPECTED_RELEASE,build_id:hash('drifted build')}],
+    ['/v1/release/manifest',{...EXPECTED_RELEASE,spdx_sbom_sha256:hash('drifted sbom')}],
+    ['/v1/release/attestation',{payload:{...EXPECTED_RELEASE,slsa_provenance_sha256:hash('drifted provenance')}}],
+    ['/v1/release/supply-chain',{valid:true,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:hash('drifted supply')}]
+  ]){
+    const response=await routeRuntime(new Request('https://numina.test'+path),async()=>Response.json(payload));
+    assert.equal(response.status,502,path);assert.equal((await response.json()).error,'RUNTIME_RELEASE_IDENTITY_MISMATCH',path);
+    assert.equal(response.headers.get('X-Numina-Runtime-Release'),null,path);
   }
 });
 
