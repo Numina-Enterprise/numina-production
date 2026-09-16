@@ -1,0 +1,59 @@
+name: Repair rc26 integration manifest
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+      - name: Confirm runtimes
+        run: |
+          node --version
+          python3 --version
+      - name: Align packaged runtime contract inventory
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const manifestPath='integrations/numina/file-manifest.json';
+          const sourcePath='integrations/numina/src/runtime-contract.js';
+          const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+          const bytes=fs.readFileSync(sourcePath);
+          const entry=manifest.files.find(file=>file.path==='src/runtime-contract.js');
+          if(!entry) throw new Error('runtime contract inventory entry missing');
+          entry.bytes=bytes.length;
+          entry.sha256=createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+          console.log({bytes:entry.bytes,sha256:entry.sha256});
+          NODE
+      - name: Repackage current iOS source identity
+        run: python3 scripts/package-ios-source.py
+      - name: Validate production build gate
+        run: npm run build
+      - name: Commit aligned release inventories
+        run: |
+          git config user.name 'Numina Release Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            integrations/numina/file-manifest.json \
+            docs/native-package-record-v4.json \
+            docs/numina-os-4.0.0-ios-source.zip \
+            runtime/vercel-production/public/downloads/native-package-record-v4.json \
+            runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo 'Release inventories already aligned.'
+            exit 0
+          fi
+          git commit -m 'Align rc26 release inventories after Node 24 pin'
+          git push origin HEAD:main

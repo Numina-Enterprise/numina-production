@@ -1,0 +1,14 @@
+{
+  "schema": "numina.approval-handoff-package-record.v1",
+  "status": "HANDOFF_COMPLETE_APPROVAL_BLOCKED",
+  "file": "Numina-1500T-Approval-Handoff.zip",
+  "sha256": "ec3066ee5a32b0111044682c33d0582af069f51a631a88b8a2c2d7fcecf50503",
+  "bytes": 127348,
+  "manifestSha256": "be10a998dbcddd999b42d497de19ba2fa404b9d4899a06a4c6fecc24a17dc0c0",
+  "contentFilesVerified": 46,
+  "offlineConsistencyChecksPassed": 10,
+  "signatureCreated": false,
+  "independentApprovalCreated": false,
+  "submissionPerformed": false,
+  "receipt": null
+}

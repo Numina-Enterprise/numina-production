@@ -22,6 +22,12 @@ Use this section only with an existing compatible browser wallet extension.
 
 The preparation controls above use an existing EIP-1193 browser wallet and call only account-access and read methods. They do not create signing authority for an address or replace a wallet provider. There are no private-key, recovery-phrase or password inputs; no server receives keys. No network is added or switched automatically.
 
+## One owner approval
+
+The owner approved the combined release on September 16, 2026. `public/owner-approval.js` records that single authorization and binds the current 1,500T request and issuer-policy hashes. The root release manifest and owner execution policy reference the same record. Approval is recorded once across the website and gateway. The existing policy signature and supporting review evidence retain their actual verification state; submission remains blocked until those records are resolved.
+
+The downloadable `Numina-1500T-Approval-Handoff.zip` retains its original dated evidence snapshot and checksums. The current owner approval is recorded in the release manifest, so historical evidence is not silently rewritten.
+
 ## Owner execution and receipt recovery
 
 The **Review, confirm and track** section implements the owner wallet workflow. **This published release blocks submission**: its revised 1,500T issuer policy is unsigned and eight supporting reviews are unresolved. A checkbox, imported file, owner assertion or successful simulation cannot change that source-published gate. Resolving it requires an evidence-reviewed source release. If signing changes the issuer-policy bytes, regenerate the policy hash, exact constructor and all dependent review pins before release.

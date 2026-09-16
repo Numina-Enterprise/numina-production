@@ -6,6 +6,7 @@ import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 import {treasuryClientVerificationManifest} from '../public/treasury-proof.js';
 import {checkIOSRelease,iosInputSnapshot} from './ios-release.mjs';
+import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {EXPECTED_RUNTIME_SHA256,MINIMUM_CONFIRMATIONS} from '../public/wallet-execution-receipt.js';
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
@@ -45,6 +46,8 @@ const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const record={
+ owner_approval:{...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:digest(readFileSync('public/owner-approval.js'))},
+ approval_handoff:{archive:'/downloads/Numina-1500T-Approval-Handoff.zip',sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff.zip')),record:'/downloads/Numina-1500T-Approval-Handoff-Package-Record.json',record_sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff-Package-Record.json')),status:'EVIDENCE_HANDOFF_PREPARED',scope:'Original dated evidence intake; owner authorization is recorded separately in owner_approval and does not manufacture signatures, review findings or receipts'},
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  contract_record:NUSD_CONTRACT_RECORD,
  approved_review:NUSD_APPROVED_REVIEW,

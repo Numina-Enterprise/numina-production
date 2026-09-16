@@ -1,3 +1,4 @@
+import {NUMINA_OWNER_APPROVAL} from './owner-approval.js';
 // Source-published release gate. Form input and wallet consent cannot approve it.
 const executionFreeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(executionFreeze);Object.freeze(value);}return value;};
 export const WALLET_EXECUTION_POLICY=executionFreeze({
@@ -8,7 +9,7 @@ export const WALLET_EXECUTION_POLICY=executionFreeze({
  creationSha256:'bdaf4313f68b97d504ef3796096814d41b3002bffcf9ed75b78a939de6049401',
  chainId:'962421430',genesisHash:'0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1',
  sender:'0x1a45671AE2ee3E52264116151924FAAcb80Fc02E',initialSupplyBaseUnits:'1500000000000000000000',
- issuerPolicySigned:false,ownerApproved:false,reviewEvidenceVerified:false,
+ issuerPolicySigned:false,ownerApproved:NUMINA_OWNER_APPROVAL.approved&&NUMINA_OWNER_APPROVAL.requestSha256==='0af2b7e72cd18f9676f85356da95f8deee8788eac0dee3d587a1278342a401ca',ownerApprovalId:NUMINA_OWNER_APPROVAL.id,reviewEvidenceVerified:false,
  reviews:['independentSecurityAudit','authorizedIssuerAndJurisdictions','custodianAndReserveEvidence','redeemabilityTermsAndOperations','financialCrimeAndSanctionsControls','independentRoleKeyCustody','incidentAndPauseRecovery','applicationSettlementAndFulfillmentReview'].map(id=>({id,verified:false,evidenceSha256:null})),
  blockers:['The revised 1,500T issuer policy is unsigned.','Eight production reviews lack verified supporting records.'],
  minimumConfirmations:12,fundsVerified:false,providerDepositsEnabled:false

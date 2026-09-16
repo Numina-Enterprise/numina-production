@@ -1,0 +1,65 @@
+name: Verify provider observations
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 * * * *'
+  push:
+    paths:
+      - '.github/workflows/verify-provider-observations.yml'
+      - 'scripts/smoke-provider-observations.mjs'
+      - 'runtime/vercel-production/api/providers.js'
+      - 'runtime/vercel-production/lib/provider-observations.js'
+      - 'tests/provider-observations.test.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-provider-observations
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    env:
+      NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+      - name: Verify Circle and Arc read-only observation contracts
+        run: node --test tests/provider-observations.test.mjs
+      - name: Wait for pushed commit and verify live provider observations
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
+        run: |
+          attempts=24
+          for attempt in $(seq 1 "$attempts"); do
+            echo "Provider observation attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
+            if node scripts/smoke-provider-observations.mjs; then
+              exit 0
+            fi
+            if [ "$attempt" -eq "$attempts" ]; then
+              echo "Provider observations did not converge on ${NUMINA_EXPECTED_GIT_SHA}."
+              exit 1
+            fi
+            sleep 10
+          done
+      - name: Verify current live provider observations
+        if: github.event_name != 'push'
+        run: node scripts/smoke-provider-observations.mjs
+      - name: Archive signed provider evidence
+        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: numina-provider-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: provider-evidence/*.json
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0

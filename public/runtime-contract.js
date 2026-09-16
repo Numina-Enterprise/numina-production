@@ -9,8 +9,8 @@ export const EXPECTED_RELEASE = Object.freeze({
   "production_files_root": "0890f3a837d26ee445b5ad9d311387e119ee564949a439cfe325b47fb32762fd",
   "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
   "core_conformance_artifact_sha256": "ed9656ba60eb89f4bbce85d8693c462eb64062af423cc4b48f6b5db20d7bc18f",
-  "spdx_sbom_sha256": "5ac4ea89b8de437ec2a05ddaceb7ffdebd5c9a6d5ed5b9d746128b0406d832f9",
-  "slsa_provenance_sha256": "26acb573fbd05080ac3d4d1a26f6a50215aa976f604790dd6845c512f811554b"
+  "spdx_sbom_sha256": "fd53e695ace2fcb04f619ff48dffd07b02ee3baebfa848301897c0c5cba1dcfa",
+  "slsa_provenance_sha256": "f4abb2d2cb164427486dc740225532195106f1ee49e0fd0d22c0007fa463d9a5"
 });
 export const PINNED_RUNTIME_PUBLIC_KEY = 'UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=';
 export const PINNED_RUNTIME_KEY_ID = '3a2fe594a7e10458ae89683f';

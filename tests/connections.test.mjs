@@ -7,6 +7,14 @@ import {database} from '../scripts/sqlite.mjs';
 const registry=JSON.parse(readFileSync(new URL('../public/security-surfaces.json',import.meta.url)));
 const origin='https://numina.test';
 const json=value=>Response.json(value);
+test('provider route discovery is fixed, read-only and does not report private response fields',async()=>{
+ const value={schema:'numina.treasury.provider-routes.v1',connection:'read_only',privateAccountReference:'private-fixture',balance:'123456'};
+ const result=await checkConnection('provider-routes',{origin,fetchImpl:async(url,options)=>{
+  assert.equal(url,origin+'/api/control/v2/treasury/provider-routes');assert.equal(options.method,'GET');return json(value);
+ }});
+ assert.equal(result.state,'available');assert.doesNotMatch(JSON.stringify(result),/private-fixture|123456/);
+ assert.equal((await checkConnection('provider-routes',{origin,fetchImpl:async()=>json({...value,connection:'unverified'})})).state,'error');
+});
 test('a changed manifest cannot redirect checks, omit surfaces or duplicate identities',()=>{
   assert.equal(validateConnectionManifest(registry),registry);
   for(const change of [r=>r.rootCount=2,r=>r.surfaces.pop(),r=>r.surfaces[0].entry='https://other.test/',r=>r.surfaces[0].id='__proto__',r=>r.surfaces[0]=r.surfaces[1]]){

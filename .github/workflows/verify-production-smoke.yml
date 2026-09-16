@@ -1,0 +1,46 @@
+name: Verify production smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-production-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+      - name: Wait for pushed commit to become production and verify it
+        if: github.event_name == 'push'
+        env:
+          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
+        run: |
+          attempts=24
+          for attempt in $(seq 1 "$attempts"); do
+            echo "Production verification attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
+            if npm run smoke:production; then
+              exit 0
+            fi
+            if [ "$attempt" -eq "$attempts" ]; then
+              echo "Production did not converge on ${NUMINA_EXPECTED_GIT_SHA} with a valid signed state."
+              exit 1
+            fi
+            sleep 10
+          done
+      - name: Verify live production identity and signed readiness
+        if: github.event_name != 'push'
+        run: npm run smoke:production

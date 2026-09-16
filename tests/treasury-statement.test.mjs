@@ -5,6 +5,7 @@ import {database} from '../scripts/sqlite.mjs';
 import {bootstrapControl,readControl,commitControl} from '../src/control-store.js';
 import {controlHash} from '../src/control.js';
 import worker from '../src/worker.js';
+import {NUSD_APPROVED_REVIEW,NUSD_SIMULATION} from '../src/nusd-http.js';
 const owner='email:owner@example.test',delegate='email:delegate@example.test',key='local-owner-test-key';
 const path='/api/control/v1/treasury-attestation';
 const identity=email=>({'oai-authenticated-user-id':'platform-test-user','oai-authenticated-user-email':email});
@@ -35,8 +36,17 @@ test('broad record delegation cannot reveal the owner bank statement through a s
    const res=await worker.fetch(new Request('https://numina.test/api/control/v1/state',{headers}),env);assert.equal(res.status,200);assert.equal(containsPrivate(await res.text()),false);
   }
   for(const route of ['/api/control/v1/health','/api/control/v1/manifest','/api/nusd/v1/status','/api/nusd/v1/redemption-policy']){
-   const res=await worker.fetch(new Request('https://numina.test'+route),env);assert.equal(res.status,200);assert.equal(containsPrivate(await res.text()),false);
+   const res=await worker.fetch(new Request('https://numina.test'+route),env);assert.equal(res.status,200);
+   const value=await res.json();
+   if(route==='/api/nusd/v1/status'){
+    // Public candidate amounts and reference labels are not private account records.
+    assert.deepEqual(value.approved_review,NUSD_APPROVED_REVIEW);assert.deepEqual(value.simulation,NUSD_SIMULATION);
+    delete value.approved_review;delete value.simulation;
+   }
+   assert.equal(containsPrivate(JSON.stringify(value)),false);
   }
+  const noPrivateRead={...env,get DB(){throw new Error('Private records must not be read for public NUSD status');}};
+  assert.equal((await worker.fetch(new Request('https://numina.test/api/nusd/v1/status'),noPrivateRead)).status,200);
   const status=await(await worker.fetch(new Request('https://numina.test/api/nusd/v1/status'),env)).json();
   assert.equal(status.treasury_backing.owner_attestation.status,'received');assert.equal(status.treasury_backing.owner_attestation.qualified_as_verified_reserves,false);assert.equal(status.treasury_backing.valuation,null);assert.equal(status.redemption_policy.reserves.verified_usd_value,null);
   for(const capability of ['mint','exchange','redemption','settlement'])assert.equal(status.capabilities[capability],false);
