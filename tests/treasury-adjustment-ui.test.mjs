@@ -161,3 +161,58 @@ test('successful commit refresh remount preserves the verified receipt and enabl
  const event={preventDefault(){this.prevented=true;}};for(const handler of h.events.beforeunload)handler(event);
  assert.equal(event.prevented,undefined);
 });
+
+for(const phase of ['prepare','submit'])for(const status of [401,403])for(const remount of [false,true])test(`${phase} ${status} clears private panels through only the ${remount?'remounted':'current'} access-loss callback`,async()=>{
+ const pending=deferred();let attempts=0,generation=0,afterAccessLoss,clearedNodes;
+ const h=harness({[phase]:()=>++attempts===1?pending.promise:Promise.resolve(phase==='prepare'?h.draft:h.receipt)});
+ const accessLossCalls=[],privatePanels=[new Element('section'),new Element('section')];
+ for(const panel of privatePanels)panel.append(new Element('private-record'));
+ function mountProtected(name){
+  const mountedGeneration=generation;
+  const view=h.mount({isCurrent:()=>generation===mountedGeneration,onAccessLost:()=>{
+   accessLossCalls.push(name);generation++;
+   clearedNodes=view.all().slice(1);view.target.replaceChildren();for(const panel of privatePanels)panel.replaceChildren();
+   afterAccessLoss=domSnapshot({all:()=>clearedNodes});
+  }});
+  return view;
+ }
+ const original=mountProtected('original');let operation;
+ if(phase==='prepare')operation=review(original);else{await review(original);operation=original.commit.click();}
+ let current=original;
+ if(remount){generation++;current=mountProtected('fresh');}
+ const originalBefore=domSnapshot(original),writesBefore=h.calls.submit.length;
+ pending.reject(Object.assign(Error('Owner access expired'),{status}));await operation;
+ assert.deepEqual(accessLossCalls,[remount?'fresh':'original']);
+ assert.equal(current.target.children.length,0);for(const panel of privatePanels)assert.equal(panel.children.length,0);
+ assert.deepEqual(domSnapshot({all:()=>clearedNodes}),afterAccessLoss,'Completion must not repopulate or change the cleared private controls');
+ if(remount)assert.deepEqual(domSnapshot(original),originalBefore);
+ await current.commit.click();current.edit.click();current.download.click();await current.form.onsubmit({preventDefault(){}});
+ await original.commit.click();
+ assert.equal(h.calls.submit.length,writesBefore);assert.equal(h.calls.prepare.length,1);assert.equal(h.downloads.length,0);
+ assert.deepEqual(domSnapshot({all:()=>clearedNodes}),afterAccessLoss);
+
+ // The integration mounts again only after a fresh successful owner-access check.
+ const verified=mountProtected('verified-owner');
+ assert.equal(h.calls.factory,1);assert.equal(h.calls.prepare.length,1);assert.equal(h.calls.submit.length,writesBefore);
+ if(phase==='submit'){
+  assert.equal(verified.delta.value,h.draft.event.Intent.delta);assert.equal(verified.reason.value,h.draft.event.Intent.reason);
+  assert.equal(verified.delta.disabled,true);assert.equal(verified.reason.disabled,true);assert.equal(verified.edit.hidden,true);
+  assert.match(verified.commit.textContent,/Retry exact adjustment/);assert.equal(JSON.parse(verified.record.textContent).receipt,null);
+  await verified.commit.click();
+  assert.equal(h.calls.submit.length,2);assert.strictEqual(h.calls.submit[0],h.draft);assert.strictEqual(h.calls.submit[1],h.draft);
+  assert.equal(h.calls.prepare.length,1);assert.deepEqual(JSON.parse(verified.record.textContent).receipt,plain(h.receipt));
+ }else{
+  assert.equal(verified.review.disabled,false);assert.equal(verified.commit.hidden,true);assert.equal(verified.record.textContent,'');
+  assert.equal(h.calls.submit.length,0);
+ }
+ assert.deepEqual(accessLossCalls,[remount?'fresh':'original']);
+});
+
+test('a non-authentication write failure preserves exact retry without clearing owner access',async()=>{
+ let accessLossCalls=0;
+ const h=harness({submit:()=>Promise.reject(Object.assign(Error('Temporary service failure'),{status:503}))});
+ const view=h.mount({onAccessLost:()=>{accessLossCalls++;}});await review(view);await view.commit.click();
+ assert.equal(accessLossCalls,0);assert.match(view.status.textContent,/Result not confirmed/);
+ assert.equal(view.commit.disabled,false);assert.equal(view.edit.hidden,true);assert.equal(view.delta.disabled,true);
+ assert.strictEqual(h.calls.submit[0],h.draft);assert.equal(h.calls.submit.length,1);
+});
