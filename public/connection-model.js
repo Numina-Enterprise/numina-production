@@ -16,6 +16,7 @@ export const CONNECTION_TARGETS = Object.freeze({
   'runtime-verifier':{name:'Core runtime',entry:'/core',path:'/v1/status',kind:'runtime'},
   treasury:{name:'Canonical treasury',entry:'/api/control/v1/treasury',path:'/api/control/v1/treasury',kind:'treasury'},
   'provider-observations':{name:'Provider account',entry:'/api/control/v1/stripe-treasury',path:'/api/control/v1/stripe-treasury',kind:'provider'},
+  'provider-routes':{name:'Provider routes',entry:'/api/control/v2/treasury/provider-routes',path:'/api/control/v2/treasury/provider-routes',kind:'provider-routes'},
   'financial-status':{name:'Financial capabilities',entry:'/api/nusd/v1/status',path:'/api/nusd/v1/status',kind:'financial'},
   'financial-evidence':{name:'Financial evidence',entry:'/financial-services',path:'/api/financial/v1/manifest',kind:'evidence'},
   telemetry:{name:'Telemetry',entry:'/telemetry-metrics.json',path:'/telemetry-metrics.json',kind:'telemetry'},
@@ -46,6 +47,7 @@ function connectionClassification(target,value){
     case 'runtime':if([value?.production_version,value?.release,value?.state?.release].some(version=>['1.9.0-rc26','core-v1.8+prod-v1.9.0-rc26'].includes(version)))return ['available','Runtime responding','The pinned runtime status responds. Review its signed evidence in Build & trust.'];break;
     case 'treasury':if(schema==='numina.treasury.v1')return value.status==='READY'?['available','Read connection working','The authorized canonical treasury read succeeded. No financial movement was requested.']:['attention','Not initialized','The canonical treasury reports that initialization is incomplete.'];break;
     case 'provider':if(schema==='numina.stripe.treasury.v1'&&value.connection==='read_only')return ['available','Provider read working','The authorized provider observation succeeded. No balances are included in this report.'];break;
+    case 'provider-routes':if(schema==='numina.treasury.provider-routes.v1'&&value.connection==='read_only')return ['available','Route observation available','The authorized route observation responds. This check does not verify funding, provider acceptance or settlement.'];break;
     case 'financial':if(schema==='numina.nusd.status.v1'&&value.capabilities&&typeof value.capabilities==='object')return ['attention','Review capability status',Object.values(value.capabilities).some(flag=>flag===false)?'The application reports disabled financial capabilities. Open the current status for details.':'The application reports capability flags. This check does not verify settlement, reserves or operating authority.'];break;
     case 'evidence':if(schema==='numina.financial-evidence.v1'&&value.classification==='evidence_management_only')return ['available','Evidence workspace available','Private document registration and review tools respond. This does not attest operating authority or enable financial transactions.'];break;
     case 'telemetry':if(schema==='numina.metric-map.v1')return ['available','Definitions available','Metric definitions respond. Private operational logs are not read.'];break;

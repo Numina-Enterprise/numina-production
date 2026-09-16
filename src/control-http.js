@@ -5,6 +5,8 @@ import {readStripeTreasury} from './stripe-treasury.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
 import {readControl,bootstrapControl,controlSnapshot,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
+import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
+import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
 function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 export async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER||!env.NUMINA_CONTROL_API_KEY_SHA256)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
@@ -46,6 +48,12 @@ export async function controlHttp(req,env){
       return controlResponse(await bootstrapControl(env.DB,actor,now),201);
     }
     const current=await readControl(env.DB);if(current.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    if(path==='/api/control/v1/nusd-deployment'){
+      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(new URL(req.url).search)controlError('DEPLOYMENT_QUERY_NOT_ALLOWED',400);
+      if(req.method==='GET')return controlResponse({policy:WALLET_EXECUTION_POLICY,submissionAllowed:walletExecutionAuthorized(),record:await readWalletDeploymentIntent(env.DB,actor)});
+      return controlResponse(await writeWalletDeploymentIntent(env.DB,actor,await controlBody(req)));
+    }
     if(path==='/api/control/v1/stripe-treasury'){
       if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
