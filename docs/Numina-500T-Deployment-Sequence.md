@@ -6,6 +6,8 @@ The [preparation package](Numina-500T-Deployment-Handoff.zip) contains the v3 to
 
 The [preparation tools](Numina-500T-Preparation-Tools.zip) add the matching eight-argument encoder, a read-only RPC observer, receipt consistency checks and eight review-evidence intake records. Start with `tool/README.md` inside that archive. Its [package record](numina-500t-preparation-tools-record.json) provides the exact hash. These tools cannot replace owner wallet selection, independent reviews or provider-origin evidence.
 
+Use the [deployment readiness workspace](https://numinalabs.xyz/deployment-readiness) to review all 36 package requirements and collect a local draft. It exports a recipient request compatible with the tools above. Only the recipient is changed in that request; the six-field local draft separately retains your network and fee notes. Form input, import and export do not approve reviews, verify funds, encode a transaction or submit one.
+
 ## 1. Resolve and encode the exact request
 
 - Verify the intended network identity through its authenticated RPC, including chain ID and genesis block hash. Confirm the signing sender, nonce, fee asset, gas estimate and fee budget on that network.

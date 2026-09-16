@@ -56,6 +56,7 @@ export const NUSD_SIMULATION=freezeNusdRedemption({
  localContractEvidence:'/downloads/approved-reviews/nusd-uncapped-500t/verification/local-test-report.json',
  instructions:'/downloads/Numina-500T-Simulation.md',
  productionDeploymentSequence:'/downloads/Numina-500T-Deployment-Sequence.md',
+ readinessWorkspace:'https://numinalabs.xyz/deployment-readiness',
  productionPreparation:{url:'/downloads/Numina-500T-Preparation-Tools.zip',sha256:'9304f2f3e0a72c2a8db857ad0ee3557523eccfac0b61db3d39e33626b40baeea',record:'/downloads/numina-500t-preparation-tools-record.json',status:'review_tools_inputs_pending',encoded:false,tools:['offline_constructor_encoding','read_only_network_observation','supplied_receipt_consistency_checks'],productionReady:false},
  execution:{simulation:true,submission_performed:false,receipt:null,providerBalancesChanged:false,nativeJournalChanged:false},
  scope:'Browser allocation simulation of one 500T total. Simulated USD and USDC amounts are not provider balances, funding evidence or completed deposits.'
