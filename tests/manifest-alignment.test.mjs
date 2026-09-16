@@ -3,11 +3,24 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NuminaClient} from '../integrations/numina/src/client.js';
+import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const releasePath='dist/client/downloads/application-release-v4.json';
+
+test('root release manifest binds the owner workflow, additive migration and actual blocked policy',()=>{
+ const release=json(releasePath),binding=release.owner_wallet_execution;
+ assert.equal(binding.schema,'numina.owner-wallet.release-binding.v1');assert.deepEqual(binding.policy,WALLET_EXECUTION_POLICY);assert.equal(binding.submission_enabled,false);
+ assert.equal(binding.owner_endpoint,'/api/control/v1/nusd-deployment');assert.equal(binding.final_confirmation,'owner_wallet');
+ for(const name of ['model','policy','receipt','ui'])assert.equal(binding.modules[name].sha256,digest(bytes('public/wallet-execution-'+name+'.js')));
+ assert.equal(binding.receipt_verification.minimum_confirmations,12);assert.equal(binding.receipt_verification.scope,'provider_observation_consistency');
+ assert.equal(binding.attempt_storage.migration_sha256,digest(bytes('drizzle/0004_wallet_deployment_intents.sql')));assert.equal(binding.attempt_storage.native_journal_modified,false);
+ assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents']);
+ assert.deepEqual(binding.evidence,{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false});
+ for(const flag of Object.values(release.scope))assert.equal(flag,false);
+});
 
 test('application manifest aliases contain the same current release bytes',()=>{
   const current=bytes(releasePath),release=JSON.parse(current);
