@@ -6,7 +6,7 @@
     { "source": "/control-room", "destination": "/frontier" },
     { "source": "/api/control/v2/:path*", "destination": "https://numinalabs.xyz/api/control/v2/:path*" },
     { "source": "/.well-known/agent-card.json", "destination": "https://numinalabs.xyz/.well-known/agent-card.json" },
-    { "source": "/v1/frontier/readiness", "destination": "/api/frontier-readiness" },
+    { "source": "/v1/frontier/readiness", "destination": "/api/application-release?mode=frontier-readiness" },
     { "source": "/v2/network/status", "destination": "/api/node-connection" },
     { "source": "/v2/network/deployment-estimate", "destination": "/api/deployment-estimate" },
     { "source": "/v1/status", "destination": "/api/status" },
