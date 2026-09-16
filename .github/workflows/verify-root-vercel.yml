@@ -23,6 +23,8 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync,readdirSync} from 'node:fs';
+          import {resolve} from 'node:path';
+          import {pathToFileURL} from 'node:url';
           const config=JSON.parse(readFileSync('vercel.json','utf8'));
           if(config.git?.deploymentEnabled!==false) throw new Error('manual deployment gate must remain false in source');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
@@ -32,7 +34,7 @@ jobs:
           const files=readdirSync('api').filter(name=>/\.(?:js|mjs)$/.test(name)).sort();
           if(files.length!==11) throw new Error('expected 11 root API adapters, found '+files.length);
           for(const file of files){
-            const mod=await import(new URL('../../api/'+file,import.meta.url));
+            const mod=await import(pathToFileURL(resolve('api',file)).href);
             if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);
           }
           console.log('Validated root Vercel adapter routes and '+files.length+' handlers.');
