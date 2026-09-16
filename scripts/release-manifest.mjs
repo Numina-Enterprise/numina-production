@@ -1,5 +1,5 @@
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
-import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW} from '../src/nusd-http.js';
+import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW,NUSD_APPROVED_REVIEW,NUSD_SIMULATION} from '../src/nusd-http.js';
 import {NUSD_PROVIDER_ROUTING} from '../src/stripe-treasury.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
@@ -45,6 +45,8 @@ const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.
 const record={
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  contract_record:NUSD_CONTRACT_RECORD,
+ approved_review:NUSD_APPROVED_REVIEW,
+ treasury_simulation:NUSD_SIMULATION,
  mint_workflow:NUSD_MINT_WORKFLOW,
  conversion_workflow:NUSD_CONVERSION_WORKFLOW,
  provider_routing:NUSD_PROVIDER_ROUTING,

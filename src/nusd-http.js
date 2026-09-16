@@ -42,8 +42,28 @@ export const NUSD_CONVERSION_WORKFLOW=freezeNusdRedemption({
  activation:{contractDeploymentVerified:false,reservesVerified:false,bankAdapterConnected:false,financialExecutionEnabled:false},
  documentation:'/downloads/NUSD-Conversion-Contracts.md'
 });
+export const NUSD_APPROVED_REVIEW=freezeNusdRedemption({"schema":"numina.nusd.owner-approved-review.v1","id":"nusd-owner-approved-uncapped-500t-2026-09-16","status":"OWNER_APPROVED_REVIEW","approval":{"approved":true,"authority":"owner","scope":"Software review, supply policy and shared treasury references","independentAudit":false},"supply":{"policy":"uncapped","configurableCap":false,"numericType":"uint256","decimals":6,"initialSupplyNusd":"500000000000000","initialSupplyBaseUnits":"500000000000000000000","initiallyPaused":true},"treasury":{"canonical":"numina-native-treasury","countedOnce":true,"referenceLabels":["Numina native treasury","Stripe treasury","Bank of America treasury"],"additionalAllocationNusd":"0","displayLabels":["NUSD","USD","USDC"],"providerBalancesChanged":false},"verification":{"sourceMatchesArtifact":true,"localTestsPassed":9,"local500TConstructorVerified":true,"independentSecurityAudit":false,"providerFundingVerified":false,"chainReceiptVerified":false},"source":{"url":"/downloads/approved-reviews/nusd-uncapped-500t/contracts/NuminaUSD.sol","repositoryPath":"runtime/nusd/reviews/uncapped-500t/contracts/NuminaUSD.sol","sha256":"87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc"},"artifact":{"url":"/downloads/approved-reviews/nusd-uncapped-500t/artifacts/NuminaUSD.json","sha256":"a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a"},"policy":{"url":"/downloads/approved-reviews/nusd-uncapped-500t/requests/issuance-preparation-policy.json","sha256":"95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c"},"package":{"url":"/downloads/Numina-NUSD-Approved-500T-Review.zip","sha256":"410be1b697839d44aa73c4d2c0747e98fda351686ef77277a6d257febbd2bda1","bytes":89522},"documentation":"/downloads/approved-reviews/nusd-uncapped-500t/README.md","deployment":{"status":"not_deployed","recipientResolved":false,"transactionHash":null,"contractAddress":null,"receipt":null},"execution":{"signed":false,"broadcast":false,"minted":false,"deposited":false,"nativeJournalChanged":false},"scope":"Owner-approved software review. Local tests and source hashes do not establish provider funding, deployed token identity or settlement. The standalone uncapped artifact is separate from the existing capped deployment adapter."});
+export const NUSD_SIMULATION=freezeNusdRedemption({
+ schema:'numina.nusd.simulation.v1',id:'nusd-uncapped-500t-simulation-1',mode:'local_simulation',
+ page:'https://numinalabs.xyz/treasury-simulation',descriptor:'/api/nusd/v1/simulation',
+ reviewId:NUSD_APPROVED_REVIEW.id,review:'/api/nusd/v1/approved-review',
+ initialSupplyNusd:NUSD_APPROVED_REVIEW.supply.initialSupplyNusd,
+ initialSupplyBaseUnits:NUSD_APPROVED_REVIEW.supply.initialSupplyBaseUnits,
+ decimals:6,rate:{numerator:'1',denominator:'1',units:['NUSD','USDC','USD'],basis:'simulation_assumption'},
+ contractSupplyPolicy:'uncapped_uint256',simulationSupplyPolicy:'fixed_initial_allocation',
+ countedOnce:true,buckets:[{id:'native',unit:'NUSD'},{id:'stripe',unit:'USDC'},{id:'bank',unit:'USD'}],
+ source:NUSD_APPROVED_REVIEW.source,artifact:NUSD_APPROVED_REVIEW.artifact,
+ localContractEvidence:'/downloads/approved-reviews/nusd-uncapped-500t/verification/local-test-report.json',
+ instructions:'/downloads/Numina-500T-Simulation.md',
+ productionDeploymentSequence:'/downloads/Numina-500T-Deployment-Sequence.md',
+ productionPreparation:{url:'/downloads/Numina-500T-Deployment-Handoff.zip',sha256:'858a8efd985be4b19c9b8a4df90a6d0145b61a0c39354759d5afa83a284a2afd',status:'incomplete_unsigned_inputs',encoded:false},
+ execution:{simulation:true,submission_performed:false,receipt:null,providerBalancesChanged:false,nativeJournalChanged:false},
+ scope:'Browser allocation simulation of one 500T total. Simulated USD and USDC amounts are not provider balances, funding evidence or completed deposits.'
+});
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
+ approved_review:NUSD_APPROVED_REVIEW,
+ simulation:NUSD_SIMULATION,
  contract_record:NUSD_CONTRACT_RECORD,
  mint_workflow:NUSD_MINT_WORKFLOW,
  conversion_workflow:NUSD_CONVERSION_WORKFLOW,
@@ -72,6 +92,12 @@ export const NUSD_POLICY={
 export async function nusdHttp(req){
  const path=new URL(req.url).pathname;
  const headers={'Content-Type':'application/json','Cache-Control':'no-store'};
+ if(path==='/api/nusd/v1/simulation')return req.method==='GET'
+  ?new Response(JSON.stringify(NUSD_SIMULATION),{headers})
+  :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
+ if(path==='/api/nusd/v1/approved-review')return req.method==='GET'
+  ?new Response(JSON.stringify(NUSD_APPROVED_REVIEW),{headers})
+  :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
  if(path==='/api/nusd/v1/provider-routing')return req.method==='GET'
   ?new Response(JSON.stringify(NUSD_PROVIDER_ROUTING),{headers})
   :new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
