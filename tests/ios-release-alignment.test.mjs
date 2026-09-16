@@ -20,7 +20,7 @@ test('iOS release binds the shared application, core and rc26 runtime',()=>{
   assert.equal(identity.nativeCompilationEstablished,false);
   assert.equal(identity.signed,false);
 });
-test('platform source counters match the newly compiled iOS build',()=>{
+test('platform source counters retain the recorded iOS build number',()=>{
   const identity=deriveIOSIdentity(input());
   assert.equal(identity.buildNumber,5);
   assert.equal(identity.historicalBinaryBuild,5);
@@ -53,18 +53,24 @@ test('input fingerprint covers the actual native source, assets and current buil
     'mobile/ios/Numina.xcodeproj/project.pbxproj','.github/workflows/numina-ios-branch-build.yml'])
     assert.ok(snapshot.inputs.some(item=>item.path===path),path);
 });
-test('compiled build 5 matches the source while preserving historical build 3 evidence',()=>{
+test('current iOS metadata remains distinct from compiled build 5 while preserving build 3 evidence',()=>{
   const record=input().native,archive=record.sourceArchives.find(item=>item.platform==='ios');
   assert.equal(record.ios.sourceBuildNumber,5);
   assert.equal(record.ios.binaryVersionCode,5);
-  assert.equal(record.ios.currentSourceCompiled,true);
-  assert.equal(record.ios.signingInputMatchesCurrentSource,true);
-  assert.equal(record.ios.compiledSourceInputsSha256,iosInputSnapshot().sha256);
+  assert.equal(record.ios.currentSourceCompiled,false);
+  assert.equal(record.ios.signingInputMatchesCurrentSource,false);
+  assert.match(record.ios.compiledSourceInputsSha256,/^[a-f0-9]{64}$/);
+  assert.notEqual(record.ios.compiledSourceInputsSha256,iosInputSnapshot().sha256);
+  assert.ok(record.ios.binaries.length>0);
+  for(const file of record.ios.binaries)assert.equal(createHash('sha256').update(readFileSync(new URL('../docs/'+file.file,import.meta.url))).digest('hex'),file.sha256);
   const historical=json('docs/native-package-record-v4-pre-build5.json');
   assert.equal(historical.ios.binaryVersionCode,3);
   assert.equal(historical.ios.currentSourceCompiled,false);
   for(const file of historical.ios.binaries)assert.equal(createHash('sha256').update(readFileSync(new URL('../docs/'+file.file,import.meta.url))).digest('hex'),file.sha256);
   assert.equal(archive.sourceInputsSha256,iosInputSnapshot().sha256);
+  assert.equal(record.ios.sourceInputsSha256,iosInputSnapshot().sha256);
+  assert.equal(archive.installable,false);
+  assert.equal(createHash('sha256').update(readFileSync(new URL('../docs/'+archive.file,import.meta.url))).digest('hex'),archive.sha256);
 });
 
 test("core version capture cannot consume following runtime manifest fields",()=>{
