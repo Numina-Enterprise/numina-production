@@ -45,7 +45,7 @@ jobs:
           import {pathToFileURL} from 'node:url';
           import {createRequire} from 'node:module';
           const config=JSON.parse(readFileSync('vercel.json','utf8'));
-          if(config.git?.deploymentEnabled!==false) throw new Error('manual deployment gate must remain false in source');
+          if(config.git?.deploymentEnabled!==true) throw new Error('Git deployment policy must remain enabled in source');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
           for(const source of ['/v1/frontier/readiness','/v1/deployment/provenance','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
           if(rewrites.get('/v1/frontier/readiness')!=='/api/application-release?mode=frontier-readiness') throw new Error('frontier readiness bypasses verifier');
@@ -75,5 +75,5 @@ jobs:
           const openControl={...controlState,public_execution_api_enabled:true};
           const unsafe=evaluateFrontierReadiness({...records,control:{state:openControl,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:openControl}}},{verifyEnvelope});
           if(unsafe.ready||unsafe.checks.execution_boundary_closed) throw new Error('frontier readiness did not fail closed when public execution opened');
-          console.log('Validated 12-function topology, exact rc26 identity, deployment provenance and fail-closed frontier readiness on Node '+process.versions.node+'.');
+          console.log('Validated enabled Git deployment policy, 12-function topology, exact rc26 identity, deployment provenance and fail-closed frontier readiness on Node '+process.versions.node+'.');
           NODE
