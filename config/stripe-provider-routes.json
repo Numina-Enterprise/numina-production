@@ -1,0 +1,24 @@
+{
+  "schema": "numina.stripe.provider-route-configuration.v1",
+  "classification": "configuration_requirements_not_connection_evidence",
+  "provider": "Stripe",
+  "livemode": true,
+  "account": "acct_1UEEPnQdJat0efmT",
+  "financial_account": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+  "api_version": "2026-08-26.preview",
+  "credential_environment_variable": "NUMINA_STRIPE_TREASURY_READ_KEY",
+  "financial_account_environment_variable": "NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT",
+  "credential_type": "restricted_live_key",
+  "required_read_access": [
+    {"resource": "Money Management Financial Accounts", "access": "Read"},
+    {"resource": "Money Management Financial Address", "access": "Read", "permission": "money_management_financial_address_read"}
+  ],
+  "provider_requests": [
+    {"method": "GET", "path": "/v2/money_management/financial_accounts/{financial_account}"},
+    {"method": "GET", "path": "/v2/money_management/financial_addresses", "limit": 50}
+  ],
+  "owner_route": "/api/control/v2/treasury/provider-routes",
+  "canonical_treasury": "/api/control/v1/treasury",
+  "write_permissions_required": false,
+  "setup_document": "docs/Stripe-Provider-Route-Setup.md"
+}
