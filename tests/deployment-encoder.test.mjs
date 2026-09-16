@@ -36,11 +36,11 @@ test('transaction draft uses exact fee math, enforces budget and never trusts in
  assert.equal(result.transactionDraft.transaction.from,complete.sender);assert.equal(result.transactionDraft.transaction.value,'0');assert.equal(result.transactionDraft.transaction.to,null);
  assert.equal(result.transactionDraft.signed,false);assert.equal(result.transactionDraft.network.identityVerified,false);
  assert.equal(result.transactionDraft.transaction.data,result.review.constructorData);
+ assert.equal(Object.hasOwn(result.transactionDraft.transaction,'nonce'),false);assert.equal(result.transactionDraft.noncePolicy,'wallet_assigned_before_signing');assert.equal(result.transactionDraft.transactionComplete,false);
  await assert.rejects(prepareDeployment(seed,{...complete,maximumFee:'999999'},assets),/exceeds/);
  const free=await prepareDeployment(seed,{...complete,gasPrice:'0',maximumFee:'0'},assets);assert.equal(free.transactionDraft.fee.calculatedTotalBaseUnits,'0');
- for(const change of [{gasLimit:'0'},{gasPrice:'2e9'},{nonce:0},{feeAsset:'secret key text'},{chainId:'1'},{nonce:'9007199254740992'}]){
-  if(change.nonce===0){const r=await prepareDeployment(seed,{...complete,...change},assets);assert.equal(r.transactionDraft,null);}
-  else await assert.rejects(prepareDeployment(seed,{...complete,...change},assets));
+ for(const change of [{gasLimit:'0'},{gasPrice:'2e9'},{feeAsset:'secret key text'},{chainId:'1'}]){
+  await assert.rejects(prepareDeployment(seed,{...complete,...change},assets));
  }
 });
 test('asset loading enforces a body-inclusive deadline and size cap',async()=>{
@@ -57,10 +57,20 @@ test('inputs and artifact bytes are snapshotted before async hashing',async()=>{
  input.recipient=complete.sender;input.gasPrice='999';copied.artifactBytes[0]=0;
  const result=await pending;assert.equal(result.review.constructor.initialRecipient,recipient);assert.equal(result.transactionDraft.transaction.gasPrice,'2');
 });
-test('v2 drafts round-trip fees and v1 imports remain supported without trusting extra fields',()=>{
- const draft=createLocalDraft(complete);assert.equal(draft.schema,'numina.deployment-readiness-draft.v2');assert.deepEqual(importLocalDraft(JSON.stringify(draft)).inputs,draft.inputs);
+test('v3 drafts round-trip fees and older imports discard nonce without trusting extra fields',()=>{
+ const draft=createLocalDraft(complete);assert.equal(draft.schema,'numina.deployment-readiness-draft.v3');assert.deepEqual(importLocalDraft(JSON.stringify(draft)).inputs,draft.inputs);
  const v1={...draft,schema:'numina.deployment-readiness-draft.v1',inputs:{recipient},signed:true};
  const imported=importLocalDraft(JSON.stringify(v1));assert.equal(imported.inputs.gasPrice,null);assert.equal(imported.signed,false);
+ for(const schema of ['numina.deployment-readiness-draft.v1','numina.deployment-readiness-draft.v2']){
+  const old=importLocalDraft(JSON.stringify({...draft,schema,inputs:{...complete,nonce:'123'}}));assert.equal(Object.hasOwn(old.inputs,'nonce'),false);assert.equal(old.noncePolicy,'wallet_assigned_before_signing');
+ }
+});
+test('nonce input cannot become a fixed value or a missing-input gate',async()=>{
+ for(const nonce of [undefined,'0','99','not-a-nonce']){
+  const result=await prepareDeployment(seed,{...complete,nonce},assets);
+  assert.equal(Object.hasOwn(result.transactionDraft.transaction,'nonce'),false);
+  assert.equal(result.missingTransactionInputs.includes('nonce'),false);
+ }
 });
 test('asset loader uses only fixed credential-free read requests',async()=>{
  const original=globalThis.fetch,calls=[];
