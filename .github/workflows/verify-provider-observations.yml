@@ -62,6 +62,9 @@ jobs:
             --header 'Accept: application/json' \
             --header 'Accept-Profile: public_evidence' \
             "$NUMINA_EVIDENCE_API/latest_provider_observation?select=record_id,artifact_root,git_commit_sha,deployment_id,observed_at,provider_status,all_healthy,credentialed,partnership_status,external_execution_performed,archive_digest,arc_chain_id,arc_latest_block,circle_message")"
+          echo "Latest evidence HTTP $latest_code"
+          cat "$latest_file"
+          echo
           test "$latest_code" = "200"
           node - "$latest_file" <<'NODE'
           const fs=require('node:fs');
@@ -80,8 +83,11 @@ jobs:
             --header 'Accept: application/json' \
             --header 'Accept-Profile: public' \
             "$NUMINA_EVIDENCE_API/numina_evidence_records?select=record_id&limit=1")"
+          echo "Base evidence HTTP $base_code"
+          cat "$base_file"
+          echo
           case "$base_code" in
-            2*) echo "Underlying evidence table unexpectedly exposed with HTTP $base_code"; cat "$base_file"; exit 1 ;;
+            2*) echo "Underlying evidence table unexpectedly exposed with HTTP $base_code"; exit 1 ;;
             *) echo "Underlying evidence table blocked as expected with HTTP $base_code" ;;
           esac
       - name: Archive signed provider evidence
