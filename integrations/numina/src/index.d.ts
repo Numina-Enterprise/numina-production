@@ -12,7 +12,7 @@ export interface StatusInput {request_id:string|null}
 export interface ServerResult {
   source:'configured_numina_server';
   verification:'server_reported_not_independently_verified';
-  client_capabilities:Array<'release'|'runtimeBuild'|'readTreasury'|'quote'|'request'|'status'|'network'|'catalog'>;
+  client_capabilities:Array<'release'|'runtimeBuild'|'readTreasury'|'readProviderRoutes'|'quote'|'request'|'status'|'network'|'catalog'>;
   asset_execution_available:false;
   data:Record<string,unknown>;
 }
@@ -22,6 +22,7 @@ export class NuminaClient {
   release(input?:Record<string,never>):Promise<ServerResult>;
   runtimeBuild(input?:Record<string,never>):Promise<ServerResult>;
   readTreasury(input?:Record<string,never>):Promise<ServerResult>;
+  readProviderRoutes(input?:Record<string,never>):Promise<ServerResult>;
   status(input?:StatusInput):Promise<ServerResult>;
   network(input?:Record<string,never>):Promise<ServerResult>;
   catalog(input?:Record<string,never>):Promise<ServerResult>;
@@ -30,7 +31,7 @@ export class NuminaClient {
   callTool(name:'numina_nusd_quote',input:QuoteInput):Promise<ServerResult>;
   callTool(name:'numina_nusd_request',input:RequestInput):Promise<ServerResult>;
   callTool(name:'numina_nusd_status',input:StatusInput):Promise<ServerResult>;
-  callTool(name:'numina_read_treasury'|'numina_application_release'|'numina_runtime_build'|'numina_nusd_network'|'numina_service_catalog',input:Record<string,never>):Promise<ServerResult>;
+  callTool(name:'numina_read_treasury'|'numina_provider_routes'|'numina_application_release'|'numina_runtime_build'|'numina_nusd_network'|'numina_service_catalog',input:Record<string,never>):Promise<ServerResult>;
 }
 export function validateArguments(name:string,input:unknown):unknown;
 export const NUMINA_TOOLS:Array<{name:string;description:string;inputSchema:Record<string,unknown>;annotations:Record<string,boolean>}>;

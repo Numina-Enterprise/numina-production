@@ -20,7 +20,7 @@ export function validateArguments(name,input){
     if(typeof input.quote_id!=='string'||!ID.test(input.quote_id)||!text(input.description,1,4000)||typeof input.idempotency_key!=='string'||!KEY.test(input.idempotency_key))fail('INVALID_ARGUMENTS');
   }else if(name==='numina_nusd_status'){
     exact(input,['request_id']);if(input.request_id!==null&&(typeof input.request_id!=='string'||!ID.test(input.request_id)))fail('INVALID_ARGUMENTS');
-  }else if(name==='numina_read_treasury'||name==='numina_nusd_network'||name==='numina_service_catalog'||name==='numina_application_release'||name==='numina_runtime_build'){
+  }else if(name==='numina_read_treasury'||name==='numina_provider_routes'||name==='numina_nusd_network'||name==='numina_service_catalog'||name==='numina_application_release'||name==='numina_runtime_build'){
     exact(input,[]);
   }else fail('UNKNOWN_TOOL');
   return input;
@@ -47,7 +47,7 @@ export class NuminaClient {
   #requireAuth(){if(!this.#token)fail('SERVER_AUTH_REQUIRED');}
   async #send(path,body){
     const privateOperation=!['/status','/catalog','/application-release'].includes(path);if(privateOperation)this.#requireAuth();
-    const endpoint=path==='/treasury'?'/api/control/v1/treasury':path==='/application-release'?'/v4/release/manifest':path==='/catalog'?'/api/app/v1/catalog':'/api/nusd/v1'+path;
+    const endpoint=path==='/treasury'?'/api/control/v1/treasury':path==='/provider-routes'?'/api/control/v2/treasury/provider-routes':path==='/application-release'?'/v4/release/manifest':path==='/catalog'?'/api/app/v1/catalog':'/api/nusd/v1'+path;
     const controller=new AbortController();let timer,reader;
     const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(new NuminaError('REQUEST_TIMEOUT'));},this.#timeout);});
     try{
@@ -70,12 +70,31 @@ export class NuminaClient {
     }catch(error){if(error instanceof NuminaError)throw error;fail(controller.signal.aborted?'REQUEST_TIMEOUT':'CONNECTION_FAILED');}
     finally{clearTimeout(timer);controller.abort();if(reader)void reader.cancel().catch(()=>{});}
   }
-  #wrap(data){return {source:'configured_numina_server',verification:'server_reported_not_independently_verified',client_capabilities:['release','runtimeBuild','readTreasury','quote','request','status','network','catalog'],asset_execution_available:false,data};}
+  #wrap(data){return {source:'configured_numina_server',verification:'server_reported_not_independently_verified',client_capabilities:['release','runtimeBuild','readTreasury','readProviderRoutes','quote','request','status','network','catalog'],asset_execution_available:false,data};}
   async readTreasury(input={}){
     validateArguments('numina_read_treasury',input);this.#requireAuth();
     await this.release({});
     const data=await this.#send('/treasury');
     if(!await verifyTreasuryRecord(data,{allowUninitialized:true}))fail('INVALID_TREASURY_PROOF');
+    return this.#wrap(data);
+  }
+  async readProviderRoutes(input={}){
+    validateArguments('numina_provider_routes',input);this.#requireAuth();
+    const data=await this.#send('/provider-routes');
+    const nullableText=(value,max)=>value===null||text(value,1,max)&&!/[\u0000-\u001f\u007f]/.test(value);
+    const currency=value=>typeof value==='string'&&/^[a-z][a-z0-9]{1,15}$/.test(value);
+    if(data.schema!=='numina.treasury.provider-routes.v1'||data.provider!=='Stripe'||data.connection!=='read_only'||
+      typeof data.financial_account!=='string'||!/^fa_[A-Za-z0-9]{1,100}$/.test(data.financial_account)||
+      !['open','closed'].includes(data.account_status)||!text(data.observed_at,20,40)||!Number.isFinite(Date.parse(data.observed_at))||
+      typeof data.complete!=='boolean'||!Array.isArray(data.routes)||data.routes.length>50||
+      data.routes.some(route=>!object(route)||!text(route.id,1,128)||!currency(route.currency)||!currency(route.settlement_currency)||
+        !text(route.status,1,64)||!nullableText(route.network,128)||!nullableText(route.address,512)||!nullableText(route.memo,256)||
+        typeof route.provider_reported_active!=='boolean')||
+      new Set(data.routes.map(route=>route.id)).size!==data.routes.length||
+      !object(data.nusd)||!['NOT_REPORTED','OBSERVATION_INCOMPLETE','ASSET_IDENTITY_NOT_VERIFIED'].includes(data.nusd.status)||
+      data.nusd.provider_acceptance_verified!==false||data.submission_performed!==false||data.receipt!==null||data.transfer_execution!==false)fail('INVALID_SERVER_RESPONSE');
+    // Provider route observations remain server-reported. This client does not
+    // contact Stripe or establish asset identity, funding or transfer readiness.
     return this.#wrap(data);
   }
   async release(input={}){
@@ -114,7 +133,7 @@ export class NuminaClient {
       ['builder_signed_artifacts_verified','application_started_by_build','production_host_deployment_verified','financial_execution_established'].some(key=>typeof build[key]!=='boolean')||
       !object(data.financial_status_sources)||!object(data.scope))fail('INVALID_SERVER_RESPONSE');
     const rootRecords={};
-    for(const field of ['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','treasury_client_verification']){
+    for(const field of ['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','provider_routing','treasury_client_verification']){
       // Older v2 manifests may omit these records. Never synthesize evidence or
       // turn an absent readiness record into a positive or negative assertion.
       if(!Object.hasOwn(data,field))continue;
@@ -137,7 +156,8 @@ export class NuminaClient {
     if(data.denomination_policy!==undefined&&!object(data.denomination_policy))fail('INVALID_SERVER_RESPONSE');
     if(data.contract_record!==undefined&&!object(data.contract_record))fail('INVALID_SERVER_RESPONSE');
     if(data.mint_workflow!==undefined&&!object(data.mint_workflow))fail('INVALID_SERVER_RESPONSE');
-    return this.#wrap({...(data.contract_record===undefined?{}:{contract_record:data.contract_record}),...(data.mint_workflow===undefined?{}:{mint_workflow:data.mint_workflow}),...(data.denomination_policy===undefined?{}:{denomination_policy:data.denomination_policy}),network_policy:data.network_policy??null,asset:data.asset??null,
+    if(data.provider_routing!==undefined&&!object(data.provider_routing))fail('INVALID_SERVER_RESPONSE');
+    return this.#wrap({...(data.contract_record===undefined?{}:{contract_record:data.contract_record}),...(data.mint_workflow===undefined?{}:{mint_workflow:data.mint_workflow}),...(data.provider_routing===undefined?{}:{provider_routing:data.provider_routing}),...(data.denomination_policy===undefined?{}:{denomination_policy:data.denomination_policy}),network_policy:data.network_policy??null,asset:data.asset??null,
       asset_verification:data.asset_verification??null,capabilities:data.capabilities??null,
       blockchain_rpc_checked:false,independently_verified:false});
   }
@@ -178,6 +198,7 @@ export class NuminaClient {
   }
   async callTool(name,input){
     if(name==='numina_read_treasury')return this.readTreasury(input);
+    if(name==='numina_provider_routes')return this.readProviderRoutes(input);
     validateArguments(name,input);
     if(name==='numina_application_release')return this.release(input);
     if(name==='numina_runtime_build')return this.runtimeBuild(input);

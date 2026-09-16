@@ -1,5 +1,16 @@
 [
   {
+    "name": "numina_provider_routes",
+    "description": "Read owner-authenticated provider route observations from /api/control/v2/treasury/provider-routes. Preserve each provider currency, network, destination and incomplete-observation status. Results are server-reported; this tool does not independently verify provider acceptance, NUSD identity, funding or transfer readiness, and cannot submit deposits or change balances.",
+    "input_schema": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "strict": true
+  },
+  {
     "name": "numina_read_treasury",
     "description": "Read the owner-authenticated canonical Numina-native NUSD treasury through readTreasury(). Requires the production application and its owner token. Preserve NUMINA authority, system of record and native model verification scope. This tool does not submit transfers or independently verify bank or chain receipts.",
     "input_schema": {

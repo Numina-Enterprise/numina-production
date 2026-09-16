@@ -10,13 +10,14 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const metadata=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const providerFormats=['openai-responses','openai-chat-completions','anthropic-messages','gemini-interactions','gemini-generate-content'];
 const revision='numina-root-v'+metadata.version;
+const providerRoutes={tool:'numina_provider_routes',method:'GET',endpoint:'/api/control/v2/treasury/provider-routes',access:'authenticated_owner',schema:'numina.treasury.provider-routes.v1',clientPerformsProviderAcceptanceVerification:false,transferExecution:false};
 const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime_build',
- additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','treasury_client_verification'],proofGuide:'EVIDENCE.md',
+ additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','provider_routing','treasury_client_verification'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
 const verification={
  schema:'numina.integration.package.v2',packagedAtUtc:new Date().toISOString(),
  package:{name:metadata.name,version:metadata.version,private:metadata.private},revision,
- applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,
+ applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
  testRunPerformed:false,tests:null,reason:'Packaging generates metadata; validation runs separately in the repository test suite.',
  historicalValidation:'history/0.2.0/verification.json',
  providerFormats,mcpProtocolsImplemented:['2025-11-25','2025-06-18'],mcp20260728Implemented:false,
@@ -33,7 +34,7 @@ const distribution={
  procurement_usage:true,procurementPolicy:'/business-core.json',
  livemode:true,frontier:{version:metadata.version,transport:'stdio-to-streamable-http',script:'bin/control-mcp-stdio.js',endpoint:'https://numinalabs.xyz/api/control/v2/mcp',protocolVersion:'2025-11-25',tokenEnvironmentVariable:'NUMINA_API_TOKEN',a2a:'https://numinalabs.xyz/.well-known/agent-card.json'},
  schema:'numina.integration.distribution.v2',version:metadata.version,revision,
- applicationManifest:'/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,
+ applicationManifest:'/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
  defaultOrigin:'https://numinalabs.xyz',defaultProfile:'discovery',
  hostExamples:{nvidiaNim:{script:'examples/nvidia-nim.mjs',setup:'examples/NVIDIA.md',windowsBootstrap:'examples/setup-nvidia-wsl.ps1',localLauncher:'examples/start-nvidia-nim.sh',endpointVerifier:'examples/verify-nvidia-nim.mjs',providerPolicy:'examples/nvidia-provider-policy.json',protocol:'openai-chat-completions',profile:'discovery',liveAcceptanceVerified:false}},
  providerFormats:Object.fromEntries(providerFormats.map(name=>[name,{discovery:'schemas/'+name+'.json',workflow:'schemas/'+name+'-workflow.json'}])),

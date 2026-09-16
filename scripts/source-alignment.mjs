@@ -1,5 +1,6 @@
 import {isDeepStrictEqual} from 'node:util';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
+import {NUSD_PROVIDER_ROUTING} from '../src/stripe-treasury.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import fs from 'node:fs';
 import {checkIOSRelease, iosInputSnapshot} from './ios-release.mjs';
@@ -84,6 +85,7 @@ record.denomination_policy=NUMINA_DENOMINATION_POLICY;record.checks.denomination
 record.sourceInputs.push({path:'public/treasury-valuation.js',sha256:digest(fs.readFileSync('public/treasury-valuation.js'))});
 record.sourceInputs.push(...['public/treasury-amount.js','public/stripe-treasury.js','src/stripe-treasury.js','src/treasury-evidence.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 record.contract_record=NUSD_CONTRACT_RECORD;
+record.provider_routing=NUSD_PROVIDER_ROUTING;
 record.sourceInputs.push(...['NuminaUSDCConversion','NuminaUSDRedemption'].flatMap(name=>[
   'runtime/nusd/contracts/'+name+'.sol','runtime/nusd/artifacts/'+name+'.json'
 ]).map(path=>({path,sha256:digest(fs.readFileSync(path))})));

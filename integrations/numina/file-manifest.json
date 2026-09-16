@@ -10,13 +10,13 @@
     },
     {
       "path": "API-CONTRACT.md",
-      "bytes": 10024,
-      "sha256": "1cc3abbcd0517677470e79d171668333009daee525f27105eafa03194a3daa0e"
+      "bytes": 11817,
+      "sha256": "bf4c428ad3847963e4961e48fc94667d567ddac88983f054adbce509887013bd"
     },
     {
       "path": "COMPATIBILITY.md",
-      "bytes": 3382,
-      "sha256": "620e1f53a6c158b1efc184abc5f121fee94cbc3c04e7c40230664aa7b33696ee"
+      "bytes": 3513,
+      "sha256": "b1175a7293358f8bd6d3c80cc3a282126e511ddce142bde12114b809a02aadc5"
     },
     {
       "path": "EVIDENCE.md",
@@ -25,8 +25,8 @@
     },
     {
       "path": "INSTALL.md",
-      "bytes": 3846,
-      "sha256": "a03dd65d99259748bb8ec59c81972b4200331b2a7d65c10e72c255222ba803f3"
+      "bytes": 3995,
+      "sha256": "c133f38dc82875f96ee974c2b2895bb447b6695925e2549f99757bd349324b20"
     },
     {
       "path": "LICENSE.md",
@@ -45,18 +45,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 7682,
-      "sha256": "48c3edab08cd6c85d9d03a086ca0816aeaee812608e97e41063f9f631b6d8f82"
+      "bytes": 8608,
+      "sha256": "76a0f2e143989ce8e6a7bf4639210bf60589f0be9f4c5f7b8bfd3836ba763616"
     },
     {
       "path": "SECURITY.md",
-      "bytes": 3784,
-      "sha256": "38eca92e56e6e2b1c184984b801beeeab5fda2f1c5589d759352e7fa91905050"
+      "bytes": 3898,
+      "sha256": "75a04e94fcf4bdcded465f608c8ce0e0448851f92d5b754a1bade9eb3765aa2c"
     },
     {
       "path": "VALIDATION.md",
-      "bytes": 1161,
-      "sha256": "6b6c1010f2fbe2933de45fd8f1df2870de630c9c90b4d088ccd44958e90f6e47"
+      "bytes": 1583,
+      "sha256": "f81214fb45bdcf36854957aaca34685e2a134aa5a397deee67e450b8525f1e6f"
     },
     {
       "path": "bin/control-mcp-stdio.js",
@@ -70,8 +70,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 4855,
-      "sha256": "0ffd206a5488ac004af95cf24790071a40fa71ed2eeedc31b7d61ce0a7804f41"
+      "bytes": 5206,
+      "sha256": "68612aa02551b0a835ac6987556e9a50c9a3401dcac930f164bfc7e16b2c75d7"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -155,58 +155,58 @@
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
-      "bytes": 5816,
-      "sha256": "cb6a004f967f712f42bf7939a62734497cd9dfdad91c5b03fc20c0ca4123e359"
+      "bytes": 6411,
+      "sha256": "8029034aebc391f6ba67c45fc8cd290d5cb42563a942d6144fbcff63ebe85557"
     },
     {
       "path": "schemas/anthropic-messages.json",
-      "bytes": 3435,
-      "sha256": "827a1650c97f6bf883cb571b3c04b5072dc75c048d1e1e2b55607b117e0268e7"
+      "bytes": 4030,
+      "sha256": "f5452d812778d5044a6341b199fd8a9d53a28791a8a15db3b9b9b85cd107e9d3"
     },
     {
       "path": "schemas/gemini-generate-content-workflow.json",
-      "bytes": 6356,
-      "sha256": "e56a01bd3c2dd932e1f8be54123a1248e0befd2b6d114b05c54909e2a568784e"
+      "bytes": 6979,
+      "sha256": "cb97c246575b321218287d2404be9d7dd576ed393547668e578041b478ae2844"
     },
     {
       "path": "schemas/gemini-generate-content.json",
-      "bytes": 3711,
-      "sha256": "d84b3d4a5b473a589d97890549e23c18492414a8d4de97ddf9b1e6287777fc69"
+      "bytes": 4334,
+      "sha256": "362797f810eb3e19d6132c0076b19cf3eacd36edefe91cb889d573068d0786de"
     },
     {
       "path": "schemas/gemini-interactions-workflow.json",
-      "bytes": 5832,
-      "sha256": "f802cc70ca711430783cbf751fd9fed96fdb5572c285a6a13fe06f38ee2a6f97"
+      "bytes": 6429,
+      "sha256": "6014a57fac0ef6593d0065eef7e1efb04bc8cca213f05d8db101e99b1d84f5ef"
     },
     {
       "path": "schemas/gemini-interactions.json",
-      "bytes": 3447,
-      "sha256": "886d6d4d480f934992a1d5b50cd9ec2573b20ee5a362a5b1595787928836a62c"
+      "bytes": 4044,
+      "sha256": "bea404436197f84c64fe00c6eca778fa99751032117f9ea5f94039b0b725e986"
     },
     {
       "path": "schemas/openai-chat-completions-workflow.json",
-      "bytes": 6464,
-      "sha256": "be1297dc6c0e1c135388d6c7f1e6df31267b8624a9352621cb63dec4b6be4dc2"
+      "bytes": 7123,
+      "sha256": "6b57b0bb8fb97b4df4079b1572fb8cedc1317ba3c7c25b730adfc50af11b786e"
     },
     {
       "path": "schemas/openai-chat-completions.json",
-      "bytes": 3851,
-      "sha256": "5b751391243ca121d4b510558fe16a9a242fb5a536495cf11218c3f7078cc220"
+      "bytes": 4510,
+      "sha256": "35124e920af30c78fe8ce65a6a15ded02daee948e722b5bfea1355a8c1957ad1"
     },
     {
       "path": "schemas/openai-responses-workflow.json",
-      "bytes": 5992,
-      "sha256": "6b4f3efdeb7f3d0179f27c450df46215c373769683d6297f7b6719ef20f255ba"
+      "bytes": 6609,
+      "sha256": "d753a78c90b30c2ac5d03b60a041db992eb1184bfc32af33661f3c6b82949d80"
     },
     {
       "path": "schemas/openai-responses.json",
-      "bytes": 3567,
-      "sha256": "cdadec2f96c85b66898e27bc5c96673ea06a66adf47e2630c144bb260d1df17c"
+      "bytes": 4184,
+      "sha256": "d18393d2d10bc48a462fde60e71b7031716ebeb3669d62aefd1c015895148ce6"
     },
     {
       "path": "schemas/provider-neutral.json",
-      "bytes": 6819,
-      "sha256": "0255b972ae30bef6ba748e29bb26e03df943b11448d91fc2812f0422924b6564"
+      "bytes": 7539,
+      "sha256": "5f5034f2c98d1fd84d5423a1460df589113be089b23e5098800c12702e9f6c60"
     },
     {
       "path": "scripts/export-tools.js",
@@ -215,18 +215,18 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 5711,
-      "sha256": "9c13fa0af75945cc9687d038f54f5f8af4f3926ff8ddcb3b0ef136836a87bc1e"
+      "bytes": 6027,
+      "sha256": "498e62e2718bbe9872d0adf7b348a19c98bdb3771b609979dda9f30774943cd0"
     },
     {
       "path": "src/client.js",
-      "bytes": 15283,
-      "sha256": "3fe3387fc51dd97b1e01b729fc5d65ac92287746d0d617b9b9c3f091bff05776"
+      "bytes": 17406,
+      "sha256": "df4641726676ca6d62a425bcf49461ed0695f1ce9b759fc5b7c43bc1afde35e3"
     },
     {
       "path": "src/index.d.ts",
-      "bytes": 3269,
-      "sha256": "b6170fd1e9ff4676fc97db33d6bbdf43574dd7efa50734b0a64c2708dec01464"
+      "bytes": 3388,
+      "sha256": "e508c7b417df47877c563671ccd3c054d4511c1727f7e4b569e95522ef3d0a6e"
     },
     {
       "path": "src/index.js",
@@ -235,8 +235,8 @@
     },
     {
       "path": "src/mcp.js",
-      "bytes": 4606,
-      "sha256": "b46ec59403447ad3c5978c9a33add03378da579d488a6a2a14258a8c111264ea"
+      "bytes": 4878,
+      "sha256": "fcaf04ebe31063af7ee1f549642d54d048bfd358c90ae9c11a9dc8264bcd30d3"
     },
     {
       "path": "src/provider-adapters.js",
@@ -260,8 +260,8 @@
     },
     {
       "path": "src/tools.js",
-      "bytes": 5788,
-      "sha256": "9abd12bf18409543a3cf128393447050a087bb479081275b149c13ad8f83a8ae"
+      "bytes": 6324,
+      "sha256": "cfc396691c2ae6a279b640baadd8b38f49eeaa5ff01fa033cd96726c6e8d0918"
     },
     {
       "path": "src/treasury-proof.js",
@@ -275,8 +275,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 2041,
-      "sha256": "8882538509df6478a21bdc6485576f7c0bc02aab6678f9d0f7af240cf7893fee"
+      "bytes": 2422,
+      "sha256": "3c291088b0a0fc75f2cba4354f4b36bbea6fcb58358b904604f4422b11314baf"
     }
   ]
 }
