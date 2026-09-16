@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/verify-root-vercel.yml'
+      - '.nvmrc'
       - 'api/**'
       - 'package.json'
       - 'scripts/smoke-production.mjs'
@@ -23,13 +24,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.x'
+          node-version-file: '.nvmrc'
       - name: Validate pinned Node runtime
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync} from 'node:fs';
           const pkg=JSON.parse(readFileSync('package.json','utf8'));
+          const nvmrc=readFileSync('.nvmrc','utf8').trim();
           if(pkg.engines?.node!=='24.x') throw new Error('package runtime must stay pinned to Node 24.x');
+          if(nvmrc!=='24') throw new Error('.nvmrc must stay pinned to Node 24');
           if(Number(process.versions.node.split('.')[0])!==24) throw new Error('CI is not running Node 24');
           NODE
       - name: Validate application build
