@@ -11,6 +11,7 @@ function digestText(value){return createHash('sha256').update(value,'utf8').dige
 function assert(condition,message){if(!condition)throw new Error(message);}
 function exactRelease(value){return value&&typeof value==='object'&&!Array.isArray(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected);}
 function sameJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
+function firstDifference(a,b){const length=Math.min(a.length,b.length);for(let i=0;i<length;i++)if(a[i]!==b[i])return i;return a.length===b.length?-1:length;}
 function verifyEnvelope(envelope,expectedType){
   assert(envelope&&typeof envelope==='object','signed envelope missing');
   assert(envelope.artifact_type===expectedType,`unexpected artifact type: ${envelope.artifact_type}`);
@@ -37,21 +38,7 @@ const get=(path)=>fetchBody(RUNTIME_ORIGIN,path);
 const getCanonical=(path,options)=>fetchBody(CANONICAL_ORIGIN,path,options);
 
 const [frontier,provenance,status,manifest,supply,attestation,control,application,canonicalApplication,stableAgentCard,canonicalAgentCard,stableControlManifest,canonicalControlManifest,stableFrontier,canonicalFrontier]=await Promise.all([
-  get('/v1/frontier/readiness'),
-  get('/v1/deployment/provenance'),
-  get('/v1/status'),
-  get('/v1/release/manifest'),
-  get('/v1/release/supply-chain'),
-  get('/v1/release/attestation'),
-  get('/v1/control/state'),
-  get('/v4/release/manifest'),
-  getCanonical('/v4/release/manifest'),
-  get('/.well-known/agent-card.json'),
-  getCanonical('/.well-known/agent-card.json'),
-  get('/api/control/v2/manifest'),
-  getCanonical('/api/control/v2/manifest'),
-  fetchBody(RUNTIME_ORIGIN,'/frontier',{kind:'html',maxBytes:MAX_HTML_BYTES}),
-  getCanonical('/frontier',{kind:'html',maxBytes:MAX_HTML_BYTES})
+  get('/v1/frontier/readiness'),get('/v1/deployment/provenance'),get('/v1/status'),get('/v1/release/manifest'),get('/v1/release/supply-chain'),get('/v1/release/attestation'),get('/v1/control/state'),get('/v4/release/manifest'),getCanonical('/v4/release/manifest'),get('/.well-known/agent-card.json'),getCanonical('/.well-known/agent-card.json'),get('/api/control/v2/manifest'),getCanonical('/api/control/v2/manifest'),fetchBody(RUNTIME_ORIGIN,'/frontier',{kind:'html',maxBytes:MAX_HTML_BYTES}),getCanonical('/frontier',{kind:'html',maxBytes:MAX_HTML_BYTES})
 ]);
 
 assert(frontier.headers.get('x-numina-runtime-release')===RUNTIME_VERSION,'frontier runtime header drift');
@@ -103,25 +90,11 @@ assert(/<link rel="canonical" href="https:\/\/numinalabs\.xyz\/frontier">/i.test
 assert(/<link rel="canonical" href="https:\/\/numinalabs\.xyz\/frontier">/i.test(canonicalFrontier.text),'canonical frontier canonical link drift');
 assert(/NUMINA/i.test(stableFrontier.text)&&/NUMINA/i.test(canonicalFrontier.text),'frontier identity marker missing');
 const stableFrontierSha256=digestText(stableFrontier.text),canonicalFrontierSha256=digestText(canonicalFrontier.text);
+if(stableFrontierSha256!==canonicalFrontierSha256){
+  const offset=firstDifference(stableFrontier.text,canonicalFrontier.text);
+  const start=Math.max(0,offset-120),end=Math.min(Math.max(stableFrontier.text.length,canonicalFrontier.text.length),offset+240);
+  console.error(JSON.stringify({frontier_drift:{stable_sha256:stableFrontierSha256,canonical_sha256:canonicalFrontierSha256,stable_bytes:Buffer.byteLength(stableFrontier.text,'utf8'),canonical_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8'),first_difference:offset,stable_context:stableFrontier.text.slice(start,end),canonical_context:canonicalFrontier.text.slice(start,end)}},null,2));
+}
 assert(stableFrontierSha256===canonicalFrontierSha256,'stable and canonical frontier HTML diverged');
 
-console.log(JSON.stringify({
-  ok:true,
-  runtime:RUNTIME_VERSION,
-  release:EXPECTED_RELEASE.release,
-  application:application.value.release,
-  deployment_id:deploymentPayload.deployment_id,
-  git_commit_sha:deploymentPayload.git_commit_sha,
-  readiness_checks:Object.keys(readiness.checks),
-  signing_key_id:PINNED_RUNTIME_KEY_ID,
-  execution_boundary:'closed',
-  public_surface_convergence:{
-    application_manifest:true,
-    agent_card:true,
-    control_manifest:true,
-    frontier_html:true,
-    frontier_sha256:stableFrontierSha256,
-    canonical_origin:CANONICAL_ORIGIN,
-    stable_origin:RUNTIME_ORIGIN
-  }
-},null,2));
+console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_html:true,frontier_sha256:stableFrontierSha256,canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
