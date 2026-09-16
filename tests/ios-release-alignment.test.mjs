@@ -53,16 +53,31 @@ test('input fingerprint covers the actual native source, assets and current buil
     'mobile/ios/Numina.xcodeproj/project.pbxproj','.github/workflows/numina-ios-branch-build.yml'])
     assert.ok(snapshot.inputs.some(item=>item.path===path),path);
 });
-test('current iOS metadata remains distinct from compiled build 5 while preserving build 3 evidence',()=>{
+test('current iOS compile binds the source inventory while preserving earlier build evidence',()=>{
   const record=input().native,archive=record.sourceArchives.find(item=>item.platform==='ios');
   assert.equal(record.ios.sourceBuildNumber,5);
   assert.equal(record.ios.binaryVersionCode,5);
-  assert.equal(record.ios.currentSourceCompiled,false);
-  assert.equal(record.ios.signingInputMatchesCurrentSource,false);
-  assert.match(record.ios.compiledSourceInputsSha256,/^[a-f0-9]{64}$/);
-  assert.notEqual(record.ios.compiledSourceInputsSha256,iosInputSnapshot().sha256);
+  assert.equal(record.ios.currentSourceCompiled,true);
+  assert.equal(record.ios.signingInputMatchesCurrentSource,true);
+  assert.equal(record.ios.compiledSourceInputsSha256,iosInputSnapshot().sha256);
+  assert.equal(record.ios.signed,false);
+  assert.equal(record.ios.storeSubmitted,false);
+  const evidence=json('docs/ios-build-verification-2026-09-16-c6ffbb5.json');
+  assert.equal(evidence.sourceCommit,record.ios.sourceCommit);
+  assert.equal(evidence.sourceTree,record.ios.sourceTree);
+  assert.equal(evidence.sourceInputs.sha256,iosInputSnapshot().sha256);
+  assert.equal(evidence.compiledArtifact.sha256,record.ios.binaries[0].sha256);
+  assert.equal(evidence.compiledInfoPlist.CFBundleIdentifier,record.proposedPackageIdentity);
+  assert.equal(evidence.compiledInfoPlist.CFBundleVersion,String(record.ios.binaryVersionCode));
+  assert.equal(evidence.compiledInfoPlist.NuminaRuntimeVersion,checkIOSRelease().runtimeVersion);
+  assert.equal(evidence.compiledInfoPlist.NuminaFrozenCoreRoot,checkIOSRelease().frozenCoreRoot);
+  assert.ok(Object.values(evidence.checks).every(value=>value===true));
   assert.ok(record.ios.binaries.length>0);
   for(const file of record.ios.binaries)assert.equal(createHash('sha256').update(readFileSync(new URL('../docs/'+file.file,import.meta.url))).digest('hex'),file.sha256);
+  const prior=record.ios.previousCompiledBuild;
+  assert.notEqual(prior.compiledSourceInputsSha256,iosInputSnapshot().sha256);
+  assert.notEqual(prior.sha256,record.ios.binaries[0].sha256);
+  assert.equal(createHash('sha256').update(readFileSync(new URL('../docs/'+prior.file,import.meta.url))).digest('hex'),prior.sha256);
   const historical=json('docs/native-package-record-v4-pre-build5.json');
   assert.equal(historical.ios.binaryVersionCode,3);
   assert.equal(historical.ios.currentSourceCompiled,false);

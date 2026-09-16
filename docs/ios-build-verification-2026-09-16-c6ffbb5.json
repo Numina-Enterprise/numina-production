@@ -1,0 +1,320 @@
+{
+  "schema": "numina.ios-build-verification.v1",
+  "verifiedAtUtc": "2026-09-16T22:46:46.288282+00:00",
+  "sourceCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
+  "sourceTree": "df4d4aac875db80ecafcd0c499b12cb84ba1b7a7",
+  "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/35158998398",
+  "runId": 35158998398,
+  "workflow": ".github/workflows/numina-native-packages.yml",
+  "workflowInput": {
+    "platform": "ios"
+  },
+  "buildStatus": "success",
+  "githubArtifact": {
+    "id": 10472311084,
+    "name": "numina-ios-unsigned",
+    "bytes": 112344,
+    "sha256": "880f8d26219c816d0cc2b283d250fc6bb05e1060b5f9b163bb23ff416439a125"
+  },
+  "compiledArtifact": {
+    "file": "numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip",
+    "upstreamFile": "numina-4.0.0-ios-unsigned-app.zip",
+    "bytes": 113715,
+    "sha256": "23e953860f7ec71937666a0fe543613bc4762fab4abd9da0fc59def92334425e",
+    "platform": "ios",
+    "signed": false,
+    "installable": false
+  },
+  "compiledInfoPlist": {
+    "CFBundleIdentifier": "xyz.numinalabs.app",
+    "CFBundleShortVersionString": "4.0.0",
+    "CFBundleVersion": "5",
+    "MinimumOSVersion": "15.0",
+    "NuminaApplicationManifest": "/v4/release/manifest",
+    "NuminaRuntimeVersion": "1.9.0-rc26",
+    "NuminaCoreVersion": "1.8.0",
+    "NuminaFrozenCoreRoot": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+    "NuminaTelemetryEndpoint": "/api/ops/v1/telemetry",
+    "DTPlatformName": "iphoneos",
+    "DTSDKName": "iphoneos26.5",
+    "DTXcode": "2660"
+  },
+  "compiledEntries": [
+    {
+      "path": "Numina.app/AppIcon60x60@2x.png",
+      "bytes": 2713,
+      "sha256": "1c289a2fc0b297ec92eefa9010d31b5d1fe3a2898d77d82bf67e187d7717df94"
+    },
+    {
+      "path": "Numina.app/Assets.car",
+      "bytes": 55352,
+      "sha256": "49105fa3b70f7f252eedb4a7a6d4c047a22874ae2f609b099f8625f61b619be9"
+    },
+    {
+      "path": "Numina.app/AppIcon76x76@2x~ipad.png",
+      "bytes": 3386,
+      "sha256": "cc09abbcfce6bee59c42e3a0bb96583ee02ab08877a8f169db8d743d63b4ce53"
+    },
+    {
+      "path": "Numina.app/Numina",
+      "bytes": 445264,
+      "sha256": "211914b406432c78479a8251c8e8d8aff1979060a978f946c25f7ae6e6554f94"
+    },
+    {
+      "path": "Numina.app/Info.plist",
+      "bytes": 1843,
+      "sha256": "df5f420b258854fab40cf5246b993f6d0085711097489f9bc74b5793b2e1e5ed"
+    },
+    {
+      "path": "Numina.app/PkgInfo",
+      "bytes": 8,
+      "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0"
+    }
+  ],
+  "sourceInputs": {
+    "sha256": "85775b4254ba63eee0709738a842dcffb95746caaf671472d75fb3dbf00e1da0",
+    "inputs": [
+      {
+        "path": ".github/workflows/numina-ios-branch-build.yml",
+        "bytes": 1034,
+        "sha256": "690be403444ec508a3310a8f2aceb78943a9c674afea1f9926c71c65ad62cfc9"
+      },
+      {
+        "path": ".github/workflows/numina-ios-signing.yml",
+        "bytes": 1215,
+        "sha256": "a66d3d159a1a921bbc75971400df9e6849db67a297951e2b14b237bb2669669b"
+      },
+      {
+        "path": ".github/workflows/numina-native-packages.yml",
+        "bytes": 3052,
+        "sha256": "6daef46eca98fd36552b6351ae2bc8ba0da6e4d5e2bc1c93d5bedc644661912e"
+      },
+      {
+        "path": "config/numina-architecture.json",
+        "bytes": 1742,
+        "sha256": "de6ffd234d65b1af8c0abc0efd25204bfb996b7579e8f1a61589f206ec7b5409"
+      },
+      {
+        "path": "mobile/ios/.gitignore",
+        "bytes": 98,
+        "sha256": "62a955445d072c4174d2056d66a70ed4207e0a680a97ee6c598b24fd2b5acba3"
+      },
+      {
+        "path": "mobile/ios/Configuration/Numina.xcconfig",
+        "bytes": 874,
+        "sha256": "ab6be57cb8b09e9a399246d0fc632a8e2eb7f8a256f462bd08f7942f23172b5d"
+      },
+      {
+        "path": "mobile/ios/Configuration/NuminaRelease.xcconfig",
+        "bytes": 320,
+        "sha256": "e7614e8e630ea2d4bd0521599daaaf8d54ecd61c45b15bed9478efe3adeaea4e"
+      },
+      {
+        "path": "mobile/ios/LICENSE.md",
+        "bytes": 1210,
+        "sha256": "ef793b4563210568ac5afc60563de3c1dc9a18475171391cebb94a7845d3cb6e"
+      },
+      {
+        "path": "mobile/ios/NOTICE.md",
+        "bytes": 1247,
+        "sha256": "f9ba92913ecf4732efeabb41135b9a9ca1d2b1146e80d7dae37ec2807a58a991"
+      },
+      {
+        "path": "mobile/ios/Numina.xcodeproj/project.pbxproj",
+        "bytes": 7496,
+        "sha256": "32c65d456a60ab49d765466a658586b31ccfeafa326c880ffd1efe2a7aba6231"
+      },
+      {
+        "path": "mobile/ios/Numina.xcodeproj/xcshareddata/xcschemes/Numina.xcscheme",
+        "bytes": 1950,
+        "sha256": "4c2687224a9d2cd4199d0eec996729b7cf33cbd5fb6ccbfe631e261b98568026"
+      },
+      {
+        "path": "mobile/ios/Numina/AppConfiguration.swift",
+        "bytes": 2008,
+        "sha256": "e27b2311f2bde258e551dd9bc6ac7589027ee94273f9da44a131e22dc1a39df2"
+      },
+      {
+        "path": "mobile/ios/Numina/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+        "bytes": 34756,
+        "sha256": "2fffb9a89985439a6a064988c826a38aab3e1cb14919c7e475a5cc159e464c56"
+      },
+      {
+        "path": "mobile/ios/Numina/Assets.xcassets/AppIcon.appiconset/Contents.json",
+        "bytes": 208,
+        "sha256": "3c6addf3f20972a12a0c33e6f6fe9e0857a0bdb512dce5d59f4bd007b236c157"
+      },
+      {
+        "path": "mobile/ios/Numina/Assets.xcassets/Contents.json",
+        "bytes": 60,
+        "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+      },
+      {
+        "path": "mobile/ios/Numina/ContentView.swift",
+        "bytes": 6527,
+        "sha256": "3eed54363f95b9f4befb0fd8d565ab59017e7863a37b5cb646f5d631b69d846b"
+      },
+      {
+        "path": "mobile/ios/Numina/HostedAppModel.swift",
+        "bytes": 11915,
+        "sha256": "f286704e774aad17211c665a4486d058aa68afc0a6014464411bb855d642658e"
+      },
+      {
+        "path": "mobile/ios/Numina/HostedWebView.swift",
+        "bytes": 267,
+        "sha256": "cbcb1b6d4601d95a38efe8c68f579fae52ebad42dcda97eb2455e0bf7e6a7f7c"
+      },
+      {
+        "path": "mobile/ios/Numina/Info.plist",
+        "bytes": 2127,
+        "sha256": "58ea7ff9ad56fcc025f3812fb87f401b9a3653e0fc924a4856e438678e9ade37"
+      },
+      {
+        "path": "mobile/ios/Numina/NuminaApp.swift",
+        "bytes": 150,
+        "sha256": "73645faaaed0001f8438535666a65b82d1b9b7b3e852765c8d5ec86eca25bd07"
+      },
+      {
+        "path": "mobile/ios/OWNERSHIP.md",
+        "bytes": 1543,
+        "sha256": "fbab0d68245f37abe44a06d98135b9ec89e57867c38998da4e8165feca8cef43"
+      },
+      {
+        "path": "mobile/ios/README.md",
+        "bytes": 10479,
+        "sha256": "13117d7a15ead34a93db0e8b993d8bac813b7d8cccde2ad355b1aa8ce4cecd6f"
+      },
+      {
+        "path": "mobile/ios/RELEASE-INPUTS.md",
+        "bytes": 5312,
+        "sha256": "055fc3b3db8d32d35278d2a8124393fdb897e783487491391b0a4b97fe3d91d7"
+      },
+      {
+        "path": "mobile/ios/Signing/APP-STORE-HANDOFF.md",
+        "bytes": 1830,
+        "sha256": "f6998f73327d020795942a317ed943a8cb9d5b11ef031236d321125f831197d9"
+      },
+      {
+        "path": "mobile/ios/Signing/ExportOptions.plist.template",
+        "bytes": 730,
+        "sha256": "cd39a706d0914b106e58acf86184a48658eaafc3c58bc84a86f546c168583ff9"
+      },
+      {
+        "path": "mobile/ios/Signing/Numina-Distribution.certSigningRequest",
+        "bytes": 964,
+        "sha256": "85d239ff7982f5e4c6d3085f73afa51faf8df7d526487e1482f98bb38afc93a8"
+      },
+      {
+        "path": "mobile/ios/Signing/Numina-Signing.xcconfig.template",
+        "bytes": 474,
+        "sha256": "14a608d2dd5c9502f312648b24ad49c8287d196e75ba6f65e74f2d41892e6413"
+      },
+      {
+        "path": "mobile/ios/Signing/README.md",
+        "bytes": 4433,
+        "sha256": "0cb28d429793cce9393daae06a2e5ae9ffd6d4384c5e152f1265dd41d5c96e05"
+      },
+      {
+        "path": "mobile/ios/Signing/signing-inputs.json",
+        "bytes": 1416,
+        "sha256": "3c9fa5062aa53597dacd4126e0e20dfb7e72d330d29429b78ce583f1a309d5e3"
+      },
+      {
+        "path": "mobile/signing/distribution-policy.json",
+        "bytes": 1362,
+        "sha256": "e9980471c70e3cf038b6c5a0f02155e8ffc943f5a1a70533ba725f7d1f3bd850"
+      },
+      {
+        "path": "mobile/signing/numina-ios-distribution.csr",
+        "bytes": 964,
+        "sha256": "85d239ff7982f5e4c6d3085f73afa51faf8df7d526487e1482f98bb38afc93a8"
+      },
+      {
+        "path": "package.json",
+        "bytes": 606,
+        "sha256": "9af1807c75d5fcfb7fce61b32911c6ea1a3ba93f99607e48560e6b798104aa50"
+      },
+      {
+        "path": "public/runtime-contract.js",
+        "bytes": 1163,
+        "sha256": "0889ec6f09f651f3fb95ef91397c0727c890de0c67f23d3b0c863a9fab24e074"
+      },
+      {
+        "path": "scripts/ios-release.mjs",
+        "bytes": 7424,
+        "sha256": "bf7c8d2229093c0799c1baaf1a10aa96a6125f9d5230415ea6b60f9862e058c6"
+      },
+      {
+        "path": "scripts/package-ios-source.py",
+        "bytes": 4282,
+        "sha256": "f827413564d7fef8ff55895a333200e4f78ab9909cd39f3397854e8da1974293"
+      },
+      {
+        "path": "scripts/sign-ios-release.py",
+        "bytes": 9113,
+        "sha256": "1215a27bfbc0f1bb8c0ace506c1badf1cbdb090882c9740cc169363b24006f99"
+      }
+    ],
+    "scope": "scoped_current_source_not_signed_provenance",
+    "textNormalization": "utf8_lf_binary_unchanged"
+  },
+  "checks": {
+    "outerHashMatched": true,
+    "innerSHA256SUMSMatched": true,
+    "zipEntriesSafe": true,
+    "archiveCRCVerified": true,
+    "bundleIdentityMatched": true,
+    "runtimeBindingsMatched": true,
+    "sourceInputsMatchCurrent": true,
+    "sourceInputsMatchBuildCommitTree": true,
+    "historicalArchiveUnchanged": true
+  },
+  "sourceBindingBasis": "Workflow source commit and the previously verified identical Git tree; every scoped current source input was checked against that committed tree. This local comparison is not a signed provenance attestation.",
+  "previousCompiledBuild": {
+    "status": "compiled_unsigned_v4_build5",
+    "binaries": [
+      {
+        "file": "numina-4.0.0-ios-build5-unsigned-app.zip",
+        "bytes": 113715,
+        "sha256": "b69dc40ecdb84eb5aa38327c1d80e1c5d20a1c4f6d72ebe33b63353188025746",
+        "platform": "ios",
+        "signed": false,
+        "installable": false,
+        "url": "https://numinalabs.xyz/downloads/numina-4.0.0-ios-build5-unsigned-app.zip"
+      }
+    ],
+    "binaryApplicationVersion": "4.0.0",
+    "binaryVersionCode": 5,
+    "sourceApplicationVersion": "4.0.0",
+    "currentSourceCompiled": false,
+    "compiled": true,
+    "signed": false,
+    "ipaCreated": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "nativeAuthenticatedSessionSupported": false,
+    "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
+    "distributionPolicy": "/downloads/distribution-policy.json",
+    "hostedArtifactPaths": {
+      "sites": "https://numinalabs.xyz/downloads/numina-4.0.0-ios-build5-unsigned-app.zip"
+    },
+    "hostPublicationVerified": false,
+    "sourceBuildNumber": 5,
+    "sourceInputsSha256": "85775b4254ba63eee0709738a842dcffb95746caaf671472d75fb3dbf00e1da0",
+    "signingInputMatchesCurrentSource": false,
+    "sourceAlignmentScope": "current_source_package_not_native_build",
+    "sourceCommit": "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34947887766",
+    "compiledSourceInputsSha256": "7fb729bf20add06ea17472fb3e6bc58ca1f9b800109b1a1920dd7188039b00a8",
+    "compiledSourceBuildNumber": 5,
+    "sourceRecord": "https://numinalabs.xyz/downloads/native-build-verification-2026-09-15.json"
+  },
+  "compiled": true,
+  "signed": false,
+  "ipaCreated": false,
+  "storeSubmitted": false,
+  "deviceInstalled": false,
+  "testsRun": false,
+  "providerCredentialsVerified": false,
+  "scope": "Fresh compiled unsigned device bundle. Apple distribution signing and store processing remain separate operations."
+}
