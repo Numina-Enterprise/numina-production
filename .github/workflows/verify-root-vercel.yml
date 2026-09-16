@@ -33,12 +33,12 @@ jobs:
           for(const source of ['/v1/frontier/readiness','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) {
             if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
           }
-          if(rewrites.get('/v1/frontier/readiness')!=='/api/frontier-readiness') throw new Error('frontier readiness bypasses verifier');
+          if(rewrites.get('/v1/frontier/readiness')!=='/api/application-release?mode=frontier-readiness') throw new Error('frontier readiness bypasses consolidated verifier');
           for(const source of ['/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) {
             if(rewrites.get(source)!=='/api/application-release') throw new Error('application release alias bypasses validation proxy: '+source);
           }
           const files=readdirSync('api').filter(name=>/\.(?:js|mjs)$/.test(name)).sort();
-          if(files.length!==13) throw new Error('expected 13 root API adapters, found '+files.length);
+          if(files.length!==12) throw new Error('expected 12 root API adapters, found '+files.length);
           for(const file of files){
             const mod=await import(pathToFileURL(resolve('api',file)).href);
             if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);
@@ -51,10 +51,9 @@ jobs:
             if(RELEASE_IDENTITY[field]!==expected) throw new Error('runtime identity drift: '+field);
           }
           if(JSON.stringify(RELEASE_IDENTITY).includes('rc22')) throw new Error('legacy rc22 identity survived runtime alignment');
-          const {validateApplicationRelease}=await import(pathToFileURL(resolve('api/application-release.mjs')).href);
+          const {validateApplicationRelease,evaluateFrontierReadiness}=await import(pathToFileURL(resolve('api/application-release.mjs')).href);
           const application={schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'ci-build',runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};
           validateApplicationRelease(application);
-          const {evaluateFrontierReadiness}=await import(pathToFileURL(resolve('api/frontier-readiness.mjs')).href);
           const controlState={schema:'numina.control-state.v1',release:EXPECTED_RELEASE.production_version,runtime_controls_configurable:true,real_funds_enabled:false,employer_ip_enabled:false,public_execution_api_enabled:false,public_execution_route_exposed:false};
           const records={
             application,
@@ -69,5 +68,5 @@ jobs:
           const openControl={...controlState,public_execution_api_enabled:true};
           const unsafe=evaluateFrontierReadiness({...records,control:{state:openControl,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:openControl}}},{verifyEnvelope});
           if(unsafe.ready||unsafe.checks.execution_boundary_closed) throw new Error('frontier readiness did not fail closed when public execution opened');
-          console.log('Validated root Vercel routes, '+files.length+' handlers, exact rc26 identity parity, application release proxy and fail-closed frontier readiness.');
+          console.log('Validated consolidated '+files.length+'-function Vercel topology, exact rc26 identity parity, application release proxy and fail-closed frontier readiness.');
           NODE
