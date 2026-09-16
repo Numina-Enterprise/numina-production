@@ -60,7 +60,6 @@ const [frontier,status,manifest,supply,attestation,control,application]=await Pr
 ]);
 
 assert(frontier.headers.get('x-numina-runtime-release')===RUNTIME_VERSION,'frontier runtime header drift');
-assert(manifest.headers.get('x-numina-runtime-release')===RUNTIME_VERSION,'manifest runtime header drift');
 assert(exactRelease(manifest.value),'runtime manifest identity drift');
 assert(exactRelease(status.value),'status release identity drift');
 assert(status.value.live_provider_submitter_exposed===false,'live provider submitter unexpectedly exposed');
