@@ -1,13 +1,17 @@
 import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {dirname,resolve} from 'node:path';
 import {PINNED_RUNTIME_KEY_ID,PINNED_RUNTIME_PUBLIC_KEY,RUNTIME_ORIGIN,RUNTIME_VERSION} from '../public/runtime-contract.js';
 
 const EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||'').trim();
+const EVIDENCE_PATH=(process.env.NUMINA_PROVIDER_EVIDENCE_PATH||'').trim();
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const MAX_BYTES=262144;
 const MAX_AGE_MS=5*60*1000;
 const MAX_FUTURE_SKEW_MS=60*1000;
 function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value&&typeof value==='object'){const out={};for(const key of Object.keys(value).sort())out[key]=sorted(value[key]);return out;}return value;}
 function canonical(value){return Buffer.from(JSON.stringify(sorted(value)),'utf8');}
+function digest(value){return createHash('sha256').update(Buffer.isBuffer(value)?value:canonical(value)).digest('hex');}
 function sameJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
 function assert(condition,message){if(!condition)throw new Error(message);}
 function verifyEnvelope(envelope,expectedType){
@@ -80,4 +84,28 @@ assert(arc.network==='Arc Testnet'&&arc.observed?.chain_id===5042002,'Arc networ
 assert(Number.isSafeInteger(arc.observed?.latest_block)&&arc.observed.latest_block>=0,'Arc latest block invalid');
 assert(arc.observed?.currency==='USDC','Arc currency identity drift');
 
-console.log(JSON.stringify({ok:true,deployment_id:provenancePayload.deployment_id,git_commit_sha:provenancePayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,provider_status:setPayload.status,providers:{circle:{healthy:circle.healthy,latency_ms:circle.latency_ms},arc:{healthy:arc.healthy,chain_id:arc.observed.chain_id,latest_block:arc.observed.latest_block,latency_ms:arc.latency_ms}},signing_key_id:PINNED_RUNTIME_KEY_ID,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false},null,2));
+let evidenceArchive=null;
+if(EVIDENCE_PATH){
+  const base={
+    schema:'numina.provider-evidence-archive.v1',
+    archived_at:new Date().toISOString(),
+    deployment:provenancePayload,
+    deployment_receipt:provenance.receipt,
+    observation_set:response.observation_set,
+    observation_receipt:response.receipt,
+    observation_receipt_sha256:digest(response.receipt),
+    signing_key_id:PINNED_RUNTIME_KEY_ID,
+    credentialed:false,
+    partnership_status:'not_asserted',
+    external_execution_performed:false,
+    hash_scope:'canonical JSON of this archive excluding archive_sha256'
+  };
+  const archive_sha256=digest(base);
+  const archive={...base,archive_sha256};
+  const target=resolve(EVIDENCE_PATH);
+  mkdirSync(dirname(target),{recursive:true});
+  writeFileSync(target,JSON.stringify(archive,null,2)+'\n',{encoding:'utf8',mode:0o600});
+  evidenceArchive={path:EVIDENCE_PATH,archive_sha256,observation_receipt_sha256:base.observation_receipt_sha256};
+}
+
+console.log(JSON.stringify({ok:true,deployment_id:provenancePayload.deployment_id,git_commit_sha:provenancePayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,provider_status:setPayload.status,providers:{circle:{healthy:circle.healthy,latency_ms:circle.latency_ms},arc:{healthy:arc.healthy,chain_id:arc.observed.chain_id,latest_block:arc.observed.latest_block,latency_ms:arc.latency_ms}},signing_key_id:PINNED_RUNTIME_KEY_ID,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,evidence_archive:evidenceArchive},null,2));
