@@ -4,6 +4,19 @@
 <main class="wrap readiness signing" id="main">
  <div class="readiness-heading"><div><span class="eyebrow">1,500T NUSD · OWNER WALLET</span><h1>Wallet signing controls</h1><p>Select your saved Numina wallet backup or connect a browser wallet to prepare your unsigned deployment handoff.</p></div></div>
  <div class="readiness-banner"><strong>Owner signing remains in your wallet</strong><p>Prepare and review the exact request here. The owner execution section retains submission attempts and checks receipts. Signing remains blocked in this release until the revised policy and production reviews are resolved.</p><p id="signing-profile-status" role="status">Checking the exact 1,500T constructor…</p></div>
+ <section class="local-signing-panel receipt-intake" id="receipt-check" aria-labelledby="receipt-intake-title">
+  <span class="eyebrow">NUMINA OS · NUMINA BLOCKCHAIN · NUSD</span><h2 id="receipt-intake-title">Check your NUSD mint receipt</h2>
+  <p>After submitting through your wallet, bring the public transaction and chain observations here. This checker covers the existing <strong>1,500T initial-supply deployment</strong> to the treasury address shown below. Later mint operations need their own checks.</p>
+  <p class="signing-small">The file stays on this device. Do not include a wallet backup, password, private key or recovery phrase.</p>
+  <label for="receipt-intake-file">Public receipt observations · JSON, up to 2 MiB</label><input id="receipt-intake-file" type="file" accept=".json,application/json">
+  <label for="receipt-intake-text">Or paste the observation JSON</label><textarea id="receipt-intake-text" rows="6" maxlength="2097152" autocomplete="off" spellcheck="false" aria-describedby="receipt-intake-help"></textarea>
+  <p id="receipt-intake-help" class="signing-small">Include the exact request, transaction, receipt, receipt block, latest block, block reread, deployed code and token-state observations. The template lists the required fields without creating evidence.</p>
+  <div class="readiness-actions"><button id="receipt-intake-check" class="button" type="button" disabled>Check receipt</button><button id="receipt-intake-template" class="button secondary" type="button">Download required-fields template</button><button id="receipt-intake-clear" class="button secondary" type="button">Clear</button></div>
+  <p id="receipt-intake-status" class="readiness-notice" role="status" aria-live="polite">No receipt observations loaded.</p><pre id="receipt-intake-result" class="execution-record" hidden></pre>
+  <button id="receipt-intake-download" class="button secondary" type="button" disabled>Download receipt review</button>
+  <p class="signing-small">A passing result means the supplied observations agree with this request. It does not independently authenticate the blockchain, create a mint, change treasury balances or confirm USD/USDC settlement.</p>
+ </section>
+ <script type="module" src="/receipt-intake-ui.js"></script>
  <section class="local-signing-panel" aria-labelledby="local-signing-title">
   <span class="eyebrow">WALLET CREATED INSIDE NUMINA</span><h2 id="local-signing-title">Use your saved Numina wallet</h2>
   <p>Select the encrypted JSON backup you downloaded when you created the wallet. This checks the file format and its public address locally. It does not unlock the wallet or verify key control.</p>
