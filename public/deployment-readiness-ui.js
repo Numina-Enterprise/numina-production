@@ -1,6 +1,7 @@
 import {requestJson,createViewScope} from './http-client.js';
 import {DRAFT_FIELDS,assessInputs,validateReadinessSource,createLocalDraft,importLocalDraft,createConstructorRequest} from './deployment-readiness-model.js';
-const $=id=>document.getElementById(id),scope=createViewScope();let seed=null,draftGeneration=0;
+import {mountLocalWallet} from './local-wallet-ui.js';
+const $=id=>document.getElementById(id),scope=createViewScope();let seed=null,draftGeneration=0,walletCreator=null;
 const inputs=()=>Object.fromEntries(DRAFT_FIELDS.map(key=>[key,$(key).value]));
 const node=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 const notice=text=>{$('readiness-notice').textContent=text;};
@@ -23,6 +24,7 @@ function renderRequirements(items){
 function download(name,value){const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)+'\n'],{type:'application/json'}));const link=node('a','');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 async function refresh(){
   scope.reset();const generation=scope.generation;seed=null;$('readiness-fields').disabled=true;for(const name of ['export-draft','export-request','import-draft','clear-draft'])$(name).disabled=true;
+  walletCreator?.setAvailable();
   $('readiness-requirements').replaceChildren();$('requirements-count').textContent='Checking requirements…';$('execution-state').textContent='Checking the current status…';$('readiness-source-status').textContent='Checking the published preparation package…';$('refresh-readiness').disabled=true;
   try{
     const [candidate,descriptor,review]=await Promise.all(['/deployment-readiness-inputs.json','/api/nusd/v1/simulation','/api/nusd/v1/approved-review'].map(path=>requestJson(path,{credentials:'omit',redirect:'error',signal:scope.signal})));
@@ -37,7 +39,7 @@ async function refresh(){
     if(!pending){seed=null;notice('The execution record changed. Draft editing is paused until the preparation package is updated.');return;}
     $('readiness-fields').disabled=false;$('import-draft').disabled=false;$('clear-draft').disabled=false;renderInputs();
   }catch{if(scope.isCurrent(generation)){$('readiness-source-status').textContent='Current preparation sources could not be confirmed. Refresh to try again.';$('execution-state').textContent='Current execution status unavailable.';notice('Draft export is paused. Existing inputs remain in this tab.');}}
-  finally{if(scope.isCurrent(generation))$('refresh-readiness').disabled=false;}
+  finally{if(scope.isCurrent(generation)){$('refresh-readiness').disabled=false;walletCreator?.setAvailable();}}
 }
 $('readiness-form').addEventListener('submit',event=>event.preventDefault());$('readiness-form').addEventListener('input',()=>{draftGeneration++;renderInputs();});
 $('export-draft').addEventListener('click',()=>{if(!seed||assessInputs(inputs()).invalid.length)return;download('Numina-readiness-local-draft.json',createLocalDraft(inputs()));notice('Local draft downloaded. Inputs remain unverified and were not uploaded.');});
@@ -48,4 +50,5 @@ $('clear-draft').addEventListener('click',()=>{draftGeneration++;for(const key o
 $('refresh-readiness').addEventListener('click',refresh);
 window.addEventListener('pagehide',()=>{scope.reset();seed=null;for(const key of DRAFT_FIELDS)$(key).value='';});
 window.addEventListener('pageshow',event=>{if(event.persisted){renderInputs();refresh();}});
+walletCreator=mountLocalWallet({isReady:()=>Boolean(seed),onRecipient:address=>{if(!seed)return;draftGeneration++;$('recipient').value=address;renderInputs();notice('Locally created public wallet address entered. The pending reviews and network requirements are unchanged.');}});
 refresh();
