@@ -53,7 +53,7 @@ jobs:
             sleep 10
           done
       - name: Verify current live provider observations
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: node scripts/smoke-provider-observations.mjs
       - name: Verify public evidence Data API boundary
         run: |
@@ -62,10 +62,11 @@ jobs:
             --header 'Accept: application/json' \
             --header 'Accept-Profile: public_evidence' \
             "$NUMINA_EVIDENCE_API/latest_provider_observation?select=record_id,artifact_root,git_commit_sha,deployment_id,observed_at,provider_status,all_healthy,credentialed,partnership_status,external_execution_performed,archive_digest,arc_chain_id,arc_latest_block,circle_message")"
-          echo "Latest evidence HTTP $latest_code"
-          cat "$latest_file"
-          echo
-          test "$latest_code" = "200"
+          if [ "$latest_code" != "200" ]; then
+            echo "Latest evidence request failed with HTTP $latest_code"
+            cat "$latest_file"
+            exit 1
+          fi
           node - "$latest_file" <<'NODE'
           const fs=require('node:fs');
           const rows=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
@@ -83,11 +84,8 @@ jobs:
             --header 'Accept: application/json' \
             --header 'Accept-Profile: public' \
             "$NUMINA_EVIDENCE_API/numina_evidence_records?select=record_id&limit=1")"
-          echo "Base evidence HTTP $base_code"
-          cat "$base_file"
-          echo
           case "$base_code" in
-            2*) echo "Underlying evidence table unexpectedly exposed with HTTP $base_code"; exit 1 ;;
+            2*) echo "Underlying evidence table unexpectedly exposed with HTTP $base_code"; cat "$base_file"; exit 1 ;;
             *) echo "Underlying evidence table blocked as expected with HTTP $base_code" ;;
           esac
       - name: Archive signed provider evidence
