@@ -10,6 +10,7 @@ async function settled(){for(let i=0;i<8;i++)await new Promise(resolve=>setTimeo
 const dashboard='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury';
 const amount=(currency,value=0)=>({currency,value,formatted:(value/100).toFixed(2)+' '+currency.toUpperCase()});
 function stripeFixture(){return {schema:'numina.stripe.treasury.v1',provider:'Stripe',connection:'read_only',account:{name:'Test financial account',status:'open',livemode:true},observed_at:'2026-01-02T12:00:00Z',dashboard_url:dashboard,transfer_execution:false,nusd_settlement:false,balances:Object.fromEntries(['available','inbound_pending','outbound_pending'].map(bucket=>[bucket,{usd:amount('usd'),usdc:amount('usdc')}]))};}
+function routesFixture(){return {schema:'numina.treasury.provider-routes.v1',provider:'Stripe',connection:'read_only',complete:true,routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,receipt:null};}
 
 class Element{
  constructor(tag='div'){this.tagName=tag;this.children=[];this.hidden=false;this.disabled=false;this.value='';this.checked=false;this._text='';this.listeners={};}
@@ -64,6 +65,34 @@ test('a late provider route observation cannot restore cleared owner data',async
  try{
   await h.subject.loadStripeTreasury();const [button]=h.get('stripe-treasury-details').children.at(-1).children;
   const loading=button.onclick();h.subject.clearStripeTreasury();pending.resolve(response({}));await loading;assertCleared(h);
+ }finally{h.close();}
+});
+
+test('Stripe route permission denial replaces old destinations with guidance and preserves owner access',async()=>{
+ let denied=false;const canary='PRIVATE_PROVIDER_ERROR_MUST_NOT_RENDER';
+ const h=harness(async path=>response(path.endsWith('/provider-routes')?(denied?{error:'STRIPE_PROVIDER_ROUTES_ACCESS_DENIED',message:canary}:routesFixture()):stripeFixture(),path.endsWith('/provider-routes')&&denied?503:200));
+ try{
+  await h.subject.loadStripeTreasury();const [button,result]=h.get('stripe-treasury-details').children.at(-1).children;
+  await button.onclick();assert.match(result.textContent,/0x1234567890/);
+  denied=true;await button.onclick();assert.match(result.textContent,/Stripe denied access/i);assert.match(result.textContent,/Money Management Financial Address Read/i);assert.doesNotMatch(result.textContent,/0x1234567890|Provider reports active|has not listed an NUSD/);assert.equal(result.textContent.includes(canary),false);
+  assert.equal(h.get('stripe-treasury-panel').hidden,false);assert.equal(values(h)['Available USD'],'0.00 USD');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.deepEqual(h.dispatched,[]);assert.equal(button.disabled,false);
+ }finally{h.close();}
+});
+
+test('generic route unavailability removes old destinations without diagnosing a permission denial',async()=>{
+ let unavailable=false;const h=harness(async path=>response(path.endsWith('/provider-routes')?(unavailable?{error:'STRIPE_PROVIDER_ROUTES_UNAVAILABLE'}:routesFixture()):stripeFixture(),path.endsWith('/provider-routes')&&unavailable?503:200));
+ try{
+  await h.subject.loadStripeTreasury();const [button,result]=h.get('stripe-treasury-details').children.at(-1).children;
+  await button.onclick();assert.match(result.textContent,/0x1234567890/);
+  unavailable=true;await button.onclick();assert.match(result.textContent,/could not be checked.*No acceptance is confirmed/);assert.doesNotMatch(result.textContent,/0x1234567890|Stripe denied access|Financial Address Read/);assert.equal(h.get('stripe-treasury-panel').hidden,false);assert.deepEqual(h.dispatched,[]);assert.equal(button.disabled,false);
+ }finally{h.close();}
+});
+
+for(const status of [401,403])test('Numina route HTTP '+status+' still clears owner data and reports lost access',async()=>{
+ let lostAccess=false;const h=harness(async path=>response(path.endsWith('/provider-routes')?(lostAccess?{error:'AUTHORITY_DENIED'}:routesFixture()):stripeFixture(),path.endsWith('/provider-routes')&&lostAccess?status:200));
+ try{
+  await h.subject.loadStripeTreasury();const [button,result]=h.get('stripe-treasury-details').children.at(-1).children;await button.onclick();assert.match(result.textContent,/0x1234567890/);
+  lostAccess=true;await button.onclick();assertCleared(h);assert.equal(h.get('stripe-treasury-panel').hidden,true);assert.deepEqual(h.dispatched,['numina-owner-access-lost']);
  }finally{h.close();}
 });
 

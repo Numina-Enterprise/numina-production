@@ -86,9 +86,50 @@ test('a provider-reported NUSD currency or settlement label never establishes ve
 });
 
 test('destination redirects, HTTP failures and thrown errors remain unavailable and sanitized',async()=>{
- for(const status of [301,302,307,401,403,404,429,500,503]){const mock=provider({addressResponse:()=>response({error:{message:canary+' '+readKey}},status,{Location:'https://evil.test/steal'})});await rejects(readStripeProviderRoutes(config(),mock),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);assert.deepEqual(mock.calls.map(call=>call.url),[accountUrl,addressesUrl]);}
- const redirected=provider({addressResponse:()=>{const value=response(page());Object.defineProperty(value,'redirected',{value:true});return value;}});await rejects(readStripeProviderRoutes(config(),redirected),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+ for(const status of [301,302,307,401,404,429,500,503]){const mock=provider({addressResponse:()=>response({error:{message:canary+' '+readKey}},status,{Location:'https://evil.test/steal'})});await rejects(readStripeProviderRoutes(config(),mock),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);assert.deepEqual(mock.calls.map(call=>call.url),[accountUrl,addressesUrl]);}
+ for(const status of [200,403]){const redirected=provider({addressResponse:()=>{const value=response(page(),status);Object.defineProperty(value,'redirected',{value:true});return value;}});await rejects(readStripeProviderRoutes(config(),redirected),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);}
  await rejects(readStripeProviderRoutes(config(),provider({addressResponse:()=>{throw Error(canary+' '+readKey);}})),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+});
+
+test('provider access denial is a sanitized service failure with only safe diagnostic fields',async t=>{
+ const logs=[];t.mock.method(console,'log',value=>logs.push(JSON.parse(value)));
+ const mock=provider({addressResponse:()=>response({error:{message:canary+' '+readKey}},403,{'request-id':'req_routes_denied_fixture'})});
+ await rejects(readStripeProviderRoutes(config(),mock),'STRIPE_PROVIDER_ROUTES_ACCESS_DENIED',503);
+ assert.deepEqual(mock.calls.map(call=>call.url),[accountUrl,addressesUrl]);
+ assert.deepEqual(logs,[{event:'stripe_provider_routes_provider_error',http_status:403,request_id:'req_routes_denied_fixture'}]);safe(logs);
+});
+
+test('provider error logs reject malformed or oversized request IDs without recording response bodies',async t=>{
+ const logs=[];t.mock.method(console,'log',value=>logs.push(JSON.parse(value)));
+ for(const requestId of ['unsafe request '+canary,'https://example.test/'+canary,'x'.repeat(101)]){
+  const mock=provider({addressResponse:()=>response({error:{message:canary+' '+readKey}},500,{'request-id':requestId})});
+  await rejects(readStripeProviderRoutes(config(),mock),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+ }
+ assert.equal(logs.length,3);for(const log of logs)assert.deepEqual(log,{event:'stripe_provider_routes_provider_error',http_status:500,request_id:null});safe(logs);
+});
+
+test('provider fetch exceptions log categories and allowlisted names without raw messages',async t=>{
+ const logs=[];t.mock.method(console,'log',value=>logs.push(JSON.parse(value)));
+ const failures=[[new TypeError('fetch failed '+canary+' '+readKey),'network_failure','TypeError'],[{name:canary,message:canary+' '+readKey},'unclassified','OtherError']];
+ for(const [failure] of failures)await rejects(readStripeProviderRoutes(config(),provider({addressResponse:()=>{throw failure;}})),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+ assert.equal(logs.length,2);
+ for(let i=0;i<logs.length;i++){const log=logs[i];assert.equal(log.event,'stripe_provider_routes_runtime_error');assert.equal(log.stage,'fetch_pending');assert.equal(log.category,failures[i][1]);assert.equal(log.error_name,failures[i][2]);assert.ok(Object.keys(log).every(key=>['event','stage','response_received','category','error_name'].includes(key)));assert.equal(Object.hasOwn(log,'message'),false);}
+ safe(logs);
+});
+
+test('diagnostic logging failure never replaces sanitized provider errors',async t=>{
+ t.mock.method(console,'log',()=>{throw Error(canary+' '+readKey);});
+ await rejects(readStripeProviderRoutes(config(),provider({addressResponse:()=>response({error:{message:canary}},403)})),'STRIPE_PROVIDER_ROUTES_ACCESS_DENIED',503);
+ await rejects(readStripeProviderRoutes(config(),provider({addressResponse:()=>{throw Error('fetch failed '+canary);}})),'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+});
+
+test('upstream 403 becomes HTTP 503 while the owner credential and treasury journal remain valid',async t=>{
+ const env=await fixture();let denied=true;const mock=provider({addressResponse:()=>denied?response({error:{message:canary+' '+readKey}},403,{'request-id':'req_owner_denied_fixture'}):response(page())});t.mock.method(globalThis,'fetch',mock.fetcher);
+ try{
+  const before=await readControl(env.DB),failed=await worker.fetch(request(),env);assert.equal(failed.status,503);assert.equal(failed.headers.get('Cache-Control'),'private, no-store');const body=await failed.json();assert.equal(body.error,'STRIPE_PROVIDER_ROUTES_ACCESS_DENIED');safe(body);
+  denied=false;const recovered=await worker.fetch(request(),env);assert.equal(recovered.status,200);assert.equal((await recovered.json()).nusd.provider_acceptance_verified,false);assert.equal(mock.calls.length,4);
+  const after=await readControl(env.DB);assert.equal(after.head_hash,before.head_hash);assert.equal(after.revision,before.revision);assert.equal(after.eventCount,before.eventCount);
+ }finally{env.DB.close();}
 });
 
 test('malformed, oversized, invalid UTF-8 and absent response bodies cannot become route observations',async()=>{
