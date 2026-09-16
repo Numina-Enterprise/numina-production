@@ -35,7 +35,7 @@ canonical_paths += ['/v'+major+'/release/manifest' for major in dict.fromkeys(['
 vercel_config['rewrites']=[{'source':path,'destination':'https://numinalabs.xyz'+path} for path in canonical_paths]+vercel_config['rewrites']
 vercel_config['rewrites'].insert(0,{'source':'/v2/network/deployment-estimate','destination':'/api/deployment-estimate'})
 # Business, blockchain and treasury pages share the canonical production service.
-for path in ['/contact','/services','/app','/integrations','/privacy','/ownership','/blockchain','/economy','/redemption']:
+for path in ['/contact','/services','/app','/integrations','/privacy','/ownership','/blockchain','/economy','/redemption','/wallet-signing','/wallet-signing.html','/deployment-readiness']:
     vercel_config.setdefault('redirects',[]).append({'source':path,'destination':'https://numinalabs.xyz'+path,'permanent':False})
 (destination/'vercel.json').write_text(json.dumps(vercel_config,indent=2)+'\n',encoding='utf-8')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
