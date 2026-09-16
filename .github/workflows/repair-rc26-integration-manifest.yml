@@ -1,6 +1,7 @@
 name: Repair rc26 integration manifest
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - '.github/workflows/repair-rc26-integration-manifest.yml'
@@ -13,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
       - name: Confirm runtimes
         run: |
           node --version
@@ -52,5 +56,5 @@ jobs:
             echo 'Release inventories already aligned.'
             exit 0
           fi
-          git commit -m 'Align rc26 integration and iOS source inventories'
+          git commit -m 'Align rc26 release inventories after Node 24 pin'
           git push origin HEAD:main
