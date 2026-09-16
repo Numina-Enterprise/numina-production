@@ -1,12 +1,16 @@
 import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_KEY_ID,PINNED_RUNTIME_PUBLIC_KEY,RELEASE_ARTIFACT_TYPE,RUNTIME_ORIGIN,RUNTIME_VERSION} from '../public/runtime-contract.js';
 
+const CANONICAL_ORIGIN='https://numinalabs.xyz';
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
-const MAX_BYTES=262144;
+const MAX_JSON_BYTES=262144;
+const MAX_HTML_BYTES=1048576;
 function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value&&typeof value==='object'){const out={};for(const key of Object.keys(value).sort())out[key]=sorted(value[key]);return out;}return value;}
 function canonical(value){return Buffer.from(JSON.stringify(sorted(value)),'utf8');}
+function digestText(value){return createHash('sha256').update(value,'utf8').digest('hex');}
 function assert(condition,message){if(!condition)throw new Error(message);}
 function exactRelease(value){return value&&typeof value==='object'&&!Array.isArray(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected);}
+function sameJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
 function verifyEnvelope(envelope,expectedType){
   assert(envelope&&typeof envelope==='object','signed envelope missing');
   assert(envelope.artifact_type===expectedType,`unexpected artifact type: ${envelope.artifact_type}`);
@@ -20,17 +24,36 @@ function verifyEnvelope(envelope,expectedType){
   assert(verifySignature(null,canonical({artifact_type:envelope.artifact_type,key_id:envelope.key_id,payload:envelope.payload}),publicKey,Buffer.from(envelope.signature||'','base64')),'signature verification failed');
   return envelope.payload;
 }
-async function get(path){
-  const response=await fetch(RUNTIME_ORIGIN+path,{headers:{accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(10000)});
-  assert(response.status===200,`${path} returned ${response.status}`);
-  assert((response.headers.get('content-type')||'').toLowerCase().includes('application/json'),`${path} did not return JSON`);
-  const text=await response.text();assert(Buffer.byteLength(text,'utf8')<=MAX_BYTES,`${path} response too large`);
-  return {value:JSON.parse(text),headers:response.headers};
+async function fetchBody(origin,path,{kind='json',maxBytes=MAX_JSON_BYTES}={}){
+  const response=await fetch(origin+path,{headers:{accept:kind==='json'?'application/json':'text/html'},redirect:'manual',signal:AbortSignal.timeout(10000)});
+  assert(response.status===200,`${origin}${path} returned ${response.status}`);
+  const type=(response.headers.get('content-type')||'').toLowerCase();
+  assert(kind==='json'?type.includes('application/json'):type.includes('text/html'),`${origin}${path} returned unexpected content type ${type}`);
+  const text=await response.text();
+  assert(Buffer.byteLength(text,'utf8')<=maxBytes,`${origin}${path} response too large`);
+  return {text,value:kind==='json'?JSON.parse(text):text,headers:response.headers};
 }
+const get=(path)=>fetchBody(RUNTIME_ORIGIN,path);
+const getCanonical=(path,options)=>fetchBody(CANONICAL_ORIGIN,path,options);
 
-const [frontier,provenance,status,manifest,supply,attestation,control,application]=await Promise.all([
-  get('/v1/frontier/readiness'),get('/v1/deployment/provenance'),get('/v1/status'),get('/v1/release/manifest'),get('/v1/release/supply-chain'),get('/v1/release/attestation'),get('/v1/control/state'),get('/v4/release/manifest')
+const [frontier,provenance,status,manifest,supply,attestation,control,application,canonicalApplication,stableAgentCard,canonicalAgentCard,stableControlManifest,canonicalControlManifest,stableFrontier,canonicalFrontier]=await Promise.all([
+  get('/v1/frontier/readiness'),
+  get('/v1/deployment/provenance'),
+  get('/v1/status'),
+  get('/v1/release/manifest'),
+  get('/v1/release/supply-chain'),
+  get('/v1/release/attestation'),
+  get('/v1/control/state'),
+  get('/v4/release/manifest'),
+  getCanonical('/v4/release/manifest'),
+  get('/.well-known/agent-card.json'),
+  getCanonical('/.well-known/agent-card.json'),
+  get('/api/control/v2/manifest'),
+  getCanonical('/api/control/v2/manifest'),
+  fetchBody(RUNTIME_ORIGIN,'/frontier',{kind:'html',maxBytes:MAX_HTML_BYTES}),
+  getCanonical('/frontier',{kind:'html',maxBytes:MAX_HTML_BYTES})
 ]);
+
 assert(frontier.headers.get('x-numina-runtime-release')===RUNTIME_VERSION,'frontier runtime header drift');
 assert(exactRelease(manifest.value),'runtime manifest identity drift');
 assert(exactRelease(status.value),'status release identity drift');
@@ -46,13 +69,13 @@ assert(exactRelease(releasePayload),'release attestation identity drift');
 assert(releasePayload.environment==='production'&&releasePayload.role==='public-verifier','release attestation scope drift');
 assert(releasePayload.financial_execution_performed===false,'release attestation reports financial execution');
 const controlPayload=verifyEnvelope(control.value.receipt,'NUMINA_CONTROL_STATE');
-assert(JSON.stringify(sorted(controlPayload))===JSON.stringify(sorted(control.value.state)),'control state receipt mismatch');
+assert(sameJson(controlPayload,control.value.state),'control state receipt mismatch');
 assert(controlPayload.release===RUNTIME_VERSION,'control state release drift');
 assert(controlPayload.real_funds_enabled===false&&controlPayload.employer_ip_enabled===false&&controlPayload.public_execution_api_enabled===false&&controlPayload.public_execution_route_exposed===false,'execution boundary unexpectedly open');
 assert(application.value.version==='4.0.0'&&application.value.release==='numina-v4.0.0','application release drift');
 assert(application.value.runtime_dependency?.version===RUNTIME_VERSION&&application.value.runtime_dependency?.release===EXPECTED_RELEASE.release,'application runtime binding drift');
 const deploymentPayload=verifyEnvelope(provenance.value.receipt,'NUMINA_DEPLOYMENT_PROVENANCE');
-assert(JSON.stringify(sorted(deploymentPayload))===JSON.stringify(sorted(provenance.value.provenance)),'deployment provenance receipt mismatch');
+assert(sameJson(deploymentPayload,provenance.value.provenance),'deployment provenance receipt mismatch');
 assert(deploymentPayload.environment==='production','deployment environment drift');
 assert(/^dpl_[A-Za-z0-9]+$/.test(deploymentPayload.deployment_id),'deployment id missing');
 assert(/^[0-9a-f]{40}$/i.test(deploymentPayload.git_commit_sha),'deployment git SHA missing');
@@ -64,5 +87,41 @@ assert(Object.values(readiness.checks||{}).length===8&&Object.values(readiness.c
 assert(exactRelease(readiness.runtime),'frontier runtime identity drift');
 assert(readiness.deployment?.deployment_id===deploymentPayload.deployment_id&&readiness.deployment?.git_commit_sha===deploymentPayload.git_commit_sha,'frontier provenance binding drift');
 const readinessPayload=verifyEnvelope(frontier.value.receipt,'NUMINA_FRONTIER_READINESS');
-assert(JSON.stringify(sorted(readinessPayload))===JSON.stringify(sorted(readiness)),'frontier readiness receipt mismatch');
-console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed'},null,2));
+assert(sameJson(readinessPayload,readiness),'frontier readiness receipt mismatch');
+
+assert(canonicalApplication.value.version==='4.0.0'&&canonicalApplication.value.release==='numina-v4.0.0','canonical application release drift');
+assert(canonicalApplication.value.runtime_dependency?.version===RUNTIME_VERSION&&canonicalApplication.value.runtime_dependency?.release===EXPECTED_RELEASE.release,'canonical application runtime binding drift');
+assert(sameJson(application.value,canonicalApplication.value),'stable and canonical application manifests diverged');
+assert(stableAgentCard.value?.name==='Numina Control'&&stableAgentCard.value?.version==='4.0.0','stable agent card identity drift');
+assert(stableAgentCard.value?.url===CANONICAL_ORIGIN+'/api/control/v2/a2a','stable agent card endpoint drift');
+assert(sameJson(stableAgentCard.value,canonicalAgentCard.value),'stable and canonical agent cards diverged');
+assert(stableControlManifest.value?.schema==='numina.frontier.v2'&&stableControlManifest.value?.version==='4.0.0','stable control manifest identity drift');
+assert(stableControlManifest.value?.environment==='production'&&stableControlManifest.value?.livemode===true,'stable control manifest environment drift');
+assert(stableControlManifest.value?.externalExecution===false,'canonical control plane reports external execution');
+assert(sameJson(stableControlManifest.value,canonicalControlManifest.value),'stable and canonical control manifests diverged');
+assert(/<link rel="canonical" href="https:\/\/numinalabs\.xyz\/frontier">/i.test(stableFrontier.text),'stable frontier canonical link drift');
+assert(/<link rel="canonical" href="https:\/\/numinalabs\.xyz\/frontier">/i.test(canonicalFrontier.text),'canonical frontier canonical link drift');
+assert(/NUMINA/i.test(stableFrontier.text)&&/NUMINA/i.test(canonicalFrontier.text),'frontier identity marker missing');
+const stableFrontierSha256=digestText(stableFrontier.text),canonicalFrontierSha256=digestText(canonicalFrontier.text);
+assert(stableFrontierSha256===canonicalFrontierSha256,'stable and canonical frontier HTML diverged');
+
+console.log(JSON.stringify({
+  ok:true,
+  runtime:RUNTIME_VERSION,
+  release:EXPECTED_RELEASE.release,
+  application:application.value.release,
+  deployment_id:deploymentPayload.deployment_id,
+  git_commit_sha:deploymentPayload.git_commit_sha,
+  readiness_checks:Object.keys(readiness.checks),
+  signing_key_id:PINNED_RUNTIME_KEY_ID,
+  execution_boundary:'closed',
+  public_surface_convergence:{
+    application_manifest:true,
+    agent_card:true,
+    control_manifest:true,
+    frontier_html:true,
+    frontier_sha256:stableFrontierSha256,
+    canonical_origin:CANONICAL_ORIGIN,
+    stable_origin:RUNTIME_ORIGIN
+  }
+},null,2));
