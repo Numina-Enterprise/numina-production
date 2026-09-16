@@ -3,14 +3,14 @@ export const READINESS_INPUTS_SHA='a4382e46f930ff2b80ecc5b27b2966c24c40a2e37c26c
 const trustedSeeds=new WeakSet();
 const sorted=value=>Array.isArray(value)?value.map(sorted):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,sorted(value[key])])):value;
 const freeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;};
-export const DRAFT_FIELDS=['recipient','sender','chainId','genesisHash','nonce','maximumFee','gasLimit','gasPrice','feeAsset'];
+export const DRAFT_FIELDS=['recipient','sender','chainId','genesisHash','maximumFee','gasLimit','gasPrice','feeAsset'];
 const address=value=>/^0x[0-9a-fA-F]{40}$/.test(value)&&!/^0x0{40}$/.test(value);
 const integer=value=>/^(0|[1-9][0-9]{0,77})$/.test(value)&&BigInt(value)<2n**256n;
 export function assessInputs(input={}){
   const values={},invalid=[];
   for(const field of DRAFT_FIELDS){
     const raw=typeof input[field]==='string'?input[field].trim():'';
-    const valid=raw&&(field==='recipient'||field==='sender'?address(raw):field==='genesisHash'?/^0x[0-9a-fA-F]{64}$/.test(raw):field==='feeAsset'?/^[A-Z][A-Z0-9]{0,15}$/.test(raw):integer(raw)&&(!['chainId','gasLimit'].includes(field)||BigInt(raw)>0n)&&(field!=='nonce'||BigInt(raw)<=9007199254740991n));
+    const valid=raw&&(field==='recipient'||field==='sender'?address(raw):field==='genesisHash'?/^0x[0-9a-fA-F]{64}$/.test(raw):field==='feeAsset'?/^[A-Z][A-Z0-9]{0,15}$/.test(raw):integer(raw)&&(!['chainId','gasLimit'].includes(field)||BigInt(raw)>0n));
     values[field]=valid?raw:null;
     if(raw&&!valid)invalid.push(field);
   }
@@ -28,12 +28,12 @@ export async function validateReadinessSource(seed,descriptor){
 }
 export function createLocalDraft(input){
   const assessment=assessInputs(input);
-  return {schema:'numina.deployment-readiness-draft.v2',packageSha256:READINESS_PACKAGE_SHA,inputs:assessment.values,invalidFields:assessment.invalid,productionReady:false,reviewEvidenceVerified:false,walletTransaction:null,signed:false,broadcast:false,receipt:null};
+  return {schema:'numina.deployment-readiness-draft.v3',packageSha256:READINESS_PACKAGE_SHA,inputs:assessment.values,invalidFields:assessment.invalid,noncePolicy:'wallet_assigned_before_signing',productionReady:false,reviewEvidenceVerified:false,walletTransaction:null,signed:false,broadcast:false,receipt:null};
 }
 export function importLocalDraft(text){
   if(typeof text!=='string'||text.length>32768)throw Error('Choose a readiness draft smaller than 32 KB.');
   let value;try{value=JSON.parse(text);}catch{throw Error('This file is not valid JSON.');}
-  if(!['numina.deployment-readiness-draft.v1','numina.deployment-readiness-draft.v2'].includes(value?.schema)||value.packageSha256!==READINESS_PACKAGE_SHA||!value.inputs||typeof value.inputs!=='object'||Array.isArray(value.inputs))throw Error('Choose a draft for this preparation package.');
+  if(!['numina.deployment-readiness-draft.v1','numina.deployment-readiness-draft.v2','numina.deployment-readiness-draft.v3'].includes(value?.schema)||value.packageSha256!==READINESS_PACKAGE_SHA||!value.inputs||typeof value.inputs!=='object'||Array.isArray(value.inputs))throw Error('Choose a draft for this preparation package.');
   // Ignore imported approvals, transaction data, arbitrary fields and invalid values.
   return createLocalDraft(value.inputs);
 }

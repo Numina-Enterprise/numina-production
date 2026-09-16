@@ -32,3 +32,4 @@ scripts/package-nusd-review-tools.py -text
 scripts/prepare-readiness-workspace.py -text
 docs/Numina-Local-Wallet.md -text
 docs/Numina-Browser-Deployment-Preparation.md -text
+docs/Numina-Requested-Asset-Fee.json -text
