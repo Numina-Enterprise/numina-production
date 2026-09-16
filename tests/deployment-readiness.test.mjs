@@ -45,7 +45,7 @@ function harness(override){
  const nodes=new Map(),events={},calls=[];
  const get=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
  const responses={'/deployment-readiness-inputs.json':seed,'/api/nusd/v1/simulation':NUSD_SIMULATION,'/api/nusd/v1/approved-review':NUSD_APPROVED_REVIEW};
- const context=vm.createContext({document:{getElementById:get,createElement:()=>new Element()},window:{addEventListener:(name,handler)=>events[name]=handler},fetch:async(path,options)=>{calls.push({path,options});return override?.(path,options)??Response.json(responses[path]);},Response,AbortController,setTimeout,clearTimeout,structuredClone,Blob,URL,console,crypto,TextEncoder});
+ const context=vm.createContext({document:{getElementById:get,createElement:()=>new Element()},window:{addEventListener:(name,handler)=>events[name]=handler},fetch:async(path,options)=>{calls.push({path,options});return override?.(path,options)??Response.json(responses[path]);},Response,AbortController,setTimeout,clearTimeout,structuredClone,Blob,URL,console,crypto,TextEncoder,mountLocalWallet:()=>({setAvailable(){}})});
  vm.runInContext(source('http-client.js').replace(/^export /gm,'')+'\n'+source('deployment-readiness-model.js').replace(/^export /gm,'')+'\n'+source('deployment-readiness-ui.js').replace(/^import .*;\n/gm,'')+'\nglobalThis.subject={refresh,renderInputs};',context);
  return {get,calls,events,subject:context.subject};
 }
