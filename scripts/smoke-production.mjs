@@ -1,5 +1,6 @@
 import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_KEY_ID,PINNED_RUNTIME_PUBLIC_KEY,RELEASE_ARTIFACT_TYPE,RUNTIME_ORIGIN,RUNTIME_VERSION} from '../public/runtime-contract.js';
+import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,APPLICATION_ARTIFACT_BUILD_SCOPE} from '../src/application-release-contract.js';
 
 const CANONICAL_ORIGIN='https://numinalabs.xyz';
 const EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||'').trim();
@@ -60,7 +61,8 @@ const controlPayload=verifyEnvelope(control.value.receipt,'NUMINA_CONTROL_STATE'
 assert(sameJson(controlPayload,control.value.state),'control state receipt mismatch');
 assert(controlPayload.release===RUNTIME_VERSION,'control state release drift');
 assert(controlPayload.real_funds_enabled===false&&controlPayload.employer_ip_enabled===false&&controlPayload.public_execution_api_enabled===false&&controlPayload.public_execution_route_exposed===false,'execution boundary unexpectedly open');
-assert(application.value.version==='4.0.0'&&application.value.release==='numina-v4.0.0','application release drift');
+assert(application.value.version===APPLICATION_VERSION&&application.value.release===APPLICATION_RELEASE,'application release drift');
+assert(/^[0-9a-f]{64}$/i.test(String(application.value.build_id||'')),'canonical application build id invalid');
 assert(application.value.runtime_dependency?.version===RUNTIME_VERSION&&application.value.runtime_dependency?.release===EXPECTED_RELEASE.release,'application runtime binding drift');
 const deploymentPayload=verifyEnvelope(provenance.value.receipt,'NUMINA_DEPLOYMENT_PROVENANCE');
 assert(sameJson(deploymentPayload,provenance.value.provenance),'deployment provenance receipt mismatch');
@@ -78,16 +80,21 @@ assert(readiness.mode==='public-verifier-no-financial-execution','frontier mode 
 assert(Object.values(readiness.checks||{}).length===8&&Object.values(readiness.checks).every(Boolean),'one or more frontier readiness checks failed');
 assert(exactRelease(readiness.runtime),'frontier runtime identity drift');
 assert(readiness.deployment?.deployment_id===deploymentPayload.deployment_id&&readiness.deployment?.git_commit_sha===deploymentPayload.git_commit_sha,'frontier provenance binding drift');
+assert(readiness.application?.canonical_manifest_build_id===application.value.build_id,'signed readiness canonical application build id drift');
+assert(readiness.application?.artifact_inventory_build_id===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,'signed readiness artifact inventory build id drift');
+assert(readiness.application?.artifact_inventory_scope===APPLICATION_ARTIFACT_BUILD_SCOPE,'signed readiness artifact inventory scope drift');
+const expectedRelation=application.value.build_id===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes';
+assert(readiness.application?.build_identity_relation===expectedRelation,'signed readiness build identity relationship drift');
 const readinessPayload=verifyEnvelope(frontier.value.receipt,'NUMINA_FRONTIER_READINESS');
 assert(sameJson(readinessPayload,readiness),'frontier readiness receipt mismatch');
 
-assert(canonicalApplication.value.version==='4.0.0'&&canonicalApplication.value.release==='numina-v4.0.0','canonical application release drift');
+assert(canonicalApplication.value.version===APPLICATION_VERSION&&canonicalApplication.value.release===APPLICATION_RELEASE,'canonical application release drift');
 assert(canonicalApplication.value.runtime_dependency?.version===RUNTIME_VERSION&&canonicalApplication.value.runtime_dependency?.release===EXPECTED_RELEASE.release,'canonical application runtime binding drift');
 assert(sameJson(application.value,canonicalApplication.value),'stable and canonical application manifests diverged');
-assert(stableAgentCard.value?.name==='Numina Control'&&stableAgentCard.value?.version==='4.0.0','stable agent card identity drift');
+assert(stableAgentCard.value?.name==='Numina Control'&&stableAgentCard.value?.version===APPLICATION_VERSION,'stable agent card identity drift');
 assert(stableAgentCard.value?.url===CANONICAL_ORIGIN+'/api/control/v2/a2a','stable agent card endpoint drift');
 assert(sameJson(stableAgentCard.value,canonicalAgentCard.value),'stable and canonical agent cards diverged');
-assert(stableControlManifest.value?.schema==='numina.frontier.v2'&&stableControlManifest.value?.version==='4.0.0','stable control manifest identity drift');
+assert(stableControlManifest.value?.schema==='numina.frontier.v2'&&stableControlManifest.value?.version===APPLICATION_VERSION,'stable control manifest identity drift');
 assert(stableControlManifest.value?.environment==='production'&&stableControlManifest.value?.livemode===true,'stable control manifest environment drift');
 assert(stableControlManifest.value?.externalExecution===false,'canonical control plane reports external execution');
 assert(sameJson(stableControlManifest.value,canonicalControlManifest.value),'stable and canonical control manifests diverged');
@@ -98,4 +105,4 @@ const stableAuthoredFrontier=authoredFrontier(stableFrontier.text),canonicalAuth
 const stableFrontierSha256=digestText(stableAuthoredFrontier),canonicalFrontierSha256=digestText(canonicalAuthoredFrontier);
 assert(stableFrontierSha256===canonicalFrontierSha256,'stable and canonical authored frontier HTML diverged');
 
-console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
+console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',application_build_identity:{canonical_manifest_build_id:application.value.build_id,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,relation:expectedRelation},public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
