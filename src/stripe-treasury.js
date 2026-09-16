@@ -96,7 +96,7 @@ export async function readStripeTreasury(env,{fetcher=(...args)=>globalThis.fetc
 export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThis.fetch(...args),timeoutMs=8000}={}){
   const deadline=Date.now()+timeoutMs;
   const account=await readStripeTreasury(env,{fetcher,timeoutMs});
-  const controller=new AbortController();let timer;
+  const controller=new AbortController();let timer,stage='fetch_pending';
   try{return await Promise.race([
     new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(stripeTreasuryError('STRIPE_TREASURY_TIMEOUT',504));},Math.max(1,deadline-Date.now()));}),
     (async()=>{
@@ -104,8 +104,17 @@ export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThi
       const response=await fetcher('https://api.stripe.com/v2/money_management/financial_addresses?financial_account='+STRIPE_TREASURY_FINANCIAL_ACCOUNT+'&limit=50',{
         method:'GET',redirect:'manual',signal:controller.signal,headers:{Authorization:'Bearer '+env.NUMINA_STRIPE_TREASURY_READ_KEY,'Stripe-Version':STRIPE_TREASURY_VERSION,Accept:'application/json','Cache-Control':'no-store',Pragma:'no-cache'}
       });
-      if(!response.ok||response.redirected){void response.body?.cancel().catch(()=>{});throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);}
+      stage='response_received';
+      if(!response.ok||response.redirected){
+        const requestId=response.headers.get('request-id');
+        stripeTreasuryDiagnostic({event:'stripe_provider_routes_provider_error',http_status:response.status,request_id:requestId&&/^[A-Za-z0-9._-]{1,100}$/.test(requestId)?requestId:null});
+        void response.body?.cancel().catch(()=>{});
+        // A provider denial is distinct from the owner's Numina authentication.
+        // Keep the outer response 503 so the browser does not clear that session.
+        throw stripeTreasuryError(response.status===403&&!response.redirected?'STRIPE_PROVIDER_ROUTES_ACCESS_DENIED':'STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+      }
       const page=await stripeTreasuryJson(response);
+      stage='body_read';
       const invalid=()=>{throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE',502);};
       if(!page||!Array.isArray(page.data)||page.data.length>50||!Object.hasOwn(page,'next_page_url')||!(page.next_page_url===null||typeof page.next_page_url==='string'&&page.next_page_url.length>0))invalid();
       const routes=[],ids=new Set();let excluded=0,unclassified=0;
@@ -134,6 +143,10 @@ export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThi
         canonical_treasury:'/api/control/v1/treasury',transfer_execution:false,submission_performed:false,receipt:null,
         scope:'Authenticated provider route observation only. A listed destination does not establish NUSD token identity, available source funds, conversion, reserve allocation or settlement.'};
     })()
-  ]);}catch(error){if(['STRIPE_PROVIDER_ROUTES_UNAVAILABLE','STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);}
+  ]);}catch(error){
+    if(['STRIPE_PROVIDER_ROUTES_ACCESS_DENIED','STRIPE_PROVIDER_ROUTES_UNAVAILABLE','STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;
+    stripeTreasuryDiagnostic({event:'stripe_provider_routes_runtime_error',stage,response_received:stage!=='fetch_pending',category:stripeTreasuryExceptionCategory(error),error_name:['Error','TypeError','RangeError','AbortError','NetworkError','SecurityError','NotSupportedError'].includes(error?.name)?error.name:'OtherError'});
+    throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_UNAVAILABLE',503);
+  }
   finally{clearTimeout(timer);controller.abort();}
 }

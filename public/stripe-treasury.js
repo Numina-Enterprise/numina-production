@@ -22,7 +22,15 @@ function stripeProviderRouteControl(generation){
     }catch(error){
       if(!stripeScope.isCurrent(generation))return;
       if(error.status===401||error.status===403){clearStripeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
-      result.replaceChildren(stripeNode('p','Deposit routes could not be checked. No acceptance is confirmed.'));
+      const message=error.code==='STRIPE_PROVIDER_ROUTES_ACCESS_DENIED'
+        ?'Stripe denied access to deposit routes. Check Money Management Financial Address Read on the configured restricted key, then try again.'
+        :error.code==='STRIPE_TREASURY_NOT_CONNECTED'
+          ?'The Stripe connection is not configured. Check the production connection settings, then try again.'
+          :'Deposit routes could not be checked. No acceptance is confirmed.';
+      result.replaceChildren(stripeNode('p',message));
+      if(error.code==='STRIPE_PROVIDER_ROUTES_ACCESS_DENIED'||error.code==='STRIPE_TREASURY_NOT_CONNECTED'){
+        const help=stripeNode('a','Provider connection setup');help.href='/downloads/Stripe-Provider-Route-Setup.md';result.append(help);
+      }
     }finally{button.disabled=false;}
   };
   container.append(button,result);return container;

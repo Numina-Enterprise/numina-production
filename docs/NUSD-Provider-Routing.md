@@ -18,4 +18,6 @@ The response is a server observation, not a provider signature or deposit receip
 
 ## Provider reference
 
+For restricted-key permissions, production environment settings and error diagnosis, see [Stripe provider route setup](Stripe-Provider-Route-Setup.md). An upstream Stripe 403 becomes `STRIPE_PROVIDER_ROUTES_ACCESS_DENIED` with HTTP 503; it does not sign the Numina owner out. Safe server diagnostics retain the provider HTTP status and request ID without provider response bodies or credentials.
+
 [Stripe Financial Addresses API](https://docs.stripe.com/api/v2/money-management/financial-addresses) describes the provider resource. The exact preview request schema and credential fields were checked against the connected provider API before implementation. Live observations are retrieved when the owner requests them; they are not embedded as permanent acceptance claims in the build.
