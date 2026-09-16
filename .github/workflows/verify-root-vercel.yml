@@ -6,6 +6,7 @@ on:
       - '.github/workflows/verify-root-vercel.yml'
       - 'api/**'
       - 'vercel.json'
+      - 'public/runtime-contract.js'
       - 'runtime/vercel-production/api/**'
       - 'runtime/vercel-production/lib/**'
 
@@ -19,12 +20,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate application build
         run: npm run build
-      - name: Validate root route configuration
+      - name: Validate root route and rc26 runtime identity
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync,readdirSync} from 'node:fs';
           import {resolve} from 'node:path';
           import {pathToFileURL} from 'node:url';
+          import {createRequire} from 'node:module';
           const config=JSON.parse(readFileSync('vercel.json','utf8'));
           if(config.git?.deploymentEnabled!==false) throw new Error('manual deployment gate must remain false in source');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
@@ -37,5 +39,13 @@ jobs:
             const mod=await import(pathToFileURL(resolve('api',file)).href);
             if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);
           }
-          console.log('Validated root Vercel adapter routes and '+files.length+' handlers.');
+          const {EXPECTED_RELEASE}=await import(pathToFileURL(resolve('public/runtime-contract.js')).href);
+          const require=createRequire(import.meta.url);
+          const {RELEASE_IDENTITY}=require(resolve('runtime/vercel-production/lib/numina.js'));
+          if(Object.keys(RELEASE_IDENTITY).length!==Object.keys(EXPECTED_RELEASE).length) throw new Error('runtime identity field set differs from pinned contract');
+          for(const [field,expected] of Object.entries(EXPECTED_RELEASE)) {
+            if(RELEASE_IDENTITY[field]!==expected) throw new Error('runtime identity drift: '+field);
+          }
+          if(JSON.stringify(RELEASE_IDENTITY).includes('rc22')) throw new Error('legacy rc22 identity survived runtime alignment');
+          console.log('Validated root Vercel adapter routes, '+files.length+' handlers and exact rc26 identity parity.');
           NODE
