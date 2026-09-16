@@ -13,11 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
+      - name: Confirm Node runtime
+        run: node --version
       - name: Align packaged runtime contract inventory
         run: |
           node --input-type=module <<'NODE'
