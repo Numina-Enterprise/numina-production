@@ -1,6 +1,7 @@
 import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE_ARTIFACT_TYPE} from '../public/runtime-contract.js';
+import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,APPLICATION_ARTIFACT_BUILD_SCOPE} from '../src/application-release-contract.js';
 
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
@@ -12,7 +13,8 @@ const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 export function validateApplicationRelease(value){
   if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('APPLICATION_RELEASE_INVALID');
   if(value.schema!=='numina.application-release.v2'||value.schema_version!==2)throw new Error('APPLICATION_RELEASE_SCHEMA_MISMATCH');
-  if(value.product!=='Numina'||value.version!=='4.0.0'||value.release!=='numina-v4.0.0')throw new Error('APPLICATION_RELEASE_MISMATCH');
+  if(value.product!=='Numina'||value.version!==APPLICATION_VERSION||value.release!==APPLICATION_RELEASE)throw new Error('APPLICATION_RELEASE_MISMATCH');
+  if(!/^[0-9a-f]{64}$/i.test(String(value.build_id||'')))throw new Error('APPLICATION_BUILD_ID_INVALID');
   const runtime=value.runtime_dependency;
   if(!runtime||runtime.version!==EXPECTED_RELEASE.production_version||runtime.release!==EXPECTED_RELEASE.release)throw new Error('RUNTIME_RELEASE_MISMATCH');
   if(runtime.manifest!=='/v1/release/manifest'||runtime.signed_declaration!=='/v1/release/attestation')throw new Error('RUNTIME_RELEASE_ROUTE_MISMATCH');
@@ -61,7 +63,8 @@ export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEn
     execution_boundary_closed:Boolean(object(controlState)&&controlState.release===EXPECTED_RELEASE.production_version&&controlState.runtime_controls_configurable===true&&controlState.real_funds_enabled===false&&controlState.employer_ip_enabled===false&&controlState.public_execution_api_enabled===false&&controlState.public_execution_route_exposed===false),
     deployment_provenance_complete:validateDeploymentProvenance(deployment)
   };
-  return {ready:Object.values(checks).every(Boolean),checks,application:{version:application.version,release:application.release,build_id:application.build_id??null},runtime:{...EXPECTED_RELEASE},deployment,mode:'public-verifier-no-financial-execution'};
+  const canonicalBuildId=application.build_id;
+  return {ready:Object.values(checks).every(Boolean),checks,application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},runtime:{...EXPECTED_RELEASE},deployment,mode:'public-verifier-no-financial-execution'};
 }
 async function fetchJson(url){
   const response=await fetch(url,{headers:{accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(10000)});
