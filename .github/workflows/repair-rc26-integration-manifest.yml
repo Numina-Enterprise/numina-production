@@ -13,8 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Confirm Node runtime
-        run: node --version
+      - name: Confirm runtimes
+        run: |
+          node --version
+          python3 --version
       - name: Align packaged runtime contract inventory
         run: |
           node --input-type=module <<'NODE'
@@ -31,13 +33,24 @@ jobs:
           fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
           console.log({bytes:entry.bytes,sha256:entry.sha256});
           NODE
+      - name: Repackage current iOS source identity
+        run: python3 scripts/package-ios-source.py
       - name: Validate production build gate
         run: npm run build
-      - name: Commit aligned inventory
+      - name: Commit aligned release inventories
         run: |
           git config user.name 'Numina Release Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add integrations/numina/file-manifest.json
+          git add \
+            integrations/numina/file-manifest.json \
+            docs/native-package-record-v4.json \
+            docs/numina-os-4.0.0-ios-source.zip \
+            runtime/vercel-production/public/downloads/native-package-record-v4.json \
+            runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip
           git diff --cached --check
-          git commit -m 'Align packaged integration manifest with rc26 runtime contract'
+          if git diff --cached --quiet; then
+            echo 'Release inventories already aligned.'
+            exit 0
+          fi
+          git commit -m 'Align rc26 integration and iOS source inventories'
           git push origin HEAD:main
