@@ -2,9 +2,12 @@ name: Verify provider observations
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '41 * * * *'
   push:
     paths:
       - '.github/workflows/verify-provider-observations.yml'
+      - 'scripts/smoke-provider-observations.mjs'
       - 'runtime/vercel-production/api/providers.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
       - 'tests/provider-observations.test.mjs'
@@ -12,10 +15,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: verify-provider-observations
+  cancel-in-progress: false
+
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -25,3 +32,23 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Verify Circle and Arc read-only observation contracts
         run: node --test tests/provider-observations.test.mjs
+      - name: Wait for pushed commit and verify live provider observations
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
+        run: |
+          attempts=24
+          for attempt in $(seq 1 "$attempts"); do
+            echo "Provider observation attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
+            if node scripts/smoke-provider-observations.mjs; then
+              exit 0
+            fi
+            if [ "$attempt" -eq "$attempts" ]; then
+              echo "Provider observations did not converge on ${NUMINA_EXPECTED_GIT_SHA}."
+              exit 1
+            fi
+            sleep 10
+          done
+      - name: Verify current live provider observations
+        if: github.event_name != 'push'
+        run: node scripts/smoke-provider-observations.mjs
