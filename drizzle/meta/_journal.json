@@ -29,6 +29,13 @@
       "when": 1789502258435,
       "tag": "0003_google_play_reviewer",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1789537266264,
+      "tag": "0004_wallet_deployment_intents",
+      "breakpoints": true
     }
   ]
 }

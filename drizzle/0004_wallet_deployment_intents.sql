@@ -1,0 +1,1 @@
+CREATE TABLE numina_wallet_deployment_intents (deployment_key TEXT PRIMARY KEY NOT NULL, owner TEXT NOT NULL, attempt_id TEXT NOT NULL, transaction_json TEXT NOT NULL, transaction_hash TEXT, created_at INTEGER NOT NULL);
