@@ -1,6 +1,19 @@
 # Numina owner-wallet signing controls
 
-Open https://numinalabs.xyz/wallet-signing in the browser containing the wallet that controls `0x1a45671AE2ee3E52264116151924FAAcb80Fc02E`.
+Open https://numinalabs.xyz/wallet-signing. The approved recipient and sender is `0x1a45671AE2ee3E52264116151924FAAcb80Fc02E`.
+
+## Wallet created inside Numina
+
+1. Under **Use your saved Numina wallet**, select the encrypted JSON backup you downloaded during wallet creation. It is read locally, limited to the standard Numina V3/scrypt format, and discarded after checking its public address. No password is requested; the backup is not uploaded or stored. Its public address is unencrypted metadata and does not establish key control.
+2. Choose **Read Numina network estimate**. The server queries only the configured Numina node, fixed sender and exact reviewed constructor. It checks the pinned chain ID and genesis before and after estimation. The browser sends no wallet file or caller-selected transaction data.
+3. Review the maximum cost and choose **Download unsigned wallet handoff**. The page refreshes the observation, verifies the exact request and constructor hashes, and checks integer fee arithmetic, freshness and observed native fee balance. Clearing the session or leaving the page discards the selection and estimate.
+4. Complete the eight outstanding production reviews. Unlock the backup yourself in compatible wallet software, review the complete transaction including nonce and actual network fee asset, and sign there only when the requirements are resolved. This page does not decrypt, sign or submit. A file-format check, address match or network estimate does not resolve the reviews or independently verify funds.
+
+The read-only route is `GET /v2/network/deployment-estimate`. It accepts no transaction input or credential selection. Quotes expire after 60 seconds. Unsigned exports retain the pending reviews, false verification/execution flags and null receipt. A 1,500T native journal projection is separate from this proposed on-chain issuance and from provider balances.
+
+## Browser wallet extension
+
+Use this section only with an existing compatible browser wallet extension.
 
 1. Select that account and Numina chain `962421430` in the wallet, then choose **Connect treasury wallet**. The page checks the account, chain ID and expected genesis block. Account access is not proof that a signature has been made.
 2. Choose **Read Numina gas estimate**. The provider estimates the exact 1,500T constructor and reports gas price and the selected account's native balance. Values are exact base-unit integers; no native fee symbol or NUSD gas-payment support is inferred.

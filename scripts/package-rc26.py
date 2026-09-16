@@ -33,12 +33,14 @@ canonical_paths += ['/v'+major+'/release/manifest' for major in dict.fromkeys(['
 # All application and treasury records belong to the existing Sites journal.
 # The retained verifier still serves its own /v1 runtime identity and receipts.
 vercel_config['rewrites']=[{'source':path,'destination':'https://numinalabs.xyz'+path} for path in canonical_paths]+vercel_config['rewrites']
+vercel_config['rewrites'].insert(0,{'source':'/v2/network/deployment-estimate','destination':'/api/deployment-estimate'})
 # Business, blockchain and treasury pages share the canonical production service.
 for path in ['/contact','/services','/app','/integrations','/privacy','/ownership','/blockchain','/economy','/redemption']:
     vercel_config.setdefault('redirects',[]).append({'source':path,'destination':'https://numinalabs.xyz'+path,'permanent':False})
 (destination/'vercel.json').write_text(json.dumps(vercel_config,indent=2)+'\n',encoding='utf-8')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
+shutil.copyfile(repo/'runtime/vercel-production/api/deployment-estimate.mjs',destination/'api/deployment-estimate.mjs')
 # Publish the same recorded native downloads alongside the unchanged verifier.
 public_assets=repo/'runtime/vercel-production/public'
 if public_assets.exists():shutil.copytree(public_assets,destination/'public')
