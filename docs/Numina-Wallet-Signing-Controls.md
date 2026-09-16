@@ -42,6 +42,14 @@ The result describes consistency of the selected provider's observations. It is 
 
 The owner-only `GET/POST /api/control/v1/nusd-deployment` route uses existing authentication, origin protection and rate limits. Its separate table has one immutable attempt per pinned deployment and a single reportable transaction hash. Request bodies accept only compact, exact public transaction fields; they cannot inject calldata, credentials, policy approvals or provider endpoints. Migration `0004_wallet_deployment_intents` adds this table without changing existing treasury records. An unresolved attempt requires explicit operator reconciliation outside this workflow; the app does not provide an unlock route.
 
+## Check externally submitted receipt observations
+
+Open **Check your NUSD mint receipt** at `/wallet-signing#receipt-check` without connecting a wallet. Download the required-fields template, fill it with actual public observations from the same transaction, then paste or select the UTF-8 JSON file (maximum 2 MiB) and choose **Check receipt**. An ordinary receipt alone is insufficient: the verifier also needs the exact transaction request, canonical block and reread, latest block, deployed runtime and token-state calls. The template leaves missing observations null and does not create evidence.
+
+This intake applies only to the pinned 1,500T constructor mint described below. It reuses the existing strict receipt verifier and exports a sanitized consistency report with the input SHA-256 and explicit execution flags. Different supply, policy, network, runtime or mint-event observations fail. Later minting, conversion and deposits require their own operation-specific checks.
+
+The new intake performs no network request, wallet access, signing, broadcast, owner-intent write or financial mutation. Raw input is held only in this page, is cleared when leaving it, and is never included in the downloaded report. Editing, clearing or selecting another file invalidates the earlier result, including when a delayed check finishes. A passing consistency result does not independently authenticate the observations or establish funding, mint finality from an independent source, reserves or settlement. Wallet backups and known secret-material fields are rejected; provide public observations only.
+
 ## Exact separate 1,500T proposal
 
 - Total initial supply: `1500000000000000 NUSD`, six decimals, `1500000000000000000000` base units.

@@ -75,6 +75,15 @@ const record={
   evidence:{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false},
   scope:'Software capability and exact source binding; release publication does not sign, broadcast, mint, convert or deposit funds'
  },
+ receipt_observation_intake:{
+  schema:'numina.nusd.receipt-intake-capability.v1',workspace:'/wallet-signing#receipt-check',
+  input_schema:'numina.nusd.receipt-observation-input.v1',profile:'nusd-1500t-constructor-v3',
+  modules:Object.fromEntries(['model','ui'].map(name=>[name,{path:'/receipt-intake-'+name+'.js',sha256:digest(readFileSync('public/receipt-intake-'+name+'.js'))}])),
+  scope:'local_consistency_of_user_supplied_public_observations',maximum_input_bytes:2097152,
+  minimum_confirmations:MINIMUM_CONFIRMATIONS,network_access:false,wallet_connection_required:false,
+  raw_input_persisted:false,receipt_authenticity_verified:false,signing:false,broadcast:false,
+  treasury_writes:false,minting:false,provider_deposits:false
+ },
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
  schema:'numina.application-release.v2',schema_version:2,
  livemode:true,environment:'production',architecture:{layers:['L1','L2','L3','L4','L5'],manifest:'/api/control/v2/architecture',head:'/api/control/v2/head'},frontier:{version,discoveryMcp:'/api/control/v2/discovery-mcp',workspace:'/control-room',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},
