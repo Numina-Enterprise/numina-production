@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate application build
         run: npm run build
-      - name: Validate root route and rc26 runtime identity
+      - name: Validate root routes and release identities
         run: |
           node --input-type=module <<'NODE'
           import {readFileSync,readdirSync} from 'node:fs';
@@ -30,11 +30,14 @@ jobs:
           const config=JSON.parse(readFileSync('vercel.json','utf8'));
           if(config.git?.deploymentEnabled!==false) throw new Error('manual deployment gate must remain false in source');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
-          for(const source of ['/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v4/release/manifest']) {
+          for(const source of ['/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) {
             if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
           }
+          for(const source of ['/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) {
+            if(rewrites.get(source)!=='/api/application-release') throw new Error('application release alias bypasses validation proxy: '+source);
+          }
           const files=readdirSync('api').filter(name=>/\.(?:js|mjs)$/.test(name)).sort();
-          if(files.length!==11) throw new Error('expected 11 root API adapters, found '+files.length);
+          if(files.length!==12) throw new Error('expected 12 root API adapters, found '+files.length);
           for(const file of files){
             const mod=await import(pathToFileURL(resolve('api',file)).href);
             if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);
@@ -47,5 +50,7 @@ jobs:
             if(RELEASE_IDENTITY[field]!==expected) throw new Error('runtime identity drift: '+field);
           }
           if(JSON.stringify(RELEASE_IDENTITY).includes('rc22')) throw new Error('legacy rc22 identity survived runtime alignment');
-          console.log('Validated root Vercel adapter routes, '+files.length+' handlers and exact rc26 identity parity.');
+          const {validateApplicationRelease}=await import(pathToFileURL(resolve('api/application-release.mjs')).href);
+          validateApplicationRelease({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}});
+          console.log('Validated root Vercel routes, '+files.length+' handlers, exact rc26 identity parity and application release proxy contract.');
           NODE
