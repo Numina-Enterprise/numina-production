@@ -25,6 +25,7 @@ jobs:
     timeout-minutes: 7
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_EVIDENCE_API: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -54,6 +55,35 @@ jobs:
       - name: Verify current live provider observations
         if: github.event_name != 'push'
         run: node scripts/smoke-provider-observations.mjs
+      - name: Verify public evidence Data API boundary
+        run: |
+          latest_file="$(mktemp)"
+          latest_code="$(curl --silent --show-error --location --output "$latest_file" --write-out '%{http_code}' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Profile: public_evidence' \
+            "$NUMINA_EVIDENCE_API/latest_provider_observation?select=record_id,artifact_root,git_commit_sha,deployment_id,observed_at,provider_status,all_healthy,credentialed,partnership_status,external_execution_performed,archive_digest,arc_chain_id,arc_latest_block,circle_message")"
+          test "$latest_code" = "200"
+          node - "$latest_file" <<'NODE'
+          const fs=require('node:fs');
+          const rows=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+          if(!Array.isArray(rows)||rows.length!==1)throw Error('latest evidence row missing');
+          const row=rows[0];
+          if(row.provider_status!=='HEALTHY'||row.all_healthy!=='true')throw Error('public provider evidence degraded');
+          if(row.credentialed!=='false'||row.partnership_status!=='not_asserted'||row.external_execution_performed!=='false')throw Error('public evidence boundary drift');
+          if(row.circle_message!=='pong'||row.arc_chain_id!=='5042002')throw Error('public evidence provider identity drift');
+          if(!/^[0-9a-f]{64}$/i.test(row.artifact_root||''))throw Error('public evidence artifact root invalid');
+          if(!/^[0-9a-f]{40}$/i.test(row.git_commit_sha||''))throw Error('public evidence Git SHA invalid');
+          console.log(JSON.stringify({ok:true,record_id:row.record_id,artifact_root:row.artifact_root,git_commit_sha:row.git_commit_sha,deployment_id:row.deployment_id,provider_status:row.provider_status,arc_latest_block:row.arc_latest_block,archive_digest:row.archive_digest},null,2));
+          NODE
+          base_file="$(mktemp)"
+          base_code="$(curl --silent --show-error --location --output "$base_file" --write-out '%{http_code}' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Profile: public' \
+            "$NUMINA_EVIDENCE_API/numina_evidence_records?select=record_id&limit=1")"
+          case "$base_code" in
+            2*) echo "Underlying evidence table unexpectedly exposed with HTTP $base_code"; cat "$base_file"; exit 1 ;;
+            *) echo "Underlying evidence table blocked as expected with HTTP $base_code" ;;
+          esac
       - name: Archive signed provider evidence
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
