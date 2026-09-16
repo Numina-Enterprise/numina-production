@@ -2,6 +2,7 @@ import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto'
 import {EXPECTED_RELEASE,PINNED_RUNTIME_KEY_ID,PINNED_RUNTIME_PUBLIC_KEY,RELEASE_ARTIFACT_TYPE,RUNTIME_ORIGIN,RUNTIME_VERSION} from '../public/runtime-contract.js';
 
 const CANONICAL_ORIGIN='https://numinalabs.xyz';
+const EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||'').trim();
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const MAX_JSON_BYTES=262144;
 const MAX_HTML_BYTES=1048576;
@@ -67,6 +68,10 @@ assert(deploymentPayload.environment==='production','deployment environment drif
 assert(/^dpl_[A-Za-z0-9]+$/.test(deploymentPayload.deployment_id),'deployment id missing');
 assert(/^[0-9a-f]{40}$/i.test(deploymentPayload.git_commit_sha),'deployment git SHA missing');
 assert(deploymentPayload.git_commit_ref==='main','deployment branch drift');
+if(EXPECTED_GIT_SHA){
+  assert(/^[0-9a-f]{40}$/i.test(EXPECTED_GIT_SHA),'NUMINA_EXPECTED_GIT_SHA must be a full 40-character Git SHA');
+  assert(deploymentPayload.git_commit_sha.toLowerCase()===EXPECTED_GIT_SHA.toLowerCase(),`production Git SHA ${deploymentPayload.git_commit_sha} does not match expected ${EXPECTED_GIT_SHA}`);
+}
 const readiness=frontier.value.readiness;
 assert(readiness?.ready===true,'frontier readiness is false');
 assert(readiness.mode==='public-verifier-no-financial-execution','frontier mode drift');
@@ -93,4 +98,4 @@ const stableAuthoredFrontier=authoredFrontier(stableFrontier.text),canonicalAuth
 const stableFrontierSha256=digestText(stableAuthoredFrontier),canonicalFrontierSha256=digestText(canonicalAuthoredFrontier);
 assert(stableFrontierSha256===canonicalFrontierSha256,'stable and canonical authored frontier HTML diverged');
 
-console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
+console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
