@@ -7,7 +7,6 @@ on:
   push:
     paths:
       - '.github/workflows/verify-provider-observations.yml'
-      - 'package.json'
       - 'scripts/smoke-provider-observations.mjs'
       - 'runtime/vercel-production/api/providers.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
@@ -41,7 +40,7 @@ jobs:
           attempts=24
           for attempt in $(seq 1 "$attempts"); do
             echo "Provider observation attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
-            if npm run smoke:providers; then
+            if node scripts/smoke-provider-observations.mjs; then
               exit 0
             fi
             if [ "$attempt" -eq "$attempts" ]; then
@@ -52,4 +51,4 @@ jobs:
           done
       - name: Verify current live provider observations
         if: github.event_name != 'push'
-        run: npm run smoke:providers
+        run: node scripts/smoke-provider-observations.mjs
