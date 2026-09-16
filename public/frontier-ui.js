@@ -3,6 +3,7 @@ import {verifyTreasuryAccountView} from './treasury-proof.js';
 import {refreshControlRoom} from './control-room.js';
 import {renderFundingPlan} from './funding-plan.js';
 import {renderTreasuryBalances,renderNativeAccountReference} from './treasury-balances.js';
+import {mountTreasuryAdjustment} from './treasury-adjustment-ui.js';
 const $=s=>document.querySelector(s);
 import {NUMINA_LAYERS} from './architecture-layers.js';
 const canonical=v=>v===null||typeof v!=='object'?JSON.stringify(v):Array.isArray(v)?'['+v.map(canonical).join(',')+']':'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}';
@@ -20,6 +21,7 @@ async function api(path,body,options={}){
 function node(tag,text){const n=document.createElement(tag);n.textContent=text;return n;}
 function treasuryActions(t,readApi,isCurrent){
   const target=$('#treasury-actions');if(!target)return;target.replaceChildren();
+  if(t.treasury.status==='READY')mountTreasuryAdjustment(target,{root:t.treasury.root,isCurrent,onCommitted:refresh,onAccessLost:ownerAccessLost});
   if(t.treasury.status==='NOT_INITIALIZED'){
     const b=node('button','Initialize canonical NUSD projection');b.className='button secondary';
     b.onclick=async()=>{b.disabled=true;try{
