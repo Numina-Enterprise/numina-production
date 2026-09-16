@@ -4,11 +4,35 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NuminaClient} from '../integrations/numina/src/client.js';
 import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
+import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
+import {walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const releasePath='dist/client/downloads/application-release-v4.json';
+
+test('one owner approval binds both runtime manifests without manufacturing financial evidence',()=>{
+ const release=json(releasePath),approval=release.owner_approval;
+ for(const [key,value] of Object.entries(NUMINA_OWNER_APPROVAL))assert.deepEqual(approval[key],value);
+ assert.equal(approval.sha256,digest(bytes('public/owner-approval.js')));
+ assert.equal(approval.approved,true);assert.equal(approval.cryptographicSignature,null);
+ assert.equal(WALLET_EXECUTION_POLICY.ownerApproved,true);
+ assert.equal(WALLET_EXECUTION_POLICY.ownerApprovalId,approval.id);
+ assert.equal(WALLET_EXECUTION_POLICY.requestSha256,approval.requestSha256);
+ assert.equal(WALLET_EXECUTION_POLICY.issuerPolicySha256,approval.issuerPolicySha256);
+ assert.equal(walletExecutionAuthorized(),false);
+ assert.equal(WALLET_EXECUTION_POLICY.issuerPolicySigned,false);
+ assert.equal(WALLET_EXECUTION_POLICY.reviews.filter(r=>r.verified).length,0);
+ const handoff=release.approval_handoff,packageRecord=json('docs/Numina-1500T-Approval-Handoff-Package-Record.json');
+ assert.equal(handoff.sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff.zip')));
+ assert.equal(handoff.sha256,packageRecord.sha256);
+ assert.equal(handoff.record_sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff-Package-Record.json')));
+ const config=json('vercel.json');assert.equal(config.git.deploymentEnabled,true);
+ for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source)?.destination,'https://numinalabs.xyz'+source);
+ assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://numinalabs.xyz/api/control/v1/:path*');
+ for(const version of ['2','3','4'])assert.equal(config.rewrites.find(r=>r.source==='/v'+version+'/release/manifest')?.destination,'/api/application-release');
+});
 
 test('root release manifest binds the owner workflow, additive migration and actual blocked policy',()=>{
  const release=json(releasePath),binding=release.owner_wallet_execution;

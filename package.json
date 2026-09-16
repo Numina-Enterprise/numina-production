@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=24"
+    "node": "24.x"
   },
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -12,8 +12,9 @@
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs",
+    "smoke:production": "node scripts/smoke-production.mjs",
     "publish:source": "node scripts/publish-with-telemetry.mjs"
   },
   "license": "SEE LICENSE IN LICENSE.md",
-  "author": "Numina \u00b7 SK Consulting LLC"
+  "author": "Numina · SK Consulting LLC"
 }

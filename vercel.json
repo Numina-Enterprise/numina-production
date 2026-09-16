@@ -1,3 +1,148 @@
 {
-  "git": { "deploymentEnabled": false }
+  "git": {
+    "deploymentEnabled": true
+  },
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/api/control/v1/:path*",
+      "destination": "https://numinalabs.xyz/api/control/v1/:path*"
+    },
+    {
+      "source": "/control-room",
+      "destination": "/frontier"
+    },
+    {
+      "source": "/api/control/v2/:path*",
+      "destination": "https://numinalabs.xyz/api/control/v2/:path*"
+    },
+    {
+      "source": "/.well-known/agent-card.json",
+      "destination": "https://numinalabs.xyz/.well-known/agent-card.json"
+    },
+    {
+      "source": "/v1/frontier/readiness",
+      "destination": "/api/application-release?mode=frontier-readiness"
+    },
+    {
+      "source": "/v1/deployment/provenance",
+      "destination": "/api/application-release?mode=deployment-provenance"
+    },
+    {
+      "source": "/v2/network/status",
+      "destination": "/api/node-connection"
+    },
+    {
+      "source": "/v2/network/deployment-estimate",
+      "destination": "/api/deployment-estimate"
+    },
+    {
+      "source": "/v1/status",
+      "destination": "/api/status"
+    },
+    {
+      "source": "/v1/control/state",
+      "destination": "/api/control-state"
+    },
+    {
+      "source": "/v1/control/evaluate",
+      "destination": "/api/control-evaluate"
+    },
+    {
+      "source": "/v1/execution/providers",
+      "destination": "/api/providers"
+    },
+    {
+      "source": "/v1/execution/prepare",
+      "destination": "/api/execution-prepare"
+    },
+    {
+      "source": "/v1/execution/evidence/bind",
+      "destination": "/api/evidence-bind"
+    },
+    {
+      "source": "/v1/release/manifest",
+      "destination": "/api/manifest"
+    },
+    {
+      "source": "/v1/release/supply-chain",
+      "destination": "/api/supply-chain"
+    },
+    {
+      "source": "/v1/release/attestation",
+      "destination": "/api/attestation"
+    },
+    {
+      "source": "/v2/release/manifest",
+      "destination": "/api/application-release"
+    },
+    {
+      "source": "/v3/release/manifest",
+      "destination": "/api/application-release"
+    },
+    {
+      "source": "/v4/release/manifest",
+      "destination": "/api/application-release"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/v(1|2|3|4)/release/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/v1/frontier/readiness",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/v1/deployment/provenance",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/wallet-signing",
+      "destination": "https://numinalabs.xyz/wallet-signing",
+      "permanent": false
+    },
+    {
+      "source": "/wallet-signing.html",
+      "destination": "https://numinalabs.xyz/wallet-signing.html",
+      "permanent": false
+    },
+    {
+      "source": "/deployment-readiness",
+      "destination": "https://numinalabs.xyz/deployment-readiness",
+      "permanent": false
+    }
+  ]
 }
