@@ -7,6 +7,7 @@ on:
       - 'api/**'
       - 'package.json'
       - 'scripts/smoke-production.mjs'
+      - 'docs/native-package-record-v4.json'
       - 'vercel.json'
       - 'public/runtime-contract.js'
       - 'runtime/vercel-production/api/**'
