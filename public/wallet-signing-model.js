@@ -38,6 +38,7 @@ export async function validateSigningReview(input){
  if(await digest(creation)!==SIGNING_PINS.creation)throw failure('CREATION_MISMATCH','The creation data differs from the reviewed 1,500T constructor.');
  const result=freeze(review);trustedReviews.add(result);return result;
 }
+export function isValidatedSigningReview(value){return trustedReviews.has(value);}
 export async function loadSigningReview(signal){
  const controller=new AbortController();let timer,onAbort;
  try{return await Promise.race([
