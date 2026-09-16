@@ -1,0 +1,39 @@
+name: Verify root Vercel adapter
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-root-vercel.yml'
+      - 'api/**'
+      - 'vercel.json'
+      - 'runtime/vercel-production/api/**'
+      - 'runtime/vercel-production/lib/**'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate application build
+        run: npm run build
+      - name: Validate root route configuration
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,readdirSync} from 'node:fs';
+          const config=JSON.parse(readFileSync('vercel.json','utf8'));
+          if(config.git?.deploymentEnabled!==false) throw new Error('manual deployment gate must remain false in source');
+          const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
+          for(const source of ['/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v4/release/manifest']) {
+            if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
+          }
+          const files=readdirSync('api').filter(name=>/\.(?:js|mjs)$/.test(name)).sort();
+          if(files.length!==11) throw new Error('expected 11 root API adapters, found '+files.length);
+          for(const file of files){
+            const mod=await import(new URL('../../api/'+file,import.meta.url));
+            if(typeof mod.default!=='function') throw new Error('default handler missing: '+file);
+          }
+          console.log('Validated root Vercel adapter routes and '+files.length+' handlers.');
+          NODE
