@@ -1,0 +1,76 @@
+{
+  "schema": "numina.play-listing-assets.v1",
+  "observedDate": "2026-09-16",
+  "status": "PREPARED_NOT_UPLOADED",
+  "packageIdentity": "xyz.numinalabs.app",
+  "locale": "en-US",
+  "assets": [
+    {
+      "file": "numina-icon-512.png",
+      "width": 512,
+      "height": 512,
+      "format": "PNG",
+      "mode": "RGB",
+      "bytes": 2628,
+      "sha256": "47ba5aa331ad8e672d501a3530b8c9d5f0068442c6cdfeb99e6e7ad61f6a61e3"
+    },
+    {
+      "file": "numina-feature-1024x500.png",
+      "width": 1024,
+      "height": 500,
+      "format": "PNG",
+      "mode": "RGB",
+      "bytes": 62332,
+      "sha256": "48a3e4dc87fae0f5a1ac73def58258c61dacb400abb2836fc40524335a63d828"
+    },
+    {
+      "file": "numina-phone-services.jpg",
+      "width": 630,
+      "height": 1120,
+      "format": "JPEG",
+      "mode": "RGB",
+      "bytes": 69407,
+      "sha256": "e117a4487d87901ab33f0b363a072e8cb11b848b2cf51ec08ca0be8d42c703db"
+    },
+    {
+      "file": "numina-phone-integrations.jpg",
+      "width": 630,
+      "height": 1120,
+      "format": "JPEG",
+      "mode": "RGB",
+      "bytes": 65713,
+      "sha256": "4fdb48a44b126a00f6444d472612804026891859294bf0b59472ef5984eefdf4"
+    }
+  ],
+  "captureProvenance": {
+    "sources": [
+      "https://numinalabs.xyz/services",
+      "https://numinalabs.xyz/integrations"
+    ],
+    "method": "Actual hosted app, in-app browser, portrait viewport; raw screenshot bytes saved without editing or overlay.",
+    "screenDimensions": [
+      630,
+      1120
+    ],
+    "aspectRatio": "9:16",
+    "privateAccountDataIncluded": false,
+    "physicalDeviceCapture": false,
+    "screenCaptureDate": "2026-09-16"
+  },
+  "graphicProvenance": {
+    "icon": "Byte-for-byte copy of the current production app icon.",
+    "feature": "Deterministic SVG extension of existing Numina visual identity; rendered to opaque RGB PNG."
+  },
+  "candidate": {
+    "repositoryPath": "docs/numina-4.0.0-upload-signed.aab",
+    "versionName": "4.0.0",
+    "versionCode": 3,
+    "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896",
+    "bytes": 3617288,
+    "signatureEvidence": "docs/android-signed-build-record-v4.json"
+  },
+  "aabUploaded": false,
+  "storeListingSavedWithImages": false,
+  "reviewSubmitted": false,
+  "publicationConfirmed": false
+}

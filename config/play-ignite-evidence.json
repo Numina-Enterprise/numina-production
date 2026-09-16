@@ -66,7 +66,7 @@
     },
     "storeListing": {
       "status": "blocked",
-      "detail": "Full description and 18+ notice exist in the saved draft. Required icon, feature graphic and phone screenshots remain missing; final listing review is incomplete."
+      "detail": "Full description and 18+ notice exist in the saved draft. Required icon, feature graphic and two phone screenshots are prepared and validated in mobile/store-listing/en-US, but have not been uploaded. Final listing review remains incomplete."
     },
     "appContent": {
       "status": "confirmed",
@@ -210,5 +210,14 @@
       "financialDraft": "Saved seven owner-reported categories: personal loan direct lender, loan facilitator, earned wage advances, mobile payments/digital wallets, money transfer/wire services, cryptocurrency wallet and cryptocurrency exchange. Documentation incomplete; no lawful-business or licensing attestation selected.",
       "dataSafetyDraft": "Data collection Yes, encrypted transit Yes, OAuth, account/data deletion URLs, and nine source-observed data types saved as draft: email, user IDs, device/other IDs, purchase history, other financial info, files/docs, app interactions, other user-generated content, diagnostics. Handling and provider flows remain incomplete; no final submission."
     }
-  ]
+  ],
+  "preparedListingAssets": {
+    "status": "PREPARED_NOT_UPLOADED",
+    "manifest": "mobile/store-listing/en-US/asset-manifest.json",
+    "imageCount": 4,
+    "dimensionsAndHashesVerified": true,
+    "consoleUploadVerified": false,
+    "browserFileAccessChangeConfirmed": false,
+    "scope": "Prepared repository assets; existing Console listing and release gates remain unresolved."
+  }
 }
