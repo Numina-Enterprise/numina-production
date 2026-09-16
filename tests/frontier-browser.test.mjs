@@ -44,7 +44,7 @@ function harness(view,override=()=>null,adjustmentClient=null){
     else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
   };
-  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
+  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryPreparation(target,options){assert.equal(options.root,view.treasury.root);assert.deepEqual(options.accounts,view.accounts);assert.equal(typeof options.onAccessLost,'function');assert.equal(typeof options.onCommitted,'function');assert.equal(typeof options.isCurrent,'function');},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
   if(adjustmentClient)vm.runInContext('const mountTreasuryAdjustment=(()=>{'+source('treasury-adjustment-ui.js')+';return mountTreasuryAdjustment;})();',context);
   vm.runInContext(source('http-client.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
   return {get,events,subject:context.subject,close(){events.pagehide?.();}};

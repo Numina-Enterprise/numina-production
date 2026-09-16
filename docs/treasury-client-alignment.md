@@ -18,6 +18,14 @@ An older treasury event remains valid when other journal operations have advance
 
 Refreshes and loss of owner access cancel pending reads and clear private records. A late response cannot restore an obsolete treasury view. Writes are not automatically retried.
 
+## Owner preparation requests
+
+Frontier provides owner controls for `PREPARE_MINT` and `PREPARE_BANK_TRANSACTION` through the same canonical treasury GET/POST route. Mint amounts are exact whole NUSD integer strings. Bank amounts are exact USD minor-unit integer strings (cents); the review also displays the corresponding USD amount. Existing account designation IDs may identify a prepared bank destination, but do not verify a provider destination or ownership.
+
+Review reads and verifies the current projection before freezing the complete event, operation ID, revision and head. Recording submits those exact canonical bytes. A confirmed result must preserve the native balance, append exactly the reviewed request with `status: "PREPARED"`, `submission_performed: false` and `receipt: null`, and bind the exact event to its SHA-256 journal proof. `FINAL` confirms only this internal record. It does not mean a token mint, bank deposit, conversion or provider submission occurred.
+
+Pending requests survive control-room refresh within the current tab. An uncertain attempt can only retry its original event; it cannot be replaced with a new ID or revised concurrency conditions. After a verified result, the owner can start a new request against a freshly read head. Download the exact request and result for retention. Publishing this interface does not itself record any request.
+
 The rc26 release display also requires a production declaration that signs every displayed manifest field. An unsigned extra field or a staging declaration cannot pass the release check. The runtime's pinned identity remains unchanged.
 
 The frozen starting projection remains 500,000,000,000,000 NUSD, Authority NUMINA, Verification VERIFIED, System of record NUMINA, within the Numina-native model. This software update performs no treasury write or account-reference mutation.
