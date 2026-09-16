@@ -42,7 +42,7 @@ function harness(view,override=()=>null){
     else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
   };
-  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},NUMINA_LAYERS:{layers:[]}});
+  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryAdjustment(){},NUMINA_LAYERS:{layers:[]}});
   vm.runInContext(source('http-client.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
   return {get,events,subject:context.subject,close(){events.pagehide?.();}};
 }
