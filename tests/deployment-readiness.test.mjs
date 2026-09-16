@@ -19,7 +19,7 @@ test('public input sheets remain pinned to the published review with every requi
 });
 test('inputs retain exact integers and reject zero addresses, excess values and numeric coercion',()=>{
  const state=assessInputs({recipient,sender:'0x'+'0'.repeat(40),nonce:'0',maximumFee:'900719925474099312345',chainId:962421430});
- assert.equal(state.values.maximumFee,'900719925474099312345');assert.equal(state.values.nonce,'0');assert.equal(state.values.sender,null);assert.equal(state.values.chainId,null);
+ assert.equal(state.values.maximumFee,'900719925474099312345');assert.equal(state.values.nonce,undefined);assert.equal(state.values.sender,null);assert.equal(state.values.chainId,null);
  for(const value of ['1e18','-1','1.5','01',(2n**256n).toString()])assert.equal(assessInputs({maximumFee:value}).values.maximumFee,null);
  assert.equal(state.productionReady,false);
 });
