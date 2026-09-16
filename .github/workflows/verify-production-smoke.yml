@@ -11,6 +11,7 @@ on:
       - 'package.json'
       - 'scripts/smoke-production.mjs'
       - 'public/runtime-contract.js'
+      - 'vercel.json'
 
 permissions:
   contents: read
