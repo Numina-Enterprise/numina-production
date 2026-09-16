@@ -23,6 +23,10 @@
       "destination": "/api/node-connection"
     },
     {
+      "source": "/v2/network/deployment-estimate",
+      "destination": "/api/deployment-estimate"
+    },
+    {
       "source": "/status",
       "destination": "/status.html"
     },
