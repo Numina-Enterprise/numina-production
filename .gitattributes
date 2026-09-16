@@ -26,3 +26,5 @@ docs/Numina-Security.md -text
 docs/approved-reviews/** -text
 docs/Numina-500T-Simulation.md -text
 docs/Numina-500T-Deployment-Sequence.md -text
+docs/numina-500t-preparation-tools-record.json -text
+scripts/package-nusd-review-tools.py -text
