@@ -7,6 +7,7 @@ import {bootstrapControl,readControl} from '../src/control-store.js';
 import {createNuminaTreasury} from '../src/native-treasury.js';
 import {alignTreasuryAccounts} from '../src/treasury-alignment.js';
 import {verifyTreasuryAccountView} from '../public/treasury-proof.js';
+import {createTreasuryAdjustment} from '../public/treasury-adjustment.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
@@ -18,6 +19,7 @@ class Element{
   replaceChildren(...nodes){this._text='';this.children=[...nodes];}
   set textContent(value){this._text=String(value);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
+  setAttribute(name,value){this[name]=value;}
 }
 async function accountView(funding={},initialized=true){
   const db=database(),owner='email:owner@example.test';
@@ -28,7 +30,7 @@ async function accountView(funding={},initialized=true){
     return alignTreasuryAccounts(await treasury.readTreasury(),{accounts:[{id:'existing',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing reference',providerAccountReference:'original-reference'}],...funding});
   }finally{db.close();}
 }
-function harness(view,override=()=>null){
+function harness(view,override=()=>null,adjustmentClient=null){
   const nodes=new Map(),events={};const get=selector=>{if(!nodes.has(selector))nodes.set(selector,new Element());return nodes.get(selector);};
   const document={querySelector:get,createElement:()=>new Element(),addEventListener:(name,fn)=>events[name]=fn,dispatchEvent:event=>events[event.type]?.(event)};
   const fetch=async(path,options)=>{
@@ -42,7 +44,8 @@ function harness(view,override=()=>null){
     else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
   };
-  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryAdjustment(){},NUMINA_LAYERS:{layers:[]}});
+  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
+  if(adjustmentClient)vm.runInContext('const mountTreasuryAdjustment=(()=>{'+source('treasury-adjustment-ui.js')+';return mountTreasuryAdjustment;})();',context);
   vm.runInContext(source('http-client.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
   return {get,events,subject:context.subject,close(){events.pagehide?.();}};
 }
@@ -60,6 +63,26 @@ test('frontier displays only current application identities and refreshes withou
     old.resolve(Response.json(applicationManifest()));await settled();
     assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
   }finally{h.close();}
+});
+
+for(const phase of ['prepare','submit'])for(const status of [401,403])test(`adjustment ${phase} HTTP ${status} clears all private frontier panels`,async()=>{
+ const view=await accountView();let reads=0,writes=0;
+ const denied=()=>{throw Object.assign(Error('Owner access lost'),{status});};
+ const client=createTreasuryAdjustment({read:async()=>{reads++;if(phase==='prepare')denied();return structuredClone(view.treasury);},write:async()=>{writes++;denied();}});
+ const h=harness(view,()=>null,client);
+ const find=(target,predicate)=>{if(predicate(target))return target;for(const child of target.children){const match=find(child,predicate);if(match)return match;}};
+ try{
+  await settled();assert.ok(h.get('#accounts').children.length);
+  const actions=h.get('#treasury-actions'),section=actions.children[0],form=section.children[2];
+  const delta=find(section,node=>node.id==='native-adjustment-delta'),reason=find(section,node=>node.id==='native-adjustment-reason'),commit=find(section,node=>node.id==='native-adjustment-commit');
+  delta.value='1000000000000000';reason.value='Authorized native model adjustment';
+  await form.onsubmit({preventDefault(){}});if(phase==='submit')await commit.onclick();
+  assert.equal(reads,1);assert.equal(writes,phase==='submit'?1:0);
+  for(const selector of ['#treasury-actions','#treasury-policy','#accounts','#requests','#treasury-balances','#funding-plan'])assert.equal(h.get(selector).children.length,0);
+  assert.match(h.get('#treasury-status').textContent,/Owner access is required/);
+  assert.match(h.get('#account-status').textContent,/Sign in to Numina/);
+  await commit.onclick();await form.onsubmit({preventDefault(){}});assert.equal(reads,1);assert.equal(writes,phase==='submit'?1:0);
+ }finally{h.close();}
 });
 
 test('frontier rejects older, missing and mixed application release metadata',async()=>{
