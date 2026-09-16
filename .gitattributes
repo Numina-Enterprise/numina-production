@@ -23,3 +23,6 @@ OWNERSHIP.md -text
 LICENSE.md -text
 NOTICE.md -text
 docs/Numina-Security.md -text
+docs/approved-reviews/** -text
+docs/Numina-500T-Simulation.md -text
+docs/Numina-500T-Deployment-Sequence.md -text

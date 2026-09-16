@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>500T treasury simulation — Numina</title>
+  <meta name="description" content="Explore one 500T NUSD supply, a 1:1 denomination model and simulated treasury allocations.">
+  <meta name="theme-color" content="#07080c">
+  <link rel="canonical" href="https://numinalabs.xyz/treasury-simulation"><link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/site-shell.css"><link rel="stylesheet" href="/treasury-simulation.css">
+  <script type="module" src="/treasury-simulation-ui.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to simulation</a>
+  <header class="header wrap site-header"><a class="brand" href="/" aria-label="Numina home"><strong>NUMINA</strong><span>Intelligence in Motion</span></a><nav aria-label="Simulation navigation"><a href="/economy">NUSD</a><a href="/financial-services">Review evidence</a><a href="/control">Live control room</a></nav></header>
+  <main id="main" class="wrap simulation">
+    <section class="simulation-intro" aria-labelledby="simulation-title">
+      <span class="simulation-badge">SIMULATION · 500T REVIEW</span>
+      <h1 id="simulation-title">One supply.<br>Three treasury views.</h1>
+      <p class="simulation-lead">Explore the owner-approved 500T NUSD review at a model rate of <strong>1 NUSD = 1 USDC = 1 USD</strong>. Move a single allocation between simulated accounts and see every amount reconcile.</p>
+      <p class="simulation-scope">This session runs in your browser. Its balances and transfers are simulated; production accounts and the native journal are unchanged. Reloading starts a fresh session.</p>
+    </section>
+    <section class="simulation-total" aria-labelledby="total-title"><div><span id="total-title">TOTAL MODEL VALUE · COUNTED ONCE</span><strong>500,000,000,000,000 <small>NUSD equivalent</small></strong></div><span id="simulation-invariant" role="status">Loading model…</span></section>
+    <section aria-label="Simulated treasury allocations" class="simulation-accounts">
+      <article><span>NATIVE · SIMULATED</span><h2>Numina treasury</h2><p class="simulation-balance" data-balance="native">—</p><small>NUSD</small><div class="simulation-meter"><div data-meter="native"></div></div></article>
+      <article><span>STRIPE · SIMULATED</span><h2>USDC destination</h2><p class="simulation-balance" data-balance="stripe">—</p><small>USDC model units</small><div class="simulation-meter"><div data-meter="stripe"></div></div></article>
+      <article><span>BANK · SIMULATED</span><h2>USD destination</h2><p class="simulation-balance" data-balance="bank">—</p><small>USD model units</small><div class="simulation-meter"><div data-meter="bank"></div></div></article>
+    </section>
+    <section class="simulation-controls" aria-labelledby="move-title">
+      <div><span class="simulation-label">TRY AN ALLOCATION</span><h2 id="move-title">Move value. Keep the total.</h2><p>Each move subtracts from its source and adds the same value to its destination. The three balances together remain 500T.</p><button class="button secondary" id="simulation-example" type="button">Run example allocation</button><p class="simulation-help">Example: 250T to simulated Stripe, then 250T to the simulated bank.</p></div>
+      <form id="simulation-transfer"><fieldset id="simulation-fields" disabled>
+        <label>From<select name="from"><option value="native">Numina · NUSD</option><option value="stripe">Stripe · simulated USDC</option><option value="bank">Bank · simulated USD</option></select></label>
+        <label>To<select name="to"><option value="stripe">Stripe · simulated USDC</option><option value="bank">Bank · simulated USD</option><option value="native">Numina · NUSD</option></select></label>
+        <label class="simulation-wide">Amount<input name="amount" type="text" inputmode="decimal" required value="250000000000000" maxlength="90" autocomplete="off" aria-describedby="simulation-amount-help"></label>
+        <small class="simulation-wide" id="simulation-amount-help">Enter an exact amount without commas. Bank allocations use whole cents.</small>
+        <button class="button simulation-wide" type="submit">Simulate transfer</button>
+      </fieldset></form>
+    </section>
+    <p id="simulation-notice" role="status" aria-live="polite">Loading simulation…</p>
+    <section class="simulation-history" aria-labelledby="history-title"><div class="simulation-section-heading"><h2 id="history-title">Session activity</h2><div><button class="button secondary" id="simulation-export" type="button">Export simulation</button><button class="button secondary" id="simulation-reset" type="button">Reset session</button></div></div><ol id="simulation-events"><li>No simulated transfers yet.</li></ol></section>
+    <section class="simulation-evidence" aria-labelledby="evidence-title"><div><span class="simulation-label">APPROVED REVIEW</span><h2 id="evidence-title">500T initial supply.<br>No configurable cap.</h2><p>The contract review uses six decimals and a finite uint256 supply. It issues the initial amount to one recipient in local tests, then pauses. This allocation simulation keeps that initial total fixed.</p><p id="simulation-review-status">Loading the current review reference…</p></div><div class="simulation-evidence-links"><a href="/api/nusd/v1/simulation">Simulation descriptor ↗</a><a href="/api/nusd/v1/approved-review">Owner-approved review ↗</a><a href="/downloads/Numina-NUSD-Approved-500T-Review.zip">Source, artifact &amp; test evidence ↗</a><a href="/api/nusd/v1/status">Production capability status ↗</a></div></section>
+    <p><a href="/downloads/Numina-500T-Deployment-Handoff.zip">Download production preparation sheets ↗</a> · <a href="/downloads/Numina-500T-Deployment-Sequence.md">Owner signing and receipt checks ↗</a></p>
+    <noscript><p>Enable JavaScript to run the simulation. The review and production status links remain available.</p></noscript>
+  </main>
+  <footer class="wrap simulation-footer"><p>Numina · Intelligence in Motion. © 2026 SK Consulting LLC.</p><p>18+ · Adults only.</p></footer>
+</body></html>
