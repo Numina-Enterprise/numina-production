@@ -10,18 +10,19 @@
     "branch": "main",
     "repository_count": 1,
     "push_model": "SINGULAR",
-    "current_parent_sha": "db8f80fc65f977aa7a7f082fc088e4e77552ccdb",
+    "current_parent_sha": "5e3fcde26bd863c41f630ce78d6e91f9f89004ca",
     "state": "FINAL_SOURCE"
   },
   "software": {
     "identity": "NUMINA",
     "build_model": "SINGULAR",
-    "artifact_build_id": "a31cc58b5f59174ac9a5fb3a766f80742806e07c917c829ce487891ebf327004",
+    "artifact_build_id": "742f60c0c839e0feb0f55ecfc245c8818c2a161a168df046b7d9b119a1f90283",
     "worker_identity": "NUMINA",
     "worker_count": 1,
     "environment_model": "SINGULAR",
     "journal_identity": "NUMINA",
-    "journal_count": 1
+    "journal_count": 1,
+    "state": "FINAL_SOURCE_BOUND"
   },
   "delivery": {
     "identity": "NUMINA",
