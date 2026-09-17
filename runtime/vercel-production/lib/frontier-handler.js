@@ -2,6 +2,7 @@
 
 const legacy=require('./numina');
 const {createRuntimeNumina}=require('./numina-runtime');
+const {applyAuthorizedExecution}=require('./execution-controls');
 
 function body(req){if(req.body&&typeof req.body==='object')return req.body;try{return JSON.parse(req.body||'{}')}catch{return {};}}
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
@@ -14,6 +15,7 @@ function makeFrontierHandler(kind){
   return async function(req,res){
     try{
       if(!requireMethod(req,res,'POST'))return;
+      applyAuthorizedExecution();
       const numina=createRuntimeNumina();
       const next=await numina.execute({kind,body:body(req)});
       const last=next.state.last||{};
