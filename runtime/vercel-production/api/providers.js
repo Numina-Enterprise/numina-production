@@ -38,7 +38,7 @@ async function observationSet(){
     mode:'public-read-only-health',
     source_authority:'provider_public_endpoints',
     credentialed:false,
-    partnership_status:'asserted_by_numina_owner',
+    partnership_status:'not_asserted',
     partnership_state:authority.partnershipState(),
     external_execution_performed:false,
     observed_at:new Date().toISOString(),
