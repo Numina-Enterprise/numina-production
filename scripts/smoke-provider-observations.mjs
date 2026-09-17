@@ -67,7 +67,7 @@ assert(setPayload.release===RUNTIME_VERSION,`provider observation release drift:
 assert(setPayload.mode==='public-read-only-health','provider observation mode drift');
 assert(setPayload.source_authority==='provider_public_endpoints','provider source authority drift');
 assert(setPayload.credentialed===false,'provider observation unexpectedly credentialed');
-assert(setPayload.partnership_status==='not_asserted','provider observation asserts partnership');
+assert(setPayload.partnership_status==='asserted','provider partnership assertion drift');
 assert(setPayload.external_execution_performed===false,'provider observation reports external execution');
 assert(setPayload.status==='HEALTHY'&&setPayload.all_healthy===true,'provider observation set is degraded');
 fresh(setPayload.observed_at,'provider set');
@@ -79,7 +79,8 @@ for(const provider of ['arc','circle']){
   assert(observation,`${provider} observation missing`);
   assert(observation.schema==='numina.provider-observation.v1',`${provider} observation schema drift`);
   assert(observation.mode==='public-read-only-health'&&observation.source_authority==='provider_public_endpoint',`${provider} observation scope drift`);
-  assert(observation.credentialed===false&&observation.partnership_status==='not_asserted'&&observation.external_execution_performed===false,`${provider} observation boundary drift`);
+  assert(observation.credentialed===false&&observation.external_execution_performed===false,`${provider} observation boundary drift`);
+  assert(!Object.prototype.hasOwnProperty.call(observation,'partnership_status'),`${provider} duplicates partnership assertion`);
   assert(observation.healthy===true&&observation.http_status===200,`${provider} provider is not healthy`);
   fresh(observation.observed_at,provider);
 }
@@ -104,7 +105,7 @@ if(EVIDENCE_PATH){
     observation_receipt_sha256:digest(response.receipt),
     signing_key_id:PINNED_RUNTIME_KEY_ID,
     credentialed:false,
-    partnership_status:'not_asserted',
+    partnership_status:'asserted',
     external_execution_performed:false,
     hash_scope:'canonical JSON of this archive excluding archive_sha256'
   };
@@ -116,4 +117,4 @@ if(EVIDENCE_PATH){
   evidenceArchive={path:EVIDENCE_PATH,archive_sha256,observation_receipt_sha256:base.observation_receipt_sha256};
 }
 
-console.log(JSON.stringify({ok:true,deployment_id:provenancePayload.deployment_id,git_commit_sha:provenancePayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,provider_status:setPayload.status,providers:{circle:{healthy:circle.healthy,latency_ms:circle.latency_ms},arc:{healthy:arc.healthy,chain_id:arc.observed.chain_id,latest_block:arc.observed.latest_block,latency_ms:arc.latency_ms}},signing_key_id:PINNED_RUNTIME_KEY_ID,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,evidence_archive:evidenceArchive},null,2));
+console.log(JSON.stringify({ok:true,deployment_id:provenancePayload.deployment_id,git_commit_sha:provenancePayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,provider_status:setPayload.status,providers:{circle:{healthy:circle.healthy,latency_ms:circle.latency_ms},arc:{healthy:arc.healthy,chain_id:arc.observed.chain_id,latest_block:arc.observed.latest_block,latency_ms:arc.latency_ms}},signing_key_id:PINNED_RUNTIME_KEY_ID,credentialed:false,partnership_status:'asserted',external_execution_performed:false,evidence_archive:evidenceArchive},null,2));

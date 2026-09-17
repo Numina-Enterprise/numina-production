@@ -22,7 +22,7 @@ const archive=JSON.parse(readFileSync(inputPath,'utf8'));
 assert(archive?.schema==='numina.provider-evidence-archive.v1','archive schema drift');
 assert(archive?.signing_key_id===PINNED_RUNTIME_KEY_ID,'archive signing key drift');
 assert(archive?.credentialed===false,'archive unexpectedly credentialed');
-assert(archive?.partnership_status==='not_asserted','archive asserts partnership');
+assert(archive?.partnership_status==='asserted','archive partnership assertion drift');
 assert(archive?.external_execution_performed===false,'archive reports external execution');
 assert(/^sha256:[0-9a-f]{64}$/i.test(artifactDigest),'GitHub artifact digest missing or invalid');
 assert(artifactName,'GitHub artifact name missing');
@@ -37,7 +37,7 @@ assert(observation?.release===RUNTIME_VERSION,'provider set release drift');
 assert(observation?.status==='HEALTHY'&&observation?.all_healthy===true,'provider set is not healthy');
 assert(Array.isArray(observation?.providers)&&observation.providers.join(',')==='arc,circle','provider identities drift');
 assert(observation?.credentialed===false,'provider set unexpectedly credentialed');
-assert(observation?.partnership_status==='not_asserted','provider set asserts partnership');
+assert(observation?.partnership_status==='asserted','provider set partnership assertion drift');
 assert(observation?.external_execution_performed===false,'provider set reports external execution');
 const byProvider=new Map((observation.observations||[]).map(item=>[item.provider,item]));
 const arc=byProvider.get('arc');
@@ -83,7 +83,7 @@ const artifact_json={
     arc_latest_block:arc.observed.latest_block,
     fresh_timestamp:true,
     credentialed:false,
-    partnership_status:'not_asserted',
+    partnership_status:'asserted',
     external_execution_performed:false
   }
 };
@@ -99,4 +99,4 @@ const manifest={
 };
 mkdirSync(dirname(outputPath),{recursive:true});
 writeFileSync(outputPath,JSON.stringify(manifest,null,2)+'\n',{encoding:'utf8',mode:0o600});
-console.log(JSON.stringify({ok:true,record_id:manifest.record_id,artifact_root,archive_digest:artifactDigest,git_commit_sha:archive.deployment.git_commit_sha,deployment_id:archive.deployment.deployment_id,provider_status:observation.status,circle_message:circle.observed.message,arc_chain_id:arc.observed.chain_id,arc_latest_block:arc.observed.latest_block,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,path:outputPath},null,2));
+console.log(JSON.stringify({ok:true,record_id:manifest.record_id,artifact_root,archive_digest:artifactDigest,git_commit_sha:archive.deployment.git_commit_sha,deployment_id:archive.deployment.deployment_id,provider_status:observation.status,circle_message:circle.observed.message,arc_chain_id:arc.observed.chain_id,arc_latest_block:arc.observed.latest_block,credentialed:false,partnership_status:'asserted',external_execution_performed:false,path:outputPath},null,2));
