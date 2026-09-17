@@ -12,6 +12,7 @@ on:
       - 'vercel.json'
       - 'public/runtime-contract.js'
       - 'src/application-release-contract.js'
+      - 'runtime/vercel-production/vercel.json'
       - 'runtime/vercel-production/api/**'
       - 'runtime/vercel-production/lib/**'
       - 'tests/provider-submitter.test.mjs'
@@ -52,6 +53,11 @@ jobs:
           if(config.git?.deploymentEnabled!==true) throw new Error('Git deployment policy must remain enabled in source');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
           for(const source of ['/v1/frontier/readiness','/v1/deployment/provenance','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/submit','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
+          for(const configPath of ['vercel.json','runtime/vercel-production/vercel.json']) {
+            const gateway=JSON.parse(readFileSync(configPath,'utf8'));
+            const matches=(gateway.rewrites||[]).filter(rule=>rule.source==='/api/nusd/v1/:path*');
+            if(matches.length!==1||matches[0].destination!=='https://numinalabs.xyz/api/nusd/v1/:path*') throw new Error('NUSD API must route once to the canonical service: '+configPath);
+          }
           if(rewrites.get('/v1/frontier/readiness')!=='/api/application-release?mode=frontier-readiness') throw new Error('frontier readiness bypasses verifier');
           if(rewrites.get('/v1/deployment/provenance')!=='/api/application-release?mode=deployment-provenance') throw new Error('deployment provenance bypasses verifier');
           if(rewrites.get('/v1/execution/submit')!=='/api/execution-prepare?mode=submit') throw new Error('execution submit route bypasses governed handler');
