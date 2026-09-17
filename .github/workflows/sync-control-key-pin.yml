@@ -1,0 +1,61 @@
+name: Sync production control credential pin
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-control-key-pin.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 5
+    env:
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Require repaired production credential
+        shell: bash
+        run: |
+          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
+            echo '::error::NUMINA_CONTROL_API_KEY is not configured.'
+            exit 1
+          fi
+      - name: Synchronize SHA-256 fallback pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          pin="$(printf '%s' "$NUMINA_CONTROL_API_KEY" | sha256sum | awk '{print $1}')"
+          PIN="$pin" python3 - <<'PY'
+          from pathlib import Path
+          import os, re
+          path = Path('src/control-http.js')
+          text = path.read_text(encoding='utf-8')
+          pin = os.environ['PIN']
+          updated, count = re.subn(
+              r"export const CONTROL_API_KEY_SHA256_PIN='[a-f0-9]{64}';",
+              f"export const CONTROL_API_KEY_SHA256_PIN='{pin}';",
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit('control pin declaration not found exactly once')
+          path.write_text(updated, encoding='utf-8')
+          PY
+          git add src/control-http.js
+          if git diff --cached --quiet; then
+            echo 'Production credential pin is already synchronized.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Synchronize production control credential pin'
+          git push origin HEAD:main
