@@ -1,11 +1,16 @@
+'use strict';
+
 const {sign,PROVIDERS,RELEASE_IDENTITY}=require('../lib/numina');
+const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
+const {project}=require('../lib/numina-projection');
 const {observeProvider,SUPPORTED_READ_ONLY_PROVIDERS}=require('../lib/provider-observations');
 
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
 function catalog(){
-  return {
+  const payload={
     schema:'numina.execution-provider-catalog.v1',
     release:RELEASE_IDENTITY.production_version,
+    manifest:NUMINA_MANIFEST.schema,
     providers:Object.keys(PROVIDERS).sort().map(key=>({
       ...PROVIDERS[key],
       read_only_observation:SUPPORTED_READ_ONLY_PROVIDERS.includes(key)?{available:true,mode:'public-read-only-health',route:`/v1/execution/providers?mode=health&provider=${key}`,credentialed:false,external_execution_performed:false}:{available:false}
@@ -13,13 +18,15 @@ function catalog(){
     observation_set:{available:true,route:'/v1/execution/providers?mode=health-all',providers:SUPPORTED_READ_ONLY_PROVIDERS,credentialed:false,external_execution_performed:false},
     live_submission_route_exposed:false
   };
+  return project('providers',payload);
 }
 async function observationSet(){
   const observations=await Promise.all(SUPPORTED_READ_ONLY_PROVIDERS.map(provider=>observeProvider(provider)));
   const allHealthy=observations.every(item=>item.healthy===true);
-  return {
+  return project('provider-observations',{
     schema:'numina.provider-observation-set.v1',
     release:RELEASE_IDENTITY.production_version,
+    manifest:NUMINA_MANIFEST.schema,
     mode:'public-read-only-health',
     source_authority:'provider_public_endpoints',
     credentialed:false,
@@ -31,7 +38,7 @@ async function observationSet(){
     all_healthy:allHealthy,
     status:allHealthy?'HEALTHY':'DEGRADED',
     observations
-  };
+  });
 }
 
 module.exports=async function(req,res){
@@ -47,8 +54,9 @@ module.exports=async function(req,res){
     if(mode!=='health')return respond(res,400,{error:'UNKNOWN_PROVIDER_MODE'});
     const provider=String(url.searchParams.get('provider')||'').trim().toLowerCase();
     const observation=await observeProvider(provider);
-    const receipt=sign(observation,'NUMINA_PROVIDER_OBSERVATION');
-    return respond(res,observation.healthy?200:503,{observation,receipt});
+    const projection=project('provider-observation',{manifest:NUMINA_MANIFEST.schema,observation});
+    const receipt=sign(projection,'NUMINA_PROVIDER_OBSERVATION');
+    return respond(res,observation.healthy?200:503,{observation:projection,receipt});
   }catch(error){
     return respond(res,400,{error:String(error?.message||error)});
   }
