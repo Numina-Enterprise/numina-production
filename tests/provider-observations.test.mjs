@@ -4,6 +4,7 @@ import {createRequire} from 'node:module';
 
 const require=createRequire(import.meta.url);
 const {observeProvider,ARC_TESTNET_CHAIN_ID}=require('../runtime/vercel-production/lib/provider-observations.js');
+const {project}=require('../runtime/vercel-production/lib/numina-projection.js');
 const fixedNow=()=>new Date('2026-09-16T07:00:00.000Z');
 
 function response(status,value){return {status,text:async()=>JSON.stringify(value)};}
@@ -49,6 +50,26 @@ test('Arc observation fails closed on the wrong chain',async()=>{
   const observation=await observeProvider('arc',{fetchFn,now:fixedNow});
   assert.equal(observation.healthy,false);
   assert.equal(observation.observed.chain_id,1);
+});
+
+test('provider observation set schema remains inside the signed projection payload',()=>{
+  const inner={
+    schema:'numina.provider-observation-set.v1',
+    release:'1.9.0-rc26',
+    mode:'public-read-only-health',
+    providers:['arc','circle'],
+    credentialed:false,
+    partnership_status:'not_asserted',
+    external_execution_performed:false
+  };
+  const projection=project('provider-observations',inner);
+  assert.equal(projection.surface,'provider-observations');
+  assert.equal(projection.schema,undefined);
+  assert.equal(projection.payload.schema,'numina.provider-observation-set.v1');
+  assert.deepEqual(projection.payload.providers,['arc','circle']);
+  assert.equal(projection.payload.credentialed,false);
+  assert.equal(projection.payload.partnership_status,'not_asserted');
+  assert.equal(projection.payload.external_execution_performed,false);
 });
 
 test('unsupported providers cannot be treated as read-only health adapters',async()=>{
