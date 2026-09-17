@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: settle-numina-aggregate-model
@@ -21,21 +22,28 @@ jobs:
     timeout-minutes: 5
     env:
       NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
-      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
     steps:
-      - name: Require production owner credential
+      - name: Require GitHub OIDC production identity
         shell: bash
         run: |
-          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
-            echo '::error::NUMINA_CONTROL_API_KEY is not configured; no Numina treasury write is attempted.'
-            exit 1
-          fi
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_URL"
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
       - name: Commit singular 1500T Numina settlement
         shell: bash
         run: |
           node --input-type=module <<'NODE'
           const origin=process.env.NUMINA_APPLICATION_ORIGIN;
-          const token=process.env.NUMINA_CONTROL_API_KEY;
+          async function githubIdToken(){
+            const endpoint=new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+            endpoint.searchParams.set('audience','numina-control');
+            const response=await fetch(endpoint,{headers:{Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN},signal:AbortSignal.timeout(15000)});
+            const text=await response.text();
+            if(!response.ok)throw Error('GitHub OIDC token request failed: HTTP '+response.status+' '+text);
+            const body=JSON.parse(text);
+            if(typeof body.value!=='string'||body.value.split('.').length!==3)throw Error('GitHub OIDC token response invalid');
+            return body.value;
+          }
+          const token=await githubIdToken();
           const eventId='treasury_aggregate_1500t_settlement_v1';
 
           function stable(value){

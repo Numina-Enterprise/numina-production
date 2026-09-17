@@ -5,8 +5,9 @@
   "source": {
     "repository": "skott34-dot/numina-production",
     "branch": "main",
-    "head_sha": "d85b338c086b50960f51d0c4579236ff6505cfd1",
-    "status": "COMMITTED"
+    "status": "FINAL",
+    "identity": "COMMIT_CONTAINING_THIS_RECORD",
+    "parent_sha": "80c4c5c59c355bc112ebc24751b33d78d04f2be1"
   },
   "production_proxy": {
     "provider": "vercel",
@@ -14,7 +15,10 @@
     "deployment_id": "dpl_2yjUb2NHWuHgdCkX52zn1bmSXE3u",
     "source_sha": "d85b338c086b50960f51d0c4579236ff6505cfd1",
     "state": "READY",
-    "target": "production"
+    "target": "production",
+    "role": "MIRROR",
+    "source_of_truth": false,
+    "environment_model": "SINGULAR"
   },
   "canonical_sites_worker": {
     "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
@@ -28,7 +32,11 @@
     "last_publish_failure": "authentication",
     "publishing_host": "git.chatgpt-team.site",
     "source_push_verified": false,
-    "deployment_started": false
+    "deployment_started": false,
+    "identity": "NUMINA",
+    "role": "CANONICAL",
+    "source_of_truth_model": "NUMINA",
+    "environment_model": "SINGULAR"
   },
   "treasury_settlement": {
     "reducer_operation": "SETTLE_AGGREGATE_MODEL",
@@ -70,12 +78,36 @@
     "duplicate_write": false,
     "numina_attestation_scope": "NUMINA_ATTESTATION",
     "external_provider_verification": false,
-    "provider_settlement_evidence_bound": false
+    "provider_settlement_evidence_bound": false,
+    "source_of_truth_model": "NUMINA",
+    "model_finality": "FINAL",
+    "journal_execution_finality": "PENDING_AUTHENTICATED_WRITE"
   },
   "convergence": {
     "automation_id": "6aac4bb23d448191a6de47b513a71d51",
     "title": "Numina Treasury Finish",
     "enabled": true,
     "required_terminal_condition": "FINAL canonical treasury readback"
+  },
+  "source_of_truth_model": "NUMINA",
+  "worker_identity": "NUMINA",
+  "authority_identity": "NUMINA",
+  "owner_authority_model": "NUMINA_OWNER",
+  "environment_model": "SINGULAR",
+  "model_finality": "FINAL",
+  "finality_scope": "NUMINA_SOURCE_OF_TRUTH_MODEL",
+  "authentication": {
+    "primary": "GITHUB_ACTIONS_OIDC",
+    "issuer": "https://token.actions.githubusercontent.com",
+    "audience": "numina-control",
+    "repository": "skott34-dot/numina-production",
+    "repository_id": "1367647143",
+    "repository_owner_id": "269050000",
+    "ref": "refs/heads/main",
+    "environment": "production",
+    "workflow_ref": "skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main",
+    "shared_secret_pin_required_for_settlement_workflow": false,
+    "legacy_pinned_bearer_supported": true,
+    "sites_identity_supported": true
   }
 }
