@@ -7,16 +7,18 @@ const EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||'').trim();
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const MAX_JSON_BYTES=262144;
 const MAX_HTML_BYTES=1048576;
-function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value&&typeof value==='object'){const out={};for(const key of Object.keys(value).sort())out[key]=sorted(value[key]);return out;}return value;}
+
+function object(value){return value!==null&&typeof value==='object'&&!Array.isArray(value);}
+function sorted(value){if(Array.isArray(value))return value.map(sorted);if(object(value)){const out={};for(const key of Object.keys(value).sort())out[key]=sorted(value[key]);return out;}return value;}
 function canonical(value){return Buffer.from(JSON.stringify(sorted(value)),'utf8');}
 function digestText(value){return createHash('sha256').update(value,'utf8').digest('hex');}
 function assert(condition,message){if(!condition)throw new Error(message);}
-function releaseIdentity(value){if(!value||typeof value!=='object'||Array.isArray(value))return null;if(Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected))return value;if(value.release===EXPECTED_RELEASE.release&&(value.production_version===EXPECTED_RELEASE.production_version||value.version===EXPECTED_RELEASE.production_version))return value;if(value.payload&&typeof value.payload==='object')return releaseIdentity(value.payload);if(value.manifest&&typeof value.manifest==='object')return releaseIdentity(value.manifest.release||value.manifest);if(value.release&&typeof value.release==='object')return releaseIdentity(value.release);return null;}
-function exactRelease(value){return Boolean(releaseIdentity(value));}
 function sameJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
+function exactRelease(value){return Boolean(object(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected));}
 function authoredFrontier(html){const marker='</footer>';const index=html.indexOf(marker);assert(index>=0,'frontier footer boundary missing');return html.slice(0,index+marker.length);}
+function verifyProjection(value,surface){assert(object(value),`${surface} projection missing`);assert(value.source==='NUMINA'&&value.authority==='NUMINA'&&value.productionSource==='NUMINA',`${surface} authority drift`);assert(value.surface===surface,`${surface} projection surface drift`);return value;}
 function verifyEnvelope(envelope,expectedType){
-  assert(envelope&&typeof envelope==='object','signed envelope missing');
+  assert(object(envelope),'signed envelope missing');
   assert(envelope.artifact_type===expectedType,`unexpected artifact type: ${envelope.artifact_type}`);
   assert(envelope.algorithm==='Ed25519','unexpected signing algorithm');
   assert(envelope.key_id===PINNED_RUNTIME_KEY_ID,'runtime key id drift');
@@ -45,37 +47,65 @@ const [frontier,provenance,status,manifest,supply,attestation,control,applicatio
 ]);
 
 assert(frontier.headers.get('x-numina-runtime-release')===RUNTIME_VERSION,'frontier runtime header drift');
-assert(exactRelease(manifest.value),'runtime manifest identity drift');
-assert(exactRelease(status.value),'status release identity drift');
-assert(status.value.live_provider_submitter_exposed===false,'live provider submitter unexpectedly exposed');
-assert(status.value.external_execution_performed===false,'status reports external execution');
-assert(supply.value.valid===true,'supply-chain verifier not valid');
-assert(supply.value.release===EXPECTED_RELEASE.release,'supply-chain release drift');
-assert(supply.value.production_files_root===EXPECTED_RELEASE.production_files_root,'production files root drift');
-assert(supply.value.spdx_sbom_sha256===EXPECTED_RELEASE.spdx_sbom_sha256,'SBOM digest drift');
-assert(supply.value.slsa_provenance_sha256===EXPECTED_RELEASE.slsa_provenance_sha256,'SLSA provenance digest drift');
-const releasePayload=verifyEnvelope(attestation.value,RELEASE_ARTIFACT_TYPE);
-assert(exactRelease(releasePayload),'release attestation identity drift');
-assert(releasePayload.environment==='production'&&releasePayload.role==='public-verifier','release attestation scope drift');
-assert(releasePayload.financial_execution_performed===false,'release attestation reports financial execution');
-const controlPayload=verifyEnvelope(control.value.receipt,'NUMINA_CONTROL_STATE');
-assert(sameJson(controlPayload,control.value.state),'control state receipt mismatch');
-const controlState=controlPayload?.payload||controlPayload;
-assert(controlState.release===RUNTIME_VERSION,'control state release drift');
-assert(controlState.runtime_controls_configurable===true&&controlState.real_funds_enabled===false&&controlState.employer_ip_enabled===false&&controlState.public_execution_api_enabled===false&&controlState.public_execution_route_exposed===false,'execution boundary unexpectedly open');
+
+const runtimeManifest=manifest.value?.manifest;
+verifyProjection(runtimeManifest,'manifest');
+assert(runtimeManifest.schema==='numina.manifest.v1','runtime manifest schema drift');
+assert(exactRelease(runtimeManifest.release),'runtime manifest identity drift');
+const manifestPayload=verifyEnvelope(manifest.value?.receipt,'NUMINA_MANIFEST');
+assert(sameJson(manifestPayload,runtimeManifest),'runtime manifest receipt mismatch');
+
+const statusProjection=verifyProjection(status.value?.status,'status');
+const statusPayload=verifyEnvelope(status.value?.receipt,'NUMINA_PRODUCTION_STATUS');
+assert(sameJson(statusPayload,statusProjection),'status receipt mismatch');
+const statusBody=statusProjection.payload;
+assert(object(statusBody)&&exactRelease(statusBody.release),'status release identity drift');
+assert(statusBody.runtime==='NUMINA','status runtime identity drift');
+assert(statusBody.controls?.real_funds_enabled===false&&statusBody.controls?.employer_ip_enabled===false&&statusBody.controls?.public_execution_api_enabled===false,'status execution boundary unexpectedly open');
+
+const supplyProjection=verifyProjection(supply.value,'supply-chain');
+const supplyContainer=supplyProjection.payload;
+const supplyEvidence=supplyContainer?.evidence;
+assert(object(supplyEvidence)&&supplyEvidence.valid===true,'supply-chain verifier not valid');
+assert(supplyEvidence.release===EXPECTED_RELEASE.release,'supply-chain release drift');
+assert(supplyEvidence.production_files_root===EXPECTED_RELEASE.production_files_root,'production files root drift');
+assert(supplyEvidence.spdx_sbom_sha256===EXPECTED_RELEASE.spdx_sbom_sha256,'SBOM digest drift');
+assert(supplyEvidence.slsa_provenance_sha256===EXPECTED_RELEASE.slsa_provenance_sha256,'SLSA provenance digest drift');
+const supplySigned=verifyEnvelope(supplyContainer?.receipt,'NUMINA_SUPPLY_CHAIN_EVIDENCE');
+assert(sameJson(supplySigned,supplyEvidence),'supply-chain receipt mismatch');
+
+const releaseProjection=verifyEnvelope(attestation.value,RELEASE_ARTIFACT_TYPE);
+verifyProjection(releaseProjection,'release-attestation');
+const releaseBody=releaseProjection.payload;
+assert(releaseBody?.schema==='numina.release-attestation.v1','release attestation schema drift');
+assert(exactRelease(releaseBody.release),'release attestation identity drift');
+assert(releaseBody.runtime==='NUMINA','release attestation runtime drift');
+assert(releaseBody.manifest?.schema==='numina.manifest.v1'&&exactRelease(releaseBody.manifest?.release),'release attestation manifest drift');
+
+const controlProjection=verifyProjection(control.value?.state,'control-state');
+const controlSigned=verifyEnvelope(control.value?.receipt,'NUMINA_CONTROL_STATE');
+assert(sameJson(controlSigned,controlProjection),'control state receipt mismatch');
+const controlBody=controlProjection.payload;
+assert(controlBody?.schema==='numina.control-state.v1'&&controlBody.release===RUNTIME_VERSION,'control state release drift');
+const controls=controlBody.controls;
+assert(controls?.runtime_controls_configurable===true&&controls?.real_funds_enabled===false&&controls?.employer_ip_enabled===false&&controls?.public_execution_api_enabled===false&&controls?.public_execution_route_exposed===false,'execution boundary unexpectedly open');
+
 assert(application.value.version===APPLICATION_VERSION&&application.value.release===APPLICATION_RELEASE,'application release drift');
 assert(/^[0-9a-f]{64}$/i.test(String(application.value.build_id||'')),'canonical application build id invalid');
 assert(application.value.runtime_dependency?.version===RUNTIME_VERSION&&application.value.runtime_dependency?.release===EXPECTED_RELEASE.release,'application runtime binding drift');
+
 const deploymentPayload=verifyEnvelope(provenance.value.receipt,'NUMINA_DEPLOYMENT_PROVENANCE');
 assert(sameJson(deploymentPayload,provenance.value.provenance),'deployment provenance receipt mismatch');
 assert(deploymentPayload.environment==='production','deployment environment drift');
 assert(/^dpl_[A-Za-z0-9]+$/.test(deploymentPayload.deployment_id),'deployment id missing');
 assert(/^[0-9a-f]{40}$/i.test(deploymentPayload.git_commit_sha),'deployment git SHA missing');
 assert(deploymentPayload.git_commit_ref==='main','deployment branch drift');
+assert(deploymentPayload.runtime_release===RUNTIME_VERSION&&deploymentPayload.release===EXPECTED_RELEASE.release,'deployment release drift');
 if(EXPECTED_GIT_SHA){
   assert(/^[0-9a-f]{40}$/i.test(EXPECTED_GIT_SHA),'NUMINA_EXPECTED_GIT_SHA must be a full 40-character Git SHA');
   assert(deploymentPayload.git_commit_sha.toLowerCase()===EXPECTED_GIT_SHA.toLowerCase(),`production Git SHA ${deploymentPayload.git_commit_sha} does not match expected ${EXPECTED_GIT_SHA}`);
 }
+
 const readiness=frontier.value.readiness;
 assert(readiness?.ready===true,'frontier readiness is false');
 assert(readiness.mode==='public-verifier-no-financial-execution','frontier mode drift');
@@ -107,4 +137,4 @@ const stableAuthoredFrontier=authoredFrontier(stableFrontier.text),canonicalAuth
 const stableFrontierSha256=digestText(stableAuthoredFrontier),canonicalFrontierSha256=digestText(canonicalAuthoredFrontier);
 assert(stableFrontierSha256===canonicalFrontierSha256,'stable and canonical authored frontier HTML diverged');
 
-console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',application_build_identity:{canonical_manifest_build_id:application.value.build_id,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,relation:expectedRelation},public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
+console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',signed_runtime_surfaces:{manifest:true,status:true,supply_chain:true,release_attestation:true,control_state:true,frontier_readiness:true,deployment_provenance:true},application_build_identity:{canonical_manifest_build_id:application.value.build_id,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,relation:expectedRelation},public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
