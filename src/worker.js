@@ -16,7 +16,9 @@ const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
  async fetch(req,env){
-  env={...env,NUMINA_CONTROL_API_KEY_SHA256:CONTROL_API_KEY_SHA256_PIN};
+  const configuredControlPin=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';
+  const controlPin=configuredControlPin||CONTROL_API_KEY_SHA256_PIN;
+  env={...env,NUMINA_CONTROL_API_KEY_SHA256:controlPin};
   const url=new URL(req.url),path=url.pathname;
   const span=path==='/api/ops/v1/telemetry'?{requestId:crypto.randomUUID(),finish(){}}:numinaWebTelemetry.begin({path,method:req.method,log:env.NUMINA_TELEMETRY_LOGS!=='false'});
   const requestId=span.requestId;let status=200;
@@ -31,7 +33,7 @@ export default {
    if(path.startsWith('/api/')){
     const review=await reviewerContext(req,env);
     if(review?.error)return finish(review.error);
-    if(review){req=review.req;env={...review.env,NUMINA_CONTROL_API_KEY_SHA256:CONTROL_API_KEY_SHA256_PIN};}
+    if(review){req=review.req;env={...review.env,NUMINA_CONTROL_API_KEY_SHA256:controlPin};}
 
    }
    if(path.startsWith('/api/financial/v1/'))return finish(await financialEvidenceHttp(req,env));
