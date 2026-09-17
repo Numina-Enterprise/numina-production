@@ -68,8 +68,6 @@ jobs:
           done
       - name: Verify current live provider observations
         if: github.event_name != 'push'
-        env:
-          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
         run: node scripts/smoke-provider-observations.mjs
       - name: Archive signed provider evidence
         id: archive
@@ -98,7 +96,7 @@ jobs:
           retention-days: 90
           compression-level: 0
       - name: Persist and verify canonical provider evidence
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
@@ -108,12 +106,12 @@ jobs:
           const fs=require('fs'),expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));let observed;try{observed=JSON.parse(process.env.RESPONSE);}catch{process.exit(1);}function fail(m){console.error(m,observed);process.exit(1);}if(observed.code||observed.error)fail('provider evidence ingest rejected request');if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('durable provider evidence identity mismatch');if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha||observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('durable provider evidence provenance mismatch');if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('durable provider status mismatch');if(observed.archive_digest!==expected.artifact_json.archive.digest)fail('durable provider archive digest mismatch');if(observed.external_execution_performed!==false||observed.partnership_status!=='asserted'||observed.credentialed!==false)fail('durable provider boundary mismatch');console.log(JSON.stringify(observed,null,2));
           NODE
       - name: Build trusted production release gate
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
         run: node scripts/build-trusted-production-release.mjs
       - name: Archive trusted production release gate
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: numina-trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}
@@ -122,7 +120,7 @@ jobs:
           retention-days: 90
           compression-level: 0
       - name: Persist and verify trusted production release gate
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
@@ -132,7 +130,7 @@ jobs:
           const fs=require('fs'),expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));let observed;try{observed=JSON.parse(process.env.RESPONSE);}catch{process.exit(1);}function fail(m){console.error(m,observed);process.exit(1);}if(observed.code||observed.error)fail('trusted release ingest rejected request');if(observed.committed!==true||observed.read_back!==true)fail('trusted release commit/readback failed');if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('trusted release record mismatch');if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha||observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('trusted release provenance mismatch');if(observed.provider_evidence_record_id!==expected.artifact_json.provider_evidence.record_id||observed.provider_artifact_root!==expected.artifact_json.provider_evidence.artifact_root||observed.archive_digest!==expected.artifact_json.provider_evidence.archive_digest)fail('trusted release provider binding mismatch');if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('trusted release provider status mismatch');if(observed.external_execution_performed!==false||observed.partnership_status!=='asserted'||observed.credentialed!==false||observed.execution_authorization_bounded!==true||observed.live_submission_enabled!==true||observed.live_submission_provider!=='arc'||observed.owner_authorization_required!==true||observed.pre_signed_payload_required!==true)fail('trusted release bounded execution mismatch');console.log(JSON.stringify(observed,null,2));
           NODE
       - name: Gate trusted production release on full signed smoke verification
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
         run: npm run smoke:production
