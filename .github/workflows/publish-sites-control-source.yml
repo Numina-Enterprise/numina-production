@@ -1,4 +1,4 @@
-name: Publish control source to Sites
+name: Publish singular Numina Sites Worker
 
 on:
   workflow_dispatch:
@@ -6,14 +6,30 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/publish-sites-control-source.yml'
+      - '.openai/hosting.json'
+      - 'config/numina-production-bound-state.v1.json'
+      - 'src/**'
+      - 'public/**'
+      - 'drizzle/**'
+      - 'scripts/build.mjs'
+      - 'scripts/package.mjs'
+      - 'scripts/publish-with-telemetry.mjs'
+      - 'package.json'
+      - '.nvmrc'
 
 permissions:
   contents: read
 
+concurrency:
+  group: numina-singular-sites-worker
+  cancel-in-progress: false
+
 jobs:
   publish:
+    name: publish-singular-worker
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    environment: production
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -23,6 +39,10 @@ jobs:
         with:
           node-version-file: .nvmrc
           check-latest: false
-      - name: Publish pinned current source to configured Sites remote
+      - name: Build singular Numina Worker
+        run: npm run build
+      - name: Package exact Sites Worker artifact
+        run: node scripts/package.mjs "$RUNNER_TEMP/numina-sites-worker.tgz"
+      - name: Publish exact main commit to canonical Sites project
         shell: bash
         run: npm run publish:source -- sites
