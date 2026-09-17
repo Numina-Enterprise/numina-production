@@ -12,9 +12,9 @@ if(!['https://numinalabs.xyz','https://www.numinalabs.xyz'].includes(origin)||!t
   throw Error('Set the canonical application origin and owner API key');
 }
 
-// This operator intentionally targets 500T when invoked. The 500T amount is the
-// current modeled Numina-native projection, not an immutable treasury invariant;
-// the canonical ADJUST_PROJECTION path remains authorized to change it later.
+// This force operator intentionally targets the singular modeled 500T NUSD
+// Numina-native projection. ADJUST_PROJECTION is authorized. Accepted writes
+// append immutable canonical journal events; prior treasury events are never mutated.
 // Verify the current signed production contract before touching the canonical journal.
 // This gate intentionally checks runtime/canonical convergence rather than requiring
 // the Vercel deployment SHA to equal the workflow SHA; deployment freshness is enforced
@@ -59,7 +59,7 @@ if(current.status==='READY'){
     throw Error('Canonical treasury projection is invalid');
   }
   if(current.projection.balance===target){
-    console.log(JSON.stringify({status:'ALIGNED',balance:target,unit:'NUSD',revision:current.revision,head:current.head,writePerformed:false,modeledAmount:true,invariant:false},null,2));
+    console.log(JSON.stringify({status:'ALIGNED',balance:target,unit:'NUSD',revision:current.revision,head:current.head,writePerformed:false,modeledAmount:true,journalImmutable:true},null,2));
     process.exit(0);
   }
 }else if(current.status!=='NOT_INITIALIZED'){
@@ -70,12 +70,12 @@ const id=`treasury_align_500t_${current.revision}_${current.head.slice(0,16)}`;
 let Objective,Intent;
 if(current.status==='NOT_INITIALIZED'){
   Objective='treasury.initialize';
-  Intent={operation:'INITIALIZE',reason:'Initialize the canonical Numina-native treasury at the current modeled 500T NUSD amount; this is a mutable projection, not an invariant'};
+  Intent={operation:'INITIALIZE',reason:'Initialize the singular modeled Numina-native treasury at 500T NUSD as a new immutable canonical journal event'};
 }else{
   const delta=(BigInt(target)-BigInt(current.projection.balance)).toString();
   if(delta==='0')throw Error('Unexpected zero treasury delta');
   Objective='treasury.project';
-  Intent={operation:'ADJUST_PROJECTION',delta,reason:'Apply the approved force-to-500T operator to the current mutable Numina-native treasury projection'};
+  Intent={operation:'ADJUST_PROJECTION',delta,reason:'Authorized ADJUST_PROJECTION to the singular modeled 500T NUSD amount; append an immutable canonical journal event'};
 }
 
 const event={
@@ -116,5 +116,6 @@ console.log(JSON.stringify({
   writePerformed:true,
   replayed:written.replayed===true,
   modeledAmount:true,
-  invariant:false
+  journalImmutable:true,
+  operation:Intent.operation
 },null,2));
