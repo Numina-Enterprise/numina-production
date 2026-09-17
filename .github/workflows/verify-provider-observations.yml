@@ -28,6 +28,7 @@ jobs:
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_PROVIDER_RECORD_PATH: provider-evidence/neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
+      # Secretless ingress: Data API fallback role has EXECUTE only on the validating RPC and no evidence-table privileges.
       NUMINA_PROVIDER_INGEST_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_ingest_provider_evidence
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
