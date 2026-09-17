@@ -9,13 +9,8 @@ on:
       - '.github/workflows/verify-provider-observations.yml'
       - 'scripts/smoke-provider-observations.mjs'
       - 'scripts/build-provider-evidence-record.mjs'
-      - 'api/evidence-bind.js'
-      - 'vercel.json'
       - 'runtime/vercel-production/api/providers.js'
-      - 'runtime/vercel-production/api/provider-evidence-ingest.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
-      - 'runtime/vercel-production/lib/provider-evidence-ingest.js'
-      - 'runtime/vercel-production/vercel.json'
       - 'tests/provider-observations.test.mjs'
 
 permissions:
@@ -33,7 +28,7 @@ jobs:
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_PROVIDER_RECORD_PATH: provider-evidence/neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_PROVIDER_INGEST_URL: https://numina-production.vercel.app/v1/evidence/provider-observation
+      NUMINA_PROVIDER_INGEST_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_ingest_provider_evidence
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -98,11 +93,13 @@ jobs:
             -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
+          payload="$(RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node -e "const fs=require('fs');const manifest=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));process.stdout.write(JSON.stringify({manifest}))")"
           response="$(curl --silent --show-error \
             --request POST \
             --header "Authorization: Bearer ${oidc_token}" \
             --header 'Content-Type: application/json' \
-            --data-binary "@${NUMINA_PROVIDER_RECORD_PATH}" \
+            --header 'Accept: application/json' \
+            --data-binary "$payload" \
             "${NUMINA_PROVIDER_INGEST_URL}")"
           RESPONSE="$response" RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node <<'NODE'
           const fs=require('fs');
@@ -110,7 +107,7 @@ jobs:
           let observed;
           try{observed=JSON.parse(process.env.RESPONSE);}catch{console.error('provider evidence ingest returned non-JSON');process.exit(1);}
           function fail(message){console.error(message,observed);process.exit(1);}
-          if(observed.error)fail('provider evidence ingest rejected request');
+          if(observed.code||observed.error)fail('provider evidence ingest rejected request');
           if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');
           if(observed.record_id!==expected.record_id)fail('durable provider evidence record id mismatch');
           if(observed.artifact_root!==expected.artifact_root)fail('durable provider evidence root mismatch');
