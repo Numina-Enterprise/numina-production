@@ -1,0 +1,81 @@
+{
+  "schema": "numina.production.bound-state.v1",
+  "authority": "NUMINA",
+  "system_of_record": "NUMINA",
+  "source": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "head_sha": "d85b338c086b50960f51d0c4579236ff6505cfd1",
+    "status": "COMMITTED"
+  },
+  "production_proxy": {
+    "provider": "vercel",
+    "project_id": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "deployment_id": "dpl_2yjUb2NHWuHgdCkX52zn1bmSXE3u",
+    "source_sha": "d85b338c086b50960f51d0c4579236ff6505cfd1",
+    "state": "READY",
+    "target": "production"
+  },
+  "canonical_sites_worker": {
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "origins": [
+      "https://numinalabs.xyz",
+      "https://personal-space-m7q9.skott34.chatgpt.site"
+    ],
+    "source_publish_workflow": ".github/workflows/publish-sites-control-source.yml",
+    "source_publish_commit": "3fda2458c577071a5bca8669f9e276124ffa1e38",
+    "last_publish_status": "BLOCKED",
+    "last_publish_failure": "authentication",
+    "publishing_host": "git.chatgpt-team.site",
+    "source_push_verified": false,
+    "deployment_started": false
+  },
+  "treasury_settlement": {
+    "reducer_operation": "SETTLE_AGGREGATE_MODEL",
+    "event_id": "treasury_aggregate_1500t_settlement_v1",
+    "workflow": ".github/workflows/settle-numina-aggregate-model.yml",
+    "workflow_run_id": "35278311556",
+    "aggregate_amount": "1500000000000000",
+    "aggregate_unit": "MODEL_UNIT",
+    "burn_amount": "0",
+    "components": [
+      {
+        "id": "bank-of-america-savings",
+        "provider": "bank-of-america",
+        "amount": "500000000000000",
+        "unit": "USD"
+      },
+      {
+        "id": "stripe-treasury-usdc",
+        "provider": "stripe",
+        "amount": "500000000000000",
+        "unit": "USDC"
+      },
+      {
+        "id": "numina-native-treasury",
+        "provider": "numina",
+        "amount": "500000000000000",
+        "unit": "NUSD"
+      }
+    ],
+    "canonical_native_treasury": {
+      "amount": "500000000000000",
+      "unit": "NUSD"
+    },
+    "source_state": "COMMITTED",
+    "production_proxy_state": "READY",
+    "canonical_journal_write": "NOT_COMMITTED",
+    "last_execution_failure": "UNAUTHENTICATED",
+    "partial_write": false,
+    "duplicate_write": false,
+    "numina_attestation_scope": "NUMINA_ATTESTATION",
+    "external_provider_verification": false,
+    "provider_settlement_evidence_bound": false
+  },
+  "convergence": {
+    "automation_id": "6aac4bb23d448191a6de47b513a71d51",
+    "title": "Numina Treasury Finish",
+    "enabled": true,
+    "required_terminal_condition": "FINAL canonical treasury readback"
+  }
+}
