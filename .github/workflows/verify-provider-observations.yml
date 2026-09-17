@@ -7,15 +7,21 @@ on:
   push:
     paths:
       - '.github/workflows/verify-provider-observations.yml'
+      - 'vercel.json'
       - 'scripts/smoke-provider-observations.mjs'
       - 'scripts/build-provider-evidence-record.mjs'
       - 'scripts/build-trusted-production-release.mjs'
       - 'scripts/smoke-production.mjs'
       - 'api/application-release.mjs'
       - 'runtime/vercel-production/api/control-state.js'
+      - 'runtime/vercel-production/api/status.js'
       - 'runtime/vercel-production/api/providers.js'
+      - 'runtime/vercel-production/api/execution-prepare.js'
+      - 'runtime/vercel-production/lib/execution-controls.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
+      - 'runtime/vercel-production/lib/provider-submitter.js'
       - 'tests/provider-observations.test.mjs'
+      - 'tests/provider-submitter.test.mjs'
 
 permissions:
   contents: read
@@ -45,6 +51,8 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Verify Circle and Arc read-only observation contracts
         run: node --test tests/provider-observations.test.mjs
+      - name: Verify governed Arc provider submitter contract
+        run: node --test tests/provider-submitter.test.mjs
       - name: Verify durable evidence ingress rejects bypasses
         run: |
           set -euo pipefail
@@ -213,8 +221,8 @@ jobs:
           if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha||observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('trusted release provenance mismatch');
           if(observed.provider_evidence_record_id!==expected.artifact_json.provider_evidence.record_id||observed.provider_artifact_root!==expected.artifact_json.provider_evidence.artifact_root||observed.archive_digest!==expected.artifact_json.provider_evidence.archive_digest)fail('trusted release provider binding mismatch');
           if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('trusted release provider status mismatch');
-          if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false||observed.execution_boundary_closed!==true)fail('trusted release boundary mismatch');
-          console.log(JSON.stringify({ok:true,record_id:observed.record_id,artifact_root:observed.artifact_root,git_commit_sha:observed.git_commit_sha,deployment_id:observed.deployment_id,provider_evidence_record_id:observed.provider_evidence_record_id,provider_artifact_root:observed.provider_artifact_root,archive_digest:observed.archive_digest,readiness_observed_at:observed.readiness_observed_at,provider_status:'HEALTHY',circle_message:'pong',arc_chain_id:5042002,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,execution_boundary_closed:true},null,2));
+          if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false||observed.execution_boundary_governed!==true||observed.live_submission_enabled!==true||observed.live_submission_provider!=='arc'||observed.owner_authorization_required!==true||observed.pre_signed_payload_required!==true)fail('trusted release governed execution boundary mismatch');
+          console.log(JSON.stringify({ok:true,record_id:observed.record_id,artifact_root:observed.artifact_root,git_commit_sha:observed.git_commit_sha,deployment_id:observed.deployment_id,provider_evidence_record_id:observed.provider_evidence_record_id,provider_artifact_root:observed.provider_artifact_root,archive_digest:observed.archive_digest,readiness_observed_at:observed.readiness_observed_at,provider_status:'HEALTHY',circle_message:'pong',arc_chain_id:5042002,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,execution_boundary_governed:true,live_submission_enabled:true,live_submission_provider:'arc',owner_authorization_required:true,pre_signed_payload_required:true},null,2));
           NODE
       - name: Gate trusted production release on full signed smoke verification
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
