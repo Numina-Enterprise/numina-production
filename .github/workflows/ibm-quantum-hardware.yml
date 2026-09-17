@@ -13,6 +13,8 @@ on:
 
 env:
   PYTHONUNBUFFERED: "1"
+  IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY || secrets.IBM_QUANTUM_TOKEN || secrets.QISKIT_IBM_TOKEN || secrets.QISKIT_IBM_API_TOKEN || secrets.IBM_CLOUD_API_KEY || secrets.IBM_API_KEY || secrets.QISKIT_TOKEN || secrets.IBM_QUANTUM_KEY }}
+  IBM_QUANTUM_INSTANCE: ${{ secrets.IBM_QUANTUM_INSTANCE || secrets.QISKIT_IBM_INSTANCE }}
 
 jobs:
   hardware-validation:
@@ -22,10 +24,8 @@ jobs:
     steps:
       - name: Require IBM Quantum API key
         shell: bash
-        env:
-          IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY }}
         run: |
-          test -n "$IBM_QUANTUM_API_KEY" || { echo "IBM_QUANTUM_API_KEY secret is not configured"; exit 2; }
+          test -n "$IBM_QUANTUM_API_KEY" || { echo "No recognized IBM Quantum API-key repository secret is configured"; exit 2; }
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
@@ -37,9 +37,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install "qiskit~=2.5.2" "qiskit-ibm-runtime~=0.47.0"
       - name: Configure ephemeral IBM account
-        env:
-          IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY }}
-          IBM_QUANTUM_INSTANCE: ${{ secrets.IBM_QUANTUM_INSTANCE }}
         run: |
           python - <<'PY'
           import os
