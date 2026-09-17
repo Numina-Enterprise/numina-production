@@ -55,6 +55,10 @@
       "destination": "/api/evidence-bind"
     },
     {
+      "source": "/v1/evidence/provider-observation",
+      "destination": "/api/provider-evidence-ingest"
+    },
+    {
       "source": "/v1/release/manifest",
       "destination": "/api/manifest"
     },
