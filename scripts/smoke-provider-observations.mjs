@@ -52,10 +52,18 @@ if(EXPECTED_GIT_SHA){
 }
 
 const response=await get('/v1/execution/providers?mode=health-all');
-const setPayload=verifyEnvelope(response.receipt,'NUMINA_PROVIDER_OBSERVATION_SET');
-assert(sameJson(setPayload,response.observation_set),'provider observation set receipt mismatch');
-assert(setPayload.schema==='numina.provider-observation-set.v1','provider observation set schema drift');
-assert(setPayload.release===RUNTIME_VERSION,'provider observation release drift');
+const signedSetPayload=verifyEnvelope(response.receipt,'NUMINA_PROVIDER_OBSERVATION_SET');
+assert(sameJson(signedSetPayload,response.observation_set),'provider observation set receipt mismatch');
+const projected=Boolean(signedSetPayload&&typeof signedSetPayload==='object'&&signedSetPayload.payload&&typeof signedSetPayload.payload==='object');
+if(projected){
+  assert(signedSetPayload.source==='NUMINA','provider observation projection source drift');
+  assert(signedSetPayload.authority==='NUMINA','provider observation projection authority drift');
+  assert(signedSetPayload.productionSource==='NUMINA','provider observation projection production source drift');
+  assert(signedSetPayload.surface==='provider-observations','provider observation projection surface drift');
+}
+const setPayload=projected?signedSetPayload.payload:signedSetPayload;
+assert(setPayload.schema==='numina.provider-observation-set.v1',`provider observation set schema drift: ${String(setPayload?.schema??'missing')}`);
+assert(setPayload.release===RUNTIME_VERSION,`provider observation release drift: ${String(setPayload?.release??'missing')}`);
 assert(setPayload.mode==='public-read-only-health','provider observation mode drift');
 assert(setPayload.source_authority==='provider_public_endpoints','provider source authority drift');
 assert(setPayload.credentialed===false,'provider observation unexpectedly credentialed');
