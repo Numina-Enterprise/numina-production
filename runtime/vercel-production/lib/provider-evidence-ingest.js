@@ -39,7 +39,6 @@ async function verifyGithubOidc(token){
   if(payload.nbf!==undefined)assert(Number(payload.nbf)<=now+60,'GITHUB_OIDC_NOT_YET_VALID');
   assert(payload.repository===EXPECTED_REPOSITORY,'GITHUB_OIDC_REPOSITORY_INVALID');
   assert(payload.ref===EXPECTED_REF,'GITHUB_OIDC_REF_INVALID');
-  assert(String(payload.sub||'').startsWith(`repo:${EXPECTED_REPOSITORY}:`),'GITHUB_OIDC_SUBJECT_INVALID');
   assert(String(payload.workflow_ref||'').startsWith(`${EXPECTED_REPOSITORY}/${WORKFLOW_PATH}@${EXPECTED_REF}`),'GITHUB_OIDC_WORKFLOW_INVALID');
   assert(/^[0-9a-f]{40}$/i.test(String(payload.sha||'')),'GITHUB_OIDC_SHA_INVALID');
   assert(/^\d+$/.test(String(payload.run_id||'')),'GITHUB_OIDC_RUN_ID_INVALID');
