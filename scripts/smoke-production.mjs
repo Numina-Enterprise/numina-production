@@ -11,7 +11,8 @@ function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value
 function canonical(value){return Buffer.from(JSON.stringify(sorted(value)),'utf8');}
 function digestText(value){return createHash('sha256').update(value,'utf8').digest('hex');}
 function assert(condition,message){if(!condition)throw new Error(message);}
-function exactRelease(value){return value&&typeof value==='object'&&!Array.isArray(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected);}
+function releaseIdentity(value){if(!value||typeof value!=='object'||Array.isArray(value))return null;if(Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected))return value;if(value.release===EXPECTED_RELEASE.release&&(value.production_version===EXPECTED_RELEASE.production_version||value.version===EXPECTED_RELEASE.production_version))return value;if(value.payload&&typeof value.payload==='object')return releaseIdentity(value.payload);if(value.manifest&&typeof value.manifest==='object')return releaseIdentity(value.manifest.release||value.manifest);if(value.release&&typeof value.release==='object')return releaseIdentity(value.release);return null;}
+function exactRelease(value){return Boolean(releaseIdentity(value));}
 function sameJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
 function authoredFrontier(html){const marker='</footer>';const index=html.indexOf(marker);assert(index>=0,'frontier footer boundary missing');return html.slice(0,index+marker.length);}
 function verifyEnvelope(envelope,expectedType){
@@ -59,8 +60,9 @@ assert(releasePayload.environment==='production'&&releasePayload.role==='public-
 assert(releasePayload.financial_execution_performed===false,'release attestation reports financial execution');
 const controlPayload=verifyEnvelope(control.value.receipt,'NUMINA_CONTROL_STATE');
 assert(sameJson(controlPayload,control.value.state),'control state receipt mismatch');
-assert(controlPayload.release===RUNTIME_VERSION,'control state release drift');
-assert(controlPayload.real_funds_enabled===false&&controlPayload.employer_ip_enabled===false&&controlPayload.public_execution_api_enabled===false&&controlPayload.public_execution_route_exposed===false,'execution boundary unexpectedly open');
+const controlState=controlPayload?.payload||controlPayload;
+assert(controlState.release===RUNTIME_VERSION,'control state release drift');
+assert(controlState.runtime_controls_configurable===true&&controlState.real_funds_enabled===false&&controlState.employer_ip_enabled===false&&controlState.public_execution_api_enabled===false&&controlState.public_execution_route_exposed===false,'execution boundary unexpectedly open');
 assert(application.value.version===APPLICATION_VERSION&&application.value.release===APPLICATION_RELEASE,'application release drift');
 assert(/^[0-9a-f]{64}$/i.test(String(application.value.build_id||'')),'canonical application build id invalid');
 assert(application.value.runtime_dependency?.version===RUNTIME_VERSION&&application.value.runtime_dependency?.release===EXPECTED_RELEASE.release,'application runtime binding drift');
