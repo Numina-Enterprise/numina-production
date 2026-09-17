@@ -10,11 +10,15 @@ on:
       - 'scripts/smoke-provider-observations.mjs'
       - 'scripts/build-provider-evidence-record.mjs'
       - 'runtime/vercel-production/api/providers.js'
+      - 'runtime/vercel-production/api/provider-evidence-ingest.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
+      - 'runtime/vercel-production/lib/provider-evidence-ingest.js'
+      - 'runtime/vercel-production/vercel.json'
       - 'tests/provider-observations.test.mjs'
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: verify-provider-observations
@@ -27,6 +31,7 @@ jobs:
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_PROVIDER_RECORD_PATH: provider-evidence/neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_PROVIDER_INGEST_URL: https://numina-production.vercel.app/v1/evidence/provider-observation
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -55,6 +60,8 @@ jobs:
           done
       - name: Verify current live provider observations
         if: github.event_name != 'push'
+        env:
+          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
         run: node scripts/smoke-provider-observations.mjs
       - name: Archive signed provider evidence
         id: archive
@@ -82,3 +89,31 @@ jobs:
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
+      - name: Persist and verify canonical provider evidence
+        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        run: |
+          oidc_json="$(curl --fail --silent --show-error \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
+          oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
+          response="$(curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${oidc_token}" \
+            --header 'Content-Type: application/json' \
+            --data-binary "@${NUMINA_PROVIDER_RECORD_PATH}" \
+            "${NUMINA_PROVIDER_INGEST_URL}")"
+          RESPONSE="$response" RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node <<'NODE'
+          const fs=require('fs');
+          const expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));
+          const observed=JSON.parse(process.env.RESPONSE);
+          function fail(message){console.error(message,observed);process.exit(1);}
+          if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');
+          if(observed.record_id!==expected.record_id)fail('durable provider evidence record id mismatch');
+          if(observed.artifact_root!==expected.artifact_root)fail('durable provider evidence root mismatch');
+          if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha)fail('durable provider evidence git sha mismatch');
+          if(observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('durable provider evidence deployment id mismatch');
+          if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('durable provider status mismatch');
+          if(observed.archive_digest!==expected.artifact_json.archive.digest)fail('durable provider archive digest mismatch');
+          if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false)fail('durable provider boundary mismatch');
+          console.log(JSON.stringify({ok:true,record_id:observed.record_id,artifact_root:observed.artifact_root,git_commit_sha:observed.git_commit_sha,deployment_id:observed.deployment_id,provider_status:observed.provider_status,circle_message:observed.circle_message,arc_chain_id:observed.arc_chain_id,arc_latest_block:observed.arc_latest_block,archive_digest:observed.archive_digest,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false},null,2));
+          NODE
