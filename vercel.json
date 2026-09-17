@@ -58,6 +58,10 @@
       "destination": "/api/execution-prepare"
     },
     {
+      "source": "/v1/execution/submit",
+      "destination": "/api/execution-prepare?mode=submit"
+    },
+    {
       "source": "/v1/execution/evidence/bind",
       "destination": "/api/evidence-bind"
     },
@@ -133,6 +137,15 @@
     },
     {
       "source": "/v1/evidence/provider-observation",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/v1/execution/submit",
       "headers": [
         {
           "key": "Cache-Control",
