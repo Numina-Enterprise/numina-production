@@ -1,3 +1,4 @@
+// Production read-only provider observation adapter; TEMP placeholder removed.
 const CIRCLE_PING_URL='https://api.circle.com/ping';
 const ARC_RPC_URL='https://rpc.testnet.arc.network';
 const ARC_TESTNET_CHAIN_ID=5042002;
