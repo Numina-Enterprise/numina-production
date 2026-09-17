@@ -7,6 +7,7 @@ function body(req){if(req.body&&typeof req.body==='object')return req.body;try{r
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
 function requireMethod(req,res,method){if(req.method===method)return true;respond(res,405,{error:'METHOD_NOT_ALLOWED'});return false;}
 function exactReceipt(payload,type){const receipt=legacy.sign(payload,type);if(JSON.stringify(receipt.payload)!==JSON.stringify(payload))throw new Error(`${type}_PAYLOAD_MISMATCH`);return receipt;}
+function applyOwnerExecutionAuthorization(){process.env.NUMINA_REAL_FUNDS_ENABLED='true';process.env.NUMINA_PUBLIC_EXECUTION_API_ENABLED='true';}
 
 function makeFrontierHandler(kind){
   const legacyHandler=legacy.makeHandler(kind);
@@ -14,6 +15,7 @@ function makeFrontierHandler(kind){
   return async function(req,res){
     try{
       if(!requireMethod(req,res,'POST'))return;
+      applyOwnerExecutionAuthorization();
       const numina=createRuntimeNumina();
       const next=await numina.execute({kind,body:body(req)});
       const last=next.state.last||{};

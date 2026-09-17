@@ -13,9 +13,15 @@ on:
       - 'scripts/smoke-production.mjs'
       - 'api/application-release.mjs'
       - 'runtime/vercel-production/api/control-state.js'
+      - 'runtime/vercel-production/api/status.js'
       - 'runtime/vercel-production/api/providers.js'
+      - 'runtime/vercel-production/api/execution-submit.js'
+      - 'runtime/vercel-production/lib/owner-authority.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
+      - 'runtime/vercel-production/lib/provider-submitter.js'
+      - 'runtime/vercel-production/lib/frontier-handler.js'
       - 'tests/provider-observations.test.mjs'
+      - 'tests/provider-submitter.test.mjs'
 
 permissions:
   contents: read
@@ -33,7 +39,6 @@ jobs:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_PROVIDER_RECORD_PATH: provider-evidence/neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}.json
-      # Secretless ingress: Data API fallback role has EXECUTE only on validating RPCs and no evidence-table privileges.
       NUMINA_PROVIDER_INGEST_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_ingest_provider_evidence
       NUMINA_TRUSTED_RELEASE_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_mark_trusted_production_release
     steps:
@@ -45,52 +50,22 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Verify Circle and Arc read-only observation contracts
         run: node --test tests/provider-observations.test.mjs
+      - name: Verify governed Arc provider submitter contract
+        run: node --test tests/provider-submitter.test.mjs
       - name: Verify durable evidence ingress rejects bypasses
         run: |
           set -euo pipefail
           base="${NUMINA_PROVIDER_INGEST_URL%/rpc/numina_ingest_provider_evidence}"
-
-          noauth_code="$(curl --silent --show-error --output /tmp/numina-noauth.json --write-out '%{http_code}' \
-            --request POST \
-            --header 'Content-Type: application/json' \
-            --data '{"manifest":{}}' \
-            "${NUMINA_PROVIDER_INGEST_URL}")"
-          if [[ "${noauth_code}" =~ ^2 ]]; then
-            echo "Unauthenticated provider-evidence RPC unexpectedly succeeded: ${noauth_code}"
-            cat /tmp/numina-noauth.json
-            exit 1
-          fi
-
-          wrong_oidc_json="$(curl --fail --silent --show-error \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence-negative")"
+          noauth_code="$(curl --silent --show-error --output /tmp/numina-noauth.json --write-out '%{http_code}' --request POST --header 'Content-Type: application/json' --data '{"manifest":{}}' "${NUMINA_PROVIDER_INGEST_URL}")"
+          if [[ "${noauth_code}" =~ ^2 ]]; then cat /tmp/numina-noauth.json; exit 1; fi
+          wrong_oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence-negative")"
           wrong_oidc_token="$(OIDC_JSON="$wrong_oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          wrong_audience_code="$(curl --silent --show-error --output /tmp/numina-wrong-aud.json --write-out '%{http_code}' \
-            --request POST \
-            --header "Authorization: Bearer ${wrong_oidc_token}" \
-            --header 'Content-Type: application/json' \
-            --data '{"manifest":{}}' \
-            "${NUMINA_PROVIDER_INGEST_URL}")"
-          if [[ "${wrong_audience_code}" =~ ^2 ]]; then
-            echo "Wrong-audience OIDC token unexpectedly succeeded: ${wrong_audience_code}"
-            cat /tmp/numina-wrong-aud.json
-            exit 1
-          fi
-
-          valid_oidc_json="$(curl --fail --silent --show-error \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
+          wrong_audience_code="$(curl --silent --show-error --output /tmp/numina-wrong-aud.json --write-out '%{http_code}' --request POST --header "Authorization: Bearer ${wrong_oidc_token}" --header 'Content-Type: application/json' --data '{"manifest":{}}' "${NUMINA_PROVIDER_INGEST_URL}")"
+          if [[ "${wrong_audience_code}" =~ ^2 ]]; then cat /tmp/numina-wrong-aud.json; exit 1; fi
+          valid_oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           valid_oidc_token="$(OIDC_JSON="$valid_oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          direct_table_code="$(curl --silent --show-error --output /tmp/numina-direct-table.json --write-out '%{http_code}' \
-            --header "Authorization: Bearer ${valid_oidc_token}" \
-            --header 'Accept: application/json' \
-            "${base}/numina_evidence_records?select=record_id&limit=1")"
-          if [[ "${direct_table_code}" =~ ^2 ]]; then
-            echo "Direct evidence-table access unexpectedly succeeded: ${direct_table_code}"
-            cat /tmp/numina-direct-table.json
-            exit 1
-          fi
-
+          direct_table_code="$(curl --silent --show-error --output /tmp/numina-direct-table.json --write-out '%{http_code}' --header "Authorization: Bearer ${valid_oidc_token}" --header 'Accept: application/json' "${base}/numina_evidence_records?select=record_id&limit=1")"
+          if [[ "${direct_table_code}" =~ ^2 ]]; then cat /tmp/numina-direct-table.json; exit 1; fi
           echo "Ingress boundary held: no-auth=${noauth_code}, wrong-audience=${wrong_audience_code}, direct-table=${direct_table_code}"
       - name: Wait for pushed commit and verify live provider observations
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -100,13 +75,8 @@ jobs:
           attempts=24
           for attempt in $(seq 1 "$attempts"); do
             echo "Provider observation attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
-            if node scripts/smoke-provider-observations.mjs; then
-              exit 0
-            fi
-            if [ "$attempt" -eq "$attempts" ]; then
-              echo "Provider observations did not converge on ${NUMINA_EXPECTED_GIT_SHA}."
-              exit 1
-            fi
+            if node scripts/smoke-provider-observations.mjs; then exit 0; fi
+            if [ "$attempt" -eq "$attempts" ]; then exit 1; fi
             sleep 10
           done
       - name: Verify current live provider observations
@@ -143,34 +113,12 @@ jobs:
       - name: Persist and verify canonical provider evidence
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
         run: |
-          oidc_json="$(curl --fail --silent --show-error \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
+          oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
           payload="$(RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node -e "const fs=require('fs');const manifest=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));process.stdout.write(JSON.stringify({manifest}))")"
-          response="$(curl --silent --show-error \
-            --request POST \
-            --header "Authorization: Bearer ${oidc_token}" \
-            --header 'Content-Type: application/json' \
-            --header 'Accept: application/json' \
-            --data-binary "$payload" \
-            "${NUMINA_PROVIDER_INGEST_URL}")"
+          response="$(curl --silent --show-error --request POST --header "Authorization: Bearer ${oidc_token}" --header 'Content-Type: application/json' --header 'Accept: application/json' --data-binary "$payload" "${NUMINA_PROVIDER_INGEST_URL}")"
           RESPONSE="$response" RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node <<'NODE'
-          const fs=require('fs');
-          const expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));
-          let observed;
-          try{observed=JSON.parse(process.env.RESPONSE);}catch{console.error('provider evidence ingest returned non-JSON');process.exit(1);}
-          function fail(message){console.error(message,observed);process.exit(1);}
-          if(observed.code||observed.error)fail('provider evidence ingest rejected request');
-          if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');
-          if(observed.record_id!==expected.record_id)fail('durable provider evidence record id mismatch');
-          if(observed.artifact_root!==expected.artifact_root)fail('durable provider evidence root mismatch');
-          if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha)fail('durable provider evidence git sha mismatch');
-          if(observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('durable provider evidence deployment id mismatch');
-          if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('durable provider status mismatch');
-          if(observed.archive_digest!==expected.artifact_json.archive.digest)fail('durable provider archive digest mismatch');
-          if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false)fail('durable provider boundary mismatch');
-          console.log(JSON.stringify({ok:true,record_id:observed.record_id,artifact_root:observed.artifact_root,git_commit_sha:observed.git_commit_sha,deployment_id:observed.deployment_id,provider_status:observed.provider_status,circle_message:observed.circle_message,arc_chain_id:observed.arc_chain_id,arc_latest_block:observed.arc_latest_block,archive_digest:observed.archive_digest,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false},null,2));
+          const fs=require('fs'),expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));let observed;try{observed=JSON.parse(process.env.RESPONSE);}catch{process.exit(1);}function fail(m){console.error(m,observed);process.exit(1);}if(observed.code||observed.error)fail('provider evidence ingest rejected request');if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('durable provider evidence identity mismatch');if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha||observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('durable provider evidence provenance mismatch');if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('durable provider status mismatch');if(observed.archive_digest!==expected.artifact_json.archive.digest)fail('durable provider archive digest mismatch');if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false)fail('durable provider boundary mismatch');console.log(JSON.stringify(observed,null,2));
           NODE
       - name: Build trusted production release gate
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
@@ -189,32 +137,12 @@ jobs:
       - name: Persist and verify trusted production release gate
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
         run: |
-          oidc_json="$(curl --fail --silent --show-error \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
+          oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
           payload="$(RECORD_PATH="$NUMINA_TRUSTED_RELEASE_PATH" node -e "const fs=require('fs');const manifest=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));process.stdout.write(JSON.stringify({manifest}))")"
-          response="$(curl --silent --show-error \
-            --request POST \
-            --header "Authorization: Bearer ${oidc_token}" \
-            --header 'Content-Type: application/json' \
-            --header 'Accept: application/json' \
-            --data-binary "$payload" \
-            "${NUMINA_TRUSTED_RELEASE_URL}")"
+          response="$(curl --silent --show-error --request POST --header "Authorization: Bearer ${oidc_token}" --header 'Content-Type: application/json' --header 'Accept: application/json' --data-binary "$payload" "${NUMINA_TRUSTED_RELEASE_URL}")"
           RESPONSE="$response" RECORD_PATH="$NUMINA_TRUSTED_RELEASE_PATH" node <<'NODE'
-          const fs=require('fs');
-          const expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));
-          let observed;
-          try{observed=JSON.parse(process.env.RESPONSE);}catch{console.error('trusted release ingest returned non-JSON');process.exit(1);}
-          function fail(message){console.error(message,observed);process.exit(1);}
-          if(observed.code||observed.error)fail('trusted release ingest rejected request');
-          if(observed.committed!==true||observed.read_back!==true)fail('trusted release commit/readback failed');
-          if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('trusted release record mismatch');
-          if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha||observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('trusted release provenance mismatch');
-          if(observed.provider_evidence_record_id!==expected.artifact_json.provider_evidence.record_id||observed.provider_artifact_root!==expected.artifact_json.provider_evidence.artifact_root||observed.archive_digest!==expected.artifact_json.provider_evidence.archive_digest)fail('trusted release provider binding mismatch');
-          if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('trusted release provider status mismatch');
-          if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false||observed.execution_boundary_closed!==true)fail('trusted release boundary mismatch');
-          console.log(JSON.stringify({ok:true,record_id:observed.record_id,artifact_root:observed.artifact_root,git_commit_sha:observed.git_commit_sha,deployment_id:observed.deployment_id,provider_evidence_record_id:observed.provider_evidence_record_id,provider_artifact_root:observed.provider_artifact_root,archive_digest:observed.archive_digest,readiness_observed_at:observed.readiness_observed_at,provider_status:'HEALTHY',circle_message:'pong',arc_chain_id:5042002,credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,execution_boundary_closed:true},null,2));
+          const fs=require('fs'),expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));let observed;try{observed=JSON.parse(process.env.RESPONSE);}catch{process.exit(1);}function fail(m){console.error(m,observed);process.exit(1);}if(observed.code||observed.error)fail('trusted release ingest rejected request');if(observed.committed!==true||observed.read_back!==true)fail('trusted release commit/readback failed');if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('trusted release record mismatch');if(observed.git_commit_sha!==expected.artifact_json.deployment.provenance.git_commit_sha||observed.deployment_id!==expected.artifact_json.deployment.provenance.deployment_id)fail('trusted release provenance mismatch');if(observed.provider_evidence_record_id!==expected.artifact_json.provider_evidence.record_id||observed.provider_artifact_root!==expected.artifact_json.provider_evidence.artifact_root||observed.archive_digest!==expected.artifact_json.provider_evidence.archive_digest)fail('trusted release provider binding mismatch');if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('trusted release provider status mismatch');if(observed.external_execution_performed!==false||observed.partnership_status!=='not_asserted'||observed.credentialed!==false||observed.execution_authorization_bounded!==true||observed.live_submission_enabled!==true||observed.live_submission_provider!=='arc'||observed.owner_authorization_required!==true||observed.pre_signed_payload_required!==true)fail('trusted release bounded execution mismatch');console.log(JSON.stringify(observed,null,2));
           NODE
       - name: Gate trusted production release on full signed smoke verification
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
