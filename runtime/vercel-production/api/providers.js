@@ -4,21 +4,39 @@ const {sign,PROVIDERS,RELEASE_IDENTITY}=require('../lib/numina');
 const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
 const {project}=require('../lib/numina-projection');
 const {observeProvider,SUPPORTED_READ_ONLY_PROVIDERS}=require('../lib/provider-observations');
+const {authorizedControls}=require('../lib/execution-controls');
 
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
 function partnershipState(){return {schema:'numina.partnership-state.v1',status:'NOT_ASSERTED',external_evidence_bound:false,evidence_basis:'public_read_only_health_observation_only'};}
 function catalog(){
+  const controls=authorizedControls();
   const payload={
     schema:'numina.execution-provider-catalog.v1',
     release:RELEASE_IDENTITY.production_version,
     manifest:NUMINA_MANIFEST.schema,
     providers:Object.keys(PROVIDERS).sort().map(key=>({
       ...PROVIDERS[key],
+      live_adapter_shipped:key==='arc',
+      live_submission:key==='arc'?{
+        available:true,
+        route:'/v1/execution/submit',
+        method:'POST',
+        network:'Arc Testnet',
+        chain_id:5042002,
+        payload:'pre-signed-raw-transaction',
+        owner_authorization:'EIP-191 wallet signature bound to handoff, transaction hash, idempotency key, and expiry',
+        arbitrary_provider_url_allowed:false,
+        embedded_private_key_allowed:false
+      }:{available:false},
       partnership_state:partnershipState(),
       read_only_observation:SUPPORTED_READ_ONLY_PROVIDERS.includes(key)?{available:true,mode:'public-read-only-health',route:`/v1/execution/providers?mode=health&provider=${key}`,credentialed:false,external_execution_performed:false}:{available:false}
     })),
     observation_set:{available:true,route:'/v1/execution/providers?mode=health-all',providers:SUPPORTED_READ_ONLY_PROVIDERS,credentialed:false,partnership_state:partnershipState(),external_execution_performed:false},
-    live_submission_route_exposed:false
+    live_submission_route_exposed:true,
+    live_submission_route:'/v1/execution/submit',
+    live_submission_provider:'arc',
+    controls:{real_funds_enabled:controls.real_funds_enabled,public_execution_api_enabled:controls.public_execution_api_enabled,owner_authorization_required:true,pre_signed_payload_required:true},
+    partnership_state:partnershipState()
   };
   return project('providers',payload);
 }
