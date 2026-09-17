@@ -63,7 +63,7 @@
     },
     {
       "source": "/v1/evidence/provider-observation",
-      "destination": "/api/provider-evidence-ingest"
+      "destination": "/api/evidence-bind?mode=provider-observation-ingest"
     },
     {
       "source": "/v1/release/manifest",
