@@ -1,5 +1,7 @@
 'use strict';
 
+const PARTNERSHIP_STATUS='asserted';
+
 const FUNDABLE_TARGETS=Object.freeze({
   schema:'numina.fundable-targets.v1',
   scope:'numina_native',
@@ -24,8 +26,7 @@ const OWNER_AUTHORIZATION=Object.freeze({
   owner_authorization_required:true,
   pre_signed_payload_required:true,
   fundable_targets:FUNDABLE_TARGETS,
-  partnership_asserted:false,
-  partnership_status:'not_asserted',
+  partnership_status:PARTNERSHIP_STATUS,
   external_balance_verified:false,
   external_funds_moved:false,
   external_execution_performed:false,
@@ -87,12 +88,11 @@ function executionState(){return {
 
 function partnershipState(){return {
   schema:'numina.partnership-state.v1',
-  status:'NOT_ASSERTED',
-  asserted:false,
+  partnership_status:PARTNERSHIP_STATUS,
   external_evidence_bound:false,
   external_partnership_verified:false,
-  evidence_basis:'no_external_partnership_evidence_bound',
+  evidence_basis:'numina_owner_assertion_only_no_external_partnership_evidence_bound',
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
 
-module.exports={FUNDABLE_TARGETS,OWNER_AUTHORIZATION,controls,fundsState,executionState,partnershipState};
+module.exports={PARTNERSHIP_STATUS,FUNDABLE_TARGETS,OWNER_AUTHORIZATION,controls,fundsState,executionState,partnershipState};
