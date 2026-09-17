@@ -21,6 +21,18 @@ jobs:
       - name: Require owner credential
         shell: bash
         run: test -n "$NUMINA_CONTROL_API_KEY"
+      - name: Inspect credential normalization without disclosure
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          raw=os.environ['NUMINA_CONTROL_API_KEY']
+          trimmed=raw.strip()
+          print('trim_changed=' + str(raw != trimmed).lower())
+          print('contains_linebreak=' + str(('\n' in raw) or ('\r' in raw)).lower())
+          print('contains_tab=' + str('\t' in raw).lower())
+          print('nonempty_after_trim=' + str(bool(trimmed)).lower())
+          PY
       - name: Probe read-only treasury authentication
         shell: bash
         run: |
