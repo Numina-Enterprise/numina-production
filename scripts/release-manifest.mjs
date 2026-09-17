@@ -84,6 +84,13 @@ const record={
   raw_input_persisted:false,receipt_authenticity_verified:false,signing:false,broadcast:false,
   treasury_writes:false,minting:false,provider_deposits:false
  },
+ evidence_handoff:{
+  schema:'numina.nusd.evidence-handoff-capability.v1',workspace:'/wallet-signing#evidence-handoff',
+  modules:Object.fromEntries(['model','ui'].map(name=>[name,{path:'/evidence-handoff-'+name+'.js',sha256:digest(readFileSync('public/evidence-handoff-'+name+'.js'))}])),
+  scope:'local_document_fingerprint_and_user_supplied_references',maximum_document_bytes:2097152,
+  signature_verification:false,document_contents_exported:false,network_access:false,persistent_storage:false,
+  signing:false,broadcast:false,treasury_writes:false,release_gate_changed:false
+ },
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
  schema:'numina.application-release.v2',schema_version:2,
  livemode:true,environment:'production',architecture:{layers:['L1','L2','L3','L4','L5'],manifest:'/api/control/v2/architecture',head:'/api/control/v2/head'},frontier:{version,discoveryMcp:'/api/control/v2/discovery-mcp',workspace:'/control-room',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},

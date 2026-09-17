@@ -50,6 +50,14 @@ This intake applies only to the pinned 1,500T constructor mint described below. 
 
 The new intake performs no network request, wallet access, signing, broadcast, owner-intent write or financial mutation. Raw input is held only in this page, is cleared when leaving it, and is never included in the downloaded report. Editing, clearing or selecting another file invalidates the earlier result, including when a delayed check finishes. A passing consistency result does not independently authenticate the observations or establish funding, mint finality from an independent source, reserves or settlement. Wallet backups and known secret-material fields are rejected; provide public observations only.
 
+## Document and transaction reference handoff
+
+The **Create an evidence handoff** panel at `/wallet-signing#evidence-handoff` creates a local record of the owner's signing statement, an optional issuer-policy document fingerprint, and an optional public transaction hash or provider reference. It accepts PDF or UTF-8 policy documents up to 2 MiB, hashes the exact bytes, and compares them to the policy pin below. It does not validate PDF signatures or cryptographic signatures. A matching hash means the file matches the published policy bytes, including their existing verification state. A different hash requires review of the document and policy binding; changed underlying policy bytes require freshly encoded constructor and request pins before deployment.
+
+Create one transaction-reference record for each mint, conversion or deposit. References are user supplied and remain unverified with `receipt: null`; no transaction hash or receipt is generated. A provider reference is not accepted as a Numina-chain mint hash. Owner signing statements are recorded separately with `signatureVerified: false`. File contents and filenames are omitted from the export, raw input is not uploaded or persisted, and leaving the page clears the record. The existing private supporting-document store remains available through the owner control panel. This handoff does not change the execution gate, treasury journal, contract metadata or provider balances.
+
+The owner signing statement is separately recorded in `public/owner-approval.js` as `OWNER_REPORTED_SIGNED`. The signed-document hash remains null and signature verification remains false until the actual signed artifact is identified and checked. This statement does not change the policy or constructor pins.
+
 ## Exact separate 1,500T proposal
 
 - Total initial supply: `1500000000000000 NUSD`, six decimals, `1500000000000000000000` base units.
