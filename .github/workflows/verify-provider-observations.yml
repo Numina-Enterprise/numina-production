@@ -9,7 +9,7 @@ on:
       - '.github/workflows/verify-provider-observations.yml'
       - 'scripts/smoke-provider-observations.mjs'
       - 'scripts/build-provider-evidence-record.mjs'
-      - 'api/provider-evidence-ingest.js'
+      - 'api/evidence-bind.js'
       - 'vercel.json'
       - 'runtime/vercel-production/api/providers.js'
       - 'runtime/vercel-production/api/provider-evidence-ingest.js'
@@ -24,7 +24,7 @@ permissions:
 
 concurrency:
   group: verify-provider-observations
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   verify:
