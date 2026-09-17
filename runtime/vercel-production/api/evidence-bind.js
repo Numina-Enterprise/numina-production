@@ -1,1 +1,1 @@
-module.exports = require('../lib/numina').makeHandler('evidence-bind');
+module.exports = require('../lib/frontier-handler').makeFrontierHandler('evidence-bind');
