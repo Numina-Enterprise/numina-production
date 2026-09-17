@@ -1,0 +1,80 @@
+name: IBM Quantum hardware validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      shots:
+        description: Number of shots for Bell-state validation
+        required: true
+        default: "256"
+
+env:
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  hardware-validation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install IBM Quantum dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "qiskit~=2.5.2" "qiskit-ibm-runtime~=0.47.0"
+      - name: Require IBM Quantum credentials
+        shell: bash
+        env:
+          IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY }}
+          IBM_QUANTUM_INSTANCE: ${{ secrets.IBM_QUANTUM_INSTANCE }}
+        run: |
+          test -n "$IBM_QUANTUM_API_KEY" || { echo "IBM_QUANTUM_API_KEY secret is not configured"; exit 2; }
+          test -n "$IBM_QUANTUM_INSTANCE" || { echo "IBM_QUANTUM_INSTANCE secret is not configured"; exit 2; }
+      - name: Configure ephemeral IBM account
+        env:
+          IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY }}
+          IBM_QUANTUM_INSTANCE: ${{ secrets.IBM_QUANTUM_INSTANCE }}
+        run: |
+          python - <<'PY'
+          import os
+          from qiskit_ibm_runtime import QiskitRuntimeService
+          QiskitRuntimeService.save_account(
+              channel="ibm_quantum_platform",
+              token=os.environ["IBM_QUANTUM_API_KEY"],
+              instance=os.environ["IBM_QUANTUM_INSTANCE"],
+              overwrite=True,
+          )
+          PY
+      - name: Submit Bell-state workload to IBM QPU
+        run: |
+          python scripts/ibm-quantum-smoke.py \
+            --submit \
+            --wait \
+            --shots "${{ inputs.shots }}" \
+            --receipt release-evidence/ibm-quantum-hardware.json
+      - name: Verify provider evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          p='release-evidence/ibm-quantum-hardware.json'
+          d=json.load(open(p, encoding='utf-8'))
+          assert d['mode']=='ibm-quantum-hardware'
+          assert d['external_qpu_execution'] is True
+          assert d.get('job_id')
+          assert d.get('backend')
+          assert d.get('final_status')
+          assert d.get('counts')
+          print('IBM job:', d['job_id'])
+          print('Backend:', d['backend'])
+          print('Counts:', d['counts'])
+          PY
+      - name: Upload credential-free IBM receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: ibm-quantum-hardware-receipt
+          path: release-evidence/ibm-quantum-hardware.json
+          if-no-files-found: error
+          retention-days: 90
