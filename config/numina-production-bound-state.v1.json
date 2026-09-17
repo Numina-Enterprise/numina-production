@@ -7,7 +7,7 @@
     "branch": "main",
     "status": "FINAL",
     "identity": "COMMIT_CONTAINING_THIS_RECORD",
-    "parent_sha": "80c4c5c59c355bc112ebc24751b33d78d04f2be1"
+    "parent_sha": "bc7607b60324f2661a373210cf57e5737febfebb"
   },
   "production_proxy": {
     "provider": "vercel",
@@ -109,5 +109,7 @@
     "shared_secret_pin_required_for_settlement_workflow": false,
     "legacy_pinned_bearer_supported": true,
     "sites_identity_supported": true
-  }
+  },
+  "control_identity_source": "src/control-http.js",
+  "runtime_release_contract_identity_separate": true
 }
