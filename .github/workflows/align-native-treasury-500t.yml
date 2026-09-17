@@ -18,6 +18,7 @@ concurrency:
 jobs:
   align:
     runs-on: ubuntu-24.04
+    environment: production
     timeout-minutes: 5
     env:
       NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
@@ -30,7 +31,7 @@ jobs:
           check-latest: false
       - name: Report unavailable owner credential
         if: ${{ env.NUMINA_CONTROL_API_KEY == '' }}
-        run: echo 'NUMINA_CONTROL_API_KEY is not configured; no treasury write is attempted.'
+        run: echo 'NUMINA_CONTROL_API_KEY is not configured in the production GitHub environment; no treasury write is attempted.'
       - name: Align canonical Numina-native treasury
         if: ${{ env.NUMINA_CONTROL_API_KEY != '' }}
         run: node scripts/ensure-native-treasury-500t.mjs
