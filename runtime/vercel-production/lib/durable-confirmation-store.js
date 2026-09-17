@@ -1,30 +1,24 @@
 'use strict';
 
 const crypto=require('crypto');
-
-function root(value){return crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');}
-function databaseUrl(){const value=process.env.NUMINA_DATABASE_URL||process.env.DATABASE_URL;if(!value)throw new Error('NUMINA_DATABASE_URL_REQUIRED');return value;}
+function canonical(v){if(Array.isArray(v))return v.map(canonical);if(v&&typeof v==='object'){const o={};for(const k of Object.keys(v).sort())o[k]=canonical(v[k]);return o;}return v;}
+function root(v){return crypto.createHash('sha256').update(JSON.stringify(canonical(v))).digest('hex');}
+function requiredEnv(name){const v=process.env[name];if(!v)throw new Error(`${name}_REQUIRED`);return v;}
 
 async function persistConfirmation({expected,provider,providerResponse,verification,receipt}){
-  const {neon}=await import('@neondatabase/serverless');
-  const sql=neon(databaseUrl(),{fullResults:true});
-  const now=Date.now();
-  const eventId=String(verification.event_id);
-  const handoffId=String(expected?.handoff_id||expected?.handoffId||eventId);
-  const recordId=`confirmation:${provider}:${eventId}:${root(verification).slice(0,24)}`;
-  const jobId=`verification:${provider}:${eventId}`;
+  const now=Date.now(),eventId=String(verification.event_id),handoffId=String(expected?.handoff_id||expected?.handoffId||eventId);
+  const recordId=`confirmation:${provider}:${eventId}:${root(verification).slice(0,24)}`,jobId=`verification:${provider}:${eventId}`;
   const artifact={schema:'numina.durable-confirmation.v1',expected,provider,providerResponse,verification,receipt};
-  const artifactRoot=root(artifact);
-  const state=verification.verification_status;
-  await sql.transaction([
-    sql`INSERT INTO numina_verification_jobs (job_id,tx_hash,handoff_id,request_json,status,attempts,next_attempt_at,expires_at,last_error,result_record_id,lease_owner,lease_expires_at,created_at,updated_at)
-        VALUES (${jobId},${eventId},${handoffId},${JSON.stringify({expected,provider})}::jsonb,${state},1,${now},${now},NULL,${recordId},NULL,NULL,${now},${now})
-        ON CONFLICT (job_id) DO UPDATE SET status=EXCLUDED.status,attempts=numina_verification_jobs.attempts+1,last_error=NULL,result_record_id=EXCLUDED.result_record_id,updated_at=EXCLUDED.updated_at`,
-    sql`INSERT INTO numina_evidence_records (record_id,tx_hash,handoff_id,state,artifact_type,artifact_root,artifact_json,created_at,revoked,revocation_json)
-        VALUES (${recordId},${eventId},${handoffId},${state},'NUMINA_EXTERNAL_CONFIRMATION',${artifactRoot},${JSON.stringify(artifact)}::jsonb,${now},false,NULL)
-        ON CONFLICT (record_id) DO NOTHING`
-  ]);
-  return {durable:true,record_id:recordId,job_id:jobId,artifact_root:artifactRoot,state};
+  const artifactRoot=root(artifact),state=verification.verification_status;
+  const request={schema:'numina.durable-evidence.commit.v1',operation:'WRITE_COMMIT_READ_BACK',job:{job_id:jobId,tx_hash:eventId,handoff_id:handoffId,request_json:{expected,provider},status:state,attempts:1,next_attempt_at:now,expires_at:now,result_record_id:recordId,created_at:now,updated_at:now},evidence:{record_id:recordId,tx_hash:eventId,handoff_id:handoffId,state,artifact_type:'NUMINA_EXTERNAL_CONFIRMATION',artifact_root:artifactRoot,artifact_json:artifact,created_at:now,revoked:false}};
+  const response=await fetch(requiredEnv('NUMINA_DURABLE_EVIDENCE_URL'),{method:'POST',headers:{authorization:`Bearer ${requiredEnv('NUMINA_DURABLE_EVIDENCE_TOKEN')}`,'content-type':'application/json',accept:'application/json'},body:JSON.stringify(request),redirect:'error',signal:AbortSignal.timeout(10000)});
+  if(!response.ok)throw new Error(`DURABLE_EVIDENCE_HTTP_${response.status}`);
+  const result=await response.json();
+  if(result?.committed!==true||result?.read_back!==true)throw new Error('DURABLE_CONFIRMATION_COMMIT_NOT_PROVEN');
+  if(result?.record_id!==recordId||result?.job_id!==jobId)throw new Error('DURABLE_CONFIRMATION_ID_MISMATCH');
+  if(result?.artifact_root!==artifactRoot)throw new Error('DURABLE_CONFIRMATION_ARTIFACT_ROOT_MISMATCH');
+  if(root(result?.artifact_json)!==artifactRoot)throw new Error('DURABLE_CONFIRMATION_READ_BACK_MISMATCH');
+  if(JSON.stringify(canonical(result?.artifact_json?.verification))!==JSON.stringify(canonical(verification))||JSON.stringify(canonical(result?.artifact_json?.receipt))!==JSON.stringify(canonical(receipt)))throw new Error('DURABLE_CONFIRMATION_SIGNED_VERIFICATION_MISMATCH');
+  return {durable:true,verified:true,record_id:recordId,job_id:jobId,artifact_root:artifactRoot,state};
 }
-
 module.exports={persistConfirmation};
