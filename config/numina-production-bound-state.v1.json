@@ -1,50 +1,60 @@
 {
-  "schema": "numina.production.bound-state.v1",
+  "schema": "numina.production.singular-state.v1",
   "authority": "NUMINA",
-  "system_of_record": "NUMINA",
-  "source": {
-    "repository": "skott34-dot/numina-production",
-    "branch": "main",
-    "status": "FINAL",
-    "identity": "COMMIT_CONTAINING_THIS_RECORD",
-    "parent_sha": "9fe157a7b4a9a43fb77501b90146ce0acf7266cb",
-    "repository_authority": "SINGULAR"
-  },
-  "production_proxy": {
-    "provider": "vercel",
-    "project_id": "prj_WY1kKgo522ufsymotnArIUee01uO",
-    "deployment_id": "dpl_2yjUb2NHWuHgdCkX52zn1bmSXE3u",
-    "source_sha": "d85b338c086b50960f51d0c4579236ff6505cfd1",
-    "state": "STALE_MIRROR",
-    "target": "production",
-    "role": "MIRROR",
-    "source_of_truth": false,
-    "environment_model": "SINGULAR",
-    "canonical_runtime": false,
-    "blocks_canonical_worker": false
-  },
-  "canonical_sites_worker": {
-    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
-    "origins": [
-      "https://numinalabs.xyz",
-      "https://personal-space-m7q9.skott34.chatgpt.site"
-    ],
-    "source_publish_workflow": ".github/workflows/publish-sites-control-source.yml",
-    "source_publish_commit": "COMMIT_CONTAINING_THIS_RECORD",
-    "last_publish_status": "PENDING_CURRENT_PUSH",
-    "last_publish_failure": null,
-    "publishing_host": "git.chatgpt-team.site",
-    "source_push_verified": false,
-    "deployment_started": false,
+  "root": "NUMINA",
+  "core": "NUMINA",
+  "source_of_truth_model": "NUMINA",
+  "repository": {
     "identity": "NUMINA",
-    "role": "CANONICAL",
-    "source_of_truth_model": "NUMINA",
+    "full_name": "skott34-dot/numina-production",
+    "branch": "main",
+    "repository_count": 1,
+    "push_model": "SINGULAR",
+    "current_parent_sha": "db8f80fc65f977aa7a7f082fc088e4e77552ccdb",
+    "state": "FINAL_SOURCE"
+  },
+  "software": {
+    "identity": "NUMINA",
+    "build_model": "SINGULAR",
+    "artifact_build_id": "a31cc58b5f59174ac9a5fb3a766f80742806e07c917c829ce487891ebf327004",
+    "worker_identity": "NUMINA",
+    "worker_count": 1,
     "environment_model": "SINGULAR",
-    "repository_authority": "skott34-dot/numina-production:main",
-    "publish_mode": "SINGULAR_REPOSITORY_PUSH",
-    "artifact_build_required": true,
-    "canonical_runtime": true,
-    "mirror_dependency": false
+    "journal_identity": "NUMINA",
+    "journal_count": 1
+  },
+  "delivery": {
+    "identity": "NUMINA",
+    "surface_model": "SINGULAR",
+    "surfaces": [
+      {
+        "kind": "domain",
+        "value": "https://numinalabs.xyz"
+      },
+      {
+        "kind": "site",
+        "value": "https://personal-space-m7q9.skott34.chatgpt.site"
+      },
+      {
+        "kind": "vercel",
+        "value": "https://numina-production.vercel.app"
+      }
+    ],
+    "note": "Delivery surfaces do not create separate Numina repositories, builds, workers, journals, roots, cores, or authorities."
+  },
+  "authentication": {
+    "primary": "GITHUB_ACTIONS_OIDC",
+    "issuer": "https://token.actions.githubusercontent.com",
+    "audience": "numina-control",
+    "repository": "skott34-dot/numina-production",
+    "repository_id": "1367647143",
+    "repository_owner_id": "269050000",
+    "ref": "refs/heads/main",
+    "environment": "production",
+    "workflow_ref": "skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main",
+    "shared_secret_pin_required_for_settlement_workflow": false,
+    "legacy_pinned_bearer_supported": true,
+    "sites_identity_supported": true
   },
   "treasury_settlement": {
     "reducer_operation": "SETTLE_AGGREGATE_MODEL",
@@ -98,42 +108,14 @@
     "required_terminal_condition": "FINAL canonical treasury readback",
     "canonical_target": "SITES_WORKER",
     "mirror_target": "VERCEL",
-    "mirror_blocks_canonical_worker": false
+    "mirror_blocks_canonical_worker": false,
+    "identity": "NUMINA",
+    "repository_model": "SINGULAR",
+    "build_model": "SINGULAR",
+    "worker_model": "SINGULAR",
+    "delivery_surface_model": "SINGULAR"
   },
-  "source_of_truth_model": "NUMINA",
-  "worker_identity": "NUMINA",
-  "authority_identity": "NUMINA",
-  "owner_authority_model": "NUMINA_OWNER",
-  "environment_model": "SINGULAR",
-  "model_finality": "FINAL",
-  "finality_scope": "NUMINA_SOURCE_OF_TRUTH_MODEL",
-  "authentication": {
-    "primary": "GITHUB_ACTIONS_OIDC",
-    "issuer": "https://token.actions.githubusercontent.com",
-    "audience": "numina-control",
-    "repository": "skott34-dot/numina-production",
-    "repository_id": "1367647143",
-    "repository_owner_id": "269050000",
-    "ref": "refs/heads/main",
-    "environment": "production",
-    "workflow_ref": "skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main",
-    "shared_secret_pin_required_for_settlement_workflow": false,
-    "legacy_pinned_bearer_supported": true,
-    "sites_identity_supported": true
-  },
+  "invariant": "NUMINA = SINGULAR",
   "control_identity_source": "src/control-http.js",
-  "runtime_release_contract_identity_separate": true,
-  "deployment_policy": {
-    "schema": "numina.deployment-policy.v1",
-    "source_of_truth_model": "NUMINA",
-    "repository": "skott34-dot/numina-production",
-    "branch": "main",
-    "repository_count": 1,
-    "canonical_worker": "SITES_WORKER",
-    "worker_identity": "NUMINA",
-    "environment_model": "SINGULAR",
-    "publish_mode": "SINGULAR_REPOSITORY_PUSH",
-    "vercel_role": "MIRROR",
-    "vercel_blocks_canonical_worker": false
-  }
+  "runtime_release_contract_identity_separate": true
 }
