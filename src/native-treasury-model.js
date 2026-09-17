@@ -24,7 +24,7 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
   if(data.Principal!==actor||data.Authority!=='NUMINA')controlError('TREASURY_AUTHORITY_DENIED',403);
   const intent=data.Intent;
   if(!intent||typeof intent.operation!=='string')controlError('INVALID_TREASURY_INTENT',400);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind',CONFIRM_NUMINA_RECEIPT:'treasury.receipt.confirm'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',SETTLE_AGGREGATE_MODEL:'treasury.aggregate.settle',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind',CONFIRM_NUMINA_RECEIPT:'treasury.receipt.confirm'};
   if(!Object.hasOwn(objectives,intent.operation)||data.Objective!==objectives[intent.operation])controlError('INVALID_TREASURY_OBJECTIVE',400);
   let projection=current?structuredClone(validateTreasuryProjection(current)):null;
   let transactionRequest=null;
@@ -40,6 +40,25 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
       const balance=BigInt(projection.balance)+BigInt(intent.delta);
       if(balance<0n||!treasuryUnsigned.test(balance.toString()))controlError('TREASURY_BALANCE_OUT_OF_RANGE',409);
       projection.balance=balance.toString();
+    }else if(intent.operation==='SETTLE_AGGREGATE_MODEL'){
+      treasuryExact(intent,['operation','aggregateAmount','bankAmount','stripeAmount','nativeAmount','numinaAttestedExternalFundsMoved','numinaAttestedExternalFundsVerified','reason']);treasuryReason(intent.reason);
+      for(const field of ['aggregateAmount','bankAmount','stripeAmount','nativeAmount'])if(typeof intent[field]!=='string'||!treasuryUnsigned.test(intent[field])||intent[field]==='0')controlError('INVALID_TRANSACTION_AMOUNT',400);
+      const aggregate=BigInt(intent.aggregateAmount),bank=BigInt(intent.bankAmount),stripe=BigInt(intent.stripeAmount),native=BigInt(intent.nativeAmount);
+      if(bank+stripe+native!==aggregate||intent.nativeAmount!==projection.balance)controlError('AGGREGATE_SETTLEMENT_MISMATCH',409);
+      if(intent.numinaAttestedExternalFundsMoved!==true||intent.numinaAttestedExternalFundsVerified!==true)controlError('NUMINA_ATTESTATION_REQUIRED',400);
+      if(projection.transaction_requests.length>=100)controlError('TREASURY_REQUEST_CAPACITY',409);
+      transactionRequest={
+        id:eventId,kind:'aggregate_settlement',status:'SETTLED',settlement:true,settlement_scope:'NUMINA_SINGULAR_ATTESTATION',
+        aggregate_amount:intent.aggregateAmount,unit:'MODEL_UNIT',
+        components:[
+          {id:'bank-of-america-savings',provider:'bank-of-america',amount:intent.bankAmount,unit:'USD'},
+          {id:'stripe-treasury-usdc',provider:'stripe',amount:intent.stripeAmount,unit:'USDC'},
+          {id:'numina-native-treasury',provider:'numina',amount:intent.nativeAmount,unit:'NUSD'}
+        ],
+        numina_attested_external_funds_moved:true,numina_attested_external_funds_verified:true,verification_scope:'NUMINA_ATTESTATION',
+        external_provider_verification:false,provider_settlement_evidence_bound:false,submission_performed:false,receipt:null
+      };
+      projection.transaction_requests.push(transactionRequest);
     }else if(intent.operation==='BIND_EXTERNAL_RECEIPT'){
       treasuryExact(intent,['operation','requestId','provider','providerReference','evidenceDigest','reason']);treasuryReason(intent.reason);
       if(!treasuryReference.test(intent.requestId)||!treasuryReference.test(intent.provider)||!treasuryReference.test(intent.providerReference)||!treasuryEvidenceDigest.test(intent.evidenceDigest))controlError('INVALID_EXTERNAL_RECEIPT',400);
