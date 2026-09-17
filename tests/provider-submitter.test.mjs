@@ -1,0 +1,68 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Wallet,Transaction} from '../public/vendor/ethers-6.15.0.min.js';
+import submitter from '../runtime/vercel-production/lib/provider-submitter.js';
+
+const {submitArc,authorizationPayload,authorizationMessage,ARC_TESTNET_CHAIN_ID}=submitter;
+const PRIVATE_KEY='0x'+'11'.repeat(32);
+const OTHER_KEY='0x'+'22'.repeat(32);
+const controls={real_funds_enabled:true,public_execution_api_enabled:true,live_provider_submitter_enabled:true,owner_authorization_required:true,pre_signed_payload_required:true};
+const nowDate=new Date('2026-09-17T17:30:00.000Z');
+const verifyEnvelope=()=>true;
+const sign=(payload,artifact_type)=>({artifact_type,key_id:'test',payload,algorithm:'Ed25519',public_key:'test',signature:'test'});
+
+async function fixture(){
+  const wallet=new Wallet(PRIVATE_KEY);
+  const raw=await wallet.signTransaction({chainId:ARC_TESTNET_CHAIN_ID,nonce:0,gasLimit:21000,gasPrice:1,to:'0x3333333333333333333333333333333333333333',value:0});
+  const tx=Transaction.from(raw);
+  const handoff={schema:'numina.execution-handoff.v1',provider:'arc',status:'READY_FOR_PROVIDER_SUBMISSION',execution_permitted:true,external_execution_performed:false,handoff_id:'a'.repeat(64),intent_root:'b'.repeat(64),intent:{action:'transfer',from:wallet.address}};
+  const idempotency_key='owner-approved-submit-0001';
+  const expires_at='2026-09-17T17:35:00.000Z';
+  const authPayload=authorizationPayload({handoff,transactionHash:tx.hash,from:wallet.address,idempotencyKey:idempotency_key,expiresAt:expires_at});
+  const signature=await wallet.signMessage(authorizationMessage(authPayload));
+  return {wallet,raw,tx,handoff,idempotency_key,expires_at,body:{handoff_receipt:{payload:handoff},raw_transaction:raw,expected_transaction_hash:tx.hash,idempotency_key,owner_authorization:{expires_at,signature}}};
+}
+function rpcFetch(sequence,calls){return async(_url,options)=>{const request=JSON.parse(options.body);calls.push(request);const next=sequence.shift();assert.equal(request.method,next.method);return Response.json(next.body);};}
+
+test('governed Arc submitter broadcasts one pre-signed transaction and returns a signed network receipt',async()=>{
+  const f=await fixture(),calls=[];
+  const fetchFn=rpcFetch([
+    {method:'eth_getTransactionByHash',body:{jsonrpc:'2.0',id:1,result:null}},
+    {method:'eth_sendRawTransaction',body:{jsonrpc:'2.0',id:2,result:f.tx.hash}},
+    {method:'eth_getTransactionByHash',body:{jsonrpc:'2.0',id:3,result:{hash:f.tx.hash,from:f.wallet.address}}}
+  ],calls);
+  const result=await submitArc({body:f.body,fetchFn,now:()=>nowDate,verifyEnvelope,sign,controls});
+  assert.equal(result.submission.status,'SUBMITTED');
+  assert.equal(result.submission.transaction_hash,f.tx.hash.toLowerCase());
+  assert.equal(result.submission.from,f.wallet.address);
+  assert.equal(result.submission.chain_id,ARC_TESTNET_CHAIN_ID);
+  assert.equal(result.submission.owner_authorization_verified,true);
+  assert.equal(result.submission.pre_signed_payload,true);
+  assert.equal(result.submission.embedded_private_key,false);
+  assert.equal(result.submission.external_execution_performed,true);
+  assert.equal(result.submission.partnership_status,'not_asserted');
+  assert.equal(result.receipt.artifact_type,'NUMINA_PROVIDER_SUBMISSION_RECEIPT');
+  assert.equal(calls.filter(call=>call.method==='eth_sendRawTransaction').length,1);
+  assert.equal(JSON.stringify(result).includes(PRIVATE_KEY.slice(2)),false);
+});
+
+test('existing transaction hash is idempotent and is not re-broadcast',async()=>{
+  const f=await fixture(),calls=[];
+  const fetchFn=rpcFetch([{method:'eth_getTransactionByHash',body:{jsonrpc:'2.0',id:1,result:{hash:f.tx.hash,from:f.wallet.address}}}],calls);
+  const result=await submitArc({body:f.body,fetchFn,now:()=>nowDate,verifyEnvelope,sign,controls});
+  assert.equal(result.submission.status,'ALREADY_SUBMITTED');
+  assert.equal(calls.filter(call=>call.method==='eth_sendRawTransaction').length,0);
+});
+
+test('wrong owner signature fails before any network request',async()=>{
+  const f=await fixture(),other=new Wallet(OTHER_KEY),calls=[];
+  const payload=authorizationPayload({handoff:f.handoff,transactionHash:f.tx.hash,from:f.wallet.address,idempotencyKey:f.idempotency_key,expiresAt:f.expires_at});
+  f.body.owner_authorization.signature=await other.signMessage(authorizationMessage(payload));
+  await assert.rejects(submitArc({body:f.body,fetchFn:async()=>{calls.push(true);throw Error('should not call');},now:()=>nowDate,verifyEnvelope,sign,controls}),/OWNER_AUTHORIZATION_SIGNER_MISMATCH/);
+  assert.equal(calls.length,0);
+});
+
+test('closed runtime controls fail before parsing or network submission',async()=>{
+  const f=await fixture();
+  await assert.rejects(submitArc({body:f.body,fetchFn:async()=>{throw Error('should not call');},now:()=>nowDate,verifyEnvelope,sign,controls:{...controls,real_funds_enabled:false}}),/LIVE_SUBMISSION_CONTROL_GATE_CLOSED/);
+});
