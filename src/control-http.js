@@ -8,6 +8,7 @@ import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {SOURCE_OF_TRUTH_MODEL,CONTROL_WORKER_IDENTITY,AUTHORITY_IDENTITY,OWNER_AUTHORITY_MODEL,ENVIRONMENT_MODEL,PRODUCTION_PROXY_ROLE} from '../public/runtime-contract.js';
 import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
+// Numina singular authority: production treasury workflows authenticate with repository-scoped GitHub OIDC.
 export const CONTROL_API_KEY_SHA256_PIN='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
 export const GITHUB_OIDC_ISSUER='https://token.actions.githubusercontent.com';
 export const GITHUB_OIDC_JWKS='https://token.actions.githubusercontent.com/.well-known/jwks';
