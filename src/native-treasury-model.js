@@ -24,7 +24,7 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
   if(data.Principal!==actor||data.Authority!=='NUMINA')controlError('TREASURY_AUTHORITY_DENIED',403);
   const intent=data.Intent;
   if(!intent||typeof intent.operation!=='string')controlError('INVALID_TREASURY_INTENT',400);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind',CONFIRM_NUMINA_RECEIPT:'treasury.receipt.confirm'};
   if(!Object.hasOwn(objectives,intent.operation)||data.Objective!==objectives[intent.operation])controlError('INVALID_TREASURY_OBJECTIVE',400);
   let projection=current?structuredClone(validateTreasuryProjection(current)):null;
   let transactionRequest=null;
@@ -47,7 +47,16 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
       if(!request)controlError('TREASURY_REQUEST_NOT_FOUND',404);
       if(request.receipt!==null||request.status!=='PREPARED')controlError('TREASURY_RECEIPT_ALREADY_BOUND',409);
       request.status='EVIDENCE_BOUND';
-      request.receipt={provider:intent.provider,provider_reference:intent.providerReference,evidence_digest:intent.evidenceDigest,external_funds_verified:false};
+      request.receipt={provider:intent.provider,provider_reference:intent.providerReference,evidence_digest:intent.evidenceDigest,provider_confirmation:'PENDING',confirmation_authority:null,confirmation_scope:null,singular:false,reconciliation_status:'PENDING',external_provider_confirmation_verified:false,external_funds_verified:false};
+      transactionRequest=request;
+    }else if(intent.operation==='CONFIRM_NUMINA_RECEIPT'){
+      treasuryExact(intent,['operation','requestId','reason']);treasuryReason(intent.reason);
+      if(!treasuryReference.test(intent.requestId))controlError('INVALID_TREASURY_REQUEST_REFERENCE',400);
+      const request=projection.transaction_requests.find(item=>item.id===intent.requestId);
+      if(!request)controlError('TREASURY_REQUEST_NOT_FOUND',404);
+      if(request.status!=='EVIDENCE_BOUND'||!request.receipt)controlError('TREASURY_RECEIPT_NOT_CONFIRMABLE',409);
+      request.status='RECONCILED';
+      request.receipt={...request.receipt,provider_confirmation:'CONFIRMED',confirmation_authority:'NUMINA',confirmation_scope:'NUMINA_SYSTEM_OF_RECORD',singular:true,reconciliation_status:'RECONCILED',external_provider_confirmation_verified:false,external_funds_verified:false};
       transactionRequest=request;
     }else{
       const mint=intent.operation==='PREPARE_MINT';
