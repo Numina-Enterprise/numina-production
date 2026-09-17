@@ -16,7 +16,8 @@ function assert(condition,message){if(!condition)throw new Error(message);}
 function sameJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
 function exactRelease(value){return Boolean(object(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected));}
 function authoredFrontier(html){const marker='</footer>';const index=html.indexOf(marker);assert(index>=0,'frontier footer boundary missing');return html.slice(0,index+marker.length);}
-function verifyProjection(value,surface){assert(object(value),`${surface} projection missing`);assert(value.source==='NUMINA'&&value.authority==='NUMINA'&&value.productionSource==='NUMINA',`${surface} authority drift`);assert(value.surface===surface,`${surface} projection surface drift`);return value;}
+function verifyAuthority(value,label){assert(object(value),`${label} projection missing`);assert(value.source==='NUMINA'&&value.authority==='NUMINA'&&value.productionSource==='NUMINA',`${label} authority drift`);return value;}
+function verifyProjection(value,surface){verifyAuthority(value,surface);assert(value.surface===surface,`${surface} projection surface drift`);return value;}
 function verifyEnvelope(envelope,expectedType){
   assert(object(envelope),'signed envelope missing');
   assert(envelope.artifact_type===expectedType,`unexpected artifact type: ${envelope.artifact_type}`);
@@ -49,7 +50,7 @@ const [frontier,provenance,status,manifest,supply,attestation,control,applicatio
 assert(frontier.headers.get('x-numina-runtime-release')===RUNTIME_VERSION,'frontier runtime header drift');
 
 const runtimeManifest=manifest.value?.manifest;
-verifyProjection(runtimeManifest,'manifest');
+verifyAuthority(runtimeManifest,'manifest');
 assert(runtimeManifest.schema==='numina.manifest.v1','runtime manifest schema drift');
 assert(exactRelease(runtimeManifest.release),'runtime manifest identity drift');
 const manifestPayload=verifyEnvelope(manifest.value?.receipt,'NUMINA_MANIFEST');
@@ -61,7 +62,8 @@ assert(sameJson(statusPayload,statusProjection),'status receipt mismatch');
 const statusBody=statusProjection.payload;
 assert(object(statusBody)&&exactRelease(statusBody.release),'status release identity drift');
 assert(statusBody.runtime==='NUMINA','status runtime identity drift');
-assert(statusBody.controls?.real_funds_enabled===false&&statusBody.controls?.employer_ip_enabled===false&&statusBody.controls?.public_execution_api_enabled===false,'status execution boundary unexpectedly open');
+assert(statusBody.controls?.real_funds_enabled===true&&statusBody.controls?.employer_ip_enabled===false&&statusBody.controls?.public_execution_api_enabled===true&&statusBody.controls?.live_provider_submitter_enabled===true,'status governed execution controls drift');
+assert(statusBody.execution?.status==='GOVERNED_LIVE_SUBMISSION_ENABLED'&&statusBody.execution?.owner_authorization_required===true&&statusBody.execution?.pre_signed_payload_required===true&&statusBody.execution?.external_execution_performed===false,'status execution governance drift');
 
 const supplyProjection=verifyProjection(supply.value,'supply-chain');
 const supplyContainer=supplyProjection.payload;
@@ -87,8 +89,9 @@ const controlSigned=verifyEnvelope(control.value?.receipt,'NUMINA_CONTROL_STATE'
 assert(sameJson(controlSigned,controlProjection),'control state receipt mismatch');
 const controlBody=controlProjection.payload;
 assert(controlBody?.schema==='numina.control-state.v1'&&controlBody.release===RUNTIME_VERSION,'control state release drift');
-const controls=controlBody.controls;
-assert(controls?.runtime_controls_configurable===true&&controls?.real_funds_enabled===false&&controls?.employer_ip_enabled===false&&controls?.public_execution_api_enabled===false&&controls?.public_execution_route_exposed===false,'execution boundary unexpectedly open');
+const controls=controlBody.controls,executionState=controlBody.execution_state;
+assert(controls?.runtime_controls_configurable===true&&controls?.real_funds_enabled===true&&controls?.employer_ip_enabled===false&&controls?.public_execution_api_enabled===true&&controls?.public_execution_route_exposed===true&&controls?.live_provider_submitter_enabled===true&&controls?.owner_authorization_required===true&&controls?.pre_signed_payload_required===true&&controls?.arbitrary_provider_url_allowed===false&&controls?.embedded_private_key_allowed===false,'execution governance boundary drift');
+assert(executionState?.status==='GOVERNED_LIVE_SUBMISSION_ENABLED'&&executionState?.live_provider_submitter_exposed===true&&executionState?.owner_authorization_required===true&&executionState?.pre_signed_payload_required===true&&executionState?.external_execution_performed===false,'execution state drift');
 
 assert(application.value.version===APPLICATION_VERSION&&application.value.release===APPLICATION_RELEASE,'application release drift');
 assert(/^[0-9a-f]{64}$/i.test(String(application.value.build_id||'')),'canonical application build id invalid');
@@ -108,8 +111,9 @@ if(EXPECTED_GIT_SHA){
 
 const readiness=frontier.value.readiness;
 assert(readiness?.ready===true,'frontier readiness is false');
-assert(readiness.mode==='public-verifier-no-financial-execution','frontier mode drift');
+assert(readiness.mode==='governed-live-submission','frontier mode drift');
 assert(Object.values(readiness.checks||{}).length===8&&Object.values(readiness.checks).every(Boolean),'one or more frontier readiness checks failed');
+assert(readiness.checks.execution_boundary_governed===true,'governed execution readiness missing');
 assert(exactRelease(readiness.runtime),'frontier runtime identity drift');
 assert(readiness.deployment?.deployment_id===deploymentPayload.deployment_id&&readiness.deployment?.git_commit_sha===deploymentPayload.git_commit_sha,'frontier provenance binding drift');
 assert(readiness.application?.canonical_manifest_build_id===application.value.build_id,'signed readiness canonical application build id drift');
@@ -128,7 +132,7 @@ assert(stableAgentCard.value?.url===CANONICAL_ORIGIN+'/api/control/v2/a2a','stab
 assert(sameJson(stableAgentCard.value,canonicalAgentCard.value),'stable and canonical agent cards diverged');
 assert(stableControlManifest.value?.schema==='numina.frontier.v2'&&stableControlManifest.value?.version===APPLICATION_VERSION,'stable control manifest identity drift');
 assert(stableControlManifest.value?.environment==='production'&&stableControlManifest.value?.livemode===true,'stable control manifest environment drift');
-assert(stableControlManifest.value?.externalExecution===false,'canonical control plane reports external execution');
+assert(stableControlManifest.value?.externalExecution===false,'canonical control plane reports an unproven external execution');
 assert(sameJson(stableControlManifest.value,canonicalControlManifest.value),'stable and canonical control manifests diverged');
 assert(/<link rel="canonical" href="https:\/\/numinalabs\.xyz\/frontier">/i.test(stableFrontier.text),'stable frontier canonical link drift');
 assert(/<link rel="canonical" href="https:\/\/numinalabs\.xyz\/frontier">/i.test(canonicalFrontier.text),'canonical frontier canonical link drift');
@@ -137,4 +141,4 @@ const stableAuthoredFrontier=authoredFrontier(stableFrontier.text),canonicalAuth
 const stableFrontierSha256=digestText(stableAuthoredFrontier),canonicalFrontierSha256=digestText(canonicalAuthoredFrontier);
 assert(stableFrontierSha256===canonicalFrontierSha256,'stable and canonical authored frontier HTML diverged');
 
-console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'closed',signed_runtime_surfaces:{manifest:true,status:true,supply_chain:true,release_attestation:true,control_state:true,frontier_readiness:true,deployment_provenance:true},application_build_identity:{canonical_manifest_build_id:application.value.build_id,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,relation:expectedRelation},public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
+console.log(JSON.stringify({ok:true,runtime:RUNTIME_VERSION,release:EXPECTED_RELEASE.release,application:application.value.release,deployment_id:deploymentPayload.deployment_id,git_commit_sha:deploymentPayload.git_commit_sha,expected_git_commit_sha:EXPECTED_GIT_SHA||null,readiness_checks:Object.keys(readiness.checks),signing_key_id:PINNED_RUNTIME_KEY_ID,execution_boundary:'governed-live-submission',external_execution_performed:false,signed_runtime_surfaces:{manifest:true,status:true,supply_chain:true,release_attestation:true,control_state:true,frontier_readiness:true,deployment_provenance:true},application_build_identity:{canonical_manifest_build_id:application.value.build_id,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,relation:expectedRelation},public_surface_convergence:{application_manifest:true,agent_card:true,control_manifest:true,frontier_authored_html:true,frontier_authored_sha256:stableFrontierSha256,canonical_post_document_bytes:Buffer.byteLength(canonicalFrontier.text,'utf8')-Buffer.byteLength(canonicalAuthoredFrontier,'utf8'),canonical_origin:CANONICAL_ORIGIN,stable_origin:RUNTIME_ORIGIN}},null,2));
