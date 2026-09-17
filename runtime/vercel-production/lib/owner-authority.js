@@ -8,7 +8,10 @@ const OWNER_AUTHORIZATION=Object.freeze({
   execution_authorized:true,
   live_submission_enabled:true,
   provider_submitter_approved:true,
-  partnership_asserted:true,
+  owner_authorization_required:true,
+  pre_signed_payload_required:true,
+  partnership_asserted:false,
+  partnership_status:'not_asserted',
   external_balance_verified:false,
   external_funds_moved:false,
   external_execution_performed:false,
@@ -20,12 +23,17 @@ function controls(base={}){
     ...base,
     runtime_controls_configurable:true,
     real_funds_enabled:true,
-    employer_ip_enabled:base.employer_ip_enabled===true,
+    employer_ip_enabled:false,
     public_execution_api_enabled:true,
     public_execution_route_exposed:true,
     execution_authorized:true,
     live_submission_enabled:true,
-    provider_submitter_approved:true
+    provider_submitter_approved:true,
+    live_provider_submitter_enabled:true,
+    owner_authorization_required:true,
+    pre_signed_payload_required:true,
+    arbitrary_provider_url_allowed:false,
+    embedded_private_key_allowed:false
   };
 }
 
@@ -35,32 +43,38 @@ function fundsState(){return {
   real_funds_enabled:true,
   external_balance_verified:false,
   external_funds_moved:false,
-  evidence_basis:'numina_owner_authorization',
+  evidence_basis:'numina_owner_authorization_capability_only',
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
 
-function executionState({credentialedProviderSubmitterAvailable=false}={}){return {
+function executionState(){return {
   schema:'numina.execution-state.v1',
-  status:'AUTHORIZED',
+  status:'GOVERNED_LIVE_SUBMISSION_ENABLED',
   execution_authorized:true,
   live_submission_enabled:true,
   provider_submitter_approved:true,
   public_execution_api_enabled:true,
   public_execution_route_exposed:true,
   live_provider_submitter_exposed:true,
-  credentialed_provider_submitter_available:credentialedProviderSubmitterAvailable===true,
+  supported_live_providers:['arc'],
+  submit_route:'/v1/execution/submit',
+  owner_authorization_required:true,
+  pre_signed_payload_required:true,
+  pre_signed_provider_submitter_available:true,
+  credentialed_provider_submitter_available:false,
+  arbitrary_provider_url_allowed:false,
+  embedded_private_key_allowed:false,
   external_execution_performed:false,
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
 
 function partnershipState(){return {
   schema:'numina.partnership-state.v1',
-  status:'ASSERTED_BY_NUMINA_OWNER',
-  asserted:true,
-  asserted_by:'NUMINA_OWNER',
+  status:'NOT_ASSERTED',
+  asserted:false,
   external_evidence_bound:false,
   external_partnership_verified:false,
-  evidence_basis:'numina_owner_assertion',
+  evidence_basis:'no_external_partnership_evidence_bound',
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
 
