@@ -14,6 +14,15 @@ export const NUMINA_OWNER_APPROVAL=Object.freeze({
   "scope": "One owner authorization for the combined Numina software release and the existing requested 1,500T proposal across the website, gateway and shared application manifests.",
   "requestSha256": "0af2b7e72cd18f9676f85356da95f8deee8788eac0dee3d587a1278342a401ca",
   "issuerPolicySha256": "1d24f311a34a28d9560db1f32eb3efc4241701c5ae7233b97c2527006623b13d",
+  "issuerPolicySigningStatement": Object.freeze({
+    "status": "OWNER_REPORTED_SIGNED",
+    "ownerReportsSigned": true,
+    "recordedOn": "2026-09-17",
+    "source": "Direct owner statements: issuer policy signed; in the software; signed",
+    "signedDocumentSha256": null,
+    "signatureVerified": false,
+    "scope": "Owner statement recorded. The signed document and its signature have not been independently identified or verified. This does not change submission authorization."
+  }),
   "cryptographicSignature": null,
   "independentReviewVerified": false,
   "fundsVerified": false,

@@ -17,6 +17,22 @@
   <p class="signing-small">A passing result means the supplied observations agree with this request. It does not independently authenticate the blockchain, create a mint, change treasury balances or confirm USD/USDC settlement.</p>
  </section>
  <script type="module" src="/receipt-intake-ui.js"></script>
+ <section class="local-signing-panel evidence-handoff" id="evidence-handoff" aria-labelledby="evidence-title">
+  <span class="eyebrow">POLICY AND TRANSACTION RECORDS</span><h2 id="evidence-title">Create an evidence handoff</h2>
+  <p id="evidence-owner-statement" class="readiness-notice">Reading the recorded owner statement…</p>
+  <p>Bring together your policy document's identity and an actual transaction reference. Files stay on this device; the download contains fingerprints and references only.</p>
+  <label for="evidence-policy">Issuer policy document · PDF or UTF-8 text, up to 2 MiB</label><input id="evidence-policy" type="file" accept=".pdf,.json,.md,.txt,application/pdf,application/json,text/plain">
+  <p id="evidence-policy-status" class="signing-small signing-address" role="status">No policy document selected.</p>
+  <label class="execution-ack"><input id="evidence-signed" type="checkbox"> I report that I have signed the issuer policy.</label>
+  <p class="signing-small">Your statement is recorded separately from signature verification. Selecting a file checks its identity, not its signature. Keep the signed original and any detached signature for review.</p>
+  <label for="evidence-operation">Transaction record</label><select id="evidence-operation"><option value="none">Policy record only</option><option value="nusd_constructor_mint">NUSD initial-supply deployment</option><option value="conversion">Currency conversion</option><option value="deposit">Provider deposit</option></select>
+  <label for="evidence-hash">Public transaction hash, if available</label><input id="evidence-hash" maxlength="66" autocomplete="off" spellcheck="false" placeholder="0x…">
+  <label for="evidence-reference">Public provider reference, if available</label><input id="evidence-reference" maxlength="120" autocomplete="off" spellcheck="false">
+  <p class="signing-small">Create one record per operation. A reference identifies a claimed transaction; the receipt checker above requires the actual transaction and chain observations. Do not enter credentials, account numbers or wallet secrets.</p>
+  <div class="readiness-actions"><button id="evidence-create" class="button" type="button">Create reference record</button><button id="evidence-download" class="button secondary" type="button" disabled>Download evidence handoff</button><button id="evidence-clear" class="button secondary" type="button">Clear record</button></div>
+  <p id="evidence-status" class="readiness-notice" role="status" aria-live="polite">No evidence record created.</p><pre id="evidence-result" class="execution-record" hidden></pre>
+  <p class="signing-small">Creating this record does not sign a document, submit a transaction, verify a deposit or enable the release's submission gate.</p>
+ </section><script type="module" src="/evidence-handoff-ui.js"></script>
  <section class="local-signing-panel" aria-labelledby="local-signing-title">
   <span class="eyebrow">WALLET CREATED INSIDE NUMINA</span><h2 id="local-signing-title">Use your saved Numina wallet</h2>
   <p>Select the encrypted JSON backup you downloaded when you created the wallet. This checks the file format and its public address locally. It does not unlock the wallet or verify key control.</p>
