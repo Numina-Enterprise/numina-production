@@ -15,7 +15,7 @@ module.exports=async function controlState(req,res){
     schema:'numina.control-state.v1',
     release:legacy.RELEASE_IDENTITY.production_version,
     manifest:NUMINA_MANIFEST.schema,
-    controls:legacy.controls()
+    controls:{...legacy.controls(),public_execution_route_exposed:false}
   });
   // Sign the exact object returned as `state`; no derived or reduced payload.
   const receipt=legacy.sign(state,'NUMINA_CONTROL_STATE');
