@@ -5,23 +5,10 @@ on:
   schedule:
     - cron: '41 * * * *'
   push:
-    paths:
-      - '.github/workflows/verify-provider-observations.yml'
-      - 'scripts/smoke-provider-observations.mjs'
-      - 'scripts/build-provider-evidence-record.mjs'
-      - 'scripts/build-trusted-production-release.mjs'
-      - 'scripts/smoke-production.mjs'
-      - 'api/application-release.mjs'
-      - 'runtime/vercel-production/api/control-state.js'
-      - 'runtime/vercel-production/api/status.js'
-      - 'runtime/vercel-production/api/providers.js'
-      - 'runtime/vercel-production/api/execution-submit.js'
-      - 'runtime/vercel-production/lib/owner-authority.js'
-      - 'runtime/vercel-production/lib/provider-observations.js'
-      - 'runtime/vercel-production/lib/provider-submitter.js'
-      - 'runtime/vercel-production/lib/frontier-handler.js'
-      - 'tests/provider-observations.test.mjs'
-      - 'tests/provider-submitter.test.mjs'
+    branches:
+      - main
+    paths-ignore:
+      - '.github/**'
 
 permissions:
   contents: read
