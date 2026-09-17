@@ -2,7 +2,7 @@ import {financialEvidenceHttp} from './financial-evidence.js';
 import {reviewerHttp,reviewerContext} from './reviewer.js';
 import {connectionsHttp} from './connections-http.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-v18.js';
-import {controlHttp,CONTROL_API_KEY_SHA256_PIN} from './control-http.js';
+import {controlHttp,CONTROL_API_KEY_SHA256_PIN,SOURCE_OF_TRUTH_MODEL,CONTROL_WORKER_IDENTITY,AUTHORITY_IDENTITY,ENVIRONMENT_MODEL} from './control-http.js';
 import {routeRc20} from './rc20.js';
 import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
@@ -11,7 +11,6 @@ import {frontierHttp} from './frontier-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
 import {quantumHttp} from './quantum-http.js';
-import {SOURCE_OF_TRUTH_MODEL,CONTROL_WORKER_IDENTITY,AUTHORITY_IDENTITY,ENVIRONMENT_MODEL} from '../public/runtime-contract.js';
 const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}

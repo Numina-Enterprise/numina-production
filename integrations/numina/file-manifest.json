@@ -255,8 +255,8 @@
     },
     {
       "path": "src/runtime-contract.js",
-      "bytes": 1448,
-      "sha256": "c31c88994f05afe0ad1f7cb3c9e4fca3f3fc9d4dc31dca4fd3c551ddbd39165e"
+      "bytes": 1163,
+      "sha256": "0889ec6f09f651f3fb95ef91397c0727c890de0c67f23d3b0c863a9fab24e074"
     },
     {
       "path": "src/tools.js",

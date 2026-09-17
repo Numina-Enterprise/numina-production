@@ -1,10 +1,4 @@
 // Verified rc26 production identity; Numina's application and journal retain their own identities.
-export const SOURCE_OF_TRUTH_MODEL = 'NUMINA';
-export const CONTROL_WORKER_IDENTITY = 'NUMINA';
-export const AUTHORITY_IDENTITY = 'NUMINA';
-export const OWNER_AUTHORITY_MODEL = 'NUMINA_OWNER';
-export const ENVIRONMENT_MODEL = 'SINGULAR';
-export const PRODUCTION_PROXY_ROLE = 'MIRROR';
 export const RUNTIME_ORIGIN = 'https://numina-production.vercel.app';
 export const RUNTIME_VERSION = '1.9.0-rc26';
 export const EXPECTED_RELEASE = Object.freeze({
