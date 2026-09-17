@@ -12,9 +12,18 @@ if(!['https://numinalabs.xyz','https://www.numinalabs.xyz'].includes(origin)||!t
   throw Error('Set the canonical application origin and owner API key');
 }
 
-const gate=spawnSync(process.execPath,[fileURLToPath(new URL('./check-runtime.mjs',import.meta.url))],{encoding:'utf8'});
+// Verify the current signed production contract before touching the canonical journal.
+// This gate intentionally checks runtime/canonical convergence rather than requiring
+// the Vercel deployment SHA to equal the workflow SHA; deployment freshness is enforced
+// separately by production smoke CI and may be rate-limit blocked.
+const gate=spawnSync(process.execPath,[fileURLToPath(new URL('./smoke-production.mjs',import.meta.url))],{
+  encoding:'utf8',
+  env:{...process.env,NUMINA_CONTROL_API_KEY:'',NUMINA_EXPECTED_GIT_SHA:''}
+});
 if(gate.status!==0){
-  console.error('configured production runtime verification failed; no treasury write attempted.');
+  if(gate.stdout)console.error(gate.stdout.trim());
+  if(gate.stderr)console.error(gate.stderr.trim());
+  console.error('configured signed production verification failed; no treasury write attempted.');
   process.exit(1);
 }
 
