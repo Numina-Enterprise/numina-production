@@ -7,18 +7,21 @@
     "branch": "main",
     "status": "FINAL",
     "identity": "COMMIT_CONTAINING_THIS_RECORD",
-    "parent_sha": "bc7607b60324f2661a373210cf57e5737febfebb"
+    "parent_sha": "9fe157a7b4a9a43fb77501b90146ce0acf7266cb",
+    "repository_authority": "SINGULAR"
   },
   "production_proxy": {
     "provider": "vercel",
     "project_id": "prj_WY1kKgo522ufsymotnArIUee01uO",
     "deployment_id": "dpl_2yjUb2NHWuHgdCkX52zn1bmSXE3u",
     "source_sha": "d85b338c086b50960f51d0c4579236ff6505cfd1",
-    "state": "READY",
+    "state": "STALE_MIRROR",
     "target": "production",
     "role": "MIRROR",
     "source_of_truth": false,
-    "environment_model": "SINGULAR"
+    "environment_model": "SINGULAR",
+    "canonical_runtime": false,
+    "blocks_canonical_worker": false
   },
   "canonical_sites_worker": {
     "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
@@ -27,16 +30,21 @@
       "https://personal-space-m7q9.skott34.chatgpt.site"
     ],
     "source_publish_workflow": ".github/workflows/publish-sites-control-source.yml",
-    "source_publish_commit": "3fda2458c577071a5bca8669f9e276124ffa1e38",
-    "last_publish_status": "BLOCKED",
-    "last_publish_failure": "authentication",
+    "source_publish_commit": "COMMIT_CONTAINING_THIS_RECORD",
+    "last_publish_status": "PENDING_CURRENT_PUSH",
+    "last_publish_failure": null,
     "publishing_host": "git.chatgpt-team.site",
     "source_push_verified": false,
     "deployment_started": false,
     "identity": "NUMINA",
     "role": "CANONICAL",
     "source_of_truth_model": "NUMINA",
-    "environment_model": "SINGULAR"
+    "environment_model": "SINGULAR",
+    "repository_authority": "skott34-dot/numina-production:main",
+    "publish_mode": "SINGULAR_REPOSITORY_PUSH",
+    "artifact_build_required": true,
+    "canonical_runtime": true,
+    "mirror_dependency": false
   },
   "treasury_settlement": {
     "reducer_operation": "SETTLE_AGGREGATE_MODEL",
@@ -85,9 +93,12 @@
   },
   "convergence": {
     "automation_id": "6aac4bb23d448191a6de47b513a71d51",
-    "title": "Numina Treasury Finish",
+    "title": "Numina Production Convergence",
     "enabled": true,
-    "required_terminal_condition": "FINAL canonical treasury readback"
+    "required_terminal_condition": "FINAL canonical treasury readback",
+    "canonical_target": "SITES_WORKER",
+    "mirror_target": "VERCEL",
+    "mirror_blocks_canonical_worker": false
   },
   "source_of_truth_model": "NUMINA",
   "worker_identity": "NUMINA",
@@ -111,5 +122,18 @@
     "sites_identity_supported": true
   },
   "control_identity_source": "src/control-http.js",
-  "runtime_release_contract_identity_separate": true
+  "runtime_release_contract_identity_separate": true,
+  "deployment_policy": {
+    "schema": "numina.deployment-policy.v1",
+    "source_of_truth_model": "NUMINA",
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "repository_count": 1,
+    "canonical_worker": "SITES_WORKER",
+    "worker_identity": "NUMINA",
+    "environment_model": "SINGULAR",
+    "publish_mode": "SINGULAR_REPOSITORY_PUSH",
+    "vercel_role": "MIRROR",
+    "vercel_blocks_canonical_worker": false
+  }
 }
