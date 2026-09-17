@@ -2,7 +2,7 @@ import {financialEvidenceHttp} from './financial-evidence.js';
 import {reviewerHttp,reviewerContext} from './reviewer.js';
 import {connectionsHttp} from './connections-http.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-v18.js';
-import {controlHttp} from './control-http.js';
+import {controlHttp,CONTROL_API_KEY_SHA256_PIN} from './control-http.js';
 import {routeRc20} from './rc20.js';
 import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
@@ -11,7 +11,6 @@ import {frontierHttp} from './frontier-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
 import {quantumHttp} from './quantum-http.js';
-const CONTROL_API_KEY_SHA256_PIN='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
 const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production","X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
