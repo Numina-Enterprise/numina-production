@@ -5,6 +5,7 @@ const authority=require('../lib/owner-authority');
 const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
 const {project}=require('../lib/numina-projection');
 const {observeProvider,SUPPORTED_READ_ONLY_PROVIDERS}=require('../lib/provider-observations');
+const PARTNERSHIP_STATUS=authority.OWNER_AUTHORIZATION.partnership_status;
 
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
 function catalog(){
@@ -16,12 +17,11 @@ function catalog(){
     providers:Object.keys(PROVIDERS).sort().map(key=>({
       ...PROVIDERS[key],
       live_adapter_shipped:key==='arc',
-      partnership_state:authority.partnershipState(),
       execution_state:executionState,
       live_submission:key==='arc'?{available:true,route:'/v1/execution/submit',method:'POST',network:'Arc Testnet',chain_id:5042002,payload:'pre-signed-raw-transaction',owner_authorization:'EIP-191 wallet signature bound to handoff, transaction hash, idempotency key, and expiry',arbitrary_provider_url_allowed:false,embedded_private_key_allowed:false}:{available:false},
       read_only_observation:SUPPORTED_READ_ONLY_PROVIDERS.includes(key)?{available:true,mode:'public-read-only-health',route:`/v1/execution/providers?mode=health&provider=${key}`,credentialed:false,external_execution_performed:false}:{available:false}
     })),
-    observation_set:{available:true,route:'/v1/execution/providers?mode=health-all',providers:SUPPORTED_READ_ONLY_PROVIDERS,credentialed:false,partnership_status:'not_asserted',partnership_state:authority.partnershipState(),external_execution_performed:false},
+    observation_set:{available:true,route:'/v1/execution/providers?mode=health-all',providers:SUPPORTED_READ_ONLY_PROVIDERS,credentialed:false,external_execution_performed:false},
     live_submission_route:'/v1/execution/submit',
     live_submission_route_exposed:true,
     live_submission_provider:'arc',
@@ -29,7 +29,7 @@ function catalog(){
     pre_signed_payload_required:true,
     owner_authorization_required:true,
     credentialed_provider_submitter_available:false,
-    partnership_status:'not_asserted',
+    partnership_status:PARTNERSHIP_STATUS,
     external_execution_performed:false
   };
   return project('providers',payload);
@@ -44,8 +44,7 @@ async function observationSet(){
     mode:'public-read-only-health',
     source_authority:'provider_public_endpoints',
     credentialed:false,
-    partnership_status:'not_asserted',
-    partnership_state:authority.partnershipState(),
+    partnership_status:PARTNERSHIP_STATUS,
     external_execution_performed:false,
     observed_at:new Date().toISOString(),
     providers:SUPPORTED_READ_ONLY_PROVIDERS,
@@ -69,7 +68,7 @@ module.exports=async function(req,res){
     if(mode!=='health')return respond(res,400,{error:'UNKNOWN_PROVIDER_MODE'});
     const provider=String(url.searchParams.get('provider')||'').trim().toLowerCase();
     const observation=await observeProvider(provider);
-    const projection=project('provider-observation',{manifest:NUMINA_MANIFEST.schema,partnership_status:'not_asserted',partnership_state:authority.partnershipState(),observation});
+    const projection=project('provider-observation',{manifest:NUMINA_MANIFEST.schema,observation});
     const receipt=sign(projection,'NUMINA_PROVIDER_OBSERVATION');
     return respond(res,observation.healthy?200:503,{observation:projection,receipt});
   }catch(error){
