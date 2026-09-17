@@ -8,12 +8,12 @@ import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
 export const CONTROL_API_KEY_SHA256_PIN='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
-function controlApiKeyPin(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured||CONTROL_API_KEY_SHA256_PIN;}
+function controlApiKeyPins(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured&&configured!==CONTROL_API_KEY_SHA256_PIN?[CONTROL_API_KEY_SHA256_PIN,configured]:[CONTROL_API_KEY_SHA256_PIN];}
 function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 export async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
   const auth=req.headers.get('authorization');
-  if(auth){if(!auth.startsWith('Bearer ')||await controlHash(auth.slice(7))!==controlApiKeyPin(env))controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}
+  if(auth){if(!auth.startsWith('Bearer ')||!controlApiKeyPins(env).includes(await controlHash(auth.slice(7))))controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}
   // Identity is supplied by Sites or the verified reviewer middleware. Reviewers
   // retain their distinct principal and do not inherit the production root.
   const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
