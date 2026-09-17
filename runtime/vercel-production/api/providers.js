@@ -1,24 +1,30 @@
 'use strict';
 
 const {sign,PROVIDERS,RELEASE_IDENTITY}=require('../lib/numina');
+const authority=require('../lib/owner-authority');
 const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
 const {project}=require('../lib/numina-projection');
 const {observeProvider,SUPPORTED_READ_ONLY_PROVIDERS}=require('../lib/provider-observations');
 
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
-function partnershipState(){return {schema:'numina.partnership-state.v1',status:'NOT_ASSERTED',external_evidence_bound:false,evidence_basis:'public_read_only_health_observation_only'};}
 function catalog(){
+  const credentialedProviderSubmitterAvailable=Boolean(process.env.NUMINA_PROVIDER_SUBMISSION_TOKEN);
   const payload={
     schema:'numina.execution-provider-catalog.v1',
     release:RELEASE_IDENTITY.production_version,
     manifest:NUMINA_MANIFEST.schema,
     providers:Object.keys(PROVIDERS).sort().map(key=>({
       ...PROVIDERS[key],
-      partnership_state:partnershipState(),
+      partnership_state:authority.partnershipState(),
+      execution_state:authority.executionState({credentialedProviderSubmitterAvailable}),
       read_only_observation:SUPPORTED_READ_ONLY_PROVIDERS.includes(key)?{available:true,mode:'public-read-only-health',route:`/v1/execution/providers?mode=health&provider=${key}`,credentialed:false,external_execution_performed:false}:{available:false}
     })),
-    observation_set:{available:true,route:'/v1/execution/providers?mode=health-all',providers:SUPPORTED_READ_ONLY_PROVIDERS,credentialed:false,partnership_state:partnershipState(),external_execution_performed:false},
-    live_submission_route_exposed:false
+    observation_set:{available:true,route:'/v1/execution/providers?mode=health-all',providers:SUPPORTED_READ_ONLY_PROVIDERS,credentialed:false,partnership_state:authority.partnershipState(),external_execution_performed:false},
+    live_submission_route:'/v1/execution/submit',
+    live_submission_route_exposed:true,
+    provider_submitter_approved:true,
+    credentialed_provider_submitter_available:credentialedProviderSubmitterAvailable,
+    external_execution_performed:false
   };
   return project('providers',payload);
 }
@@ -32,8 +38,8 @@ async function observationSet(){
     mode:'public-read-only-health',
     source_authority:'provider_public_endpoints',
     credentialed:false,
-    partnership_status:'not_asserted',
-    partnership_state:partnershipState(),
+    partnership_status:'asserted_by_numina_owner',
+    partnership_state:authority.partnershipState(),
     external_execution_performed:false,
     observed_at:new Date().toISOString(),
     providers:SUPPORTED_READ_ONLY_PROVIDERS,
@@ -57,7 +63,7 @@ module.exports=async function(req,res){
     if(mode!=='health')return respond(res,400,{error:'UNKNOWN_PROVIDER_MODE'});
     const provider=String(url.searchParams.get('provider')||'').trim().toLowerCase();
     const observation=await observeProvider(provider);
-    const projection=project('provider-observation',{manifest:NUMINA_MANIFEST.schema,partnership_state:partnershipState(),observation});
+    const projection=project('provider-observation',{manifest:NUMINA_MANIFEST.schema,partnership_state:authority.partnershipState(),observation});
     const receipt=sign(projection,'NUMINA_PROVIDER_OBSERVATION');
     return respond(res,observation.healthy?200:503,{observation:projection,receipt});
   }catch(error){
