@@ -28,12 +28,9 @@ jobs:
         with:
           node-version-file: .nvmrc
           check-latest: false
-      - name: Require owner control credential
-        shell: bash
-        run: |
-          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
-            echo '::error::NUMINA_CONTROL_API_KEY repository secret is not configured.'
-            exit 1
-          fi
+      - name: Report unavailable owner credential
+        if: ${{ env.NUMINA_CONTROL_API_KEY == '' }}
+        run: echo 'NUMINA_CONTROL_API_KEY is not configured; no treasury write is attempted.'
       - name: Align canonical Numina-native treasury
+        if: ${{ env.NUMINA_CONTROL_API_KEY != '' }}
         run: node scripts/ensure-native-treasury-500t.mjs
