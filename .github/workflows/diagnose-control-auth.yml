@@ -1,0 +1,42 @@
+name: Diagnose production control auth
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-control-auth.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 5
+    env:
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+    steps:
+      - name: Require owner credential
+        shell: bash
+        run: test -n "$NUMINA_CONTROL_API_KEY"
+      - name: Probe read-only treasury authentication
+        shell: bash
+        run: |
+          set -euo pipefail
+          for origin in \
+            https://numinalabs.xyz \
+            https://www.numinalabs.xyz \
+            https://numina-production.vercel.app \
+            https://numina-production-skott34-dot.vercel.app \
+            https://numina-production-l0t4iigco-skott34-dot.vercel.app
+          do
+            status="$(curl --silent --show-error --output /tmp/body --write-out '%{http_code}' \
+              --max-time 15 --location --max-redirs 0 \
+              -H 'Accept: application/json' \
+              -H "Authorization: Bearer $NUMINA_CONTROL_API_KEY" \
+              "$origin/api/control/v1/treasury" || true)"
+            error="$(node -e "try{const x=JSON.parse(require('fs').readFileSync('/tmp/body','utf8'));process.stdout.write(String(x.error||x.status||''))}catch{}")"
+            echo "$origin status=$status result=$error"
+          done
