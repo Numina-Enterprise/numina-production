@@ -14,6 +14,7 @@ on:
       - 'src/application-release-contract.js'
       - 'runtime/vercel-production/api/**'
       - 'runtime/vercel-production/lib/**'
+      - 'tests/provider-submitter.test.mjs'
 
 permissions:
   contents: read
@@ -36,6 +37,8 @@ jobs:
           if(nvmrc!=='24') throw new Error('.nvmrc must stay pinned to Node 24');
           if(Number(process.versions.node.split('.')[0])!==24) throw new Error('CI is not running Node 24');
           NODE
+      - name: Validate governed Arc provider submitter
+        run: node --test tests/provider-submitter.test.mjs
       - name: Validate application build
         run: npm run build
       - name: Validate root routes, release identities and provenance-bound readiness
@@ -71,7 +74,7 @@ jobs:
           validateApplicationRelease(application);
           const deployment={schema:'numina.deployment-provenance.v1',environment:'production',deployment_id:'dpl_1234567890',deployment_url:'https://numina-production-example.vercel.app',git_commit_sha:'0123456789abcdef0123456789abcdef01234567',git_commit_ref:'main',runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
           if(!validateDeploymentProvenance(deployment)) throw new Error('valid deployment provenance rejected');
-          const controlState={schema:'numina.control-state.v1',release:EXPECTED_RELEASE.production_version,controls:{runtime_controls_configurable:true,real_funds_enabled:true,employer_ip_enabled:false,public_execution_api_enabled:true,public_execution_route_exposed:true,execution_authorized:true,live_submission_enabled:true,provider_submitter_approved:true},funds_state:{schema:'numina.funds-state.v1',status:'ENABLED_BY_OWNER',real_funds_enabled:true,external_balance_verified:false,external_funds_moved:false},execution_state:{schema:'numina.execution-state.v1',status:'AUTHORIZED',execution_authorized:true,live_submission_enabled:true,provider_submitter_approved:true,public_execution_api_enabled:true,public_execution_route_exposed:true,live_provider_submitter_exposed:true,credentialed_provider_submitter_available:false,external_execution_performed:false},partnership_state:{schema:'numina.partnership-state.v1',status:'ASSERTED_BY_NUMINA_OWNER',asserted:true,external_partnership_verified:false}};
+          const controlState={schema:'numina.control-state.v1',release:EXPECTED_RELEASE.production_version,controls:{runtime_controls_configurable:true,real_funds_enabled:true,employer_ip_enabled:false,public_execution_api_enabled:true,public_execution_route_exposed:true,execution_authorized:true,live_submission_enabled:true,provider_submitter_approved:true,live_provider_submitter_enabled:true,owner_authorization_required:true,pre_signed_payload_required:true,arbitrary_provider_url_allowed:false,embedded_private_key_allowed:false},funds_state:{schema:'numina.funds-state.v1',status:'ENABLED_BY_OWNER',real_funds_enabled:true,external_balance_verified:false,external_funds_moved:false},execution_state:{schema:'numina.execution-state.v1',status:'GOVERNED_LIVE_SUBMISSION_ENABLED',execution_authorized:true,live_submission_enabled:true,provider_submitter_approved:true,public_execution_api_enabled:true,public_execution_route_exposed:true,live_provider_submitter_exposed:true,owner_authorization_required:true,pre_signed_payload_required:true,pre_signed_provider_submitter_available:true,credentialed_provider_submitter_available:false,external_execution_performed:false},partnership_state:{schema:'numina.partnership-state.v1',status:'NOT_ASSERTED',asserted:false,external_partnership_verified:false}};
           const manifest={schema:'numina.manifest.v1',source:'NUMINA',productionSource:'NUMINA',authority:'NUMINA',release:{...EXPECTED_RELEASE}};
           const supplyEvidence={valid:true,release:EXPECTED_RELEASE.release,production_files_root:EXPECTED_RELEASE.production_files_root,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256};
           const records={application,manifest:{manifest,receipt:{artifact_type:'NUMINA_MANIFEST',payload:manifest}},attestation:{artifact_type:RELEASE_ARTIFACT_TYPE,payload:{...EXPECTED_RELEASE,environment:'production',role:'public-verifier'}},supply:{payload:{evidence:supplyEvidence,receipt:{artifact_type:'NUMINA_SUPPLY_CHAIN_EVIDENCE',payload:supplyEvidence}}},control:{state:controlState,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:controlState}},deployment};
@@ -84,5 +87,5 @@ jobs:
           const unsafeControl={...controlState,execution_state:{...controlState.execution_state,external_execution_performed:true}};
           const unsafe=evaluateFrontierReadiness({...records,control:{state:unsafeControl,receipt:{artifact_type:'NUMINA_CONTROL_STATE',payload:unsafeControl}}},{verifyEnvelope});
           if(unsafe.ready||unsafe.checks.execution_authorization_bounded) throw new Error('frontier readiness did not fail closed on unverified external execution state');
-          console.log('Validated enabled Git deployment policy, pinned application artifact inventory '+EXPECTED_APPLICATION_ARTIFACT_BUILD_ID+', 12-function topology, exact rc26 identity, deployment provenance and owner-authorized bounded execution readiness on Node '+process.versions.node+'.');
+          console.log('Validated enabled Git deployment policy, pinned application artifact inventory '+EXPECTED_APPLICATION_ARTIFACT_BUILD_ID+', 12-function topology, exact rc26 identity, deployment provenance and owner-authorized pre-signed bounded execution readiness on Node '+process.versions.node+'.');
           NODE
