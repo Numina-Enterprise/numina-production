@@ -19,6 +19,9 @@ module.exports=async function attestation(req,res){
     compatibility:NUMINA_MANIFEST.compatibility
   });
   const receipt=legacy.sign(declaration,'NUMINA_RELEASE_ATTESTATION');
+  if(JSON.stringify(receipt.payload)!==JSON.stringify(declaration)){
+    throw new Error('NUMINA_RELEASE_ATTESTATION_PAYLOAD_MISMATCH');
+  }
   res.statusCode=200;
   res.setHeader('content-type','application/json; charset=utf-8');
   res.setHeader('cache-control','no-store');
