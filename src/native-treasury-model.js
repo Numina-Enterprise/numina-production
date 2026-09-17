@@ -6,6 +6,7 @@ export const NUMINA_TREASURY_INITIAL_BALANCE='500000000000000';
 const treasuryUnsigned=/^(0|[1-9][0-9]{0,77})$/;
 const treasurySigned=/^-?[1-9][0-9]{0,77}$/;
 const treasuryReference=/^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$/;
+const treasuryEvidenceDigest=/^sha256:[a-f0-9]{64}$/;
 export function treasuryExact(value,fields){
   if(!value||Object.getPrototypeOf(value)!==Object.prototype||Object.keys(value).length!==fields.length||fields.some(field=>!Object.hasOwn(value,field)))controlError('INVALID_TREASURY_FIELDS',400);
 }
@@ -17,12 +18,13 @@ export function validateTreasuryProjection(value){
 }
 
 // Pure reducer: no provider calls, mint submission, bank connection or new root.
+// Every accepted operation is a new immutable journal event; prior history is never rewritten.
 export function reduceTreasuryProjection(current,data,actor,eventId){
   treasuryExact(data,['Principal','Authority','Objective','Intent','expectedHead']);
   if(data.Principal!==actor||data.Authority!=='NUMINA')controlError('TREASURY_AUTHORITY_DENIED',403);
   const intent=data.Intent;
   if(!intent||typeof intent.operation!=='string')controlError('INVALID_TREASURY_INTENT',400);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind'};
   if(!Object.hasOwn(objectives,intent.operation)||data.Objective!==objectives[intent.operation])controlError('INVALID_TREASURY_OBJECTIVE',400);
   let projection=current?structuredClone(validateTreasuryProjection(current)):null;
   let transactionRequest=null;
@@ -38,6 +40,15 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
       const balance=BigInt(projection.balance)+BigInt(intent.delta);
       if(balance<0n||!treasuryUnsigned.test(balance.toString()))controlError('TREASURY_BALANCE_OUT_OF_RANGE',409);
       projection.balance=balance.toString();
+    }else if(intent.operation==='BIND_EXTERNAL_RECEIPT'){
+      treasuryExact(intent,['operation','requestId','provider','providerReference','evidenceDigest','reason']);treasuryReason(intent.reason);
+      if(!treasuryReference.test(intent.requestId)||!treasuryReference.test(intent.provider)||!treasuryReference.test(intent.providerReference)||!treasuryEvidenceDigest.test(intent.evidenceDigest))controlError('INVALID_EXTERNAL_RECEIPT',400);
+      const request=projection.transaction_requests.find(item=>item.id===intent.requestId);
+      if(!request)controlError('TREASURY_REQUEST_NOT_FOUND',404);
+      if(request.receipt!==null||request.status!=='PREPARED')controlError('TREASURY_RECEIPT_ALREADY_BOUND',409);
+      request.status='EVIDENCE_BOUND';
+      request.receipt={provider:intent.provider,provider_reference:intent.providerReference,evidence_digest:intent.evidenceDigest,external_funds_verified:false};
+      transactionRequest=request;
     }else{
       const mint=intent.operation==='PREPARE_MINT';
       treasuryExact(intent,mint?['operation','amount','networkReference','destinationReference','reason']:['operation','amountMinor','currency','destinationReference','reason']);
