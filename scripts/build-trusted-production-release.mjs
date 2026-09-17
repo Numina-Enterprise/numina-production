@@ -55,7 +55,7 @@ assert(providerArtifact.assertions?.circle_message==='pong','Circle evidence mis
 assert(providerArtifact.assertions?.arc_chain_id===5042002,'Arc chain mismatch');
 assert(providerArtifact.assertions?.credentialed===false,'credentialed provider evidence not allowed');
 assert(providerArtifact.assertions?.partnership_status==='not_asserted','partnership boundary mismatch');
-assert(providerArtifact.assertions?.external_execution_performed===false,'provider evidence reports execution');
+assert(providerArtifact.assertions?.external_execution_performed===false,'provider observation evidence reports execution');
 assert(/^sha256:[0-9a-f]{64}$/i.test(String(providerArtifact.archive?.digest||'')),'provider archive digest invalid');
 
 const [frontier,provenance]=await Promise.all([fetchJson('/v1/frontier/readiness'),fetchJson('/v1/deployment/provenance')]);
@@ -64,9 +64,10 @@ assert(sameJson(readinessPayload,frontier.readiness),'readiness receipt mismatch
 const deploymentPayload=verifyEnvelope(provenance.receipt,'NUMINA_DEPLOYMENT_PROVENANCE');
 assert(sameJson(deploymentPayload,provenance.provenance),'deployment receipt mismatch');
 assert(readinessPayload?.schema==='numina.frontier-readiness.v1'&&readinessPayload.ready===true,'frontier readiness not trusted');
-assert(readinessPayload.mode==='public-verifier-no-financial-execution','frontier mode mismatch');
+assert(readinessPayload.mode==='governed-live-submission','frontier mode mismatch');
 const checks=readinessPayload.checks||{};
 assert(Object.keys(checks).length===8&&Object.values(checks).every(Boolean),'frontier readiness checks incomplete');
+assert(checks.execution_boundary_governed===true,'governed execution boundary missing');
 assert(readinessPayload.runtime?.production_version===EXPECTED_RELEASE.production_version&&readinessPayload.runtime?.release===EXPECTED_RELEASE.release,'frontier runtime release mismatch');
 assert(deploymentPayload.git_commit_sha===EXPECTED_GIT_SHA,'deployment Git SHA mismatch');
 assert(deploymentPayload.git_commit_ref==='main'&&deploymentPayload.environment==='production','deployment scope mismatch');
@@ -94,7 +95,11 @@ const artifactJson={
     credentialed:false,
     partnership_status:'not_asserted',
     external_execution_performed:false,
-    execution_boundary_closed:true
+    execution_boundary_governed:true,
+    live_submission_enabled:true,
+    live_submission_provider:'arc',
+    owner_authorization_required:true,
+    pre_signed_payload_required:true
   }
 };
 const manifest={
@@ -108,4 +113,4 @@ const manifest={
 };
 fs.mkdirSync(path.dirname(OUTPUT_PATH),{recursive:true});
 fs.writeFileSync(OUTPUT_PATH,JSON.stringify(manifest,null,2)+'\n');
-console.log(JSON.stringify({ok:true,record_id:manifest.record_id,artifact_root:manifest.artifact_root,git_commit_sha:EXPECTED_GIT_SHA,deployment_id:deploymentPayload.deployment_id,provider_evidence_record_id:providerRecord.record_id,provider_artifact_root:providerRecord.artifact_root,archive_digest:providerArtifact.archive.digest,readiness_observed_at:readinessPayload.observed_at,readiness_checks:Object.keys(checks),credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,execution_boundary_closed:true,path:path.resolve(OUTPUT_PATH)},null,2));
+console.log(JSON.stringify({ok:true,record_id:manifest.record_id,artifact_root:manifest.artifact_root,git_commit_sha:EXPECTED_GIT_SHA,deployment_id:deploymentPayload.deployment_id,provider_evidence_record_id:providerRecord.record_id,provider_artifact_root:providerRecord.artifact_root,archive_digest:providerArtifact.archive.digest,readiness_observed_at:readinessPayload.observed_at,readiness_checks:Object.keys(checks),credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,execution_boundary_governed:true,live_submission_enabled:true,live_submission_provider:'arc',owner_authorization_required:true,pre_signed_payload_required:true,path:path.resolve(OUTPUT_PATH)},null,2));
