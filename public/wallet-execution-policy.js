@@ -11,7 +11,7 @@ export const WALLET_EXECUTION_POLICY=executionFreeze({
  sender:'0x1a45671AE2ee3E52264116151924FAAcb80Fc02E',initialSupplyBaseUnits:'1500000000000000000000',
  issuerPolicySigned:false,ownerApproved:NUMINA_OWNER_APPROVAL.approved&&NUMINA_OWNER_APPROVAL.requestSha256==='0af2b7e72cd18f9676f85356da95f8deee8788eac0dee3d587a1278342a401ca',ownerApprovalId:NUMINA_OWNER_APPROVAL.id,reviewEvidenceVerified:false,
  reviews:['independentSecurityAudit','authorizedIssuerAndJurisdictions','custodianAndReserveEvidence','redeemabilityTermsAndOperations','financialCrimeAndSanctionsControls','independentRoleKeyCustody','incidentAndPauseRecovery','applicationSettlementAndFulfillmentReview'].map(id=>({id,verified:false,evidenceSha256:null})),
- blockers:['The revised 1,500T issuer policy is unsigned.','Eight production reviews lack verified supporting records.'],
+ blockers:['No verified issuer-policy signature is attached to the published 1,500T request.','Eight production reviews lack verified supporting records.'],
  minimumConfirmations:12,fundsVerified:false,providerDepositsEnabled:false
 });
 export function walletExecutionAuthorized(policy=WALLET_EXECUTION_POLICY){
