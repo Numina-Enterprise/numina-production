@@ -22,6 +22,34 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Diagnose IBM credential placement without values
+        shell: bash
+        env:
+          HAS_SECRET_IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY != '' }}
+          HAS_SECRET_IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN != '' }}
+          HAS_SECRET_QISKIT_IBM_TOKEN: ${{ secrets.QISKIT_IBM_TOKEN != '' }}
+          HAS_SECRET_QISKIT_IBM_API_TOKEN: ${{ secrets.QISKIT_IBM_API_TOKEN != '' }}
+          HAS_SECRET_IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY != '' }}
+          HAS_SECRET_IBM_API_KEY: ${{ secrets.IBM_API_KEY != '' }}
+          HAS_SECRET_QISKIT_TOKEN: ${{ secrets.QISKIT_TOKEN != '' }}
+          HAS_SECRET_IBM_QUANTUM_KEY: ${{ secrets.IBM_QUANTUM_KEY != '' }}
+          HAS_VAR_IBM_QUANTUM_API_KEY: ${{ vars.IBM_QUANTUM_API_KEY != '' }}
+          HAS_VAR_IBM_QUANTUM_TOKEN: ${{ vars.IBM_QUANTUM_TOKEN != '' }}
+          HAS_VAR_QISKIT_IBM_TOKEN: ${{ vars.QISKIT_IBM_TOKEN != '' }}
+          HAS_VAR_IBM_CLOUD_API_KEY: ${{ vars.IBM_CLOUD_API_KEY != '' }}
+        run: |
+          printf 'secret.IBM_QUANTUM_API_KEY=%s\n' "$HAS_SECRET_IBM_QUANTUM_API_KEY"
+          printf 'secret.IBM_QUANTUM_TOKEN=%s\n' "$HAS_SECRET_IBM_QUANTUM_TOKEN"
+          printf 'secret.QISKIT_IBM_TOKEN=%s\n' "$HAS_SECRET_QISKIT_IBM_TOKEN"
+          printf 'secret.QISKIT_IBM_API_TOKEN=%s\n' "$HAS_SECRET_QISKIT_IBM_API_TOKEN"
+          printf 'secret.IBM_CLOUD_API_KEY=%s\n' "$HAS_SECRET_IBM_CLOUD_API_KEY"
+          printf 'secret.IBM_API_KEY=%s\n' "$HAS_SECRET_IBM_API_KEY"
+          printf 'secret.QISKIT_TOKEN=%s\n' "$HAS_SECRET_QISKIT_TOKEN"
+          printf 'secret.IBM_QUANTUM_KEY=%s\n' "$HAS_SECRET_IBM_QUANTUM_KEY"
+          printf 'variable.IBM_QUANTUM_API_KEY=%s\n' "$HAS_VAR_IBM_QUANTUM_API_KEY"
+          printf 'variable.IBM_QUANTUM_TOKEN=%s\n' "$HAS_VAR_IBM_QUANTUM_TOKEN"
+          printf 'variable.QISKIT_IBM_TOKEN=%s\n' "$HAS_VAR_QISKIT_IBM_TOKEN"
+          printf 'variable.IBM_CLOUD_API_KEY=%s\n' "$HAS_VAR_IBM_CLOUD_API_KEY"
       - name: Require IBM Quantum API key
         shell: bash
         run: |
