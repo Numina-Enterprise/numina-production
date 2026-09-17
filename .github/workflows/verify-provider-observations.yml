@@ -98,7 +98,7 @@ jobs:
             -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
           oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          response="$(curl --fail --silent --show-error \
+          response="$(curl --silent --show-error \
             --request POST \
             --header "Authorization: Bearer ${oidc_token}" \
             --header 'Content-Type: application/json' \
@@ -107,8 +107,10 @@ jobs:
           RESPONSE="$response" RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node <<'NODE'
           const fs=require('fs');
           const expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));
-          const observed=JSON.parse(process.env.RESPONSE);
+          let observed;
+          try{observed=JSON.parse(process.env.RESPONSE);}catch{console.error('provider evidence ingest returned non-JSON');process.exit(1);}
           function fail(message){console.error(message,observed);process.exit(1);}
+          if(observed.error)fail('provider evidence ingest rejected request');
           if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');
           if(observed.record_id!==expected.record_id)fail('durable provider evidence record id mismatch');
           if(observed.artifact_root!==expected.artifact_root)fail('durable provider evidence root mismatch');
