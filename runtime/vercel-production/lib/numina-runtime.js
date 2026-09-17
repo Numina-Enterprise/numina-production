@@ -1,0 +1,40 @@
+'use strict';
+
+const {createNumina,projectLegacyRuntime}=require('./frontier');
+const legacy=require('./numina');
+
+function runtimeState(){
+  return {
+    authority:'NUMINA',
+    release:legacy.RELEASE_IDENTITY,
+    controls:legacy.controls(),
+    providers:legacy.PROVIDERS,
+  };
+}
+
+async function transition(state,intent){
+  const kind=String(intent.kind||'').trim();
+  const body=intent.body&&typeof intent.body==='object'?intent.body:{};
+  switch(kind){
+    case 'control-evaluate':
+      return {...state,last:{kind,decision:legacy.evaluate(body)}};
+    case 'execution-prepare':
+      return {...state,last:{kind,handoff:legacy.prepare(body)}};
+    case 'evidence-bind':
+      return {...state,last:{kind,binding:legacy.bindEvidence(body)}};
+    case 'observe':
+      return {...state,last:{kind,observed:body}};
+    default:
+      throw new Error('UNKNOWN_NUMINA_INTENT');
+  }
+}
+
+function createRuntimeNumina(){
+  return createNumina({state:runtimeState(),execute:transition});
+}
+
+function compatibilityProjection(){
+  return projectLegacyRuntime(createRuntimeNumina());
+}
+
+module.exports={createRuntimeNumina,compatibilityProjection,transition};

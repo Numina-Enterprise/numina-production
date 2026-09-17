@@ -1,1 +1,1 @@
-module.exports = require('../lib/numina').makeHandler('execution-prepare');
+module.exports = require('../lib/frontier-handler').makeFrontierHandler('execution-prepare');
