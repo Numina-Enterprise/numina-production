@@ -3,6 +3,7 @@
 const legacy=require('../lib/numina');
 const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
 const {project}=require('../lib/numina-projection');
+const {authorizedControls}=require('../lib/execution-controls');
 
 module.exports=async function status(req,res){
   if(req.method!=='GET'){
@@ -11,9 +12,21 @@ module.exports=async function status(req,res){
     res.setHeader('cache-control','no-store');
     return res.end(JSON.stringify({error:'METHOD_NOT_ALLOWED'}));
   }
+  const controls=authorizedControls(legacy.controls());
   const status=project('status',{
     release:legacy.RELEASE_IDENTITY,
-    controls:legacy.controls(),
+    controls,
+    execution:{
+      schema:'numina.live-execution-capability.v1',
+      status:'GOVERNED_LIVE_SUBMISSION_ENABLED',
+      provider:'arc',
+      route:'/v1/execution/submit',
+      owner_authorization_required:true,
+      pre_signed_payload_required:true,
+      live_provider_submitter_exposed:true,
+      external_execution_performed:false,
+      partnership_status:'not_asserted'
+    },
     runtime:NUMINA_MANIFEST.runtime
   });
   const receipt=legacy.sign(status,'NUMINA_PRODUCTION_STATUS');
