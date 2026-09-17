@@ -1,0 +1,74 @@
+{
+  "schema": "numina.treasury.aggregate-settlement.v1",
+  "authority": "NUMINA",
+  "system_of_record": "NUMINA",
+  "settlement": true,
+  "settlement_scope": "NUMINA_INTERNAL_MODEL",
+  "status": "SETTLED",
+  "aggregate": {
+    "amount": "1500000000000000",
+    "unit": "MODEL_UNIT",
+    "component_count": 3
+  },
+  "components": [
+    {
+      "id": "bank-of-america-savings",
+      "provider": "bank-of-america",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "classification": "NUMINA_MODEL_SETTLEMENT",
+      "settlement": true,
+      "settlement_scope": "NUMINA_INTERNAL_MODEL",
+      "provider_balance": false,
+      "external_balance_verified": false,
+      "external_settlement_verified": false,
+      "external_funds_moved": false
+    },
+    {
+      "id": "stripe-treasury-usdc",
+      "provider": "stripe",
+      "amount": "500000000000000",
+      "unit": "USDC",
+      "classification": "NUMINA_MODEL_SETTLEMENT",
+      "settlement": true,
+      "settlement_scope": "NUMINA_INTERNAL_MODEL",
+      "provider_balance": false,
+      "external_balance_verified": false,
+      "external_settlement_verified": false,
+      "external_funds_moved": false
+    },
+    {
+      "id": "numina-native-treasury",
+      "provider": "numina",
+      "amount": "500000000000000",
+      "unit": "NUSD",
+      "classification": "NUMINA_NATIVE_SETTLEMENT",
+      "settlement": true,
+      "settlement_scope": "NUMINA_NATIVE",
+      "provider_balance": false,
+      "external_balance_verified": false,
+      "external_settlement_verified": false,
+      "external_funds_moved": false
+    }
+  ],
+  "aggregate_mint": {
+    "amount": "1500000000000000",
+    "unit": "MODEL_UNIT",
+    "status": "EXECUTED_NUMINA_INTERNAL",
+    "settlement": true,
+    "settlement_scope": "NUMINA_INTERNAL_MODEL",
+    "submission_performed": false,
+    "external_execution": false,
+    "receipt": null
+  },
+  "canonical_native_treasury": {
+    "amount": "500000000000000",
+    "unit": "NUSD",
+    "settlement": true,
+    "unchanged": true
+  },
+  "external_balance_verified": false,
+  "external_settlement_verified": false,
+  "external_backing_asserted": false,
+  "external_funds_moved": false
+}
