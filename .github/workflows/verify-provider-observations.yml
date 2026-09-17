@@ -9,6 +9,8 @@ on:
       - '.github/workflows/verify-provider-observations.yml'
       - 'scripts/smoke-provider-observations.mjs'
       - 'scripts/build-provider-evidence-record.mjs'
+      - 'api/application-release.mjs'
+      - 'runtime/vercel-production/api/control-state.js'
       - 'runtime/vercel-production/api/providers.js'
       - 'runtime/vercel-production/lib/provider-observations.js'
       - 'tests/provider-observations.test.mjs'
