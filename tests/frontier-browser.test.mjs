@@ -46,7 +46,7 @@ function harness(view,override=()=>null,adjustmentClient=null){
   };
   const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryPreparation(target,options){assert.equal(options.root,view.treasury.principal);assert.deepEqual(options.accounts,view.accounts);assert.equal(typeof options.onAccessLost,'function');assert.equal(typeof options.onCommitted,'function');assert.equal(typeof options.isCurrent,'function');},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
   if(adjustmentClient)vm.runInContext('const mountTreasuryAdjustment=(()=>{'+source('treasury-adjustment-ui.js')+';return mountTreasuryAdjustment;})();',context);
-  vm.runInContext(source('http-client.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-amount.js')+'\n'+source('nusd-contract-record.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
+  vm.runInContext(source('http-client.js')+'\n'+source('treasury-connection-model.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-amount.js')+'\n'+source('nusd-contract-record.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
   return {get,events,subject:context.subject,close(){events.pagehide?.();}};
 }
 
@@ -118,7 +118,7 @@ test('funding panel displays the current native declaration while retaining the 
     await settled();const panel=h.get('#funding-plan').textContent;
     assert.match(panel,/Current native funding status · FUNDED_PLAN · Owner declaration/);
     assert.match(panel,/Original plan status · UNFUNDED_PLAN/);
-    assert.match(panel,/View the canonical native treasury/);assert.doesNotMatch(panel,/500,000,000,000,000/);assert.match(h.get('#treasury-balances').textContent,/500,000,000,000,000\.000000000000000000 NUSD/);
+    assert.match(panel,/View the canonical native treasury/);assert.doesNotMatch(panel,/500,000,000,000,000/);assert.match(h.get('#treasury-balances').textContent,/500,000,000,000,000\.000000 NUSD/);
     assert.match(panel,/Read signed plan receipt/);assert.match(panel,/Read signed owner declaration/);
     assert.deepEqual(view,before);
   }finally{h.close();}
@@ -132,7 +132,7 @@ test('frontier session loss clears records and ignores a late treasury response'
 test('a refreshed frontier ignores an older pending snapshot and preserves account labels',async()=>{
   const view=await accountView(),pending=deferred();let reads=0;
   const h=harness(view,path=>path.endsWith('/treasury/accounts')&&reads++===0?pending.promise:null);
-  try{await settled();await h.subject.refresh();assert.match(h.get('#accounts').textContent,/Existing reference/);const old=structuredClone(view);old.accounts[0].accountLabel='Stale response';pending.resolve(Response.json(old));await settled();assert.doesNotMatch(h.get('#accounts').textContent,/Stale response/);assert.match(h.get('#accounts').textContent,/View the canonical native treasury/);assert.match(h.get('#accounts').textContent,/500,000,000,000,000\.000000000000000000 NUSD/);assert.match(h.get('#accounts').textContent,/One canonical NUMINA treasury/);}finally{h.close();}
+  try{await settled();await h.subject.refresh();assert.match(h.get('#accounts').textContent,/Existing reference/);const old=structuredClone(view);old.accounts[0].accountLabel='Stale response';pending.resolve(Response.json(old));await settled();assert.doesNotMatch(h.get('#accounts').textContent,/Stale response/);assert.match(h.get('#accounts').textContent,/View the canonical native treasury/);assert.match(h.get('#accounts').textContent,/500,000,000,000,000\.000000 NUSD/);assert.match(h.get('#accounts').textContent,/One canonical NUMINA treasury/);}finally{h.close();}
 });
 
 test('late provider reads cannot restore balances after frontier access is lost',async()=>{
