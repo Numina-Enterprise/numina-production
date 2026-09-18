@@ -38,7 +38,7 @@ test('treasury commits after 2048 journal events and survives restart in the sam
     db.close();db=database(file);
     const reopened=createNuminaTreasury({db,principal:owner,root:owner});
     const record=await reopened.readTreasury();
-    assert.equal(record.root,owner);assert.equal(record.revision,2049);
+    assert.equal(record.root,'NUMINA');assert.equal(record.principal,owner);assert.equal(record.revision,2049);
     assert.equal(record.head,result.canonical_proof.hash);
     assert.equal((await reopened.writeTreasury(event)).replayed,true);
     assert.equal((await readControl(db)).eventCount,2050);
