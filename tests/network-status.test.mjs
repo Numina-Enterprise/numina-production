@@ -7,7 +7,7 @@ test('network observation preserves its date while pointing to the receipt-backe
  const view=networkPresentation(NUSD_POLICY);
  assert.match(view.summary,/3 validators running when observed/);
  assert.match(view.detail,/962421430/);
- assert.match(view.observed,/2026-09-12 16:07:17 UTC/);
+ assert.match(view.observed,/2026-09-18 15:31:26.425 UTC/);
  assert.match(view.observed,/not continuous monitoring/);
  assert.match(view.asset,/See the NUSD status record/);
  assert.equal(NUSD_POLICY.asset.contract,'0x491c1DF1b5CA77AF797f052c2310ca17039C931b');
