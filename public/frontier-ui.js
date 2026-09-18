@@ -23,8 +23,8 @@ function node(tag,text){const n=document.createElement(tag);n.textContent=text;r
 function treasuryActions(t,readApi,isCurrent){
   const target=$('#treasury-actions');if(!target)return;target.replaceChildren();
   if(t.treasury.status==='READY'){
-    mountTreasuryAdjustment(target,{root:t.treasury.root,isCurrent,onCommitted:refresh,onAccessLost:ownerAccessLost});
-    mountTreasuryPreparation(target,{root:t.treasury.root,accounts:t.accounts,isCurrent,onCommitted:refresh,onAccessLost:ownerAccessLost});
+    mountTreasuryAdjustment(target,{root:t.treasury.principal,isCurrent,onCommitted:refresh,onAccessLost:ownerAccessLost});
+    mountTreasuryPreparation(target,{root:t.treasury.principal,accounts:t.accounts,isCurrent,onCommitted:refresh,onAccessLost:ownerAccessLost});
   }
   if(t.treasury.status==='NOT_INITIALIZED'){
     const b=node('button','Initialize canonical NUSD projection');b.className='button secondary';
@@ -33,7 +33,7 @@ function treasuryActions(t,readApi,isCurrent){
       if(!await verifyTreasuryAccountView(current))throw Error('Treasury record could not be verified.');
       if(current.treasury.status==='READY'){await refresh();return;}
       const state=current.treasury;
-      const response=await fetch('/api/control/v1/treasury',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:canonical({id:crypto.randomUUID(),expectedRevision:state.revision,expectedHead:state.head,Principal:state.root,Authority:'NUMINA',Objective:'treasury.initialize',Intent:{operation:'INITIALIZE',reason:'Owner initializes the singular Numina-native treasury projection in the existing journal'}})});
+      const response=await fetch('/api/control/v1/treasury',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:canonical({id:crypto.randomUUID(),expectedRevision:state.revision,expectedHead:state.head,Principal:state.principal,Authority:'NUMINA',Objective:'treasury.initialize',Intent:{operation:'INITIALIZE',reason:'Owner initializes the singular Numina-native treasury projection in the existing journal'}})});
       const result=await response.json();if(!response.ok)throw Error(result.error||'Initialization not confirmed');await refresh();
     }catch(e){$('#treasury-status').textContent=e.message;b.disabled=false;}};
     target.append(node('p','Initialize the authorized Numina-native model: 500,000,000,000,000 NUSD in the existing journal. Provider balances remain their own observations.'),b);

@@ -79,6 +79,10 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
 }
 
 export function createNusdContractRecord(read=readFileSync) {
+  const verified=JSON.parse(read(path.join(root,'runtime/nusd/deployment-verification.json')));
+  if(verified.status!=='FINAL'||verified.chainId!=='962421430'||verified.issuance?.decimals!==18||
+    verified.token?.address!==VERIFIED_DEPLOYMENTS.nusd.contract_address||verified.token.transactionHash!==VERIFIED_DEPLOYMENTS.nusd.transaction_hash||
+    BigInt(verified.issuance.amountNusd)*10n**18n!==BigInt(verified.issuance.baseUnits))throw Error('NUSD issuance verification mismatch');
   const entries=specifications.map(specification=>contractDescriptor(specification,
     read(path.join(root,`runtime/nusd/contracts/${specification.name}.sol`)),
     read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`))));
@@ -86,9 +90,10 @@ export function createNusdContractRecord(read=readFileSync) {
     schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
+    issuance:{...verified.issuance,verifiedAt:verified.verifiedAt,transactionHash:verified.token.transactionHash,record:'/downloads/nusd/deployment-verification.json'},
     financial_execution:{issuance:true,transfer:false,nusd_settlement:false,usd_redemption:false,
       usdc_conversion:false,external_deposits:false},
-    scope:'NuminaUSD and NuminaSettlement are deployed and receipt-verified on the pinned NUMINA chain. NuminaUSD remains paused after its verified 1,500T constructor mint. USDC conversion and USD redemption contracts remain compiled but not deployed or activated; no external reserves, bank settlement, USDC liquidity or provider deposit is inferred.',
+    scope:'NuminaUSD and NuminaSettlement are deployed and receipt-verified on the pinned NUMINA chain. The dated verification records a 1,500T constructor mint and paused state; it is not a live activity observation. USDC conversion and USD redemption contracts remain compiled but not deployed or activated; no external reserves, bank settlement, USDC liquidity or provider deposit is inferred.',
   }};
 }
 

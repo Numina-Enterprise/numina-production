@@ -27,6 +27,9 @@ export default async function handler(req,res){
     return res.end(JSON.stringify({error:'METHOD_NOT_ALLOWED'}));
   }
   if(mode==='nusd-status')return writeJson(req,res,NUSD_POLICY);
+  if(mode==='nusd-contracts')return writeJson(req,res,NUSD_POLICY.contract_record);
+  if(mode==='nusd-mint-workflow')return writeJson(req,res,NUSD_POLICY.mint_workflow);
+  if(mode==='nusd-conversion-workflow')return writeJson(req,res,NUSD_POLICY.conversion_workflow);
   if(mode==='nusd-deployment-receipt')return writeJson(req,res,deploymentReceipt,{immutable:true});
   if(mode==='nusd-deployment-verification')return writeJson(req,res,deploymentVerification,{immutable:true});
   res.statusCode=404;

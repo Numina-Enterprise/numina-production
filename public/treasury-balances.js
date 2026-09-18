@@ -1,18 +1,20 @@
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {requestJson} from './http-client.js';
+import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount} from './treasury-amount.js';
+import {NUSD_CONTRACT_RECORD} from './nusd-contract-record.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
 function fundableTarget(treasury,id){return treasury?.fundableTargets?.targets?.find(target=>target.id===id)??null;}
-function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?BigInt(target.amount).toLocaleString()+' '+target.unit+' modeled value · '+target.alignmentStatus:'Unavailable';}
+function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?formatTreasuryModelWholeAmount(target.amount,target.unit)+' modeled value · '+target.alignmentStatus:'Unavailable';}
 export function renderNativeAccountReference(treasury){
   const reference=item('div','');reference.className='shared-native-treasury-reference';
   const projection=treasury?.treasury?.projection,valuation=treasury?.nativeValuation;
   const rows=item('dl','');
-  detail(rows,'Shared NUSD balance',projection?.balance?BigInt(projection.balance).toLocaleString()+' NUSD':'Unavailable');
+  detail(rows,'Shared NUSD balance',projection?.balance?formatTreasuryNusdWholeAmount(projection.balance):'Unavailable');
   for(const unit of ['USD','USDC']){
     const value=valuation?.denominations?.find(value=>value.unit===unit);
     const matches=valuation?.basis==='owner_authorized_denomination_policy'&&value?.amount===projection?.balance;
-    detail(rows,'Declared '+unit+' value (1:1 policy)',matches?BigInt(value.amount).toLocaleString()+' '+unit:'Unavailable');
+    detail(rows,'Declared '+unit+' value (1:1 policy)',matches?formatTreasuryModelWholeAmount(value.amount,unit):'Unavailable');
   }
   detail(rows,'Canonical journal revision',String(treasury?.treasury?.revision??'Unavailable'));
   reference.append(item('h5','NUMINA Treasury v2'),rows,item('p','One canonical NUMINA treasury. This role view carries transport/verification evidence only; it does not create an additional balance.'));
@@ -24,19 +26,26 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const heading=item('h3','NUMINA Treasury v2 evidence roles');
   const canonicalLink=()=>{const link=item('a','View the canonical native treasury ↗');link.href='/api/control/v1/treasury';return link;};
   const sharedProjection=treasury?.treasury?.projection?.balance;
-  const nativeText=sharedProjection?BigInt(sharedProjection).toLocaleString()+' NUSD · shared canonical record':'Unavailable';
+  const nativeText=sharedProjection?formatTreasuryNusdWholeAmount(sharedProjection)+' · shared canonical record':'Unavailable';
   const valuation=treasury?.nativeValuation;
-  const declaredUsd=valuation?.basis==='owner_authorized_denomination_policy'&&valuation.unit==='USD'?BigInt(valuation.amount).toLocaleString()+' USD · shared declared value':'Unavailable';
+  const declaredUsd=valuation?.basis==='owner_authorized_denomination_policy'&&valuation.unit==='USD'?formatTreasuryModelWholeAmount(valuation.amount,'USD')+' · shared declared value':'Unavailable';
   const usdc=valuation?.denominations?.find(value=>value.unit==='USDC');
-  const declaredUsdc=usdc&&usdc.amount===valuation?.amount?BigInt(usdc.amount).toLocaleString()+' USDC · shared declared value':'Unavailable';
+  const declaredUsdc=usdc&&usdc.amount===valuation?.amount?formatTreasuryModelWholeAmount(usdc.amount,'USDC')+' · shared declared value':'Unavailable';
   const valuationRows=list=>{detail(list,'Declared USD value (1:1 policy)',declaredUsd);detail(list,'Declared USDC value (1:1 policy)',declaredUsdc);};
   const summary=item('article','');summary.className='treasury-balances canonical-treasury-summary';
   const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);detail(summaryRows,'Numina NUSD fundable target',fundableTargetText(treasury,'numina-native-treasury'));valuationRows(summaryRows);
   detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
-  if(treasury?.fundableTargets?.aggregateModeledValue)detail(summaryRows,'Aggregate modeled value',BigInt(treasury.fundableTargets.aggregateModeledValue).toLocaleString()+' NUSD modeled equivalent');
-  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','Three designated NUMINA treasury modeled values are aligned at 500T each: 500T USD + 500T USDC + 500T NUSD = 1,500T NUSD modeled aggregate. '+NUMINA_DENOMINATION_POLICY.expression+'. This modeled aggregate does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
+  if(treasury?.fundableTargets?.aggregateModeledValue)detail(summaryRows,'Shared model total (counted once)',formatTreasuryNusdWholeAmount(treasury.fundableTargets.aggregateModeledValue)+' modeled equivalent');
+  const issuance=NUSD_CONTRACT_RECORD.issuance;
+  if(issuance?.constructorMint===true&&issuance.decimals===18){
+    detail(summaryRows,'Minted NUSD aggregate (separate token supply)',formatTreasuryNusdWholeAmount(issuance.amountNusd));
+    detail(summaryRows,'Issuance verification observed at',issuance.verifiedAt);
+  }
+  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One shared 500T NUMINA treasury model is expressed in three denomination views: USD, USDC and NUSD. These are not additive balances. '+NUMINA_DENOMINATION_POLICY.expression+'. Model amounts are displayed at 18 decimal places without changing the stored integers or existing token contract. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
   target.append(summary);
+  const issuanceLink=item('a','Read the minted-supply verification ↗');issuanceLink.href='/downloads/nusd/deployment-verification.json';
+  summary.append(item('p','The 500T treasury model balance and the recorded 1,500T minted token aggregate are distinct measures within the singular NUMINA record. Denomination views do not add balances; minted supply is not provider funding.'),issuanceLink);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
   const stripeTargetRows=item('dl','');detail(stripeTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));
@@ -45,7 +54,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const bankTargetRows=item('dl','');detail(bankTargetRows,'Fundable USD target',fundableTargetText(treasury,'bank-of-america-savings'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
   const bankRows=item('dl','');detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
   grid.append(stripe,bank);
-  target.append(heading,grid,item('p','Treasury v2 is singular: the 1,500T modeled aggregate is composed inside NUMINA from three 500T modeled role values. Provider observations remain factual evidence and are not treated as externally settled balances without confirmation.'));
+  target.append(heading,grid,item('p','Treasury v2 is singular: one 500T model, three denomination views, counted once. Provider observations remain factual evidence and are not treated as externally settled balances without confirmation.'));
   try{
     const record=await requestJson('/api/control/v1/stripe-treasury',{signal,timeoutMs:12000});
     if(signal?.aborted)return;

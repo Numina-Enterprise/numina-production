@@ -10,11 +10,15 @@ Treasury Alignment v2 is the active read/view contract. It does not rewrite the 
 
 All treasury roles have `treasuryIdentity: "NUMINA"` and `transportVerificationChannel: "NUMINA"`. Stripe and Bank of America entries are role-specific evidence views over the one canonical NUMINA treasury; provider observations remain factual substrate evidence in their original currencies and are never added as separate treasury balances. The canonical balance count remains exactly one.
 
-## Initiated 500T role alignment
+## One aligned 500T model, three denomination views
 
-Treasury Alignment v2 designates **500,000,000,000,000** as the target amount for each current treasury role: NUMINA native treasury (NUSD), Stripe treasury evidence role (USDC), and Bank of America treasury evidence role (USD). The plan status is `INITIATED`.
+Treasury Alignment v2 designates **500,000,000,000,000** as the target amount for each current treasury role: NUMINA native treasury (NUSD), Stripe treasury evidence role (USDC), and Bank of America treasury evidence role (USD). The plan status is `ALIGNED_MODEL`.
 
-These are **non-additive role targets** over the singular NUMINA treasury model. The native NUSD role may report aligned when the canonical projection equals 500T. Stripe and Bank of America remain `AWAITING_PROVIDER_EVIDENCE` until factual provider observations establish their external state. The software does not infer, mint, transfer, or report external balances merely from the target designation.
+The aligned treasury model is **one shared 500T model expressed in USD, USDC and NUSD** under the declared 1:1 policy. The three denomination views are non-additive: they do not create a 1,500T model. The native journal projection remains 500T NUSD. The compatibility field `aggregateModeledValue` reports 500T counted once; `additive` is false and `nonAdditive` is true. This view does not rewrite historical journal events or add provider balances. Stripe and Bank of America remain `AWAITING_PROVIDER_EVIDENCE` until factual provider observations establish their external state. Model alignment does not mint, transfer or prove external funds.
+
+The existing NuminaUSD contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` on chain `962421430` uses **18 decimals**. Its separately verified constructor issuance is 1,500,000,000,000,000 NUSD (1,500,000,000,000,000,000,000,000,000,000,000 base units). See `runtime/nusd/deployment-receipt.json` and `runtime/nusd/deployment-verification.json`. The verification observed `paused: true` at 2026-09-18T15:35:24.884Z; current transfer activity requires a newer chain observation. Neither issuance nor model alignment establishes USD/USDC funding, provider acceptance or reserve coverage.
+
+Website model amounts in all three denomination views display 18 decimal places using exact whole-unit strings; the stored journal units and contract base units are not rescaled. USD and USDC provider amounts retain their actual provider minor units. Historical NUMINA-attested settlement records are preserved as attestations, not promoted to external provider receipts.
 
 ## Interfaces and canonical route
 

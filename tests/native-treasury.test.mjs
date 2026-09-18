@@ -52,6 +52,18 @@ test('account views share one checked balance without changing stored references
     await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
     assert.equal(await verifyTreasuryAccountView(view),true);assert.equal(view.schema,'numina.treasury.alignment.v2');assert.equal(view.identity,'NUMINA');assert.equal(view.treasuryIdentity,'NUMINA');assert.equal(view.transportVerificationChannel,'NUMINA');assert.equal(view.accountAlignment.schema,'numina.treasury.account-view.v2');assert.equal(view.accountAlignment.separateRoles,true);assert.equal(view.accountAlignment.singularIdentity,true);assert.ok(view.accounts.every(account=>account.treasuryIdentity==='NUMINA'&&account.treasuryRole==='evidence_view'&&account.providerObservationOnly===true));assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
     for(const mutate of [
+      v=>v.fundableTargets.aggregateModeledValue='1500000000000000',
+      v=>v.fundableTargets.additive=true,
+      v=>v.treasuryAlignmentPlan.nonAdditive=false,
+      v=>v.fundableTargets.externalBalancesAggregated=true,
+      v=>v.fundableTargets.targets[0].amount='500000000000001',
+      v=>v.fundableTargets.targets[1].unit='NUSD',
+      v=>v.fundableTargets.targets[0].providerBalance=true,
+      v=>v.fundableTargets.targets[0].providerObservationVerified=true,
+      v=>v.fundableTargets.targets[0].fundingPerformed=true,
+      v=>v.treasuryAlignmentPlan.designatedLocations[1].fundingPerformed=true,
+      v=>v.treasuryAlignmentPlan.designatedLocations[1].modeledNusdEquivalent='1',
+      v=>v.accountAlignment.aggregation='one NUMINA treasury; three modeled 500T role values compose a 1,500T NUSD aggregate; external provider balances are not added',
       v=>v.canonicalTreasury.root='wrong-root',v=>v.canonicalTreasury.head='a'.repeat(64),
       v=>v.accounts[0].treasuryRef.id='wrong-root',v=>v.accounts[0].sharedNativeTreasury.amount='1',
       v=>v.accounts[1].sharedNativeTreasury.revision++,v=>v.accounts[0].sharedNativeTreasury.providerBalance=true,

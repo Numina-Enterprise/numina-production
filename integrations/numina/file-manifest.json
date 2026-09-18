@@ -1,19 +1,75 @@
 {
   "schema": "numina.integration.manifest.v2",
+  "root": "NUMINA",
   "manifest": "NUMINA",
   "identity": "NUMINA",
   "authority": "NUMINA",
   "source": "NUMINA",
   "evidence": "NUMINA",
-  "provenance": "NUMINA",
+  "provider": "NUMINA",
   "host": "NUMINA",
+  "provenance": "NUMINA",
+  "core": "NUMINA",
+  "repository": "NUMINA",
+  "software": "NUMINA",
+  "worker": "NUMINA",
+  "journal": "NUMINA",
+  "runtime": "NUMINA",
+  "artifact": "NUMINA",
+  "authentication": "NUMINA",
+  "deployment": "NUMINA",
+  "delivery": "NUMINA",
+  "readiness": "NUMINA",
+  "treasury": "NUMINA",
+  "storage": "NUMINA",
+  "projection": "NUMINA",
+  "transport": "NUMINA",
+  "release": "NUMINA",
+  "receipts": "NUMINA",
+  "settlements": "NUMINA",
+  "funds": "NUMINA",
+  "confirmation_evidence": "NUMINA",
+  "modelIdentity": "NUMINA",
   "singular": true,
   "canonical": true,
   "role": "canonical_integration_manifest",
   "version": "4.0.0",
   "revision": "numina-root-v4.0.0",
   "scope": "NUMINA",
-  "repository": "NUMINA",
+  "nusdContracts": {
+    "schema": "numina.nusd.contract-lifecycle.v1",
+    "modelIdentity": "NUMINA",
+    "identity": "NUMINA",
+    "status": "DEPLOYED_VERIFIED",
+    "initiatedOn": "2026-09-18",
+    "contractCount": 4,
+    "contracts": [
+      "NuminaUSD",
+      "NuminaSettlement",
+      "NuminaUSDCConversion",
+      "NuminaUSDRedemption"
+    ],
+    "deploymentPreparationInitiated": true,
+    "deploymentVerified": true,
+    "chainReceiptVerified": true,
+    "mintStatus": "MINT_VERIFIED",
+    "mintSuccessReported": true,
+    "mintVerified": true,
+    "mintPerformed": true,
+    "constructorMint": true,
+    "decimals": 18,
+    "mintAmountNusd": "1500000000000000",
+    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "paused": true,
+    "conversionPerformed": false,
+    "redemptionPerformed": false,
+    "settlementPerformed": false,
+    "externalDepositsPerformed": false,
+    "externalBackingVerified": false
+  },
   "application": {
     "manifest": "/v4/release/manifest",
     "schema": "numina.application-release.v2"
@@ -49,6 +105,15 @@
     "funds": "NUMINA",
     "confirmation_evidence": "NUMINA",
     "schema": "numina.treasury.alignment.v2",
+    "planSchema": "numina.treasury.alignment-plan.v2",
+    "status": "ALIGNED_MODEL",
+    "modelIdentity": "NUMINA",
+    "modelAligned": true,
+    "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
+    "targetAmount": "500000000000000",
+    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
     "treasuryIdentity": "NUMINA",
     "transportVerificationChannel": "NUMINA",
@@ -56,13 +121,8 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "planSchema": "numina.treasury.alignment-plan.v2",
-    "status": "ALIGNED_MODEL",
-    "targetAmount": "500000000000000",
-    "designatedRoleCount": 3,
-    "modelIdentity": "NUMINA",
-    "modelAligned": true,
-    "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE"
+    "modeledRoleValuesAdditive": false,
+    "externalBalancesAggregated": false
   },
   "distribution": {
     "path": "distribution.json",
@@ -140,8 +200,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 6003,
-      "sha256": "a28333c9a499a17e65100ed0f2bd1375a5da58f291e0cb87d433483867c0e7ba"
+      "bytes": 9053,
+      "sha256": "7ae4be716dbc0d4953ac83d5da2bb6255cb301b6e147409ad110c2ca5ed83715"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -285,8 +345,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 7249,
-      "sha256": "9cc9a0c8b0d55aecebff172c79119b1b64ebff5aa6dd2fbb832e678e487bbebc"
+      "bytes": 9117,
+      "sha256": "c93975b77cf1ffbaeea5b271e21968dd341400498e753cff184d8e10906fe8b4"
     },
     {
       "path": "src/client.js",
@@ -335,8 +395,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 14502,
-      "sha256": "7a85958b53d1578e40fcb969cdecfe9e08965f95fe7b14494e186d35712d7f54"
+      "bytes": 17805,
+      "sha256": "06ab0cefa91b14055af3ce03775ff566c8f61fe93a903c0ef964ecf4e9189b56"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -345,55 +405,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 3056,
-      "sha256": "48284411295641b0879b8134b8e25b175b983def558aec17d326afb5594651c2"
+      "bytes": 6228,
+      "sha256": "93671e921ad94b9db5b812b92d378d6bdb633879077dee8c3c7199f6a45041bc"
     }
-  ],
-  "root": "NUMINA",
-  "provider": "NUMINA",
-  "core": "NUMINA",
-  "software": "NUMINA",
-  "worker": "NUMINA",
-  "journal": "NUMINA",
-  "runtime": "NUMINA",
-  "artifact": "NUMINA",
-  "authentication": "NUMINA",
-  "deployment": "NUMINA",
-  "delivery": "NUMINA",
-  "readiness": "NUMINA",
-  "treasury": "NUMINA",
-  "storage": "NUMINA",
-  "projection": "NUMINA",
-  "transport": "NUMINA",
-  "release": "NUMINA",
-  "receipts": "NUMINA",
-  "settlements": "NUMINA",
-  "funds": "NUMINA",
-  "confirmation_evidence": "NUMINA",
-  "modelIdentity": "NUMINA",
-  "nusdContracts": {
-    "schema": "numina.nusd.contract-lifecycle.v1",
-    "modelIdentity": "NUMINA",
-    "identity": "NUMINA",
-    "status": "INITIATED",
-    "initiatedOn": "2026-09-18",
-    "contractCount": 4,
-    "contracts": [
-      "NuminaUSD",
-      "NuminaSettlement",
-      "NuminaUSDCConversion",
-      "NuminaUSDRedemption"
-    ],
-    "deploymentPreparationInitiated": true,
-    "deploymentVerified": false,
-    "chainReceiptVerified": false,
-    "mintPerformed": false,
-    "conversionPerformed": false,
-    "redemptionPerformed": false,
-    "settlementPerformed": false,
-    "externalDepositsPerformed": false,
-    "mintStatus": "MINT_SUCCESS",
-    "mintSuccessReported": true,
-    "mintVerified": false
-  }
+  ]
 }

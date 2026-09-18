@@ -27,7 +27,11 @@ test('website evidence and maintained source versions agree without inventing mo
  assert.equal(release.applicationVersion,JSON.parse(read('integrations/numina/package.json')).version);
  assert.equal(Number(read('mobile/android/app/build.gradle').match(/versionCode (\d+)/)[1]),release.mobile.android.versionCode);
  assert.ok(read('mobile/ios/Configuration/Numina.xcconfig').includes('CURRENT_PROJECT_VERSION = '+release.mobile.ios.buildNumber));
- assert.equal(release.delivery.website.blocker,null);
+ assert.equal(release.delivery.website.blocker,'VERCEL_DEPLOYMENT_DAILY_QUOTA');
+ assert.equal(release.delivery.website.productionTransportUpdated,false);
+ assert.equal(release.treasury.aggregateModeledValue,'500000000000000');
+ assert.equal(release.treasury.modeledRoleValuesAdditive,false);
+ assert.equal(release.nusd.amountNusd,'1500000000000000');
  assert.equal(release.delivery.website.observedDeployment.commit.length,40);
  assert.equal(release.storePublication.googlePlay,false);
  assert.equal(release.storePublication.appStore,false);
