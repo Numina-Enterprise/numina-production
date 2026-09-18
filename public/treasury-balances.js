@@ -34,7 +34,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);detail(summaryRows,'Numina NUSD fundable target',fundableTargetText(treasury,'numina-native-treasury'));valuationRows(summaryRows);
   detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
-  summary.append(item('h3','NUMINA Treasury v2 · alignment initiated'),item('p','500T is designated as the non-additive target for each NUMINA treasury role. '+NUMINA_DENOMINATION_POLICY.expression+'. External role targets remain pending until factual provider observations support them.'),summaryRows,canonicalLink());
+  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','All designated NUMINA treasury roles are aligned to the same non-additive 500T model target. '+NUMINA_DENOMINATION_POLICY.expression+'. External provider evidence remains separately pending and is not inferred from model alignment.'),summaryRows,canonicalLink());
   target.append(summary);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
