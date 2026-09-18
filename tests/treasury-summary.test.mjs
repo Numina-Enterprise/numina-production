@@ -34,8 +34,8 @@ function summaryAndProviders(target){
     const reference=account.children.find(x=>x.className==='shared-native-treasury-reference');assert.ok(reference);
     const values=all(reference).filter(element=>element.tagName==='dd').map(element=>element.textContent);
     for(const unit of ['NUSD','USD','USDC'])assert.equal(values.filter(value=>value==='500,000,000,000,000 '+unit).length,1);
-    assert.match(reference.textContent,/Canonical journal revision138/);assert.match(reference.textContent,/same canonical balance, counted once/);
-    assert.match(reference.textContent,/not an additional account allocation or provider-reported balance/);
+    assert.match(reference.textContent,/Canonical journal revision138/);assert.match(reference.textContent,/One canonical NUMINA treasury/);
+    assert.match(reference.textContent,/does not create an additional balance/);
   }
   assert.equal(all(target).filter(x=>x.href==='/api/control/v1/treasury').length,3);
   return {summary,providers};
@@ -57,6 +57,6 @@ test('all account references follow a changed canonical balance without manufact
 test('provider read failure keeps the single native summary and reports unavailable balances',async()=>{
   const target=await render(()=>Response.json({error:'Unavailable'},{status:503}));
   const {providers}=summaryAndProviders(target);
-  assert.match(providers.textContent,/Live provider balance unavailable/);
+  assert.match(providers.textContent,/Live provider observation unavailable/);
   assert.doesNotMatch(providers.textContent,/(?:^|\s)0 (?:USD|USDC)/);
 });
