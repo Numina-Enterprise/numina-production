@@ -9,6 +9,8 @@ execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inher
 execFileSync(process.execPath,['scripts/ios-release.mjs','check'],{stdio:'inherit'});
 // Source safeguards can pass while Play upload, declarations and device checks remain blocked.
 execFileSync(process.execPath,['scripts/check-play-readiness.mjs','--source-only'],{stdio:'inherit'});
+// Regenerate the canonical integration manifest and its dependent metadata from current same-repo source before validating or copying it.
+execFileSync(process.execPath,['integrations/numina/scripts/package-distribution.js'],{stdio:'inherit'});
 if(readFileSync('public/runtime-contract.js','utf8')!==readFileSync('integrations/numina/src/runtime-contract.js','utf8'))throw Error('Integration runtime contract is stale; sync and repackage the integration kit before building');
 // Rebuild from current source so retired assets and migrations cannot survive an overlay.
 resetBuildOutput(fileURLToPath(root));
