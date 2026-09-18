@@ -17,11 +17,11 @@ Numina 4.0.0 is configured to serve the website, Numina OS operations workspace 
 
 The authenticated read-only Numina node observation is available at `/v2/network/status`. The control-plane runtime target is a separately identified v1.9.0-rc26 dependency. Node connectivity does not establish financial execution, token issuance, reserves or redemption.
 
-The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(event)` on the existing control journal. The former owner-statement endpoint redirects to it. See [native treasury implementation](NATIVE-TREASURY.md) for initialization, P/A/O/I execution and proof scope.
+The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(event)` on the existing control journal. The former owner-statement endpoint redirects to it. The control manifest, revision sequence, journal continuity and evidence head together form the NUMINA transactional database model. Storage substrates may persist NUMINA bytes, but they do not create a separate database identity. See [native treasury implementation](NATIVE-TREASURY.md) for initialization, P/A/O/I execution and proof scope.
 
 ## Build and provenance
 
-Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. **NUMINA is the model, repository, source, evidence and provenance identity.**
+Use Node 24, `npm test`, `npm run build`, and `npm run release:github`. GitHub Actions runs the same NUMINA path and publishes the `NUMINA` build artifact. **NUMINA is the model, repository, database, journal, build, release, deployment, source, evidence and provenance identity.**
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
@@ -37,7 +37,7 @@ The mobile web app is served at `/app`. The v4 distribution retains Android 3.0.
 
 `src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain source material. The restored provenance workflows operate inside the canonical repository and bind exact build artifacts to NUMINA release records; deployment state still requires actual runtime/provider evidence.
 
-The production GitHub repository is private. GitHub source, build logs and workflow artifacts require repository access. Vercel's connected project has Build Logs and Source Protection enabled. The public website and its explicitly published downloads remain available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
+The production GitHub repository is the canonical NUMINA repository. GitHub source, build logs and workflow artifacts require repository access. External hosting, storage, network and provider service names are substrate metadata or historical compatibility references; they do not create separate NUMINA identities or authorities. External events are treated as confirmed only when their factual evidence is available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
 
 ## Source alignment
 
