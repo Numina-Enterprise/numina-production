@@ -15,7 +15,7 @@ Production uses the rc26 runtime with its pinned key and manifest identity. The 
 
 Numina 4.0.0 is configured to serve the website, Numina OS operations workspace and installable mobile web app at https://numinalabs.xyz. Existing application and control APIs remain at `/api/app/v1` and `/api/control/v1`; the application manifest is `/v4/release/manifest`. No data migration is required for this application release.
 
-The authenticated read-only Numina node observation is available at `/v2/network/status`. The control-plane runtime target is a separately identified v1.9.0-rc26 dependency. Node connectivity does not establish financial execution, token issuance, reserves or redemption.
+The authenticated Numina node observation is available at `/v2/network/status`. NuminaUSD is deployed on chain `962421430` at `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`; NuminaSettlement is deployed at `0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0`. The deployment receipts are final with more than the required 12 confirmations. The 1,500T constructor mint is an on-chain NUSD state and does not establish external USD or USDC reserves.
 
 The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(event)` on the existing control journal. The former owner-statement endpoint redirects to it. The control manifest, revision sequence, journal continuity and evidence head together form the NUMINA transactional database model. Storage substrates may persist NUMINA bytes, but they do not create a separate database identity. See [native treasury implementation](NATIVE-TREASURY.md) for initialization, P/A/O/I execution and proof scope.
 
@@ -27,11 +27,11 @@ Runtime signing keys, provider credentials and private records belong only in pr
 
 ## Distribution
 
-### Google Play Ignite
+### Native distribution
 
-The authenticated rollout observations and unresolved declarations are tracked in [the September 15 evidence record](release-evidence/play-ignite-2026-09-15.md) and [issue #25](https://github.com/skott34-dot/numina-production/issues/25). `node scripts/check-play-readiness.mjs` checks source safeguards and reports remaining release evidence gates; it exits 1 while the release remains blocked. Builds run the source-only checks. To also verify the exact staged candidate bytes, use `node scripts/check-play-readiness.mjs --source-only --aab PATH_TO_AAB`. Current hosted source is 4.0.0; the requested upload candidate remains 3.0.0.
+The canonical final build is published at `/final-build.json` and binds website, NUMINA OS, NUSD receipts, Android versionCode 4 and iOS build 6 to application version 4.0.0. Android package identity `xyz.numinalabs.app` is registered in Google Play and its Play App Signing fingerprint is recorded; the final release workflow compiles and signs current source. iOS build 6 compiles current source and signs it only when a valid Apple distribution certificate, App Store provisioning profile and Team ID are present in GitHub Actions.
 
-The mobile web app is served at `/app`. The v4 distribution retains Android 3.0.0 binaries and reuses the iOS executable with v4 bundle metadata. Actual input/output hashes and signing status are in docs/native-package-record-v4.json. The shared Numina distribution team policy and macOS signing host workflow are described in mobile/signing/APPLE-SIGNING.md. Android and iOS source candidates are 4.0.0 with build number 3 and have not been compiled. Prior 3.0.0 device binaries retain their exact hashes and build evidence in docs/native-package-record-v3.json. Native store publication is not established. The integration kit supports documented provider formats and local MCP configuration; publication does not install it in third-party LLM products.
+Store publication is evidence-bound: Google Play and App Store are not marked submitted until their provider upload/submission receipts exist. Signed artifact production and store acceptance are separate states.
 
 ## Source and rights
 
