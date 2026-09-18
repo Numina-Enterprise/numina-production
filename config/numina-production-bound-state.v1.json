@@ -10,13 +10,13 @@
     "branch": "main",
     "repository_count": 1,
     "push_model": "NUMINA",
-    "current_parent_sha": "355f0754ab7a77b6dff440d1eee1377c8df3d8af",
+    "current_parent_sha": "40e6d7b052b300cb010e60230a033d19e7f9c499",
     "state": "FINAL_SOURCE"
   },
   "software": {
     "identity": "NUMINA",
     "build_model": "NUMINA",
-    "artifact_build_id": "a60f3ee37e9e1fc2b4aecdb2a259ce0874af9945409a85e016d8740bf9a50d43",
+    "artifact_build_id": "cd23b95fd14ca609b605442ea14a07c2010deb2fe988bff5e48d660561dfda64",
     "worker_identity": "NUMINA",
     "worker_count": 1,
     "environment_model": "NUMINA",
