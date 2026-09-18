@@ -41,7 +41,7 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
     throw Error(`Contract artifact does not match its source and interface: ${specification.name}`);
   }
   const descriptor = {
-    id:specification.id, name:specification.name, status:'compiled_not_deployed',
+    id:specification.id, name:specification.name, status:'DEPLOYMENT_PREPARATION_INITIATED',
     source:{repository_path:`runtime/nusd/contracts/${specification.name}.sol`,
       url:`/downloads/contracts/${specification.name}.sol`,sha256:sha256(source),bytes:source.length,
       encoding:'UTF-8',line_endings:'LF'},
@@ -50,8 +50,8 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
       encoding:'UTF-8',line_endings:artifactBytes.includes(Buffer.from('\r\n'))?'CRLF':'LF'},
     compiler:{version:artifact.compiler,settings:artifact.compilerSettings},
     implemented_operations:specification.operations,
-    verification:{source_hash_matches_artifact:true,independent_security_audit:false,chain_receipt_verified:false},
-    deployment:{status:'not_verified',expected_chain_id:'962421430',contract_address:null,
+    verification:{source_hash_matches_artifact:true,initiation_recorded:true,independent_security_audit:false,chain_receipt_verified:false},
+    deployment:{lifecycle:'INITIATED',status:'not_verified',submission_performed:false,expected_chain_id:'962421430',contract_address:null,
       transaction_hash:null,receipt:null},
   };
   return {descriptor,source,artifactBytes};
@@ -62,12 +62,12 @@ export function createNusdContractRecord(read=readFileSync) {
     read(path.join(root,`runtime/nusd/contracts/${specification.name}.sol`)),
     read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`))));
   return {entries,record:{
-    schema:'numina.nusd.contract-record.v1',status:'compiled_not_deployed',
+    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'INITIATED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
     financial_execution:{issuance:false,transfer:false,nusd_settlement:false,usd_redemption:false,
       usdc_conversion:false,external_deposits:false},
-    scope:'Compiled NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow candidates. USD settlement requires a separate bank payment and a trusted confirmer attestation. Source and artifact hashes do not establish deployed contracts, reserves, activated conversion or external deposits.',
+    scope:'NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow contract lifecycles are initiated from their verified compiled artifacts. Initiation prepares the software lifecycle only; it does not establish deployed contracts, reserves, activated conversion, bank settlement, minting or external deposits.',
   }};
 }
 
