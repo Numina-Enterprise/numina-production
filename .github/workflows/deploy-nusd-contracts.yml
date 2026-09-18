@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/deploy-nusd-contracts.yml'
+      - 'runtime/nusd/contracts/**'
+      - 'runtime/nusd/artifacts/**'
+      - 'runtime/nusd/scripts/deploy-production.mjs'
+      - 'runtime/nusd/scripts/validate-deployment.mjs'
+      - 'runtime/nusd/deployment.production.json'
+      - 'runtime/nusd/policies/issuer-policy-1500t-18d.json'
   workflow_dispatch:
 
 permissions:
@@ -24,20 +30,15 @@ jobs:
       NUMINA_RPC_AUTHORIZATION: ${{ secrets.NUMINA_RPC_AUTHORIZATION }}
       NUMINA_EXPECTED_CHAIN_ID: '962421430'
       NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
-      NUMINA_RECIPIENT: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
-      NUMINA_ADMIN: '0xa7e9FB02495700ccE0d209392C0A30FbE077498e'
-      NUMINA_ISSUER: '0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0'
-      NUMINA_MINTER: '0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6'
-      NUMINA_PAUSER: '0x434AB24E613055Fd2598Fd9f0558A06a94D39c81'
+      NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          package-manager-cache: false
 
       - name: Install locked NUSD runtime dependencies
         working-directory: runtime/nusd
@@ -48,43 +49,20 @@ jobs:
         run: |
           test -n "$NUMINA_RPC_AUTHORIZATION" || { echo "NUMINA_RPC_AUTHORIZATION is not configured"; exit 2; }
 
-      - name: Verify chain, genesis and managed signer
-        shell: bash
-        run: |
-          node --input-type=module <<'NODE'
-          const endpoint=process.env.NUMINA_RPC_URL;
-          const auth=process.env.NUMINA_RPC_AUTHORIZATION;
-          let id=0;
-          async function rpc(method,params=[]){
-            const r=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','authorization':auth},body:JSON.stringify({jsonrpc:'2.0',id:++id,method,params}),redirect:'error',signal:AbortSignal.timeout(15000)});
-            const j=await r.json();
-            if(!r.ok||j.error)throw Error(method+' failed');
-            return j.result;
-          }
-          const chain=BigInt(await rpc('eth_chainId')).toString();
-          if(chain!==process.env.NUMINA_EXPECTED_CHAIN_ID)throw Error('CHAIN_MISMATCH');
-          const genesis=await rpc('eth_getBlockByNumber',['0x0',false]);
-          if(genesis?.hash?.toLowerCase()!==process.env.NUMINA_EXPECTED_GENESIS.toLowerCase())throw Error('GENESIS_MISMATCH');
-          const accounts=await rpc('eth_accounts');
-          if(!Array.isArray(accounts)||accounts.length===0)throw Error('SIGNER_UNAVAILABLE');
-          const wanted=process.env.NUMINA_RECIPIENT.toLowerCase();
-          const signer=accounts.find(x=>x.toLowerCase()===wanted);
-          if(!signer)throw Error('APPROVED_SIGNER_NOT_EXPOSED');
-          const nonce=BigInt(await rpc('eth_getTransactionCount',[signer,'pending'])).toString();
-          const balance=BigInt(await rpc('eth_getBalance',[signer,'pending'])).toString();
-          console.log(JSON.stringify({chainId:chain,genesis:genesis.hash,signer,nonce,balance,signerVerified:true}));
-          NODE
+      - name: Validate exact 1,500T 18-decimal constructor
+        working-directory: runtime/nusd
+        run: node scripts/validate-deployment.mjs deployment.production.json --output artifacts/unsigned-production-deployment.json
 
-      - name: Stop before broadcast unless exact deployment set is complete
-        shell: bash
-        run: |
-          node --input-type=module <<'NODE'
-          const unresolved = [
-            '500T constructor request/policy hash must be regenerated for the selected recipient',
-            'NuminaUSDCConversion requires an actual same-chain USDC token address',
-            'NuminaUSDCConversion requires an explicitly approved liquidity manager',
-            'NuminaUSDRedemption requires explicitly approved operator and confirmer addresses'
-          ];
-          console.error(JSON.stringify({status:'DEPLOYMENT_INPUTS_REQUIRED',unresolved},null,2));
-          process.exit(3);
-          NODE
+      - name: Deploy NuminaUSD and NuminaSettlement
+        working-directory: runtime/nusd
+        run: node scripts/deploy-production.mjs deployment.production.json deployment-receipt.json
+
+      - name: Upload verified NUMINA chain receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NUSD-PRODUCTION-RECEIPT
+          path: |
+            runtime/nusd/deployment-receipt.json
+            runtime/nusd/artifacts/unsigned-production-deployment.json
+          if-no-files-found: warn
