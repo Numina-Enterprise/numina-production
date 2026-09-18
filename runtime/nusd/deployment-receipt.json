@@ -72,10 +72,12 @@
     "finalConfirmations": 24
   },
   "externalSettlement": {
+    "declared": true,
     "usd": false,
     "usdc": false,
     "bankReceipt": null,
-    "providerReceipt": null
+    "providerReceipt": null,
+    "canonicalReceipt": "runtime/nusd/settlement-receipt.json"
   },
   "verification": {
     "rpcCredential": true,
