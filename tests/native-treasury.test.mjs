@@ -50,7 +50,7 @@ test('account views share one checked balance without changing stored references
     const before=structuredClone(frontier);
     assert.equal(await verifyTreasuryAccountView(alignTreasuryAccounts(await api.readTreasury(),frontier)),true);
     await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
-    assert.equal(await verifyTreasuryAccountView(view),true);assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
+    assert.equal(await verifyTreasuryAccountView(view),true);assert.equal(view.schema,'numina.treasury.alignment.v2');assert.equal(view.identity,'NUMINA');assert.equal(view.treasuryIdentity,'NUMINA');assert.equal(view.transportVerificationChannel,'NUMINA');assert.equal(view.accountAlignment.schema,'numina.treasury.account-view.v2');assert.equal(view.accountAlignment.separateRoles,true);assert.equal(view.accountAlignment.singularIdentity,true);assert.ok(view.accounts.every(account=>account.treasuryIdentity==='NUMINA'&&account.treasuryRole==='evidence_view'&&account.providerObservationOnly===true));assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
     for(const mutate of [
       v=>v.canonicalTreasury.root='wrong-root',v=>v.canonicalTreasury.head='a'.repeat(64),
       v=>v.accounts[0].treasuryRef.id='wrong-root',v=>v.accounts[0].sharedNativeTreasury.amount='1',
