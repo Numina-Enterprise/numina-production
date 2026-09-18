@@ -12,7 +12,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   verify:
@@ -92,23 +91,3 @@ jobs:
         run: |
           URL="$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
-      - name: Report successful deployment
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
-        run: |
-          DEPLOY_COMMIT="$(git rev-parse HEAD)"
-          gh issue create --title "NUMINA prebuilt deploy succeeded" --body "Commit: $DEPLOY_COMMIT
-
-Production deployment: $DEPLOY_URL
-
-The existing immutable-workflow verifier built Numina on GitHub-hosted compute and submitted the prebuilt production artifact to Vercel."
-      - name: Report deployment blocker
-        if: failure()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          DEPLOY_COMMIT="$(git rev-parse HEAD 2>/dev/null || printf '%s' "$GITHUB_SHA")"
-          gh issue create --title "NUMINA prebuilt deploy blocked" --body "Commit: $DEPLOY_COMMIT
-
-The deployment job in the existing immutable-workflow verifier failed. Inspect this workflow run before claiming current main is deployed."
