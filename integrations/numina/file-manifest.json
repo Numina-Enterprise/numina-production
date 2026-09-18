@@ -71,7 +71,7 @@
     {
       "path": "distribution.json",
       "bytes": 5206,
-      "sha256": "9f1ebb55eef1bc005192a1351c442ff2961b2c0b8ea9162b0f28019c3a6ecc32"
+      "sha256": "5dae82de9c27760cea3ae8f79a3629dd6724f5efb7b2369427b502bb30b2acd7"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -265,8 +265,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 12995,
-      "sha256": "5189b4675ddeeea7fa4179cfc2872a6cfef755175e65851b3ff3a59bf0774d8e"
+      "bytes": 13103,
+      "sha256": "29a5b0b8bb2827bb15c11fe1bbb7744022609ea7478e3cb1ddaf60bb0484513a"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -276,7 +276,7 @@
     {
       "path": "verification.json",
       "bytes": 2422,
-      "sha256": "a72176dcce9ab2d5413e0b4d2d7e9a739334ca3183e05e66a366e762d69f0516"
+      "sha256": "bfc334f2df3df3c10951566c859320d0a1f7db01d6125d56da9452628561a081"
     }
   ]
 }
