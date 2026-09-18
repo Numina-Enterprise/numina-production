@@ -52,16 +52,26 @@ test('account views share one checked balance without changing stored references
     await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
     assert.equal(await verifyTreasuryAccountView(view),true);assert.equal(view.schema,'numina.treasury.alignment.v2');assert.equal(view.identity,'NUMINA');assert.equal(view.treasuryIdentity,'NUMINA');assert.equal(view.transportVerificationChannel,'NUMINA');assert.equal(view.accountAlignment.schema,'numina.treasury.account-view.v2');assert.equal(view.accountAlignment.separateRoles,true);assert.equal(view.accountAlignment.singularIdentity,true);assert.ok(view.accounts.every(account=>account.treasuryIdentity==='NUMINA'&&account.treasuryRole==='evidence_view'&&account.providerObservationOnly===true));assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
     for(const mutate of [
-      v=>v.fundableTargets.aggregateModeledValue='1500000000000000',
-      v=>v.fundableTargets.additive=true,
-      v=>v.treasuryAlignmentPlan.nonAdditive=false,
+      v=>v.fundableTargets.aggregateModeledValue='500000000000000',
+      v=>v.fundableTargets.additive=false,
+      v=>v.fundableTargets.aggregation='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',
+      v=>v.fundableTargets.singularBalanceCount=3,
+      v=>v.treasuryAlignmentPlan.nonAdditive=true,
+      v=>v.treasuryAlignmentPlan.additive=false,
+      v=>v.treasuryAlignmentPlan.aggregation='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',
+      v=>v.treasuryAlignmentPlan.singularBalanceCount=3,
+      v=>v.treasuryAlignmentPlan.aggregateModeledValue='500000000000000',
+      v=>v.singular=false,
       v=>v.fundableTargets.externalBalancesAggregated=true,
       v=>v.fundableTargets.targets[0].amount='500000000000001',
       v=>v.fundableTargets.targets[1].unit='NUSD',
       v=>v.fundableTargets.targets[0].providerBalance=true,
       v=>v.fundableTargets.targets[0].providerObservationVerified=true,
       v=>v.fundableTargets.targets[0].fundingPerformed=true,
+      v=>v.fundableTargets.targets[0].routePurpose='NUMINA_NATIVE_TREASURY',
+      v=>v.fundableTargets.targets[0].classification='TREASURY_ROLE_TARGET',
       v=>v.treasuryAlignmentPlan.designatedLocations[1].fundingPerformed=true,
+      v=>v.treasuryAlignmentPlan.designatedLocations[1].routePurpose='BANK_OF_AMERICA_SAVINGS_ACH',
       v=>v.treasuryAlignmentPlan.designatedLocations[1].modeledNusdEquivalent='1',
       v=>v.accountAlignment.aggregation='one NUMINA treasury; three modeled 500T role values compose a 1,500T NUSD aggregate; external provider balances are not added',
       v=>v.canonicalTreasury.root='wrong-root',v=>v.canonicalTreasury.head='a'.repeat(64),
@@ -81,6 +91,46 @@ test('account views share one checked balance without changing stored references
     assert.equal(await verifyTreasuryAccountView(funded),true);
     assert.equal(funded.nativeFundingView.status,'FUNDED_PLAN');assert.equal(funded.fundingPlan.status,'UNFUNDED_PLAN');
     funded.nativeFundingView.status='UNFUNDED_PLAN';assert.equal(await verifyTreasuryAccountView(funded),false);
+  }finally{db.close();}
+});
+test('browser accepts the preserved shared500 model but rejects mixed allocation and legacy fields',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);await api.writeTreasury(await command(db));
+    const current=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]}),legacy=structuredClone(current);
+    legacy.accountAlignment.aggregation='one NUMINA treasury; one shared 500T model expressed in USD, USDC and NUSD; denomination views are not added';
+    legacy.fundableTargets.aggregation='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS';
+    legacy.fundableTargets.additive=false;legacy.fundableTargets.aggregateModeledValue='500000000000000';
+    delete legacy.fundableTargets.singularBalanceCount;
+    legacy.treasuryAlignmentPlan.aggregateModeledValue='500000000000000';legacy.treasuryAlignmentPlan.nonAdditive=true;
+    for(const field of ['aggregation','additive','singularBalanceCount'])delete legacy.treasuryAlignmentPlan[field];
+    const oldLabels=['Bank of America Savings','Stripe Numina Native Treasury','Numina Native Treasury'];
+    for(let i=0;i<3;i++){
+      legacy.fundableTargets.targets[i].classification='TREASURY_ROLE_TARGET';
+      legacy.fundableTargets.targets[i].accountLabel=oldLabels[i];
+      delete legacy.fundableTargets.targets[i].routePurpose;
+      delete legacy.treasuryAlignmentPlan.designatedLocations[i].routePurpose;
+    }
+    assert.equal(await verifyTreasuryAccountView(current),true);
+    assert.equal(await verifyTreasuryAccountView(legacy),true);
+    for(const mutate of [
+      v=>v.accountAlignment.aggregation=current.accountAlignment.aggregation,
+      v=>v.fundableTargets.aggregateModeledValue='1500000000000000',
+      v=>v.fundableTargets.additive=true,
+      v=>v.fundableTargets.singularBalanceCount=1,
+      v=>v.fundableTargets.targets[0].classification='MODEL_ROUTE_ALLOCATION',
+      v=>v.fundableTargets.targets[0].routePurpose='BANK_OF_AMERICA_SAVINGS_ACH',
+      v=>v.treasuryAlignmentPlan.aggregateModeledValue='1500000000000000',
+      v=>v.treasuryAlignmentPlan.nonAdditive=false,
+      v=>v.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS',
+      v=>v.treasuryAlignmentPlan.additive=true,
+      v=>v.treasuryAlignmentPlan.singularBalanceCount=1,
+      v=>v.treasuryAlignmentPlan.designatedLocations[1].routePurpose='STRIPE_TREASURY_USDC_ADDRESS',
+      v=>v.accountAlignment.aggregation='one NUMINA treasury; role views do not add balances'
+    ]){const changed=structuredClone(legacy);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false);}
+    const mixed=structuredClone(current);mixed.accountAlignment.aggregation=legacy.accountAlignment.aggregation;
+    assert.equal(await verifyTreasuryAccountView(mixed),false);
+    assert.equal(current.treasury.projection.balance,'500000000000000');
+    assert.deepEqual(current.treasury,legacy.treasury);
   }finally{db.close();}
 });
 test('account alignment rejects changed groups and provider claims before and after initialization',async()=>{

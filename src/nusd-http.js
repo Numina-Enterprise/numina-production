@@ -1,3 +1,4 @@
+import {NUSD_OPERATOR_ACTIVATION} from '../public/treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_PROVIDER_ROUTING} from './stripe-treasury.js';
@@ -63,6 +64,7 @@ export const NUSD_SIMULATION=freezeNusdRedemption({
 });
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
+ operator_activation:NUSD_OPERATOR_ACTIVATION,
  approved_review:NUSD_APPROVED_REVIEW,
  simulation:NUSD_SIMULATION,
  contract_record:NUSD_CONTRACT_RECORD,
@@ -118,7 +120,8 @@ export async function nusdHttp(req){
   return new Response(JSON.stringify(known?NUSD_REDEMPTION_POLICIES[policyVersion]:{error:'POLICY_NOT_FOUND'}),{status:known?200:404,headers});
  }
 
+ if(path==='/api/nusd/v1/activation')return req.method==='GET'?new Response(JSON.stringify(NUSD_OPERATOR_ACTIVATION),{headers}):new Response(JSON.stringify({error:'METHOD_NOT_ALLOWED'}),{status:405,headers:{...headers,Allow:'GET'}});
  if(path==='/api/nusd/v1/status'&&req.method==='GET')return new Response(JSON.stringify(NUSD_POLICY),{headers});
- if((path==='/api/nusd/v1/quotes'||path==='/api/nusd/v1/requests'||path==='/api/nusd/v1/redemptions'||path==='/api/nusd/v1/exchange')&&req.method==='POST'||/^\/api\/nusd\/v1\/requests\/[^/]+$/.test(path)&&req.method==='GET')return new Response(JSON.stringify({error:'NUSD_NOT_ACTIVATED',message:'NUSD issuance, treasury backing, redemption and payment verification are not activated.',status_url:'/api/nusd/v1/status'}),{status:503,headers});
+ if((path==='/api/nusd/v1/quotes'||path==='/api/nusd/v1/requests'||path==='/api/nusd/v1/redemptions'||path==='/api/nusd/v1/exchange')&&req.method==='POST'||/^\/api\/nusd\/v1\/requests\/[^/]+$/.test(path)&&req.method==='GET')return new Response(JSON.stringify({error:'NUSD_NOT_ACTIVATED',message:'This application payment route is not connected. NUSD issuance and the operator activation declaration are separate from checkout, payment verification and settlement.',status_url:'/api/nusd/v1/status'}),{status:503,headers});
  return new Response(JSON.stringify({error:'NOT_FOUND'}),{status:404,headers});
 }
