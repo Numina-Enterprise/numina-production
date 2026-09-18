@@ -1,5 +1,4 @@
 name: Probe NUMINA runtime deployment authentication
-# final-build probe 2026-09-18
 
 on:
   push:
