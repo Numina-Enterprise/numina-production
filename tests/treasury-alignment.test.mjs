@@ -17,9 +17,11 @@ test('one native target groups duplicate provider references without rewriting e
   const bankTarget=result.fundableTargets.targets.find(target=>target.id==='bank-of-america-savings');
   const stripeTarget=result.fundableTargets.targets.find(target=>target.id==='stripe-numina-native-treasury');
   const nativeTarget=result.fundableTargets.targets.find(target=>target.id==='numina-native-treasury');
-  assert.deepEqual([bankTarget.amount,bankTarget.unit,bankTarget.targetOnly,bankTarget.providerBalance],['500000000000000','USD',true,false]);
-  assert.deepEqual([stripeTarget.amount,stripeTarget.unit,stripeTarget.targetOnly,stripeTarget.providerBalance],['500000000000000','USDC',true,false]);
+  assert.deepEqual([bankTarget.identity,bankTarget.provider,bankTarget.providerService,bankTarget.amount,bankTarget.unit,bankTarget.targetOnly,bankTarget.providerBalance],['NUMINA','NUMINA','bank-of-america','500000000000000','USD',true,false]);
+  assert.deepEqual([stripeTarget.identity,stripeTarget.provider,stripeTarget.providerService,stripeTarget.amount,stripeTarget.unit,stripeTarget.targetOnly,stripeTarget.providerBalance],['NUMINA','NUMINA','stripe','500000000000000','USDC',true,false]);
   assert.deepEqual([nativeTarget.amount,nativeTarget.unit,nativeTarget.currentNativeBalance,nativeTarget.targetSatisfied],['500000000000000','NUSD','500000000000000',true]);
+  for(const field of ['root','manifest','identity','authority','source','evidence','provider','host','provenance'])assert.equal(result[field],'NUMINA');
+  assert.equal(result.singular,true);
   assert.equal(JSON.stringify(frontier),before);assert.ok(result.accounts.every(a=>a.allocatedAmount===null));
   for(const account of result.accounts){assert.equal(account.sharedNativeTreasury.amount,'500000000000000');assert.equal(account.sharedNativeTreasury.unit,'NUSD');assert.equal(account.sharedNativeTreasury.revision,135);assert.equal(account.sharedNativeTreasury.head,'newer-head');assert.equal(account.sharedNativeTreasury.sharedAcrossAccounts,true);assert.equal(account.sharedNativeTreasury.providerBalance,false);}
   result.accounts[0].sharedNativeTreasury.amount='1';assert.equal(result.accounts[1].sharedNativeTreasury.amount,'500000000000000');assert.equal(treasury.projection.balance,'500000000000000');
