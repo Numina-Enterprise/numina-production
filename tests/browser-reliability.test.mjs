@@ -39,7 +39,7 @@ function harness(kind,fetcher){
   clearTreasuryDocuments(){},async loadTreasuryDocuments(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
  const exports=kind==='app'?'({api,openOrder,loadOrders,savedView,boot,clearSession,get session(){return session;},get selected(){return selected;}})':'({api,refresh,run,clearSession,get snapshot(){return snapshot;}})';
  const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
- const nativeModule='const {clearNativeTreasury,loadNativeTreasury}=(()=>{'+source('treasury-proof.js')+'\n'+source('treasury-valuation.js')+'\n'+source('native-treasury.js')+';return {clearNativeTreasury,loadNativeTreasury};})();';
+ const nativeModule='const {clearNativeTreasury,loadNativeTreasury}=(()=>{'+source('treasury-proof.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-amount.js')+'\n'+source('native-treasury.js')+';return {clearNativeTreasury,loadNativeTreasury};})();';
  vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+nativeModule+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
  return {get,events,subject:context.subject,context,close(){events.pagehide?.();}};
 }

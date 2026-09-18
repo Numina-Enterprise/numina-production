@@ -57,6 +57,33 @@ export async function verifyTreasuryRecord(data, {allowUninitialized = false} = 
 
 // Account rows are a read-only grouping of the retained references. Checking the
 // balance alone must not let duplicate rows or changed ownership claims pass.
+function treasuryAggregationMatches(view) {
+  const description=view.accountAlignment?.aggregation;
+  // Historical role views keep their original non-additive interpretation.
+  if(description==='one NUMINA treasury; role views do not add balances')return !view.fundableTargets||view.fundableTargets.alignment==='INITIATED'&&view.fundableTargets.additive===false&&!Object.hasOwn(view.fundableTargets,'aggregateModeledValue');
+  if(description!=='one NUMINA treasury; one shared 500T model expressed in USD, USDC and NUSD; denomination views are not added')return false;
+  const model=view.fundableTargets,plan=view.treasuryAlignmentPlan;
+  const amount='500000000000000',aggregate=amount;
+  if(model?.schema!=='numina.treasury.fundable-targets.v2'||model.identity!=='NUMINA'||model.treasuryIdentity!=='NUMINA'||model.transportVerificationChannel!=='NUMINA'||model.alignment!=='ALIGNED_MODEL'||model.amount!==amount||model.additive!==false||model.aggregation!=='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS'||model.aggregateModeledValue!==aggregate||model.aggregateModeledUnit!=='NUSD'||model.externalBalancesAggregated!==false)return false;
+  if(plan?.schema!=='numina.treasury.alignment-plan.v2'||plan.status!=='ALIGNED_MODEL'||plan.modelIdentity!=='NUMINA'||plan.modelAligned!==true||plan.externalEvidenceStatus!=='PENDING_PROVIDER_EVIDENCE'||plan.targetAmount!==amount||plan.aggregateModeledValue!==aggregate||plan.aggregateModeledUnit!=='NUSD'||plan.nonAdditive!==true||plan.externalBalancesAggregated!==false)return false;
+  const roles=[
+    ['bank-of-america-savings','USD','bank-of-america','bank_evidence'],
+    ['stripe-numina-native-treasury','USDC','stripe','stripe_evidence'],
+    ['numina-native-treasury','NUSD','NUMINA','canonical_projection']
+  ];
+  if(!Array.isArray(model.targets)||model.targets.length!==3||!Array.isArray(plan.designatedLocations)||plan.designatedLocations.length!==3)return false;
+  const projection=view.treasury?.projection;
+  for(let i=0;i<roles.length;i++){
+    const [id,unit,service,role]=roles[i],target=model.targets[i],location=plan.designatedLocations[i],native=unit==='NUSD';
+    const balance=native&&projection?.unit==='NUSD'?projection.balance:null;
+    const satisfied=native?balance===amount:null;
+    const status=native?(satisfied?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'AWAITING_PROVIDER_EVIDENCE';
+    if(target?.id!==id||target.identity!=='NUMINA'||target.treasuryIdentity!=='NUMINA'||target.amount!==amount||target.unit!==unit||target.providerService!==service||target.treasuryRole!==role||target.modelAlignmentStatus!=='ALIGNED'||target.alignmentStatus!==status||target.targetSatisfied!==satisfied||target.currentNativeBalance!==balance||target.targetOnly!==!native||target.providerBalance!==false||target.observedProviderAmount!==null||target.providerObservationVerified!==false||target.fundingPerformed!==false)return false;
+    if(location?.id!==id||location.identity!=='NUMINA'||location.unit!==unit||location.service!==service||location.treasuryRole!==role||location.targetAmount!==amount||location.modeledNusdEquivalent!==amount||location.modelAlignmentStatus!=='ALIGNED'||location.status!==status||location.providerObservationVerified!==false||location.fundingPerformed!==false)return false;
+  }
+  return model.targets.every(target=>target.amount===aggregate);
+}
+
 function treasuryAccountSourcesMatch(view) {
   const references = view.accountReferences, groups = new Map(), byId = new Map();
   if (!Array.isArray(references) || !Array.isArray(view.supersededReferences)) return false;
@@ -74,7 +101,7 @@ function treasuryAccountSourcesMatch(view) {
   const superseded = references.filter(reference => reference.supersededBy);
   if (treasuryCanonical(view.supersededReferences) !== treasuryCanonical(superseded)) return false;
   const count = references.length - superseded.length, alignment = view.accountAlignment;
-  if (alignment?.schema !== 'numina.treasury.account-view.v2' || alignment.identity !== 'NUMINA' || alignment.treasuryIdentity !== 'NUMINA' || alignment.separateRoles !== true || alignment.singularIdentity !== true || alignment.transportVerificationChannel !== 'NUMINA' || alignment.sourceReferenceCount !== count || alignment.distinctAccountViews !== groups.size || alignment.duplicateReferenceCount !== count - groups.size || alignment.storedReferencesChanged !== false || alignment.aggregation !== 'one NUMINA treasury; role views do not add balances' || view.accounts.length !== groups.size) return false;
+  if (alignment?.schema !== 'numina.treasury.account-view.v2' || alignment.identity !== 'NUMINA' || alignment.treasuryIdentity !== 'NUMINA' || alignment.separateRoles !== true || alignment.singularIdentity !== true || alignment.transportVerificationChannel !== 'NUMINA' || alignment.sourceReferenceCount !== count || alignment.distinctAccountViews !== groups.size || alignment.duplicateReferenceCount !== count - groups.size || alignment.storedReferencesChanged !== false || !treasuryAggregationMatches(view) || view.accounts.length !== groups.size) return false;
   const derived = new Set(['sourceReferences', 'labelConflict', 'treasuryRef', 'nativeTreasuryRoute', 'treasuryIdentity', 'treasuryRole', 'transportVerificationChannel', 'providerObservationOnly', 'sharedNativeProjection', 'sharedNativeTreasury', 'allocatedAmount']);
   const sourceFields = ['id', 'accountLabel', 'provider', 'providerAccountReference'], seen = new Set();
   for (const account of view.accounts) {

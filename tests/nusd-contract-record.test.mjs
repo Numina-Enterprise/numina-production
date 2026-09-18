@@ -39,8 +39,15 @@ test('contract API and UI separate compiled functions from activated financial o
   const request=method=>new Request('https://numina.test/api/nusd/v1/contracts',{method});
   assert.deepEqual(await (await nusdHttp(request('GET'))).json(),record);
   for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(request(method))).status,405);
-  assert.match(contractSourcePresentation(record).source,/compiled.*unverified/);
-  assert.match(assessFinancialStatus(NUSD_POLICY).contract,/deployed|receipt|paused/i);
+  assert.match(contractSourcePresentation(record).source,/deployed.*receipt-verified/);
+  assert.equal(assessFinancialStatus(NUSD_POLICY).contract,NUSD_POLICY.asset.contract);
+  assert.match(assessFinancialStatus(NUSD_POLICY).identity,/Issued NUSD.*18 decimals/);
+  assert.match(assessFinancialStatus(NUSD_POLICY).checked,/current transfer activity was not checked/);
+  for(const mutate of [
+    value=>value.issuance.baseUnits='1',
+    value=>value.issuance.transactionHash='0x'+'0'.repeat(64),
+    value=>value.financial_execution.external_deposits=true
+  ]){const changed=structuredClone(record);mutate(changed);assert.throws(()=>contractSourcePresentation(changed));}
   assert.equal(record.financial_execution.issuance,true);assert.equal(record.financial_execution.transfer,false);assert.equal(record.financial_execution.nusd_settlement,false);assert.equal(record.financial_execution.usd_redemption,false);assert.equal(record.financial_execution.usdc_conversion,false);assert.equal(record.financial_execution.external_deposits,false);
   for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
   const forged=structuredClone(record);forged.contracts[0].deployment.contract_address='0x123';assert.throws(()=>contractSourcePresentation(forged));
@@ -61,7 +68,7 @@ test('mint workflow reports implemented preparation while receipt and provider c
   assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.nativeBalanceChanged,false);
   assert.equal(NUSD_MINT_WORKFLOW.contract.decimals,18);assert.equal(NUSD_MINT_WORKFLOW.preparation.broadcast,false);
   assert.equal(NUSD_MINT_WORKFLOW.recipientEvidence.providerAcceptanceInferred,false);
-  assert.match(assessFinancialStatus(NUSD_POLICY).mint,/Implemented in contract.*unsigned preparation/);
+  assert.match(assessFinancialStatus(NUSD_POLICY).mint,/Constructor issuance verified.*1,500T NUSD.*18 decimals/);
   const unsafe=structuredClone(NUSD_POLICY);unsafe.mint_workflow.preparation.broadcast=true;
   assert.throws(()=>assessFinancialStatus(unsafe),/Mint workflow unavailable/);
   const mismatched=structuredClone(NUSD_POLICY);mismatched.mint_workflow.contract.artifactSha256='0'.repeat(64);

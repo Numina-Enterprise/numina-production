@@ -9,6 +9,18 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/nusd/v1/contracts",
+      "destination": "/api/status?mode=nusd-contracts"
+    },
+    {
+      "source": "/api/nusd/v1/mint-workflow",
+      "destination": "/api/status?mode=nusd-mint-workflow"
+    },
+    {
+      "source": "/api/nusd/v1/conversion-workflow",
+      "destination": "/api/status?mode=nusd-conversion-workflow"
+    },
+    {
       "source": "/api/nusd/v1/status",
       "destination": "/api/status?mode=nusd-status"
     },

@@ -3,11 +3,13 @@ import {requestJson} from './http-client.js';
 // The provider observation has a fixed date. Loading it never turns it into a live health check.
 export function networkPresentation(data){
  const n=data?.network_policy;
- if(data?.schema!=='numina.nusd.status.v1'||n?.status!=='provider_reported_live'||n.evidence_type!=='authenticated_provider_dashboard_observation'||!/^\d+$/.test(n.chain_id)||!Number.isFinite(Date.parse(n.observed_at))||!Number.isSafeInteger(n.validator_count)||n.validator_count<1)throw new Error('Network record unavailable');
+ const dashboard=n?.status==='provider_reported_live'&&n.evidence_type==='authenticated_provider_dashboard_observation';
+ const receipt=n?.status==='authenticated_provider_live'&&n.evidence_type==='authenticated_json_rpc_transaction_receipt_and_state_readback'&&n.authenticated_rpc_verified===true;
+ if(data?.schema!=='numina.nusd.status.v1'||!(dashboard||receipt)||!/^\d+$/.test(n.chain_id)||!Number.isFinite(Date.parse(n.observed_at))||!Number.isSafeInteger(n.validator_count)||n.validator_count<1)throw new Error('Network record unavailable');
  return {
-  summary:`${n.name} · ${n.validator_count} validators running when observed`,
+  summary:`${n.name} · ${n.validator_count} validators ${dashboard?'running when observed':'in the recorded network configuration'}`,
   detail:`Chain ${n.chain_id} · ${n.protocol} · ${n.region}`,
-  observed:`${n.provider} dashboard observation: ${new Date(n.observed_at).toISOString().replace('T',' ').replace('.000Z',' UTC')}. This is a dated record, not continuous monitoring.`,
+  observed:`${n.provider} ${dashboard?'dashboard observation':'authenticated RPC receipt and state observation'}: ${new Date(n.observed_at).toISOString().replace('T',' ').replace('Z',' UTC')}. This is a dated record, not continuous monitoring.`,
   asset:data.asset?.contract?'See the NUSD status record for contract and activation details.':'No NUSD contract address is reported in this application record. Read current NUSD status for issuance, transfer and settlement capabilities.'
  };
 }

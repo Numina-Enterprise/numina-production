@@ -5,7 +5,7 @@ import {NUSD_POLICY} from '../src/nusd-http.js';
 
 test('network observation preserves its date while pointing to the receipt-backed NUSD status',()=>{
  const view=networkPresentation(NUSD_POLICY);
- assert.match(view.summary,/3 validators running when observed/);
+ assert.match(view.summary,/3 validators in the recorded network configuration/);
  assert.match(view.detail,/962421430/);
  assert.match(view.observed,/2026-09-18 15:31:26.425 UTC/);
  assert.match(view.observed,/not continuous monitoring/);
