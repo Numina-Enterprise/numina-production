@@ -12,9 +12,9 @@ const treasuryRouteMetadata={
 };
 // The browser and authenticated account API share the same model amounts and units.
 // Route metadata describes evidence roles; it never supplies provider funds.
-export const NUMINA_FUNDABLE_TARGETS=Object.freeze(NUMINA_TREASURY_CONNECTION.allocations.map(({id,amount,unit})=>Object.freeze({
+export const NUMINA_FUNDABLE_TARGETS=Object.freeze(NUMINA_TREASURY_CONNECTION.allocations.map(({id,amount,unit,destination=null,providerAccountReference=null,providerAccountBindingVerified=false})=>Object.freeze({
   id,identity:'NUMINA',provider:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',
-  ...treasuryRouteMetadata[id],amount,unit,classification:'MODEL_ROUTE_ALLOCATION',treasuryIdentity:'NUMINA',systemOfRecord:'NUMINA'
+  ...treasuryRouteMetadata[id],amount,unit,destination,providerAccountReference,providerAccountBindingVerified,classification:'MODEL_ROUTE_ALLOCATION',treasuryIdentity:'NUMINA',systemOfRecord:'NUMINA'
 })));
 
 function buildFundableTargets(projection){
@@ -76,7 +76,7 @@ export function alignTreasuryAccounts(treasury,frontier){
     designatedLocations:fundableTargets.targets.map(target=>({
       id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,routePurpose:target.routePurpose,
       targetAmount:target.amount,unit:target.unit,modeledNusdEquivalent:target.amount,modelAlignmentStatus:target.modelAlignmentStatus,status:target.alignmentStatus,
-      providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed
+      providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed,providerAccountReference:target.providerAccountReference,providerAccountBindingVerified:target.providerAccountBindingVerified,destination:target.destination
     }))
   };
   const references=structuredClone(frontier.accounts??[]);
