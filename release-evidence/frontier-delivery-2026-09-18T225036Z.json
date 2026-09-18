@@ -1,0 +1,111 @@
+{
+  "schema": "numina.frontier-delivery-observation.v1",
+  "observedAt": "2026-09-18T22:50:36Z",
+  "canonical": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "head": "419755f30f0ab60aaa87e2cb23fb20049d04ea6a",
+    "singularTreasuryModelPreserved": true,
+    "accountRepresentationsChanged": false
+  },
+  "production": {
+    "vercelProject": "numina-production",
+    "latestReadyDeployment": {
+      "id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w",
+      "commit": "5d93ddca486cd22c620e1eab30058c345937316f",
+      "target": "production",
+      "state": "READY"
+    },
+    "headAheadOfLatestReadyDeployment": {
+      "aheadBy": 3,
+      "behindBy": 0,
+      "status": "ahead"
+    },
+    "publicVerification": {
+      "finalBuild": {
+        "path": "/final-build.json",
+        "httpStatus": 200
+      },
+      "settlementReceipt": {
+        "path": "/downloads/nusd/settlement-receipt.json",
+        "httpStatus": 200
+      },
+      "nusdStatus": {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200
+      },
+      "deploymentEstimate": {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200
+      }
+    }
+  },
+  "githubActions": {
+    "rerunAt": "2026-09-18T22:49:30Z",
+    "runnerAllocationCleared": false,
+    "runs": [
+      {
+        "name": "NUMINA",
+        "runId": 35401790870,
+        "attempt": 2,
+        "jobId": 105787363409,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "artifacts": []
+      },
+      {
+        "name": "NUMINA prebuilt production deploy",
+        "runId": 35401790863,
+        "attempt": 2,
+        "jobId": 105787367649,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "artifacts": []
+      },
+      {
+        "name": "Build and publish Numina",
+        "runId": 35401770484,
+        "attempt": 2,
+        "jobId": 105787371263,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "artifacts": []
+      },
+      {
+        "name": "Numina signed Android production release",
+        "runId": 35396478334,
+        "attempt": 2,
+        "jobId": 105787376692,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "artifacts": []
+      },
+      {
+        "name": "Numina iOS distribution signing",
+        "runId": 35396478463,
+        "attempt": 2,
+        "jobId": 105787380773,
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": null,
+        "artifacts": []
+      }
+    ],
+    "interpretation": "All retried jobs again terminated without steps or artifacts; no GitHub-hosted runner allocation is evidenced."
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909Z",
+    "fallbackUsed": false
+  },
+  "boundary": {
+    "externalSettlementClaimed": false,
+    "mobileStoreSubmissionClaimed": false,
+    "note": "This evidence records delivery observations only. It does not change treasury allocations, provider balances, signing identities, external settlement state, or store-submission state."
+  }
+}
