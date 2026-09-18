@@ -71,10 +71,10 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
-      - name: Validate NUMINA
-        run: npm test
       - name: Validate production build
         run: npm run build
+      - name: Validate NUMINA
+        run: npm test
       - name: Require Vercel deployment credential
         shell: bash
         run: |
