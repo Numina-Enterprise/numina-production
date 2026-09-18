@@ -15,6 +15,7 @@ const expectedGenesis=process.env.NUMINA_EXPECTED_GENESIS?.toLowerCase();
 const sender=getAddress(process.env.NUMINA_SENDER||'');
 const REQUIRED_INITIAL_SUPPLY='1500000000000000000000000000000000';
 const REQUIRED_DECIMALS=18n;
+const REQUIRED_CONFIRMATIONS=12;
 if(!endpoint||!authorization||!expectedChain||!expectedGenesis)throw Error('NUMINA_RPC_CONFIGURATION_REQUIRED');
 
 let rpcId=0;
@@ -34,7 +35,7 @@ async function waitReceipt(hash){
   }
   throw Error('RECEIPT_TIMEOUT');
 }
-async function waitConfirmations(blockHex,count=12){
+async function waitConfirmations(blockHex,count=REQUIRED_CONFIRMATIONS){
   const mined=BigInt(blockHex);
   for(let attempt=0;attempt<300;attempt++){
     const latest=BigInt(await rpc('eth_blockNumber'));
@@ -58,12 +59,31 @@ async function sendCreation(data,label){
   if(receipt.status!=='0x1'||!receipt.contractAddress)throw Error(label+'_DEPLOYMENT_REVERTED');
   const code=await rpc('eth_getCode',[receipt.contractAddress,'latest']);
   if(!code||code==='0x')throw Error(label+'_NO_RUNTIME_CODE');
-  return {hash,receipt,gas:gas.toString(),gasPrice:gasPrice.toString(),maximumFee:maximumFee.toString()};
+  return {hash,receipt,gas:gas.toString(),gasPrice:gasPrice.toString(),maximumFee:maximumFee.toString(),reusedExisting:false};
 }
 async function contractCall(address,iface,name,args=[]){
   const data=iface.encodeFunctionData(name,args);
   const raw=await rpc('eth_call',[{to:address,data},'latest']);
   return iface.decodeFunctionResult(name,raw);
+}
+async function creationTransactions(){
+  const latest=BigInt(await rpc('eth_blockNumber'));
+  const creations=[];
+  for(let height=latest;height>=0n;height--){
+    const block=await rpc('eth_getBlockByNumber',[hex(height),true]);
+    if(Array.isArray(block?.transactions)){
+      for(const tx of block.transactions){
+        if(tx?.from?.toLowerCase()===sender.toLowerCase()&&!tx.to&&/^0x[0-9a-fA-F]{64}$/.test(tx.hash)){
+          const receipt=await rpc('eth_getTransactionReceipt',[tx.hash]);
+          if(receipt?.status==='0x1'&&receipt.contractAddress){
+            creations.push({hash:tx.hash,receipt,reusedExisting:true});
+          }
+        }
+      }
+    }
+    if(height===0n)break;
+  }
+  return creations;
 }
 
 const chain=BigInt(await rpc('eth_chainId')).toString();
@@ -79,52 +99,82 @@ if(checked.initialSupply.toString()!==REQUIRED_INITIAL_SUPPLY||checked.cap.toStr
 if(getAddress(checked.initialRecipient)!==sender)throw Error('RECIPIENT_SIGNER_MISMATCH');
 
 const tokenArtifact=loadTokenArtifact();
-const tokenData=(await new ContractFactory(tokenArtifact.abi,tokenArtifact.bytecode).getDeployTransaction(
-  checked.cap,checked.initialSupply,checked.initialRecipient,
-  checked.roles.admin,checked.roles.issuer,checked.roles.minter,checked.roles.pauser,
-  checked.config.adminDelaySeconds,`0x${checked.policyHash}`
-)).data;
-const tokenTx=await sendCreation(tokenData,'NUSD');
-const tokenAddress=getAddress(tokenTx.receipt.contractAddress);
 const tokenInterface=new Interface(tokenArtifact.abi);
-const [decimals]=await contractCall(tokenAddress,tokenInterface,'decimals');
-const [totalSupply]=await contractCall(tokenAddress,tokenInterface,'totalSupply');
-const [cap]=await contractCall(tokenAddress,tokenInterface,'cap');
-const [paused]=await contractCall(tokenAddress,tokenInterface,'paused');
-const [recipientBalance]=await contractCall(tokenAddress,tokenInterface,'balanceOf',[checked.initialRecipient]);
-const [policyHash]=await contractCall(tokenAddress,tokenInterface,'issuerPolicyHash');
-if(decimals!==REQUIRED_DECIMALS||totalSupply.toString()!==REQUIRED_INITIAL_SUPPLY||cap.toString()!==REQUIRED_INITIAL_SUPPLY||
-   recipientBalance.toString()!==REQUIRED_INITIAL_SUPPLY||paused!==true||policyHash.toLowerCase()!==`0x${checked.policyHash}`.toLowerCase()) {
-  throw Error('NUSD_POST_DEPLOY_VERIFICATION_FAILED');
+async function verifyToken(address){
+  try{
+    const [decimals]=await contractCall(address,tokenInterface,'decimals');
+    const [totalSupply]=await contractCall(address,tokenInterface,'totalSupply');
+    const [cap]=await contractCall(address,tokenInterface,'cap');
+    const [paused]=await contractCall(address,tokenInterface,'paused');
+    const [recipientBalance]=await contractCall(address,tokenInterface,'balanceOf',[checked.initialRecipient]);
+    const [policyHash]=await contractCall(address,tokenInterface,'issuerPolicyHash');
+    if(decimals!==REQUIRED_DECIMALS||totalSupply.toString()!==REQUIRED_INITIAL_SUPPLY||cap.toString()!==REQUIRED_INITIAL_SUPPLY||
+       recipientBalance.toString()!==REQUIRED_INITIAL_SUPPLY||paused!==true||
+       policyHash.toLowerCase()!==`0x${checked.policyHash}`.toLowerCase())return null;
+    for(const [roleName,roleAddress] of [['ISSUER_ROLE',checked.roles.issuer],['MINTER_ROLE',checked.roles.minter],['PAUSER_ROLE',checked.roles.pauser]]){
+      const [has]=await contractCall(address,tokenInterface,'hasRole',[id(roleName),roleAddress]);
+      if(!has)return null;
+    }
+    const [admin]=await contractCall(address,tokenInterface,'defaultAdmin');
+    if(getAddress(admin)!==getAddress(checked.roles.admin))return null;
+    return {decimals,totalSupply,cap,paused,recipientBalance,policyHash};
+  }catch{return null;}
 }
-for(const [roleName,address] of [['ISSUER_ROLE',checked.roles.issuer],['MINTER_ROLE',checked.roles.minter],['PAUSER_ROLE',checked.roles.pauser]]){
-  const [has]=await contractCall(tokenAddress,tokenInterface,'hasRole',[id(roleName),address]);
-  if(!has)throw Error(roleName+'_MISSING');
+
+const priorCreations=await creationTransactions();
+let tokenTx=null,tokenState=null,tokenAddress=null;
+for(const candidate of priorCreations){
+  const address=getAddress(candidate.receipt.contractAddress);
+  const state=await verifyToken(address);
+  if(state){tokenTx=candidate;tokenState=state;tokenAddress=address;break;}
 }
-const [admin]=await contractCall(tokenAddress,tokenInterface,'defaultAdmin');
-if(getAddress(admin)!==getAddress(checked.roles.admin))throw Error('ADMIN_ROLE_MISMATCH');
+if(!tokenTx){
+  const tokenData=(await new ContractFactory(tokenArtifact.abi,tokenArtifact.bytecode).getDeployTransaction(
+    checked.cap,checked.initialSupply,checked.initialRecipient,
+    checked.roles.admin,checked.roles.issuer,checked.roles.minter,checked.roles.pauser,
+    checked.config.adminDelaySeconds,`0x${checked.policyHash}`
+  )).data;
+  tokenTx=await sendCreation(tokenData,'NUSD');
+  tokenAddress=getAddress(tokenTx.receipt.contractAddress);
+  tokenState=await verifyToken(tokenAddress);
+  if(!tokenState)throw Error('NUSD_POST_DEPLOY_VERIFICATION_FAILED');
+}
 
 const settlementArtifact=JSON.parse(fs.readFileSync(path.join(root,'artifacts/NuminaSettlement.json'),'utf8'));
-const settlementData=(await new ContractFactory(settlementArtifact.abi,settlementArtifact.bytecode).getDeployTransaction(tokenAddress)).data;
-const settlementTx=await sendCreation(settlementData,'NUSD_SETTLEMENT');
-const settlementAddress=getAddress(settlementTx.receipt.contractAddress);
 const settlementInterface=new Interface(settlementArtifact.abi);
-const [boundNusd]=await contractCall(settlementAddress,settlementInterface,'nusd');
-if(getAddress(boundNusd)!==tokenAddress)throw Error('SETTLEMENT_TOKEN_BINDING_MISMATCH');
+async function verifySettlement(address){
+  try{
+    const [boundNusd]=await contractCall(address,settlementInterface,'nusd');
+    return getAddress(boundNusd)===tokenAddress;
+  }catch{return false;}
+}
+let settlementTx=null,settlementAddress=null;
+for(const candidate of priorCreations){
+  const address=getAddress(candidate.receipt.contractAddress);
+  if(address!==tokenAddress&&await verifySettlement(address)){settlementTx=candidate;settlementAddress=address;break;}
+}
+if(!settlementTx){
+  const settlementData=(await new ContractFactory(settlementArtifact.abi,settlementArtifact.bytecode).getDeployTransaction(tokenAddress)).data;
+  settlementTx=await sendCreation(settlementData,'NUSD_SETTLEMENT');
+  settlementAddress=getAddress(settlementTx.receipt.contractAddress);
+  if(!await verifySettlement(settlementAddress))throw Error('SETTLEMENT_TOKEN_BINDING_MISMATCH');
+}
 
-const tokenConfirmations=await waitConfirmations(tokenTx.receipt.blockNumber,12);
-const settlementConfirmations=await waitConfirmations(settlementTx.receipt.blockNumber,12);
+const tokenConfirmations=await waitConfirmations(tokenTx.receipt.blockNumber);
+const settlementConfirmations=await waitConfirmations(settlementTx.receipt.blockNumber);
 const result={
   schema:'numina.nusd.production-deployment-receipt.v1',identity:'NUMINA',
   observedAt:new Date().toISOString(),chainId:chain,genesisHash:genesis.hash,sender,
+  deploymentMode:'idempotent_reconcile_or_create',
   issuance:{amountNusd:'1500000000000000',decimals:18,baseUnits:REQUIRED_INITIAL_SUPPLY,
     constructorMint:true,recipient:checked.initialRecipient,externallyBackedClaim:false},
   token:{address:tokenAddress,transactionHash:tokenTx.hash,blockNumber:tokenTx.receipt.blockNumber,
-    confirmations:tokenConfirmations,artifactSha256:TOKEN_ARTIFACT_SHA256,sourceSha256:tokenArtifact.sourceSha256,
-    decimals:Number(decimals),totalSupply:totalSupply.toString(),cap:cap.toString(),recipientBalance:recipientBalance.toString(),
-    paused,issuerPolicySha256:checked.policyHash},
+    confirmations:tokenConfirmations,reusedExisting:tokenTx.reusedExisting===true,
+    artifactSha256:TOKEN_ARTIFACT_SHA256,sourceSha256:tokenArtifact.sourceSha256,
+    decimals:Number(tokenState.decimals),totalSupply:tokenState.totalSupply.toString(),cap:tokenState.cap.toString(),
+    recipientBalance:tokenState.recipientBalance.toString(),paused:tokenState.paused,issuerPolicySha256:checked.policyHash},
   settlement:{address:settlementAddress,transactionHash:settlementTx.hash,blockNumber:settlementTx.receipt.blockNumber,
-    confirmations:settlementConfirmations,nusd:tokenAddress},
+    confirmations:settlementConfirmations,reusedExisting:settlementTx.reusedExisting===true,nusd:tokenAddress},
   externalSettlement:{usd:false,usdc:false,bankReceipt:null,providerReceipt:null},
   verification:{chain:true,genesis:true,managedSigner:true,tokenCode:true,tokenState:true,roles:true,settlementCode:true,settlementBinding:true}
 };
