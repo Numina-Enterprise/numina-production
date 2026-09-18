@@ -51,7 +51,7 @@ function connectionClassification(target,value){
     case 'financial':if(schema==='numina.nusd.status.v1'&&value.capabilities&&typeof value.capabilities==='object')return ['attention','Review capability status',Object.values(value.capabilities).some(flag=>flag===false)?'The application reports disabled financial capabilities. Open the current status for details.':'The application reports capability flags. This check does not verify settlement, reserves or operating authority.'];break;
     case 'evidence':if(schema==='numina.financial-evidence.v1'&&value.classification==='evidence_management_only')return ['available','Evidence workspace available','Private document registration and review tools respond. This does not attest operating authority or enable financial transactions.'];break;
     case 'telemetry':if(schema==='numina.metric-map.v1')return ['available','Definitions available','Metric definitions respond. Private operational logs are not read.'];break;
-    case 'release':if(schema==='numina.application-release.v2'&&value.product==='Numina'&&/^[a-f0-9]{64}$/.test(value.build_id))return ['available','Release record available','The deployed application inventory responds. Its signature is verified separately.'];break;
+    case 'release':if(schema==='numina.application-release.v2'&&['NUMINA','Numina'].includes(value.product)&&/^[a-f0-9]{64}$/.test(value.build_id))return ['available','Release record available','The deployed application inventory responds. Its signature is verified separately.'];break;
   }
   return ['error','Unexpected response','The response does not match the expected Numina interface.'];
 }
@@ -88,3 +88,4 @@ export async function checkConnection(id,{origin,fetchImpl=fetch,signal,timeoutM
 export function connectionReport(results,origin){
   return {schema:'numina.connection-observations.v1',system:'Numina',rootCount:1,origin:new URL(origin).origin,recordedAt:new Date().toISOString(),scope:'Browser-session read checks; unsigned observations, not independent assurance or financial execution evidence.',financialOperationsPerformed:false,credentialsCollected:false,results:results.map(item=>({id:item.id,name:item.name,path:item.path,state:item.state,label:item.label,message:item.message,checkedAt:item.checkedAt,durationMs:item.durationMs,httpStatus:item.httpStatus}))};
 }
+
