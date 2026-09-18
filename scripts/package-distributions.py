@@ -1,6 +1,6 @@
 """Package maintained Numina sources without running application tests."""
 from pathlib import Path
-import datetime, hashlib, json, subprocess, zipfile
+import argparse, datetime, hashlib, json, subprocess, zipfile
 
 root = Path(__file__).resolve().parent.parent
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
@@ -9,6 +9,9 @@ sha = lambda data: hashlib.sha256(data).hexdigest()
 version = read(root/'package.json')['version']
 major = version.split('.')[0]
 now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--native-only', action='store_true', help='Refresh native source archives without rebuilding integration distributions.')
+options = parser.parse_args()
 
 def package(source, name, prefix, paths):
     target = root/'docs'/name
@@ -33,16 +36,18 @@ def package(source, name, prefix, paths):
                 raise RuntimeError('Archive source mismatch: '+name)
     return {'file':target.name,'bytes':target.stat().st_size,'sha256':sha(target.read_bytes())}
 
-subprocess.run(['node','integrations/numina/scripts/package-distribution.js'],cwd=root,check=True)
-source = root/'integrations/numina'
-inventory = read(source/'file-manifest.json')
-item = package(source,f'numina-integration-kit-v{version}.zip',f'numina-integration-kit-v{version}',[source/f['path'] for f in inventory['files']]+[source/'file-manifest.json'])
-verification = read(source/'verification.json')
-record = {'schema':'numina.integration.archive.v2','version':version,'revision':verification['revision'],'archive':item['file'],'bytes':item['bytes'],'sha256':item['sha256'],'packagedAtUtc':now,'sourceFiles':len(inventory['files'])+1,'testsRun':False,'defaultTools':verification['defaultTools'],'applicationManifest':verification['applicationManifest'],'providerInstallationPerformed':False,'registryPublicationPerformed':False,'sitePublicationPerformedByThisPackageStep':False,'livemode':True}
-write(root/f'docs/integration-kit-v{version}-record.json',record)
-source = root/'integrations/codex/numina'
-plugin = package(source,f'numina-codex-plugin-{version}.zip','numina',[p for p in source.rglob('*') if p.is_file()])
-write(root/f'docs/codex-plugin-v{major}-record.json',{'version':version,**plugin,'publication':'download_available_after_deployment','marketplacePublicationVerified':False})
+record = plugin = None
+if not options.native_only:
+    subprocess.run(['node','integrations/numina/scripts/package-distribution.js'],cwd=root,check=True)
+    source = root/'integrations/numina'
+    inventory = read(source/'file-manifest.json')
+    item = package(source,f'numina-integration-kit-v{version}.zip',f'numina-integration-kit-v{version}',[source/f['path'] for f in inventory['files']]+[source/'file-manifest.json'])
+    verification = read(source/'verification.json')
+    record = {'schema':'numina.integration.archive.v2','version':version,'revision':verification['revision'],'archive':item['file'],'bytes':item['bytes'],'sha256':item['sha256'],'packagedAtUtc':now,'sourceFiles':len(inventory['files'])+1,'testsRun':False,'defaultTools':verification['defaultTools'],'applicationManifest':verification['applicationManifest'],'providerInstallationPerformed':False,'registryPublicationPerformed':False,'sitePublicationPerformedByThisPackageStep':False,'livemode':True}
+    write(root/f'docs/integration-kit-v{version}-record.json',record)
+    source = root/'integrations/codex/numina'
+    plugin = package(source,f'numina-codex-plugin-{version}.zip','numina',[p for p in source.rglob('*') if p.is_file()])
+    write(root/f'docs/codex-plugin-v{major}-record.json',{'version':version,**plugin,'publication':'download_available_after_deployment','marketplacePublicationVerified':False})
 native = read(root/f'docs/native-package-record-v{major}.json')
 native['sourceArchives'] = []
 for platform in ['android','ios']:

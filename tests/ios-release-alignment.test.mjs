@@ -20,11 +20,12 @@ test('iOS release binds the shared application, core and rc26 runtime',()=>{
   assert.equal(identity.nativeCompilationEstablished,false);
   assert.equal(identity.signed,false);
 });
-test('platform source counters retain the recorded iOS build number',()=>{
+test('current platform source counters remain distinct from historical binaries',()=>{
   const identity=deriveIOSIdentity(input());
-  assert.equal(identity.buildNumber,5);
+  assert.equal(identity.buildNumber,6);
   assert.equal(identity.historicalBinaryBuild,5);
-  assert.match(read('mobile/android/app/build.gradle'),/versionCode 3/);
+  assert.match(read('mobile/android/app/build.gradle'),/versionCode 4/);
+  assert.equal(input().native.android.binaryVersionCode,3);
 });
 test('application version drift fails rather than relabeling an artifact',()=>{
   const value=input(); value.pkg.version='5.0.0';
@@ -53,19 +54,19 @@ test('input fingerprint covers the actual native source, assets and current buil
     'mobile/ios/Numina.xcodeproj/project.pbxproj','.github/workflows/numina-ios-branch-build.yml'])
     assert.ok(snapshot.inputs.some(item=>item.path===path),path);
 });
-test('current iOS compile binds the source inventory while preserving earlier build evidence',()=>{
+test('current iOS source archive is fresh while earlier compilation evidence remains historical',()=>{
   const record=input().native,archive=record.sourceArchives.find(item=>item.platform==='ios');
-  assert.equal(record.ios.sourceBuildNumber,5);
+  assert.equal(record.ios.sourceBuildNumber,6);
   assert.equal(record.ios.binaryVersionCode,5);
-  assert.equal(record.ios.currentSourceCompiled,true);
-  assert.equal(record.ios.signingInputMatchesCurrentSource,true);
-  assert.equal(record.ios.compiledSourceInputsSha256,iosInputSnapshot().sha256);
+  assert.equal(record.ios.currentSourceCompiled,false);
+  assert.equal(record.ios.signingInputMatchesCurrentSource,false);
+  assert.notEqual(record.ios.compiledSourceInputsSha256,iosInputSnapshot().sha256);
   assert.equal(record.ios.signed,false);
   assert.equal(record.ios.storeSubmitted,false);
   const evidence=json('docs/ios-build-verification-2026-09-16-c6ffbb5.json');
   assert.equal(evidence.sourceCommit,record.ios.sourceCommit);
   assert.equal(evidence.sourceTree,record.ios.sourceTree);
-  assert.equal(evidence.sourceInputs.sha256,iosInputSnapshot().sha256);
+  assert.equal(evidence.sourceInputs.sha256,record.ios.compiledSourceInputsSha256);
   assert.equal(evidence.compiledArtifact.sha256,record.ios.binaries[0].sha256);
   assert.equal(evidence.compiledInfoPlist.CFBundleIdentifier,record.proposedPackageIdentity);
   assert.equal(evidence.compiledInfoPlist.CFBundleVersion,String(record.ios.binaryVersionCode));
