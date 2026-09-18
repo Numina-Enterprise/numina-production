@@ -22,6 +22,7 @@ unlinkSync('dist/client/pricing.html');
 copyFileSync('public/frontier.html','dist/client/index.html');
 copyFileSync('mobile/signing/release-identities.json','dist/client/identity.json');
 copyFileSync('mobile/signing/distribution-policy.json','dist/client/downloads/distribution-policy.json');
+copyFileSync('integrations/numina/file-manifest.json','dist/client/downloads/integration-manifest.json');
 for(const name of ['release-identities.json','numina-android-release.pem','numina-android-upload.pem','numina-ios-distribution.csr'])copyFileSync('mobile/signing/'+name,'dist/client/downloads/'+name);
 for(const name of ['site.js','release-ui.js','release-model.js','downloads/RC26-ALIGNMENT.md']){try{unlinkSync('dist/client/'+name);}catch(error){if(error.code!=='ENOENT')throw error;}}
 // Remove only explicitly retired generated assets; preserve release and customer artifacts.
