@@ -116,6 +116,10 @@
         {
           "key": "X-Numina-Identity",
           "value": "NUMINA"
+        },
+        {
+          "key": "X-Numina-Host",
+          "value": "NUMINA"
         }
       ]
     },
