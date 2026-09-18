@@ -1,54 +1,276 @@
 {
   "schema": "numina.final-build.v1",
   "identity": "NUMINA",
-  "source": "GitHub",
-  "repository": "skott34-dot/numina-production",
-  "release": "FINAL",
-  "nusd": {
-    "decimals": 18,
-    "supplyNusd": "1500000000000000",
-    "supplyBaseUnits": "1500000000000000000000000000000000",
-    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
-    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-    "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
-    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
-    "paused": true,
-    "status": "DEPLOYED_VERIFIED_PAUSED",
-    "finality": {
-      "requiredConfirmations": 12,
-      "tokenConfirmations": 25,
-      "settlementConfirmations": 24,
-      "observedBlockNumber": "51749",
-      "observedBlockHash": "0xaa976d94df250c3305837e362b6598964bfe5064c22300ed05c6bea439166d8f"
-    }
+  "status": "FINAL",
+  "finalizedAt": "2026-09-18",
+  "applicationVersion": "4.0.0",
+  "canonicalRepository": "skott34-dot/numina-production",
+  "website": {
+    "origin": "https://numinalabs.xyz",
+    "workspace": "https://numinalabs.xyz/app",
+    "identity": "NUMINA",
+    "primaryOrigin": "https://personal-space-m7q9.skott34.chatgpt.site",
+    "vercelRole": "backup_storage_and_deployment_surface",
+    "customDomainUpdated": false
+  },
+  "os": {
+    "name": "NUMINA",
+    "version": "4.0.0",
+    "identity": "NUMINA",
+    "runtime": "1.9.0-rc26"
   },
   "treasury": {
-    "modeledAggregateNusd": "1500000000000000",
-    "modeledComponents": [
+    "identity": "NUMINA",
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "components": [
       {
         "unit": "USD",
-        "value": "500000000000000"
+        "modeledValue": "500000000000000"
       },
       {
         "unit": "USDC",
-        "value": "500000000000000"
+        "modeledValue": "500000000000000"
       },
       {
         "unit": "NUSD",
-        "value": "500000000000000"
+        "modeledValue": "500000000000000"
       }
     ],
-    "externalUsdSettlementVerified": false,
-    "externalUsdcSettlementVerified": false
+    "externalBalancesAggregated": false,
+    "modeledRoleValuesAdditive": true,
+    "balanceCount": 1,
+    "componentsAre": "route_allocations_within_one_treasury",
+    "modelDefinition": {
+      "basis": "owner_confirmed_model_specification",
+      "date": "2026-09-18",
+      "scope": "One NUMINA treasury with a 1,500T declared aggregate: 500T USD Bank of America Savings ACH, 500T USDC Stripe Treasury address, 500T native NUSD. Historical native journal and token receipt unchanged.",
+      "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
+    },
+    "submissions": {
+      "record": "/api/treasury/v1/submissions",
+      "access": "owner_authenticated",
+      "applicationSubmissionPerformed": false,
+      "ownerReportedSubmission": true,
+      "providerSubmissionVerified": false,
+      "settlementReceipts": []
+    }
   },
-  "evidence": {
-    "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+  "nusd": {
     "chainId": "962421430",
     "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
-    "deploymentVerification": "runtime/nusd/deployment-verification.json",
-    "transactionReceiptsFinal": true
+    "decimals": 18,
+    "amountNusd": "1500000000000000",
+    "baseUnits": "1500000000000000000000000000000000",
+    "token": {
+      "address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "blockNumber": "51725",
+      "confirmations": 25,
+      "paused": true
+    },
+    "settlement": {
+      "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "blockNumber": "51726",
+      "confirmations": 24
+    },
+    "finality": "FINAL",
+    "receipt": "/downloads/nusd/deployment-receipt.json",
+    "verification": "/downloads/nusd/deployment-verification.json",
+    "externalBackingClaimed": false,
+    "operatorActivation": {
+      "status": "active_operator_confirmed",
+      "evidenceType": "owner_statement",
+      "record": "/api/nusd/v1/activation",
+      "chainActivityVerified": false,
+      "checkoutConnected": false
+    }
   },
-  "status": "FINAL",
-  "finalizedAt": "2026-09-18T15:35:24.884Z",
-  "executionBridgeRemoved": true
+  "mobile": {
+    "packageIdentity": "xyz.numinalabs.app",
+    "android": {
+      "versionCode": 4,
+      "versionName": "4.0.0",
+      "signingWorkflow": ".github/workflows/numina-android-release.yml",
+      "signedArtifactReceipt": null,
+      "googlePlaySubmissionReceipt": null
+    },
+    "ios": {
+      "buildNumber": 6,
+      "marketingVersion": "4.0.0",
+      "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
+      "signedArtifactReceipt": null,
+      "appStoreSubmissionReceipt": null
+    }
+  },
+  "storePublication": {
+    "googlePlay": false,
+    "appStore": false,
+    "evidenceRequired": true
+  },
+  "delivery": {
+    "source": {
+      "status": "FINAL",
+      "canonicalRepository": "skott34-dot/numina-production",
+      "verifiedCodeCommit": "671d88058bac5858e9ffd986d8065c3d18651449"
+    },
+    "smartContracts": {
+      "status": "FINAL",
+      "receipt": "/downloads/nusd/deployment-receipt.json",
+      "verification": "/downloads/nusd/deployment-verification.json"
+    },
+    "website": {
+      "sourceAligned": true,
+      "productionTransportUpdated": true,
+      "currentPublicDeploymentKnownStale": true,
+      "blocker": "CUSTOM_DOMAIN_VERCEL_DEPLOYMENT_LIMIT",
+      "verifiedAt": "2026-09-18T18:51:16Z",
+      "observedDeployment": {
+        "id": "dpl_FLgkD318R3Cn9tkv15BZioQb2GKc",
+        "commit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "url": "https://vercel.com/skott34-dot/numina-production/FLgkD318R3Cn9tkv15BZioQb2GKc",
+        "deploymentUrl": "https://numina-production-70q5ig443-skott34-dot.vercel.app",
+        "status": "READY",
+        "target": "production",
+        "readyAt": "2026-09-18T18:03:33.952Z",
+        "aliases": [
+          "www.numinalabs.xyz",
+          "numinalabs.xyz",
+          "numina-production.vercel.app"
+        ],
+        "historical": true
+      },
+      "domains": {
+        "apex": "https://numinalabs.xyz",
+        "canonical": "https://www.numinalabs.xyz",
+        "apexRedirectStatus": 308,
+        "ssl": "valid"
+      },
+      "verificationScope": "Primary NUMINA treasury page and public model/activation APIs verified. Anonymous private reads denied. Authenticated provider balances and bank connection were not verified; custom domain remains on older Vercel source.",
+      "priorObservedDeployment": {
+        "id": "dpl_2SbEf3mp95BiGA65mMVb9ARiQd2Y",
+        "commit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
+        "url": "https://vercel.com/skott34-dot/numina-production/2SbEf3mp95BiGA65mMVb9ARiQd2Y",
+        "status": "READY"
+      },
+      "status": "PRIMARY_HOST_DEPLOYED_CUSTOM_DOMAIN_STALE",
+      "latestRedeployAttempt": {
+        "result": "rejected",
+        "code": "api-deployments-free-per-day",
+        "deploymentCreated": false,
+        "observedAt": "2026-09-18T18:43:24Z"
+      },
+      "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
+      "primaryDeploymentVerified": true,
+      "primaryHost": {
+        "projectId": "appgprj_6aa1a5988258819196abc45e9ac02796",
+        "versionId": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
+        "versionNumber": 103,
+        "sourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
+        "sourceTreeMatchesCanonical": true,
+        "deployment": {
+          "id": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
+          "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+          "title": "Numina Labs",
+          "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
+          "type": "publish",
+          "status": "succeeded",
+          "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+          "screenshot_asset_pointer": null,
+          "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+          "failure_message": null,
+          "env_set_revision": 10,
+          "updated_at": "2026-09-18T18:50:56.936001+00:00"
+        },
+        "storedArchive": {
+          "archive_format": "tar",
+          "sediment_file_id": "file_00000000c42481f581bf7aad9db5b0c7",
+          "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5",
+          "size_bytes": 44277760,
+          "file_count": 307
+        }
+      }
+    },
+    "android": {
+      "sourceAligned": true,
+      "versionCode": 4,
+      "signedArtifactCreated": false,
+      "googlePlaySubmitted": false,
+      "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+      "submissionReceipt": null,
+      "lastRunnerObservation": {
+        "runId": 35377920361,
+        "attempt": 2,
+        "jobId": 105707486805,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920361",
+        "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "conclusion": "failure",
+        "runnerId": 0,
+        "stepsExecuted": 0,
+        "artifacts": [],
+        "completedAt": "2026-09-18T18:05:25Z",
+        "observedAt": "2026-09-18T18:07:00Z",
+        "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased."
+      }
+    },
+    "ios": {
+      "sourceAligned": true,
+      "buildNumber": 6,
+      "signedArtifactCreated": false,
+      "appStoreSubmitted": false,
+      "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+      "submissionReceipt": null,
+      "lastRunnerObservation": {
+        "runId": 35377920370,
+        "attempt": 2,
+        "jobId": 105707497373,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920370",
+        "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "conclusion": "failure",
+        "runnerId": 0,
+        "stepsExecuted": 0,
+        "artifacts": [],
+        "completedAt": "2026-09-18T18:05:11Z",
+        "observedAt": "2026-09-18T18:07:00Z",
+        "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased."
+      }
+    },
+    "applicationBackend": {
+      "origin": "https://personal-space-m7q9.skott34.chatgpt.site",
+      "storage": "existing D1 and R2",
+      "healthObserved": "ready",
+      "applicationVersion": "4.0.0",
+      "deployedSourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
+      "matchesCanonicalSource": true,
+      "scope": "Primary runtime deployment succeeded with source tree identical to the named canonical GitHub main commit. Existing journal retained; no funds moved.",
+      "canonicalGithubCommit": "671d88058bac5858e9ffd986d8065c3d18651449",
+      "sourceTree": "ad8f120f3cec3c6646539406f7a85a05c44f0815",
+      "deploymentId": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
+      "version": 103
+    },
+    "browserAlignment": {
+      "status": "PRIMARY_HOST_PUBLIC_MODEL_VERIFIED",
+      "modelBalance": "1500000000000000",
+      "modelUnits": [
+        "USD",
+        "USDC",
+        "NUSD"
+      ],
+      "modelViewsAdditive": true,
+      "mintedNusdAggregate": "1500000000000000",
+      "displayDecimals": 18,
+      "contractDecimals": 18,
+      "existingContractPreserved": true,
+      "tests": {
+        "focusedPassed": 44,
+        "focusedFailed": 0,
+        "fullSuiteRunThisObservation": false
+      },
+      "productionVerified": true,
+      "verificationScope": "Primary NUMINA treasury page and public model/activation APIs verified. Anonymous private reads denied. Authenticated provider balances and bank connection were not verified; custom domain remains on older Vercel source.",
+      "authenticatedTreasuryProductionVerified": false,
+      "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json"
+    }
+  }
 }
