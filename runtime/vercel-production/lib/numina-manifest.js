@@ -25,9 +25,9 @@ const mechanics=Object.freeze({
   providerVerification:Object.freeze({provider:NUMINA,verified:true,scope:NUMINA,bankOfAmericaDestinationConfirmation:false,stripeDestinationConfirmation:false})
 });
 const NUMINA_MANIFEST=Object.freeze({
-  schema:'numina.manifest.v2',singular:true,root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,
+  schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,authority:NUMINA,
   source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,
-  productionSource:NUMINA,vocabulary,release:RELEASE_IDENTITY,
+  productionSource:NUMINA,source:NUMINA,vocabulary,release:RELEASE_IDENTITY,
   core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
   authentication:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
   mechanics,
