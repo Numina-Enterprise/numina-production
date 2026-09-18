@@ -2,9 +2,9 @@ import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from '../publi
 
 export const NUMINA_FUNDABLE_TARGET_AMOUNT='500000000000000';
 export const NUMINA_FUNDABLE_TARGETS=Object.freeze([
-  Object.freeze({id:'bank-of-america-savings',provider:'bank-of-america',accountLabel:'Bank of America Savings',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'USD',classification:'TREASURY_ROLE_TARGET',treasuryIdentity:'NUMINA',treasuryRole:'bank_evidence',systemOfRecord:'NUMINA',evidenceSource:'bank-of-america'}),
-  Object.freeze({id:'stripe-numina-native-treasury',provider:'stripe',accountLabel:'Stripe Numina Native Treasury',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'USDC',classification:'TREASURY_ROLE_TARGET',treasuryIdentity:'NUMINA',treasuryRole:'stripe_evidence',systemOfRecord:'NUMINA',evidenceSource:'stripe'}),
-  Object.freeze({id:'numina-native-treasury',provider:'numina',accountLabel:'Numina Native Treasury',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'NUSD',classification:'TREASURY_ROLE_TARGET',treasuryIdentity:'NUMINA',treasuryRole:'canonical_projection',systemOfRecord:'NUMINA',evidenceSource:'NUMINA'})
+  Object.freeze({id:'bank-of-america-savings',identity:'NUMINA',provider:'NUMINA',providerService:'bank-of-america',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',accountLabel:'Bank of America Savings',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'USD',classification:'TREASURY_ROLE_TARGET',treasuryIdentity:'NUMINA',treasuryRole:'bank_evidence',systemOfRecord:'NUMINA',evidenceService:'bank-of-america'}),
+  Object.freeze({id:'stripe-numina-native-treasury',identity:'NUMINA',provider:'NUMINA',providerService:'stripe',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',accountLabel:'Stripe Numina Native Treasury',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'USDC',classification:'TREASURY_ROLE_TARGET',treasuryIdentity:'NUMINA',treasuryRole:'stripe_evidence',systemOfRecord:'NUMINA',evidenceService:'stripe'}),
+  Object.freeze({id:'numina-native-treasury',identity:'NUMINA',provider:'NUMINA',providerService:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',accountLabel:'Numina Native Treasury',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'NUSD',classification:'TREASURY_ROLE_TARGET',treasuryIdentity:'NUMINA',treasuryRole:'canonical_projection',systemOfRecord:'NUMINA',evidenceService:'NUMINA'})
 ]);
 
 function buildFundableTargets(projection){
@@ -54,7 +54,7 @@ export function alignTreasuryAccounts(treasury,frontier){
     treasuryRef:canonicalTreasury?{id:canonicalTreasury.id,route:canonicalTreasury.route,evidenceRoute:canonicalTreasury.evidence.route}:null,
     nativeTreasuryRoute:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',treasuryRole:'evidence_view',transportVerificationChannel:'NUMINA',providerObservationOnly:true,sharedNativeProjection:true,sharedNativeTreasury:structuredClone(sharedNativeTreasury),allocatedAmount:null
   }));
-  return {schema:'numina.treasury.alignment.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,accounts,accountReferences:references,
+  return {schema:'numina.treasury.alignment.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,accounts,accountReferences:references,
     supersededReferences:references.filter(account=>account.supersededBy),
     accountAlignment:{schema:'numina.treasury.account-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',separateRoles:true,singularIdentity:true,transportVerificationChannel:'NUMINA',sourceReferenceCount:active.length,distinctAccountViews:accounts.length,
       duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one NUMINA treasury; role views do not add balances'},
