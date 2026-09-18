@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/verify-nusd-production.yml'
       - 'runtime/nusd/scripts/verify-production.mjs'
+      - 'runtime/nusd/scripts/rpc-auth.mjs'
   workflow_run:
     workflows: ['Deploy NUSD contracts to NUMINA chain']
     types: [completed]
@@ -23,6 +24,21 @@ jobs:
     env:
       NUMINA_RPC_URL: https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/
       NUMINA_RPC_AUTHORIZATION: ${{ secrets.NUMINA_RPC_AUTHORIZATION }}
+      NUMINA_RPC_USERNAME: ${{ secrets.NUMINA_RPC_USERNAME }}
+      NUMINA_RPC_PASSWORD: ${{ secrets.NUMINA_RPC_PASSWORD }}
+      NUMINA_RPC_APP_USERNAME: ${{ secrets.NUMINA_RPC_APP_USERNAME }}
+      NUMINA_RPC_APP_PASSWORD: ${{ secrets.NUMINA_RPC_APP_PASSWORD }}
+      NUMINA_RPC_APP_CREDENTIAL: ${{ secrets.NUMINA_RPC_APP_CREDENTIAL }}
+      NUMINA_KALEIDO_APP_CREDENTIAL: ${{ secrets.NUMINA_KALEIDO_APP_CREDENTIAL }}
+      KALEIDO_APP_CREDENTIAL: ${{ secrets.KALEIDO_APP_CREDENTIAL }}
+      KALEIDO_APP_CRED_USERNAME: ${{ secrets.KALEIDO_APP_CRED_USERNAME }}
+      KALEIDO_APP_CRED_PASSWORD: ${{ secrets.KALEIDO_APP_CRED_PASSWORD }}
+      KALEIDO_APP_USERNAME: ${{ secrets.KALEIDO_APP_USERNAME }}
+      KALEIDO_APP_PASSWORD: ${{ secrets.KALEIDO_APP_PASSWORD }}
+      KALEIDO_USERNAME: ${{ secrets.KALEIDO_USERNAME }}
+      KALEIDO_PASSWORD: ${{ secrets.KALEIDO_PASSWORD }}
+      NUMINA_KALEIDO_API_KEY: ${{ secrets.NUMINA_KALEIDO_API_KEY }}
+      KALEIDO_API_KEY: ${{ secrets.KALEIDO_API_KEY }}
       NUMINA_EXPECTED_CHAIN_ID: '962421430'
       NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
       NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
