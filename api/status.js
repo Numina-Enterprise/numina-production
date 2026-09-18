@@ -7,6 +7,7 @@ import {NUMINA_TREASURY_CONNECTION,NUSD_OPERATOR_ACTIVATION} from '../public/tre
 
 const deploymentReceipt=JSON.parse(readFileSync(new URL('../runtime/nusd/deployment-receipt.json',import.meta.url),'utf8'));
 const deploymentVerification=JSON.parse(readFileSync(new URL('../runtime/nusd/deployment-verification.json',import.meta.url),'utf8'));
+const settlementReceipt=JSON.parse(readFileSync(new URL('../runtime/nusd/settlement-receipt.json',import.meta.url),'utf8'));
 
 function writeJson(req,res,value,{immutable=false}={}){
   res.statusCode=200;
@@ -45,6 +46,7 @@ export default async function handler(req,res){
   if(mode==='nusd-conversion-workflow')return writeJson(req,res,NUSD_POLICY.conversion_workflow);
   if(mode==='nusd-deployment-receipt')return writeJson(req,res,deploymentReceipt,{immutable:true});
   if(mode==='nusd-deployment-verification')return writeJson(req,res,deploymentVerification,{immutable:true});
+  if(mode==='nusd-settlement-receipt')return writeJson(req,res,settlementReceipt,{immutable:true});
   res.statusCode=404;
   res.setHeader('content-type','application/json; charset=utf-8');
   res.setHeader('cache-control','no-store');
