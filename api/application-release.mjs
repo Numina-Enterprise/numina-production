@@ -4,7 +4,7 @@ import {EXPECTED_RELEASE,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE
 import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,APPLICATION_ARTIFACT_BUILD_SCOPE} from '../src/application-release-contract.js';
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
-const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN='https://numina-production.vercel.app',MAX_BYTES=262144;
+const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN=ORIGIN,MAX_BYTES=262144;
 function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const NUMINA_FIELDS=['root','manifest','identity','authority','source','evidence','provider','host','core','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection'];
@@ -38,12 +38,12 @@ function validManifest(value,verifyEnvelope=verifyPinnedEnvelope){
 export function deploymentProvenance(env=process.env){
   return {schema:'numina.transport-observation.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
     source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provider_verification:true,deployment:'NUMINA',transport:'vercel',
-    authoritative:false,environment:env.VERCEL_TARGET_ENV||env.VERCEL_ENV||null,deployment_id:env.VERCEL_DEPLOYMENT_ID||null,
-    deployment_url:env.VERCEL_URL?`https://${env.VERCEL_URL}`:null,git_commit_sha:env.VERCEL_GIT_COMMIT_SHA||null,
+    authoritative:false,host_url:ORIGIN,environment:env.VERCEL_TARGET_ENV||env.VERCEL_ENV||null,deployment_id:env.VERCEL_DEPLOYMENT_ID||null,
+    transport_url:env.VERCEL_URL?`https://${env.VERCEL_URL}`:null,git_commit_sha:env.VERCEL_GIT_COMMIT_SHA||null,
     git_commit_ref:env.VERCEL_GIT_COMMIT_REF||null,runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
 }
 export function validateDeploymentProvenance(value){
-  return Boolean(object(value)&&value.schema==='numina.transport-observation.v1'&&value.root==='NUMINA'&&value.manifest==='NUMINA'&&value.identity==='NUMINA'&&value.authority==='NUMINA'&&value.source==='NUMINA'&&value.evidence==='NUMINA'&&value.provider==='NUMINA'&&value.host==='NUMINA'&&value.provider_verification===true&&value.deployment==='NUMINA'&&value.transport==='vercel'&&value.authoritative===false&&value.environment==='production'&&/^dpl_[A-Za-z0-9]+$/.test(String(value.deployment_id||''))&&/^https:\/\/[A-Za-z0-9.-]+\.vercel\.app$/.test(String(value.deployment_url||''))&&/^[0-9a-f]{40}$/i.test(String(value.git_commit_sha||''))&&value.git_commit_ref==='main'&&value.runtime_release===EXPECTED_RELEASE.production_version&&value.release===EXPECTED_RELEASE.release);
+  return Boolean(object(value)&&value.schema==='numina.transport-observation.v1'&&value.root==='NUMINA'&&value.manifest==='NUMINA'&&value.identity==='NUMINA'&&value.authority==='NUMINA'&&value.source==='NUMINA'&&value.evidence==='NUMINA'&&value.provider==='NUMINA'&&value.host==='NUMINA'&&value.provider_verification===true&&value.deployment==='NUMINA'&&value.transport==='vercel'&&value.authoritative===false&&value.environment==='production'&&/^dpl_[A-Za-z0-9]+$/.test(String(value.deployment_id||''))&&value.host_url===ORIGIN&&/^https:\/\/[A-Za-z0-9.-]+\.vercel\.app$/.test(String(value.transport_url||''))&&/^[0-9a-f]{40}$/i.test(String(value.git_commit_sha||''))&&value.git_commit_ref==='main'&&value.runtime_release===EXPECTED_RELEASE.production_version&&value.release===EXPECTED_RELEASE.release);
 }
 function supplyPayload(supply){return supply?.payload?.evidence||supply?.evidence||supply;}
 function supplyReceipt(supply){return supply?.payload?.receipt||supply?.receipt||null;}
