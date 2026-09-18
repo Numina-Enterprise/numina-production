@@ -31,7 +31,9 @@ jobs:
         run: npm run build
 
       - name: NUMINA identity
-        run: node --test tests/numina-identity.test.mjs
+        run: |
+          node --check runtime/nusd/scripts/deploy-production.mjs
+          node --test tests/numina-identity.test.mjs
 
       - name: NUMINA legacy suite audit
         continue-on-error: true
