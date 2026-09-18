@@ -1,5 +1,9 @@
 # Numina NUSD managed runtime candidate
 
+## Contract lifecycle
+
+The NUSD contract lifecycle is **INITIATED** for `NuminaUSD`, `NuminaSettlement`, `NuminaUSDCConversion`, and `NuminaUSDRedemption`. Each role is in `DEPLOYMENT_PREPARATION_INITIATED`. This records software preparation only: no contract address, transaction hash, chain receipt, mint, conversion, redemption, bank payment, or external deposit is asserted until the corresponding provider/network evidence exists.
+
 ## 1:1 conversion contract candidates
 
 The source also includes `NuminaUSDCConversion` for exact exchange against existing same-chain NUSD/USDC inventory and `NuminaUSDRedemption` for NUSD escrow with separate bank-outcome attestations. Both start paused; publishing or compiling them does not deploy them, mint tokens or initiate deposits. Their sources and artifacts are included in the application contract record. See [contract and security documentation](../../docs/NUSD-Conversion-Contracts.md) for interfaces, trust boundaries, local tests and activation requirements. The existing managed token deployment adapter does not deploy these new contracts automatically.

@@ -19,13 +19,10 @@ export function createEstimateHandler({observe = observeDeploymentEstimate} = {}
     response.setHeader('Allow', 'GET');
     const reject = (status, code) => { response.statusCode = status; response.end(request.method === 'HEAD' ? undefined : JSON.stringify({schema, status: 'unavailable', error: {code}})); };
     if (request.method !== 'GET') return reject(405, 'METHOD_NOT_ALLOWED');
-    try {
-      const url = new URL(request.url, 'https://numina.invalid');
-      const length = request.headers?.['content-length'];
-      if (url.search || url.hash || Object.keys(request.query ?? {}).length ||
-          request.headers?.['transfer-encoding'] !== undefined || (length !== undefined && length !== '0') ||
-          (request.body !== undefined && request.body !== null && request.body !== '')) return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
-    } catch { return reject(400, 'REQUEST_INPUT_NOT_ALLOWED'); }
+    // This read-only endpoint consumes no caller input. Vercel's rewrite/function
+    // transport can decorate the internal URL and request object, so treating
+    // transport metadata as caller input causes false rejections. Ignore all
+    // query/body/framing data and derive the response only from the observation.
     try {
       // Coalesce simultaneous public reads; never retain a completed estimate.
       if (!pending) { const work = Promise.resolve().then(() => observe()); pending = work; void work.finally(() => { if (pending === work) pending = null; }).catch(() => {}); }

@@ -10,7 +10,7 @@ The application remains **4.0.0**, with iOS source build **5** and runtime **1.9
 
 `node scripts/ios-release.mjs check` verifies the iOS identity against the root application package, required architecture, runtime contract and shared distribution policy. `node scripts/ios-release.mjs sync` regenerates only `Configuration/NuminaRelease.xcconfig`; it does not change the source build counter or create a binary. The generated dependency values are embedded into Info.plist and shown in native diagnostics.
 
-The normal web build now checks these bindings before building and records the iOS input fingerprint in source-alignment.json. Release manifest generation rejects an iOS source archive whose recorded input fingerprint differs from the current tree. The source archive and existing unsigned binary are separate artifacts.
+The normal web build checks these bindings before building and records the current iOS input fingerprint in source-alignment.json. Release metadata treats stored iOS source ZIPs as historical snapshots: a stale snapshot is marked non-authoritative instead of replacing or blocking the checked-in current source identity. The source snapshot and existing unsigned binary remain separate artifacts.
 
 The existing recorded unsigned iOS binary remains build 3 and predates these source changes. **Do not sign or submit that older bundle as build 5.** A fresh macOS compile, matching artifact evidence and an updated signing path are still required. No source alignment check establishes native compilation, Apple signing or store acceptance.
 

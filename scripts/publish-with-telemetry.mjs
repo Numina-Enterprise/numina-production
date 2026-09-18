@@ -8,7 +8,6 @@ import {setTimeout as delay} from 'node:timers/promises';
 const SITE_PROJECT = 'appgprj_6aa1a5988258819196abc45e9ac02796';
 export const PUBLISH_TARGETS = Object.freeze({
   github: 'https://github.com/skott34-dot/numina-production.git',
-  builder: 'https://github.com/skott34-dot/numina-builder.git',
   sites: 'https://git.chatgpt-team.site/26e6048d-1773-4301-af72-0b7aeedabce7/'+SITE_PROJECT+'.git'
 });
 const SHA = /^[a-f0-9]{40}$/;
@@ -52,7 +51,7 @@ function classify(result) {
 
 /** Publish a pinned commit with existing host credentials. Never deploys or transfers funds. */
 export async function publishGit({cwd=process.cwd(),target,env=process.env,reportDirectory}={}) {
-  if(!Object.hasOwn(PUBLISH_TARGETS,target))throw Error('Select github, builder or sites.');
+  if(!Object.hasOwn(PUBLISH_TARGETS,target))throw Error('Select github or sites.');
   cwd = realpathSync(resolve(cwd));
   const id = randomUUID();
   const directory = resolve(reportDirectory || resolve(cwd,'.openai/publishing'));
@@ -156,7 +155,7 @@ export async function publishGit({cwd=process.cwd(),target,env=process.env,repor
 
 if(process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    if(process.argv.length !== 3)throw Error('Usage: node scripts/publish-with-telemetry.mjs github|builder|sites');
+    if(process.argv.length !== 3)throw Error('Usage: node scripts/publish-with-telemetry.mjs github|sites');
     const result = await publishGit({target:process.argv[2]});
     console.log(JSON.stringify(result));
     process.exitCode = result.exitCode;

@@ -1,6 +1,6 @@
-# Treasury client alignment
+# Treasury client alignment v2
 
-Numina OS, the control panel, Frontier, and the integration kit read the existing canonical native treasury through `readTreasury()` at `/api/control/v1/treasury`. The account view at `/api/control/v2/treasury/accounts` derives its shared amounts from that same record. Treasury mutations continue exclusively through `writeTreasury(event)` in the existing root and journal.
+Numina OS, the control panel, Frontier, and the integration kit read the existing canonical native treasury through `readTreasury()` at `/api/control/v1/treasury`. The account view at `/api/control/v2/treasury/accounts` now returns `numina.treasury.alignment.v2` with `numina.treasury.account-view.v2`. It derives every role view from that same record. Treasury mutations continue exclusively through `writeTreasury(event)` in the existing root and journal.
 
 `config/numina-architecture.json` binds the required architecture to Numina 4.0.0 and its retained 1.9.0-rc26 runtime. The build checks its release versions, five layers, execution contract and single treasury against the maintained software and includes the contract in `/source-alignment.json`. This contract describes required software behavior; live head, deployment and balances come from their authenticated records.
 
@@ -11,6 +11,8 @@ Provider integer amounts remain exact through parsing, display and signed observ
 The Vercel assembly forwards `/api/control/v1/*`, `/api/app/v1/*`, `/api/ops/v1/*`, application release manifests and `/source-alignment.json` to `https://numinalabs.xyz`. Its existing v2 control forwarding uses that same origin. Vercel therefore reads the canonical treasury and Stripe observation endpoints from the existing application; it does not create an environment-specific balance. Owner authentication remains required. The retained verifier continues to serve its own `/v1/*` runtime evidence.
 
 The website and integration kit ship the same `treasury-proof.js` validator. The build rejects differences between these copies. It checks the frozen model fields, exact integer NUSD amount, root and Principal, Authority, command hash, event hash, revision, and projection binding. Frontier also checks each displayed account's canonical reference, shared amount, revision, head, and declared valuation against that record before rendering.
+
+Treasury v2 keeps provider roles separate in function and singular in identity: `treasuryIdentity`, `identity`, and `transportVerificationChannel` resolve to `NUMINA`. Stripe and Bank of America remain factual substrate-observation roles and do not create additional treasury balances.
 
 Account alignment is checked against the retained source references as well. Every active provider/account/entity group appears exactly once; unresolved references remain separate, and superseded references remain historical. Group counts, source-reference membership, label conflicts, provider identity, ownership flags and original account fields must agree. Duplicate or omitted groups, changed provider labels/ownership claims and mixed account sources are rejected even when every row repeats the correct native balance. This is an internal consistency check of the authenticated account response, not independent proof of provider ownership. Account references, recorded policy, funding declarations, and historical events are preserved.
 

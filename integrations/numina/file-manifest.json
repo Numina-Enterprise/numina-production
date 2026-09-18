@@ -1,7 +1,137 @@
 {
-  "schema": "numina.integration.files.v2",
+  "schema": "numina.integration.manifest.v2",
+  "root": "NUMINA",
+  "manifest": "NUMINA",
+  "identity": "NUMINA",
+  "authority": "NUMINA",
+  "source": "NUMINA",
+  "evidence": "NUMINA",
+  "provider": "NUMINA",
+  "host": "NUMINA",
+  "provenance": "NUMINA",
+  "core": "NUMINA",
+  "repository": "NUMINA",
+  "software": "NUMINA",
+  "worker": "NUMINA",
+  "journal": "NUMINA",
+  "runtime": "NUMINA",
+  "artifact": "NUMINA",
+  "authentication": "NUMINA",
+  "deployment": "NUMINA",
+  "delivery": "NUMINA",
+  "readiness": "NUMINA",
+  "treasury": "NUMINA",
+  "storage": "NUMINA",
+  "projection": "NUMINA",
+  "transport": "NUMINA",
+  "release": "NUMINA",
+  "receipts": "NUMINA",
+  "settlements": "NUMINA",
+  "funds": "NUMINA",
+  "confirmation_evidence": "NUMINA",
+  "modelIdentity": "NUMINA",
+  "singular": true,
+  "canonical": true,
+  "role": "canonical_integration_manifest",
   "version": "4.0.0",
-  "scope": "Integration source archive; separate from the Numina application artifact identity",
+  "revision": "numina-root-v4.0.0",
+  "scope": "NUMINA",
+  "nusdContracts": {
+    "schema": "numina.nusd.contract-lifecycle.v1",
+    "modelIdentity": "NUMINA",
+    "identity": "NUMINA",
+    "status": "DEPLOYED_VERIFIED",
+    "initiatedOn": "2026-09-18",
+    "contractCount": 4,
+    "contracts": [
+      "NuminaUSD",
+      "NuminaSettlement",
+      "NuminaUSDCConversion",
+      "NuminaUSDRedemption"
+    ],
+    "deploymentPreparationInitiated": true,
+    "deploymentVerified": true,
+    "chainReceiptVerified": true,
+    "mintStatus": "MINT_VERIFIED",
+    "mintSuccessReported": true,
+    "mintVerified": true,
+    "mintPerformed": true,
+    "constructorMint": true,
+    "decimals": 18,
+    "mintAmountNusd": "1500000000000000",
+    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "paused": true,
+    "conversionPerformed": false,
+    "redemptionPerformed": false,
+    "settlementPerformed": false,
+    "externalDepositsPerformed": false,
+    "externalBackingVerified": false
+  },
+  "application": {
+    "manifest": "/v4/release/manifest",
+    "schema": "numina.application-release.v2"
+  },
+  "treasuryAlignment": {
+    "root": "NUMINA",
+    "manifest": "NUMINA",
+    "identity": "NUMINA",
+    "authority": "NUMINA",
+    "source": "NUMINA",
+    "evidence": "NUMINA",
+    "provider": "NUMINA",
+    "host": "NUMINA",
+    "provenance": "NUMINA",
+    "core": "NUMINA",
+    "repository": "NUMINA",
+    "software": "NUMINA",
+    "worker": "NUMINA",
+    "journal": "NUMINA",
+    "runtime": "NUMINA",
+    "artifact": "NUMINA",
+    "authentication": "NUMINA",
+    "deployment": "NUMINA",
+    "delivery": "NUMINA",
+    "readiness": "NUMINA",
+    "treasury": "NUMINA",
+    "storage": "NUMINA",
+    "projection": "NUMINA",
+    "transport": "NUMINA",
+    "release": "NUMINA",
+    "receipts": "NUMINA",
+    "settlements": "NUMINA",
+    "funds": "NUMINA",
+    "confirmation_evidence": "NUMINA",
+    "schema": "numina.treasury.alignment.v2",
+    "planSchema": "numina.treasury.alignment-plan.v2",
+    "status": "ALIGNED_MODEL",
+    "modelIdentity": "NUMINA",
+    "modelAligned": true,
+    "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
+    "targetAmount": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "designatedRoleCount": 3,
+    "accountViewSchema": "numina.treasury.account-view.v2",
+    "treasuryIdentity": "NUMINA",
+    "transportVerificationChannel": "NUMINA",
+    "separateRoles": true,
+    "singularIdentity": true,
+    "historicalProjectionSchema": "numina.treasury.projection.v1",
+    "providerRoleBalancesAdditive": false,
+    "modeledRoleValuesAdditive": true,
+    "externalBalancesAggregated": false
+  },
+  "distribution": {
+    "path": "distribution.json",
+    "schema": "numina.integration.distribution.v2"
+  },
+  "verification": {
+    "path": "verification.json",
+    "schema": "numina.integration.package.v2"
+  },
   "files": [
     {
       "path": ".gitignore",
@@ -10,8 +140,8 @@
     },
     {
       "path": "API-CONTRACT.md",
-      "bytes": 11817,
-      "sha256": "bf4c428ad3847963e4961e48fc94667d567ddac88983f054adbce509887013bd"
+      "bytes": 12442,
+      "sha256": "1a873cf2f0c5891614cc305b6e804e2539abc34dc18f0291e26beb116c6ee306"
     },
     {
       "path": "COMPATIBILITY.md",
@@ -70,8 +200,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 5206,
-      "sha256": "68612aa02551b0a835ac6987556e9a50c9a3401dcac930f164bfc7e16b2c75d7"
+      "bytes": 9053,
+      "sha256": "dcdcfd9b0f7a6007406e26da19f88e4b096659ff6af700b5b25bc4dabd626654"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -150,8 +280,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 980,
-      "sha256": "00ebde2f3e90ba576573f76465768997aba9dbfd5d19ae045933258f61eeda83"
+      "bytes": 904,
+      "sha256": "1898bd51ff5890c8ade3b70fdd7a84ed30ca662a1be21933de6a35c1afd55683"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -215,8 +345,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 6027,
-      "sha256": "498e62e2718bbe9872d0adf7b348a19c98bdb3771b609979dda9f30774943cd0"
+      "bytes": 9117,
+      "sha256": "add318632332660a17ab9929f0d9dd20d4e0c89a88ac6ffe6a641009efffd08b"
     },
     {
       "path": "src/client.js",
@@ -255,8 +385,8 @@
     },
     {
       "path": "src/runtime-contract.js",
-      "bytes": 1163,
-      "sha256": "0889ec6f09f651f3fb95ef91397c0727c890de0c67f23d3b0c863a9fab24e074"
+      "bytes": 1224,
+      "sha256": "e28185af6a771370aa38cc6d11beda78bb7c80d26d771238d018d02883dd0fb4"
     },
     {
       "path": "src/tools.js",
@@ -265,8 +395,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 12776,
-      "sha256": "45be18985605af0409ac87d0c237577e7ff5ac728a92f22db639c4a884eb3cb3"
+      "bytes": 19275,
+      "sha256": "882cb55e57e01b8cedd7db52f1beda82168d0af18c8285bb316c2ae8f08e67cf"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -275,8 +405,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 2422,
-      "sha256": "1253f6b89548a252e9568ae0bbebd91d795c8b2b67f1787f1da816238d988436"
+      "bytes": 6228,
+      "sha256": "22544ab5c9085f49c956512691d92a95384ccf47e3d72699a9bfd25bff8b96a6"
     }
   ]
 }

@@ -28,9 +28,9 @@ test('one owner approval binds both runtime manifests without manufacturing fina
  assert.equal(handoff.sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff.zip')));
  assert.equal(handoff.sha256,packageRecord.sha256);
  assert.equal(handoff.record_sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff-Package-Record.json')));
- const config=json('vercel.json');assert.equal(config.git.deploymentEnabled,true);
- for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source)?.destination,'https://numinalabs.xyz'+source);
- assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://numinalabs.xyz/api/control/v1/:path*');
+ const config=json('vercel.json');assert.equal(config.git.deploymentEnabled.main,true);
+ for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source),undefined);
+ assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://personal-space-m7q9.skott34.chatgpt.site/api/control/v1/:path*');
  for(const version of ['2','3','4'])assert.equal(config.rewrites.find(r=>r.source==='/v'+version+'/release/manifest')?.destination,'/api/application-release');
 });
 
@@ -41,7 +41,7 @@ test('root release manifest binds the owner workflow, additive migration and act
  for(const name of ['model','policy','receipt','ui'])assert.equal(binding.modules[name].sha256,digest(bytes('public/wallet-execution-'+name+'.js')));
  assert.equal(binding.receipt_verification.minimum_confirmations,12);assert.equal(binding.receipt_verification.scope,'provider_observation_consistency');
  assert.equal(binding.attempt_storage.migration_sha256,digest(bytes('drizzle/0004_wallet_deployment_intents.sql')));assert.equal(binding.attempt_storage.native_journal_modified,false);
- assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents']);
+ assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents','0005_numina_manifest_control']);
  assert.deepEqual(binding.evidence,{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false});
  for(const flag of Object.values(release.scope))assert.equal(flag,false);
 });
@@ -55,6 +55,8 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.release,'numina-v4.0.0');
   assert.equal(release.schema,'numina.application-release.v2');
   assert.equal(release.runtime_dependency.version,'1.9.0-rc26');
+  for(const field of ['root','manifest','identity','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release[field],'NUMINA',field);
+  assert.equal(release.provider_verification,true);
 });
 
 test('current native distribution retains its actual Android and iOS build identities',()=>{
@@ -120,3 +122,4 @@ test('runtimeBuild preserves optional treasury verification as server-reported m
   assert.equal(legacy.asset_execution_available,false);
   assert.deepEqual(calls,Array.from({length:2},()=>({url:'https://numina.test/v4/release/manifest',method:'GET',authorization:undefined})));
 });
+

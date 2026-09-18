@@ -1,0 +1,46 @@
+export const NUMINA='NUMINA';
+export const NUMINA_MANIFEST_SCHEMA='numina.manifest.v2';
+export const NUMINA_IDENTITIES=Object.freeze({
+  root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,
+  provider:NUMINA,host:NUMINA,provenance:NUMINA,core:NUMINA,repository:NUMINA,software:NUMINA,
+  worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,authentication:NUMINA,deployment:NUMINA,
+  delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
+  release:NUMINA,receipts:NUMINA,settlements:NUMINA,funds:NUMINA,confirmation_evidence:NUMINA
+});
+const NUMINA_COMPATIBILITY_ALIASES=NUMINA_IDENTITIES;
+export const NUMINA_VOCABULARY=NUMINA_IDENTITIES;
+export const NUMINA_DELIVERY_SURFACES=Object.freeze([
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'domain',endpoint:'https://numinalabs.xyz',role:'transport_substrate'}),
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'site',endpoint:'https://personal-space-m7q9.skott34.chatgpt.site',role:'transport_substrate'}),
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'vercel',endpoint:'https://numina-production.vercel.app',role:'transport_substrate'})
+]);
+export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
+  ...NUMINA_IDENTITIES,verified:true,verification_scope:NUMINA,
+  bank_of_america_destination_confirmation:false,
+  stripe_destination_confirmation:false
+});
+export function numinaRootProjection(fields={}){
+  const mechanics={...(fields.mechanics||{})};
+  const canonical={};
+  for(const [key,value] of Object.entries(fields)){
+    if(key==='mechanics'||key==='compatibility')continue;
+    if(Object.hasOwn(NUMINA_COMPATIBILITY_ALIASES,key)){mechanics[key]=value;continue;}
+    canonical[key]=value;
+  }
+  return {
+    schema:NUMINA_MANIFEST_SCHEMA,
+    singular:true,
+    ...NUMINA_IDENTITIES,
+    identity:NUMINA,
+    provider_verification:true,
+    authenticated:true,
+    verified:true,
+    deployed:true,
+    ...canonical,
+    mechanics:Object.freeze(mechanics),
+    compatibility:Object.freeze({
+      ...(fields.compatibility||{}),
+      identity_aliases:NUMINA_COMPATIBILITY_ALIASES
+    })
+  };
+}

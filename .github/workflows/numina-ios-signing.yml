@@ -1,6 +1,12 @@
 name: Numina iOS distribution signing
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'release-evidence/numina-final-build-2026-09-18.json'
+      - 'mobile/ios/**'
+      - 'scripts/sign-ios-release.py'
 permissions:
   contents: read
 concurrency:
@@ -10,13 +16,17 @@ jobs:
   sign:
     if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main'
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
-      - name: Sign the versioned iOS bundle with the configured Apple identity
+      - name: Compile current NUMINA iOS source
+        run: |
+          xcodebuild -project mobile/ios/Numina.xcodeproj -scheme Numina -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/NuminaDerived" CODE_SIGNING_ALLOWED=NO build
+      - name: Sign current-source iOS bundle with configured Apple identity
         env:
+          NUMINA_IOS_COMPILED_APP: ${{ runner.temp }}/NuminaDerived/Build/Products/Release-iphoneos/Numina.app
           NUMINA_APPLE_TEAM_ID: ${{ vars.NUMINA_APPLE_TEAM_ID }}
           NUMINA_APPLE_DISTRIBUTION_P12_BASE64: ${{ secrets.NUMINA_APPLE_DISTRIBUTION_P12_BASE64 }}
           NUMINA_APPLE_DISTRIBUTION_P12_PASSWORD: ${{ secrets.NUMINA_APPLE_DISTRIBUTION_P12_PASSWORD }}
@@ -24,7 +34,7 @@ jobs:
         run: python3 scripts/sign-ios-release.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: numina-ios-signed
+          name: numina-ios-signed-final
           path: packages/ios-signed/
           if-no-files-found: error
           retention-days: 90

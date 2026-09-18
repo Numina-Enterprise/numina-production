@@ -2,6 +2,14 @@ name: Repair rc26 integration manifest
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'integrations/numina/src/runtime-contract.js'
+      - 'integrations/numina/package.json'
+      - 'integrations/numina/scripts/package-distribution.js'
+      - 'config/numina-architecture.json'
+      - '.github/workflows/repair-rc26-integration-manifest.yml'
 
 permissions:
   contents: write
@@ -20,6 +28,10 @@ jobs:
         run: |
           node --version
           python3 --version
+      - name: NUMINA
+        run: cp integrations/numina/src/runtime-contract.js public/runtime-contract.js
+      - name: NUMINA
+        run: cp integrations/numina/src/runtime-contract.js public/runtime-contract.js
       - name: Align packaged runtime contract inventory
         run: |
           node --input-type=module <<'NODE'
@@ -36,6 +48,8 @@ jobs:
           fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
           console.log({bytes:entry.bytes,sha256:entry.sha256});
           NODE
+      - name: Regenerate packaged integration metadata
+        run: node integrations/numina/scripts/package-distribution.js
       - name: Repackage current iOS source identity
         run: python3 scripts/package-ios-source.py
       - name: Validate production build gate
@@ -45,6 +59,9 @@ jobs:
           git config user.name 'Numina Release Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add \
+            public/runtime-contract.js \
+            integrations/numina/distribution.json \
+            integrations/numina/verification.json \
             integrations/numina/file-manifest.json \
             docs/native-package-record-v4.json \
             docs/numina-os-4.0.0-ios-source.zip \
@@ -55,5 +72,5 @@ jobs:
             echo 'Release inventories already aligned.'
             exit 0
           fi
-          git commit -m 'Align rc26 release inventories after Node 24 pin'
+          git commit -m 'NUMINA'
           git push origin HEAD:main

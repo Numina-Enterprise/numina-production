@@ -1,1 +1,1 @@
-module.exports = require('../lib/numina').makeHandler('control-evaluate');
+module.exports = require('../lib/frontier-handler').makeFrontierHandler('control-evaluate');

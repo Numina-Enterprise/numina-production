@@ -4,7 +4,7 @@
   "legalEntity": "SK Consulting LLC",
   "product": "Numina",
   "applicationVersion": "4.0.0",
-  "sourceBuildNumber": 5,
+  "sourceBuildNumber": 6,
   "proposedBundleIdentifier": "xyz.numinalabs.app",
   "bundleRegisteredWithApple": null,
   "appleTeamId": null,
@@ -42,5 +42,6 @@
   ],
   "secretsConfigured": null,
   "signedIPA": null,
-  "appStoreSubmission": null
+  "appStoreSubmission": null,
+  "finalBuildReceipt": "release-evidence/numina-final-build-2026-09-18.json"
 }

@@ -1,0 +1,81 @@
+name: Sync production control credential pin
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-control-key-pin.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 5
+    env:
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Require repaired production credential
+        shell: bash
+        run: |
+          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
+            echo '::error::NUMINA_CONTROL_API_KEY is not configured.'
+            exit 1
+          fi
+      - name: Synchronize pin and bounded rotation semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          pin="$(printf '%s' "$NUMINA_CONTROL_API_KEY" | sha256sum | awk '{print $1}')"
+          PIN="$pin" python3 - <<'PY'
+          from pathlib import Path
+          import os, re
+
+          path = Path('src/control-http.js')
+          text = path.read_text(encoding='utf-8')
+          pin = os.environ['PIN']
+
+          text, count = re.subn(
+              r"export const CONTROL_API_KEY_SHA256_PIN='[a-f0-9]{64}';",
+              f"export const CONTROL_API_KEY_SHA256_PIN='{pin}';",
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit('control pin declaration not found exactly once')
+
+          old = "function controlApiKeyPin(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured||CONTROL_API_KEY_SHA256_PIN;}"
+          new = "function controlApiKeyPins(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured&&configured!==CONTROL_API_KEY_SHA256_PIN?[CONTROL_API_KEY_SHA256_PIN,configured]:[CONTROL_API_KEY_SHA256_PIN];}"
+          if old not in text:
+              if new not in text:
+                  raise SystemExit('control pin resolver not found')
+          else:
+              text = text.replace(old, new, 1)
+
+          old_auth = "if(auth){if(!auth.startsWith('Bearer ')||await controlHash(auth.slice(7))!==controlApiKeyPin(env))controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}"
+          new_auth = "if(auth){if(!auth.startsWith('Bearer ')||!controlApiKeyPins(env).includes(await controlHash(auth.slice(7))))controlError('UNAUTHENTICATED',401);return env.NUMINA_CONTROL_OWNER;}"
+          if old_auth not in text:
+              if new_auth not in text:
+                  raise SystemExit('control bearer check not found')
+          else:
+              text = text.replace(old_auth, new_auth, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+          node --check src/control-http.js
+          git add src/control-http.js
+          if git diff --cached --quiet; then
+            echo 'Production credential pin and rotation semantics are already synchronized.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Allow bounded production credential rotation'
+          git push origin HEAD:main

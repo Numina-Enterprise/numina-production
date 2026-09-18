@@ -1,0 +1,165 @@
+name: Prepare 1500T treasury aggregate model
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/initiate-treasury-aggregate-model.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prepare-treasury-aggregate-model
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 5
+    env:
+      NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+    steps:
+      - name: Require production owner credential
+        shell: bash
+        run: |
+          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
+            echo '::error::NUMINA_CONTROL_API_KEY is not configured; no aggregate model write is attempted.'
+            exit 1
+          fi
+      - name: Commit prepared 1500T aggregate plan into canonical Numina journal
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const origin=process.env.NUMINA_APPLICATION_ORIGIN;
+          const token=process.env.NUMINA_CONTROL_API_KEY;
+          if(origin!=='https://numinalabs.xyz'||!token) throw Error('canonical production configuration required');
+
+          function stable(value){
+            if(value===null||typeof value==='boolean')return JSON.stringify(value);
+            if(typeof value==='number'&&Number.isSafeInteger(value)&&!Object.is(value,-0))return String(value);
+            if(typeof value==='string')return JSON.stringify(value);
+            if(Array.isArray(value))return '['+value.map(stable).join(',')+']';
+            if(value&&Object.getPrototypeOf(value)===Object.prototype)return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stable(value[k])).join(',')+'}';
+            throw Error('INVALID_CANONICAL_VALUE');
+          }
+          async function read(path){
+            const response=await fetch(origin+path,{redirect:'error',signal:AbortSignal.timeout(15000),headers:{Accept:'application/json',Authorization:'Bearer '+token}});
+            const text=await response.text();
+            if(!response.ok)throw Error(`GET ${path} failed: HTTP ${response.status} ${text}`);
+            return JSON.parse(text);
+          }
+          async function post(path,body){
+            const response=await fetch(origin+path,{method:'POST',redirect:'error',signal:AbortSignal.timeout(15000),headers:{Authorization:'Bearer '+token,'Content-Type':'application/json',Accept:'application/json'},body:stable(body)});
+            const text=await response.text();
+            if(!response.ok){const error=Error(`POST ${path} failed: HTTP ${response.status} ${text}`);error.status=response.status;throw error;}
+            return JSON.parse(text);
+          }
+
+          const native=await read('/api/control/v1/treasury');
+          if(native.status!=='READY'||native.projection?.unit!=='NUSD'||native.projection?.balance!=='500000000000000'){
+            throw Error('canonical native treasury must be READY at exactly 500T NUSD before preparing the aggregate plan');
+          }
+
+          const model={
+            schema:'numina.treasury.aggregate-plan.v2',
+            authority:'NUMINA',
+            system_of_record:'NUMINA',
+            status:'PREPARED',
+            aggregation:'ADDITIVE_MODEL_UNITS',
+            aggregate:{amount:'1500000000000000',unit:'MODEL_UNIT',component_count:3},
+            components:[
+              {
+                id:'bank-of-america-savings',provider:'bank-of-america',amount:'500000000000000',unit:'USD',classification:'MODEL_UNIT',provider_balance:false,external_balance_verified:false,
+                preparation:{kind:'bank_transaction_request',operation:'PREPARE_BANK_TRANSACTION',amount_minor:'50000000000000000',currency:'USD',destination_reference:'boa-savings',status:'PREPARED_MODEL_ONLY',submission_performed:false,receipt:null}
+              },
+              {
+                id:'stripe-treasury-usdc',provider:'stripe',amount:'500000000000000',unit:'USDC',classification:'MODEL_UNIT',provider_balance:false,external_balance_verified:false,
+                preparation:{kind:'provider_conversion_target',operation:'MODEL_USDC_PREPARATION',amount:'500000000000000',unit:'USDC',destination_reference:'stripe-treasury',status:'PREPARED_MODEL_ONLY',submission_performed:false,receipt:null}
+              },
+              {
+                id:'numina-native-treasury',provider:'numina',amount:'500000000000000',unit:'NUSD',classification:'VERIFIED_NATIVE_MODEL',provider_balance:false,external_balance_verified:false,
+                preparation:{kind:'native_mint_request',operation:'PREPARE_MINT',amount:'500000000000000',unit:'NUSD',network_reference:'numina-native',destination_reference:'numina-native-treasury',status:'PREPARED_MODEL_ONLY',submission_performed:false,receipt:null}
+              }
+            ],
+            aggregate_mint:{amount:'1500000000000000',unit:'MODEL_UNIT',status:'PREPARED_MODEL_ONLY',submission_performed:false,external_execution:false,receipt:null},
+            canonical_native_treasury:{amount:'500000000000000',unit:'NUSD',unchanged:true},
+            external_balance_verified:false,
+            external_backing_asserted:false,
+            external_funds_moved:false
+          };
+          const payload=stable(model);
+          const resource='record:numina.treasury.aggregate-plan.v2';
+          const requestId='treasury_aggregate_1500t_v2';
+          const requestCommandId='treasury_aggregate_1500t_request_v2';
+          const executeCommandId='treasury_aggregate_1500t_execute_v2';
+
+          async function snapshot(){return read('/api/control/v1/state');}
+          function existingRecord(state){return state.state.records.find(r=>r.resource===resource&&r.requestId===requestId);}
+
+          let state=await snapshot();
+          const existing=existingRecord(state);
+          if(existing){
+            if(existing.payload!==payload)throw Error('aggregate plan record exists with conflicting payload');
+            console.log(JSON.stringify({status:'ALREADY_PREPARED',revision:state.revision,requestId,resource,aggregate:model.aggregate,components:model.components,external_balance_verified:false,external_funds_moved:false},null,2));
+            process.exit(0);
+          }
+
+          if(!state.state.requests.some(r=>r.id===requestId)){
+            for(let attempt=1;attempt<=3;attempt++){
+              state=await snapshot();
+              if(state.state.requests.some(r=>r.id===requestId))break;
+              const command={
+                id:requestCommandId,
+                expectedRevision:state.revision,
+                type:'request',
+                data:{id:requestId,route:'internal.record.v1',wants:{resource,payload},requiredEvidence:[],grantId:'root'}
+              };
+              try{await post('/api/control/v1/commands',command);break;}catch(error){if(error.status!==409||attempt===3)throw error;}
+            }
+          }
+
+          state=await snapshot();
+          if(existingRecord(state)){
+            console.log(JSON.stringify({status:'PREPARED',phase:'record_already_committed',revision:state.revision,requestId,resource,aggregate:model.aggregate},null,2));
+            process.exit(0);
+          }
+          const decision=state.decisions.find(d=>d.requestId===requestId);
+          if(!decision?.nextAction?.actionId||decision.nextAction.kind!=='record.write'){
+            throw Error('aggregate plan request has no verified internal record next action');
+          }
+
+          for(let attempt=1;attempt<=3;attempt++){
+            state=await snapshot();
+            if(existingRecord(state))break;
+            const currentDecision=state.decisions.find(d=>d.requestId===requestId);
+            if(!currentDecision?.nextAction?.actionId)throw Error('verified next action disappeared');
+            const command={id:executeCommandId,expectedRevision:state.revision,type:'execute',data:{requestId,actionId:currentDecision.nextAction.actionId}};
+            try{await post('/api/control/v1/commands',command);break;}catch(error){if(error.status!==409||attempt===3)throw error;}
+          }
+
+          const confirmed=await snapshot();
+          const record=existingRecord(confirmed);
+          if(!record||record.payload!==payload)throw Error('aggregate plan record readback failed');
+          const parsed=JSON.parse(record.payload);
+          if(parsed.status!=='PREPARED'||parsed.aggregate?.amount!=='1500000000000000'||parsed.aggregate?.unit!=='MODEL_UNIT'||parsed.components?.length!==3||parsed.canonical_native_treasury?.amount!=='500000000000000'||parsed.external_balance_verified!==false||parsed.external_funds_moved!==false){
+            throw Error('aggregate plan readback invariant failed');
+          }
+          console.log(JSON.stringify({
+            status:'PREPARED',
+            revision:confirmed.revision,
+            evidenceHead:confirmed.evidenceHead,
+            requestId,
+            resource,
+            aggregate:parsed.aggregate,
+            components:parsed.components,
+            aggregate_mint:parsed.aggregate_mint,
+            canonical_native_treasury:parsed.canonical_native_treasury,
+            external_balance_verified:parsed.external_balance_verified,
+            external_backing_asserted:parsed.external_backing_asserted,
+            external_funds_moved:parsed.external_funds_moved
+          },null,2));
+          NODE

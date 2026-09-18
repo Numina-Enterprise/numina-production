@@ -1,0 +1,45 @@
+name: Probe NUMINA runtime deployment authentication
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/probe-numina-runtime-auth.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Probe live deployment estimate and signer listing
+        shell: bash
+        run: |
+          set -euo pipefail
+          estimate="$(curl --fail-with-body --silent --show-error --max-time 20 -H 'accept: application/json' https://numinalabs.xyz/v2/network/deployment-estimate)"
+          status="$(curl --fail-with-body --silent --show-error --max-time 20 -H 'accept: application/json' https://numinalabs.xyz/v2/network/status)"
+          export ESTIMATE="$estimate" STATUS="$status"
+          node --input-type=module <<'NODE'
+          const estimate=JSON.parse(process.env.ESTIMATE);
+          const status=JSON.parse(process.env.STATUS);
+          if(estimate?.schema!=='numina.deployment-estimate.v1'||estimate.status!=='observed')throw Error('ESTIMATE_NOT_READY_'+String(estimate?.error?.code||estimate?.status));
+          if(status?.schema!=='numina.node-connection.v1'||status.status!=='connected')throw Error('NODE_NOT_READY_'+String(status?.error?.code||status?.status));
+          const signer='0x1a45671ae2ee3e52264116151924faacb80fc02e';
+          if(estimate.account?.toLowerCase()!==signer||status.configuredSigner?.toLowerCase()!==signer)throw Error('SIGNER_MISMATCH');
+          if(status.authorizationHeaderIncluded!==true||status.configuredSignerListed!==true||status.rpcResponding!==true||status.chainMatched!==true||status.observationComplete!==true)throw Error('SIGNER_NOT_LISTED');
+          if(estimate.chainId!=='962421430'||status.chainId!=='962421430')throw Error('CHAIN_MISMATCH');
+          if(estimate.genesisHash?.toLowerCase()!==status.genesis?.hash?.toLowerCase())throw Error('GENESIS_MISMATCH');
+          console.log(JSON.stringify({
+            status:'RUNTIME_AUTHENTICATED_SIGNER_LISTED',
+            account:estimate.account,
+            gasLimit:estimate.gasLimit,
+            gasPrice:estimate.gasPrice,
+            balanceBaseUnits:estimate.balanceBaseUnits,
+            balanceSufficient:estimate.balanceSufficient,
+            latestBlock:status.latestBlock?.number,
+            signerExecutionVerified:status.scope?.signerExecutionVerified
+          }));
+          NODE
