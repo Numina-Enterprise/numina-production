@@ -29,7 +29,7 @@
     "access": "authenticated_owner",
     "fundingStatus": "server_observed_evidence_required",
     "canonicalView": "/api/control/v2/treasury/accounts",
-    "referenceSchema": "numina.treasury.canonical-reference.v1",
+    "referenceSchema": "numina.treasury.canonical-reference.v2",
     "coverage": [
       "provider_observations",
       "reserve_allocation",
@@ -39,7 +39,13 @@
     ],
     "nativeTreasuryRecordCount": 1,
     "recordsSchema": "numina.treasury.record-sources.v1",
-    "recordSeparation": "Each provider balance, currency, reserve allocation and redemption record retains its own source and verification status"
+    "recordSeparation": "Provider observations retain source/currency/status as role-specific substrate evidence attached to the singular NUMINA treasury; role balances are never additive.",
+    "alignmentSchema": "numina.treasury.alignment.v2",
+    "accountViewSchema": "numina.treasury.account-view.v2",
+    "treasuryIdentity": "NUMINA",
+    "transportVerificationChannel": "NUMINA",
+    "separateRoles": true,
+    "singularIdentity": true
   },
   "procurement_usage": true,
   "providerEvidenceRequired": true,
