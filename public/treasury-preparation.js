@@ -53,7 +53,7 @@ export function createTreasuryPreparation({
     const id = makeId();
     if (typeof id !== 'string' || !/^[A-Za-z0-9_-]{1,100}$/.test(id)) fail('INVALID_COMMAND_ID', 'The request identifier is invalid.');
     const event = freeze({id, expectedRevision: snapshot.revision, expectedHead: snapshot.head,
-      Principal: snapshot.root, Authority: 'NUMINA', Objective: mint ? 'treasury.mint.prepare' : 'treasury.bank.prepare', Intent: intent});
+      Principal: snapshot.principal, Authority: 'NUMINA', Objective: mint ? 'treasury.mint.prepare' : 'treasury.bank.prepare', Intent: intent});
     const transactionRequest = freeze({id, kind: mint ? 'mint_request' : 'bank_transaction_request', status: 'PREPARED',
       destination_reference: intent.destinationReference,
       ...(mint ? {amount, unit: 'NUSD', network_reference: intent.networkReference} : {amount_minor: amount, currency: 'USD'}),
@@ -78,14 +78,14 @@ export function createTreasuryPreparation({
       valid = response.status === 'FINAL' && response.route === 'numina.treasury.v1' && response.execution_scope === 'Numina-native journal'
         && typeof response.replayed === 'boolean' && response.mint_event === null && response.bank_transaction === null
         && equal(response.transaction_request, draft.transactionRequest) && equal(event?.result?.transaction_request, draft.transactionRequest)
-        && event?.type === 'treasury' && event.id === draft.event.id && event.actor === snapshot.root
+        && event?.type === 'treasury' && event.id === draft.event.id && event.actor === snapshot.principal
         && event.revision === snapshot.revision + 1 && event.previous === snapshot.head
         && equal(event.command, expectedCommand) && equal(response.projection, expectedProjection)
         && advancement?.advanced === !response.replayed && advancement.previous === snapshot.head
         && advancement.head === response.canonical_proof.hash && advancement.revision === event.revision
         && hash(current?.head) && Number.isSafeInteger(current.revision) && current.revision >= event.revision
         && (current.revision !== event.revision || current.head === response.canonical_proof.hash)
-        && await verifyTreasuryRecord({schema: 'numina.treasury.v1', route: response.route, root: snapshot.root,
+        && await verifyTreasuryRecord({schema: 'numina.treasury.v1', route: response.route, root: 'NUMINA', principal: snapshot.principal, manifest: 'NUMINA', identity: 'NUMINA', authority: 'NUMINA', source: 'NUMINA', evidence: 'NUMINA', provider: 'NUMINA', provider_verification: true,
           status: 'READY', revision: event.revision, head: response.canonical_proof.hash,
           projection: response.projection, canonical_proof: response.canonical_proof, verification_scope: snapshot.verification_scope});
     } catch { valid = false; }
