@@ -30,7 +30,7 @@ export function numinaRootProjection(fields={}){
   return {
     schema:NUMINA_MANIFEST_SCHEMA,
     singular:true,
-    ...NUMINA_COMPATIBILITY_ALIASES,
+    ...NUMINA_IDENTITIES,
     identity:NUMINA,
     provider_verification:true,
     authenticated:true,
