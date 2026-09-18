@@ -24,7 +24,7 @@ export async function financialEvidenceHttp(req,env){
     const actor=await controlActor(req,env);
     if(env.NUMINA_REVIEW_SESSION===true||actor!==env.NUMINA_CONTROL_OWNER)controlError('OWNER_VIEW_REQUIRED',403);
     if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==url.origin)controlError('ORIGIN_REQUIRED',403);
-    const current=await readControl(env.DB);if(current.state.root!==actor)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    const current=await readControl(env.DB);if(current.manifest.root!==actor)controlError('ROOT_CONFIGURATION_MISMATCH',503);
     if(!await rateLimit(env.DB,await controlHash('financial-evidence:'+actor),Math.floor(Date.now()/1000)))controlError('RATE_LIMITED',429);
     if(!env.BUCKET)controlError('DOCUMENT_STORAGE_UNAVAILABLE',503);
     const prefix='financial-evidence/v1/'+await controlHash(actor)+'/';

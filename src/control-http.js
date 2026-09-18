@@ -5,7 +5,7 @@ import {createNuminaTreasury} from './native-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {readStripeTreasury} from './stripe-treasury.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
-import {readControl,bootstrapControl,controlSnapshot,commitControl} from './control-store.js';
+import {readControl,bootstrapControl,controlManifestView,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
@@ -97,7 +97,7 @@ async function controlNuminaManifest(req,env,row){
   const application=await readApplicationRelease(req,env);
   const settlement=treasury.projection?.transaction_requests?.find(item=>item.id==='treasury_aggregate_1500t_settlement_v1')??null;
   const continuity=row.eventCount===row.revision+1;
-  const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.state.root;
+  const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.manifest.root;
   return numinaRootProjection({
     version:CONTROL_VERSION,
     core:{identity:NUMINA,release:application?.runtime_dependency?.release??null},
@@ -138,9 +138,9 @@ export async function controlHttp(req,env){
     if(!await rateLimit(env.DB,bucket,now))return controlResponse({error:'RATE_LIMITED'},429);
     if(req.method==='GET'&&path==='/api/control/v1/health'){
       const row=await readControl(env.DB);const count={n:row.eventCount};
-      const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.state.root;
+      const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.manifest.root;
       const healthy=configured&&count.n===row.revision+1;
-      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],sharedState:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,stateIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,stateHash:row.state_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
+      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],storage:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.state_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
     }
     if(req.method==='GET'&&path==='/api/control/v1/manifest'){const row=await readControl(env.DB);return controlResponse(await controlNuminaManifest(req,env,row));}
     if(!['GET','POST'].includes(req.method))return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
@@ -153,24 +153,24 @@ export async function controlHttp(req,env){
       const body=await controlBody(req);if(stable(body)!==stable({initialize:true}))controlError('INVALID_BOOTSTRAP',400);
       return controlResponse(await bootstrapControl(env.DB,actor,now),201);
     }
-    const current=await readControl(env.DB);if(current.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    const current=await readControl(env.DB);if(current.manifest.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
     if(path==='/api/control/v1/nusd-deployment'){
-      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(actor!==current.manifest.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(new URL(req.url).search)controlError('DEPLOYMENT_QUERY_NOT_ALLOWED',400);
       if(req.method==='GET')return controlResponse({policy:WALLET_EXECUTION_POLICY,submissionAllowed:walletExecutionAuthorized(),record:await readWalletDeploymentIntent(env.DB,actor)});
       return controlResponse(await writeWalletDeploymentIntent(env.DB,actor,await controlBody(req)));
     }
     if(path==='/api/control/v1/stripe-treasury'){
-      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(actor!==current.manifest.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
       return controlResponse(await readStripeTreasury(env));
     }
     if(path==='/api/control/v1/treasury-documents'||path.startsWith('/api/control/v1/treasury-documents/')){
-      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(actor!==current.manifest.root)controlError('OWNER_VIEW_REQUIRED',403);
       return await treasuryDocumentHttp(req,env,actor);
     }
     if(path==='/api/control/v1/treasury-attestation'){
-      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(actor!==current.manifest.root)controlError('OWNER_VIEW_REQUIRED',403);
       if(req.method!=='GET')return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
       return controlResponse({canonical:'/api/control/v1/treasury'},308,{Location:'/api/control/v1/treasury'});
     }
@@ -179,11 +179,11 @@ export async function controlHttp(req,env){
       if(req.method==='GET')return controlResponse(await treasury.readTreasury());
       return controlResponse(await treasury.writeTreasury(await controlBody(req)));
     }
-    if(path==='/api/control/v1/state'&&req.method==='GET')return controlResponse(await controlSnapshot(env.DB,actor,now));
-    if(path==='/api/control/v1/next-action'&&req.method==='GET'){const snapshot=await controlSnapshot(env.DB,actor,now);return controlResponse({revision:snapshot.revision,decisions:snapshot.decisions});}
+    if(path==='/api/control/v1/state'&&req.method==='GET')return controlResponse({...await controlManifestView(env.DB,actor,now),compatibility:{route:'/api/control/v1/state',role:'legacy_route_only'}});
+    if(path==='/api/control/v1/next-action'&&req.method==='GET'){const manifest=await controlManifestView(env.DB,actor,now);return controlResponse({root:NUMINA,manifest:NUMINA,revision:manifest.revision,decisions:manifest.decisions});}
     if(path==='/api/control/v1/commands'&&req.method==='POST'){const body=await controlBody(req);if(body.type==='treasury')controlError('CANONICAL_TREASURY_ROUTE_REQUIRED',409);if(body.type?.startsWith('frontier.'))controlError('CANONICAL_FRONTIER_ROUTE_REQUIRED',409);return controlResponse(await commitControl(env.DB,body,actor,Math.floor(Date.now()/1000)));}
     if(path==='/api/control/v1/journal'&&req.method==='GET'){
-      if(actor!==current.state.root)controlError('OWNER_VIEW_REQUIRED',403);
+      if(actor!==current.manifest.root)controlError('OWNER_VIEW_REQUIRED',403);
       const after=Number(new URL(req.url).searchParams.get('after')??-1);if(!Number.isSafeInteger(after)||after< -1)controlError('INVALID_CURSOR',400);
       const rows=await env.DB.prepare('SELECT event_json,hash FROM numina_control_events WHERE revision>? ORDER BY revision LIMIT 100').bind(after).all();return controlResponse({events:rows.results.map(r=>({event:JSON.parse(r.event_json),hash:r.hash})),next:rows.results.length?JSON.parse(rows.results.at(-1).event_json).revision:null});
     }

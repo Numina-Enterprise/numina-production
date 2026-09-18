@@ -58,7 +58,7 @@ export async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 1
     const bytes = new Uint8Array(size); let offset = 0;
     for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
     const payload = JSON.parse(new TextDecoder().decode(bytes));
-    const releaseIdentity=releaseIdentityFor(path,payload);const observed=releaseIdentity?.production_version??releaseIdentity?.version??payload?.state?.payload?.release??payload?.state?.release??payload?.release;
+    const releaseIdentity=releaseIdentityFor(path,payload);const observed=releaseIdentity?.production_version??releaseIdentity?.version??payload?.manifest?.payload?.release??payload?.manifest?.release??payload?.state?.payload?.release??payload?.state?.release??payload?.release;
     const versioned = VERSIONED_RUNTIME_PATHS.has(path);
     if(response.ok && versioned && ![RUNTIME_VERSION,EXPECTED_RELEASE.release].includes(observed)) {
       return Response.json({error:'RUNTIME_RELEASE_MISMATCH',expected:RUNTIME_VERSION,observed:typeof observed==='string'?observed:null},{status:502,headers:{'Cache-Control':'no-store'}});
