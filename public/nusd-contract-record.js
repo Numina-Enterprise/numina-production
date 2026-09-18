@@ -2,14 +2,18 @@
 function freezeNusdContractRecord(value){if(value&&typeof value==='object'){Object.values(value).forEach(freezeNusdContractRecord);Object.freeze(value);}return value;}
 export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "schema": "numina.nusd.contract-record.v1",
-  "status": "compiled_not_deployed",
+  "modelIdentity": "NUMINA",
+  "identity": "NUMINA",
+  "status": "INITIATED",
+  "contractsInitiated": true,
+  "initiatedOn": "2026-09-18",
   "url": "/api/nusd/v1/contracts",
   "native_treasury": "/api/control/v1/treasury",
   "contracts": [
     {
       "id": "nusd",
       "name": "NuminaUSD",
-      "status": "compiled_not_deployed",
+      "status": "DEPLOYMENT_PREPARATION_INITIATED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaUSD.sol",
         "url": "/downloads/contracts/NuminaUSD.sol",
@@ -78,11 +82,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       },
       "verification": {
         "source_hash_matches_artifact": true,
+        "initiation_recorded": true,
         "independent_security_audit": false,
         "chain_receipt_verified": false
       },
       "deployment": {
+        "lifecycle": "INITIATED",
         "status": "not_verified",
+        "submission_performed": false,
         "expected_chain_id": "962421430",
         "contract_address": null,
         "transaction_hash": null,
@@ -92,7 +99,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd_settlement",
       "name": "NuminaSettlement",
-      "status": "compiled_not_deployed",
+      "status": "DEPLOYMENT_PREPARATION_INITIATED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaSettlement.sol",
         "url": "/downloads/contracts/NuminaSettlement.sol",
@@ -143,11 +150,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       },
       "verification": {
         "source_hash_matches_artifact": true,
+        "initiation_recorded": true,
         "independent_security_audit": false,
         "chain_receipt_verified": false
       },
       "deployment": {
+        "lifecycle": "INITIATED",
         "status": "not_verified",
+        "submission_performed": false,
         "expected_chain_id": "962421430",
         "contract_address": null,
         "transaction_hash": null,
@@ -157,7 +167,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd_usdc_conversion",
       "name": "NuminaUSDCConversion",
-      "status": "compiled_not_deployed",
+      "status": "DEPLOYMENT_PREPARATION_INITIATED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaUSDCConversion.sol",
         "url": "/downloads/contracts/NuminaUSDCConversion.sol",
@@ -220,11 +230,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       },
       "verification": {
         "source_hash_matches_artifact": true,
+        "initiation_recorded": true,
         "independent_security_audit": false,
         "chain_receipt_verified": false
       },
       "deployment": {
+        "lifecycle": "INITIATED",
         "status": "not_verified",
+        "submission_performed": false,
         "expected_chain_id": "962421430",
         "contract_address": null,
         "transaction_hash": null,
@@ -234,7 +247,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd_usd_redemption",
       "name": "NuminaUSDRedemption",
-      "status": "compiled_not_deployed",
+      "status": "DEPLOYMENT_PREPARATION_INITIATED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
         "url": "/downloads/contracts/NuminaUSDRedemption.sol",
@@ -297,11 +310,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       },
       "verification": {
         "source_hash_matches_artifact": true,
+        "initiation_recorded": true,
         "independent_security_audit": false,
         "chain_receipt_verified": false
       },
       "deployment": {
+        "lifecycle": "INITIATED",
         "status": "not_verified",
+        "submission_performed": false,
         "expected_chain_id": "962421430",
         "contract_address": null,
         "transaction_hash": null,
@@ -317,5 +333,5 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "usdc_conversion": false,
     "external_deposits": false
   },
-  "scope": "Compiled NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow candidates. USD settlement requires a separate bank payment and a trusted confirmer attestation. Source and artifact hashes do not establish deployed contracts, reserves, activated conversion or external deposits."
+  "scope": "NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow contract lifecycles are initiated from their verified compiled artifacts. Initiation prepares the software lifecycle only; it does not establish deployed contracts, reserves, activated conversion, bank settlement, minting or external deposits."
 });
