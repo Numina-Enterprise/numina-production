@@ -10,13 +10,15 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   rebuild:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
@@ -28,6 +30,19 @@ jobs:
         run: npm run compile
       - name: Refresh exact token pins
         run: node runtime/nusd/development/refresh-token-pins.mjs
+      - name: Commit canonical artifacts
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        shell: bash
+        run: |
+          git config user.name "NUMINA"
+          git config user.email "actions@users.noreply.github.com"
+          git add runtime/nusd/artifacts/NuminaUSD.json                   runtime/nusd/artifacts/NuminaSettlement.json                   runtime/nusd/artifacts/NuminaUSDCConversion.json                   runtime/nusd/artifacts/NuminaUSDRedemption.json                   runtime/nusd/scripts/token-artifact.mjs
+          if git diff --cached --quiet; then
+            echo "Canonical artifacts already current."
+          else
+            git commit -m "Rebuild 18-decimal NUSD artifacts"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
       - name: Upload rebuilt canonical artifacts
         uses: actions/upload-artifact@v4
         with:
