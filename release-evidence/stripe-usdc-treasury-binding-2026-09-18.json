@@ -1,0 +1,104 @@
+{
+  "schema": "numina.stripe-usdc-treasury-binding.v1",
+  "observedAt": "2026-09-18T22:25:00Z",
+  "provider": "Stripe",
+  "stripeAccount": "acct_1UEEPnQdJat0efmT",
+  "livemode": true,
+  "financialAccount": {
+    "id": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+    "displayName": "Numina Treasury — SK Consulting LLC",
+    "country": "US",
+    "type": "storage",
+    "status": "open",
+    "holdsCurrencies": [
+      "eur",
+      "gbp",
+      "usd",
+      "usdc"
+    ]
+  },
+  "balanceObservation": {
+    "available": {
+      "usdc": {
+        "value": 0,
+        "currency": "usdc"
+      }
+    },
+    "inboundPending": {
+      "usdc": {
+        "value": 0,
+        "currency": "usdc"
+      }
+    },
+    "outboundPending": {
+      "usdc": {
+        "value": 0,
+        "currency": "usdc"
+      }
+    },
+    "externalSettlementVerified": false
+  },
+  "usdcReceivingRoutes": [
+    {
+      "network": "arbitrum",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "avalanche_c_chain",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "base",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "ethereum",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "optimism",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "polygon",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "solana",
+      "address": "D3VGagF8rVw5ieywk4C6keDW5K1dmhUDx2oyhD7kyV5S",
+      "memo": null,
+      "status": "active"
+    },
+    {
+      "network": "stellar",
+      "address": "GCUKWVKFEIOMOF5GZPU4JKBAX7HSR57ETD5F3RHKN7BPRKYBEWH3XV22",
+      "memo": "1731351588916325502",
+      "status": "active"
+    },
+    {
+      "network": "tempo",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "memo": null,
+      "status": "active"
+    }
+  ],
+  "integration": {
+    "balanceRoute": "/api/control/v1/stripe-treasury",
+    "providerRoutes": "/api/control/v2/treasury/provider-routes",
+    "mode": "live_read_only",
+    "moneyMovement": false
+  },
+  "scope": "Authenticated Stripe provider observation binding NUMINA to the live USDC Treasury account and active receiving routes. This record does not establish funding, reserve coverage, conversion, NUSD acceptance, or external settlement."
+}
