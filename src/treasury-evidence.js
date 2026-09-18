@@ -77,9 +77,9 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
 
 export async function readTreasuryEvidence(env,actor){
   const before=await readControl(env.DB);
-  if(before.state.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
-  if(actor!==before.state.root)controlError('OWNER_REQUIRED',403);
-  const treasury=await createNuminaTreasury({db:env.DB,principal:actor,root:before.state.root}).readTreasury();
+  if(before.manifest.root!==env.NUMINA_CONTROL_OWNER)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+  if(actor!==before.manifest.root)controlError('OWNER_REQUIRED',403);
+  const treasury=await createNuminaTreasury({db:env.DB,principal:actor,root:before.manifest.root}).readTreasury();
   if(treasury.revision!==before.revision||treasury.head!==before.head_hash)controlError('TREASURY_SNAPSHOT_CHANGED',409);
   // Check signing configuration before requesting any external observation.
   await frontierSign({scope:'configuration-check'},env);
@@ -94,6 +94,6 @@ export async function readTreasuryEvidence(env,actor){
   if(after.revision!==before.revision||after.head_hash!==before.head_hash)controlError('TREASURY_SNAPSHOT_CHANGED',409);
   const providerObservation=provider.status==='fulfilled'?{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:provider.value}:{status:'UNAVAILABLE',record:null};
   const supportingDocuments=documents.status==='fulfilled'?{status:'OBSERVED',record:documents.value,complete:documents.value.next_cursor===null}:{status:'UNAVAILABLE',record:null,complete:false};
-  const payload=await treasuryEvidencePayload({treasury,frontier:frontierState(before.state),providerObservation,supportingDocuments,capturedAt:new Date().toISOString()});
+  const payload=await treasuryEvidencePayload({treasury,frontier:frontierState(before.manifest),providerObservation,supportingDocuments,capturedAt:new Date().toISOString()});
   return frontierSign(payload,env);
 }
