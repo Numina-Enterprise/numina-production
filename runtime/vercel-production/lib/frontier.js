@@ -32,7 +32,7 @@ function projectLegacyRuntime(numina){
   return freeze({
     schema:FRONTIER_SCHEMA,
     NUMINA:numina,
-    compatibility:Object.freeze({identity:'NUMINA',canonical:true,legacy_projection_only:true,identity_aliases:Object.freeze({root:'NUMINA',manifest:'NUMINA',authority:'NUMINA'})})
+    compatibility:Object.freeze({identity:'NUMINA',authority:'NUMINA',canonical:true,legacy_projection_only:true,identity_aliases:Object.freeze({root:'NUMINA',manifest:'NUMINA',authority:'NUMINA'})})
   });
 }
 module.exports={FRONTIER_SCHEMA,createNumina,projectLegacyRuntime};
