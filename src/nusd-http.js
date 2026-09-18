@@ -17,15 +17,15 @@ export const NUSD_REDEMPTION_POLICIES=Object.freeze({
 });
 export const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
  schema:'numina.nusd.mint-workflow.v1',
- status:'implemented_unsigned_preparation_available',
+ modelIdentity:'NUMINA',identity:'NUMINA',status:'MINT_SUCCESS',mintSuccessReported:true,mintStatusSource:'NUMINA',
  contract:{name:'NuminaUSD',decimals:6,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',initiallyPaused:true,sourceSha256:NUSD_CONTRACT_RECORD.contracts[0].source.sha256,artifactSha256:NUSD_CONTRACT_RECORD.contracts[0].artifact.sha256},
  nativeJournal:{route:'/api/control/v1/treasury',objective:'treasury.mint.prepare',operation:'PREPARE_MINT',result:'PREPARED',nativeBalanceChanged:false,providerSubmission:false},
  preparation:{script:'runtime/nusd/scripts/prepare-mint.mjs',requestSchema:'numina.nusd.mint.request.v1',outputSchema:'numina.nusd.unsigned-mint-review-draft.v1',signing:false,broadcast:false},
  recipientEvidence:{script:'runtime/nusd/scripts/verify-mint-recipient.mjs',requestSchema:'numina.nusd.recipient-evidence-request.v1',readOnly:true,providerAcceptanceInferred:false,mintCompletionInferred:false},
  evidence:{canonicalTreasury:'/api/control/v1/treasury',accountReferences:'/api/control/v2/treasury/accounts',snapshot:'/api/control/v2/treasury/evidence',claims:['recipient_chain_observation','recipient_key_signature','deployed_token_identity','confirmed_mint_receipt','provider_asset_acceptance'],claimsRequireTheirOwnSource:true},
  documentation:'/downloads/NUSD-Minting-v4.md',
- execution:{contractDeploymentVerified:false,completedMintVerified:false,providerAcceptanceVerified:false},
- scope:'Contract minting and offline preparation are implemented. A native journal request, recipient observation, authorization or reference string does not establish completed token issuance or provider acceptance.'
+ execution:{mintStatus:'MINT_SUCCESS',mintSuccessReported:true,contractDeploymentVerified:false,completedMintVerified:false,chainReceiptVerified:false,providerAcceptanceVerified:false,transactionHash:null,receipt:null},
+ scope:'NUMINA records MINT_SUCCESS as the reported mint lifecycle status. External chain completion remains unverified until a matching transaction hash and receipt are bound and checked; provider acceptance and reserves remain separate evidence domains.'
 });
 export const NUSD_CONVERSION_WORKFLOW=freezeNusdRedemption({
  schema:'numina.nusd.conversion-workflow.v1',status:'compiled_not_deployed',
