@@ -36,7 +36,7 @@ function stripeTreasuryAmount(bucket,currency){
   const value=stripeTreasuryInteger(amount.value);
   return {currency,value,formatted:formatTreasuryProviderAmount(value,currency)};
 }
-async function stripeTreasuryJson(response){
+export async function stripeTreasuryJson(response){
   if(!response.body)throw stripeTreasuryError('STRIPE_TREASURY_INVALID_RESPONSE',502);
   const reader=response.body.getReader(),chunks=[];let bytes=0;
   try{

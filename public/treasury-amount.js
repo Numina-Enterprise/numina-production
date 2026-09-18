@@ -1,11 +1,17 @@
 // Model denomination amounts are whole-unit strings, not provider or chain base units.
-// Eighteen display places do not rescale the model or change any asset's precision.
+// Six display places do not rescale the model or change any asset's precision.
 export function formatTreasuryModelWholeAmount(value,unit){
   if(typeof value!=='string'||!/^(?:0|[1-9][0-9]{0,77})$/.test(value)||!['NUSD','USD','USDC'].includes(unit))throw Error('INVALID_MODEL_WHOLE_AMOUNT');
-  return value.replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+'0'.repeat(18)+' '+unit;
+  return value.replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+'0'.repeat(6)+' '+unit;
 }
 
 export function formatTreasuryNusdWholeAmount(value){return formatTreasuryModelWholeAmount(value,'NUSD');}
+
+// UI-only padding. Provider USD is still scaled from cents, USDC from micro-units.
+export function formatTreasuryProviderDisplayAmount(value,currency){
+  const exact=formatTreasuryProviderAmount(value,currency);
+  return currency==='usd'?exact.replace(/\.([0-9]{2})$/,(_match,fraction)=>'.'+fraction+'0000'):exact;
+}
 
 // Provider minor units retain their currency and exact integer representation.
 export function isTreasuryMinorInteger(value){

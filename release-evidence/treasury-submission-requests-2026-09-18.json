@@ -2,7 +2,6 @@
   "schema": "numina.treasury.submission-requests.v1",
   "identity": "NUMINA",
   "recordedAt": "2026-09-18T18:35:03Z",
-  "updatedAt": "2026-09-18T19:52:20Z",
   "evidenceType": "owner_instruction",
   "ownerReportedSubmission": {
     "statement": "SUBMITTED",
@@ -10,21 +9,6 @@
     "providerReferenceSupplied": false,
     "independentlyVerified": false,
     "scope": "Owner reports submission; this application has not submitted either transfer."
-  },
-  "ownerReportedExecution": {
-    "statement": "NUMINA EXECUTED",
-    "reportedBy": "owner",
-    "recordedAt": "2026-09-18T19:52:20Z",
-    "evidenceType": "owner_statement",
-    "status": "OWNER_REPORTED_EXECUTED_UNVERIFIED",
-    "appliesToRequestIds": [
-      "numina-ach-500t-20260918",
-      "numina-usdc-500t-20260918"
-    ],
-    "independentlyVerified": false,
-    "providerReferenceSupplied": false,
-    "transactionHashSupplied": false,
-    "scope": "Records the owner's execution claim only. This declaration is not an ACH confirmation, blockchain transaction receipt or proof of settlement. It does not change application submission status."
   },
   "ownerBackingDeclaration": {
     "mintedAggregateNusd": "1500000000000000",
@@ -71,7 +55,6 @@
       "source": "Numina Native Treasury",
       "destination": null,
       "network": null,
-      "transactionHash": null,
       "status": "BLOCKED_NOT_SUBMITTED",
       "ownerAuthorized": true,
       "providerAuthorizationVerified": false,
