@@ -8,18 +8,32 @@ export const NUMINA_FUNDABLE_TARGETS=Object.freeze([
 ]);
 
 function buildFundableTargets(projection){
-  return {
-    schema:'numina.treasury.fundable-targets.v2',
-    amount:NUMINA_FUNDABLE_TARGET_AMOUNT,
-    aggregation:'SINGULAR_NUMINA_TREASURY_ROLE_TARGETS',
-    targets:NUMINA_FUNDABLE_TARGETS.map(target=>({...target,
-      targetOnly:target.treasuryRole!=='canonical_projection',
+  const targets=NUMINA_FUNDABLE_TARGETS.map(target=>{
+    const native=target.treasuryRole==='canonical_projection';
+    const nativeAligned=native&&projection?.unit==='NUSD'&&projection.balance===target.amount;
+    return {...target,
+      targetOnly:!native,
       transportVerificationChannel:'NUMINA',
       providerBalance:false,
-      currentNativeBalance:target.treasuryRole==='canonical_projection'&&projection?.unit==='NUSD'?projection.balance:null,
-      targetSatisfied:target.treasuryRole==='canonical_projection'&&projection?.unit==='NUSD'?projection.balance===target.amount:null,
-      verificationScope:target.treasuryRole==='canonical_projection'?'NUMINA canonical projection':'NUMINA treasury role target; provider observation remains separate substrate evidence'
-    }))
+      alignmentStatus:native?(nativeAligned?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'AWAITING_PROVIDER_EVIDENCE',
+      targetSatisfied:native?(projection?.unit==='NUSD'?projection.balance===target.amount:false):null,
+      currentNativeBalance:native&&projection?.unit==='NUSD'?projection.balance:null,
+      observedProviderAmount:null,
+      providerObservationVerified:false,
+      fundingPerformed:false,
+      verificationScope:native?'NUMINA canonical projection':'NUMINA role target; external completion requires factual provider observation'
+    };
+  });
+  return {
+    schema:'numina.treasury.fundable-targets.v2',
+    identity:'NUMINA',
+    treasuryIdentity:'NUMINA',
+    transportVerificationChannel:'NUMINA',
+    alignment:'INITIATED',
+    amount:NUMINA_FUNDABLE_TARGET_AMOUNT,
+    aggregation:'SINGULAR_NUMINA_TREASURY_ROLE_TARGETS',
+    additive:false,
+    targets
   };
 }
 
@@ -40,6 +54,16 @@ export function alignTreasuryAccounts(treasury,frontier){
   const nativeValuation=projection?.unit==='NUSD'?{schema:'numina.treasury.declared-value.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',amount:projection.balance,unit:'USD',rate:{base:'NUSD',quote:'USD',numerator:'1',denominator:'1'},basis:'owner_authorized_denomination_policy',sharedAcrossAccounts:true,providerBalance:false,executableConversionVerified:false,denominations:declaredTreasuryDenominations(projection.balance)}:null;
   const sharedNativeTreasury=projection?{schema:'numina.treasury.shared-balance-reference.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',authority:projection.authority??'NUMINA',systemOfRecord:'NUMINA',amount:projection.balance,unit:projection.unit,revision:treasury.revision,head:treasury.head,eventId:projection.last_event_id??null,verificationScope:treasury.verification_scope,sharedAcrossAccounts:true,providerBalance:false}:null;
   const fundableTargets=buildFundableTargets(projection);
+  const treasuryAlignmentPlan={
+    schema:'numina.treasury.alignment-plan.v2',
+    identity:'NUMINA',treasuryIdentity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
+    status:'INITIATED',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,nonAdditive:true,
+    designatedLocations:fundableTargets.targets.map(target=>({
+      id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,
+      targetAmount:target.amount,unit:target.unit,status:target.alignmentStatus,
+      providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed
+    }))
+  };
   const references=structuredClone(frontier.accounts??[]);
   const groups=new Map();
   const active=references.filter(account=>!account.supersededBy).sort((a,b)=>(a.linkedAt??0)-(b.linkedAt??0)||a.id.localeCompare(b.id));
@@ -54,7 +78,7 @@ export function alignTreasuryAccounts(treasury,frontier){
     treasuryRef:canonicalTreasury?{id:canonicalTreasury.id,route:canonicalTreasury.route,evidenceRoute:canonicalTreasury.evidence.route}:null,
     nativeTreasuryRoute:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',treasuryRole:'evidence_view',transportVerificationChannel:'NUMINA',providerObservationOnly:true,sharedNativeProjection:true,sharedNativeTreasury:structuredClone(sharedNativeTreasury),allocatedAmount:null
   }));
-  return {schema:'numina.treasury.alignment.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,accounts,accountReferences:references,
+  return {schema:'numina.treasury.alignment.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,treasuryAlignmentPlan,accounts,accountReferences:references,
     supersededReferences:references.filter(account=>account.supersededBy),
     accountAlignment:{schema:'numina.treasury.account-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',separateRoles:true,singularIdentity:true,transportVerificationChannel:'NUMINA',sourceReferenceCount:active.length,distinctAccountViews:accounts.length,
       duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one NUMINA treasury; role views do not add balances'},
