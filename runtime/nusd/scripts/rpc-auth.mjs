@@ -51,8 +51,10 @@ async function rpcProbe(endpoint,authorization,fetcher){
 async function adminRequest(token,path,{method='GET',body,fetcher}={}){
   const response=await fetcher(ADMIN_API+path,{method,headers:{accept:'application/json','content-type':'application/json',authorization:'Bearer '+token},
     ...(body?{body:JSON.stringify(body)}:{}),redirect:'error',signal:AbortSignal.timeout(15000)});
+  if(!response.ok)throw Error('KALEIDO_ADMIN_API_REJECTED');
+  if(response.status===204)return null;
   const type=(response.headers.get('content-type')||'').toLowerCase();
-  if(!response.ok||!/^application\/json(?:\s*;|$)/i.test(type))throw Error('KALEIDO_ADMIN_API_REJECTED');
+  if(!/^application\/json(?:\s*;|$)/i.test(type))throw Error('KALEIDO_ADMIN_API_RESPONSE_INVALID');
   return response.json();
 }
 async function bootstrap(token,endpoint,fetcher){
