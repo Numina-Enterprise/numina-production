@@ -5,8 +5,10 @@ on:
   push:
     branches: [main]
     paths:
-      - 'public/runtime-contract.js'
       - 'integrations/numina/src/runtime-contract.js'
+      - 'integrations/numina/package.json'
+      - 'integrations/numina/scripts/package-distribution.js'
+      - 'config/numina-architecture.json'
       - '.github/workflows/repair-rc26-integration-manifest.yml'
 
 permissions:
@@ -26,6 +28,8 @@ jobs:
         run: |
           node --version
           python3 --version
+      - name: NUMINA
+        run: cp integrations/numina/src/runtime-contract.js public/runtime-contract.js
       - name: Align packaged runtime contract inventory
         run: |
           node --input-type=module <<'NODE'
@@ -53,6 +57,7 @@ jobs:
           git config user.name 'Numina Release Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add \
+            public/runtime-contract.js \
             integrations/numina/distribution.json \
             integrations/numina/verification.json \
             integrations/numina/file-manifest.json \
@@ -65,5 +70,5 @@ jobs:
             echo 'Release inventories already aligned.'
             exit 0
           fi
-          git commit -m 'Align rc26 release inventories after Node 24 pin'
+          git commit -m 'NUMINA'
           git push origin HEAD:main
