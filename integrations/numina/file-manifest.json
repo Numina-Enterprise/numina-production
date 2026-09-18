@@ -366,5 +366,15 @@
   "receipts": "NUMINA",
   "settlements": "NUMINA",
   "funds": "NUMINA",
-  "confirmation_evidence": "NUMINA"
+  "confirmation_evidence": "NUMINA",
+  "modelIdentity": "NUMINA",
+  "repositoryObservation": {
+    "identity": "NUMINA",
+    "service": "GitHub",
+    "fullName": "skott34-dot/numina-production",
+    "repositoryId": 1367647143,
+    "branch": "main",
+    "observedRole": "repository_service",
+    "authoritativeIdentity": false
+  }
 }
