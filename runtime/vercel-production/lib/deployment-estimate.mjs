@@ -85,7 +85,8 @@ function body(){
       usdc:false,
       reservesVerified:false,
       bankReceipt:null,
-      providerReceipt:null
+      providerReceipt:null,
+      canonicalReceipt:'/downloads/nusd/settlement-receipt.json'
     },
     receipt:'/downloads/nusd/deployment-receipt.json',
     verification:'/downloads/nusd/deployment-verification.json'
