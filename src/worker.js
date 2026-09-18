@@ -1,4 +1,5 @@
 import {financialEvidenceHttp} from './financial-evidence.js';
+import {transferReceiptsHttp,TRANSFER_RECEIPTS_ROUTE} from './transfer-receipts.js';
 import {treasuryConnectionHttp} from './treasury-connection-http.js';
 import {reviewerHttp,reviewerContext} from './reviewer.js';
 import {connectionsHttp} from './connections-http.js';
@@ -25,7 +26,7 @@ export default {
   const url=new URL(req.url),path=url.pathname;
   const span=path==='/api/ops/v1/telemetry'?{requestId:crypto.randomUUID(),finish(){}}:numinaWebTelemetry.begin({path,method:req.method,log:env.NUMINA_TELEMETRY_LOGS!=='false'});
   const requestId=span.requestId;let status=200;
-  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
+  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
    if(path==='/favicon.ico'){
@@ -40,6 +41,7 @@ export default {
     if(review){req=review.req;const reviewEnv=Object.create(review.env);Object.defineProperty(reviewEnv,'NUMINA_CONTROL_API_KEY_SHA256',{value:controlPin,enumerable:true,configurable:true});env=reviewEnv;}
 
    }
+   if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))return finish(await transferReceiptsHttp(req,env));
    if(path.startsWith('/api/financial/v1/'))return finish(await financialEvidenceHttp(req,env));
    if(path.startsWith('/api/treasury/v1/'))return finish(await treasuryConnectionHttp(req,env));
    if(path==='/api/connections/v1/manifest')return finish(await connectionsHttp(req,env));
