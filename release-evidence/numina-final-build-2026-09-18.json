@@ -8,7 +8,10 @@
   "website": {
     "origin": "https://numinalabs.xyz",
     "workspace": "https://numinalabs.xyz/app",
-    "identity": "NUMINA"
+    "identity": "NUMINA",
+    "primaryOrigin": "https://personal-space-m7q9.skott34.chatgpt.site",
+    "vercelRole": "backup_storage_and_deployment_surface",
+    "customDomainUpdated": false
   },
   "os": {
     "name": "NUMINA",
@@ -42,7 +45,15 @@
       "basis": "owner_confirmed_model_specification",
       "date": "2026-09-18",
       "scope": "One NUMINA treasury with a 1,500T declared aggregate: 500T USD Bank of America Savings ACH, 500T USDC Stripe Treasury address, 500T native NUSD. Historical native journal and token receipt unchanged.",
-      "deploymentReceipt": null
+      "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
+    },
+    "submissions": {
+      "record": "/api/treasury/v1/submissions",
+      "access": "owner_authenticated",
+      "applicationSubmissionPerformed": false,
+      "ownerReportedSubmission": true,
+      "providerSubmissionVerified": false,
+      "settlementReceipts": []
     }
   },
   "nusd": {
@@ -101,7 +112,8 @@
   "delivery": {
     "source": {
       "status": "FINAL",
-      "canonicalRepository": "skott34-dot/numina-production"
+      "canonicalRepository": "skott34-dot/numina-production",
+      "verifiedCodeCommit": "671d88058bac5858e9ffd986d8065c3d18651449"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -112,8 +124,8 @@
       "sourceAligned": true,
       "productionTransportUpdated": true,
       "currentPublicDeploymentKnownStale": true,
-      "blocker": null,
-      "verifiedAt": "2026-09-18T18:07:00Z",
+      "blocker": "CUSTOM_DOMAIN_VERCEL_DEPLOYMENT_LIMIT",
+      "verifiedAt": "2026-09-18T18:51:16Z",
       "observedDeployment": {
         "id": "dpl_FLgkD318R3Cn9tkv15BZioQb2GKc",
         "commit": "640050c4a1a1139d048bd8f30833be79b273728a",
@@ -126,7 +138,8 @@
           "www.numinalabs.xyz",
           "numinalabs.xyz",
           "numina-production.vercel.app"
-        ]
+        ],
+        "historical": true
       },
       "domains": {
         "apex": "https://numinalabs.xyz",
@@ -134,24 +147,50 @@
         "apexRedirectStatus": 308,
         "ssl": "valid"
       },
-      "verificationScope": "Public website and dynamic NUSD receipt display verified. Authenticated treasury balances and the separate application backend deployment were not verified by this observation.",
+      "verificationScope": "Primary NUMINA treasury page and public model/activation APIs verified. Anonymous private reads denied. Authenticated provider balances and bank connection were not verified; custom domain remains on older Vercel source.",
       "priorObservedDeployment": {
         "id": "dpl_2SbEf3mp95BiGA65mMVb9ARiQd2Y",
         "commit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
         "url": "https://vercel.com/skott34-dot/numina-production/2SbEf3mp95BiGA65mMVb9ARiQd2Y",
         "status": "READY"
       },
-      "status": "ROUTE_ALLOCATION_UPDATE_PENDING",
+      "status": "PRIMARY_HOST_DEPLOYED_CUSTOM_DOMAIN_STALE",
       "latestRedeployAttempt": {
-        "observedDate": "2026-09-18",
         "result": "rejected",
         "code": "api-deployments-free-per-day",
-        "message": "Resource is limited - try again in 24 hours (more than 100)",
         "deploymentCreated": false,
-        "historical": true,
-        "scope": "Earlier manual attempt; superseded by the successful Git-triggered deployment recorded above."
+        "observedAt": "2026-09-18T18:43:24Z"
       },
-      "observationRecord": "/downloads/delivery-observation-2026-09-18.json"
+      "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
+      "primaryDeploymentVerified": true,
+      "primaryHost": {
+        "projectId": "appgprj_6aa1a5988258819196abc45e9ac02796",
+        "versionId": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
+        "versionNumber": 103,
+        "sourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
+        "sourceTreeMatchesCanonical": true,
+        "deployment": {
+          "id": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
+          "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+          "title": "Numina Labs",
+          "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
+          "type": "publish",
+          "status": "succeeded",
+          "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+          "screenshot_asset_pointer": null,
+          "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+          "failure_message": null,
+          "env_set_revision": 10,
+          "updated_at": "2026-09-18T18:50:56.936001+00:00"
+        },
+        "storedArchive": {
+          "archive_format": "tar",
+          "sediment_file_id": "file_00000000c42481f581bf7aad9db5b0c7",
+          "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5",
+          "size_bytes": 44277760,
+          "file_count": 307
+        }
+      }
     },
     "android": {
       "sourceAligned": true,
@@ -202,12 +241,16 @@
       "storage": "existing D1 and R2",
       "healthObserved": "ready",
       "applicationVersion": "4.0.0",
-      "deployedSourceCommit": "db71c054cda7442e4c5f357e9e27e542fd2a7db9",
-      "matchesCanonicalSource": false,
-      "scope": "Existing application journal retained. Backend source deployment is separate from the Vercel website release."
+      "deployedSourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
+      "matchesCanonicalSource": true,
+      "scope": "Primary runtime deployment succeeded with source tree identical to the named canonical GitHub main commit. Existing journal retained; no funds moved.",
+      "canonicalGithubCommit": "671d88058bac5858e9ffd986d8065c3d18651449",
+      "sourceTree": "ad8f120f3cec3c6646539406f7a85a05c44f0815",
+      "deploymentId": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
+      "version": 103
     },
     "browserAlignment": {
-      "status": "ROUTE_ALLOCATION_SOURCE_UPDATED_DEPLOYMENT_PENDING",
+      "status": "PRIMARY_HOST_PUBLIC_MODEL_VERIFIED",
       "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
@@ -220,16 +263,14 @@
       "contractDecimals": 18,
       "existingContractPreserved": true,
       "tests": {
-        "focusedPassed": 67,
+        "focusedPassed": 44,
         "focusedFailed": 0,
-        "fullSuitePassed": 752,
-        "fullSuiteFailed": 23,
-        "fullSuiteScope": "Remaining failures also present in baseline or unavailable contract test dependencies; not a full-suite pass"
+        "fullSuiteRunThisObservation": false
       },
-      "productionVerified": false,
-      "verificationScope": "Public website and dynamic NUSD receipt display verified. Authenticated treasury balances and the separate application backend deployment were not verified by this observation.",
+      "productionVerified": true,
+      "verificationScope": "Primary NUMINA treasury page and public model/activation APIs verified. Anonymous private reads denied. Authenticated provider balances and bank connection were not verified; custom domain remains on older Vercel source.",
       "authenticatedTreasuryProductionVerified": false,
-      "observationRecord": "/downloads/delivery-observation-2026-09-18.json"
+      "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json"
     }
   }
 }
