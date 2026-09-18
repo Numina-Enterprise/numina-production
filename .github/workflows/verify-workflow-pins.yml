@@ -71,12 +71,14 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
+      - name: Validate NUMINA
+        run: npm test
+      - name: Validate production build
+        run: npm run build
       - name: Require Vercel deployment credential
         shell: bash
         run: |
           test -n "$VERCEL_TOKEN" || { echo "VERCEL_TOKEN repository secret is not configured"; exit 2; }
-      - name: Validate NUMINA
-        run: npm test
       - name: Install pinned deployment CLI major
         run: npm install --global vercel@latest
       - name: Pull production environment
