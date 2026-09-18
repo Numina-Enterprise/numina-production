@@ -1,0 +1,85 @@
+{
+  "schema": "numina.final-build.v1",
+  "identity": "NUMINA",
+  "status": "FINAL",
+  "finalizedAt": "2026-09-18",
+  "applicationVersion": "4.0.0",
+  "canonicalRepository": "skott34-dot/numina-production",
+  "website": {
+    "origin": "https://numinalabs.xyz",
+    "workspace": "https://numinalabs.xyz/app",
+    "identity": "NUMINA"
+  },
+  "os": {
+    "name": "NUMINA",
+    "version": "4.0.0",
+    "identity": "NUMINA",
+    "runtime": "1.9.0-rc26"
+  },
+  "treasury": {
+    "identity": "NUMINA",
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "components": [
+      {
+        "unit": "USD",
+        "modeledValue": "500000000000000"
+      },
+      {
+        "unit": "USDC",
+        "modeledValue": "500000000000000"
+      },
+      {
+        "unit": "NUSD",
+        "modeledValue": "500000000000000"
+      }
+    ],
+    "externalBalancesAggregated": false
+  },
+  "nusd": {
+    "chainId": "962421430",
+    "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+    "decimals": 18,
+    "amountNusd": "1500000000000000",
+    "baseUnits": "1500000000000000000000000000000000",
+    "token": {
+      "address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "blockNumber": "51725",
+      "confirmations": 25,
+      "paused": true
+    },
+    "settlement": {
+      "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "blockNumber": "51726",
+      "confirmations": 24
+    },
+    "finality": "FINAL",
+    "receipt": "runtime/nusd/deployment-receipt.json",
+    "verification": "runtime/nusd/deployment-verification.json",
+    "externalBackingClaimed": false
+  },
+  "mobile": {
+    "packageIdentity": "xyz.numinalabs.app",
+    "android": {
+      "versionCode": 4,
+      "versionName": "4.0.0",
+      "signingWorkflow": ".github/workflows/numina-android-release.yml",
+      "signedArtifactReceipt": null,
+      "googlePlaySubmissionReceipt": null
+    },
+    "ios": {
+      "buildNumber": 6,
+      "marketingVersion": "4.0.0",
+      "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
+      "signedArtifactReceipt": null,
+      "appStoreSubmissionReceipt": null
+    }
+  },
+  "storePublication": {
+    "googlePlay": false,
+    "appStore": false,
+    "evidenceRequired": true
+  }
+}
