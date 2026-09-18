@@ -27,7 +27,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "3ee8fb1d192145143310a449998a6fa3a32de63885189a69af357ea7f5c24f8c"
+      "sha256": "6fcfcebd914054e277078b942514960bd44636dba808c5e2e520e556474fe18d"
     },
     "checks": [
       "canonical_journal_record",
@@ -41,7 +41,12 @@
     ],
     "verificationScope": "authenticated_response_internal_consistency",
     "independentProviderVerification": false,
-    "financialExecutionEnabled": false
+    "financialExecutionEnabled": false,
+    "identity": "NUMINA",
+    "treasuryIdentity": "NUMINA",
+    "transportVerificationChannel": "NUMINA",
+    "separateRoles": true,
+    "singularIdentity": true
   },
   "denomination_policy": {
     "schema": "numina.denomination-policy.v1",
