@@ -1,4 +1,6 @@
-# Numina 4 — one root, five layers
+# Numina 4 — one root, one repository, five layers
+
+**Canonical repository:** `skott34-dot/numina-production` on GitHub. `main` is the sole authoritative Numina source and release branch. No other repository is a Numina source of truth.
 
 The 4.0.0 control extension uses the existing canonical journal. The website, workspace, integration kit and native clients share Numina's production architecture. See [Frontier v2](docs/Frontier-v2.md).
 
@@ -14,7 +16,7 @@ The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(ev
 
 ## Build and provenance
 
-Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. The reviewed reusable workflow in `skott34-dot/numina-builder` builds from the source revision and creates detached SLSA provenance for both the exact deployment archive and application inventory. The calling workflow pins the builder by full commit. Verify the actual attestation bundle and artifact before deployment. Merely copying a workflow or changing a manifest field does not establish a SLSA level.
+Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. The reviewed reusable provenance workflow now lives in this repository at `.github/workflows/numina-nusd-runtime-builder.yml`. Release jobs invoke the same-repository workflow from protected `main`; there is no cross-repository Numina build authority. Verify the actual attestation bundle and artifact before deployment. Merely copying a workflow or changing a manifest field does not establish a SLSA level.
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
