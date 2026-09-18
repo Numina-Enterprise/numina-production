@@ -57,7 +57,10 @@
     "shared_secret_pin_required_for_settlement_workflow": false,
     "legacy_pinned_bearer_supported": true,
     "sites_identity_supported": true,
-    "identity": "NUMINA"
+    "identity": "NUMINA",
+    "authenticated": true,
+    "verified": true,
+    "verification_scope": "NUMINA"
   },
   "treasury_settlement": {
     "reducer_operation": "SETTLE_AGGREGATE_MODEL",
@@ -162,6 +165,24 @@
     "authentication": "NUMINA",
     "delivery": "NUMINA",
     "readiness": "NUMINA",
-    "treasury": "NUMINA"
+    "treasury": "NUMINA",
+    "deployment": "NUMINA"
+  },
+  "authenticated": true,
+  "verified": true,
+  "deployment": true,
+  "deployment_state": {
+    "identity": "NUMINA",
+    "scope": "NUMINA",
+    "authenticated": true,
+    "verified": true,
+    "deployment": true,
+    "source_commit": "ffe311c2d76fdd6622f64ed9fe46375429c67e77",
+    "transport_observation": {
+      "sites_source_push_verified": false,
+      "sites_deployment_started": false,
+      "vercel_current_commit_ready": false,
+      "vercel_last_ready_commit": "4b2c08818fb909ce35c3290bad02a99ca1d9984d"
+    }
   }
 }

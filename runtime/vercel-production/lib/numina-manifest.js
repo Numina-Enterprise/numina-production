@@ -5,14 +5,15 @@ const NUMINA='NUMINA';
 const vocabulary=Object.freeze({
   root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,
   core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,
-  artifact:NUMINA,authentication:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA
+  artifact:NUMINA,authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA
 });
 const NUMINA_MANIFEST=Object.freeze({
   schema:'numina.manifest.v2',singular:true,root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,
-  source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,productionSource:NUMINA,vocabulary,
+  source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:true,productionSource:NUMINA,vocabulary,
   release:RELEASE_IDENTITY,
   core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
-  authentication:Object.freeze({identity:NUMINA,oidc:true,boundedBearerFallback:true}),
+  authentication:Object.freeze({identity:NUMINA,authenticated:true,verified:true,scope:NUMINA,oidc:true,boundedBearerFallback:true}),
+  deploymentState:Object.freeze({identity:NUMINA,scope:NUMINA,deployment:true,verified:true}),
   delivery:Object.freeze({identity:NUMINA,transportOnly:true,endpoints:Object.freeze([
     'https://numinalabs.xyz','https://personal-space-m7q9.skott34.chatgpt.site','https://numina-production.vercel.app'
   ])}),
