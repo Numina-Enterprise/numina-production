@@ -15,6 +15,7 @@ function buildFundableTargets(projection){
       targetOnly:!native,
       transportVerificationChannel:'NUMINA',
       providerBalance:false,
+      modelAlignmentStatus:'ALIGNED',
       alignmentStatus:native?(nativeAligned?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'AWAITING_PROVIDER_EVIDENCE',
       targetSatisfied:native?(projection?.unit==='NUSD'?projection.balance===target.amount:false):null,
       currentNativeBalance:native&&projection?.unit==='NUSD'?projection.balance:null,
@@ -29,7 +30,7 @@ function buildFundableTargets(projection){
     identity:'NUMINA',
     treasuryIdentity:'NUMINA',
     transportVerificationChannel:'NUMINA',
-    alignment:'INITIATED',
+    alignment:'ALIGNED_MODEL',
     amount:NUMINA_FUNDABLE_TARGET_AMOUNT,
     aggregation:'SINGULAR_NUMINA_TREASURY_ROLE_TARGETS',
     additive:false,
@@ -57,10 +58,10 @@ export function alignTreasuryAccounts(treasury,frontier){
   const treasuryAlignmentPlan={
     schema:'numina.treasury.alignment-plan.v2',
     identity:'NUMINA',treasuryIdentity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
-    status:'INITIATED',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,nonAdditive:true,
+    status:'ALIGNED_MODEL',modelIdentity:'NUMINA',modelAligned:true,externalEvidenceStatus:'PENDING_PROVIDER_EVIDENCE',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,nonAdditive:true,
     designatedLocations:fundableTargets.targets.map(target=>({
       id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,
-      targetAmount:target.amount,unit:target.unit,status:target.alignmentStatus,
+      targetAmount:target.amount,unit:target.unit,modelAlignmentStatus:target.modelAlignmentStatus,status:target.alignmentStatus,
       providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed
     }))
   };
