@@ -74,8 +74,8 @@
       "artifacts": [],
       "completedAt": "2026-09-18T18:05:11Z"
     },
-    "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
-    "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased.",
+    "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
+    "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced.",
     "signingReceiptsCreated": false,
     "storeSubmissionsMade": false
   },
