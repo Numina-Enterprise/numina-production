@@ -19,10 +19,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          body="$(curl --fail-with-body --silent --show-error --max-time 20             -H 'accept: application/json'             https://numinalabs.xyz/v2/network/deployment-estimate)"
-          printf '%s
-' "$body"
-          BODY="$body" node --input-type=module <<'NODE'
+          body="$(curl --fail-with-body --silent --show-error --max-time 20 -H 'accept: application/json' https://numinalabs.xyz/v2/network/deployment-estimate)"
+          echo "$body"
+          export BODY="$body"
+          node --input-type=module <<'NODE'
           const body=JSON.parse(process.env.BODY);
           if(body?.schema!=='numina.deployment-estimate.v1')throw Error('UNEXPECTED_SCHEMA');
           if(body.status!=='observed')throw Error('RUNTIME_AUTH_NOT_READY_'+String(body?.error?.code||body.status));
