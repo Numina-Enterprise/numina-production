@@ -14,8 +14,10 @@ const providerRoutes={tool:'numina_provider_routes',method:'GET',endpoint:'/api/
 const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime_build',
  additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','provider_routing','treasury_client_verification'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
+const treasuryAlignment={schema:'numina.treasury.alignment.v2',accountViewSchema:'numina.treasury.account-view.v2',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',separateRoles:true,singularIdentity:true,historicalProjectionSchema:'numina.treasury.projection.v1',providerRoleBalancesAdditive:false};
+const integrationManifestRef={path:'file-manifest.json',schema:'numina.integration.manifest.v2',identity:'NUMINA',canonical:true};
 const verification={
- schema:'numina.integration.package.v2',identity:'NUMINA',source:'NUMINA',singular:true,packagedAtUtc:new Date().toISOString(),
+ schema:'numina.integration.package.v2',identity:'NUMINA',source:'NUMINA',singular:true,manifest:'NUMINA',integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
  package:{name:metadata.name,version:metadata.version,private:metadata.private},revision,
  applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
  testRunPerformed:false,tests:null,reason:'Packaging generates metadata; validation runs separately in the repository test suite.',
@@ -25,11 +27,11 @@ const verification={
  schemaGenerationPerformed:true,dependenciesAdded:0,typeScriptCompilerChecked:false,
  liveProviderAcceptanceVerified:false,productionEndpointCheckPerformed:false,remoteMcpHosted:false,
  providerInstallationPerformed:false,registryPublicationPerformed:false,appStoreSubmissionPerformed:false,
- nusdActivated:false,mintPerformed:false,transferPerformed:false,settlementConnected:false
+ nusdActivated:false,mintPerformed:false,transferPerformed:false,settlementConnected:false,treasuryAlignment
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
 const distribution={
- identity:'NUMINA',source:'NUMINA',singular:true,
+ identity:'NUMINA',source:'NUMINA',singular:true,manifest:'NUMINA',integrationManifest:integrationManifestRef,treasuryAlignment,
  treasury_client_verification:treasuryClientVerificationManifest(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'src/treasury-proof.js'))).digest('hex')),
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  procurement_usage:true,procurementPolicy:'/business-core.json',
@@ -52,7 +54,7 @@ const files=[
  'package.json','.gitignore','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
  'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
 ].sort();
-const fileManifest={schema:'numina.integration.files.v2',identity:'NUMINA',source:'NUMINA',singular:true,version:metadata.version,scope:'NUMINA',files:files.map(relative=>{
+const fileManifest={schema:'numina.integration.manifest.v2',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',host:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:{identity:'NUMINA',service:'GitHub',canonical:'skott34-dot/numina-production',branch:'main',soleSourceOfTruth:true},application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
  if(/(?:^|\/)\.env|\.private\.|\.(?:pem|key|tgz|zip)$/.test(relative))throw new Error('Private or archive files are not distribution inputs');
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
