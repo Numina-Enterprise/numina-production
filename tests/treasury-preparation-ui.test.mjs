@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {formatTreasuryRoundedWholeAmount} from '../public/treasury-amount.js';
 
 const source=readFileSync(new URL('../public/treasury-preparation-ui.js',import.meta.url),'utf8');
 const root='treasury-preparation-owner',otherRoot='another-preparation-owner';
@@ -36,7 +37,7 @@ function makeWindow(){const events={};return {events,addEventListener:(name,hand
 function harness({prepare,submit}={}){
  const calls={factory:0,prepare:[],submit:[],prepareOwners:[]},drafts=[],receipts=[],downloads=[],revoked=[];
  const doc={body:new Element('body'),createElement:tag=>new Element(tag)},win=makeWindow();
- const context=vm.createContext({Blob,URL:{createObjectURL:blob=>{downloads.push(blob);return 'blob:preparation-'+downloads.length;},revokeObjectURL:value=>revoked.push(value)},setTimeout:()=>0,document:doc,window:win,createTreasuryPreparation:()=>{throw Error('Unexpected real client');}});
+ const context=vm.createContext({formatTreasuryRoundedWholeAmount,Blob,URL:{createObjectURL:blob=>{downloads.push(blob);return 'blob:preparation-'+downloads.length;},revokeObjectURL:value=>revoked.push(value)},setTimeout:()=>0,document:doc,window:win,createTreasuryPreparation:()=>{throw Error('Unexpected real client');}});
  vm.runInContext(source.replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')+'\nglobalThis.subject={mountTreasuryPreparation};',context);
  function mount(options={}){
   const target=new Element('div'),owner=options.root??root;
@@ -70,16 +71,16 @@ function unload(win){const event={preventDefault(){this.prevented=true;}};for(co
 test('large mint review preserves every exact field and unchanged native balance without submitting',async()=>{
  const h=harness(),view=h.mount(),input=mintInput();await review(view,{...input,amount:'  '+input.amount+'  ',reason:'  '+input.reason+'  '});
  assert.deepEqual(h.calls.prepare,[input]);assert.equal(h.calls.submit.length,0);
- assert.match(view.summary.textContent,/900,719,925,474,099,312,345/);assert.match(view.summary.textContent,/NUSD/);assert.match(view.summary.textContent,/1,500,000,000,000,000/);
+ assert.match(view.summary.textContent,/900,719,925,474,099,312,345\.00 NUSD/);assert.match(view.summary.textContent,/1,500,000,000,000,000\.00 NUSD/);
  assert.match(view.summary.textContent,/treasury-prepare-1/);assert.match(view.summary.textContent,/139/);
  assert.equal(view.operation.disabled,true);assert.equal(view.amount.disabled,true);assert.equal(view.destination.disabled,true);assert.equal(view.reason.disabled,true);assert.equal(view.commit.disabled,false);
  const record=JSON.parse(view.record.textContent);assert.deepEqual(record.event,plain(h.drafts[0].event));assert.equal(record.beforeBalance,h.drafts[0].beforeBalance);
  await review(view,{...input,amount:'1',reason:'Changed review'});assert.equal(h.calls.prepare.length,1);assert.equal(h.calls.submit.length,0);
 });
-test('bank minor-unit amounts format exactly as USD and never acquire a mint network field',async()=>{
+test('bank minor-unit amounts retain exact records with rounded USD display and never acquire a mint network field',async()=>{
  const h=harness(),view=h.mount(),input=bankInput();await review(view,input);
  assert.deepEqual(h.calls.prepare,[input]);assert.equal(Object.hasOwn(h.calls.prepare[0],'networkReference'),false);assert.equal(Object.hasOwn(h.calls.prepare[0],'amount'),false);
- assert.match(view.summary.textContent,/12,345,678,901,234,567\.89/);assert.match(view.summary.textContent,/USD/);assert.equal(h.calls.submit.length,0);
+ assert.match(view.summary.textContent,/≈ 12,345,678,901,234,568\.00/);assert.match(view.summary.textContent,/USD/);assert.equal(h.calls.submit.length,0);
 });
 test('bank selector exposes only active valid Bank of America designations and marks absent provider references',async()=>{
  const accounts=[{id:'bank-designation-1',provider:'bank-of-america',legalEntity:'SK Consulting LLC',accountLabel:'Numina Treasury Savings',providerAccountReference:null},{id:'bank-designation-2',provider:'bank-of-america',legalEntity:'SK Consulting LLC',accountLabel:'Recorded Provider Account',providerAccountReference:'provider:record-2'},{id:'stripe-designation',provider:'stripe',accountLabel:'Stripe'},{id:'superseded-bank',provider:'bank-of-america',supersededBy:'bank-designation-1'},{id:'invalid id',provider:'bank-of-america',accountLabel:'Invalid reference'}];
@@ -98,7 +99,7 @@ test('an invalid bank selector cannot silently reuse an older manual destination
  assert.equal(h.calls.prepare.length,0);assert.equal(h.calls.submit.length,0);assert.equal(view.commit.hidden,true);
 });
 test('bank cents remain exact for small amounts and decimal dollar notation is rejected',async()=>{
- {const h=harness(),view=h.mount();await review(view,{...bankInput(),amountMinor:'1'});assert.equal(h.calls.prepare[0].amountMinor,'1');assert.match(view.summary.textContent,/0\.01 USD/);}
+ {const h=harness(),view=h.mount();await review(view,{...bankInput(),amountMinor:'1'});assert.equal(h.calls.prepare[0].amountMinor,'1');assert.match(view.summary.textContent,/≈ 0\.00 USD/);}
  for(const amountMinor of ['0','0.01','100.00','1e5','-100','1,000']){const h=harness(),view=h.mount();await review(view,{...bankInput(),amountMinor});assert.equal(h.calls.prepare.length,0,amountMinor);}
 });
 test('only explicit New request after a verified FINAL allows a second fresh preparation',async()=>{

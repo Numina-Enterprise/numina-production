@@ -1,17 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount,formatTreasuryProviderAmount,formatTreasuryProviderDisplayAmount} from '../public/treasury-amount.js';
+import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount,formatTreasuryProviderAmount,formatTreasuryProviderDisplayAmount,formatTreasuryRoundedWholeAmount} from '../public/treasury-amount.js';
 
-test('NUSD whole-unit display preserves exact integers and pads six decimal places',()=>{
-  assert.equal(formatTreasuryNusdWholeAmount('0'),'0.000000 NUSD');
-  assert.equal(formatTreasuryNusdWholeAmount('1500000000000000'),'1,500,000,000,000,000.000000 NUSD');
-  assert.equal(formatTreasuryNusdWholeAmount('9007199254740993'),'9,007,199,254,740,993.000000 NUSD');
+test('NUSD whole-unit display preserves exact integers and uses two decimal places',()=>{
+  assert.equal(formatTreasuryNusdWholeAmount('0'),'0.00 NUSD');
+  assert.equal(formatTreasuryNusdWholeAmount('1500000000000000'),'1,500,000,000,000,000.00 NUSD');
+  assert.equal(formatTreasuryNusdWholeAmount('9007199254740993'),'9,007,199,254,740,993.00 NUSD');
   for(const value of [null,undefined,1,9007199254740992,1n,'-1','01','1.1','1e18',' 1','1\n','1'.repeat(79)])assert.throws(()=>formatTreasuryNusdWholeAmount(value),/INVALID_MODEL_WHOLE_AMOUNT/);
 });
 
-test('all model denomination views use six display places without changing their unit',()=>{
-  for(const unit of ['USD','USDC','NUSD'])assert.equal(formatTreasuryModelWholeAmount('500000000000000',unit),'500,000,000,000,000.000000 '+unit);
+test('all model denomination views use two-decimal displays without changing their unit',()=>{
+  for(const unit of ['USD','USDC','NUSD'])assert.equal(formatTreasuryModelWholeAmount('500000000000000',unit),'500,000,000,000,000.00 '+unit);
   assert.throws(()=>formatTreasuryModelWholeAmount('1','BTC'),/INVALID_MODEL_WHOLE_AMOUNT/);
 });
 
@@ -21,12 +21,29 @@ test('provider currencies retain their own minor units, including beyond safe Nu
   assert.equal(formatTreasuryProviderAmount('-1','usdc'),'-0.000001 USDC');
 });
 
-test('provider UI pads six places without changing provider scaling or exact integers',()=>{
-  assert.equal(formatTreasuryProviderDisplayAmount('9007199254740993','usd'),'$90,071,992,547,409.930000');
-  assert.equal(formatTreasuryProviderDisplayAmount('1234','usd'),'$12.340000');
-  assert.equal(formatTreasuryProviderDisplayAmount('-1','usd'),'-$0.010000');
-  assert.equal(formatTreasuryProviderDisplayAmount(0,'usd'),'$0.000000');
-  assert.equal(formatTreasuryProviderDisplayAmount('1234567','usdc'),'1.234567 USDC');
+test('provider UI rounds to whole numbers and explicitly marks inexact displays',()=>{
+  assert.equal(formatTreasuryProviderDisplayAmount('9007199254740993','usd'),'≈ $90,071,992,547,410.00');
+  assert.equal(formatTreasuryProviderDisplayAmount('1234','usd'),'≈ $12.00');
+  assert.equal(formatTreasuryProviderDisplayAmount('-1','usd'),'≈ $0.00');
+  assert.equal(formatTreasuryProviderDisplayAmount(0,'usd'),'$0.00');
+  assert.equal(formatTreasuryProviderDisplayAmount('1234567','usdc'),'≈ 1.00 USDC');
+});
+
+test('rounding uses exact integers, rounds halves away from zero and always shows two places',()=>{
+  for(const [amount,expected] of [['1234567','≈ $12,346.00'],['49','≈ $0.00'],['50','≈ $1.00'],['149','≈ $1.00'],['150','≈ $2.00'],['-150','≈ -$2.00'],['100','$1.00']]){
+    assert.equal(formatTreasuryProviderDisplayAmount(amount,'usd'),expected);
+  }
+  assert.equal(formatTreasuryProviderDisplayAmount('500000','usdc'),'≈ 1.00 USDC');
+  assert.equal(formatTreasuryProviderDisplayAmount('1','usdc'),'≈ 0.00 USDC');
+  assert.equal(formatTreasuryRoundedWholeAmount('9007199254740993',0),'9,007,199,254,740,993.00');
+  assert.equal(formatTreasuryRoundedWholeAmount('1499999999999999999',18),'≈ 1.00');
+  assert.equal(formatTreasuryRoundedWholeAmount('1500000000000000000',18),'≈ 2.00');
+  for(const amount of [NaN,Infinity,9007199254740992,-0,'01','1.5','1e6','-0',null]){
+    assert.throws(()=>formatTreasuryRoundedWholeAmount(amount,2),/INVALID_DISPLAY_AMOUNT/);
+  }
+  for(const decimals of [-1,19,1.5,'2',NaN]){
+    assert.throws(()=>formatTreasuryRoundedWholeAmount('1',decimals),/INVALID_DISPLAY_AMOUNT/);
+  }
 });
 
 test('public issuance copy agrees with the existing receipt without changing contract identity',()=>{
