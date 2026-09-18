@@ -9,6 +9,18 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/nusd/v1/status",
+      "destination": "/api/nusd-status"
+    },
+    {
+      "source": "/downloads/nusd/deployment-receipt.json",
+      "destination": "/api/nusd-deployment-receipt"
+    },
+    {
+      "source": "/downloads/nusd/deployment-verification.json",
+      "destination": "/api/nusd-deployment-verification"
+    },
+    {
       "source": "/api/nusd/v1/:path*",
       "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/nusd/v1/:path*"
     },
