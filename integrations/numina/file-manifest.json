@@ -55,7 +55,11 @@
     "separateRoles": true,
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
-    "providerRoleBalancesAdditive": false
+    "providerRoleBalancesAdditive": false,
+    "planSchema": "numina.treasury.alignment-plan.v2",
+    "status": "INITIATED",
+    "targetAmount": "500000000000000",
+    "designatedRoleCount": 3
   },
   "distribution": {
     "path": "distribution.json",
