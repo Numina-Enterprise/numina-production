@@ -1,0 +1,92 @@
+{
+  "schema": "numina.nusd.production-deployment-receipt.v1",
+  "identity": "NUMINA",
+  "finalizedAt": "2026-09-18T15:31:26.425Z",
+  "chainId": "962421430",
+  "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+  "sender": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
+  "requestSha256": "b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4",
+  "artifactSha256": "3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2",
+  "sourceSha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238",
+  "settlementSourceSha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb",
+  "issuance": {
+    "amountNusd": "1500000000000000",
+    "decimals": 18,
+    "baseUnits": "1500000000000000000000000000000000",
+    "constructorMint": true,
+    "recipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
+    "externallyBackedClaim": false
+  },
+  "token": {
+    "address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "reusedExisting": false,
+    "observedConfirmations": 2,
+    "state": {
+      "decimals": 18,
+      "totalSupply": "1500000000000000000000000000000000",
+      "cap": "1500000000000000000000000000000000",
+      "paused": true,
+      "recipientBalance": "1500000000000000000000000000000000",
+      "issuerPolicyHash": "0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5"
+    },
+    "receipt": {
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "transactionIndex": "0x0",
+      "blockHash": "0x328264b2b4610f4143015fd21360946c7b400e5d7be6ee6e49c5718d0b28d54f",
+      "blockNumber": "0xca0d",
+      "blockNumberDecimal": "51725",
+      "from": "0x1a45671ae2ee3e52264116151924faacb80fc02e",
+      "to": null,
+      "cumulativeGasUsed": "0x20f806",
+      "gasUsed": "0x20f806",
+      "contractAddress": "0x491c1df1b5ca77af797f052c2310ca17039c931b",
+      "status": "0x1",
+      "effectiveGasPrice": "0x0",
+      "type": "0x0"
+    }
+  },
+  "settlement": {
+    "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+    "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "reusedExisting": false,
+    "observedConfirmations": 1,
+    "nusd": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "receipt": {
+      "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "transactionIndex": "0x0",
+      "blockHash": "0xa07dc432ba7ebb1a667afda8530852e478dea521f8257a8da1022862a729159c",
+      "blockNumber": "0xca0e",
+      "blockNumberDecimal": "51726",
+      "from": "0x1a45671ae2ee3e52264116151924faacb80fc02e",
+      "to": null,
+      "cumulativeGasUsed": "0x6cd77",
+      "gasUsed": "0x6cd77",
+      "contractAddress": "0x7f9793d519464103e0c51edcc5ca6317c89af3a0",
+      "logs": [],
+      "status": "0x1",
+      "effectiveGasPrice": "0x0",
+      "type": "0x0"
+    }
+  },
+  "externalSettlement": {
+    "usd": false,
+    "usdc": false,
+    "bankReceipt": null,
+    "providerReceipt": null
+  },
+  "verification": {
+    "rpcCredential": true,
+    "chain": true,
+    "genesis": true,
+    "managedSigner": true,
+    "tokenState": true,
+    "roles": true,
+    "settlementBinding": true
+  },
+  "broadcastPerformed": true,
+  "finality": {
+    "requiredConfirmations": 12,
+    "status": "PENDING_CONFIRMATIONS"
+  }
+}
