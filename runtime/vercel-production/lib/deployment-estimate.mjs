@@ -80,6 +80,7 @@ function body(){
       observedBlockNumber:receipt.finality.observedBlockNumber
     },
     externalSettlement:{
+      declared:true,
       usd:false,
       usdc:false,
       reservesVerified:false,
