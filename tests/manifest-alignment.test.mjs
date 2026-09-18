@@ -55,6 +55,8 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.release,'numina-v4.0.0');
   assert.equal(release.schema,'numina.application-release.v2');
   assert.equal(release.runtime_dependency.version,'1.9.0-rc26');
+  for(const field of ['root','manifest','identity','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release[field],'NUMINA',field);
+  assert.equal(release.provider_verification,true);
 });
 
 test('current native distribution retains its actual Android and iOS build identities',()=>{

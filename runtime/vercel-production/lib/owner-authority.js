@@ -17,7 +17,7 @@ const FUNDABLE_TARGETS=Object.freeze({
 
 const OWNER_AUTHORIZATION=Object.freeze({
   schema:'numina.owner-authorization.v1',
-  authority:'NUMINA_OWNER',
+  authority:'NUMINA',
   authorization_id:'owner-authorized-live-submission-2026-09-17',
   funds_enabled:true,
   execution_authorized:true,
