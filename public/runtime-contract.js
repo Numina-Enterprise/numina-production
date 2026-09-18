@@ -2,6 +2,7 @@
 export const RUNTIME_ORIGIN = 'https://numina-production.vercel.app';
 export const RUNTIME_VERSION = '1.9.0-rc26';
 export const EXPECTED_RELEASE = Object.freeze({
+  "singular": true,
   "identity": "NUMINA",
   "release": "core-v1.8+prod-v1.9.0-rc26",
   "core_version": "1.8.0",
