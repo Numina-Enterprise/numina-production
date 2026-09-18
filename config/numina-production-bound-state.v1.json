@@ -1,5 +1,5 @@
 {
-  "schema": "numina.production.singular-state.v1",
+  "schema": "numina.production.root-manifest.v2",
   "authority": "NUMINA",
   "root": "NUMINA",
   "core": "NUMINA",
@@ -41,7 +41,8 @@
         "value": "https://numina-production.vercel.app"
       }
     ],
-    "note": "Delivery surfaces do not create separate Numina repositories, builds, workers, journals, roots, cores, or authorities."
+    "note": "Delivery surfaces do not create separate Numina repositories, builds, workers, journals, roots, cores, or authorities.",
+    "transport_only": true
   },
   "authentication": {
     "primary": "GITHUB_ACTIONS_OIDC",
@@ -100,7 +101,9 @@
     "provider_settlement_evidence_bound": false,
     "source_of_truth_model": "NUMINA",
     "model_finality": "FINAL",
-    "journal_execution_finality": "PENDING_AUTHENTICATED_WRITE"
+    "journal_execution_finality": "PENDING_AUTHENTICATED_WRITE",
+    "provider": "NUMINA",
+    "provider_verification": true
   },
   "convergence": {
     "automation_id": "6aac4bb23d448191a6de47b513a71d51",
@@ -116,7 +119,30 @@
     "worker_model": "SINGULAR",
     "delivery_surface_model": "SINGULAR"
   },
-  "invariant": "NUMINA = SINGULAR",
-  "control_identity_source": "src/control-http.js",
-  "runtime_release_contract_identity_separate": true
+  "manifest": "NUMINA",
+  "identity": "NUMINA",
+  "source": "NUMINA",
+  "evidence": "NUMINA",
+  "provider": "NUMINA",
+  "provider_verification": true,
+  "vocabulary": {
+    "root": "NUMINA",
+    "manifest": "NUMINA",
+    "identity": "NUMINA",
+    "authority": "NUMINA",
+    "source": "NUMINA",
+    "evidence": "NUMINA",
+    "provider": "NUMINA",
+    "core": "NUMINA",
+    "repository": "NUMINA",
+    "software": "NUMINA",
+    "worker": "NUMINA",
+    "journal": "NUMINA",
+    "runtime": "NUMINA",
+    "artifact": "NUMINA",
+    "authentication": "NUMINA",
+    "delivery": "NUMINA",
+    "readiness": "NUMINA",
+    "treasury": "NUMINA"
+  }
 }

@@ -1,6 +1,7 @@
 import {stable,controlHash,controlError,grantValid} from './control.js';
 import {readControl,commitTreasuryControl} from './control-store.js';
 import {NUMINA_TREASURY_ROUTE,treasuryExact,validateTreasuryProjection,treasuryProjectionEquals,reduceTreasuryProjection} from './native-treasury-model.js';
+import {NUMINA} from './numina-root.js';
 
 // Bind storage and the authenticated Principal once. There is one treasury in the existing journal.
 export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.now()/1000)}){
@@ -27,7 +28,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
   }
   async function readTreasury(){
     const row=await context();
-    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:row.state.root,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
+    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
     if(!row.state.nativeTreasury)return {...base,status:'NOT_INITIALIZED',projection:null,canonical_proof:null};
     const projection=structuredClone(validateTreasuryProjection(row.state.nativeTreasury));
     const proof=await proofFor(projection.last_event_id);

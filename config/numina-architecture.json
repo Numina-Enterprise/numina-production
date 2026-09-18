@@ -36,7 +36,10 @@
     "funding_status_pointer": "/nativeFundingView/status",
     "provider_observation_route": "/api/control/v1/stripe-treasury",
     "provider_balances_combined": false,
-    "provider_balances_changed_by_build": false
+    "provider_balances_changed_by_build": false,
+    "identity": "NUMINA",
+    "provider": "NUMINA",
+    "provider_verification": true
   },
   "deployment_verified": false,
   "canonical_runtime_implementation_verified": false,
@@ -54,5 +57,21 @@
   "architectureManifest": "/api/control/v2/architecture",
   "applicationVersion": "4.0.0",
   "applicationManifest": "/v4/release/manifest",
-  "reconstructedSources": "preserved_unchanged"
+  "reconstructedSources": "preserved_unchanged",
+  "root": "NUMINA",
+  "manifest": "NUMINA",
+  "identity": "NUMINA",
+  "authority": "NUMINA",
+  "source": "NUMINA",
+  "evidence": "NUMINA",
+  "provider": "NUMINA",
+  "provider_verification": true,
+  "core": "NUMINA",
+  "worker": "NUMINA",
+  "journal": "NUMINA",
+  "runtime_identity": "NUMINA",
+  "artifact": "NUMINA",
+  "authentication": "NUMINA",
+  "delivery": "NUMINA",
+  "readiness": "NUMINA"
 }
