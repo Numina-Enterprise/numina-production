@@ -8,10 +8,10 @@ import {AccessControlDefaultAdminRules} from "@openzeppelin/contracts/access/ext
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-/// @notice Fixed 1:1 exchange of existing six-decimal NUSD and USDC on the same chain.
+/// @notice Fixed 1:1 whole-unit exchange of existing 18-decimal NUSD and 6-decimal USDC on the same chain.
 /// Output liquidity must already be held here. No mint, bridge or fiat transfer is performed.
-/// @dev Token identity and issuer risks require independent verification. Checking decimals
-/// does not authenticate Circle USDC. This candidate is unaudited and starts paused.
+/// @dev Token identity and issuer risks require independent verification. Decimal scaling preserves whole-unit parity
+/// but does not authenticate Circle USDC. This candidate is unaudited and starts paused.
 contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     bytes32 public constant LIQUIDITY_ROLE = keccak256("LIQUIDITY_ROLE");
@@ -19,10 +19,13 @@ contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, Reent
     bytes32 public constant PARTICIPANT_ROLE = keccak256("PARTICIPANT_ROLE");
     uint256 public constant RATE_NUMERATOR = 1;
     uint256 public constant RATE_DENOMINATOR = 1;
+    uint8 public constant NUSD_DECIMALS = 18;
+    uint8 public constant USDC_DECIMALS = 6;
+    uint256 public constant NUSD_PER_USDC_BASE_UNIT = 1_000_000_000_000;
     IERC20 public immutable nusd;
     IERC20 public immutable usdc;
 
-    struct Conversion { bool completed; bool nusdToUsdc; address recipient; uint256 amount; }
+    struct Conversion { bool completed; bool nusdToUsdc; address recipient; uint256 inputAmount; uint256 outputAmount; }
     mapping(address participant => mapping(bytes32 operationId => Conversion)) public conversions;
 
     error InvalidConfiguration();
@@ -34,7 +37,7 @@ contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, Reent
     error RoleConflict();
 
     event Converted(address indexed participant, bytes32 indexed operationId, address indexed recipient,
-        bool nusdToUsdc, uint256 amount);
+        bool nusdToUsdc, uint256 inputAmount, uint256 outputAmount);
     event LiquidityAdded(address indexed token, address indexed provider, uint256 amount);
     event LiquidityRemoved(address indexed token, address indexed recipient, uint256 amount);
 
@@ -42,7 +45,7 @@ contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, Reent
         address pauser, uint48 adminDelaySeconds)
         AccessControlDefaultAdminRules(adminDelaySeconds, admin) {
         if (nusdToken == usdcToken || nusdToken.code.length == 0 || usdcToken.code.length == 0 ||
-            IERC20Metadata(nusdToken).decimals() != 6 || IERC20Metadata(usdcToken).decimals() != 6) {
+            IERC20Metadata(nusdToken).decimals() != NUSD_DECIMALS || IERC20Metadata(usdcToken).decimals() != USDC_DECIMALS) {
             revert InvalidConfiguration();
         }
         nusd = IERC20(nusdToken);
@@ -52,36 +55,44 @@ contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, Reent
         _pause();
     }
 
-    /// @notice No rounding and no contract fee: one micro-NUSD exchanges for one micro-USDC.
-    /// @dev This calculation alone reserves no liquidity and establishes no executable quote.
-    function quote(uint256 amount) external pure returns (uint256) {
-        if (amount == 0) revert InvalidOperation();
-        return amount;
+    /// @notice No rounding and no contract fee: 1 whole NUSD exchanges for 1 whole USDC.
+    /// @dev Input amounts use the input token's native base units. NUSD->USDC must be exactly divisible by 1e12.
+    function quote(bool nusdToUsdc, uint256 inputAmount) public pure returns (uint256 outputAmount) {
+        if (inputAmount == 0) revert InvalidOperation();
+        if (nusdToUsdc) {
+            if (inputAmount % NUSD_PER_USDC_BASE_UNIT != 0) revert InvalidOperation();
+            return inputAmount / NUSD_PER_USDC_BASE_UNIT;
+        }
+        if (inputAmount > type(uint256).max / NUSD_PER_USDC_BASE_UNIT) revert InvalidOperation();
+        return inputAmount * NUSD_PER_USDC_BASE_UNIT;
     }
 
     /// @notice Both transfers succeed atomically, or neither does. IDs belong to the caller.
-    function convert(bytes32 operationId, bool nusdToUsdc, uint256 amount, address recipient)
+    function convert(bytes32 operationId, bool nusdToUsdc, uint256 inputAmount, address recipient)
         external onlyRole(PARTICIPANT_ROLE) whenNotPaused nonReentrant returns (Conversion memory) {
-        if (operationId == bytes32(0) || amount == 0 || recipient == address(0) || recipient == address(this)) {
+        if (operationId == bytes32(0) || inputAmount == 0 || recipient == address(0) || recipient == address(this)) {
             revert InvalidOperation();
         }
+        uint256 outputAmount = quote(nusdToUsdc, inputAmount);
         Conversion storage previous = conversions[msg.sender][operationId];
         if (previous.completed) {
-            if (previous.nusdToUsdc != nusdToUsdc || previous.amount != amount || previous.recipient != recipient) {
+            if (previous.nusdToUsdc != nusdToUsdc || previous.inputAmount != inputAmount ||
+                previous.outputAmount != outputAmount || previous.recipient != recipient) {
                 revert OperationMutation();
             }
             return previous;
         }
         IERC20 input = nusdToUsdc ? nusd : usdc;
         IERC20 output = nusdToUsdc ? usdc : nusd;
-        if (output.balanceOf(address(this)) < amount) revert InsufficientLiquidity();
+        if (output.balanceOf(address(this)) < outputAmount) revert InsufficientLiquidity();
         previous.completed = true;
         previous.nusdToUsdc = nusdToUsdc;
         previous.recipient = recipient;
-        previous.amount = amount;
-        _receiveExact(input, msg.sender, amount);
-        _sendExact(output, recipient, amount);
-        emit Converted(msg.sender, operationId, recipient, nusdToUsdc, amount);
+        previous.inputAmount = inputAmount;
+        previous.outputAmount = outputAmount;
+        _receiveExact(input, msg.sender, inputAmount);
+        _sendExact(output, recipient, outputAmount);
+        emit Converted(msg.sender, operationId, recipient, nusdToUsdc, inputAmount, outputAmount);
         return previous;
     }
 
