@@ -5,7 +5,7 @@ import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BU
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
 const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN=ORIGIN,MAX_BYTES=262144;
-function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:'NUMINA',repository:{host:'GitHub',canonical:'skott34-dot/numina-production',repository_id:1367647143,branch:'main',sole_source_of_truth:true},runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
+function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:'NUMINA',repository:{identity:'NUMINA',authority:'NUMINA',source:'NUMINA',provenance:'NUMINA',service:'GitHub',canonical:'skott34-dot/numina-production',repository_id:1367647143,branch:'main',sole_source_of_truth:true},runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const NUMINA_FIELDS=['root','manifest','identity','authority','source','evidence','provider','host','provenance','core','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection'];
 
@@ -64,7 +64,7 @@ export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEn
     deployment:'NUMINA',deployed:true,ready:Object.values(checks).every(Boolean),checks,
     application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},
     runtime:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',...EXPECTED_RELEASE},
-    provider_of_record:{identity:'NUMINA',scope:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA'},
+    provider_of_record:{identity:'NUMINA',authority:'NUMINA',source:'NUMINA',host:'NUMINA',provenance:'NUMINA',scope:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA'},
     transport:{host:'NUMINA',identity:'NUMINA',role:'substrate_observation_only',substrate:'vercel',vercel_observation_verified:transportVerified,observation:transportObservation??null},
     mode:'NUMINA'};
 }
