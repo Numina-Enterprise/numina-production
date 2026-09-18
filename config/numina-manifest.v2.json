@@ -35,7 +35,25 @@
     "provider_verification": true,
     "authenticated": true,
     "verified": true,
-    "deployed": true
+    "deployed": true,
+    "build_model": {
+      "identity": "NUMINA",
+      "singular": true,
+      "canonical_source": "github",
+      "canonical_repository": "skott34-dot/numina-production",
+      "canonical_branch": "main",
+      "all_builds_are_numina": true,
+      "non_numina_builds_allowed": false,
+      "competing_build_authority_allowed": false,
+      "projections": [
+        "website",
+        "vercel",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury"
+      ]
+    }
   },
   "compatibility": {
     "identity_aliases": {
@@ -59,7 +77,9 @@
       "treasury": "NUMINA",
       "storage": "NUMINA",
       "projection": "NUMINA",
-      "transport": "NUMINA"
+      "transport": "NUMINA",
+      "build": "NUMINA",
+      "release": "NUMINA"
     }
   }
 }

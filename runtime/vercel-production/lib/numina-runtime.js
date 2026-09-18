@@ -1,7 +1,7 @@
 'use strict';
 
 const {createNumina,projectLegacyRuntime}=require('./frontier');
-const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','authority','source','evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
+const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','build','authority','source','evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
 const legacy=require('./numina');
 
 function runtimeManifest(){
@@ -9,6 +9,7 @@ function runtimeManifest(){
     root:'NUMINA',
     manifest:'NUMINA',
     identity:'NUMINA',
+    build:'NUMINA',
     authority:'NUMINA',
     source:'NUMINA',
     evidence:'NUMINA',
@@ -34,6 +35,11 @@ function runtimeManifest(){
     funds:'NUMINA',
     confirmation_evidence:'NUMINA',
     singular:true,
+    all_builds_are_numina:true,
+    non_numina_builds_allowed:false,
+    canonical_source:'github',
+    canonical_repository:'skott34-dot/numina-production',
+    canonical_branch:'main',
     authenticated:true,
     verified:true,
     deployment:'NUMINA',
