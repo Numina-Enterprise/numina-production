@@ -1,6 +1,6 @@
 import {
   Interface, ContractFactory, getAddress, getCreateAddress, id
-} from '../public/vendor/ethers-6.15.0.min.js';
+} from '../../../public/vendor/ethers-6.15.0.min.js';
 
 export const maxDuration = 60;
 
