@@ -1,3 +1,4 @@
+import {NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {requestJson} from './http-client.js';
 import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount} from './treasury-amount.js';
@@ -36,16 +37,16 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);detail(summaryRows,'Numina NUSD fundable target',fundableTargetText(treasury,'numina-native-treasury'));valuationRows(summaryRows);
   detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
-  if(treasury?.fundableTargets?.aggregateModeledValue)detail(summaryRows,'Shared model total (counted once)',formatTreasuryNusdWholeAmount(treasury.fundableTargets.aggregateModeledValue)+' modeled equivalent');
+  detail(summaryRows,'Singular aggregate allocation model',formatTreasuryNusdWholeAmount(NUMINA_TREASURY_CONNECTION.aggregateModeledValue)+' modeled equivalent');
   const issuance=NUSD_CONTRACT_RECORD.issuance;
   if(issuance?.constructorMint===true&&issuance.decimals===18){
     detail(summaryRows,'Minted NUSD aggregate (separate token supply)',formatTreasuryNusdWholeAmount(issuance.amountNusd));
     detail(summaryRows,'Issuance verification observed at',issuance.verifiedAt);
   }
-  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One shared 500T NUMINA treasury model is expressed in three denomination views: USD, USDC and NUSD. These are not additive balances. '+NUMINA_DENOMINATION_POLICY.expression+'. Model amounts are displayed at 18 decimal places without changing the stored integers or existing token contract. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
+  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One NUMINA treasury has a 1,500T declared aggregate: three 500T route allocations in USD, USDC and NUSD. Only model allocations are added; observed provider balances are not. '+NUMINA_DENOMINATION_POLICY.expression+'. Model amounts are displayed at 18 decimal places without changing the stored integers or existing token contract. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
   target.append(summary);
   const issuanceLink=item('a','Read the minted-supply verification ↗');issuanceLink.href='/downloads/nusd/deployment-verification.json';
-  summary.append(item('p','The 500T treasury model balance and the recorded 1,500T minted token aggregate are distinct measures within the singular NUMINA record. Denomination views do not add balances; minted supply is not provider funding.'),issuanceLink);
+  summary.append(item('p','The native journal balance, the declared 1,500T allocation model and the recorded 1,500T minted supply are distinct measures within one NUMINA treasury. They are not added to one another; minted supply is not provider funding.'),issuanceLink);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
   const stripeTargetRows=item('dl','');detail(stripeTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));
@@ -54,7 +55,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const bankTargetRows=item('dl','');detail(bankTargetRows,'Fundable USD target',fundableTargetText(treasury,'bank-of-america-savings'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
   const bankRows=item('dl','');detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
   grid.append(stripe,bank);
-  target.append(heading,grid,item('p','Treasury v2 is singular: one 500T model, three denomination views, counted once. Provider observations remain factual evidence and are not treated as externally settled balances without confirmation.'));
+  target.append(heading,grid,item('p','Treasury v2 is singular: one 1,500T aggregate allocation model, three 500T routes. Provider observations remain factual evidence and are not treated as externally settled balances without confirmation.'));
   try{
     const record=await requestJson('/api/control/v1/stripe-treasury',{signal,timeoutMs:12000});
     if(signal?.aborted)return;

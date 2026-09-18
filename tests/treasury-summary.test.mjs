@@ -30,10 +30,10 @@ function summaryAndProviders(target){
   assert.ok(summary);assert.equal(providers.children.length,2);
   const summaryRows=all(summary).filter(element=>element.tagName==='dd').map(element=>element.textContent);
   assert.ok(summaryRows.includes('500,000,000,000,000.000000000000000000 NUSD · shared canonical record'));
-  assert.ok(summaryRows.includes('500,000,000,000,000.000000000000000000 NUSD modeled equivalent'));
+  assert.ok(summaryRows.includes('1,500,000,000,000,000.000000000000000000 NUSD modeled equivalent'));
   assert.ok(summaryRows.includes('1,500,000,000,000,000.000000000000000000 NUSD'));
   assert.match(summary.textContent,/Minted NUSD aggregate \(separate token supply\)/);
-  assert.match(summary.textContent,/These are not additive balances/);
+  assert.match(summary.textContent,/Only model allocations are added/);
   for(const unit of ['USD','USDC'])assert.ok(summaryRows.includes('500,000,000,000,000.000000000000000000 '+unit+' · shared declared value'));
   assert.match(summary.textContent,/Numina-native model and journal integrity/);
   for(const account of providers.children){

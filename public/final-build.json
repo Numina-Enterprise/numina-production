@@ -18,7 +18,7 @@
   },
   "treasury": {
     "identity": "NUMINA",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "components": [
       {
@@ -35,13 +35,13 @@
       }
     ],
     "externalBalancesAggregated": false,
-    "modeledRoleValuesAdditive": false,
+    "modeledRoleValuesAdditive": true,
     "balanceCount": 1,
-    "componentsAre": "non_additive_denomination_views",
+    "componentsAre": "route_allocations_within_one_treasury",
     "modelDefinition": {
       "basis": "owner_confirmed_model_specification",
       "date": "2026-09-18",
-      "scope": "One shared 500T model expressed in USD, USDC and NUSD. Separate 1,500T token issuance is preserved.",
+      "scope": "One NUMINA treasury with a 1,500T declared aggregate: 500T USD Bank of America Savings ACH, 500T USDC Stripe Treasury address, 500T native NUSD. Historical native journal and token receipt unchanged.",
       "deploymentReceipt": null
     }
   },
@@ -67,7 +67,14 @@
     "finality": "FINAL",
     "receipt": "/downloads/nusd/deployment-receipt.json",
     "verification": "/downloads/nusd/deployment-verification.json",
-    "externalBackingClaimed": false
+    "externalBackingClaimed": false,
+    "operatorActivation": {
+      "status": "active_operator_confirmed",
+      "evidenceType": "owner_statement",
+      "record": "/api/nusd/v1/activation",
+      "chainActivityVerified": false,
+      "checkoutConnected": false
+    }
   },
   "mobile": {
     "packageIdentity": "xyz.numinalabs.app",
@@ -104,7 +111,7 @@
     "website": {
       "sourceAligned": true,
       "productionTransportUpdated": true,
-      "currentPublicDeploymentKnownStale": false,
+      "currentPublicDeploymentKnownStale": true,
       "blocker": null,
       "verifiedAt": "2026-09-18T18:07:00Z",
       "observedDeployment": {
@@ -134,7 +141,7 @@
         "url": "https://vercel.com/skott34-dot/numina-production/2SbEf3mp95BiGA65mMVb9ARiQd2Y",
         "status": "READY"
       },
-      "status": "PRODUCTION_PUBLIC_WEBSITE_VERIFIED",
+      "status": "ROUTE_ALLOCATION_UPDATE_PENDING",
       "latestRedeployAttempt": {
         "observedDate": "2026-09-18",
         "result": "rejected",
@@ -200,14 +207,14 @@
       "scope": "Existing application journal retained. Backend source deployment is separate from the Vercel website release."
     },
     "browserAlignment": {
-      "status": "PUBLIC_WEBSITE_BROWSER_VERIFIED",
-      "modelBalance": "500000000000000",
+      "status": "ROUTE_ALLOCATION_SOURCE_UPDATED_DEPLOYMENT_PENDING",
+      "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
         "USDC",
         "NUSD"
       ],
-      "modelViewsAdditive": false,
+      "modelViewsAdditive": true,
       "mintedNusdAggregate": "1500000000000000",
       "displayDecimals": 18,
       "contractDecimals": 18,
@@ -219,7 +226,7 @@
         "fullSuiteFailed": 23,
         "fullSuiteScope": "Remaining failures also present in baseline or unavailable contract test dependencies; not a full-suite pass"
       },
-      "productionVerified": true,
+      "productionVerified": false,
       "verificationScope": "Public website and dynamic NUSD receipt display verified. Authenticated treasury balances and the separate application backend deployment were not verified by this observation.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/delivery-observation-2026-09-18.json"

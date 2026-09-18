@@ -155,6 +155,8 @@ export function assessFinancialStatus(data) {
     state: 'Current application status received',
     contract: data.asset.contract === null ? (data.contract_record?'No deployed address reported · compiled contract sources available':'No contract address reported') : data.asset.contract,
     identity: data.contract_record?.status==='DEPLOYED_VERIFIED'?'Issued NUSD · deployed contract verified · 18 decimals':data.asset_verification.status.replaceAll('_', ' '),
+    activation: data.operator_activation?.status==='active_operator_confirmed'?'Active · operator confirmed; current chain activity not verified':'No operator activation declaration received',
+    purchase: data.operator_activation?.purchaseAvailability==='operator_confirmed'?'Available per operator confirmation · checkout connection not verified':'No token purchase declaration received',
     backing: data.treasury_backing.status.replaceAll('_', ' '),
     pricing: data.service_pricing.status.replaceAll('_', ' '),
     ...Object.fromEntries(capabilities.map(name => [name,
@@ -178,7 +180,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     const financial = value => Object.entries(value).forEach(([key, text]) => set('data-linux-financial-' + key, text));
     function clear(message) {
       proof({ state: message, detail: 'Open the dated build records below to inspect the evidence.', recorded: '', source: 'Unavailable', builder: 'Unavailable', image: 'Unavailable' });
-      financial(Object.fromEntries(['state', 'contract', 'identity', 'backing', 'pricing', 'source', 'source-scope', ...capabilities]
+      financial(Object.fromEntries(['state', 'contract', 'identity', 'activation', 'purchase', 'backing', 'pricing', 'source', 'source-scope', ...capabilities]
         .map(key => [key, key === 'state' ? 'Current application status unknown' : 'Unknown'])));
       financial({ checked: '' });
     }

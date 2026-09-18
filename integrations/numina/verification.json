@@ -36,7 +36,7 @@
     "identity": "NUMINA",
     "canonical": true
   },
-  "packagedAtUtc": "2026-09-18T18:08:05.719Z",
+  "packagedAtUtc": "2026-09-18T18:37:24.295Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",
@@ -185,7 +185,7 @@
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
@@ -195,7 +195,7 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": false,
+    "modeledRoleValuesAdditive": true,
     "externalBalancesAggregated": false
   }
 }

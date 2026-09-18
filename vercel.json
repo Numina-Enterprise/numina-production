@@ -9,6 +9,22 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/treasury/v1/submissions",
+      "destination": "/api/status?mode=treasury-submissions"
+    },
+    {
+      "source": "/api/treasury/v1/bank-route",
+      "destination": "/api/status?mode=bank-route"
+    },
+    {
+      "source": "/api/treasury/v1/model",
+      "destination": "/api/status?mode=treasury-model"
+    },
+    {
+      "source": "/api/nusd/v1/activation",
+      "destination": "/api/status?mode=nusd-activation"
+    },
+    {
       "source": "/api/nusd/v1/contracts",
       "destination": "/api/status?mode=nusd-contracts"
     },

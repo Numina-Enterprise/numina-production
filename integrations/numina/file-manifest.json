@@ -111,7 +111,7 @@
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
@@ -121,7 +121,7 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": false,
+    "modeledRoleValuesAdditive": true,
     "externalBalancesAggregated": false
   },
   "distribution": {
@@ -201,7 +201,7 @@
     {
       "path": "distribution.json",
       "bytes": 9053,
-      "sha256": "7ae4be716dbc0d4953ac83d5da2bb6255cb301b6e147409ad110c2ca5ed83715"
+      "sha256": "dcdcfd9b0f7a6007406e26da19f88e4b096659ff6af700b5b25bc4dabd626654"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -346,7 +346,7 @@
     {
       "path": "scripts/package-distribution.js",
       "bytes": 9117,
-      "sha256": "c93975b77cf1ffbaeea5b271e21968dd341400498e753cff184d8e10906fe8b4"
+      "sha256": "add318632332660a17ab9929f0d9dd20d4e0c89a88ac6ffe6a641009efffd08b"
     },
     {
       "path": "src/client.js",
@@ -395,8 +395,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 17805,
-      "sha256": "06ab0cefa91b14055af3ce03775ff566c8f61fe93a903c0ef964ecf4e9189b56"
+      "bytes": 19275,
+      "sha256": "882cb55e57e01b8cedd7db52f1beda82168d0af18c8285bb316c2ae8f08e67cf"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -406,7 +406,7 @@
     {
       "path": "verification.json",
       "bytes": 6228,
-      "sha256": "cfd5f61cc510cd6761689ec427a501377168bd4dbb71ab9623f18524c46684d5"
+      "sha256": "1ab2296685e0d66513885c8fc4eb074f49616208cba512468a1488ad21617742"
     }
   ]
 }
