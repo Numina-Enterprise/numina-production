@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 
 const RELEASE_IDENTITY=Object.freeze({
+  identity:'NUMINA',
   release:'core-v1.8+prod-v1.9.0-rc26',
   core_version:'1.8.0',
   production_version:'1.9.0-rc26',
