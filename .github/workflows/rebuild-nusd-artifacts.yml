@@ -30,6 +30,12 @@ jobs:
         run: npm run compile
       - name: Refresh exact token pins
         run: node runtime/nusd/development/refresh-token-pins.mjs
+      - name: Install production deployment encoder
+        working-directory: runtime/nusd
+        run: npm ci --ignore-scripts
+      - name: Encode exact 1,500T production deployment
+        working-directory: runtime/nusd
+        run: node scripts/validate-deployment.mjs deployment.production.json --output artifacts/unsigned-production-deployment.json
       - name: Commit canonical artifacts
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         shell: bash
@@ -52,5 +58,6 @@ jobs:
             runtime/nusd/artifacts/NuminaSettlement.json
             runtime/nusd/artifacts/NuminaUSDCConversion.json
             runtime/nusd/artifacts/NuminaUSDRedemption.json
+            runtime/nusd/artifacts/unsigned-production-deployment.json
             runtime/nusd/scripts/token-artifact.mjs
           if-no-files-found: error
