@@ -5,11 +5,11 @@ android {
     compileSdk 36
 
     defaultConfig {
-        // Proposed package identity, not a verified Play Console assignment.
+        // Registered Google Play package identity; provider submission remains separately receipt-bound.
         applicationId 'xyz.numinalabs.app'
         minSdk 23
         targetSdk 36
-        versionCode 3
+        versionCode 4
         versionName '4.0.0'
     }
     compileOptions {
