@@ -8,7 +8,7 @@ const {createRuntimeNumina,compatibilityProjection}=require('../runtime/vercel-p
 test('runtime capabilities execute as NUMINA intents',async()=>{
   const numina=createRuntimeNumina();
   const next=await numina.execute({kind:'observe',body:{provider:'custom',value:'observation'}});
-  assert.equal(next.manifest.authority,'NUMINA');
+  for(const field of ['root','manifest','identity','authority','source','evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'])assert.equal(next.manifest[field],'NUMINA');
   assert.deepEqual(next.manifest.last,{kind:'observe',observed:{provider:'custom',value:'observation'}});
 });
 
