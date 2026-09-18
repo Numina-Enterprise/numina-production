@@ -3,7 +3,7 @@ import {requestJson} from './http-client.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
 function fundableTarget(treasury,id){return treasury?.fundableTargets?.targets?.find(target=>target.id===id)??null;}
-function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?BigInt(target.amount).toLocaleString()+' '+target.unit+' · fundable target':'Unavailable';}
+function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?'NUMINA role target · '+target.unit+' · non-additive':'Unavailable';}
 export function renderNativeAccountReference(treasury){
   const reference=item('div','');reference.className='shared-native-treasury-reference';
   const projection=treasury?.treasury?.projection,valuation=treasury?.nativeValuation;
