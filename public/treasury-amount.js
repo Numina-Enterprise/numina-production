@@ -1,16 +1,25 @@
 // Model denomination amounts are whole-unit strings, not provider or chain base units.
-// Six display places do not rescale the model or change any asset's precision.
+// Whole units display with two decimal places; underlying asset precision is unchanged.
 export function formatTreasuryModelWholeAmount(value,unit){
   if(typeof value!=='string'||!/^(?:0|[1-9][0-9]{0,77})$/.test(value)||!['NUSD','USD','USDC'].includes(unit))throw Error('INVALID_MODEL_WHOLE_AMOUNT');
-  return value.replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+'0'.repeat(6)+' '+unit;
+  return value.replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.00 '+unit;
 }
 
 export function formatTreasuryNusdWholeAmount(value){return formatTreasuryModelWholeAmount(value,'NUSD');}
 
-// UI-only padding. Provider USD is still scaled from cents, USDC from micro-units.
+// UI-only: nearest whole unit, then two decimal places; halves round away from zero.
+// Approximation is explicit. Never feed this display value into a transaction.
+export function formatTreasuryRoundedWholeAmount(value,decimals){
+  if(!isTreasuryMinorInteger(value)||!Number.isInteger(decimals)||decimals<0||decimals>18)throw Error('INVALID_DISPLAY_AMOUNT');
+  const raw=BigInt(value),absolute=raw<0n?-raw:raw,scale=10n**BigInt(decimals);
+  const rounded=(absolute+scale/2n)/scale;
+  return (absolute%scale===0n?'':'≈ ')+(raw<0n&&rounded!==0n?'-':'')+
+    rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.00';
+}
 export function formatTreasuryProviderDisplayAmount(value,currency){
-  const exact=formatTreasuryProviderAmount(value,currency);
-  return currency==='usd'?exact.replace(/\.([0-9]{2})$/,(_match,fraction)=>'.'+fraction+'0000'):exact;
+  if(!['usd','usdc'].includes(currency))throw Error('INVALID_PROVIDER_AMOUNT');
+  const display=formatTreasuryRoundedWholeAmount(value,currency==='usd'?2:6);
+  return currency==='usd'?display.replace(/^((?:≈ )?)(-?)/,'$1$2$'):display+' USDC';
 }
 
 // Provider minor units retain their currency and exact integer representation.

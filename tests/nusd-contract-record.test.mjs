@@ -9,6 +9,36 @@ import {contractSourcePresentation,assessFinancialStatus} from '../public/runtim
 import {NuminaClient} from '../integrations/numina/src/client.js';
 const read=path=>fs.readFileSync(new URL('../'+path,import.meta.url));
 
+test('published contract stays bound to the finalized deployed source, artifact and receipts',()=>{
+  const receipt=JSON.parse(read('runtime/nusd/deployment-receipt.json'));
+  const {record:bound}=createNusdContractRecord();
+  assert.equal(bound.contracts[0].deployment.contract_address,receipt.token.address);
+  assert.equal(bound.contracts[0].artifact.sha256,receipt.artifactSha256);
+  assert.equal(bound.contracts[0].source.sha256,receipt.sourceSha256);
+  assert.equal(bound.issuance.decimals,18);
+  for(const mutate of [
+    value=>value.sourceSha256='0'.repeat(64),
+    value=>value.artifactSha256='0'.repeat(64),
+    value=>value.settlementSourceSha256='0'.repeat(64),
+    value=>value.chainId='1',
+    value=>value.genesisHash='0x'+'0'.repeat(64),
+    value=>value.issuance.decimals=6,
+    value=>value.finality.status='PENDING',
+    value=>value.finality.requiredConfirmations=1,
+    value=>value.finality.observedAt='2026-09-18T00:00:00Z',
+    value=>value.token.address='0x'+'1'.repeat(40),
+    value=>value.token.receipt.status='0x0',
+    value=>value.token.receipt.transactionHash='0x'+'1'.repeat(64),
+    value=>value.token.receipt.contractAddress='0x'+'1'.repeat(40),
+    value=>value.token.finalConfirmations=1,
+    value=>value.settlement.nusd='0x'+'1'.repeat(40)
+  ]){
+    const changed=structuredClone(receipt);mutate(changed);
+    const readChanged=file=>String(file).replaceAll('\\','/').endsWith('/runtime/nusd/deployment-receipt.json')?Buffer.from(JSON.stringify(changed)):fs.readFileSync(file);
+    assert.throws(()=>createNusdContractRecord(readChanged),/Finalized NUSD deployment binding mismatch/);
+  }
+});
+
 test('conversion workflow binds both compiled contracts and preserves disabled live money movement',async()=>{
  const route='https://numina.test/api/nusd/v1/conversion-workflow';
  const response=await nusdHttp(new Request(route));assert.equal(response.status,200);

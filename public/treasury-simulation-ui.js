@@ -1,4 +1,5 @@
-import {createTreasurySimulation,transferTreasurySimulation,formatTreasurySimulationAmount} from './treasury-simulation-model.js';
+import {createTreasurySimulation,transferTreasurySimulation} from './treasury-simulation-model.js';
+import {formatTreasuryRoundedWholeAmount} from './treasury-amount.js';
 
 const labels={native:'Numina · simulated NUSD',stripe:'Stripe · simulated USDC',bank:'Bank · simulated USD'};
 let state=createTreasurySimulation();
@@ -6,9 +7,7 @@ const form=document.querySelector('#simulation-transfer');
 const notice=document.querySelector('#simulation-notice');
 function explain(error){return ({SIMULATION_INVALID_AMOUNT:'Enter a positive decimal amount without commas, with at most six decimal places.',SIMULATION_AMOUNT_MUST_BE_POSITIVE:'Enter an amount greater than zero.',SIMULATION_BANK_PRECISION:'Bank allocations must use whole cents, with at most two decimal places.',SIMULATION_INVALID_BUCKET:'Choose different source and destination accounts.',SIMULATION_INSUFFICIENT_BALANCE:'The source does not have enough simulated value for this transfer.'})[error.code]||'The simulation could not validate this transfer. Reset the session and try again.';}
 function displayAmount(amount){
-  const [whole,fraction]=formatTreasurySimulationAmount(amount).split('.');
-  const digits=fraction?.replace(/0+$/,'');
-  return whole.replace(/\B(?=(\d{3})+(?!\d))/g,',')+(digits?'.'+digits:'');
+  return formatTreasuryRoundedWholeAmount(amount,6);
 }
 function render(){
   for(const [name,amount] of Object.entries(state.balances)){
@@ -51,7 +50,7 @@ document.querySelector('#simulation-export').addEventListener('click',()=>{
   const link=document.createElement('a');link.href=url;link.download='numina-500t-simulation.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 render();document.querySelector('#simulation-fields').disabled=false;
-notice.textContent='Simulation ready. One 500T allocation starts in the native view.';
+notice.textContent='Simulation ready. One 500T allocation starts in the native view. Amounts round to whole units and display two decimal places; ≈ marks rounding. Exports retain exact values.';
 try{
   const response=await fetch('/api/nusd/v1/simulation',{cache:'no-store'});
   if(!response.ok)throw Error('Descriptor unavailable');
