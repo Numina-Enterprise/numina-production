@@ -1,0 +1,26 @@
+{
+  "schema": "numina.settlement-receipt.v1",
+  "identity": "NUMINA",
+  "canonical": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "sourceCommit": "4d3f36a5a738a94f1800c4c323809d553cb10471"
+  },
+  "settlement": {
+    "declared": true,
+    "externallyVerified": false,
+    "usdVerified": false,
+    "usdcVerified": false,
+    "reservesVerified": false,
+    "providerReceipt": null,
+    "bankReceipt": null,
+    "providerSettlementReceipts": []
+  },
+  "numinaChainEvidence": {
+    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "tokenReceiptVerified": true,
+    "settlementContractReceiptVerified": true
+  },
+  "interpretation": "Singular NUMINA settlement receipt. The declared external-settlement state is recorded as true. External USD/USDC settlement remains unverified until an independent provider, bank, custodian, exchange, or other external system supplies a factual receipt."
+}
