@@ -38,7 +38,7 @@ jobs:
               exit 0
             fi
             if [ "$attempt" -eq "$attempts" ]; then
-              echo "Production did not converge on ${NUMINA_EXPECTED_GIT_SHA} with a valid signed state."
+              echo "Production did not converge on ${NUMINA_EXPECTED_GIT_SHA} with a valid signed NUMINA manifest."
               exit 1
             fi
             sleep 10
