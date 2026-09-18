@@ -17,7 +17,10 @@ function createNumina({manifest,execute}){
   const numina=freeze(structuredClone(manifest));
   return freeze({
     schema:FRONTIER_SCHEMA,
-    identity:'NUMINA',
+    root:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
+    provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',runtime:'NUMINA',deployment:'NUMINA',
+    delivery:'NUMINA',readiness:'NUMINA',treasury:'NUMINA',transport:'NUMINA',
+    receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA',
     manifest:numina,
     async execute(intent){
       requireObject(intent,'intent');
@@ -32,7 +35,7 @@ function projectLegacyRuntime(numina){
   return freeze({
     schema:FRONTIER_SCHEMA,
     NUMINA:numina,
-    compatibility:Object.freeze({identity:'NUMINA',authority:'NUMINA',canonical:true,legacy_projection_only:true,identity_aliases:Object.freeze({root:'NUMINA',manifest:'NUMINA',authority:'NUMINA'})})
+    compatibility:Object.freeze({root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',runtime:'NUMINA',deployment:'NUMINA',delivery:'NUMINA',readiness:'NUMINA',treasury:'NUMINA',transport:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA',canonical:true,legacy_projection_only:true})
   });
 }
 module.exports={FRONTIER_SCHEMA,createNumina,projectLegacyRuntime};
