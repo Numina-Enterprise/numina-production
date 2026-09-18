@@ -28,7 +28,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
   }
   async function readTreasury(){
     const row=await context();
-    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
+    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,principal,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
     if(!row.manifest.nativeTreasury)return {...base,status:'NOT_INITIALIZED',projection:null,canonical_proof:null};
     const projection=structuredClone(validateTreasuryProjection(row.manifest.nativeTreasury));
     const proof=await proofFor(projection.last_event_id);
