@@ -10,6 +10,12 @@ Treasury Alignment v2 is the active read/view contract. It does not rewrite the 
 
 All treasury roles have `treasuryIdentity: "NUMINA"` and `transportVerificationChannel: "NUMINA"`. Stripe and Bank of America entries are role-specific evidence views over the one canonical NUMINA treasury; provider observations remain factual substrate evidence in their original currencies and are never added as separate treasury balances. The canonical balance count remains exactly one.
 
+## Initiated 500T role alignment
+
+Treasury Alignment v2 designates **500,000,000,000,000** as the target amount for each current treasury role: NUMINA native treasury (NUSD), Stripe treasury evidence role (USDC), and Bank of America treasury evidence role (USD). The plan status is `INITIATED`.
+
+These are **non-additive role targets** over the singular NUMINA treasury model. The native NUSD role may report aligned when the canonical projection equals 500T. Stripe and Bank of America remain `AWAITING_PROVIDER_EVIDENCE` until factual provider observations establish their external state. The software does not infer, mint, transfer, or report external balances merely from the target designation.
+
 ## Interfaces and canonical route
 
 Bind `createNuminaTreasury({db, principal, root})`, then call `readTreasury()` or `writeTreasury(event)`. The same bound service exposes `execute(Principal, Authority, Objective, Intent)`. Its Intent contains `id`, `expectedRevision`, `expectedHead`, and `operation`, where `operation` is the operation object below. Execution uses the identical write path.
