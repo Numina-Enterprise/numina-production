@@ -54,10 +54,11 @@ function selectedEvidence(manifest,request,key,now,visiting=new Set(),memo=new M
   }));
   const result=valid.length?{nodes:valid}:{reason:'STALE_EVIDENCE'};memo.set(key,result);return result;
 }
+function executionStatus(request){return request.execution?.status??request.execution?.state;}
 export function reconcileControl(manifest,now) {
-  // One event-driven loop; all decision projections are derived from current state.
+  // One event-driven loop; all decision projections are derived from the NUMINA manifest.
   return manifest.requests.map(request=>{
-    if(request.execution.state==='committed')return {requestId:request.id,outcome:'ALLOW',reason:'INTERNAL_RECORD_COMMITTED',action:null};
+    if(executionStatus(request)==='committed')return {requestId:request.id,outcome:'ALLOW',reason:'INTERNAL_RECORD_COMMITTED',action:null};
     if(!authorizeControl(manifest,request.who,'record.write',request.wants.resource,now,request.authority))return {requestId:request.id,outcome:'DENY',reason:'AUTHORITY_UNAVAILABLE',action:null};
     if(request.route!==CONTROL_ADAPTER.id)return {requestId:request.id,outcome:'ESCALATE',reason:'UNSUPPORTED_ADAPTER',action:null};
     for(const key of request.policy.requiredEvidence){const result=selectedEvidence(manifest,request,key,now);if(result.reason)return {requestId:request.id,outcome:'ESCALATE',reason:result.reason,action:null};}
@@ -83,16 +84,16 @@ export async function reduceControl(current,command,actor,revision,now) {
     demand(textField(data.id,100)&&!manifest.requests.some(r=>r.id===data.id),'REQUEST_ID_CONFLICT');demand(textField(data.route,100),'INVALID_ROUTE');
     demand(Array.isArray(data.requiredEvidence)&&data.requiredEvidence.length<=10&&data.requiredEvidence.every(k=>textField(k,80))&&new Set(data.requiredEvidence).size===data.requiredEvidence.length,'INVALID_EVIDENCE_REQUIREMENTS');
     authorized(manifest,actor,'request.create',wants.resource,now,data.grantId);const grant=authorized(manifest,actor,'record.write',wants.resource,now,data.grantId);
-    manifest.requests.push({id:data.id,who:actor,wants,authority:grant.id,policy:{requiredEvidence:data.requiredEvidence},route:data.route,evidence:[],execution:{state:'pending'},settlement:{state:'not_applicable'},verifiedOutcome:null,createdAt:now});result={requestId:data.id};
+    manifest.requests.push({id:data.id,who:actor,wants,authority:grant.id,policy:{requiredEvidence:data.requiredEvidence},route:data.route,evidence:[],execution:{status:'pending'},settlement:{status:'not_applicable'},verifiedOutcome:null,createdAt:now});result={requestId:data.id};
   }else if(command.type==='attest'){
-    controlExact(data,['requestId','key','value','expiresAt','parents']);const request=manifest.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);demand(request.execution.state==='pending','REQUEST_FINAL',409);
+    controlExact(data,['requestId','key','value','expiresAt','parents']);const request=manifest.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);demand(executionStatus(request)==='pending','REQUEST_FINAL',409);
     const grant=authorized(manifest,actor,'evidence.attest',request.wants.resource,now);demand(request.policy.requiredEvidence.includes(data.key)&&textField(data.value,2000),'INVALID_ATTESTATION');
     demand(Number.isSafeInteger(data.expiresAt)&&data.expiresAt>now&&data.expiresAt<=Math.min(now+86400,grant.expiresAt),'INVALID_EVIDENCE_EXPIRY');
     demand(Array.isArray(data.parents)&&data.parents.length<=10&&new Set(data.parents).size===data.parents.length&&data.parents.every(id=>manifest.evidence.some(e=>e.id===id&&e.requestId===request.id&&e.kind==='attestation'&&e.key!==data.key)),'INVALID_EVIDENCE_PARENTS');
     const node={id:command.id,sequence:revision+1,kind:'attestation',actor,grantId:grant.id,requestId:request.id,key:data.key,value:data.value,expiresAt:data.expiresAt,parents:data.parents,at:now,provenance:{source:'authenticated-operator',externalVerification:false}};
     node.hash=await controlHash(node);manifest.evidence.push(node);request.evidence.push(node.id);parentIds=[node.id];result={evidenceId:node.id};
   }else if(command.type==='resolve'){
-    controlExact(data,['requestId','key','selectedId','reason']);const request=manifest.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);demand(request.execution.state==='pending','REQUEST_FINAL',409);
+    controlExact(data,['requestId','key','selectedId','reason']);const request=manifest.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);demand(executionStatus(request)==='pending','REQUEST_FINAL',409);
     const grant=authorized(manifest,actor,'evidence.resolve',request.wants.resource,now);demand(textField(data.reason,1000),'RESOLUTION_REASON_REQUIRED');
     const nodes=manifest.evidence.filter(e=>e.kind==='attestation'&&e.requestId===request.id&&e.key===data.key);demand(nodes.some(e=>e.id===data.selectedId),'EVIDENCE_NOT_FOUND');
     const node={id:command.id,sequence:revision+1,kind:'resolution',actor,grantId:grant.id,requestId:request.id,key:data.key,selectedId:data.selectedId,reason:data.reason,parents:nodes.map(e=>e.id),at:now};node.hash=await controlHash(node);manifest.evidence.push(node);request.evidence.push(node.id);parentIds=[node.id];result={evidenceId:node.id};
@@ -109,11 +110,11 @@ export async function reduceControl(current,command,actor,revision,now) {
     const parent=manifest.grants.find(g=>g.id===grant.parent);demand(actor===manifest.root||(parent?.subject===actor&&grantValid(manifest,parent,now)),'AUTHORITY_DENIED',403);grant.revoked=true;result={grantId:grant.id};
   }else if(command.type==='execute'){
     controlExact(data,['requestId','actionId']);const request=manifest.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);authorized(manifest,actor,'record.write',request.wants.resource,now);
-    const projected=(await verifiedActions(state,revision,now,actor)).find(d=>d.requestId===request.id);demand(projected.nextAction&&projected.nextAction.actionId===data.actionId,'NEXT_ACTION_NOT_VERIFIED',409);
+    const projected=(await verifiedActions(manifest,revision,now,actor)).find(d=>d.requestId===request.id);demand(projected.nextAction&&projected.nextAction.actionId===data.actionId,'NEXT_ACTION_NOT_VERIFIED',409);
     const normalized=normalizeRecord(request.wants);demand(!manifest.records.some(r=>r.requestId===request.id),'ALREADY_COMMITTED',409);
     const node={id:command.id,sequence:revision+1,kind:'execution',requestId:request.id,actor,at:now,adapter:CONTROL_ADAPTER.id,adapterVersion:1,parents:[...request.evidence],inputHash:await controlHash(normalized),outcome:'INTERNAL_RECORD_COMMITTED'};
     node.hash=await controlHash(node);manifest.evidence.push(node);request.evidence.push(node.id);manifest.records.push({...normalized,requestId:request.id,evidenceId:node.id,at:now});
-    request.execution={state:'committed',recordId:request.id};request.verifiedOutcome={scope:'internal.record.v1',evidenceId:node.id,externalExecution:false};parentIds=[node.id];result={requestId:request.id,recordId:request.id,evidenceId:node.id};
+    request.execution={status:'committed',recordId:request.id};request.verifiedOutcome={scope:'internal.record.v1',evidenceId:node.id,externalExecution:false};parentIds=[node.id];result={requestId:request.id,recordId:request.id,evidenceId:node.id};
   }else if(command.type==='treasury'){
     demand(actor===manifest.root&&grantValid(manifest,manifest.grants.find(grant=>grant.id==='root'),now),'TREASURY_AUTHORITY_DENIED',403);
     const treasury=reduceTreasuryProjection(manifest.nativeTreasury,data,actor,command.id);
