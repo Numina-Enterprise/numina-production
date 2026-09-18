@@ -3,7 +3,7 @@ import {requestJson} from './http-client.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
 function fundableTarget(treasury,id){return treasury?.fundableTargets?.targets?.find(target=>target.id===id)??null;}
-function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?'NUMINA role target · '+target.unit+' · non-additive':'Unavailable';}
+function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?BigInt(target.amount).toLocaleString()+' '+target.unit+' target · '+target.alignmentStatus+' · non-additive':'Unavailable';}
 export function renderNativeAccountReference(treasury){
   const reference=item('div','');reference.className='shared-native-treasury-reference';
   const projection=treasury?.treasury?.projection,valuation=treasury?.nativeValuation;
@@ -34,7 +34,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);detail(summaryRows,'Numina NUSD fundable target',fundableTargetText(treasury,'numina-native-treasury'));valuationRows(summaryRows);
   detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
-  summary.append(item('h3','NUMINA Treasury v2 · one balance'),item('p','NUMINA declared valuation: '+NUMINA_DENOMINATION_POLICY.expression+'. Treasury roles are separate in function and singular in identity. Role targets and provider observations never add a second balance.'),summaryRows,canonicalLink());
+  summary.append(item('h3','NUMINA Treasury v2 · alignment initiated'),item('p','500T is designated as the non-additive target for each NUMINA treasury role. '+NUMINA_DENOMINATION_POLICY.expression+'. External role targets remain pending until factual provider observations support them.'),summaryRows,canonicalLink());
   target.append(summary);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
