@@ -21,14 +21,10 @@ export function createEstimateHandler({observe = observeDeploymentEstimate} = {}
     if (request.method !== 'GET') return reject(405, 'METHOD_NOT_ALLOWED');
     try {
       const url = new URL(request.url, 'https://numina.invalid');
-      const length = request.headers?.['content-length'];
-      const bodyPresent=request.body!==undefined&&request.body!==null&&request.body!==''&&
-        !(typeof request.body==='object'&&!Array.isArray(request.body)&&Object.keys(request.body).length===0);
-      // Provider/CDN transports may add framing headers to a bodyless GET. Reject
-      // only caller-controlled input: query/hash data, a positive content length,
-      // or an actual parsed body.
-      if (url.search || url.hash || (length !== undefined && length !== '0') || bodyPresent)
-        return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
+      // The estimate is read-only and consumes no request body. Some provider/CDN
+      // transports populate request.body or framing headers on otherwise bodyless
+      // GETs, so reject only explicit caller query/hash input here.
+      if (url.search || url.hash) return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
     } catch { return reject(400, 'REQUEST_INPUT_NOT_ALLOWED'); }
     try {
       // Coalesce simultaneous public reads; never retain a completed estimate.
