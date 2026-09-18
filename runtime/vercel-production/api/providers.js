@@ -9,7 +9,7 @@ const PARTNERSHIP_STATUS=authority.OWNER_AUTHORIZATION.partnership_status;
 
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
 function catalog(){
-  const executionState=authority.executionState();
+  const executionManifest=authority.executionManifest();
   const payload={
     schema:'numina.execution-provider-catalog.v1',
     release:RELEASE_IDENTITY.production_version,
@@ -17,7 +17,7 @@ function catalog(){
     providers:Object.keys(PROVIDERS).sort().map(key=>({
       ...PROVIDERS[key],
       live_adapter_shipped:key==='arc',
-      execution_state:executionState,
+      execution_manifest:executionManifest,
       live_submission:key==='arc'?{available:true,route:'/v1/execution/submit',method:'POST',network:'Arc Testnet',chain_id:5042002,payload:'pre-signed-raw-transaction',owner_authorization:'EIP-191 wallet signature bound to handoff, transaction hash, idempotency key, and expiry',arbitrary_provider_url_allowed:false,embedded_private_key_allowed:false}:{available:false},
       read_only_observation:SUPPORTED_READ_ONLY_PROVIDERS.includes(key)?{available:true,mode:'public-read-only-health',route:`/v1/execution/providers?mode=health&provider=${key}`,credentialed:false,external_execution_performed:false}:{available:false}
     })),
