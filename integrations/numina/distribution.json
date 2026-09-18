@@ -7,7 +7,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "5189b4675ddeeea7fa4179cfc2872a6cfef755175e65851b3ff3a59bf0774d8e"
+      "sha256": "29a5b0b8bb2827bb15c11fe1bbb7744022609ea7478e3cb1ddaf60bb0484513a"
     },
     "checks": [
       "canonical_journal_record",
