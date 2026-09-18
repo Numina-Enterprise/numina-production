@@ -46,7 +46,7 @@ class Element{
   set textContent(text){this._text=String(text);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
 }
-test('hosted app and mobile treasury panel show declared equivalents only after journal proof passes',async()=>{
+test('hosted app and mobile treasury panel align the aggregate, allocations and journal only after proof passes',async()=>{
   const db=database(),owner='email:mobile@example.test',saved={document:globalThis.document,fetch:globalThis.fetch},elements=new Map();
   const get=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
   try{
@@ -55,7 +55,27 @@ test('hosted app and mobile treasury panel show declared equivalents only after 
     const record=await treasury.readTreasury();let response=record;
     globalThis.document={getElementById:get,createElement:()=>new Element(),dispatchEvent(){}};
     globalThis.fetch=async()=>Response.json(response);
-    await loadNativeTreasury();assert.match(get('native-treasury-details').textContent,/1 NUSD = 1 USDC = 1 USD/);assert.match(get('native-treasury-details').textContent,/Declared USDC value500,000,000,000,000\.00 USDC/);
+    await loadNativeTreasury();
+    const details=get('native-treasury-details').textContent;
+    assert.match(details,/1 NUSD = 1 USDC = 1 USD/);
+    assert.match(details,/Aggregate allocation model1,500,000,000,000,000\.00 NUSD modeled equivalent/);
+    assert.match(details,/Model allocation · Bank of America Savings · ACH500,000,000,000,000\.00 USD/);
+    assert.match(details,/Model allocation · Stripe Treasury · USDC address500,000,000,000,000\.00 USDC/);
+    assert.match(details,/Model allocation · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
+    assert.match(details,/Native journal balance500,000,000,000,000\.00 NUSD/);
+    assert.match(details,/Journal\/model comparisonMatches the native model allocation/);
+    assert.match(details,/Recorded minted NUSD supply1,500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-message').textContent,/not additional balances to add/);
+    assert.deepEqual(await treasury.readTreasury(),record);
+    const latest=await readControl(db);
+    await treasury.writeTreasury({id:'mobile-aggregate',expectedRevision:latest.revision,expectedHead:latest.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.project',Intent:{operation:'ADJUST_PROJECTION',delta:'1000000000000000',reason:'Isolated aggregate journal fixture'}});
+    response=await treasury.readTreasury();
+    const aggregateRecord=structuredClone(response);
+    await loadNativeTreasury();
+    assert.match(get('native-treasury-details').textContent,/Native journal balance1,500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-details').textContent,/Journal\/model comparisonMatches the model aggregate/);
+    assert.match(get('native-treasury-details').textContent,/Model allocation · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
+    assert.deepEqual(await treasury.readTreasury(),aggregateRecord);
     response=structuredClone(record);response.projection.balance='1';await loadNativeTreasury();assert.equal(get('native-treasury-details').textContent,'');
     globalThis.fetch=async()=>Response.json({error:'UNAUTHENTICATED'},{status:401});await loadNativeTreasury();assert.equal(get('native-treasury-panel').hidden,true);assert.equal(get('native-treasury-details').textContent,'');
   }finally{clearNativeTreasury();globalThis.document=saved.document;globalThis.fetch=saved.fetch;db.close();}
