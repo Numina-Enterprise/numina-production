@@ -10,15 +10,15 @@
   "rewrites": [
     {
       "source": "/api/nusd/v1/status",
-      "destination": "/api/nusd-status"
+      "destination": "/api/status?mode=nusd-status"
     },
     {
       "source": "/downloads/nusd/deployment-receipt.json",
-      "destination": "/api/nusd-deployment-receipt"
+      "destination": "/api/status?mode=nusd-deployment-receipt"
     },
     {
       "source": "/downloads/nusd/deployment-verification.json",
-      "destination": "/api/nusd-deployment-verification"
+      "destination": "/api/status?mode=nusd-deployment-verification"
     },
     {
       "source": "/api/nusd/v1/:path*",
