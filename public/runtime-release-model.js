@@ -66,7 +66,7 @@ function equalJson(left, right) {
 }
 
 export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME_PUBLIC_KEY} = {}) {
-  const value = name => records[name]?.state === 'ok' ? records[name].data : null;
+  const value = name => records[name]?.phase === 'ok' ? records[name].data : null;
   const manifest = value('manifest');
   const attestation = await verifyRuntimeReceipt(value('attestation'), pinnedKey);
   const control = value('control');

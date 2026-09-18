@@ -58,7 +58,7 @@ export function createRuntimeReleaseUI({
   const set = (selector, value) => all(selector).forEach(element => { element.textContent = String(value); });
   const downloads = () => all('[data-download]');
   const refreshButtons = () => all('[data-refresh-release]');
-  let generation = 0, renderRevision = 0, controller = null, records = {}, snapshot = null, destroyed = false;
+  let generation = 0, renderRevision = 0, controller = null, records = {}, downloadBundle = null, destroyed = false;
   const listeners = [];
 
   function listen(target, type, handler) {
@@ -67,7 +67,7 @@ export function createRuntimeReleaseUI({
   }
 
   function resetDisplay(label, message) {
-    snapshot = null;
+    downloadBundle = null;
     for (const selector of fieldSelectors) set(selector, label);
     for (const selector of Object.values(jsonSelectors)) set(selector, 'No current response available.');
     set('[data-live-status]', label);
@@ -95,14 +95,14 @@ export function createRuntimeReleaseUI({
     const current = {...records};
     const assessed = await assessRuntimeEvidence(current, {pinnedKey});
     if (destroyed || currentGeneration !== generation || revision !== renderRevision) return;
-    const ok = name => current[name]?.state === 'ok';
-    const pending = Object.values(current).some(record => record.state === 'pending');
-    const failed = Object.values(current).some(record => record.state === 'error');
+    const ok = name => current[name]?.phase === 'ok';
+    const pending = Object.values(current).some(record => record.phase === 'pending');
+    const failed = Object.values(current).some(record => record.phase === 'error');
     const manifest = assessed.manifest;
     const hasManifest = ok('manifest');
     for (const [name, selector] of Object.entries(jsonSelectors)) {
       set(selector, ok(name) ? JSON.stringify(current[name].data, null, 2) :
-        current[name]?.state === 'pending' ? 'Waiting for a current response.' :
+        current[name]?.phase === 'pending' ? 'Waiting for a current response.' :
         current[name]?.error || 'No current response available.');
     }
     set('[data-release-version]', hasManifest ? 'v' + text(manifest.production_version) : pending ? 'Checking…' : 'Unavailable');
@@ -118,12 +118,12 @@ export function createRuntimeReleaseUI({
     set('[data-provenance-hash]', ok('supply') ? text(current.supply.data.slsa_provenance_sha256) : 'Unavailable');
     set('[data-supply-status]', ok('supply') ? assessed.supplyIdentityMatches ?
       assessed.releaseDeclarationVerified ? 'Artifact hashes match the signed manifest' : 'Artifact hashes match the pins; release signature unavailable' : 'Reported artifact identity does not match rc26' :
-      current.supply?.state === 'pending' ? 'Checking…' : 'Unavailable');
+      current.supply?.phase === 'pending' ? 'Checking…' : 'Unavailable');
     set('[data-readiness]', status ? assessed.runtimeStatusMatches ?
       'Runtime responding · rc26 identity matches' : 'Runtime response identity does not match rc26' :
-      current.status?.state === 'pending' ? 'Checking…' : 'Unavailable');
+      current.status?.phase === 'pending' ? 'Checking…' : 'Unavailable');
     set('[data-signature-status]', assessed.releaseDeclarationVerified ? 'Signed runtime declaration verified' :
-      current.attestation?.state === 'pending' ? 'Checking…' : 'Not verified');
+      current.attestation?.phase === 'pending' ? 'Checking…' : 'Not verified');
     set('[data-key-id]', assessed.key ? assessed.key.key_id : 'Not verified');
 
     let label = 'Unavailable', message = 'No current release manifest is available.';
@@ -154,13 +154,13 @@ export function createRuntimeReleaseUI({
     set('[data-runtime-release-detail]', message + (assessed.controlManifestBound ? ' The legacy control route receipt matches the NUMINA manifest.' : ' NUMINA control-manifest binding is not verified.'));
     set('[data-checked-at]', 'Response check ' + now().toLocaleString());
     // Raw observed artifacts remain downloadable; a key is offered only after verification against the configured pin.
-    snapshot = {
+    downloadBundle = {
       manifest: hasManifest ? manifest : null,
       attestation: ok('attestation') ? current.attestation.data : null,
       key: assessed.key,
       version: hasManifest && assessed.manifestMatches ? manifest.production_version : 'observed-runtime'
     };
-    downloads().forEach(button => { button.disabled = !snapshot[button.dataset.download]; });
+    downloads().forEach(button => { button.disabled = !downloadBundle[button.dataset.download]; });
   }
 
   async function refresh() {
@@ -170,13 +170,13 @@ export function createRuntimeReleaseUI({
     renderRevision++;
     controller = new AbortController();
     const activeController = controller;
-    records = Object.fromEntries(Object.keys(RUNTIME_ENDPOINTS).map(name => [name, {state: 'pending'}]));
+    records = Object.fromEntries(Object.keys(RUNTIME_ENDPOINTS).map(name => [name, {phase: 'pending'}]));
     resetDisplay('Checking…', 'Loading current release and runtime responses independently.');
     refreshButtons().forEach(button => { button.disabled = true; });
     await Promise.all(Object.entries(RUNTIME_ENDPOINTS).map(async ([name, path]) => {
       let record;
-      try { record = {state: 'ok', data: await readJson(fetcher, path, activeController.signal, timeoutMs)}; }
-      catch (error) { record = {state: 'error', error: error.message}; }
+      try { record = {phase: 'ok', data: await readJson(fetcher, path, activeController.signal, timeoutMs)}; }
+      catch (error) { record = {phase: 'error', error: error.message}; }
       if (destroyed || currentGeneration !== generation) return;
       records[name] = record;
       await render(currentGeneration);
@@ -189,12 +189,12 @@ export function createRuntimeReleaseUI({
 
   function download(event) {
     const kind = event.currentTarget.dataset.download;
-    if (!['manifest', 'attestation', 'key'].includes(kind) || !snapshot?.[kind]) return;
-    const blob = new Blob([JSON.stringify(snapshot[kind], null, 2) + '\n'], {type: 'application/json'});
+    if (!['manifest', 'attestation', 'key'].includes(kind) || !downloadBundle?.[kind]) return;
+    const blob = new Blob([JSON.stringify(downloadBundle[kind], null, 2) + '\n'], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'numina-' + snapshot.version.replace(/[^a-zA-Z0-9.-]/g, '-') + '-' + kind + '.json';
+    link.download = 'numina-' + downloadBundle.version.replace(/[^a-zA-Z0-9.-]/g, '-') + '-' + kind + '.json';
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     set('[data-download-message]', 'Prepared the current ' + kind + ' response. Downloading it does not establish independent verification.');
