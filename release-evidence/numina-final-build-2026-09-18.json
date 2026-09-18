@@ -103,15 +103,23 @@
     },
     "website": {
       "sourceAligned": true,
-      "productionTransportUpdated": false,
-      "currentPublicDeploymentKnownStale": true,
-      "blocker": "VERCEL_DEPLOYMENT_DAILY_QUOTA",
-      "verifiedAt": "2026-09-18",
+      "productionTransportUpdated": true,
+      "currentPublicDeploymentKnownStale": false,
+      "blocker": null,
+      "verifiedAt": "2026-09-18T18:07:00Z",
       "observedDeployment": {
-        "id": "dpl_2SbEf3mp95BiGA65mMVb9ARiQd2Y",
-        "commit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
-        "url": "https://vercel.com/skott34-dot/numina-production/2SbEf3mp95BiGA65mMVb9ARiQd2Y",
-        "status": "READY"
+        "id": "dpl_FLgkD318R3Cn9tkv15BZioQb2GKc",
+        "commit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "url": "https://vercel.com/skott34-dot/numina-production/FLgkD318R3Cn9tkv15BZioQb2GKc",
+        "deploymentUrl": "https://numina-production-70q5ig443-skott34-dot.vercel.app",
+        "status": "READY",
+        "target": "production",
+        "readyAt": "2026-09-18T18:03:33.952Z",
+        "aliases": [
+          "www.numinalabs.xyz",
+          "numinalabs.xyz",
+          "numina-production.vercel.app"
+        ]
       },
       "domains": {
         "apex": "https://numinalabs.xyz",
@@ -119,38 +127,45 @@
         "apexRedirectStatus": 308,
         "ssl": "valid"
       },
-      "verificationScope": "Last READY deployment and rejected redeploy are observed provider facts. Current source/browser alignment is locally validated only; no successful deployment of these changes is claimed.",
+      "verificationScope": "Public website and dynamic NUSD receipt display verified. Authenticated treasury balances and the separate application backend deployment were not verified by this observation.",
       "priorObservedDeployment": {
-        "id": "dpl_GJmeqbgaUdHksnySf5q8mXL7vg72",
-        "commit": "9e659cc9bd261a72a34e66a20f9c9d0096f1f793",
-        "url": "https://vercel.com/skott34-dot/numina-production/GJmeqbgaUdHksnySf5q8mXL7vg72",
+        "id": "dpl_2SbEf3mp95BiGA65mMVb9ARiQd2Y",
+        "commit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
+        "url": "https://vercel.com/skott34-dot/numina-production/2SbEf3mp95BiGA65mMVb9ARiQd2Y",
         "status": "READY"
       },
-      "status": "SOURCE_VALIDATED_DEPLOYMENT_PENDING",
+      "status": "PRODUCTION_PUBLIC_WEBSITE_VERIFIED",
       "latestRedeployAttempt": {
         "observedDate": "2026-09-18",
         "result": "rejected",
         "code": "api-deployments-free-per-day",
         "message": "Resource is limited - try again in 24 hours (more than 100)",
-        "deploymentCreated": false
-      }
+        "deploymentCreated": false,
+        "historical": true,
+        "scope": "Earlier manual attempt; superseded by the successful Git-triggered deployment recorded above."
+      },
+      "observationRecord": "/downloads/delivery-observation-2026-09-18.json"
     },
     "android": {
       "sourceAligned": true,
       "versionCode": 4,
       "signedArtifactCreated": false,
       "googlePlaySubmitted": false,
-      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
+      "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
       "submissionReceipt": null,
       "lastRunnerObservation": {
-        "runId": 35372559383,
+        "runId": 35377920361,
         "attempt": 2,
-        "jobId": 105705202661,
+        "jobId": 105707486805,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920361",
+        "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "conclusion": "failure",
         "runnerId": 0,
         "stepsExecuted": 0,
-        "conclusion": "failure",
-        "sourceCommit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
-        "observedDate": "2026-09-18"
+        "artifacts": [],
+        "completedAt": "2026-09-18T18:05:25Z",
+        "observedAt": "2026-09-18T18:07:00Z",
+        "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased."
       }
     },
     "ios": {
@@ -158,17 +173,21 @@
       "buildNumber": 6,
       "signedArtifactCreated": false,
       "appStoreSubmitted": false,
-      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
+      "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
       "submissionReceipt": null,
       "lastRunnerObservation": {
-        "runId": 35372559433,
+        "runId": 35377920370,
         "attempt": 2,
-        "jobId": 105705213047,
+        "jobId": 105707497373,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920370",
+        "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "conclusion": "failure",
         "runnerId": 0,
         "stepsExecuted": 0,
-        "conclusion": "failure",
-        "sourceCommit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
-        "observedDate": "2026-09-18"
+        "artifacts": [],
+        "completedAt": "2026-09-18T18:05:11Z",
+        "observedAt": "2026-09-18T18:07:00Z",
+        "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased."
       }
     },
     "applicationBackend": {
@@ -181,7 +200,7 @@
       "scope": "Existing application journal retained. Backend source deployment is separate from the Vercel website release."
     },
     "browserAlignment": {
-      "status": "LOCAL_BROWSER_VERIFIED",
+      "status": "PUBLIC_WEBSITE_BROWSER_VERIFIED",
       "modelBalance": "500000000000000",
       "modelUnits": [
         "USD",
@@ -200,7 +219,10 @@
         "fullSuiteFailed": 23,
         "fullSuiteScope": "Remaining failures also present in baseline or unavailable contract test dependencies; not a full-suite pass"
       },
-      "productionVerified": false
+      "productionVerified": true,
+      "verificationScope": "Public website and dynamic NUSD receipt display verified. Authenticated treasury balances and the separate application backend deployment were not verified by this observation.",
+      "authenticatedTreasuryProductionVerified": false,
+      "observationRecord": "/downloads/delivery-observation-2026-09-18.json"
     }
   }
 }
