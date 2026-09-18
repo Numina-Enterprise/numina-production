@@ -1,0 +1,17 @@
+name: Numina production release candidate
+on:
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: numina-production-release
+  cancel-in-progress: false
+jobs:
+  build-and-attest:
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    # NUMINA provenance workflow in the same canonical repository.
+    uses: ./.github/workflows/numina-site-builder.yml
+    # No secrets: inherit. No inputs. No production deployment is authorized by
+    # a successful build alone; the independent verification policy must pass.
