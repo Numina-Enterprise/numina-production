@@ -18,11 +18,19 @@ export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
   stripe_destination_confirmation:false
 });
 export function numinaRootProjection(fields={}){
+  const mechanics={...(fields.mechanics||{})};
+  const canonical={};
+  for(const [key,value] of Object.entries(fields)){
+    if(key==='mechanics'||key==='compatibility')continue;
+    if(Object.hasOwn(NUMINA_COMPATIBILITY_ALIASES,key)){mechanics[key]=value;continue;}
+    canonical[key]=value;
+  }
   return {
     schema:NUMINA_MANIFEST_SCHEMA,
     singular:true,
     identity:NUMINA,
-    ...fields,
+    ...canonical,
+    mechanics:Object.freeze(mechanics),
     compatibility:Object.freeze({
       ...(fields.compatibility||{}),
       identity_aliases:NUMINA_COMPATIBILITY_ALIASES
