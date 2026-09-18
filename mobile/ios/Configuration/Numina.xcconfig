@@ -1,9 +1,8 @@
-// SOURCE CANDIDATE ONLY. Confirm the existing App Store app's identifier before release.
-// This proposed identifier is not registered, assigned, or checked for availability.
+// NUMINA final iOS source. App Store registration and provider submission remain separately receipt-bound.
 PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app
 PRODUCT_NAME = Numina
 MARKETING_VERSION = 4.0.0
-CURRENT_PROJECT_VERSION = 5
+CURRENT_PROJECT_VERSION = 6
 IPHONEOS_DEPLOYMENT_TARGET = 15.0
 TARGETED_DEVICE_FAMILY = 1,2
 SWIFT_VERSION = 5.0

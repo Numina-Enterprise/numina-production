@@ -1,6 +1,12 @@
 name: Numina signed Android production release
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'release-evidence/numina-final-build-2026-09-18.json'
+      - 'mobile/android/**'
+      - 'scripts/sign-android-release.py'
 permissions:
   contents: read
 concurrency:
@@ -33,7 +39,7 @@ jobs:
         run: python3 scripts/sign-android-release.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: numina-android-signed
+          name: numina-android-signed-final
           path: packages/
           if-no-files-found: error
           retention-days: 90
