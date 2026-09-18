@@ -20,7 +20,21 @@ if(!endpoint||!authorizationInput||!expectedChain||!expectedGenesis)throw Error(
 function authorizationCandidates(value){
   if(/^(?:Basic|Bearer) [\x21-\x7e]+$/.test(value))return [value];
   const candidates=[];
-  if(value.includes(':'))candidates.push('Basic '+Buffer.from(value,'utf8').toString('base64'));
+  const addBasic=(username,password)=>{if(username&&password)candidates.push('Basic '+Buffer.from(username+':'+password,'utf8').toString('base64'));};
+  try{
+    if(/^https:\/\//i.test(value)){
+      const credentialUrl=new URL(value);
+      addBasic(decodeURIComponent(credentialUrl.username),decodeURIComponent(credentialUrl.password));
+    }
+  }catch{}
+  try{
+    if(/^\s*\{/.test(value)){
+      const parsed=JSON.parse(value);
+      addBasic(parsed.username??parsed.user??parsed.id??parsed.appId,parsed.password??parsed.pass??parsed.secret);
+      if(typeof parsed.authorization==='string'&&/^(?:Basic|Bearer) [\x21-\x7e]+$/.test(parsed.authorization))candidates.push(parsed.authorization);
+    }
+  }catch{}
+  if(value.includes(':')&&!/^https:\/\//i.test(value))candidates.push('Basic '+Buffer.from(value,'utf8').toString('base64'));
   candidates.push('Bearer '+value,'Basic '+value);
   return [...new Set(candidates)];
 }
