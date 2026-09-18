@@ -56,7 +56,7 @@ try{
   if(!response.ok)throw Error('Descriptor unavailable');
   const descriptor=await response.json();
   if(descriptor.mode!=='local_simulation'||descriptor.initialSupplyBaseUnits!==state.totalBaseUnits||descriptor.reviewId!=='nusd-owner-approved-uncapped-500t-2026-09-16')throw Error('Review does not match this simulation');
-  document.querySelector('#simulation-review-status').textContent='Current review matched: 500T initial supply, six decimals, counted once.';
+  document.querySelector('#simulation-review-status').textContent='Historical review matched: 500T simulation, six-decimal model precision, counted once. The deployed NUSD contract retains 18 decimals; the current treasury model is unchanged.';
 }catch{
-  document.querySelector('#simulation-review-status').textContent='The live review reference could not be matched. This local simulation is still available; check the linked review before relying on its version.';
+  document.querySelector('#simulation-review-status').textContent='The historical review reference could not be matched. This local simulation is still available; check the linked historical review before relying on its version.';
 }
