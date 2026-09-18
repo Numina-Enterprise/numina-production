@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - '.github/workflows/repair-rc26-integration-manifest.yml'
+      - 'scripts/release-manifest.mjs'
 
 permissions:
   contents: write
