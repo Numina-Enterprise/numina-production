@@ -39,5 +39,15 @@
     "Sigstore"
   ],
   "transport_identity": "NUMINA",
-  "transport_services_are_evidence_channels": true
+  "transport_services_are_evidence_channels": true,
+  "product_identity": "NUMINA",
+  "release_identity": "NUMINA",
+  "evidence_identity": "NUMINA",
+  "provider_identity": "NUMINA",
+  "runtime_identity": "NUMINA",
+  "deployment_identity": "NUMINA",
+  "treasury_identity": "NUMINA",
+  "receipt_identity": "NUMINA",
+  "settlement_identity": "NUMINA",
+  "external_services_are_evidence_channels": true
 }
