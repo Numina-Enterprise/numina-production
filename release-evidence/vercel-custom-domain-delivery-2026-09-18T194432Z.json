@@ -1,0 +1,126 @@
+{
+  "schema": "numina.vercel-custom-domain-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-18T19:44:32Z",
+  "canonical": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "mainCommitBeforeObservationRecord": "ed102eda91d9d8a7f6f04fb4ec179dbfd4bd1a8d",
+    "mainParentServingCustomDomain": "671d88058bac5858e9ffd986d8065c3d18651449"
+  },
+  "vercel": {
+    "connectedTeamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "connectedProjectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "connectedProjectName": "numina-production",
+    "customDomainDeployment": {
+      "id": "dpl_H4E1gQzqNfoKS4z7QYf4b6u7ZNes",
+      "state": "READY",
+      "target": "production",
+      "source": "git",
+      "sourceCommit": "671d88058bac5858e9ffd986d8065c3d18651449",
+      "deploymentUrl": "https://numina-production-gew42yzza-skott34-dot.vercel.app",
+      "aliases": [
+        "www.numinalabs.xyz",
+        "numinalabs.xyz",
+        "numina-production.vercel.app",
+        "numina-production-skott34-dot.vercel.app",
+        "numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    },
+    "canonicalMainStatus": {
+      "commit": "ed102eda91d9d8a7f6f04fb4ec179dbfd4bd1a8d",
+      "state": "success",
+      "description": "Deployment has completed",
+      "context": "Vercel – numina-production",
+      "providerUrl": "https://vercel.com/numina-167f7fe7/numina-production/Egg85tS47oQPjxxy7exaRCYhxpoX",
+      "providerStatusObservedAt": "2026-09-18T19:02:45Z",
+      "connectedPrimaryCustomDomainProject": false
+    }
+  },
+  "requiredEndpointVerification": {
+    "allVerified": true,
+    "origin": "https://www.numinalabs.xyz",
+    "endpoints": [
+      {
+        "path": "/final-build.json",
+        "status": 200,
+        "observedAt": "2026-09-18T19:44:07Z",
+        "schema": "numina.final-build.v1",
+        "reportedStatus": "FINAL"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "status": 200,
+        "observedAt": "2026-09-18T19:44:15Z",
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finality": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "status": 200,
+        "observedAt": "2026-09-18T19:44:26Z",
+        "schema": "numina.nusd.status.v1",
+        "deployedTokenReceiptVerified": true,
+        "externalReservesVerified": false
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "status": 200,
+        "observedAt": "2026-09-18T19:44:32Z",
+        "schema": "numina.deployment-estimate.v1",
+        "reportedStatus": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true,
+        "externalUsdSettlement": false,
+        "externalUsdcSettlement": false
+      }
+    ]
+  },
+  "githubActions": {
+    "runnerAllocated": false,
+    "canonicalBuild": {
+      "runId": 35383673129,
+      "jobId": 105725488641,
+      "conclusion": "failure",
+      "steps": null,
+      "logs": null
+    },
+    "androidSigning": {
+      "runId": 35383673261,
+      "jobId": 105725490809,
+      "conclusion": "failure",
+      "steps": null,
+      "artifacts": []
+    },
+    "iosSigning": {
+      "runId": 35383673171,
+      "jobId": 105725489142,
+      "conclusion": "failure",
+      "steps": null,
+      "artifacts": []
+    }
+  },
+  "mobileDistribution": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmitted": false,
+    "appStoreSubmitted": false,
+    "providerSubmissionReceipts": []
+  },
+  "desktopFallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909Z"
+  },
+  "financialExecution": {
+    "performedByThisObservation": false,
+    "externalSettlementClaimed": false,
+    "providerSettlementReceipts": []
+  },
+  "scope": "Factual delivery observation only. The required public Vercel endpoints returned HTTP 200 on the custom domain and the deployment estimate route now returned FINAL. The custom domain deployment observed here serves the parent code commit 671d88058bac5858e9ffd986d8065c3d18651449; the then-current main commit ed102eda91d9d8a7f6f04fb4ec179dbfd4bd1a8d had a separate successful Vercel status under a different provider scope. GitHub-hosted mobile jobs still did not allocate a runner, no signed mobile artifacts were produced, and no store submission is claimed."
+}
