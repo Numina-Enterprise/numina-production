@@ -92,6 +92,10 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Numina-Identity",
+          "value": "NUMINA"
         }
       ]
     }
