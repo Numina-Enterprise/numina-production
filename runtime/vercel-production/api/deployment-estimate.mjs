@@ -22,9 +22,11 @@ export function createEstimateHandler({observe = observeDeploymentEstimate} = {}
     try {
       const url = new URL(request.url, 'https://numina.invalid');
       const length = request.headers?.['content-length'];
-      if (url.search || url.hash || Object.keys(request.query ?? {}).length ||
+      const bodyPresent=request.body!==undefined&&request.body!==null&&request.body!==''&&
+        !(typeof request.body==='object'&&!Array.isArray(request.body)&&Object.keys(request.body).length===0);
+      if (url.search || url.hash ||
           request.headers?.['transfer-encoding'] !== undefined || (length !== undefined && length !== '0') ||
-          (request.body !== undefined && request.body !== null && request.body !== '')) return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
+          bodyPresent) return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
     } catch { return reject(400, 'REQUEST_INPUT_NOT_ALLOWED'); }
     try {
       // Coalesce simultaneous public reads; never retain a completed estimate.

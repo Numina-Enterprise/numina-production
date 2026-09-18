@@ -1,0 +1,63 @@
+{
+  "schema": "numina.nusd.production-verification.v1",
+  "identity": "NUMINA",
+  "status": "FINAL",
+  "verifiedAt": "2026-09-18T15:35:24.884Z",
+  "chainId": "962421430",
+  "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+  "observedBlock": {
+    "number": "51749",
+    "hash": "0xaa976d94df250c3305837e362b6598964bfe5064c22300ed05c6bea439166d8f"
+  },
+  "sender": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
+  "issuance": {
+    "amountNusd": "1500000000000000",
+    "decimals": 18,
+    "baseUnits": "1500000000000000000000000000000000",
+    "constructorMint": true,
+    "paused": true,
+    "recipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
+    "externallyBackedClaim": false
+  },
+  "token": {
+    "address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "blockNumber": "51725",
+    "confirmations": 25,
+    "receiptStatus": "0x1",
+    "totalSupply": "1500000000000000000000000000000000",
+    "cap": "1500000000000000000000000000000000",
+    "recipientBalance": "1500000000000000000000000000000000",
+    "issuerPolicyHash": "0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5"
+  },
+  "settlement": {
+    "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+    "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "blockNumber": "51726",
+    "confirmations": 24,
+    "receiptStatus": "0x1",
+    "nusd": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b"
+  },
+  "verification": {
+    "rpcCredential": true,
+    "chain": true,
+    "genesis": true,
+    "managedSigner": true,
+    "tokenCode": true,
+    "tokenState": true,
+    "roleAssignments": true,
+    "constructorSupply": true,
+    "paused": true,
+    "settlementCode": true,
+    "settlementBinding": true,
+    "minimumConfirmations": true
+  },
+  "externalSettlement": {
+    "usd": false,
+    "usdc": false,
+    "bankReceipt": null,
+    "providerReceipt": null,
+    "reservesVerified": false
+  },
+  "evidence": "runtime/nusd/deployment-receipt.json"
+}

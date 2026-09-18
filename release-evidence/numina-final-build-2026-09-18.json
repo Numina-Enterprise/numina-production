@@ -56,8 +56,8 @@
       "confirmations": 24
     },
     "finality": "FINAL",
-    "receipt": "runtime/nusd/deployment-receipt.json",
-    "verification": "runtime/nusd/deployment-verification.json",
+    "receipt": "/downloads/nusd/deployment-receipt.json",
+    "verification": "/downloads/nusd/deployment-verification.json",
     "externalBackingClaimed": false
   },
   "mobile": {
