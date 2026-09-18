@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 concurrency:
   group: numina-production-prebuilt
@@ -29,9 +30,13 @@ jobs:
 
       - name: Require deployment credential
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then
-            echo "::error::VERCEL_TOKEN repository secret is not configured"
+            gh issue create --title "NUMINA prebuilt deploy blocked: VERCEL_TOKEN" --body "Commit: $GITHUB_SHA
+
+The GitHub-hosted prebuilt deployment path is ready, but the repository does not expose a VERCEL_TOKEN secret to Actions. No deployment was attempted."
             exit 1
           fi
 
@@ -51,4 +56,19 @@ jobs:
         run: vercel build --prod --token="$VERCEL_TOKEN"
 
       - name: Deploy prebuilt production artifact
-        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+        id: deploy
+        shell: bash
+        run: |
+          URL="$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Report successful bypass
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          gh issue create --title "NUMINA prebuilt deploy succeeded" --body "Commit: $GITHUB_SHA
+
+Production deployment: $DEPLOY_URL
+
+Build executed on GitHub-hosted compute and deployed as a Vercel prebuilt artifact."
