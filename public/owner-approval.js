@@ -7,13 +7,13 @@ export const NUMINA_OWNER_APPROVAL=Object.freeze({
   "recordedOn": "2026-09-16",
   "basis": "Direct owner instruction in the Numina task",
   "singular": true,
-  "authority": "NUMINA",
+  "identity": "NUMINA",
   "executionAuthorization": Object.freeze({
-    "authority": "NUMINA",
+    "identity": "NUMINA",
     "scope": "NUMINA",
     "authorized": true,
     "executeAll": "NUMINA",
-    "actionClasses": Object.freeze(["signing","fund_movement","external_provider_action"]),
+    "actionClasses": Object.freeze(["signing","fund_movement","external_provider_action","procurement"]),
     "providerEvidenceRole": "completion_and_reconciliation_evidence",
     "providerEvidenceIsCompetingAuthority": false
   }),
@@ -21,11 +21,12 @@ export const NUMINA_OWNER_APPROVAL=Object.freeze({
     "approval granted, update all software to numinas latest build, merge commit",
     "approval is singular",
     "update all singularily",
-    "authorized signing, fund movement, and external provider action",
+    "authorized signing, fund movement, external provider action, and procurement",
     "EXECUTE_ALL = NUMINA",
-    "signing, fund movement, and external provider action are singular under NUMINA"
+    "signing, fund movement, external provider action, and procurement are singular NUMINA",
+    "procurement use is active"
   ],
-  "scope": "One singular NUMINA owner authorization across the Numina-controlled software release, signing, fund movement, and external-provider action classes. External completion remains evidenced by actual provider receipts and reconciliation records.",
+  "scope": "One singular NUMINA identity across the Numina-controlled software release, signing, fund movement, external-provider action, and active procurement. External completion remains evidenced by actual provider receipts and reconciliation records.",
   "requestSha256": "0af2b7e72cd18f9676f85356da95f8deee8788eac0dee3d587a1278342a401ca",
   "issuerPolicySha256": "1d24f311a34a28d9560db1f32eb3efc4241701c5ae7233b97c2527006623b13d",
   "issuerPolicySigningStatement": Object.freeze({

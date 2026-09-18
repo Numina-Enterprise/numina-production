@@ -17,7 +17,7 @@ function createNumina({manifest,execute}){
   const numina=freeze(structuredClone(manifest));
   return freeze({
     schema:FRONTIER_SCHEMA,
-    root:'NUMINA',
+    identity:'NUMINA',
     manifest:numina,
     async execute(intent){
       requireObject(intent,'intent');
@@ -32,7 +32,7 @@ function projectLegacyRuntime(numina){
   return freeze({
     schema:FRONTIER_SCHEMA,
     NUMINA:numina,
-    compatibility:Object.freeze({authority:'NUMINA',canonical:true,legacy_projection_only:true})
+    compatibility:Object.freeze({identity:'NUMINA',canonical:true,legacy_projection_only:true,identity_aliases:Object.freeze({root:'NUMINA',manifest:'NUMINA',authority:'NUMINA'})})
   });
 }
 module.exports={FRONTIER_SCHEMA,createNumina,projectLegacyRuntime};
