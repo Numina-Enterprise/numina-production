@@ -27,16 +27,16 @@ export function validateDeployment(file) {
   required(config.network?.finalityPolicy, 'Network finality policy');
   let cap = null;
   try {
-    if (typeof config.supplyCapNusd !== 'string' || !/^\d+(\.\d{1,6})?$/.test(config.supplyCapNusd)) throw new Error();
-    cap = parseUnits(config.supplyCapNusd, 6);
+    if (typeof config.supplyCapNusd !== 'string' || !/^\d+(\.\d{1,18})?$/.test(config.supplyCapNusd)) throw new Error();
+    cap = parseUnits(config.supplyCapNusd, 18);
     if (cap <= 0n || cap >= 2n ** 256n) throw new Error();
-  } catch { errors.push('An explicitly approved supply cap in NUSD decimal text is required (maximum 6 decimals)'); }
+  } catch { errors.push('An explicitly approved supply cap in NUSD decimal text is required (maximum 18 decimals)'); }
   let initialSupply = null, initialRecipient = null;
   try {
-    if (typeof config.initialSupplyNusd !== 'string' || !/^\d+(\.\d{1,6})?$/.test(config.initialSupplyNusd)) throw new Error();
-    initialSupply = parseUnits(config.initialSupplyNusd, 6);
+    if (typeof config.initialSupplyNusd !== 'string' || !/^\d+(\.\d{1,18})?$/.test(config.initialSupplyNusd)) throw new Error();
+    initialSupply = parseUnits(config.initialSupplyNusd, 18);
     if (initialSupply < 0n || initialSupply >= 2n ** 256n || cap === null || initialSupply > cap) throw new Error();
-  } catch { errors.push('An explicit initial supply from zero through the approved cap in NUSD decimal text is required (maximum 6 decimals)'); }
+  } catch { errors.push('An explicit initial supply from zero through the approved cap in NUSD decimal text is required (maximum 18 decimals)'); }
   try {
     initialRecipient = getAddress(config.initialRecipient);
     if (initialRecipient === ZeroAddress) throw new Error();
