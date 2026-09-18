@@ -30,6 +30,8 @@ jobs:
           python3 --version
       - name: NUMINA
         run: cp integrations/numina/src/runtime-contract.js public/runtime-contract.js
+      - name: NUMINA
+        run: cp integrations/numina/src/runtime-contract.js public/runtime-contract.js
       - name: Align packaged runtime contract inventory
         run: |
           node --input-type=module <<'NODE'
