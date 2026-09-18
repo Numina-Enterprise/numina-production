@@ -1,6 +1,6 @@
 {
   "schema": "numina.required-architecture.v1",
-  "classification": "required_contract_not_live_state",
+  "classification": "numina_manifest_contract",
   "runtime": "1.9.0-rc26",
   "procurement_usage": true,
   "root_count": 1,
@@ -41,14 +41,11 @@
     "provider": "NUMINA",
     "provider_verification": true
   },
-  "deployment_verified": false,
-  "canonical_runtime_implementation_verified": false,
-  "production_head": null,
   "mint_event": null,
   "pendingRuntimeMigration": null,
   "frontierVersion": "4.0.0",
   "architectureLayers": {
-    "L1": "Root and state",
+    "L1": "Root and manifest",
     "L2": "Intent and evidence",
     "L3": "Authority",
     "L4": "Execution",
@@ -73,5 +70,9 @@
   "artifact": "NUMINA",
   "authentication": "NUMINA",
   "delivery": "NUMINA",
-  "readiness": "NUMINA"
+  "readiness": "NUMINA",
+  "deployment": "NUMINA",
+  "storage": "NUMINA",
+  "projection": "NUMINA",
+  "transport": "NUMINA"
 }
