@@ -1,0 +1,41 @@
+name: Rebuild NUSD Artifacts
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'runtime/nusd/contracts/**'
+      - 'runtime/nusd/development/**'
+      - '.github/workflows/rebuild-nusd-artifacts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pinned compiler dependencies
+        working-directory: runtime/nusd/development
+        run: npm ci --ignore-scripts
+      - name: Compile canonical NUSD contracts
+        working-directory: runtime/nusd/development
+        run: npm run compile
+      - name: Refresh exact token pins
+        run: node runtime/nusd/development/refresh-token-pins.mjs
+      - name: Upload rebuilt canonical artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: NUSD-18DEC-ARTIFACTS
+          path: |
+            runtime/nusd/artifacts/NuminaUSD.json
+            runtime/nusd/artifacts/NuminaSettlement.json
+            runtime/nusd/artifacts/NuminaUSDCConversion.json
+            runtime/nusd/artifacts/NuminaUSDRedemption.json
+            runtime/nusd/scripts/token-artifact.mjs
+          if-no-files-found: error
