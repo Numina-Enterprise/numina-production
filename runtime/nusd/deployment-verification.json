@@ -53,11 +53,13 @@
     "minimumConfirmations": true
   },
   "externalSettlement": {
+    "declared": true,
     "usd": false,
     "usdc": false,
     "bankReceipt": null,
     "providerReceipt": null,
-    "reservesVerified": false
+    "reservesVerified": false,
+    "canonicalReceipt": "runtime/nusd/settlement-receipt.json"
   },
   "evidence": "runtime/nusd/deployment-receipt.json"
 }
