@@ -113,7 +113,7 @@
     "source": {
       "status": "FINAL",
       "canonicalRepository": "skott34-dot/numina-production",
-      "verifiedCodeCommit": "5183cc01a978137c292b573022d9c499bd22714f"
+      "verifiedCodeCommit": "90f7d7cd85167bca0dddd774b38e54cd830b59fd"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -125,15 +125,15 @@
       "productionTransportUpdated": true,
       "currentPublicDeploymentKnownStale": false,
       "blocker": null,
-      "verifiedAt": "2026-09-18T22:51:45Z",
+      "verifiedAt": "2026-09-18T23:12:05Z",
       "observedDeployment": {
-        "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "commit": "5183cc01a978137c292b573022d9c499bd22714f",
-        "url": "https://vercel.com/skott34-dot/numina-production/6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "deploymentUrl": "https://numina-production-4m3krnxa3-skott34-dot.vercel.app",
+        "id": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
+        "commit": "90f7d7cd85167bca0dddd774b38e54cd830b59fd",
+        "url": "https://vercel.com/skott34-dot/numina-production/9fVfCjLi3FzCYE1n68kZUZkTBktV",
+        "deploymentUrl": "https://numina-production-20gze3lty-skott34-dot.vercel.app",
         "status": "READY",
         "target": "production",
-        "readyAt": "2026-09-18T22:51:30.411Z",
+        "readyAt": "2026-09-18T23:11:58.821Z",
         "aliases": [
           "www.numinalabs.xyz",
           "numinalabs.xyz",
@@ -151,17 +151,17 @@
       },
       "verificationScope": "Canonical NUMINA main deployment is READY on the custom domain. Public /final-build.json, /downloads/nusd/deployment-receipt.json, /downloads/nusd/settlement-receipt.json, /api/nusd/v1/status and /v2/network/deployment-estimate returned HTTP 200. External Bank of America/Stripe settlement remains unverified unless provider receipts state otherwise.",
       "priorObservedDeployment": {
-        "id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w",
-        "commit": "5d93ddca486cd22c620e1eab30058c345937316f",
-        "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
+        "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
+        "commit": "5183cc01a978137c292b573022d9c499bd22714f",
+        "url": "https://vercel.com/skott34-dot/numina-production/6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
         "status": "READY"
       },
       "status": "CANONICAL_MAIN_DEPLOYED",
       "latestRedeployAttempt": {
         "result": "succeeded",
-        "deploymentId": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
+        "deploymentId": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
         "deploymentCreated": true,
-        "observedAt": "2026-09-18T22:51:45Z"
+        "observedAt": "2026-09-18T23:12:05Z"
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
@@ -192,6 +192,17 @@
           "size_bytes": 44277760,
           "file_count": 307
         }
+      },
+      "runtimeHealth": {
+        "observedAt": "2026-09-18T23:31:23Z",
+        "deploymentId": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
+        "runtimeErrorsLastHour": 0,
+        "observedRequests": [
+          {
+            "path": "/api/nusd/v1/status",
+            "status": 200
+          }
+        ]
       }
     },
     "android": {
@@ -202,18 +213,18 @@
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null,
       "lastRunnerObservation": {
-        "runId": 35396478334,
+        "runId": 35403660060,
         "attempt": 2,
-        "jobId": 105787376692,
-        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35396478334",
-        "sourceCommit": "3dfba4e001a55bbb45b6a12ebc15943c7ed447f9",
+        "jobId": 105788974506,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35403660060",
+        "sourceCommit": "b7ea31b22fbf531248187b4388c97182e9e011a5",
         "conclusion": "failure",
         "runnerId": 0,
         "stepsExecuted": 0,
         "artifacts": [],
-        "completedAt": "2026-09-18T22:49:25Z",
-        "observedAt": "2026-09-18T22:49:25Z",
-        "executionSummary": "The Android signing retry terminated before any workflow steps executed; no runner-backed build or signed artifact was produced."
+        "completedAt": "2026-09-18T22:57:03Z",
+        "observedAt": "2026-09-18T22:57:03Z",
+        "executionSummary": "Current-line Android signing retry terminated before any workflow steps executed; no signed artifact was produced."
       }
     },
     "ios": {
@@ -224,18 +235,18 @@
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null,
       "lastRunnerObservation": {
-        "runId": 35396478463,
+        "runId": 35403660084,
         "attempt": 2,
-        "jobId": 105787380773,
-        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35396478463",
-        "sourceCommit": "3dfba4e001a55bbb45b6a12ebc15943c7ed447f9",
+        "jobId": 105788978623,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35403660084",
+        "sourceCommit": "b7ea31b22fbf531248187b4388c97182e9e011a5",
         "conclusion": "failure",
         "runnerId": 0,
         "stepsExecuted": 0,
         "artifacts": [],
-        "completedAt": "2026-09-18T22:49:30Z",
-        "observedAt": "2026-09-18T22:49:30Z",
-        "executionSummary": "The iOS signing retry terminated before any workflow steps executed; no runner-backed build or signed artifact was produced."
+        "completedAt": "2026-09-18T22:57:08Z",
+        "observedAt": "2026-09-18T22:57:08Z",
+        "executionSummary": "Current-line iOS signing retry terminated before any workflow steps executed; no signed artifact was produced."
       }
     },
     "applicationBackend": {
