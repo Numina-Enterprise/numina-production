@@ -19,7 +19,7 @@ test('conversion workflow binds both compiled contracts and preserves disabled l
  assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.sameChainRequired,true);
  assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.bridgeImplemented,false);
  assert.equal(NUSD_CONVERSION_WORKFLOW.usd.bankSubmissionImplemented,false);
- assert.equal(NUSD_CONVERSION_WORKFLOW.usd.nusdBaseUnitsPerUsdCent,'10000');
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usd.nusdBaseUnitsPerUsdCent,'10000000000000000');
  assert.equal(NUSD_CONVERSION_WORKFLOW.treasury.balanceCount,1);
  assert.equal(NUSD_CONVERSION_WORKFLOW.activation.financialExecutionEnabled,false);
  assert.deepEqual(NUSD_POLICY.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
@@ -59,7 +59,7 @@ test('mint workflow reports implemented preparation while receipt and provider c
   for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(new Request('https://numina.test/api/nusd/v1/mint-workflow',{method}))).status,405);
   assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.route,'/api/control/v1/treasury');
   assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.nativeBalanceChanged,false);
-  assert.equal(NUSD_MINT_WORKFLOW.preparation.broadcast,false);
+  assert.equal(NUSD_MINT_WORKFLOW.contract.decimals,18);assert.equal(NUSD_MINT_WORKFLOW.preparation.broadcast,false);
   assert.equal(NUSD_MINT_WORKFLOW.recipientEvidence.providerAcceptanceInferred,false);
   assert.match(assessFinancialStatus(NUSD_POLICY).mint,/Implemented in contract.*unsigned preparation/);
   const unsafe=structuredClone(NUSD_POLICY);unsafe.mint_workflow.preparation.broadcast=true;
