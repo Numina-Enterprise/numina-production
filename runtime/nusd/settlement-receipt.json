@@ -4,7 +4,7 @@
   "canonical": {
     "repository": "skott34-dot/numina-production",
     "branch": "main",
-    "sourceCommit": "4d3f36a5a738a94f1800c4c323809d553cb10471"
+    "sourceCommit": "9ab3669750451e7b23ed901d7930427324f79034"
   },
   "settlement": {
     "declared": true,
@@ -22,5 +22,13 @@
     "tokenReceiptVerified": true,
     "settlementContractReceiptVerified": true
   },
-  "interpretation": "Singular NUMINA settlement receipt. The declared external-settlement state is recorded as true. External USD/USDC settlement remains unverified until an independent provider, bank, custodian, exchange, or other external system supplies a factual receipt."
+  "interpretation": "Singular NUMINA settlement receipt for an aggregate 1,500T NUSD Numina-native amount. The declared external-settlement state is recorded as true. External USD/USDC settlement remains unverified until an independent provider, bank, custodian, exchange, or other external system supplies a factual receipt.",
+  "aggregate": {
+    "asset": "NUSD",
+    "display": "1,500T NUSD",
+    "wholeUnits": "1500000000000000",
+    "decimals": 18,
+    "baseUnits": "1500000000000000000000000000000000",
+    "singular": true
+  }
 }
