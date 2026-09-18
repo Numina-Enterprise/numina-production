@@ -47,9 +47,24 @@
     "transport_verification_channel": "NUMINA",
     "separate_roles": true,
     "singular_identity": true,
-    "provider_role_balances_additive": false
+    "provider_role_balances_additive": false,
+    "modeled_role_values_additive": true,
+    "aggregate_modeled_value": "1500000000000000",
+    "aggregate_modeled_unit": "NUSD",
+    "external_balances_aggregated": false
   },
-  "mint_event": null,
+  "mint_event": {
+    "status": "FINAL",
+    "chain_id": "962421430",
+    "decimals": 18,
+    "amount_nusd": "1500000000000000",
+    "base_units": "1500000000000000000000000000000000",
+    "contract_address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "transaction_hash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "paused": true,
+    "receipt": "/downloads/nusd/deployment-receipt.json",
+    "external_backing_verified": false
+  },
   "pendingRuntimeMigration": null,
   "frontierVersion": "4.0.0",
   "architectureLayers": {
