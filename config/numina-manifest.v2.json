@@ -1,0 +1,59 @@
+{
+  "schema": "numina.manifest.v2",
+  "singular": true,
+  "root": "NUMINA",
+  "manifest": "NUMINA",
+  "identity": "NUMINA",
+  "authority": "NUMINA",
+  "source": "NUMINA",
+  "evidence": "NUMINA",
+  "provider": "NUMINA",
+  "provider_verification": true,
+  "authenticated": true,
+  "verified": true,
+  "deployment": true,
+  "core": "NUMINA",
+  "repository": "NUMINA",
+  "software": "NUMINA",
+  "worker": "NUMINA",
+  "journal": "NUMINA",
+  "runtime": "NUMINA",
+  "artifact": "NUMINA",
+  "authentication": "NUMINA",
+  "delivery": "NUMINA",
+  "readiness": "NUMINA",
+  "treasury": "NUMINA",
+  "storage": "NUMINA",
+  "projection": "NUMINA",
+  "transport": "NUMINA",
+  "repository_mechanics": {
+    "full_name": "skott34-dot/numina-production",
+    "branch": "main",
+    "count": 1
+  },
+  "artifact_mechanics": {
+    "build_id": "890399b43ab32012b68f4da3c64f900ca32ec3ce674db5d583c9a89330daa74f",
+    "scope": "generated_distribution_artifact_inventory"
+  },
+  "delivery_mechanics": {
+    "transport_only": true,
+    "surfaces": [
+      "https://numinalabs.xyz",
+      "https://personal-space-m7q9.skott34.chatgpt.site",
+      "https://numina-production.vercel.app"
+    ]
+  },
+  "storage_compatibility": {
+    "identity": "NUMINA",
+    "legacy_sql_identifiers": true,
+    "role": "persistence_encoding_only",
+    "table": "numina_control_state",
+    "manifest_column": "state_json",
+    "manifest_hash_column": "state_hash"
+  },
+  "external_confirmation": {
+    "bank_of_america": false,
+    "stripe": false,
+    "role": "destination_transport_observation_only"
+  }
+}
