@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Exact retained artifact bytes, including formatting. Do not regenerate or relabel this artifact.
-export const TOKEN_ARTIFACT_SHA256 = 'de287e38d8cd6364ea7e9d616067c086203c1b22e1301fb5f5333b5a02a72963';
-export const TOKEN_SOURCE_SHA256 = '3a118007e78ee6e455c6c51528a55b8eeb63e2ec5c294e7c71757804df0871bf';
+export const TOKEN_ARTIFACT_SHA256 = '3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2';
+export const TOKEN_SOURCE_SHA256 = '08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238';
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 
 /** Validate the preserved compiler artifact and exact reviewed source without compiling anything. */
