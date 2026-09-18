@@ -1,5 +1,5 @@
 import {requestJson,createViewScope} from './http-client.js';
-import {isTreasuryMinorInteger} from './treasury-amount.js';
+import {isTreasuryMinorInteger,formatTreasuryProviderDisplayAmount} from './treasury-amount.js';
 const stripeElement=id=>document.getElementById(id),stripeScope=createViewScope();
 const stripeNode=(tag,text)=>{const node=document.createElement(tag);node.textContent=text;return node;};
 function stripeProviderRouteControl(generation){
@@ -52,7 +52,7 @@ export async function loadStripeTreasury(){
       for(const currency of ['usd','usdc']){
         const amount=data.balances?.[bucket]?.[currency];
         if(amount!==null&&(!amount||amount.currency!==currency||!isTreasuryMinorInteger(amount.value)||typeof amount.formatted!=='string'||amount.formatted.length>112))throw Error('Invalid Stripe balance');
-        rows.push([label+' '+currency.toUpperCase(),amount===null?'Not provided by Stripe':amount.formatted]);
+        rows.push([label+' '+currency.toUpperCase(),amount===null?'Not provided by Stripe':formatTreasuryProviderDisplayAmount(amount.value,currency)]);
       }
     }
     if(data.provider_nusd_balance){rows.push(['Stripe NUSD currency record',data.provider_nusd_balance.status==='not_reported'?'Not reported by Stripe':'Provider currency reported; token identity and precision require verification']);}
