@@ -1,4 +1,6 @@
-import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from './treasury-valuation.js';
+import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
+import {NUMINA_TREASURY_CONNECTION as treasuryModel} from './treasury-connection-model.js';
+import {NUSD_CONTRACT_RECORD} from './nusd-contract-record.js';
 import {verifyTreasuryRecord} from './treasury-proof.js';
 import {requestJson,createViewScope} from './http-client.js';
 import {formatTreasuryModelWholeAmount} from './treasury-amount.js';
@@ -25,11 +27,15 @@ export async function loadNativeTreasury(){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     const p=data.projection,details=nativeTreasuryElement('native-treasury-details');
     const format=(value,unit)=>formatTreasuryModelWholeAmount(value,unit);
-    const declaredValues=declaredTreasuryDenominations(p.balance).filter(v=>v.unit!=='NUSD').map(v=>['Declared '+v.unit+' value',format(v.amount,v.unit)]);
-    for(const [label,value]of [['Balance',format(p.balance,p.unit)],['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],...declaredValues,['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
+    const allocations=treasuryModel.allocations.map(allocation=>['Model allocation · '+allocation.label,format(allocation.amount,allocation.unit)]);
+    const nativeAllocation=treasuryModel.allocations.find(allocation=>allocation.id==='numina-native-treasury');
+    const journalComparison=p.unit===treasuryModel.aggregateModeledUnit&&p.balance===treasuryModel.aggregateModeledValue?'Matches the model aggregate':p.unit===nativeAllocation.unit&&p.balance===nativeAllocation.amount?'Matches the native model allocation':'Differs from the model aggregate and native allocation';
+    const issuance=NUSD_CONTRACT_RECORD.issuance;
+    const mintedSupply=issuance?.constructorMint===true&&issuance.decimals===18?[['Recorded minted NUSD supply',format(issuance.amountNusd,'NUSD')]]:[];
+    for(const [label,value]of [['Treasury',treasuryModel.identity],['Aggregate allocation model',format(treasuryModel.aggregateModeledValue,treasuryModel.aggregateModeledUnit)+' modeled equivalent'],...allocations,['Native journal balance',format(p.balance,p.unit)],['Journal/model comparison',journalComparison],...mintedSupply,['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
       for(const [tag,text]of [['dt',label],['dd',value]]){const node=document.createElement(tag);node.textContent=text;details.append(node);}
     }
-    nativeTreasuryElement('native-treasury-message').textContent='Numina-native treasury. Model and journal record checked. Declared equivalents describe this same balance; provider funding and conversion require their own evidence.';
+    nativeTreasuryElement('native-treasury-message').textContent='One NUMINA treasury. The three model allocations compose the aggregate; the native journal balance and recorded minted supply are separate measures, not additional balances to add. Journal proof checked. Provider funding, conversion and settlement require their own evidence.';
   }catch(error){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearNativeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
