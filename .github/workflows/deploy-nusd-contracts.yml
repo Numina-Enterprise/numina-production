@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: deploy-nusd-contracts
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
 
       - uses: actions/setup-node@v4
         with:
@@ -56,6 +56,22 @@ jobs:
       - name: Deploy NuminaUSD and NuminaSettlement
         working-directory: runtime/nusd
         run: node scripts/deploy-production.mjs deployment.production.json deployment-receipt.json
+
+      - name: Persist verified NUMINA chain receipt
+        if: success()
+        shell: bash
+        run: |
+          mkdir -p docs
+          cp runtime/nusd/deployment-receipt.json docs/nusd-production-deployment-receipt.json
+          git config user.name "NUMINA"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/nusd-production-deployment-receipt.json
+          if git diff --cached --quiet; then
+            echo "Receipt already current."
+          else
+            git commit -m "Record verified NUSD production deployment receipt"
+            git push origin HEAD:main || echo "Receipt commit could not be pushed; artifact remains available."
+          fi
 
       - name: Upload verified NUMINA chain receipt
         if: always()
