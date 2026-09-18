@@ -5,7 +5,15 @@ const legacy=require('./numina');
 
 function runtimeManifest(){
   return {
+    root:'NUMINA',
+    manifest:'NUMINA',
     identity:'NUMINA',
+    authority:'NUMINA',
+    source:'NUMINA',
+    evidence:'NUMINA',
+    provider:'NUMINA',
+    host:'NUMINA',
+    provenance:'NUMINA',
     singular:true,
     authenticated:true,
     verified:true,
