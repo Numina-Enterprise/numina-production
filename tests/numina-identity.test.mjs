@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {CONTROL_STORAGE} from '../src/control-store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
+import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
+import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 
 test('NUMINA is the canonical active identity',()=>{
   for(const field of ['root','manifest','identity','database','storage','transactionAuthority','journal']){
@@ -16,4 +18,12 @@ test('NUMINA is the canonical active identity',()=>{
   }
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
   assert.equal(pkg.scripts['release:github'],'node scripts/package-github-release.mjs');
+  assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
+  assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
+  assert.equal(WALLET_EXECUTION_POLICY.decimals,18);
+  assert.equal(WALLET_EXECUTION_POLICY.initialSupplyNusd,'1500000000000000');
+  assert.equal(WALLET_EXECUTION_POLICY.initialSupplyBaseUnits,'1500000000000000000000000000000000');
+  assert.equal(WALLET_EXECUTION_POLICY.requestSha256,NUMINA_OWNER_APPROVAL.requestSha256);
+  assert.equal(WALLET_EXECUTION_POLICY.artifactSha256,'3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2');
+  assert.equal(WALLET_EXECUTION_POLICY.creationSha256,'1b07ec294a2fe3d38f12d2458efde3cbdeadc056ea096db0ee665ec68173906a');
 });
