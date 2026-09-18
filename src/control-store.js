@@ -1,12 +1,12 @@
 import {stable,controlHash,controlError,initialControlManifest,reduceControl,verifiedActions,grantValid,authorizeControl} from './control.js';
 
-// Durable NUMINA manifest storage. Historical deployments are upgraded by migration 0005.
+// Durable NUMINA transactional database. Storage mechanics are subordinate to NUMINA; transaction semantics, revision ordering, journal continuity and evidence heads are NUMINA.
 export const CONTROL_SCHEMA=[
  'CREATE TABLE numina_control_manifest (id INTEGER PRIMARY KEY NOT NULL, revision INTEGER NOT NULL, manifest_json TEXT NOT NULL, manifest_hash TEXT NOT NULL, head_hash TEXT NOT NULL, mutation_id TEXT NOT NULL)',
  'CREATE TABLE numina_control_events (id TEXT PRIMARY KEY NOT NULL, revision INTEGER NOT NULL, actor TEXT NOT NULL, command_hash TEXT NOT NULL, event_json TEXT NOT NULL, hash TEXT NOT NULL)',
  'CREATE UNIQUE INDEX numina_control_event_revision ON numina_control_events(revision)'
 ];
-export const CONTROL_STORAGE=Object.freeze({root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',table:'numina_control_manifest',manifestColumn:'manifest_json',manifestHashColumn:'manifest_hash'});
+export const CONTROL_STORAGE=Object.freeze({root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',database:'NUMINA',storage:'NUMINA',transactionAuthority:'NUMINA',journal:'NUMINA',table:'numina_control_manifest',manifestColumn:'manifest_json',manifestHashColumn:'manifest_hash'});
 export async function readControl(db){
   if(!db)controlError('STORAGE_UNAVAILABLE',503);
   const [manifestRows,events]=await db.batch([db.prepare('SELECT * FROM numina_control_manifest WHERE id=1'),db.prepare('SELECT id,revision,hash,event_json FROM numina_control_events ORDER BY revision')]);
