@@ -5,16 +5,13 @@ const legacy=require('./numina');
 
 function runtimeManifest(){
   return {
-    root:'NUMINA',
-    manifest:'NUMINA',
     identity:'NUMINA',
-    authority:'NUMINA',
-    source:'NUMINA',
-    evidence:'NUMINA',
-    provider:'NUMINA',
+    singular:true,
     authenticated:true,
     verified:true,
-    deployment:true,
+    deployment:'NUMINA',
+    deployed:true,
+    compatibility:{identity_aliases:{root:'NUMINA',manifest:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA'}},
     release:legacy.RELEASE_IDENTITY,
     controls:legacy.controls(),
     providers:legacy.PROVIDERS
