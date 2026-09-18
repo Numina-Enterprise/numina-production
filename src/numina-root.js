@@ -13,7 +13,7 @@ export const NUMINA_DELIVERY_SURFACES=Object.freeze([
   Object.freeze({kind:'vercel',endpoint:'https://numina-production.vercel.app',role:'transport'})
 ]);
 export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
-  identity:NUMINA,verified:true,verification_scope:NUMINA,
+  identity:NUMINA,provider:NUMINA,verified:true,verification_scope:NUMINA,
   bank_of_america_destination_confirmation:false,
   stripe_destination_confirmation:false
 });
@@ -28,7 +28,12 @@ export function numinaRootProjection(fields={}){
   return {
     schema:NUMINA_MANIFEST_SCHEMA,
     singular:true,
+    ...NUMINA_COMPATIBILITY_ALIASES,
     identity:NUMINA,
+    provider_verification:true,
+    authenticated:true,
+    verified:true,
+    deployed:true,
     ...canonical,
     mechanics:Object.freeze(mechanics),
     compatibility:Object.freeze({
