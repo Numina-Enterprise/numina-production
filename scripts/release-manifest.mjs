@@ -12,6 +12,7 @@ import {EXPECTED_RUNTIME_SHA256,MINIMUM_CONFIRMATIONS} from '../public/wallet-ex
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const NUMINA='NUMINA';
+const EXECUTION_SCOPE='ALL_NUMINA_CONTROLLED_WORKFLOWS';
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const version=JSON.parse(readFileSync('package.json')).version,major=version.split('.')[0];
 const integrationFile='numina-integration-kit-v'+version+'.zip';
@@ -93,7 +94,7 @@ const record={
   signing:false,broadcast:false,treasury_writes:false,release_gate_changed:false
  },
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
- schema:'numina.application-release.v2',schema_version:2,target_variant:NUMINA,
+ schema:'numina.application-release.v2',schema_version:2,target_variant:NUMINA,execution_scope:EXECUTION_SCOPE,external_commitments_require_existing_authorization:true,
  livemode:true,environment:'production',architecture:{layers:['L1','L2','L3','L4','L5'],manifest:'/api/control/v2/architecture',head:'/api/control/v2/head'},frontier:{version,discoveryMcp:'/api/control/v2/discovery-mcp',workspace:'/control-room',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},
  root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,core:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,authentication:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
  product:'Numina',version,release:'numina-v'+version,
