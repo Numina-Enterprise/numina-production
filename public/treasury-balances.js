@@ -1,7 +1,7 @@
 import {NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {requestJson} from './http-client.js';
-import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount} from './treasury-amount.js';
+import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount,formatTreasuryProviderDisplayAmount} from './treasury-amount.js';
 import {NUSD_CONTRACT_RECORD} from './nusd-contract-record.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
@@ -43,7 +43,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
     detail(summaryRows,'Minted NUSD aggregate (separate token supply)',formatTreasuryNusdWholeAmount(issuance.amountNusd));
     detail(summaryRows,'Issuance verification observed at',issuance.verifiedAt);
   }
-  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One NUMINA treasury has a 1,500T declared aggregate: three 500T route allocations in USD, USDC and NUSD. Only model allocations are added; observed provider balances are not. '+NUMINA_DENOMINATION_POLICY.expression+'. Model amounts are displayed at 18 decimal places without changing the stored integers or existing token contract. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
+  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One NUMINA treasury has a 1,500T declared aggregate: three 500T route allocations in USD, USDC and NUSD. Only model allocations are added; observed provider balances are not. '+NUMINA_DENOMINATION_POLICY.expression+'. Model amounts are displayed at six decimal places without changing the stored integers or existing token contract. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
   target.append(summary);
   const issuanceLink=item('a','Read the minted-supply verification ↗');issuanceLink.href='/downloads/nusd/deployment-verification.json';
   summary.append(item('p','The native journal balance, the declared 1,500T allocation model and the recorded 1,500T minted supply are distinct measures within one NUMINA treasury. They are not added to one another; minted supply is not provider funding.'),issuanceLink);
@@ -64,7 +64,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
     stripe.replaceChildren(item('h4','Stripe · NUMINA treasury evidence role'),item('p',record.account.name),canonicalLink(),liveTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe substrate observations'));
     const list=item('dl','');
     for(const [bucket,label] of [['available','Available'],['inbound_pending','Incoming'],['outbound_pending','Outgoing']]){
-      for(const currency of ['usd','usdc'])detail(list,label+' '+currency.toUpperCase(),record.balances?.[bucket]?.[currency]?.formatted??'Not reported');
+      for(const currency of ['usd','usdc']){const amount=record.balances?.[bucket]?.[currency];detail(list,label+' '+currency.toUpperCase(),amount?formatTreasuryProviderDisplayAmount(amount.value,currency):'Not reported');}
     }
     detail(list,'Provider NUSD balance',record.provider_nusd_balance?.status==='not_reported'?'Not reported by Stripe':'Requires asset identity and precision verification');
     detail(list,'Observed at',record.observed_at);stripe.append(list);

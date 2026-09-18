@@ -1,5 +1,5 @@
 import {NUMINA_TREASURY_CONNECTION as model} from './treasury-connection-model.js';
-import {formatTreasuryModelWholeAmount} from './treasury-amount.js';
+import {formatTreasuryModelWholeAmount,formatTreasuryProviderDisplayAmount} from './treasury-amount.js';
 import {requestJson} from './http-client.js';
 import {verifyTreasuryRecord} from './treasury-proof.js';
 
@@ -47,7 +47,7 @@ if(typeof document!=='undefined'&&document.getElementById('treasury-connection')
       put('native-connected-proof','Journal verified · revision '+result.native.revision+' · '+(result.native.head??'No head'));
       const stripe=result.stripe;
       if(stripe?.schema==='numina.stripe.treasury.v1'&&stripe.account?.livemode===true){
-        const amounts=['usd','usdc'].map(unit=>stripe.balances?.available?.[unit]?.formatted??unit.toUpperCase()+' not reported');
+        const amounts=['usd','usdc'].map(unit=>{const balance=stripe.balances?.available?.[unit];return balance?formatTreasuryProviderDisplayAmount(balance.value,unit):unit.toUpperCase()+' not reported';});
         put('stripe-connected-balances',amounts.join(' · ')+' · observed '+stripe.observed_at);
       }else put('stripe-connected-balances','Live Stripe balance observation unavailable');
       const bank=result.bank;
