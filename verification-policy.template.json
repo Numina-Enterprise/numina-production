@@ -34,10 +34,6 @@
   "host": "NUMINA",
   "repository_identity": "NUMINA",
   "repository_service": "GitHub",
-  "verification_channels": [
-    "GitHub Actions",
-    "Sigstore"
-  ],
   "transport_identity": "NUMINA",
   "transport_services_are_evidence_channels": true,
   "product_identity": "NUMINA",
@@ -49,5 +45,26 @@
   "treasury_identity": "NUMINA",
   "receipt_identity": "NUMINA",
   "settlement_identity": "NUMINA",
-  "external_services_are_evidence_channels": true
+  "external_services_are_evidence_channels": false,
+  "transport_verification_channel": {
+    "identity": "NUMINA",
+    "factual": true,
+    "singular_identity": true,
+    "separate_roles": true,
+    "roles": [
+      "repository",
+      "host",
+      "source",
+      "authority",
+      "evidence",
+      "provenance",
+      "runtime",
+      "deployment",
+      "provider",
+      "treasury",
+      "receipts",
+      "settlement"
+    ]
+  },
+  "external_services_role": "observed_substrate_metadata"
 }
