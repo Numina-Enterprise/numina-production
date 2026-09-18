@@ -20,15 +20,15 @@ function receipt(artifact_type,payload){
 function fixtures(){
   const manifest={...EXPECTED_RELEASE};
   const status={...manifest,environment:'production',frozen_core:{valid:true,manifest_root:EXPECTED_RELEASE.frozen_core_manifest_root},conformance:{valid:true}};
-  const state={schema:'numina.control-state.v1',release:RUNTIME_VERSION};
-  const values={manifest,status,attestation:receipt(RELEASE_ARTIFACT_TYPE,status),control:{state,receipt:receipt('NUMINA_CONTROL_STATE',state)},supply:{valid:true,spdx_sbom_sha256:manifest.spdx_sbom_sha256,slsa_provenance_sha256:manifest.slsa_provenance_sha256}};
-  return Object.fromEntries(Object.entries(values).map(([key,data])=>[key,{state:'ok',data}]));
+  const controlManifest={schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:RUNTIME_VERSION};
+  const values={manifest,status,attestation:receipt(RELEASE_ARTIFACT_TYPE,status),control:{manifest:controlManifest,receipt:receipt('NUMINA_CONTROL_MANIFEST',controlManifest)},supply:{valid:true,spdx_sbom_sha256:manifest.spdx_sbom_sha256,slsa_provenance_sha256:manifest.slsa_provenance_sha256}};
+  return Object.fromEntries(Object.entries(values).map(([key,data])=>[key,{phase:'ok',data}]));
 }
 const assess=records=>assessRuntimeEvidence(records,{pinnedKey});
 
-test('rc26 evidence binds the manifest, production status and control state to signed payloads',async()=>{
+test('rc26 evidence binds the manifest, production status and control manifest to signed payloads',async()=>{
   const result=await assess(fixtures());
-  for(const field of ['manifestMatches','releaseDeclarationVerified','runtimeStatusMatches','supplyIdentityMatches','controlStateBound'])assert.equal(result[field],true,field);
+  for(const field of ['manifestMatches','releaseDeclarationVerified','runtimeStatusMatches','supplyIdentityMatches','controlManifestBound'])assert.equal(result[field],true,field);
 });
 
 test('rc26 rejects changed or unsigned manifest fields and mismatched control state',async()=>{
@@ -36,8 +36,8 @@ test('rc26 rejects changed or unsigned manifest fields and mismatched control st
     const records=fixtures();Object.assign(records.manifest.data,changes);
     assert.equal((await assess(records)).releaseDeclarationVerified,false);
   }
-  const records=fixtures();records.control.data.state={...records.control.data.state,head:'unsigned test claim'};
-  assert.equal((await assess(records)).controlStateBound,false);
+  const records=fixtures();records.control.data.manifest={...records.control.data.manifest,head:'unsigned test claim'};
+  assert.equal((await assess(records)).controlManifestBound,false);
 });
 
 test('legacy release, staging, legacy attestation type and unpinned key cannot establish rc26',async()=>{
@@ -71,7 +71,7 @@ test('runtime gateway rejects an older release and missing version without forwa
 test('runtime gateway marks only successful release-bound rc26 responses',async()=>{
   for(const [path,payload,expected] of [
     ['/v1/status',{...EXPECTED_RELEASE},RUNTIME_VERSION],
-    ['/v1/control/state',{state:{release:RUNTIME_VERSION}},RUNTIME_VERSION],
+    ['/v1/control/state',{manifest:{release:RUNTIME_VERSION}},RUNTIME_VERSION],
     ['/v1/release/attestation',{payload:{...EXPECTED_RELEASE}},RUNTIME_VERSION],
     ['/v1/release/supply-chain',{valid:true,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256},RUNTIME_VERSION],
     ['/v2/network/status',{status:'unavailable'},null]
