@@ -94,7 +94,7 @@ const record={
  $schema:'https://numinalabs.xyz/schemas/application-release-v2.schema.json',
  schema:'numina.application-release.v2',schema_version:2,
  livemode:true,environment:'production',architecture:{layers:['L1','L2','L3','L4','L5'],manifest:'/api/control/v2/architecture',head:'/api/control/v2/head'},frontier:{version,discoveryMcp:'/api/control/v2/discovery-mcp',workspace:'/control-room',manifest:'/api/control/v2/manifest',mcp:'/api/control/v2/mcp',a2a:'/.well-known/agent-card.json',treasury:'/api/control/v1/treasury',externalSubmission:false},
- root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,authenticated:true,verified:true,deployment:true,core:'NUMINA',worker:'NUMINA',journal:'NUMINA',runtime:'NUMINA',artifact:'NUMINA',authentication:'NUMINA',delivery:'NUMINA',readiness:'NUMINA',treasury:'NUMINA',storage:'NUMINA',projection:'NUMINA',transport:'NUMINA',
+ root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,core:'NUMINA',worker:'NUMINA',journal:'NUMINA',runtime:'NUMINA',artifact:'NUMINA',authentication:'NUMINA',delivery:'NUMINA',readiness:'NUMINA',treasury:'NUMINA',storage:'NUMINA',projection:'NUMINA',transport:'NUMINA',
  product:'Numina',version,release:'numina-v'+version,
  release_channel:'production',build_id:root,artifact_digest_algorithm:'sha256',
  artifact_digest_method:'SHA-256 of sorted UTF-8 lines: <sha256>  <relative-path>\\n; excludes generated release manifest aliases',
