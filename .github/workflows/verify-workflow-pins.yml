@@ -73,6 +73,9 @@ jobs:
           package-manager-cache: false
       - name: Validate production build
         run: npm run build
+      - name: Install scoped NUSD development dependencies
+        run: npm ci --prefix runtime/nusd/development
+
       - name: Validate NUMINA
         run: npm test
       - name: Require Vercel deployment credential
