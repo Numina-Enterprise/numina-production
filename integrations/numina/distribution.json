@@ -1,4 +1,7 @@
 {
+  "identity": "NUMINA",
+  "source": "NUMINA",
+  "singular": true,
   "treasury_client_verification": {
     "schema": "numina.treasury.client-verification.v1",
     "canonicalTreasury": "/api/control/v1/treasury",

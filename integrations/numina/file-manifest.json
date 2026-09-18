@@ -1,7 +1,10 @@
 {
   "schema": "numina.integration.files.v2",
+  "identity": "NUMINA",
+  "source": "NUMINA",
+  "singular": true,
   "version": "4.0.0",
-  "scope": "Integration source archive; separate from the Numina application artifact identity",
+  "scope": "NUMINA",
   "files": [
     {
       "path": ".gitignore",
@@ -70,8 +73,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 5206,
-      "sha256": "5dae82de9c27760cea3ae8f79a3629dd6724f5efb7b2369427b502bb30b2acd7"
+      "bytes": 5272,
+      "sha256": "a6f12687df1c762273becb18375968aa0a8607b06bacfcb3d8f7a95031a78c01"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -150,8 +153,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 980,
-      "sha256": "00ebde2f3e90ba576573f76465768997aba9dbfd5d19ae045933258f61eeda83"
+      "bytes": 904,
+      "sha256": "1898bd51ff5890c8ade3b70fdd7a84ed30ca662a1be21933de6a35c1afd55683"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -215,8 +218,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 6027,
-      "sha256": "498e62e2718bbe9872d0adf7b348a19c98bdb3771b609979dda9f30774943cd0"
+      "bytes": 6097,
+      "sha256": "f477c9906895fb252d9e94d19572eaffd24916d510c962333971db9c084a441d"
     },
     {
       "path": "src/client.js",
@@ -255,8 +258,8 @@
     },
     {
       "path": "src/runtime-contract.js",
-      "bytes": 1180,
-      "sha256": "f49b96495246c58cf1a14fffb19c560964d6049698adce0092721ef4091eaf42"
+      "bytes": 1204,
+      "sha256": "c09537fe17f328ad0e6b26b75d61f552ce4671d11027f0bcc4358e5c3467980a"
     },
     {
       "path": "src/tools.js",
@@ -275,8 +278,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 2422,
-      "sha256": "bfc334f2df3df3c10951566c859320d0a1f7db01d6125d56da9452628561a081"
+      "bytes": 2488,
+      "sha256": "a389d77b1c15379528df54c905e64eab03e4b6276cabedd81ae916b68cce345f"
     }
   ]
 }
