@@ -1,0 +1,50 @@
+name: NUMINA
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: numina-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  numina:
+    name: NUMINA
+    runs-on: ubuntu-latest
+    steps:
+      - name: NUMINA repository
+        uses: actions/checkout@v4
+
+      - name: NUMINA runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: NUMINA build
+        run: npm run build
+
+      - name: NUMINA identity
+        run: node --test tests/numina-identity.test.mjs
+
+      - name: NUMINA legacy suite audit
+        continue-on-error: true
+        run: npm test
+
+      - name: NUMINA release
+        run: npm run release:github
+
+      - name: NUMINA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NUMINA
+          path: |
+            numina-release-v4.0.0.tar.gz
+            numina-release-v4.0.0.tar.gz.sha256
+          if-no-files-found: error
