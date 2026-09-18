@@ -151,7 +151,7 @@ export function createRuntimeReleaseUI({
       element.dataset.state = label === 'Needs attention' ? 'error' : assessed.releaseDeclarationVerified ? 'verified' : hasManifest && assessed.manifestMatches ? 'observed' : 'error';
     });
     set('[data-runtime-release-summary]', hasManifest ? 'Runtime ' + text(manifest.production_version) + ' · ' + label.toLowerCase() : label);
-    set('[data-runtime-release-detail]', message + (assessed.controlStateBound ? ' The control-state receipt matches its displayed state.' : ' Control-state binding is not verified.'));
+    set('[data-runtime-release-detail]', message + (assessed.controlManifestBound ? ' The legacy control route receipt matches the NUMINA manifest.' : ' NUMINA control-manifest binding is not verified.'));
     set('[data-checked-at]', 'Response check ' + now().toLocaleString());
     // Raw observed artifacts remain downloadable; a key is offered only after verification against the configured pin.
     snapshot = {

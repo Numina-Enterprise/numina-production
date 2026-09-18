@@ -82,10 +82,11 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const declarationRelease=declaration?.release??declaration;
   const releaseSignatureValid=attestation.valid&&attestation.envelope.artifact_type===RELEASE_ARTIFACT_TYPE&&
     releaseIdentityMatches(declarationRelease)&&(declaration.environment??'production')==='production'&&declarationBound;
-  // Exact binding is required. A signature over unrelated state is not proof of the displayed state.
-  const controlStateBound = Boolean(controlReceipt.valid && controlReceipt.envelope.artifact_type === 'NUMINA_CONTROL_STATE' &&
-    object(control) && Object.hasOwn(control, 'state') && control.state?.schema === 'numina.control-state.v1' &&
-    control.state.release === EXPECTED_RELEASE.production_version && equalJson(control.state, controlReceipt.envelope.payload));
+  // Exact binding is required. The legacy route carries a NUMINA manifest, never an independent state.
+  const controlManifest = control?.manifest;
+  const controlManifestBound = Boolean(controlReceipt.valid && ['NUMINA_CONTROL_MANIFEST','NUMINA_CONTROL_STATE'].includes(controlReceipt.envelope.artifact_type) &&
+    object(control) && object(controlManifest) && ['numina.control-manifest.v1','numina.control-state.v1'].includes(controlManifest.schema) &&
+    controlManifest.release === EXPECTED_RELEASE.production_version && equalJson(controlManifest, controlReceipt.envelope.payload));
   const status=value('status'),supply=value('supply'),statusPayload=status?.payload??status,statusRelease=statusPayload?.release??statusPayload;
   const runtimeStatusMatches=Boolean(releaseIdentityMatches(statusRelease)&&statusPayload.frozen_core?.valid===true&&statusPayload.frozen_core?.manifest_root===EXPECTED_RELEASE.frozen_core_manifest_root);
   const supplyEvidence=supply?.payload?.evidence??supply?.evidence??supply;
@@ -93,7 +94,7 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   return {
     manifest, manifestMatches, attestation,
     releaseDeclarationVerified: Boolean(manifestMatches && releaseSignatureValid),
-    runtimeStatusMatches, supplyIdentityMatches, controlReceipt, controlStateBound,
+    runtimeStatusMatches, supplyIdentityMatches, controlReceipt, controlManifestBound,
     key: attestation.valid ? attestation.key : controlReceipt.valid ? controlReceipt.key : null
   };
 }
