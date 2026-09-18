@@ -1,14 +1,21 @@
 import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from '../public/treasury-valuation.js';
+import {NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 
-export const NUMINA_FUNDABLE_TARGET_AMOUNT='500000000000000';
+export const NUMINA_FUNDABLE_TARGET_AMOUNT=NUMINA_TREASURY_CONNECTION.allocations.find(allocation=>allocation.id==='numina-native-treasury').amount;
 // One declared model aggregate, allocated across routes. This is not a sum of
 // observed provider balances and does not change the native journal projection.
-export const NUMINA_AGGREGATE_MODELED_VALUE='1500000000000000';
-export const NUMINA_FUNDABLE_TARGETS=Object.freeze([
-  Object.freeze({id:'bank-of-america-savings',identity:'NUMINA',provider:'NUMINA',providerService:'bank-of-america',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',accountLabel:'Bank of America Savings ACH route',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'USD',classification:'MODEL_ROUTE_ALLOCATION',treasuryIdentity:'NUMINA',treasuryRole:'bank_evidence',systemOfRecord:'NUMINA',evidenceService:'bank-of-america'}),
-  Object.freeze({id:'stripe-numina-native-treasury',identity:'NUMINA',provider:'NUMINA',providerService:'stripe',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',accountLabel:'Stripe Treasury USDC address',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'USDC',classification:'MODEL_ROUTE_ALLOCATION',treasuryIdentity:'NUMINA',treasuryRole:'stripe_evidence',systemOfRecord:'NUMINA',evidenceService:'stripe'}),
-  Object.freeze({id:'numina-native-treasury',identity:'NUMINA',provider:'NUMINA',providerService:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',accountLabel:'Numina Native Treasury',routePurpose:'NUMINA_NATIVE_TREASURY',amount:NUMINA_FUNDABLE_TARGET_AMOUNT,unit:'NUSD',classification:'MODEL_ROUTE_ALLOCATION',treasuryIdentity:'NUMINA',treasuryRole:'canonical_projection',systemOfRecord:'NUMINA',evidenceService:'NUMINA'})
-]);
+export const NUMINA_AGGREGATE_MODELED_VALUE=NUMINA_TREASURY_CONNECTION.aggregateModeledValue;
+const treasuryRouteMetadata={
+  'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Bank of America Savings ACH route',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
+  'stripe-numina-native-treasury':{providerService:'stripe',accountLabel:'Stripe Treasury USDC address',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',treasuryRole:'stripe_evidence',evidenceService:'stripe'},
+  'numina-native-treasury':{providerService:'NUMINA',accountLabel:'Numina Native Treasury',routePurpose:'NUMINA_NATIVE_TREASURY',treasuryRole:'canonical_projection',evidenceService:'NUMINA'}
+};
+// The browser and authenticated account API share the same model amounts and units.
+// Route metadata describes evidence roles; it never supplies provider funds.
+export const NUMINA_FUNDABLE_TARGETS=Object.freeze(NUMINA_TREASURY_CONNECTION.allocations.map(({id,amount,unit})=>Object.freeze({
+  id,identity:'NUMINA',provider:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',
+  ...treasuryRouteMetadata[id],amount,unit,classification:'MODEL_ROUTE_ALLOCATION',treasuryIdentity:'NUMINA',systemOfRecord:'NUMINA'
+})));
 
 function buildFundableTargets(projection){
   const targets=NUMINA_FUNDABLE_TARGETS.map(target=>{
