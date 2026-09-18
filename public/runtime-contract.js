@@ -4,6 +4,12 @@ export const RUNTIME_VERSION = '1.9.0-rc26';
 export const EXPECTED_RELEASE = Object.freeze({
   "singular": true,
   "identity": "NUMINA",
+  "build_identity": "NUMINA",
+  "all_builds_are_numina": true,
+  "non_numina_builds_allowed": false,
+  "canonical_source": "github",
+  "canonical_repository": "skott34-dot/numina-production",
+  "canonical_branch": "main",
   "release": "core-v1.8+prod-v1.9.0-rc26",
   "core_version": "1.8.0",
   "production_version": "1.9.0-rc26",

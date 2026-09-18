@@ -18,13 +18,24 @@ The current modeled Numina-native settlement projection uses one common NUSD-equ
 
 ```text
 NUMINA {
-  total = 1000T NUSD-equivalent
+  total = 1500T NUSD-equivalent
   USD_branch  = 500T
   USDC_branch = 500T
+  NUSD_branch = 500T
 }
 ```
 
 The branches are projections/routes of the singular Numina state rather than independent authoritative treasuries.
+
+## Singular build law
+
+```text
+GitHub main
+→ NUMINA
+→ website | Vercel | mobile | runtime | receipts | treasury
+```
+
+GitHub `skott34-dot/numina-production` branch `main` is the canonical source lineage. Every active build, deployment, package, runtime, receipt surface, and treasury presentation is a projection of the singular `NUMINA` identity. There is no supported non-NUMINA build identity and no competing build authority.
 
 ## Invariant
 

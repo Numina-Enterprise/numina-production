@@ -285,5 +285,24 @@
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json"
     }
+  },
+  "buildModel": {
+    "identity": "NUMINA",
+    "singular": true,
+    "sourceAuthority": "GitHub",
+    "canonicalRepository": "skott34-dot/numina-production",
+    "canonicalBranch": "main",
+    "allBuildsAreNumina": true,
+    "nonNuminaBuildsAllowed": false,
+    "competingBuildAuthorityAllowed": false,
+    "projections": [
+      "website",
+      "vercel",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury"
+    ],
+    "historicalReceiptsPreservedAsEvidence": true
   }
 }
