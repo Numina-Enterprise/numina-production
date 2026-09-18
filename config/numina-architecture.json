@@ -39,7 +39,15 @@
     "provider_balances_changed_by_build": false,
     "identity": "NUMINA",
     "provider": "NUMINA",
-    "provider_verification": true
+    "provider_verification": true,
+    "alignment_schema": "numina.treasury.alignment.v2",
+    "account_view_schema": "numina.treasury.account-view.v2",
+    "canonical_reference_schema": "numina.treasury.canonical-reference.v2",
+    "treasury_identity": "NUMINA",
+    "transport_verification_channel": "NUMINA",
+    "separate_roles": true,
+    "singular_identity": true,
+    "provider_role_balances_additive": false
   },
   "mint_event": null,
   "pendingRuntimeMigration": null,
