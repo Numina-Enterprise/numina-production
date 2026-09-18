@@ -27,5 +27,17 @@
   "deny_self_hosted_runners": true,
   "slsa_level_claimed": null,
   "provenance_identity": "NUMINA",
-  "canonical_repository": "skott34-dot/numina-production"
+  "canonical_repository": "skott34-dot/numina-production",
+  "identity": "NUMINA",
+  "authority": "NUMINA",
+  "source": "NUMINA",
+  "host": "NUMINA",
+  "repository_identity": "NUMINA",
+  "repository_service": "GitHub",
+  "verification_channels": [
+    "GitHub Actions",
+    "Sigstore"
+  ],
+  "transport_identity": "NUMINA",
+  "transport_services_are_evidence_channels": true
 }
