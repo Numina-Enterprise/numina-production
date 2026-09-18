@@ -1,4 +1,3 @@
-import {NUMINA} from '../src/numina-root.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW,NUSD_APPROVED_REVIEW,NUSD_SIMULATION} from '../src/nusd-http.js';
 import {NUSD_PROVIDER_ROUTING} from '../src/stripe-treasury.js';
@@ -12,6 +11,7 @@ import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/walle
 import {EXPECTED_RUNTIME_SHA256,MINIMUM_CONFIRMATIONS} from '../public/wallet-execution-receipt.js';
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+const NUMINA='NUMINA';
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const version=JSON.parse(readFileSync('package.json')).version,major=version.split('.')[0];
 const integrationFile='numina-integration-kit-v'+version+'.zip';
