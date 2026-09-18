@@ -1,6 +1,7 @@
 'use strict';
 
 const {createNumina,projectLegacyRuntime}=require('./frontier');
+const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','authority','source','evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
 const legacy=require('./numina');
 
 function runtimeManifest(){
