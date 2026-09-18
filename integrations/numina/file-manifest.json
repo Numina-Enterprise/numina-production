@@ -391,6 +391,9 @@
     "conversionPerformed": false,
     "redemptionPerformed": false,
     "settlementPerformed": false,
-    "externalDepositsPerformed": false
+    "externalDepositsPerformed": false,
+    "mintStatus": "MINT_SUCCESS",
+    "mintSuccessReported": true,
+    "mintVerified": false
   }
 }
