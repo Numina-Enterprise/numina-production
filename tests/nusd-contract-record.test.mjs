@@ -30,7 +30,7 @@ test('contract records hash exact downloadable artifacts and never supply invent
   assert.deepEqual(createNusdContractRecord().record,record);
   for(const contract of record.contracts){
     for(const field of ['source','artifact']){const file=contract[field],bytes=read('docs/'+file.url.slice('/downloads/'.length));assert.equal(bytes.length,file.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),file.sha256);}
-    assert.equal(contract.deployment.contract_address,null);assert.equal(contract.deployment.receipt,null);
+    if(['nusd','nusd_settlement'].includes(contract.id)){assert.equal(contract.deployment.status,'verified');assert.equal(contract.deployment.submission_performed,true);assert.equal(contract.verification.chain_receipt_verified,true);assert.ok(/^0x[0-9a-fA-F]{40}$/.test(contract.deployment.contract_address));assert.ok(/^0x[0-9a-fA-F]{64}$/.test(contract.deployment.transaction_hash));assert.equal(contract.deployment.receipt.status,'0x1');}else{assert.equal(contract.deployment.contract_address,null);assert.equal(contract.deployment.receipt,null);}
     const spec={id:contract.id,name:contract.name,schema:JSON.parse(read(contract.artifact.repository_path)).schema,operations:contract.implemented_operations};
     assert.throws(()=>contractDescriptor(spec,Buffer.from('forged source'),read(contract.artifact.repository_path)),/does not match/);
   }
@@ -40,8 +40,8 @@ test('contract API and UI separate compiled functions from activated financial o
   assert.deepEqual(await (await nusdHttp(request('GET'))).json(),record);
   for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(request(method))).status,405);
   assert.match(contractSourcePresentation(record).source,/compiled.*unverified/);
-  assert.match(assessFinancialStatus(NUSD_POLICY).contract,/No deployed address/);
-  assert.ok(Object.values(record.financial_execution).every(value=>value===false));
+  assert.match(assessFinancialStatus(NUSD_POLICY).contract,/deployed|receipt|paused/i);
+  assert.equal(record.financial_execution.issuance,true);assert.equal(record.financial_execution.transfer,false);assert.equal(record.financial_execution.nusd_settlement,false);assert.equal(record.financial_execution.usd_redemption,false);assert.equal(record.financial_execution.usdc_conversion,false);assert.equal(record.financial_execution.external_deposits,false);
   for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
   const forged=structuredClone(record);forged.contracts[0].deployment.contract_address='0x123';assert.throws(()=>contractSourcePresentation(forged));
 });

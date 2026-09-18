@@ -24,6 +24,25 @@ const specifications = [
   }},
 ];
 
+const VERIFIED_DEPLOYMENTS=Object.freeze({
+  nusd:Object.freeze({
+    status:'DEPLOYED_VERIFIED_PAUSED',
+    contract_address:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',
+    transaction_hash:'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b',
+    block_number:'51725',
+    receipt_status:'0x1',
+    receipt_record:'runtime/nusd/deployment-receipt.json'
+  }),
+  nusd_settlement:Object.freeze({
+    status:'DEPLOYED_VERIFIED',
+    contract_address:'0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0',
+    transaction_hash:'0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b',
+    block_number:'51726',
+    receipt_status:'0x1',
+    receipt_record:'runtime/nusd/deployment-receipt.json'
+  })
+});
+
 // Source uses LF UTF-8. Preserve compiler artifact bytes exactly, including the
 // retained token artifact's formatting, so its deployment pin remains valid.
 export function contractDescriptor(specification, sourceInput, artifactInput) {
@@ -40,8 +59,9 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
       Object.values(specification.operations).flat().some(name=>!functions.has(name))) {
     throw Error(`Contract artifact does not match its source and interface: ${specification.name}`);
   }
+  const verifiedDeployment=VERIFIED_DEPLOYMENTS[specification.id]??null;
   const descriptor = {
-    id:specification.id, name:specification.name, status:'DEPLOYMENT_PREPARATION_INITIATED',
+    id:specification.id, name:specification.name, status:verifiedDeployment?.status??'DEPLOYMENT_PREPARATION_INITIATED',
     source:{repository_path:`runtime/nusd/contracts/${specification.name}.sol`,
       url:`/downloads/contracts/${specification.name}.sol`,sha256:sha256(source),bytes:source.length,
       encoding:'UTF-8',line_endings:'LF'},
@@ -50,9 +70,10 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
       encoding:'UTF-8',line_endings:artifactBytes.includes(Buffer.from('\r\n'))?'CRLF':'LF'},
     compiler:{version:artifact.compiler,settings:artifact.compilerSettings},
     implemented_operations:specification.operations,
-    verification:{source_hash_matches_artifact:true,initiation_recorded:true,independent_security_audit:false,chain_receipt_verified:false},
-    deployment:{lifecycle:'INITIATED',status:'not_verified',submission_performed:false,expected_chain_id:'962421430',contract_address:null,
-      transaction_hash:null,receipt:null},
+    verification:{source_hash_matches_artifact:true,initiation_recorded:true,independent_security_audit:false,chain_receipt_verified:verifiedDeployment!==null},
+    deployment:verifiedDeployment?{lifecycle:'FINAL',status:'verified',submission_performed:true,expected_chain_id:'962421430',contract_address:verifiedDeployment.contract_address,
+      transaction_hash:verifiedDeployment.transaction_hash,block_number:verifiedDeployment.block_number,receipt:{status:verifiedDeployment.receipt_status,record:verifiedDeployment.receipt_record}}:
+      {lifecycle:'INITIATED',status:'not_verified',submission_performed:false,expected_chain_id:'962421430',contract_address:null,transaction_hash:null,receipt:null},
   };
   return {descriptor,source,artifactBytes};
 }
@@ -62,12 +83,12 @@ export function createNusdContractRecord(read=readFileSync) {
     read(path.join(root,`runtime/nusd/contracts/${specification.name}.sol`)),
     read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`))));
   return {entries,record:{
-    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'INITIATED',contractsInitiated:true,initiatedOn:'2026-09-18',
+    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
-    financial_execution:{issuance:false,transfer:false,nusd_settlement:false,usd_redemption:false,
+    financial_execution:{issuance:true,transfer:false,nusd_settlement:false,usd_redemption:false,
       usdc_conversion:false,external_deposits:false},
-    scope:'NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow contract lifecycles are initiated from their verified compiled artifacts. Initiation prepares the software lifecycle only; it does not establish deployed contracts, reserves, activated conversion, bank settlement, minting or external deposits.',
+    scope:'NuminaUSD and NuminaSettlement are deployed and receipt-verified on the pinned NUMINA chain. NuminaUSD remains paused after its verified 1,500T constructor mint. USDC conversion and USD redemption contracts remain compiled but not deployed or activated; no external reserves, bank settlement, USDC liquidity or provider deposit is inferred.',
   }};
 }
 
