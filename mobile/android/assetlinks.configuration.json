@@ -1,6 +1,5 @@
 {
-  "status": "release_and_google_play_identities_configured",
-  "package_name_proposed": "xyz.numinalabs.app",
+  "status": "final_release_identity_configured",
   "website": "https://numinalabs.xyz",
   "required_public_path": "/.well-known/assetlinks.json",
   "actual_app_signing_certificate_sha256": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
@@ -10,5 +9,8 @@
   "storeIdentityVerified": true,
   "storeIdentityVerifiedAtUtc": "2026-09-14T16:14:50.488Z",
   "storeIdentitySource": "Google Play Console > Numina (xyz.numinalabs.app) > App signing > Digital Asset Links JSON",
-  "deviceLinkVerificationPerformed": false
+  "deviceLinkVerificationPerformed": false,
+  "package_name": "xyz.numinalabs.app",
+  "finalBuildVersionCode": 4,
+  "finalBuildReceipt": "release-evidence/numina-final-build-2026-09-18.json"
 }
