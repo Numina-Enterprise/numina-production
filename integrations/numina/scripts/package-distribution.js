@@ -22,7 +22,6 @@ const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime
  additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','provider_routing','treasury_client_verification'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
 const treasuryAlignment={...singularIdentities,schema:'numina.treasury.alignment.v2',planSchema:'numina.treasury.alignment-plan.v2',status:'INITIATED',targetAmount:'500000000000000',designatedRoleCount:3,accountViewSchema:'numina.treasury.account-view.v2',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',separateRoles:true,singularIdentity:true,historicalProjectionSchema:'numina.treasury.projection.v1',providerRoleBalancesAdditive:false};
-const repositoryObservation=Object.freeze({identity:'NUMINA',service:'GitHub',fullName:'skott34-dot/numina-production',repositoryId:1367647143,branch:'main',observedRole:'repository_service',authoritativeIdentity:false});
 const integrationManifestRef={path:'file-manifest.json',schema:'numina.integration.manifest.v2',identity:'NUMINA',canonical:true};
 const verification={
  schema:'numina.integration.package.v2',...singularIdentities,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
@@ -62,7 +61,7 @@ const files=[
  'package.json','.gitignore','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
  'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
 ].sort();
-const fileManifest={schema:'numina.integration.manifest.v2',...singularIdentities,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',repositoryObservation,application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
+const fileManifest={schema:'numina.integration.manifest.v2',...singularIdentities,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
  if(/(?:^|\/)\.env|\.private\.|\.(?:pem|key|tgz|zip)$/.test(relative))throw new Error('Private or archive files are not distribution inputs');
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
