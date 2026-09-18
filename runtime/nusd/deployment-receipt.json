@@ -44,7 +44,8 @@
       "status": "0x1",
       "effectiveGasPrice": "0x0",
       "type": "0x0"
-    }
+    },
+    "finalConfirmations": 25
   },
   "settlement": {
     "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
@@ -67,7 +68,8 @@
       "status": "0x1",
       "effectiveGasPrice": "0x0",
       "type": "0x0"
-    }
+    },
+    "finalConfirmations": 24
   },
   "externalSettlement": {
     "usd": false,
@@ -87,6 +89,11 @@
   "broadcastPerformed": true,
   "finality": {
     "requiredConfirmations": 12,
-    "status": "PENDING_CONFIRMATIONS"
+    "status": "FINAL",
+    "observedAt": "2026-09-18T15:35:24.884Z",
+    "observedBlockNumber": "51749",
+    "observedBlockHash": "0xaa976d94df250c3305837e362b6598964bfe5064c22300ed05c6bea439166d8f",
+    "tokenConfirmations": 25,
+    "settlementConfirmations": 24
   }
 }
