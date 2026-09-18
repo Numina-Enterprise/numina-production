@@ -63,7 +63,7 @@ export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEn
     deployment:'NUMINA',deployed:true,ready:Object.values(checks).every(Boolean),checks,
     application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},
     runtime:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',deployment:'NUMINA',...EXPECTED_RELEASE},
-    provider_of_record:{identity:'NUMINA',scope:'numina_native',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',external_confirmation:'evidence_channel'},
+    provider_of_record:{identity:'NUMINA',scope:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA'},
     transport:{identity:'NUMINA',role:'diagnostic_only',vercel_observation_verified:transportVerified,observation:transportObservation??null},
     mode:'NUMINA'};
 }
