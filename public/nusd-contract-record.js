@@ -4,7 +4,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "schema": "numina.nusd.contract-record.v1",
   "modelIdentity": "NUMINA",
   "identity": "NUMINA",
-  "status": "INITIATED",
+  "status": "DEPLOYED_VERIFIED",
   "contractsInitiated": true,
   "initiatedOn": "2026-09-18",
   "url": "/api/nusd/v1/contracts",
@@ -13,7 +13,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd",
       "name": "NuminaUSD",
-      "status": "DEPLOYMENT_PREPARATION_INITIATED",
+      "status": "DEPLOYED_VERIFIED_PAUSED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaUSD.sol",
         "url": "/downloads/contracts/NuminaUSD.sol",
@@ -84,22 +84,26 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source_hash_matches_artifact": true,
         "initiation_recorded": true,
         "independent_security_audit": false,
-        "chain_receipt_verified": false
+        "chain_receipt_verified": true
       },
       "deployment": {
-        "lifecycle": "INITIATED",
-        "status": "not_verified",
-        "submission_performed": false,
+        "lifecycle": "FINAL",
+        "status": "verified",
+        "submission_performed": true,
         "expected_chain_id": "962421430",
-        "contract_address": null,
-        "transaction_hash": null,
-        "receipt": null
+        "contract_address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "transaction_hash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "block_number": "51725",
+        "receipt": {
+          "status": "0x1",
+          "record": "runtime/nusd/deployment-receipt.json"
+        }
       }
     },
     {
       "id": "nusd_settlement",
       "name": "NuminaSettlement",
-      "status": "DEPLOYMENT_PREPARATION_INITIATED",
+      "status": "DEPLOYED_VERIFIED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaSettlement.sol",
         "url": "/downloads/contracts/NuminaSettlement.sol",
@@ -152,16 +156,20 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source_hash_matches_artifact": true,
         "initiation_recorded": true,
         "independent_security_audit": false,
-        "chain_receipt_verified": false
+        "chain_receipt_verified": true
       },
       "deployment": {
-        "lifecycle": "INITIATED",
-        "status": "not_verified",
-        "submission_performed": false,
+        "lifecycle": "FINAL",
+        "status": "verified",
+        "submission_performed": true,
         "expected_chain_id": "962421430",
-        "contract_address": null,
-        "transaction_hash": null,
-        "receipt": null
+        "contract_address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+        "transaction_hash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "block_number": "51726",
+        "receipt": {
+          "status": "0x1",
+          "record": "runtime/nusd/deployment-receipt.json"
+        }
       }
     },
     {
@@ -326,12 +334,12 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     }
   ],
   "financial_execution": {
-    "issuance": false,
+    "issuance": true,
     "transfer": false,
     "nusd_settlement": false,
     "usd_redemption": false,
     "usdc_conversion": false,
     "external_deposits": false
   },
-  "scope": "NUSD token, settlement, inventory-backed 1:1 USDC conversion and 1:1 USD redemption escrow contract lifecycles are initiated from their verified compiled artifacts. Initiation prepares the software lifecycle only; it does not establish deployed contracts, reserves, activated conversion, bank settlement, minting or external deposits."
+  "scope": "NuminaUSD and NuminaSettlement are deployed and receipt-verified on the pinned NUMINA chain. NuminaUSD remains paused after its verified 1,500T constructor mint. USDC conversion and USD redemption contracts remain compiled but not deployed or activated; no external reserves, bank settlement, USDC liquidity or provider deposit is inferred."
 });
