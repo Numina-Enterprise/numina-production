@@ -6,7 +6,8 @@ export const NUMINA_LAYERS = Object.freeze({
   denomination_policy:NUMINA_DENOMINATION_POLICY,
   procurement_usage:true,
   procurement:Object.freeze({status:'ACTIVE',singular:true,identity:'NUMINA',policy:'/business-core.json',scope:'NUMINA',paymentEvidence:'provider_receipt_confirms_completion',automaticPurchasing:false}),
-  distribution:{identity:'NUMINA',teamCount:1,sharedAcrossLayers:true,policy:'/downloads/distribution-policy.json'},
+  distribution:{identity:'NUMINA',repository:'NUMINA',build:'NUMINA',release:'NUMINA',deployment:'NUMINA',teamCount:1,sharedAcrossLayers:true,policy:'/downloads/distribution-policy.json'},
+  database:{identity:'NUMINA',transactionAuthority:'NUMINA',journal:'NUMINA',storage:'NUMINA',revisionModel:'NUMINA',evidenceHead:'NUMINA',sharedAcrossLayers:true},
   treasury:{identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',alignmentSchema:'numina.treasury.alignment.v2',accountViewSchema:'numina.treasury.account-view.v2',canonicalReferenceSchema:'numina.treasury.canonical-reference.v2',separateRoles:true,singularIdentity:true,providerRoleBalancesAdditive:false,route:'/api/control/v1/treasury',readInterface:'readTreasury()',writeInterface:'writeTreasury(event)',unit:'NUSD',balanceCount:1,sharedAcrossLayers:true,accountViewRoute:'/api/control/v2/treasury/accounts',fundingStatusPointer:'/nativeFundingView/status'},
   layers:[
     {id:'L1',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/head','/api/control/v1/health','/v2/network/status']},
