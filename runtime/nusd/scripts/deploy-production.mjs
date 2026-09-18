@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {ContractFactory,Interface,getAddress,id} from 'ethers';
 import {validateDeployment} from './validate-deployment.mjs';
 import {loadTokenArtifact,TOKEN_ARTIFACT_SHA256} from './token-artifact.mjs';
+import {resolveRpcAuthorization} from './rpc-auth.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const requestFile=path.resolve(process.argv[2]||path.join(root,'deployment.production.json'));
@@ -56,39 +57,31 @@ for(const candidate of authorizationCandidates(authorizationInput)){
     if(typeof probe==='string'){authorization=candidate;break;}
   }catch{}
 }
-async function kaleidoAdminApiKeyDetected(value){
-  const tokens=[];
-  if(/^Bearer [\x21-\x7e]+$/.test(value))tokens.push(value.slice(7));
-  try{
-    if(/^\s*\{/.test(value)){
-      const parsed=JSON.parse(value);
-      for(const item of [parsed.apiKey,parsed.api_key,parsed.token,parsed.accessToken]){
-        if(typeof item==='string'&&item)tokens.push(item);
-      }
-      if(typeof parsed.authorization==='string'&&/^Bearer [\x21-\x7e]+$/.test(parsed.authorization))tokens.push(parsed.authorization.slice(7));
-    }
-  }catch{}
-  if(!/^https:\/\//i.test(value)&&!value.includes(':')&&!/^(?:Basic|Bearer) /.test(value))tokens.push(value);
-  for(const token of [...new Set(tokens)]){
-    try{
-      const response=await fetch('https://console.kaleido.io/api/v1/consortia?limit=1',{
-        method:'GET',headers:{accept:'application/json',authorization:'Bearer '+token},
-        redirect:'error',signal:AbortSignal.timeout(15000)
-      });
-      const type=(response.headers.get('content-type')||'').toLowerCase();
-      if(response.ok&&/^application\/json(?:\s*;|$)/i.test(type)){
-        const body=await response.json();
-        if(Array.isArray(body))return true;
-      }
-    }catch{}
-  }
-  return false;
-}
+let rpcCleanup=null;
 if(!authorization){
-  if(await kaleidoAdminApiKeyDetected(authorizationInput))throw Error('NUMINA_RPC_APP_CREDENTIAL_REQUIRED_ADMIN_KEY_DETECTED');
-  throw Error('NUMINA_RPC_AUTHENTICATION_FAILED');
+  const resolved=await resolveRpcAuthorization({
+    endpoint,
+    directInputs:[
+      authorizationInput,
+      process.env.NUMINA_RPC_APP_CREDENTIAL,
+      process.env.NUMINA_KALEIDO_APP_CREDENTIAL,
+      process.env.KALEIDO_APP_CREDENTIAL
+    ],
+    pairs:[
+      [process.env.NUMINA_RPC_USERNAME,process.env.NUMINA_RPC_PASSWORD],
+      [process.env.NUMINA_RPC_APP_USERNAME,process.env.NUMINA_RPC_APP_PASSWORD],
+      [process.env.KALEIDO_APP_CRED_USERNAME,process.env.KALEIDO_APP_CRED_PASSWORD],
+      [process.env.KALEIDO_APP_USERNAME,process.env.KALEIDO_APP_PASSWORD],
+      [process.env.KALEIDO_USERNAME,process.env.KALEIDO_PASSWORD]
+    ],
+    adminInputs:[authorizationInput,process.env.NUMINA_KALEIDO_API_KEY,process.env.KALEIDO_API_KEY],
+    allowAdminBootstrap:true
+  });
+  authorization=resolved.authorization;
+  rpcCleanup=resolved.cleanup;
 }
 async function rpc(method,params=[]){return rawRpc(authorization,method,params);}
+try {
 const hex=value=>'0x'+BigInt(value).toString(16);
 async function waitReceipt(hash){
   for(let attempt=0;attempt<180;attempt++){
@@ -243,3 +236,6 @@ const result={
 };
 fs.writeFileSync(receiptFile,JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify(result));
+} finally {
+  if(rpcCleanup)await rpcCleanup();
+}
