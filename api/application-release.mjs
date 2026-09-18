@@ -5,7 +5,7 @@ import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BU
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
 const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN=ORIGIN,MAX_BYTES=262144;
-function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
+function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,repository:{host:'GitHub',canonical:'skott34-dot/numina-production',repository_id:1367647143,branch:'main',sole_source_of_truth:true},runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const NUMINA_FIELDS=['root','manifest','identity','authority','source','evidence','provider','host','core','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection'];
 
