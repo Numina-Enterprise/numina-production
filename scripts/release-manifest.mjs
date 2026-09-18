@@ -1,3 +1,4 @@
+import {NUMINA} from '../src/numina-root.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW,NUSD_APPROVED_REVIEW,NUSD_SIMULATION} from '../src/nusd-http.js';
 import {NUSD_PROVIDER_ROUTING} from '../src/stripe-treasury.js';
