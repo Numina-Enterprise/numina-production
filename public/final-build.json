@@ -81,5 +81,39 @@
     "googlePlay": false,
     "appStore": false,
     "evidenceRequired": true
+  },
+  "delivery": {
+    "source": {
+      "status": "FINAL",
+      "canonicalRepository": "skott34-dot/numina-production"
+    },
+    "smartContracts": {
+      "status": "FINAL",
+      "receipt": "/downloads/nusd/deployment-receipt.json",
+      "verification": "/downloads/nusd/deployment-verification.json"
+    },
+    "website": {
+      "sourceAligned": true,
+      "productionTransportUpdated": false,
+      "currentPublicDeploymentKnownStale": true,
+      "blocker": "VERCEL_BUILD_RATE_LIMIT",
+      "blockerEvidence": "Vercel commit status target upgradeToPro=build-rate-limit"
+    },
+    "android": {
+      "sourceAligned": true,
+      "versionCode": 4,
+      "signedArtifactCreated": false,
+      "googlePlaySubmitted": false,
+      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
+      "submissionReceipt": null
+    },
+    "ios": {
+      "sourceAligned": true,
+      "buildNumber": 6,
+      "signedArtifactCreated": false,
+      "appStoreSubmitted": false,
+      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
+      "submissionReceipt": null
+    }
   }
 }
