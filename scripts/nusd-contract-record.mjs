@@ -83,10 +83,10 @@ export function createNusdContractRecord(read=readFileSync) {
     read(path.join(root,`runtime/nusd/contracts/${specification.name}.sol`)),
     read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`))));
   return {entries,record:{
-    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'INITIATED',contractsInitiated:true,initiatedOn:'2026-09-18',
+    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
-    financial_execution:{issuance:false,transfer:false,nusd_settlement:false,usd_redemption:false,
+    financial_execution:{issuance:true,transfer:false,nusd_settlement:false,usd_redemption:false,
       usdc_conversion:false,external_deposits:false},
     scope:'NuminaUSD and NuminaSettlement are deployed and receipt-verified on the pinned NUMINA chain. NuminaUSD remains paused after its verified 1,500T constructor mint. USDC conversion and USD redemption contracts remain compiled but not deployed or activated; no external reserves, bank settlement, USDC liquidity or provider deposit is inferred.',
   }};
