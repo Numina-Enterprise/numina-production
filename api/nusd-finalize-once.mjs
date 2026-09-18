@@ -70,21 +70,21 @@ export default async function handler(req,res){
       const raw=await rpc('eth_call',[{to:address,data},'latest']);
       return iface.decodeFunctionResult(name,raw);
     }
-    async function verifyToken(address){
+    async function verifyToken(contractAddress){
       try{
-        const [decimals]=await call(address,tokenIface,'decimals');
-        const [supply]=await call(address,tokenIface,'totalSupply');
-        const [cap]=await call(address,tokenIface,'cap');
-        const [paused]=await call(address,tokenIface,'paused');
-        const [balance]=await call(address,tokenIface,'balanceOf',[SENDER]);
-        const [policy]=await call(address,tokenIface,'issuerPolicyHash');
+        const [decimals]=await call(contractAddress,tokenIface,'decimals');
+        const [supply]=await call(contractAddress,tokenIface,'totalSupply');
+        const [cap]=await call(contractAddress,tokenIface,'cap');
+        const [paused]=await call(contractAddress,tokenIface,'paused');
+        const [balance]=await call(contractAddress,tokenIface,'balanceOf',[SENDER]);
+        const [policy]=await call(contractAddress,tokenIface,'issuerPolicyHash');
         if(decimals!==18n||supply.toString()!==EXPECTED_SUPPLY||cap.toString()!==EXPECTED_SUPPLY||paused!==true||
            balance.toString()!==EXPECTED_SUPPLY||String(policy).toLowerCase()!=='0x'+POLICY)return null;
-        for(const [name,address] of [['ISSUER_ROLE',cfg.roles.issuer],['MINTER_ROLE',cfg.roles.minter],['PAUSER_ROLE',cfg.roles.pauser]]){
-          const [has]=await call(address?address:address,tokenIface,'hasRole',[ethers.id(name),address]);
+        for(const [name,roleAddress] of [['ISSUER_ROLE',cfg.roles.issuer],['MINTER_ROLE',cfg.roles.minter],['PAUSER_ROLE',cfg.roles.pauser]]){
+          const [has]=await call(contractAddress,tokenIface,'hasRole',[ethers.id(name),roleAddress]);
           if(!has)return null;
         }
-        const [admin]=await call(address,tokenIface,'defaultAdmin');
+        const [admin]=await call(contractAddress,tokenIface,'defaultAdmin');
         if(ethers.getAddress(admin)!==ethers.getAddress(cfg.roles.admin))return null;
         return {decimals:Number(decimals),totalSupply:supply.toString(),cap:cap.toString(),paused,recipientBalance:balance.toString(),issuerPolicySha256:POLICY};
       }catch{return null;}
