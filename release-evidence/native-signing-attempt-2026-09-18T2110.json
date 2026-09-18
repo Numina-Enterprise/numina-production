@@ -1,0 +1,38 @@
+{
+  "schema": "numina.native-signing-attempt.v1",
+  "observedAtUtc": "2026-09-18T21:11:12Z",
+  "sourceCommit": "885b0b7c253907989dd3c17dd777f36e7c94cdab",
+  "sourceBranch": "main",
+  "applicationVersion": "4.0.0",
+  "androidVersionCode": 4,
+  "iosBuildNumber": 6,
+  "status": "NOT_STARTED_RUNNER_BILLING_BLOCK",
+  "providerAnnotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+  "android": {
+    "runId": 35395347752,
+    "jobId": 105762815915,
+    "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35395347752",
+    "runnerLabel": "ubuntu-latest",
+    "runnerId": 0,
+    "status": "completed",
+    "conclusion": "failure",
+    "executedSteps": 0,
+    "artifacts": []
+  },
+  "ios": {
+    "runId": 35395350460,
+    "jobId": 105762824802,
+    "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35395350460",
+    "runnerLabel": "macos-latest",
+    "runnerId": 0,
+    "status": "completed",
+    "conclusion": "failure",
+    "executedSteps": 0,
+    "artifacts": []
+  },
+  "nativeCompilationPerformed": false,
+  "signingPerformed": false,
+  "storeSubmissionPerformed": false,
+  "signingCredentialsValidatedByTheseRuns": false,
+  "scope": "Actual GitHub Actions attempt evidence, not a successful native build or signing receipt. Historical binaries remain byte-for-byte unchanged."
+}
