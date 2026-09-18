@@ -258,8 +258,8 @@
     },
     {
       "path": "src/runtime-contract.js",
-      "bytes": 1204,
-      "sha256": "c09537fe17f328ad0e6b26b75d61f552ce4671d11027f0bcc4358e5c3467980a"
+      "bytes": 1224,
+      "sha256": "e28185af6a771370aa38cc6d11beda78bb7c80d26d771238d018d02883dd0fb4"
     },
     {
       "path": "src/tools.js",
@@ -279,7 +279,7 @@
     {
       "path": "verification.json",
       "bytes": 2488,
-      "sha256": "cb3c021a3a4c8d661e72e3281fae57614f1611391adbd85e347da4f74dd00e41"
+      "sha256": "47dc7a4ef99013476a621383e3684af6bb20c9249a573ac2fc4054e614d817e2"
     }
   ]
 }
