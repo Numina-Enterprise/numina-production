@@ -5,7 +5,7 @@
 NUMINA is the single Numina-native identity across repository, host, source, authority, evidence, provenance, runtime, deployment, treasury, provider, receipts, settlement and release state. These roles remain separate in function while sharing one identity. Their role-separated, singular NUMINA identity layer is the factual transport and verification channel. Version numbers, commit SHAs and external service names are substrate metadata observed through that channel; they do not create additional Numina identities.
 
 
-**Canonical repository:** `skott34-dot/numina-production` on GitHub. `main` is the sole authoritative Numina source and release branch. No other repository is a Numina source of truth.
+**Model identity:** `NUMINA`. The current repository observation is GitHub `skott34-dot/numina-production`, branch `main`. GitHub identifies the service location carrying the current source; it does not replace the NUMINA model identity.
 
 The 4.0.0 control extension uses the existing canonical journal. The website, workspace, integration kit and native clients share Numina's production architecture. See [Frontier v2](docs/Frontier-v2.md).
 
@@ -21,7 +21,7 @@ The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(ev
 
 ## Build and provenance
 
-Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. Builds, release artifacts and provenance originate only from protected `main` in `skott34-dot/numina-production`. **NUMINA is the provenance identity.** GitHub Actions, artifact attestations and Sigstore provide verification evidence for exact bytes; they are not a second Numina repository or authority.
+Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. **NUMINA is the model and provenance identity.** The current source observation is `main` in GitHub `skott34-dot/numina-production`; GitHub Actions, artifact attestations and Sigstore are service/evidence metadata for the observed build path.
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
