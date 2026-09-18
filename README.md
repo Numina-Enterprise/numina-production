@@ -14,9 +14,9 @@ The authenticated read-only Numina node observation is available at `/v2/network
 
 The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(event)` on the existing control journal. The former owner-statement endpoint redirects to it. See [native treasury implementation](NATIVE-TREASURY.md) for initialization, P/A/O/I execution and proof scope.
 
-## Build and provenance
+## Build
 
-Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. The reviewed reusable provenance workflow now lives in this repository at `.github/workflows/numina-nusd-runtime-builder.yml`. Release jobs invoke the same-repository workflow from protected `main`; there is no cross-repository Numina build authority. Verify the actual attestation bundle and artifact before deployment. Merely copying a workflow or changing a manifest field does not establish a SLSA level.
+Use Node 24 and `node scripts/build.mjs`, then `node scripts/package.mjs ../numina-site-v4.0.0.tar.gz`. Builds and releases originate only from protected `main` in `skott34-dot/numina-production`. There is no separate Numina provenance repository or provenance toolchain.
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
@@ -30,7 +30,7 @@ The mobile web app is served at `/app`. The v4 distribution retains Android 3.0.
 
 ## Source and rights
 
-`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain as source; the provenance workflow does not run them or claim they ran.
+`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain source material; release state is determined from the canonical repository and deployed runtime evidence.
 
 The production GitHub repository is private. GitHub source, build logs and workflow artifacts require repository access. Vercel's connected project has Build Logs and Source Protection enabled. The public website and its explicitly published downloads remain available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
 
