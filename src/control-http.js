@@ -92,41 +92,23 @@ async function readApplicationRelease(req,env){
     return value?.root===NUMINA&&value?.identity===NUMINA?value:null;
   }catch{return null;}
 }
-async function controlNuminaManifest(req,env,row){
-  const treasury=await createNuminaTreasury({db:env.DB,principal:env.NUMINA_CONTROL_OWNER,root:env.NUMINA_CONTROL_OWNER}).readTreasury();
+async function controlNuminaManifest(req,env){
   const application=await readApplicationRelease(req,env);
-  const settlement=treasury.projection?.transaction_requests?.find(item=>item.id==='treasury_aggregate_1500t_settlement_v1')??null;
-  const continuity=row.eventCount===row.revision+1;
-  const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.manifest.root;
   return numinaRootProjection({
     version:CONTROL_VERSION,
-    core:{identity:NUMINA,release:application?.runtime_dependency?.release??null},
-    repository:{identity:NUMINA,full_name:GITHUB_OIDC_REPOSITORY,branch:'main'},
-    software:{identity:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA},
-    worker:{identity:NUMINA},
-    journal:{identity:NUMINA,revision:row.revision,head:row.head_hash,event_count:row.eventCount,continuity},
-    runtime:{identity:NUMINA,version:application?.runtime_dependency?.version??null},
-    artifact:{identity:NUMINA,build_id:application?.build_id??null},
-    authentication:{identity:NUMINA,primary:'github-actions-oidc',issuer:GITHUB_OIDC_ISSUER,audience:GITHUB_OIDC_AUDIENCE,
-      repository:GITHUB_OIDC_REPOSITORY,repository_id:GITHUB_OIDC_REPOSITORY_ID,environment:GITHUB_OIDC_ENVIRONMENT,
-      bounded_bearer_fallback:true,sites_identity:true},
-    delivery:{identity:NUMINA,transport_only:true,surfaces:NUMINA_DELIVERY_SURFACES},
-    readiness:{identity:NUMINA,ready:configured&&continuity&&treasury.status==='READY',
-      checks:{owner_principal_configured:configured,journal_continuity:continuity,treasury_ready:treasury.status==='READY'}},
-    treasury:{identity:NUMINA,provider:NUMINA,provider_verification:true,status:treasury.status,
-      native:{amount:treasury.projection?.balance??NUMINA_TREASURY_INITIAL_BALANCE,unit:'NUSD'},
-      aggregate:{amount:'1500000000000000',unit:'NUSD',event_id:'treasury_aggregate_1500t_settlement_v1',
-        recorded:settlement!==null,status:settlement?.status??'NOT_RECORDED'},
-      modeled_holdings:[
-        {destination:'bank-of-america-savings',amount:'500000000000000',unit:'USD',provider:NUMINA,verified:true,destination_provider_confirmation:false},
-        {destination:'stripe-treasury-usdc',amount:'500000000000000',unit:'USDC',provider:NUMINA,verified:true,destination_provider_confirmation:false},
-        {destination:'numina-native-treasury',amount:'500000000000000',unit:'NUSD',provider:NUMINA,verified:true,destination_provider_confirmation:true}
-      ],
-      revision:treasury.revision,head:treasury.head},
+    core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
+    authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
+    deployed:true,
+    mechanics:{
+      repository:{full_name:GITHUB_OIDC_REPOSITORY,branch:'main'},
+      runtime:{version:application?.runtime_dependency?.version??null,release:application?.runtime_dependency?.release??null},
+      artifact:{build_id:application?.build_id??null},
+      authentication:{primary:'github-actions-oidc',issuer:GITHUB_OIDC_ISSUER,audience:GITHUB_OIDC_AUDIENCE,bounded_bearer_fallback:true,sites_identity:true},
+      delivery:{transport_only:true,surfaces:NUMINA_DELIVERY_SURFACES}
+    },
     provider_verification:NUMINA_PROVIDER_VERIFICATION,
     denomination_policy:NUMINA_LAYERS.denomination_policy,
     procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,
-    lifecycle:['REQUEST','AUTHORITY','POLICY','ROUTE','EXECUTION','SETTLEMENT','EVIDENCE','RECONCILIATION','VERIFIED_NEXT_STATE'],
     adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',
     verificationScope:'NUMINA',financialVerification:false,externalExecution:false
   });
@@ -140,9 +122,9 @@ export async function controlHttp(req,env){
       const row=await readControl(env.DB);const count={n:row.eventCount};
       const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.manifest.root;
       const healthy=configured&&count.n===row.revision+1;
-      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],storage:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.state_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
+      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],storage:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.manifest_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
     }
-    if(req.method==='GET'&&path==='/api/control/v1/manifest'){const row=await readControl(env.DB);return controlResponse(await controlNuminaManifest(req,env,row));}
+    if(req.method==='GET'&&path==='/api/control/v1/manifest'){if(new URL(req.url).search)return controlResponse({error:'MANIFEST_QUERY_NOT_ALLOWED'},400);return controlResponse(await controlNuminaManifest(req,env));}
     if(!['GET','POST'].includes(req.method))return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
     const actor=await controlActor(req,env);
     if(req.method==='POST'&&!req.headers.get('authorization')){

@@ -79,7 +79,7 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const declarationBound = !Object.hasOwn(declarationWrapper || {}, 'attestation') ||
     equalJson(declarationWrapper.attestation, declaration);
   // rc26 signs the complete descriptor, including source and artifact hashes.
-  const declarationRelease=declaration?.release??declaration;
+  const declarationRelease=object(declaration?.release)?declaration.release:declaration;
   const releaseSignatureValid=attestation.valid&&attestation.envelope.artifact_type===RELEASE_ARTIFACT_TYPE&&
     releaseIdentityMatches(declarationRelease)&&(declaration.environment??'production')==='production'&&declarationBound;
   // Exact binding is required. The legacy route carries a NUMINA manifest, never an independent state.
@@ -87,7 +87,7 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const controlManifestBound = Boolean(controlReceipt.valid && ['NUMINA_CONTROL_MANIFEST','NUMINA_CONTROL_STATE'].includes(controlReceipt.envelope.artifact_type) &&
     object(control) && object(controlManifest) && ['numina.control-manifest.v1','numina.control-state.v1'].includes(controlManifest.schema) &&
     controlManifest.release === EXPECTED_RELEASE.production_version && equalJson(controlManifest, controlReceipt.envelope.payload));
-  const status=value('status'),supply=value('supply'),statusPayload=status?.payload??status,statusRelease=statusPayload?.release??statusPayload;
+  const status=value('status'),supply=value('supply'),statusPayload=status?.payload??status,statusRelease=object(statusPayload?.release)?statusPayload.release:statusPayload;
   const runtimeStatusMatches=Boolean(releaseIdentityMatches(statusRelease)&&statusPayload.frozen_core?.valid===true&&statusPayload.frozen_core?.manifest_root===EXPECTED_RELEASE.frozen_core_manifest_root);
   const supplyEvidence=supply?.payload?.evidence??supply?.evidence??supply;
   const supplyIdentityMatches=Boolean(supplyEvidence?.valid===true&&['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>supplyEvidence[field]===EXPECTED_RELEASE[field]));
