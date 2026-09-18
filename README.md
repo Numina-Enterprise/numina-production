@@ -1,4 +1,9 @@
-# Numina 4 — one root, one repository, five layers
+# NUMINA
+
+## Singular identity
+
+NUMINA is the single Numina-native identity across repository, host, source, authority, evidence, provenance, runtime, deployment, treasury, provider, receipts, settlement and release state. Version numbers, commit SHAs and external service names remain factual metadata or evidence channels; they do not create additional Numina identities.
+
 
 **Canonical repository:** `skott34-dot/numina-production` on GitHub. `main` is the sole authoritative Numina source and release branch. No other repository is a Numina source of truth.
 
