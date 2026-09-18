@@ -57,9 +57,12 @@
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
     "planSchema": "numina.treasury.alignment-plan.v2",
-    "status": "INITIATED",
+    "status": "ALIGNED_MODEL",
     "targetAmount": "500000000000000",
-    "designatedRoleCount": 3
+    "designatedRoleCount": 3,
+    "modelIdentity": "NUMINA",
+    "modelAligned": true,
+    "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE"
   },
   "distribution": {
     "path": "distribution.json",
