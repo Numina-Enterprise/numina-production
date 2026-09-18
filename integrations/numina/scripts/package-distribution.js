@@ -21,7 +21,7 @@ const providerRoutes={tool:'numina_provider_routes',method:'GET',endpoint:'/api/
 const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime_build',
  additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','provider_routing','treasury_client_verification'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
-const treasuryAlignment={...singularIdentities,schema:'numina.treasury.alignment.v2',accountViewSchema:'numina.treasury.account-view.v2',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',separateRoles:true,singularIdentity:true,historicalProjectionSchema:'numina.treasury.projection.v1',providerRoleBalancesAdditive:false};
+const treasuryAlignment={...singularIdentities,schema:'numina.treasury.alignment.v2',planSchema:'numina.treasury.alignment-plan.v2',status:'INITIATED',targetAmount:'500000000000000',designatedRoleCount:3,accountViewSchema:'numina.treasury.account-view.v2',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',separateRoles:true,singularIdentity:true,historicalProjectionSchema:'numina.treasury.projection.v1',providerRoleBalancesAdditive:false};
 const integrationManifestRef={path:'file-manifest.json',schema:'numina.integration.manifest.v2',identity:'NUMINA',canonical:true};
 const verification={
  schema:'numina.integration.package.v2',...singularIdentities,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
