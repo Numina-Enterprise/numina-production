@@ -1,0 +1,52 @@
+name: Numina Prebuilt Production
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: numina-production
+  cancel-in-progress: false
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_8bJOKLq941ouBmsFMEXAERfD
+      VERCEL_PROJECT_ID: prj_WY1kKgo522ufsymotnArIUee01uO
+    steps:
+      - name: Checkout Numina
+        uses: actions/checkout@v4
+
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Verify Numina source
+        run: |
+          npm test
+          npm run build
+
+      - name: Install pinned Vercel CLI
+        if: github.event_name != 'pull_request'
+        run: npm install --global vercel@59.20.0
+
+      - name: Build and deploy prebuilt production artifact
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "VERCEL_TOKEN is not configured. Source verification passed; deployment skipped."
+            exit 0
+          fi
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
