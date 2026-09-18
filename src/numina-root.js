@@ -18,6 +18,6 @@ export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
 });
 export function numinaRootProjection(fields={}){
   return {schema:NUMINA_MANIFEST_SCHEMA,singular:true,root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,
-    source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:true,
+    source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,
     vocabulary:NUMINA_VOCABULARY,...fields};
 }
