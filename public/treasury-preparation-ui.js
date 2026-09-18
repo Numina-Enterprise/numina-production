@@ -1,4 +1,5 @@
 import {createTreasuryPreparation} from './treasury-preparation.js';
+import {formatTreasuryRoundedWholeAmount} from './treasury-amount.js';
 
 // Retain exact attempted events across owner-panel refreshes and account switches.
 // These in-memory records belong to this tab; no credentials or records are stored.
@@ -6,8 +7,8 @@ const windows=new WeakMap();
 const reference=/^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$/;
 const amountPattern=/^[1-9][0-9]{0,77}$/;
 const mint='PREPARE_MINT',bank='PREPARE_BANK_TRANSACTION';
-const whole=value=>new Intl.NumberFormat('en-US').format(BigInt(value));
-const dollars=value=>whole(BigInt(value)/100n)+'.'+(BigInt(value)%100n).toString().padStart(2,'0');
+const whole=value=>formatTreasuryRoundedWholeAmount(value,0);
+const dollars=value=>formatTreasuryRoundedWholeAmount(value,2);
 const emptyInput=()=>({operation:mint,amount:'',networkReference:'',account:'custom',destinationReference:'',reason:''});
 const uncertain='Result not confirmed. Retry this exact event or download its record. Keep this tab open; do not create a replacement request.';
 

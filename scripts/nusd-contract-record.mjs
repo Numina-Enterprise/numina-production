@@ -86,6 +86,30 @@ export function createNusdContractRecord(read=readFileSync) {
   const entries=specifications.map(specification=>contractDescriptor(specification,
     read(path.join(root,`runtime/nusd/contracts/${specification.name}.sol`)),
     read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`))));
+  // Keep the published source and artifact bound to the finalized deployed token.
+  // UI precision must never select an old review artifact or rewrite chain evidence.
+  const receipt=JSON.parse(read(path.join(root,'runtime/nusd/deployment-receipt.json')));
+  const token=entries.find(entry=>entry.descriptor.id==='nusd').descriptor;
+  const settlement=entries.find(entry=>entry.descriptor.id==='nusd_settlement').descriptor;
+  if(receipt.chainId!==verified.chainId||receipt.genesisHash!==verified.genesisHash||
+    receipt.finality?.status!=='FINAL'||receipt.finality.observedAt!==verified.verifiedAt||
+    !Number.isSafeInteger(receipt.finality.requiredConfirmations)||receipt.finality.requiredConfirmations<12||
+    receipt.issuance?.decimals!==18||receipt.issuance.baseUnits!==verified.issuance.baseUnits||
+    receipt.sourceSha256!==token.source.sha256||receipt.artifactSha256!==token.artifact.sha256||
+    receipt.settlementSourceSha256!==settlement.source.sha256)throw Error('Finalized NUSD deployment binding mismatch');
+  for(const [key,descriptor] of [['token',token],['settlement',settlement]]){
+    const deployed=receipt[key],observation=verified[key];
+    if(deployed?.address!==descriptor.deployment.contract_address||
+      observation?.address!==deployed.address||deployed.transactionHash!==descriptor.deployment.transaction_hash||
+      observation.transactionHash!==deployed.transactionHash||deployed.receipt?.status!=='0x1'||
+      deployed.receipt.transactionHash!==deployed.transactionHash||
+      deployed.receipt.contractAddress?.toLowerCase()!==deployed.address.toLowerCase()||
+      deployed.receipt.blockNumberDecimal!==observation.blockNumber||
+      !Number.isSafeInteger(observation.confirmations)||observation.confirmations<receipt.finality.requiredConfirmations||
+      deployed.finalConfirmations!==observation.confirmations)throw Error('Finalized NUSD deployment binding mismatch');
+  }
+  if(receipt.settlement.nusd!==receipt.token.address||verified.settlement.nusd!==receipt.token.address)
+    throw Error('Finalized NUSD deployment binding mismatch');
   return {entries,record:{
     schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
