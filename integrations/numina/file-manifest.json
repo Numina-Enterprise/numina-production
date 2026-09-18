@@ -1,10 +1,47 @@
 {
-  "schema": "numina.integration.files.v2",
+  "schema": "numina.integration.manifest.v2",
+  "manifest": "NUMINA",
   "identity": "NUMINA",
+  "authority": "NUMINA",
   "source": "NUMINA",
+  "evidence": "NUMINA",
+  "provenance": "NUMINA",
+  "host": "NUMINA",
   "singular": true,
+  "canonical": true,
+  "role": "canonical_integration_manifest",
   "version": "4.0.0",
+  "revision": "numina-root-v4.0.0",
   "scope": "NUMINA",
+  "repository": {
+    "identity": "NUMINA",
+    "service": "GitHub",
+    "canonical": "skott34-dot/numina-production",
+    "branch": "main",
+    "soleSourceOfTruth": true
+  },
+  "application": {
+    "manifest": "/v4/release/manifest",
+    "schema": "numina.application-release.v2"
+  },
+  "treasuryAlignment": {
+    "schema": "numina.treasury.alignment.v2",
+    "accountViewSchema": "numina.treasury.account-view.v2",
+    "treasuryIdentity": "NUMINA",
+    "transportVerificationChannel": "NUMINA",
+    "separateRoles": true,
+    "singularIdentity": true,
+    "historicalProjectionSchema": "numina.treasury.projection.v1",
+    "providerRoleBalancesAdditive": false
+  },
+  "distribution": {
+    "path": "distribution.json",
+    "schema": "numina.integration.distribution.v2"
+  },
+  "verification": {
+    "path": "verification.json",
+    "schema": "numina.integration.package.v2"
+  },
   "files": [
     {
       "path": ".gitignore",
@@ -13,8 +50,8 @@
     },
     {
       "path": "API-CONTRACT.md",
-      "bytes": 11817,
-      "sha256": "bf4c428ad3847963e4961e48fc94667d567ddac88983f054adbce509887013bd"
+      "bytes": 12442,
+      "sha256": "1a873cf2f0c5891614cc305b6e804e2539abc34dc18f0291e26beb116c6ee306"
     },
     {
       "path": "COMPATIBILITY.md",
@@ -73,8 +110,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 5272,
-      "sha256": "a6f12687df1c762273becb18375968aa0a8607b06bacfcb3d8f7a95031a78c01"
+      "bytes": 5840,
+      "sha256": "89acc7959d3b241c9e0fdeaccd909e5f298f04562197a1258e7476852c839015"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -218,8 +255,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 6097,
-      "sha256": "f477c9906895fb252d9e94d19572eaffd24916d510c962333971db9c084a441d"
+      "bytes": 7249,
+      "sha256": "9cc9a0c8b0d55aecebff172c79119b1b64ebff5aa6dd2fbb832e678e487bbebc"
     },
     {
       "path": "src/client.js",
@@ -268,8 +305,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 13103,
-      "sha256": "29a5b0b8bb2827bb15c11fe1bbb7744022609ea7478e3cb1ddaf60bb0484513a"
+      "bytes": 14282,
+      "sha256": "3ee8fb1d192145143310a449998a6fa3a32de63885189a69af357ea7f5c24f8c"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -278,8 +315,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 2488,
-      "sha256": "47dc7a4ef99013476a621383e3684af6bb20c9249a573ac2fc4054e614d817e2"
+      "bytes": 3056,
+      "sha256": "48284411295641b0879b8134b8e25b175b983def558aec17d326afb5594651c2"
     }
   ]
 }

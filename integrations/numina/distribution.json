@@ -2,15 +2,32 @@
   "identity": "NUMINA",
   "source": "NUMINA",
   "singular": true,
+  "manifest": "NUMINA",
+  "integrationManifest": {
+    "path": "file-manifest.json",
+    "schema": "numina.integration.manifest.v2",
+    "identity": "NUMINA",
+    "canonical": true
+  },
+  "treasuryAlignment": {
+    "schema": "numina.treasury.alignment.v2",
+    "accountViewSchema": "numina.treasury.account-view.v2",
+    "treasuryIdentity": "NUMINA",
+    "transportVerificationChannel": "NUMINA",
+    "separateRoles": true,
+    "singularIdentity": true,
+    "historicalProjectionSchema": "numina.treasury.projection.v1",
+    "providerRoleBalancesAdditive": false
+  },
   "treasury_client_verification": {
-    "schema": "numina.treasury.client-verification.v1",
+    "schema": "numina.treasury.client-verification.v2",
     "canonicalTreasury": "/api/control/v1/treasury",
     "accountView": "/api/control/v2/treasury/accounts",
-    "accountAlignmentSchema": "numina.treasury.account-view.v1",
+    "accountAlignmentSchema": "numina.treasury.account-view.v2",
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "29a5b0b8bb2827bb15c11fe1bbb7744022609ea7478e3cb1ddaf60bb0484513a"
+      "sha256": "3ee8fb1d192145143310a449998a6fa3a32de63885189a69af357ea7f5c24f8c"
     },
     "checks": [
       "canonical_journal_record",

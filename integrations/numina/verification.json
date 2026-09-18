@@ -3,7 +3,14 @@
   "identity": "NUMINA",
   "source": "NUMINA",
   "singular": true,
-  "packagedAtUtc": "2026-09-18T03:55:02.112Z",
+  "manifest": "NUMINA",
+  "integrationManifest": {
+    "path": "file-manifest.json",
+    "schema": "numina.integration.manifest.v2",
+    "identity": "NUMINA",
+    "canonical": true
+  },
+  "packagedAtUtc": "2026-09-18T04:53:32.947Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",
