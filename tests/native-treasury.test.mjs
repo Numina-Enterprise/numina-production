@@ -207,7 +207,7 @@ test('generic direct control commits cannot write a treasury event',async()=>{
   }finally{db.close();}
 });
 
-test('journal insertion failure rolls back the state and an exact retry commits once',async()=>{
+test('journal insertion failure rolls back the manifest and an exact retry commits once',async()=>{
   const db=await fixture();try{
     const api=treasury(db),event=await command(db),before=await readControl(db),prepare=db.prepare;
     db.prepare=sql=>prepare(sql.startsWith('INSERT INTO numina_control_events')
@@ -226,7 +226,7 @@ test('recomputing generic journal hashes cannot bypass replay of the frozen trea
     row.manifest.nativeTreasury.balance='1';event.result.projection.balance='1';event.manifestHash=await controlHash(row.manifest);
     const hash=await controlHash(event);
     await db.batch([
-      db.prepare('UPDATE numina_control_state SET state_json=?,state_hash=?,head_hash=? WHERE id=1').bind(stable(row.manifest),event.manifestHash,hash),
+      db.prepare('UPDATE numina_control_manifest SET manifest_json=?,manifest_hash=?,head_hash=? WHERE id=1').bind(stable(row.manifest),event.manifestHash,hash),
       db.prepare('UPDATE numina_control_events SET event_json=?,hash=? WHERE id=?').bind(stable(event),hash,event.id)
     ]);
     await readControl(db); // The generic hash chain alone is consistent.
