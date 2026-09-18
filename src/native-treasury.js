@@ -8,7 +8,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
   async function context(){
     const row=await readControl(db);
     if(!root||row.manifest.root!==root)controlError('ROOT_CONFIGURATION_MISMATCH',503);
-    if(principal!==root||!row.manifest.grants.some(grant=>grant.id==='root'&&grant.subject===principal&&grantValid(row.state,grant,now())))controlError('TREASURY_AUTHORITY_DENIED',403);
+    if(principal!==root||!row.manifest.grants.some(grant=>grant.id==='root'&&grant.subject===principal&&grantValid(row.manifest,grant,now())))controlError('TREASURY_AUTHORITY_DENIED',403);
     let replayed=null;
     for(const event of row.journalEvents.filter(event=>event.type==='treasury')){
       const command=event.command;
