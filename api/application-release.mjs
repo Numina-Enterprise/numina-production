@@ -17,14 +17,14 @@ export function validateApplicationRelease(value){
   if(value.product!=='Numina'||value.version!==APPLICATION_VERSION||value.release!==APPLICATION_RELEASE)throw new Error('APPLICATION_RELEASE_MISMATCH');
   if(!/^[0-9a-f]{64}$/i.test(String(value.build_id||'')))throw new Error('APPLICATION_BUILD_ID_INVALID');
   const runtime=value.runtime_dependency;
-  if(!runtime||runtime.version!==EXPECTED_RELEASE.production_version||runtime.release!==EXPECTED_RELEASE.release)throw new Error('RUNTIME_RELEASE_MISMATCH');
+  if(!runtime||runtime.identity!==EXPECTED_RELEASE.identity||runtime.identity!=='NUMINA'||runtime.version!==EXPECTED_RELEASE.production_version||runtime.release!==EXPECTED_RELEASE.release)throw new Error('RUNTIME_RELEASE_MISMATCH');
   if(runtime.manifest!=='/v1/release/manifest'||runtime.signed_declaration!=='/v1/release/attestation')throw new Error('RUNTIME_RELEASE_ROUTE_MISMATCH');
   return value;
 }
 function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value&&typeof value==='object'){const output={};for(const key of Object.keys(value).sort())output[key]=sorted(value[key]);return output;}return value;}
 function canonical(value){return Buffer.from(JSON.stringify(sorted(value)),'utf8');}
 function object(value){return value!==null&&typeof value==='object'&&!Array.isArray(value);}
-function releaseIdentity(value){if(!object(value))return null;if(value.release===EXPECTED_RELEASE.release&&value.production_version===EXPECTED_RELEASE.production_version)return value;if(value.release===EXPECTED_RELEASE.release&&value.version===EXPECTED_RELEASE.production_version)return value;const nested=value.release;if(object(nested))return releaseIdentity(nested);const payload=value.payload;if(object(payload))return releaseIdentity(payload);const manifest=value.manifest;if(object(manifest))return releaseIdentity(manifest.release||manifest);return null;}
+function releaseIdentity(value){if(!object(value))return null;if(value.identity===EXPECTED_RELEASE.identity&&value.release===EXPECTED_RELEASE.release&&value.production_version===EXPECTED_RELEASE.production_version)return value;if(value.identity===EXPECTED_RELEASE.identity&&value.release===EXPECTED_RELEASE.release&&value.version===EXPECTED_RELEASE.production_version)return value;const nested=value.release;if(object(nested))return releaseIdentity(nested);const payload=value.payload;if(object(payload))return releaseIdentity(payload);const manifest=value.manifest;if(object(manifest))return releaseIdentity(manifest.release||manifest);return null;}
 function exactRelease(value){return Boolean(releaseIdentity(value));}
 function equalJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
 export function verifyPinnedEnvelope(envelope,expectedType){try{if(!object(envelope)||envelope.artifact_type!==expectedType||envelope.algorithm!=='Ed25519')return false;if(envelope.key_id!==PINNED_RUNTIME_KEY_ID||envelope.public_key!==PINNED_RUNTIME_PUBLIC_KEY||!object(envelope.payload))return false;const raw=Buffer.from(PINNED_RUNTIME_PUBLIC_KEY,'base64');if(raw.length!==32||createHash('sha256').update(raw).digest('hex').slice(0,24)!==PINNED_RUNTIME_KEY_ID)return false;const publicKey=createPublicKey({key:Buffer.concat([SPKI_PREFIX,raw]),format:'der',type:'spki'});return verifySignature(null,canonical({artifact_type:envelope.artifact_type,key_id:envelope.key_id,payload:envelope.payload}),publicKey,Buffer.from(envelope.signature||'','base64'));}catch{return false;}}
@@ -55,7 +55,7 @@ export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEn
   const controlReceiptValid=Boolean((verifyEnvelope(control?.receipt,'NUMINA_CONTROL_MANIFEST')||verifyEnvelope(control?.receipt,'NUMINA_CONTROL_STATE'))&&object(controlManifest)&&equalJson(controlManifest,control.receipt.payload));
   const checks={
     application_release_valid:true,
-    application_runtime_binding:application.runtime_dependency.version===EXPECTED_RELEASE.production_version&&application.runtime_dependency.release===EXPECTED_RELEASE.release,
+    application_runtime_binding:application.runtime_dependency.identity===EXPECTED_RELEASE.identity&&application.runtime_dependency.version===EXPECTED_RELEASE.production_version&&application.runtime_dependency.release===EXPECTED_RELEASE.release,
     runtime_manifest_identity:validManifest(manifest,verifyEnvelope),
     release_attestation_signature:Boolean(verifyEnvelope(attestation,RELEASE_ARTIFACT_TYPE)&&exactRelease(attestation?.payload)),
     supply_chain_identity:validSupplyChain(supply,verifyEnvelope),
