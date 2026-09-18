@@ -24,9 +24,11 @@ export function createEstimateHandler({observe = observeDeploymentEstimate} = {}
       const length = request.headers?.['content-length'];
       const bodyPresent=request.body!==undefined&&request.body!==null&&request.body!==''&&
         !(typeof request.body==='object'&&!Array.isArray(request.body)&&Object.keys(request.body).length===0);
-      if (url.search || url.hash ||
-          request.headers?.['transfer-encoding'] !== undefined || (length !== undefined && length !== '0') ||
-          bodyPresent) return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
+      // Provider/CDN transports may add framing headers to a bodyless GET. Reject
+      // only caller-controlled input: query/hash data, a positive content length,
+      // or an actual parsed body.
+      if (url.search || url.hash || (length !== undefined && length !== '0') || bodyPresent)
+        return reject(400, 'REQUEST_INPUT_NOT_ALLOWED');
     } catch { return reject(400, 'REQUEST_INPUT_NOT_ALLOWED'); }
     try {
       // Coalesce simultaneous public reads; never retain a completed estimate.
