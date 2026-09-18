@@ -197,7 +197,7 @@
       "versionCode": 4,
       "signedArtifactCreated": false,
       "googlePlaySubmitted": false,
-      "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+      "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
       "submissionReceipt": null,
       "lastRunnerObservation": {
         "runId": 35377920361,
@@ -211,7 +211,7 @@
         "artifacts": [],
         "completedAt": "2026-09-18T18:05:25Z",
         "observedAt": "2026-09-18T18:07:00Z",
-        "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased."
+        "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced."
       }
     },
     "ios": {
@@ -219,7 +219,7 @@
       "buildNumber": 6,
       "signedArtifactCreated": false,
       "appStoreSubmitted": false,
-      "blocker": "GITHUB_ACTIONS_ACCOUNT_BILLING_OR_SPENDING_LIMIT",
+      "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
       "submissionReceipt": null,
       "lastRunnerObservation": {
         "runId": 35377920370,
@@ -233,7 +233,7 @@
         "artifacts": [],
         "completedAt": "2026-09-18T18:05:11Z",
         "observedAt": "2026-09-18T18:07:00Z",
-        "providerAnnotationSummary": "GitHub reports that the jobs did not start because recent account payments failed or the spending limit must be increased."
+        "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced."
       }
     },
     "applicationBackend": {

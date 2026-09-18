@@ -6,8 +6,8 @@
   "applicationVersion": "4.0.0",
   "androidVersionCode": 4,
   "iosBuildNumber": 6,
-  "status": "NOT_STARTED_RUNNER_BILLING_BLOCK",
-  "providerAnnotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+  "status": "NOT_STARTED",
+  "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced.",
   "android": {
     "runId": 35395347752,
     "jobId": 105762815915,
