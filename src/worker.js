@@ -18,7 +18,9 @@ export default {
  async fetch(req,env){
   const configuredControlPin=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';
   const controlPin=configuredControlPin||CONTROL_API_KEY_SHA256_PIN;
-  env={...env,NUMINA_CONTROL_API_KEY_SHA256:controlPin};
+  const inheritedEnv=Object.create(env);
+  Object.defineProperty(inheritedEnv,'NUMINA_CONTROL_API_KEY_SHA256',{value:controlPin,enumerable:true,configurable:true});
+  env=inheritedEnv;
   const url=new URL(req.url),path=url.pathname;
   const span=path==='/api/ops/v1/telemetry'?{requestId:crypto.randomUUID(),finish(){}}:numinaWebTelemetry.begin({path,method:req.method,log:env.NUMINA_TELEMETRY_LOGS!=='false'});
   const requestId=span.requestId;let status=200;
@@ -34,7 +36,7 @@ export default {
    if(path.startsWith('/api/')){
     const review=await reviewerContext(req,env);
     if(review?.error)return finish(review.error);
-    if(review){req=review.req;env={...review.env,NUMINA_CONTROL_API_KEY_SHA256:controlPin};}
+    if(review){req=review.req;const reviewEnv=Object.create(review.env);Object.defineProperty(reviewEnv,'NUMINA_CONTROL_API_KEY_SHA256',{value:controlPin,enumerable:true,configurable:true});env=reviewEnv;}
 
    }
    if(path.startsWith('/api/financial/v1/'))return finish(await financialEvidenceHttp(req,env));
