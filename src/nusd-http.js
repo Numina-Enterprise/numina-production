@@ -17,25 +17,25 @@ export const NUSD_REDEMPTION_POLICIES=Object.freeze({
 });
 export const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
  schema:'numina.nusd.mint-workflow.v1',
- modelIdentity:'NUMINA',identity:'NUMINA',status:'MINT_SUCCESS',mintSuccessReported:true,mintStatusSource:'NUMINA',
- contract:{name:'NuminaUSD',decimals:6,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',initiallyPaused:true,sourceSha256:NUSD_CONTRACT_RECORD.contracts[0].source.sha256,artifactSha256:NUSD_CONTRACT_RECORD.contracts[0].artifact.sha256},
+ modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYMENT_READY_18D',mintSuccessReported:false,mintStatusSource:'NUMINA',
+ contract:{name:'NuminaUSD',decimals:18,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',initiallyPaused:true,sourceSha256:NUSD_CONTRACT_RECORD.contracts[0].source.sha256,artifactSha256:NUSD_CONTRACT_RECORD.contracts[0].artifact.sha256},
  nativeJournal:{route:'/api/control/v1/treasury',objective:'treasury.mint.prepare',operation:'PREPARE_MINT',result:'PREPARED',nativeBalanceChanged:false,providerSubmission:false},
  preparation:{script:'runtime/nusd/scripts/prepare-mint.mjs',requestSchema:'numina.nusd.mint.request.v1',outputSchema:'numina.nusd.unsigned-mint-review-draft.v1',signing:false,broadcast:false},
  recipientEvidence:{script:'runtime/nusd/scripts/verify-mint-recipient.mjs',requestSchema:'numina.nusd.recipient-evidence-request.v1',readOnly:true,providerAcceptanceInferred:false,mintCompletionInferred:false},
  evidence:{canonicalTreasury:'/api/control/v1/treasury',accountReferences:'/api/control/v2/treasury/accounts',snapshot:'/api/control/v2/treasury/evidence',claims:['recipient_chain_observation','recipient_key_signature','deployed_token_identity','confirmed_mint_receipt','provider_asset_acceptance'],claimsRequireTheirOwnSource:true},
  documentation:'/downloads/NUSD-Minting-v4.md',
- execution:{mintStatus:'MINT_SUCCESS',mintSuccessReported:true,contractDeploymentVerified:false,completedMintVerified:false,chainReceiptVerified:false,providerAcceptanceVerified:false,transactionHash:null,receipt:null},
- scope:'NUMINA records MINT_SUCCESS as the reported mint lifecycle status. External chain completion remains unverified until a matching transaction hash and receipt are bound and checked; provider acceptance and reserves remain separate evidence domains.'
+ execution:{mintStatus:'PENDING_CHAIN_RECEIPT',mintSuccessReported:false,contractDeploymentVerified:false,completedMintVerified:false,chainReceiptVerified:false,providerAcceptanceVerified:false,transactionHash:null,receipt:null},
+ scope:'NUMINA is configured for a 1,500T constructor issuance at 18 decimals. Chain completion remains unverified until a matching transaction hash, deployed contract state and receipt are bound and checked; provider acceptance and reserves remain separate evidence domains.'
 });
 export const NUSD_CONVERSION_WORKFLOW=freezeNusdRedemption({
  schema:'numina.nusd.conversion-workflow.v1',status:'compiled_not_deployed',
  rate:{nusd:'1',usd:'1',usdc:'1',basis:'fixed_contract_arithmetic',liveQuote:false},
  contracts:NUSD_CONTRACT_RECORD.contracts.filter(contract=>['nusd_usdc_conversion','nusd_usd_redemption'].includes(contract.id)),
  usdc:{contract:'NuminaUSDCConversion',operation:'convert',directions:['NUSD_TO_USDC','USDC_TO_NUSD'],
-   inputDecimals:6,outputDecimals:6,feeBaseUnits:'0',liquiditySource:'actual_contract_held_output_tokens',
+   nusdDecimals:18,usdcDecimals:6,nusdPerUsdcBaseUnit:'1000000000000',feeBaseUnits:'0',liquiditySource:'actual_contract_held_output_tokens',
    sameChainRequired:true,canonicalUsdcIdentityVerified:false,bridgeImplemented:false,initiallyPaused:true,participantAuthorizationRequired:true},
- usd:{contract:'NuminaUSDRedemption',operation:'requestRedemption',nusdDecimals:6,usdDecimals:2,
-   nusdBaseUnitsPerUsdCent:'10000',subCentRounding:false,bankSubmissionImplemented:false,
+ usd:{contract:'NuminaUSDRedemption',operation:'requestRedemption',nusdDecimals:18,usdDecimals:2,
+   nusdBaseUnitsPerUsdCent:'10000000000000000',subCentRounding:false,bankSubmissionImplemented:false,
    settlementModel:'separate_bank_payment_with_distinct_confirmer_attestation',historicalOperatorSeparation:true,receiptScope:'off_chain_evidence_reference_not_bank_verification',
    burnAfterPaidAttestation:true,refundAfterFailedAttestation:true,processingTimeoutRefund:false,initiallyPaused:true},
  treasury:{route:'/api/control/v1/treasury',balanceCount:1,journalChangedByCompilation:false,declaredBalanceUsedAsUsdcLiquidity:false},
@@ -72,7 +72,7 @@ export const NUSD_POLICY={
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  treasury_policy:'/api/control/v2/treasury/policy',
  native_treasury:{source:'/api/control/v1/treasury',unit:'NUSD',authority:'NUMINA',system_of_record:'NUMINA',access:'owner_authenticated'},
- asset:{name:'Numina USD',symbol:'NUSD',asset_id:null,chain:null,contract:null},
+ asset:{name:'Numina USD',symbol:'NUSD',decimals:18,asset_id:null,chain:null,contract:null},
  network_policy:{name:'Numina',status:'provider_reported_live',chain_id:'962421430',rpc_url:'https://u0yth28mgh-u0re35asde-rpc.us0-aws.kaleido.io/',explorer_url:null,genesis_hash:null,provider:'Kaleido',network_type:'permissioned',environment_id:'u0yth28mgh',protocol:'Hyperledger Besu / IBFT',runtime_version:'23.10.2',evm_fork:'London',region:'AWS us-east-2 (Ohio)',validator_count:3,system_monitor_count:1,observed_at:'2026-09-12T16:07:17Z',observed_block_height:'99',evidence_type:'authenticated_provider_dashboard_observation',continuous_monitoring:false,authenticated_rpc_verified:false,rpc_authentication_required:true,independently_verified:false},
  asset_verification:{status:'unconfigured',evidence:[]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',owner_attestation:NUSD_REDEMPTION_POLICY.reserves.owner_attestation,evidence:[],valuation:null,redemption:null},
