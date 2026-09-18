@@ -29,7 +29,7 @@ test('clients bind proof to the root, command, revision and current event head',
     const empty=await api.readTreasury();assert.equal(await verifyTreasuryRecord(empty),false);assert.equal(await verifyTreasuryRecord(empty,{allowUninitialized:true}),true);
     await api.writeTreasury(await command(db));const current=await api.readTreasury();
     for(const mutate of [
-      v=>v.root='email:another-root@example.test',v=>v.revision=0,v=>v.head='a'.repeat(64),
+      v=>v.root='OTHER',v=>v.principal='email:another-root@example.test',v=>v.revision=0,v=>v.head='a'.repeat(64),
       v=>v.canonical_proof.event.commandHash='a'.repeat(64),v=>v.canonical_proof.event.command.data.Authority='OTHER',
       v=>v.canonical_proof.event.command.expectedRevision=22,v=>v.canonical_proof.event.command.data.expectedHead='a'.repeat(64),
       v=>v.canonical_proof.event.command.data.Principal='email:other@example.test',
@@ -131,7 +131,7 @@ test('treasury initializes within the existing root, persists and returns actual
     assert.equal((await api.writeTreasury(event)).replayed,true);
     assert.equal((await readControl(db)).eventCount,2);
     db.close();db=database(file);
-    const current=await treasury(db).readTreasury();assert.equal(current.root,initial.manifest.root);assert.equal(current.projection.balance,'500000000000000');assert.equal(await verifyNativeTreasury(current),true);
+    const current=await treasury(db).readTreasury();assert.equal(current.root,'NUMINA');assert.equal(current.principal,initial.manifest.root);assert.equal(current.projection.balance,'500000000000000');assert.equal(await verifyNativeTreasury(current),true);
     const view=await controlManifestView(db,owner,now());assert.equal(Object.hasOwn(view.content,'nativeTreasury'),false);
     const altered=structuredClone(current);altered.projection.balance='1';assert.equal(await verifyNativeTreasury(altered),false);
   }finally{db.close();rmSync(directory,{recursive:true});}
