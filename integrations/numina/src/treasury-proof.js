@@ -9,6 +9,11 @@ export function treasuryClientVerificationManifest(verifierSha256) {
   if (!treasuryHash(verifierSha256)) throw Error('Invalid treasury verifier SHA-256');
   return {
     schema: 'numina.treasury.client-verification.v2',
+    identity: 'NUMINA',
+    treasuryIdentity: 'NUMINA',
+    transportVerificationChannel: 'NUMINA',
+    separateRoles: true,
+    singularIdentity: true,
     canonicalTreasury: '/api/control/v1/treasury',
     accountView: '/api/control/v2/treasury/accounts',
     accountAlignmentSchema: 'numina.treasury.account-view.v2',
