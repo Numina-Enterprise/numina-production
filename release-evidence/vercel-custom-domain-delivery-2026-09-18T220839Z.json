@@ -1,0 +1,106 @@
+{
+  "schema": "numina.vercel-custom-domain-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-18T22:08:39Z",
+  "canonical": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "sourceCommit": "2566532e08ff800149d432376dd03a3246cfb99b"
+  },
+  "vercel": {
+    "connectedTeamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "connectedProjectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "connectedProjectName": "numina-production",
+    "customDomainDeployment": {
+      "id": "dpl_2BcfaXpy1uCmjEs2cvKPCrKwp2eh",
+      "state": "READY",
+      "target": "production",
+      "source": "git",
+      "sourceCommit": "2566532e08ff800149d432376dd03a3246cfb99b",
+      "deploymentUrl": "https://numina-production-gtw4e16jb-skott34-dot.vercel.app",
+      "aliases": [
+        "www.numinalabs.xyz",
+        "numina-production.vercel.app",
+        "numinalabs.xyz",
+        "numina-production-skott34-dot.vercel.app",
+        "numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    }
+  },
+  "requiredEndpointVerification": {
+    "allVerified": true,
+    "origin": "https://www.numinalabs.xyz",
+    "endpoints": [
+      {
+        "path": "/final-build.json",
+        "status": 200,
+        "observedAt": "2026-09-18T22:08:17Z",
+        "schema": "numina.final-build.v1",
+        "reportedStatus": "FINAL"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "status": 200,
+        "observedAt": "2026-09-18T22:08:23Z",
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finality": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "status": 200,
+        "observedAt": "2026-09-18T22:08:33Z",
+        "schema": "numina.nusd.status.v1",
+        "deployedTokenReceiptVerified": true,
+        "externalReservesVerified": false
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "status": 200,
+        "observedAt": "2026-09-18T22:08:39Z",
+        "schema": "numina.deployment-estimate.v1",
+        "reportedStatus": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true,
+        "externalUsdSettlement": false,
+        "externalUsdcSettlement": false
+      }
+    ]
+  },
+  "githubActions": {
+    "runnerAllocated": false,
+    "canonicalBuild": {
+      "runId": 35399028326,
+      "jobId": 105774417059,
+      "sourceCommit": "2566532e08ff800149d432376dd03a3246cfb99b",
+      "conclusion": "failure",
+      "steps": null,
+      "logs": null,
+      "artifacts": []
+    },
+    "mobileRerunPerformed": false,
+    "mobileRerunReason": "Canonical build still failed before runner allocation, so the conditional mobile rerun precondition was not met."
+  },
+  "mobileDistribution": {
+    "androidSignedArtifactProducedByThisObservation": false,
+    "iosSignedArtifactProducedByThisObservation": false,
+    "googlePlaySubmittedByThisObservation": false,
+    "appStoreSubmittedByThisObservation": false,
+    "providerSubmissionReceipts": []
+  },
+  "desktopFallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909Z"
+  },
+  "financialExecution": {
+    "performedByThisObservation": false,
+    "externalSettlementClaimed": false,
+    "providerSettlementReceipts": []
+  },
+  "scope": "Factual delivery observation only. The exact canonical main commit 2566532e08ff800149d432376dd03a3246cfb99b was observed READY on the connected Vercel production project and all four required custom-domain endpoints returned HTTP 200. GitHub Actions still failed before runner allocation, no new signed mobile artifacts or store submission receipts were produced, and VENGEANCE remained offline."
+}
