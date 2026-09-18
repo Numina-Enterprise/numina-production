@@ -1,0 +1,36 @@
+{
+  "schema": "numina.quantum.provider-ui-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-18T20:53:28Z",
+  "observationMethod": "authenticated_browser_job_detail",
+  "source": {
+    "provider": "IBM Quantum Platform",
+    "jobId": "dakfqqvi3e6s738rfnqg",
+    "instanceDetailsOmitted": true
+  },
+  "providerReported": {
+    "status": "Completed",
+    "backend": "ibm_kingston",
+    "region": "us-east",
+    "mode": "Job",
+    "program": "executor",
+    "tag": "Composer",
+    "items": 1,
+    "shots": 1024,
+    "totalCompletionTime": "1m 39s",
+    "totalUsage": "2s",
+    "createdDisplay": "Sep 15, 2026, 3:10 AM",
+    "completedDisplay": "Sep 15, 2026, 3:11 AM",
+    "displayTimezoneVerified": false,
+    "register": "c",
+    "measurementCounts": {"00": 325, "01": 106, "10": 143, "11": 450}
+  },
+  "verificationScope": "Observed provider UI status and measurement counts; not a signed provider receipt or an independent hardware audit.",
+  "newJobSubmitted": false,
+  "signedProviderReceiptImported": false,
+  "treasuryModelChanged": false,
+  "nusdDeploymentEstablishedByThisJob": false,
+  "reserveBackingVerifiedByThisJob": false,
+  "achTransferEstablishedByThisJob": false,
+  "usdcTransferEstablishedByThisJob": false
+}

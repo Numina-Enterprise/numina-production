@@ -20,7 +20,13 @@ The previously published shared 500T non-additive denomination model is accepted
 
 The existing NuminaUSD contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` on chain `962421430` uses **18 decimals**. Its separately verified constructor issuance is 1,500,000,000,000,000 NUSD (1,500,000,000,000,000,000,000,000,000,000,000 base units). See `runtime/nusd/deployment-receipt.json` and `runtime/nusd/deployment-verification.json`. The verification observed `paused: true` at 2026-09-18T15:35:24.884Z; current transfer activity requires a newer chain observation. Neither issuance nor model alignment establishes USD/USDC funding, provider acceptance or reserve coverage.
 
-Website model amounts in all three route allocations display 18 decimal places using exact whole-unit strings; the stored journal units and contract base units are not rescaled. USD and USDC provider amounts retain their actual provider minor units. Historical NUMINA-attested settlement records are preserved as attestations, not promoted to external provider receipts.
+Website amounts round to the nearest whole unit and display two decimal places (`12,345.67 → ≈ 12,346.00`); inexact displays carry `≈`. Stored journal units, exact provider observations and downloaded records are not rounded or rescaled. The finalized deployed NUSD contract retains 18 decimals, USD provider amounts retain cents, and USDC provider amounts retain micro-units. Historical NUMINA-attested settlement records are preserved as attestations, not promoted to external provider receipts.
+
+The website and authenticated account API derive route amounts and units from the same immutable `public/treasury-connection-model.js` definition. Its three allocations sum to the 1,500T declared aggregate. The 500T native journal projection and the recorded 1,500T token issuance are separate measures, not extra amounts to add to that aggregate. The historical 500T/six-decimal simulation is labeled as a historical review, not the deployed contract or current treasury model.
+
+The backing statement is singular: the existing `NUMINA_DENOMINATION_POLICY` is shared across the NUMINA treasury views. Its declared 1:1 rate, reserve-verification status and executable-conversion status remain unchanged. A shared identity does not promote a compute result or internal attestation into a bank or blockchain receipt.
+
+IBM job `dakfqqvi3e6s738rfnqg` was observed as Completed on `ibm_kingston`, with 1,024 shots and 2 seconds of reported usage. The bounded observation is in `release-evidence/quantum-job-observation-2026-09-18.json`. It records an existing compute result, not a newly executed job, contract deployment, reserve verification or treasury transfer.
 
 ## Interfaces and canonical route
 
