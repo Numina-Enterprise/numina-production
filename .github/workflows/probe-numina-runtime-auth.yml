@@ -1,0 +1,34 @@
+name: Probe NUMINA runtime deployment authentication
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/probe-numina-runtime-auth.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Probe live deployment estimate
+        shell: bash
+        run: |
+          set -euo pipefail
+          body="$(curl --fail-with-body --silent --show-error --max-time 20             -H 'accept: application/json'             https://numinalabs.xyz/v2/network/deployment-estimate)"
+          printf '%s
+' "$body"
+          BODY="$body" node --input-type=module <<'NODE'
+          const body=JSON.parse(process.env.BODY);
+          if(body?.schema!=='numina.deployment-estimate.v1')throw Error('UNEXPECTED_SCHEMA');
+          if(body.status!=='observed')throw Error('RUNTIME_AUTH_NOT_READY_'+String(body?.error?.code||body.status));
+          if(body.account?.toLowerCase()!=='0x1a45671ae2ee3e52264116151924faacb80fc02e')throw Error('SIGNER_MISMATCH');
+          if(body.chainId!=='962421430')throw Error('CHAIN_MISMATCH');
+          if(body.genesisHash?.toLowerCase()!=='0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1')throw Error('GENESIS_MISMATCH');
+          if(body.estimateObserved!==true||body.networkChecked!==true)throw Error('ESTIMATE_NOT_OBSERVED');
+          console.log(JSON.stringify({status:'RUNTIME_AUTHENTICATED',account:body.account,gasLimit:body.gasLimit,gasPrice:body.gasPrice,balanceBaseUnits:body.balanceBaseUnits,balanceSufficient:body.balanceSufficient,expiresAt:body.expiresAt}));
+          NODE
