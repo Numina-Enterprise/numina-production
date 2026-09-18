@@ -36,6 +36,9 @@ jobs:
       - name: Encode exact 1,500T production deployment
         working-directory: runtime/nusd
         run: node scripts/validate-deployment.mjs deployment.production.json --output artifacts/unsigned-production-deployment.json
+      - name: Derive exact creation-data hashes
+        working-directory: runtime/nusd
+        run: node scripts/prepare-review-draft.mjs deployment.production.json --output artifacts/production-review-draft.json
       - name: Commit canonical artifacts
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         shell: bash
@@ -48,6 +51,7 @@ jobs:
           git add runtime/nusd/artifacts/NuminaUSDRedemption.json
           git add runtime/nusd/scripts/token-artifact.mjs
           git add -f runtime/nusd/artifacts/unsigned-production-deployment.json
+          git add -f runtime/nusd/artifacts/production-review-draft.json
           if git diff --cached --quiet; then
             echo "Canonical artifacts already current."
           else
@@ -64,5 +68,6 @@ jobs:
             runtime/nusd/artifacts/NuminaUSDCConversion.json
             runtime/nusd/artifacts/NuminaUSDRedemption.json
             runtime/nusd/artifacts/unsigned-production-deployment.json
+            runtime/nusd/artifacts/production-review-draft.json
             runtime/nusd/scripts/token-artifact.mjs
           if-no-files-found: error
