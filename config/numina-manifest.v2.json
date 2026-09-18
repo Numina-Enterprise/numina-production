@@ -43,18 +43,17 @@
       "https://numina-production.vercel.app"
     ]
   },
-  "storage_compatibility": {
-    "identity": "NUMINA",
-    "legacy_sql_identifiers": true,
-    "role": "persistence_encoding_only",
-    "table": "numina_control_state",
-    "manifest_column": "state_json",
-    "manifest_hash_column": "state_hash"
-  },
   "external_confirmation": {
     "bank_of_america": false,
     "stripe": false,
     "role": "destination_transport_observation_only"
   },
-  "deployed": true
+  "deployed": true,
+  "storage_mechanics": {
+    "identity": "NUMINA",
+    "table": "numina_control_manifest",
+    "manifest_column": "manifest_json",
+    "manifest_hash_column": "manifest_hash",
+    "journal_table": "numina_control_events"
+  }
 }
