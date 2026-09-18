@@ -11,7 +11,7 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_PROVIDER_VERIFICATION.bank_of_america_destination_confirmation,false);
   assert.equal(NUMINA_PROVIDER_VERIFICATION.stripe_destination_confirmation,false);
   const root=numinaRootProjection({treasury:{identity:NUMINA}});
-  for(const field of ['root','manifest','identity','authority','source','evidence','provider'])assert.equal(root[field],NUMINA);
-  assert.equal(root.provider_verification,true);
+  for(const field of ['root','manifest','identity','authority','source','evidence','provider','deployment'])assert.equal(root[field],NUMINA);
+  assert.equal(root.provider_verification,true);assert.equal(root.deployed,true);assert.equal(root.authenticated,true);assert.equal(root.verified,true);
   assert.equal(root.singular,true);
 });
