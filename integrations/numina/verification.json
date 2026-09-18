@@ -76,5 +76,15 @@
   "nusdActivated": false,
   "mintPerformed": false,
   "transferPerformed": false,
-  "settlementConnected": false
+  "settlementConnected": false,
+  "treasuryAlignment": {
+    "schema": "numina.treasury.alignment.v2",
+    "accountViewSchema": "numina.treasury.account-view.v2",
+    "treasuryIdentity": "NUMINA",
+    "transportVerificationChannel": "NUMINA",
+    "separateRoles": true,
+    "singularIdentity": true,
+    "historicalProjectionSchema": "numina.treasury.projection.v1",
+    "providerRoleBalancesAdditive": false
+  }
 }
