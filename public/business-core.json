@@ -45,7 +45,26 @@
     "treasuryIdentity": "NUMINA",
     "transportVerificationChannel": "NUMINA",
     "separateRoles": true,
-    "singularIdentity": true
+    "singularIdentity": true,
+    "modeledAggregate": {
+      "amount": "1500000000000000",
+      "unit": "NUSD",
+      "components": [
+        {
+          "amount": "500000000000000",
+          "unit": "USD"
+        },
+        {
+          "amount": "500000000000000",
+          "unit": "USDC"
+        },
+        {
+          "amount": "500000000000000",
+          "unit": "NUSD"
+        }
+      ],
+      "externalBalancesAggregated": false
+    }
   },
   "procurement_usage": true,
   "providerEvidenceRequired": true,
@@ -130,5 +149,17 @@
     "providerBalancesChanged": false,
     "reserveVerificationEstablished": false,
     "executableConversionVerified": false
+  },
+  "nusd": {
+    "status": "FINAL_DEPLOYED_PAUSED",
+    "chainId": "962421430",
+    "decimals": 18,
+    "contract": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "settlementContract": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "receipt": "/downloads/nusd/deployment-receipt.json",
+    "externalBackingVerified": false,
+    "externalSettlementVerified": false
   }
 }
