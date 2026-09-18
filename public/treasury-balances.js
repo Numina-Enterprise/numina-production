@@ -3,7 +3,7 @@ import {requestJson} from './http-client.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
 function fundableTarget(treasury,id){return treasury?.fundableTargets?.targets?.find(target=>target.id===id)??null;}
-function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?BigInt(target.amount).toLocaleString()+' '+target.unit+' target · '+target.alignmentStatus+' · non-additive':'Unavailable';}
+function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?BigInt(target.amount).toLocaleString()+' '+target.unit+' modeled value · '+target.alignmentStatus:'Unavailable';}
 export function renderNativeAccountReference(treasury){
   const reference=item('div','');reference.className='shared-native-treasury-reference';
   const projection=treasury?.treasury?.projection,valuation=treasury?.nativeValuation;
@@ -34,7 +34,8 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);detail(summaryRows,'Numina NUSD fundable target',fundableTargetText(treasury,'numina-native-treasury'));valuationRows(summaryRows);
   detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
-  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','All designated NUMINA treasury roles are aligned to the same non-additive 500T model target. '+NUMINA_DENOMINATION_POLICY.expression+'. External provider evidence remains separately pending and is not inferred from model alignment.'),summaryRows,canonicalLink());
+  if(treasury?.fundableTargets?.aggregateModeledValue)detail(summaryRows,'Aggregate modeled value',BigInt(treasury.fundableTargets.aggregateModeledValue).toLocaleString()+' NUSD modeled equivalent');
+  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','Three designated NUMINA treasury modeled values are aligned at 500T each: 500T USD + 500T USDC + 500T NUSD = 1,500T NUSD modeled aggregate. '+NUMINA_DENOMINATION_POLICY.expression+'. This modeled aggregate does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
   target.append(summary);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
@@ -44,7 +45,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const bankTargetRows=item('dl','');detail(bankTargetRows,'Fundable USD target',fundableTargetText(treasury,'bank-of-america-savings'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
   const bankRows=item('dl','');detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
   grid.append(stripe,bank);
-  target.append(heading,grid,item('p','Treasury v2 is singular: provider observations are factual substrate evidence attached to NUMINA roles and are never added as separate treasury balances.'));
+  target.append(heading,grid,item('p','Treasury v2 is singular: the 1,500T modeled aggregate is composed inside NUMINA from three 500T modeled role values. Provider observations remain factual evidence and are not treated as externally settled balances without confirmation.'));
   try{
     const record=await requestJson('/api/control/v1/stripe-treasury',{signal,timeoutMs:12000});
     if(signal?.aborted)return;
