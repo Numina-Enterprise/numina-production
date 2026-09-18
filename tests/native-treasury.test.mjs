@@ -4,7 +4,7 @@ import {mkdtempSync,rmSync,readFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {database} from '../scripts/sqlite.mjs';
-import {bootstrapControl,readControl,controlSnapshot,commitControl} from '../src/control-store.js';
+import {bootstrapControl,readControl,controlManifestView,commitControl} from '../src/control-store.js';
 import {controlHash,stable} from '../src/control.js';
 import {createNuminaTreasury} from '../src/native-treasury.js';
 import {verifyNativeTreasury} from '../public/native-treasury.js';
@@ -131,8 +131,8 @@ test('treasury initializes within the existing root, persists and returns actual
     assert.equal((await api.writeTreasury(event)).replayed,true);
     assert.equal((await readControl(db)).eventCount,2);
     db.close();db=database(file);
-    const current=await treasury(db).readTreasury();assert.equal(current.root,initial.state.root);assert.equal(current.projection.balance,'500000000000000');assert.equal(await verifyNativeTreasury(current),true);
-    const snapshot=await controlSnapshot(db,owner,now());assert.equal(Object.hasOwn(snapshot.state,'nativeTreasury'),false);
+    const current=await treasury(db).readTreasury();assert.equal(current.root,initial.manifest.root);assert.equal(current.projection.balance,'500000000000000');assert.equal(await verifyNativeTreasury(current),true);
+    const view=await controlManifestView(db,owner,now());assert.equal(Object.hasOwn(view.content,'nativeTreasury'),false);
     const altered=structuredClone(current);altered.projection.balance='1';assert.equal(await verifyNativeTreasury(altered),false);
   }finally{db.close();rmSync(directory,{recursive:true});}
 });
@@ -223,10 +223,10 @@ test('recomputing generic journal hashes cannot bypass replay of the frozen trea
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
     const row=await readControl(db),event=row.journalEvents.at(-1);
-    row.state.nativeTreasury.balance='1';event.result.projection.balance='1';event.stateHash=await controlHash(row.state);
+    row.manifest.nativeTreasury.balance='1';event.result.projection.balance='1';event.manifestHash=await controlHash(row.manifest);
     const hash=await controlHash(event);
     await db.batch([
-      db.prepare('UPDATE numina_control_state SET state_json=?,state_hash=?,head_hash=? WHERE id=1').bind(stable(row.state),event.stateHash,hash),
+      db.prepare('UPDATE numina_control_state SET state_json=?,state_hash=?,head_hash=? WHERE id=1').bind(stable(row.manifest),event.manifestHash,hash),
       db.prepare('UPDATE numina_control_events SET event_json=?,hash=? WHERE id=?').bind(stable(event),hash,event.id)
     ]);
     await readControl(db); // The generic hash chain alone is consistent.

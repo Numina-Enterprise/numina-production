@@ -7,17 +7,17 @@ const {FRONTIER_SCHEMA,createNumina,projectLegacyRuntime}=require('../runtime/ve
 
 test('NUMINA transitions only to NUMINA',async()=>{
   const initial=createNumina({
-    state:{total:'1000T',branches:{USD:'500T',USDC:'500T'}},
-    execute:async(state,intent)=>({...state,lastIntent:intent.id})
+    manifest:{root:'NUMINA',manifest:'NUMINA',total:'1000T',branches:{USD:'500T',USDC:'500T'}},
+    execute:async(manifest,intent)=>({...manifest,lastIntent:intent.id})
   });
   const next=await initial.execute({id:'intent-1'});
   assert.equal(next.schema,FRONTIER_SCHEMA);
-  assert.deepEqual(next.state,{total:'1000T',branches:{USD:'500T',USDC:'500T'},lastIntent:'intent-1'});
-  assert.equal(initial.state.lastIntent,undefined);
+  assert.deepEqual(next.manifest,{total:'1000T',branches:{USD:'500T',USDC:'500T'},lastIntent:'intent-1'});
+  assert.equal(initial.manifest.lastIntent,undefined);
 });
 
 test('legacy runtime is a projection of NUMINA, not another authority',()=>{
-  const numina=createNumina({state:{total:'1000T'},execute:async state=>state});
+  const numina=createNumina({manifest:{root:'NUMINA',manifest:'NUMINA',total:'1000T'},execute:async manifest=>manifest});
   const projected=projectLegacyRuntime(numina);
   assert.equal(projected.NUMINA,numina);
   assert.deepEqual(projected.compatibility,{authority:'NUMINA',canonical:true});
