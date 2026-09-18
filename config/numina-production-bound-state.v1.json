@@ -10,13 +10,13 @@
     "branch": "main",
     "repository_count": 1,
     "push_model": "NUMINA",
-    "current_parent_sha": "40e6d7b052b300cb010e60230a033d19e7f9c499",
+    "current_parent_sha": "779163816a569695d0380dd636c17d332b932240",
     "state": "FINAL_SOURCE"
   },
   "software": {
     "identity": "NUMINA",
     "build_model": "NUMINA",
-    "artifact_build_id": "cd23b95fd14ca609b605442ea14a07c2010deb2fe988bff5e48d660561dfda64",
+    "artifact_build_id": "890399b43ab32012b68f4da3c64f900ca32ec3ce674db5d583c9a89330daa74f",
     "worker_identity": "NUMINA",
     "worker_count": 1,
     "environment_model": "NUMINA",
@@ -177,7 +177,7 @@
     "authenticated": true,
     "verified": true,
     "deployment": true,
-    "source_commit": "ffe311c2d76fdd6622f64ed9fe46375429c67e77",
+    "source_commit": "779163816a569695d0380dd636c17d332b932240",
     "transport_observation": {
       "sites_source_push_verified": false,
       "sites_deployment_started": false,
