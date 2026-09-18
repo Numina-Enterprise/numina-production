@@ -111,7 +111,7 @@ test('inexact output rolls back input, balances and operation state; fee-bearing
  assert.equal(await f.nusd.balanceOf(f.a[4]),before);assert.equal(await f.nusd.balanceOf(vault),0n);
  assert.equal(await f.usdc.balanceOf(f.a[5]),0n);assert.equal(await f.usdc.balanceOf(vault),100n*USDC);
  assert.equal((await f.vault.conversions(f.a[4],id('fee'))).completed,false);
- await assert.rejects(sent(f.vault.connect(f.operator).addLiquidity(true,NUSD,{gasLimit:1000000})));
+ await assert.rejects(sent(f.vault.connect(f.operator).addLiquidity(true,USDC,{gasLimit:1000000})));
  assert.equal(await f.usdc.balanceOf(vault),100n*USDC);
 });
 
@@ -121,7 +121,7 @@ test('token callback cannot reenter a conversion even when the token address has
  const call=f.vault.interface.encodeFunctionData('convert',[id('reenter'),true,NUSD,f.a[5]]);
  await sent(f.usdc.configure(2,vault,call));await sent(f.vault.connect(f.holder).convert(id('outer'),true,NUSD,f.a[5]));
  assert.equal(await f.usdc.callbackError(),id('ReentrancyGuardReentrantCall()').slice(0,10));
- assert.equal((await f.vault.conversions(u,id('reenter'))).completed,false);assert.equal(await f.usdc.balanceOf(f.a[5]),NUSD);
+ assert.equal((await f.vault.conversions(u,id('reenter'))).completed,false);assert.equal(await f.usdc.balanceOf(f.a[5]),USDC);
 });
 
 test('USD requests preserve exact cents including 500T arithmetic, and cancellable claims survive pause and eligibility revocation',async t=>{
@@ -188,23 +188,25 @@ test('a paused token cannot be recorded as burned; an unsuccessful finalization 
 });
 
 test('the same NUSD cannot fund both USD escrow and USDC conversion',async t=>{
- const f=await fixture(t,{supply:100n*USDC});await f.fund();await f.enable();await f.request('usd',60n*NUSD);
+ const f=await fixture(t,{supply:100n*NUSD});await f.fund();await f.enable();await f.request('usd',60n*NUSD);
  await assert.rejects(sent(f.vault.connect(f.holder).convert(id('double-spend'),true,50n*NUSD,f.a[5],{gasLimit:1000000})));
  await sent(f.vault.connect(f.holder).convert(id('remaining'),true,40n*NUSD,f.a[5]));
- assert.equal(await f.nusd.balanceOf(f.a[4]),0n);assert.equal(await f.usdc.balanceOf(f.a[5]),40n*NUSD);
+ assert.equal(await f.nusd.balanceOf(f.a[4]),0n);assert.equal(await f.usdc.balanceOf(f.a[5]),40n*USDC);
  assert.equal(await f.escrow.totalEscrowedNusd(),60n*NUSD);assert.equal(await f.nusd.balanceOf(await f.vault.getAddress()),40n*NUSD);
  await f.begin('usd');await f.attest({name:'usd',cents:6000n});assert.equal(await f.nusd.totalSupply(),40n*NUSD);
 });
 
-test('a token that falsely reports a burn cannot complete a USD paid attestation',async t=>{
- const f=await fixture(t),fake=await f.deploy(usdRedemption,[await f.usdc.getAddress(),...f.a.slice(0,4),0]);
+test('an 18-decimal token that falsely reports a burn cannot complete a USD paid attestation',async t=>{
+ const f=await fixture(t),falseBurn=await f.deploy(mock,[18]);
+ await sent(falseBurn.seed(f.a[4],NUSD));
+ const fake=await f.deploy(usdRedemption,[await falseBurn.getAddress(),...f.a.slice(0,4),0]);
  await sent(fake.grantRole(await fake.HOLDER_ROLE(),f.a[4]));await sent(fake.unpause());
- await sent(f.usdc.connect(f.holder).approve(await fake.getAddress(),NUSD));
+ await sent(falseBurn.connect(f.holder).approve(await fake.getAddress(),NUSD));
  await sent(fake.connect(f.holder).requestRedemption(id('fake-burn'),NUSD,id('destination')));
  await sent(fake.connect(f.operator).beginPayment(f.a[4],id('fake-burn'),id('attempt')));
- await sent(f.usdc.configure(3,ZeroAddress,'0x'));
+ await sent(falseBurn.configure(3,ZeroAddress,'0x'));
  await assert.rejects(sent(fake.connect(f.confirmer).attestBankOutcome(f.a[4],id('fake-burn'),id('attempt'),id('evidence'),100n,true,{gasLimit:1000000})));
  assert.equal((await fake.redemptions(f.a[4],id('fake-burn'))).status,2n);
  assert.equal(await fake.totalEscrowedNusd(),NUSD);assert.equal(await fake.usedEvidenceHashes(id('evidence')),false);
- assert.equal(await f.usdc.balanceOf(await fake.getAddress()),NUSD);
+ assert.equal(await falseBurn.balanceOf(await fake.getAddress()),NUSD);
 });
