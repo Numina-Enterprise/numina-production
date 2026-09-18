@@ -45,6 +45,13 @@ jobs:
         run: npm run build
       - name: Package Numina
         run: node scripts/package.mjs "$RUNNER_TEMP/numina.tgz"
+      - name: Restore exact committed source for publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fdx
+          test -z "$(git status --porcelain --untracked-files=normal)"
       - name: Publish Numina
         shell: bash
         run: npm run publish:source -- sites
