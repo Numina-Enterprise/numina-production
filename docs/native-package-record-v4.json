@@ -136,7 +136,7 @@
     "scope": "Preserved metadata-only iOS build3 preparation and retained Android3 binary evidence."
   },
   "finalBuild": {
-    "status": "SIGNING_BLOCKED_RUNNER_BILLING",
+    "status": "SIGNING_PENDING",
     "latestSigningAttemptRecord": "release-evidence/native-signing-attempt-2026-09-18T2110.json",
     "androidSigningRun": "https://github.com/skott34-dot/numina-production/actions/runs/35395347752",
     "iosSigningRun": "https://github.com/skott34-dot/numina-production/actions/runs/35395350460",
