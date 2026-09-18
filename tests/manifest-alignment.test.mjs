@@ -28,9 +28,9 @@ test('one owner approval binds both runtime manifests without manufacturing fina
  assert.equal(handoff.sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff.zip')));
  assert.equal(handoff.sha256,packageRecord.sha256);
  assert.equal(handoff.record_sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff-Package-Record.json')));
- const config=json('vercel.json');assert.equal(config.git.deploymentEnabled,true);
- for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source)?.destination,'https://numinalabs.xyz'+source);
- assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://numinalabs.xyz/api/control/v1/:path*');
+ const config=json('vercel.json');assert.equal(config.git.deploymentEnabled.main,true);
+ for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source),undefined);
+ assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://personal-space-m7q9.skott34.chatgpt.site/api/control/v1/:path*');
  for(const version of ['2','3','4'])assert.equal(config.rewrites.find(r=>r.source==='/v'+version+'/release/manifest')?.destination,'/api/application-release');
 });
 
@@ -122,3 +122,4 @@ test('runtimeBuild preserves optional treasury verification as server-reported m
   assert.equal(legacy.asset_execution_available,false);
   assert.deepEqual(calls,Array.from({length:2},()=>({url:'https://numina.test/v4/release/manifest',method:'GET',authorization:undefined})));
 });
+

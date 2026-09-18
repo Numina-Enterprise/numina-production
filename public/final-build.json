@@ -94,10 +94,23 @@
     },
     "website": {
       "sourceAligned": true,
-      "productionTransportUpdated": false,
-      "currentPublicDeploymentKnownStale": true,
-      "blocker": "VERCEL_BUILD_RATE_LIMIT",
-      "blockerEvidence": "Vercel commit status target upgradeToPro=build-rate-limit"
+      "productionTransportUpdated": true,
+      "currentPublicDeploymentKnownStale": false,
+      "blocker": null,
+      "verifiedAt": "2026-09-18",
+      "observedDeployment": {
+        "id": "dpl_GJmeqbgaUdHksnySf5q8mXL7vg72",
+        "commit": "9e659cc9bd261a72a34e66a20f9c9d0096f1f793",
+        "url": "https://vercel.com/skott34-dot/numina-production/GJmeqbgaUdHksnySf5q8mXL7vg72",
+        "status": "READY"
+      },
+      "domains": {
+        "apex": "https://numinalabs.xyz",
+        "canonical": "https://www.numinalabs.xyz",
+        "apexRedirectStatus": 308,
+        "ssl": "valid"
+      },
+      "verificationScope": "Observed deployment and domain configuration; subsequent source revisions require their own deployment verification."
     },
     "android": {
       "sourceAligned": true,
@@ -114,6 +127,15 @@
       "appStoreSubmitted": false,
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null
+    },
+    "applicationBackend": {
+      "origin": "https://personal-space-m7q9.skott34.chatgpt.site",
+      "storage": "existing D1 and R2",
+      "healthObserved": "ready",
+      "applicationVersion": "4.0.0",
+      "deployedSourceCommit": "db71c054cda7442e4c5f357e9e27e542fd2a7db9",
+      "matchesCanonicalSource": false,
+      "scope": "Existing application journal retained. Backend source deployment is separate from the Vercel website release."
     }
   }
 }
