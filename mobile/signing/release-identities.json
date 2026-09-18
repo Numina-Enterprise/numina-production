@@ -90,7 +90,7 @@
       "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
       "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
       "finality": "FINAL",
-      "receipt": "runtime/nusd/deployment-receipt.json"
+      "receipt": "/downloads/nusd/deployment-receipt.json"
     }
   }
 }
