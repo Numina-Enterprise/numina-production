@@ -1,3 +1,4 @@
+import {privateBankRouteConfiguration} from './bank-route-model.js';
 import {verifyTreasuryRecord} from '../public/treasury-proof.js';
 
 // Private configuration read only; no ACH debit, credit, or bank API submission.
@@ -19,14 +20,7 @@ export async function readPrivateBankRoute(req,{env=process.env,fetcher=fetch,ve
     const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
     const treasury=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
     if(!await verify(treasury,{allowUninitialized:true}))throw Error('OWNER_AUTH_UNAVAILABLE');
-    const account=env.NUMINA_BOFA_SAVINGS_ACCOUNT||'',routing=env.NUMINA_BOFA_ACH_ROUTING_NUMBER||'';
-    const syntax=/^[0-9]{5,17}$/.test(account)&&/^[0-9]{9}$/.test(routing);
-    const digits=syntax?[...routing].map(Number):[];
-    const checksum=syntax&&(3*(digits[0]+digits[3]+digits[6])+7*(digits[1]+digits[4]+digits[7])+digits[2]+digits[5]+digits[8])%10===0&&!/^0+$/.test(routing);
-    return {schema:'numina.treasury.bank-route.v1',identity:'NUMINA',providerLabel:'Bank of America',accountType:'savings',rail:'ACH',
-      configurationStatus:checksum?'owner_provided_unverified':'not_configured',accountLast4:checksum?account.slice(-4):null,routingNumberStored:checksum,
-      evidenceType:'owner_provided_configuration',ownerDeclaration:{ownershipVerified:true,achDebitAuthorized:true,evidenceType:'owner_statement',providerVerified:false},ownershipVerified:false,bankConnectionVerified:false,providerBalance:null,
-      achSubmissionEnabled:false,submissionPerformed:false,receipt:null};
+    return privateBankRouteConfiguration(env);
   }catch(error){
     throw Object.assign(Error([401,403].includes(error.status)?'OWNER_AUTH_REQUIRED':'BANK_ROUTE_UNAVAILABLE'),{status:[401,403].includes(error.status)?error.status:503});
   }finally{clearTimeout(timer);controller.abort();}
