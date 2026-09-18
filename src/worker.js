@@ -1,4 +1,5 @@
 import {financialEvidenceHttp} from './financial-evidence.js';
+import {treasuryConnectionHttp} from './treasury-connection-http.js';
 import {reviewerHttp,reviewerContext} from './reviewer.js';
 import {connectionsHttp} from './connections-http.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-v18.js';
@@ -40,6 +41,7 @@ export default {
 
    }
    if(path.startsWith('/api/financial/v1/'))return finish(await financialEvidenceHttp(req,env));
+   if(path.startsWith('/api/treasury/v1/'))return finish(await treasuryConnectionHttp(req,env));
    if(path==='/api/connections/v1/manifest')return finish(await connectionsHttp(req,env));
    if(path==='/api/ops/v1/telemetry')return finish(await telemetryHttp(req,env));
    if(path.startsWith('/api/ops/v1/quantum/'))return finish(await quantumHttp(req,env));

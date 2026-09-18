@@ -74,9 +74,9 @@ contract NuminaUSD is ERC20, ERC20Burnable, ERC20Capped, ERC20Pausable, AccessCo
         _pause();
     }
 
-    /// @notice Amounts are integer micro-units: 1 NUSD = 1,000,000 base units.
+    /// @notice Amounts use 18 decimal places: 1 NUSD = 1,000,000,000,000,000,000 base units.
     /// @dev This denomination does not establish a USD price or redemption right.
-    function decimals() public pure override returns (uint8) { return 6; }
+    function decimals() public pure override returns (uint8) { return 18; }
 
     /// @notice An issuer authorizes a bounded issuance after its independent off-chain checks.
     /// @dev Never include personal data or a bank account number in the public reference.
