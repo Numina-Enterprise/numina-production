@@ -5,6 +5,11 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/deploy-nusd-contracts.yml'
+      - 'runtime/nusd/scripts/deploy-production.mjs'
+      - 'runtime/nusd/deployment.production.json'
+      - 'runtime/nusd/artifacts/NuminaUSD.json'
+      - 'runtime/nusd/artifacts/NuminaSettlement.json'
+      - 'runtime/nusd/scripts/token-artifact.mjs'
       - 'runtime/nusd/contracts/**'
       - 'runtime/nusd/artifacts/**'
       - 'runtime/nusd/scripts/deploy-production.mjs'

@@ -7,23 +7,41 @@ import {loadTokenArtifact,TOKEN_ARTIFACT_SHA256} from './token-artifact.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const output=path.resolve(process.argv[2]||path.join(root,'deployment-verification.json'));
 const endpoint=process.env.NUMINA_RPC_URL;
-const authorization=process.env.NUMINA_RPC_AUTHORIZATION;
+const authorizationInput=process.env.NUMINA_RPC_AUTHORIZATION;
 const expectedChain=process.env.NUMINA_EXPECTED_CHAIN_ID;
 const expectedGenesis=process.env.NUMINA_EXPECTED_GENESIS?.toLowerCase();
 const sender=getAddress(process.env.NUMINA_SENDER||'');
 const recipient=getAddress(process.env.NUMINA_RECIPIENT||sender);
 const expectedSupply='1500000000000000000000000000000000';
 const expectedPolicy=(process.env.NUMINA_ISSUER_POLICY_SHA256||'').toLowerCase();
-if(!endpoint||!authorization||!expectedChain||!expectedGenesis||!expectedPolicy)throw Error('NUMINA_VERIFICATION_CONFIGURATION_REQUIRED');
+if(!endpoint||!authorizationInput||!expectedChain||!expectedGenesis||!expectedPolicy)throw Error('NUMINA_VERIFICATION_CONFIGURATION_REQUIRED');
 
-let rpcId=0;
-async function rpc(method,params=[]){
-  const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','authorization':authorization},
-    body:JSON.stringify({jsonrpc:'2.0',id:++rpcId,method,params}),redirect:'error',signal:AbortSignal.timeout(15000)});
-  const value=await response.json();
-  if(!response.ok||value.error)throw Error(method+' failed');
+function authorizationCandidates(value){
+  if(/^(?:Basic|Bearer) [\x21-\x7e]+$/.test(value))return [value];
+  const candidates=[];
+  if(value.includes(':'))candidates.push('Basic '+Buffer.from(value,'utf8').toString('base64'));
+  candidates.push('Bearer '+value,'Basic '+value);
+  return [...new Set(candidates)];
+}
+let authorization=null,rpcId=0;
+async function rawRpc(auth,method,params=[]){
+  const id=++rpcId;
+  const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','accept':'application/json','authorization':auth},
+    body:JSON.stringify({jsonrpc:'2.0',id,method,params}),redirect:'error',signal:AbortSignal.timeout(15000)});
+  const type=(response.headers.get('content-type')||'').toLowerCase();
+  if(!response.ok||!/^application\/(?:json|json-rpc)(?:\s*;|$)/i.test(type))throw Error('RPC_HTTP_OR_CONTENT_TYPE');
+  let value;try{value=await response.json();}catch{throw Error('RPC_INVALID_JSON');}
+  if(value?.jsonrpc!=='2.0'||value.id!==id||value.error||!Object.hasOwn(value,'result'))throw Error('RPC_INVALID_ENVELOPE');
   return value.result;
 }
+for(const candidate of authorizationCandidates(authorizationInput)){
+  try{
+    const probe=await rawRpc(candidate,'eth_chainId',[]);
+    if(typeof probe==='string'){authorization=candidate;break;}
+  }catch{}
+}
+if(!authorization)throw Error('NUMINA_RPC_AUTHENTICATION_FAILED');
+async function rpc(method,params=[]){return rawRpc(authorization,method,params);}
 async function call(address,iface,name,args=[]){
   const raw=await rpc('eth_call',[{to:address,data:iface.encodeFunctionData(name,args)},'latest']);
   return iface.decodeFunctionResult(name,raw);

@@ -9,22 +9,40 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const requestFile=path.resolve(process.argv[2]||path.join(root,'deployment.production.json'));
 const receiptFile=path.resolve(process.argv[3]||path.join(root,'deployment-receipt.json'));
 const endpoint=process.env.NUMINA_RPC_URL;
-const authorization=process.env.NUMINA_RPC_AUTHORIZATION;
+const authorizationInput=process.env.NUMINA_RPC_AUTHORIZATION;
 const expectedChain=process.env.NUMINA_EXPECTED_CHAIN_ID;
 const expectedGenesis=process.env.NUMINA_EXPECTED_GENESIS?.toLowerCase();
 const sender=getAddress(process.env.NUMINA_SENDER||'');
 const REQUIRED_INITIAL_SUPPLY='1500000000000000000000000000000000';
 const REQUIRED_DECIMALS=18n;
-if(!endpoint||!authorization||!expectedChain||!expectedGenesis)throw Error('NUMINA_RPC_CONFIGURATION_REQUIRED');
+if(!endpoint||!authorizationInput||!expectedChain||!expectedGenesis)throw Error('NUMINA_RPC_CONFIGURATION_REQUIRED');
 
-let rpcId=0;
-async function rpc(method,params=[]){
-  const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','authorization':authorization},
-    body:JSON.stringify({jsonrpc:'2.0',id:++rpcId,method,params}),redirect:'error',signal:AbortSignal.timeout(15000)});
-  const value=await response.json();
-  if(!response.ok||value.error)throw Error(method+' failed: '+JSON.stringify(value.error||response.status));
+function authorizationCandidates(value){
+  if(/^(?:Basic|Bearer) [\x21-\x7e]+$/.test(value))return [value];
+  const candidates=[];
+  if(value.includes(':'))candidates.push('Basic '+Buffer.from(value,'utf8').toString('base64'));
+  candidates.push('Bearer '+value,'Basic '+value);
+  return [...new Set(candidates)];
+}
+let authorization=null,rpcId=0;
+async function rawRpc(auth,method,params=[]){
+  const id=++rpcId;
+  const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','accept':'application/json','authorization':auth},
+    body:JSON.stringify({jsonrpc:'2.0',id,method,params}),redirect:'error',signal:AbortSignal.timeout(15000)});
+  const type=(response.headers.get('content-type')||'').toLowerCase();
+  if(!response.ok||!/^application\/(?:json|json-rpc)(?:\s*;|$)/i.test(type))throw Error('RPC_HTTP_OR_CONTENT_TYPE');
+  let value;try{value=await response.json();}catch{throw Error('RPC_INVALID_JSON');}
+  if(value?.jsonrpc!=='2.0'||value.id!==id||value.error||!Object.hasOwn(value,'result'))throw Error('RPC_INVALID_ENVELOPE');
   return value.result;
 }
+for(const candidate of authorizationCandidates(authorizationInput)){
+  try{
+    const probe=await rawRpc(candidate,'eth_chainId',[]);
+    if(typeof probe==='string'){authorization=candidate;break;}
+  }catch{}
+}
+if(!authorization)throw Error('NUMINA_RPC_AUTHENTICATION_FAILED');
+async function rpc(method,params=[]){return rawRpc(authorization,method,params);}
 const hex=value=>'0x'+BigInt(value).toString(16);
 async function waitReceipt(hash){
   for(let attempt=0;attempt<180;attempt++){
