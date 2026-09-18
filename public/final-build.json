@@ -11,7 +11,7 @@
     "identity": "NUMINA",
     "primaryOrigin": "https://personal-space-m7q9.skott34.chatgpt.site",
     "vercelRole": "backup_storage_and_deployment_surface",
-    "customDomainUpdated": false
+    "customDomainUpdated": true
   },
   "os": {
     "name": "NUMINA",
@@ -24,18 +24,9 @@
     "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "components": [
-      {
-        "unit": "USD",
-        "modeledValue": "500000000000000"
-      },
-      {
-        "unit": "USDC",
-        "modeledValue": "500000000000000"
-      },
-      {
-        "unit": "NUSD",
-        "modeledValue": "500000000000000"
-      }
+      {"unit": "USD", "modeledValue": "500000000000000"},
+      {"unit": "USDC", "modeledValue": "500000000000000"},
+      {"unit": "NUSD", "modeledValue": "500000000000000"}
     ],
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": true,
@@ -104,16 +95,12 @@
       "appStoreSubmissionReceipt": null
     }
   },
-  "storePublication": {
-    "googlePlay": false,
-    "appStore": false,
-    "evidenceRequired": true
-  },
+  "storePublication": {"googlePlay": false, "appStore": false, "evidenceRequired": true},
   "delivery": {
     "source": {
       "status": "FINAL",
       "canonicalRepository": "skott34-dot/numina-production",
-      "verifiedCodeCommit": "671d88058bac5858e9ffd986d8065c3d18651449"
+      "verifiedCodeCommit": "5183cc01a978137c292b573022d9c499bd22714f"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -123,44 +110,25 @@
     "website": {
       "sourceAligned": true,
       "productionTransportUpdated": true,
-      "currentPublicDeploymentKnownStale": true,
-      "blocker": "CUSTOM_DOMAIN_VERCEL_DEPLOYMENT_LIMIT",
-      "verifiedAt": "2026-09-18T18:51:16Z",
+      "currentPublicDeploymentKnownStale": false,
+      "blocker": null,
+      "verifiedAt": "2026-09-18T22:51:45Z",
       "observedDeployment": {
-        "id": "dpl_FLgkD318R3Cn9tkv15BZioQb2GKc",
-        "commit": "640050c4a1a1139d048bd8f30833be79b273728a",
-        "url": "https://vercel.com/skott34-dot/numina-production/FLgkD318R3Cn9tkv15BZioQb2GKc",
-        "deploymentUrl": "https://numina-production-70q5ig443-skott34-dot.vercel.app",
+        "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
+        "commit": "5183cc01a978137c292b573022d9c499bd22714f",
+        "url": "https://vercel.com/skott34-dot/numina-production/6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
+        "deploymentUrl": "https://numina-production-4m3krnxa3-skott34-dot.vercel.app",
         "status": "READY",
         "target": "production",
-        "readyAt": "2026-09-18T18:03:33.952Z",
-        "aliases": [
-          "www.numinalabs.xyz",
-          "numinalabs.xyz",
-          "numina-production.vercel.app"
-        ],
-        "historical": true
+        "readyAt": "2026-09-18T22:51:30.411Z",
+        "aliases": ["www.numinalabs.xyz", "numinalabs.xyz", "numina-production.vercel.app", "numina-production-skott34-dot.vercel.app", "numina-production-git-main-skott34-dot.vercel.app"],
+        "historical": false
       },
-      "domains": {
-        "apex": "https://numinalabs.xyz",
-        "canonical": "https://www.numinalabs.xyz",
-        "apexRedirectStatus": 308,
-        "ssl": "valid"
-      },
-      "verificationScope": "Primary NUMINA treasury page and public model/activation APIs verified. Anonymous private reads denied. Authenticated provider balances and bank connection were not verified; custom domain remains on older Vercel source.",
-      "priorObservedDeployment": {
-        "id": "dpl_2SbEf3mp95BiGA65mMVb9ARiQd2Y",
-        "commit": "2cef3cf24f98d4362a4fee2022b23b0a3fad8969",
-        "url": "https://vercel.com/skott34-dot/numina-production/2SbEf3mp95BiGA65mMVb9ARiQd2Y",
-        "status": "READY"
-      },
-      "status": "PRIMARY_HOST_DEPLOYED_CUSTOM_DOMAIN_STALE",
-      "latestRedeployAttempt": {
-        "result": "rejected",
-        "code": "api-deployments-free-per-day",
-        "deploymentCreated": false,
-        "observedAt": "2026-09-18T18:43:24Z"
-      },
+      "domains": {"apex": "https://numinalabs.xyz", "canonical": "https://www.numinalabs.xyz", "apexRedirectStatus": 308, "ssl": "valid"},
+      "verificationScope": "Canonical NUMINA main deployment is READY on the custom domain. Public /final-build.json, /downloads/nusd/deployment-receipt.json, /downloads/nusd/settlement-receipt.json, /api/nusd/v1/status and /v2/network/deployment-estimate returned HTTP 200. External Bank of America/Stripe settlement remains unverified unless provider receipts state otherwise.",
+      "priorObservedDeployment": {"id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w", "commit": "5d93ddca486cd22c620e1eab30058c345937316f", "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w", "status": "READY"},
+      "status": "CANONICAL_MAIN_DEPLOYED",
+      "latestRedeployAttempt": {"result": "succeeded", "deploymentId": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc", "deploymentCreated": true, "observedAt": "2026-09-18T22:51:45Z"},
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
       "primaryHost": {
@@ -183,13 +151,7 @@
           "env_set_revision": 10,
           "updated_at": "2026-09-18T18:50:56.936001+00:00"
         },
-        "storedArchive": {
-          "archive_format": "tar",
-          "sediment_file_id": "file_00000000c42481f581bf7aad9db5b0c7",
-          "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5",
-          "size_bytes": 44277760,
-          "file_count": 307
-        }
+        "storedArchive": {"archive_format": "tar", "sediment_file_id": "file_00000000c42481f581bf7aad9db5b0c7", "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5", "size_bytes": 44277760, "file_count": 307}
       }
     },
     "android": {
@@ -197,21 +159,21 @@
       "versionCode": 4,
       "signedArtifactCreated": false,
       "googlePlaySubmitted": false,
-      "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
+      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null,
       "lastRunnerObservation": {
-        "runId": 35377920361,
+        "runId": 35396478334,
         "attempt": 2,
-        "jobId": 105707486805,
-        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920361",
-        "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "jobId": 105787376692,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35396478334",
+        "sourceCommit": "3dfba4e001a55bbb45b6a12ebc15943c7ed447f9",
         "conclusion": "failure",
         "runnerId": 0,
         "stepsExecuted": 0,
         "artifacts": [],
-        "completedAt": "2026-09-18T18:05:25Z",
-        "observedAt": "2026-09-18T18:07:00Z",
-        "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced."
+        "completedAt": "2026-09-18T22:49:25Z",
+        "observedAt": "2026-09-18T22:49:25Z",
+        "executionSummary": "The Android signing retry terminated before any workflow steps executed; no runner-backed build or signed artifact was produced."
       }
     },
     "ios": {
@@ -219,21 +181,21 @@
       "buildNumber": 6,
       "signedArtifactCreated": false,
       "appStoreSubmitted": false,
-      "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
+      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null,
       "lastRunnerObservation": {
-        "runId": 35377920370,
+        "runId": 35396478463,
         "attempt": 2,
-        "jobId": 105707497373,
-        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920370",
-        "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+        "jobId": 105787380773,
+        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35396478463",
+        "sourceCommit": "3dfba4e001a55bbb45b6a12ebc15943c7ed447f9",
         "conclusion": "failure",
         "runnerId": 0,
         "stepsExecuted": 0,
         "artifacts": [],
-        "completedAt": "2026-09-18T18:05:11Z",
-        "observedAt": "2026-09-18T18:07:00Z",
-        "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced."
+        "completedAt": "2026-09-18T22:49:30Z",
+        "observedAt": "2026-09-18T22:49:30Z",
+        "executionSummary": "The iOS signing retry terminated before any workflow steps executed; no runner-backed build or signed artifact was produced."
       }
     },
     "applicationBackend": {
@@ -250,25 +212,17 @@
       "version": 103
     },
     "browserAlignment": {
-      "status": "PRIMARY_HOST_PUBLIC_MODEL_VERIFIED",
+      "status": "CUSTOM_DOMAIN_CANONICAL_MAIN_VERIFIED",
       "modelBalance": "1500000000000000",
-      "modelUnits": [
-        "USD",
-        "USDC",
-        "NUSD"
-      ],
+      "modelUnits": ["USD", "USDC", "NUSD"],
       "modelViewsAdditive": true,
       "mintedNusdAggregate": "1500000000000000",
       "displayDecimals": 18,
       "contractDecimals": 18,
       "existingContractPreserved": true,
-      "tests": {
-        "focusedPassed": 44,
-        "focusedFailed": 0,
-        "fullSuiteRunThisObservation": false
-      },
+      "tests": {"focusedPassed": 44, "focusedFailed": 0, "fullSuiteRunThisObservation": false},
       "productionVerified": true,
-      "verificationScope": "Primary NUMINA treasury page and public model/activation APIs verified. Anonymous private reads denied. Authenticated provider balances and bank connection were not verified; custom domain remains on older Vercel source.",
+      "verificationScope": "Canonical NUMINA custom-domain endpoints returned HTTP 200 on the READY production deployment. Provider balances and external settlement remain separate evidence domains.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json"
     }
