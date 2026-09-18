@@ -49,6 +49,10 @@
       "destination": "/api/status?mode=nusd-deployment-verification"
     },
     {
+      "source": "/downloads/nusd/settlement-receipt.json",
+      "destination": "/api/status?mode=nusd-settlement-receipt"
+    },
+    {
       "source": "/api/nusd/v1/:path*",
       "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/nusd/v1/:path*"
     },
