@@ -15,7 +15,18 @@ test('primary host exposes the same model and protects owner records',async()=>{
     assert.equal(allowed.status,200);
     const value=await allowed.json();
     if(name==='bank-route'){assert.equal(value.configurationStatus,'not_configured');assert.equal(value.achSubmissionEnabled,false);}
-    else assert.deepEqual(value.settlementRecords,[]);
+    else {
+      assert.deepEqual(value.settlementRecords,[]);
+      assert.equal(value.ownerReportedExecution.statement,'NUMINA EXECUTED');
+      assert.equal(value.ownerReportedExecution.status,'OWNER_REPORTED_EXECUTED_UNVERIFIED');
+      assert.equal(value.ownerReportedExecution.independentlyVerified,false);
+      assert.equal(value.financialExecution,false);
+      for(const request of value.requests){
+        assert.equal(request.status,'BLOCKED_NOT_SUBMITTED');
+        assert.equal(request.submissionPerformed,false);assert.equal(request.settled,false);
+        assert.equal(request.providerReference,null);assert.equal(request.receipt,null);
+      }
+    }
   }
 });
 test('primary submission endpoint rejects caller settlement assertions and cross-origin posts',async()=>{
