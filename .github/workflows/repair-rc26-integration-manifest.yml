@@ -2,6 +2,12 @@ name: Repair rc26 integration manifest
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'public/runtime-contract.js'
+      - 'integrations/numina/src/runtime-contract.js'
+      - '.github/workflows/repair-rc26-integration-manifest.yml'
 
 permissions:
   contents: write
