@@ -93,5 +93,27 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false
+  },
+  "nusdContracts": {
+    "schema": "numina.nusd.contract-lifecycle.v1",
+    "modelIdentity": "NUMINA",
+    "identity": "NUMINA",
+    "status": "INITIATED",
+    "initiatedOn": "2026-09-18",
+    "contractCount": 4,
+    "contracts": [
+      "NuminaUSD",
+      "NuminaSettlement",
+      "NuminaUSDCConversion",
+      "NuminaUSDRedemption"
+    ],
+    "deploymentPreparationInitiated": true,
+    "deploymentVerified": false,
+    "chainReceiptVerified": false,
+    "mintPerformed": false,
+    "conversionPerformed": false,
+    "redemptionPerformed": false,
+    "settlementPerformed": false,
+    "externalDepositsPerformed": false
   }
 }
