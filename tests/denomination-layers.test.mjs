@@ -55,7 +55,7 @@ test('hosted app and mobile treasury panel show declared equivalents only after 
     const record=await treasury.readTreasury();let response=record;
     globalThis.document={getElementById:get,createElement:()=>new Element(),dispatchEvent(){}};
     globalThis.fetch=async()=>Response.json(response);
-    await loadNativeTreasury();assert.match(get('native-treasury-details').textContent,/1 NUSD = 1 USDC = 1 USD/);assert.match(get('native-treasury-details').textContent,/Declared USDC value500,000,000,000,000\.000000 USDC/);
+    await loadNativeTreasury();assert.match(get('native-treasury-details').textContent,/1 NUSD = 1 USDC = 1 USD/);assert.match(get('native-treasury-details').textContent,/Declared USDC value500,000,000,000,000\.00 USDC/);
     response=structuredClone(record);response.projection.balance='1';await loadNativeTreasury();assert.equal(get('native-treasury-details').textContent,'');
     globalThis.fetch=async()=>Response.json({error:'UNAUTHENTICATED'},{status:401});await loadNativeTreasury();assert.equal(get('native-treasury-panel').hidden,true);assert.equal(get('native-treasury-details').textContent,'');
   }finally{clearNativeTreasury();globalThis.document=saved.document;globalThis.fetch=saved.fetch;db.close();}
