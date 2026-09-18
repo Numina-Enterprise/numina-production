@@ -33,7 +33,7 @@ test('owner-only evidence is signed, snapshot-bound and preserves the original j
     assert.equal(await frontierVerify(receipt,JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK)),true);
     const p=receipt.payload;assert.equal(p.head,before.head_hash);assert.equal(p.revision,before.revision);assert.equal(p.evidenceHash,await controlHash(p.source));
     assert.equal(p.source.nativeTreasury.projection.balance,'500000000000000');assert.equal(p.source.providerObservation.record.balances.available.usd.value,12500);
-    assert.equal(p.source.canonicalTreasury.id,'numina:treasury:'+encodeURIComponent(owner));
+    assert.equal(p.source.canonicalTreasury.id,'numina:treasury:NUMINA');assert.equal(p.source.canonicalTreasury.root,'NUMINA');
     assert.equal(p.reconciliation.schema,'numina.treasury.reconciliation.v1');assert.equal(p.reconciliation.status,'NOT_RECONCILED');
     assert.deepEqual(p.reconciliation.canonicalTreasury,{source:'/source/canonicalTreasury',id:p.source.canonicalTreasury.id,route:'/api/control/v1/treasury',revision:p.revision,head:p.head,status:'VERIFIED'});
     assert.equal(p.reconciliation.capturedAt,p.capturedAt);assert.equal(p.reconciliation.depositReadiness.status,'NOT_READY');
