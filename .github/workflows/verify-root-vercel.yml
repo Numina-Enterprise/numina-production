@@ -48,6 +48,8 @@ jobs:
         run: node --test tests/treasury-simulation-http.test.mjs
       - name: Validate application build
         run: npm run build
+      - name: Validate complete Numina test suite
+        run: npm test
       - name: Validate root routes, release identities and provenance-bound readiness
         run: |
           node --input-type=module <<'NODE'
