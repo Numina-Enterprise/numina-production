@@ -1,19 +1,21 @@
 export const NUMINA='NUMINA';
 export const NUMINA_MANIFEST_SCHEMA='numina.manifest.v2';
-const NUMINA_COMPATIBILITY_ALIASES=Object.freeze({
-  root:NUMINA,manifest:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,
-  core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,
-  artifact:NUMINA,authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,
-  storage:NUMINA,projection:NUMINA,transport:NUMINA
+export const NUMINA_IDENTITIES=Object.freeze({
+  root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,
+  provider:NUMINA,host:NUMINA,provenance:NUMINA,core:NUMINA,repository:NUMINA,software:NUMINA,
+  worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,authentication:NUMINA,deployment:NUMINA,
+  delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
+  release:NUMINA,receipts:NUMINA,settlements:NUMINA,funds:NUMINA,confirmation_evidence:NUMINA
 });
-export const NUMINA_VOCABULARY=Object.freeze({identity:NUMINA});
+const NUMINA_COMPATIBILITY_ALIASES=NUMINA_IDENTITIES;
+export const NUMINA_VOCABULARY=NUMINA_IDENTITIES;
 export const NUMINA_DELIVERY_SURFACES=Object.freeze([
-  Object.freeze({kind:'domain',endpoint:'https://numinalabs.xyz',role:'transport'}),
-  Object.freeze({kind:'site',endpoint:'https://personal-space-m7q9.skott34.chatgpt.site',role:'transport'}),
-  Object.freeze({kind:'vercel',endpoint:'https://numina-production.vercel.app',role:'transport'})
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'domain',endpoint:'https://numinalabs.xyz',role:'transport_substrate'}),
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'site',endpoint:'https://personal-space-m7q9.skott34.chatgpt.site',role:'transport_substrate'}),
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'vercel',endpoint:'https://numina-production.vercel.app',role:'transport_substrate'})
 ]);
 export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
-  identity:NUMINA,provider:NUMINA,verified:true,verification_scope:NUMINA,
+  ...NUMINA_IDENTITIES,verified:true,verification_scope:NUMINA,
   bank_of_america_destination_confirmation:false,
   stripe_destination_confirmation:false
 });
