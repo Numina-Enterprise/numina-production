@@ -1,0 +1,132 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {ContractFactory,Interface,getAddress,id} from 'ethers';
+import {validateDeployment} from './validate-deployment.mjs';
+import {loadTokenArtifact,TOKEN_ARTIFACT_SHA256} from './token-artifact.mjs';
+
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const requestFile=path.resolve(process.argv[2]||path.join(root,'deployment.production.json'));
+const receiptFile=path.resolve(process.argv[3]||path.join(root,'deployment-receipt.json'));
+const endpoint=process.env.NUMINA_RPC_URL;
+const authorization=process.env.NUMINA_RPC_AUTHORIZATION;
+const expectedChain=process.env.NUMINA_EXPECTED_CHAIN_ID;
+const expectedGenesis=process.env.NUMINA_EXPECTED_GENESIS?.toLowerCase();
+const sender=getAddress(process.env.NUMINA_SENDER||'');
+const REQUIRED_INITIAL_SUPPLY='1500000000000000000000000000000000';
+const REQUIRED_DECIMALS=18n;
+if(!endpoint||!authorization||!expectedChain||!expectedGenesis)throw Error('NUMINA_RPC_CONFIGURATION_REQUIRED');
+
+let rpcId=0;
+async function rpc(method,params=[]){
+  const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json','authorization':authorization},
+    body:JSON.stringify({jsonrpc:'2.0',id:++rpcId,method,params}),redirect:'error',signal:AbortSignal.timeout(15000)});
+  const value=await response.json();
+  if(!response.ok||value.error)throw Error(method+' failed: '+JSON.stringify(value.error||response.status));
+  return value.result;
+}
+const hex=value=>'0x'+BigInt(value).toString(16);
+async function waitReceipt(hash){
+  for(let attempt=0;attempt<180;attempt++){
+    const receipt=await rpc('eth_getTransactionReceipt',[hash]);
+    if(receipt)return receipt;
+    await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  throw Error('RECEIPT_TIMEOUT');
+}
+async function waitConfirmations(blockHex,count=12){
+  const mined=BigInt(blockHex);
+  for(let attempt=0;attempt<300;attempt++){
+    const latest=BigInt(await rpc('eth_blockNumber'));
+    const confirmations=latest>=mined?latest-mined+1n:0n;
+    if(confirmations>=BigInt(count))return Number(confirmations);
+    await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  throw Error('FINALITY_TIMEOUT');
+}
+async function sendCreation(data,label){
+  const nonce=BigInt(await rpc('eth_getTransactionCount',[sender,'pending']));
+  const gas=BigInt(await rpc('eth_estimateGas',[{from:sender,data,value:'0x0'}]));
+  const gasPrice=BigInt(await rpc('eth_gasPrice'));
+  const balance=BigInt(await rpc('eth_getBalance',[sender,'pending']));
+  const maximumFee=gas*gasPrice;
+  if(balance<maximumFee)throw Error(label+'_INSUFFICIENT_GAS_BALANCE');
+  const transaction={from:sender,data,value:'0x0',nonce:hex(nonce),gas:hex(gas),gasPrice:hex(gasPrice)};
+  const hash=await rpc('eth_sendTransaction',[transaction]);
+  if(!/^0x[0-9a-fA-F]{64}$/.test(hash))throw Error(label+'_INVALID_TRANSACTION_HASH');
+  const receipt=await waitReceipt(hash);
+  if(receipt.status!=='0x1'||!receipt.contractAddress)throw Error(label+'_DEPLOYMENT_REVERTED');
+  const code=await rpc('eth_getCode',[receipt.contractAddress,'latest']);
+  if(!code||code==='0x')throw Error(label+'_NO_RUNTIME_CODE');
+  return {hash,receipt,gas:gas.toString(),gasPrice:gasPrice.toString(),maximumFee:maximumFee.toString()};
+}
+async function contractCall(address,iface,name,args=[]){
+  const data=iface.encodeFunctionData(name,args);
+  const raw=await rpc('eth_call',[{to:address,data},'latest']);
+  return iface.decodeFunctionResult(name,raw);
+}
+
+const chain=BigInt(await rpc('eth_chainId')).toString();
+if(chain!==expectedChain)throw Error('CHAIN_MISMATCH');
+const genesis=await rpc('eth_getBlockByNumber',['0x0',false]);
+if(genesis?.hash?.toLowerCase()!==expectedGenesis)throw Error('GENESIS_MISMATCH');
+const accounts=await rpc('eth_accounts');
+if(!Array.isArray(accounts)||!accounts.some(account=>account.toLowerCase()===sender.toLowerCase()))throw Error('MANAGED_SIGNER_UNAVAILABLE');
+
+const checked=validateDeployment(requestFile);
+if(checked.errors.length)throw Error('DEPLOYMENT_REQUEST_INVALID: '+checked.errors.join('; '));
+if(checked.initialSupply.toString()!==REQUIRED_INITIAL_SUPPLY||checked.cap.toString()!==REQUIRED_INITIAL_SUPPLY)throw Error('SUPPLY_NOT_1500T_18D');
+if(getAddress(checked.initialRecipient)!==sender)throw Error('RECIPIENT_SIGNER_MISMATCH');
+
+const tokenArtifact=loadTokenArtifact();
+const tokenData=(await new ContractFactory(tokenArtifact.abi,tokenArtifact.bytecode).getDeployTransaction(
+  checked.cap,checked.initialSupply,checked.initialRecipient,
+  checked.roles.admin,checked.roles.issuer,checked.roles.minter,checked.roles.pauser,
+  checked.config.adminDelaySeconds,`0x${checked.policyHash}`
+)).data;
+const tokenTx=await sendCreation(tokenData,'NUSD');
+const tokenAddress=getAddress(tokenTx.receipt.contractAddress);
+const tokenInterface=new Interface(tokenArtifact.abi);
+const [decimals]=await contractCall(tokenAddress,tokenInterface,'decimals');
+const [totalSupply]=await contractCall(tokenAddress,tokenInterface,'totalSupply');
+const [cap]=await contractCall(tokenAddress,tokenInterface,'cap');
+const [paused]=await contractCall(tokenAddress,tokenInterface,'paused');
+const [recipientBalance]=await contractCall(tokenAddress,tokenInterface,'balanceOf',[checked.initialRecipient]);
+const [policyHash]=await contractCall(tokenAddress,tokenInterface,'issuerPolicyHash');
+if(decimals!==REQUIRED_DECIMALS||totalSupply.toString()!==REQUIRED_INITIAL_SUPPLY||cap.toString()!==REQUIRED_INITIAL_SUPPLY||
+   recipientBalance.toString()!==REQUIRED_INITIAL_SUPPLY||paused!==true||policyHash.toLowerCase()!==`0x${checked.policyHash}`.toLowerCase()) {
+  throw Error('NUSD_POST_DEPLOY_VERIFICATION_FAILED');
+}
+for(const [roleName,address] of [['ISSUER_ROLE',checked.roles.issuer],['MINTER_ROLE',checked.roles.minter],['PAUSER_ROLE',checked.roles.pauser]]){
+  const [has]=await contractCall(tokenAddress,tokenInterface,'hasRole',[id(roleName),address]);
+  if(!has)throw Error(roleName+'_MISSING');
+}
+const [admin]=await contractCall(tokenAddress,tokenInterface,'defaultAdmin');
+if(getAddress(admin)!==getAddress(checked.roles.admin))throw Error('ADMIN_ROLE_MISMATCH');
+
+const settlementArtifact=JSON.parse(fs.readFileSync(path.join(root,'artifacts/NuminaSettlement.json'),'utf8'));
+const settlementData=(await new ContractFactory(settlementArtifact.abi,settlementArtifact.bytecode).getDeployTransaction(tokenAddress)).data;
+const settlementTx=await sendCreation(settlementData,'NUSD_SETTLEMENT');
+const settlementAddress=getAddress(settlementTx.receipt.contractAddress);
+const settlementInterface=new Interface(settlementArtifact.abi);
+const [boundNusd]=await contractCall(settlementAddress,settlementInterface,'nusd');
+if(getAddress(boundNusd)!==tokenAddress)throw Error('SETTLEMENT_TOKEN_BINDING_MISMATCH');
+
+const tokenConfirmations=await waitConfirmations(tokenTx.receipt.blockNumber,12);
+const settlementConfirmations=await waitConfirmations(settlementTx.receipt.blockNumber,12);
+const result={
+  schema:'numina.nusd.production-deployment-receipt.v1',identity:'NUMINA',
+  observedAt:new Date().toISOString(),chainId:chain,genesisHash:genesis.hash,sender,
+  issuance:{amountNusd:'1500000000000000',decimals:18,baseUnits:REQUIRED_INITIAL_SUPPLY,
+    constructorMint:true,recipient:checked.initialRecipient,externallyBackedClaim:false},
+  token:{address:tokenAddress,transactionHash:tokenTx.hash,blockNumber:tokenTx.receipt.blockNumber,
+    confirmations:tokenConfirmations,artifactSha256:TOKEN_ARTIFACT_SHA256,sourceSha256:tokenArtifact.sourceSha256,
+    decimals:Number(decimals),totalSupply:totalSupply.toString(),cap:cap.toString(),recipientBalance:recipientBalance.toString(),
+    paused,issuerPolicySha256:checked.policyHash},
+  settlement:{address:settlementAddress,transactionHash:settlementTx.hash,blockNumber:settlementTx.receipt.blockNumber,
+    confirmations:settlementConfirmations,nusd:tokenAddress},
+  externalSettlement:{usd:false,usdc:false,bankReceipt:null,providerReceipt:null},
+  verification:{chain:true,genesis:true,managedSigner:true,tokenCode:true,tokenState:true,roles:true,settlementCode:true,settlementBinding:true}
+};
+fs.writeFileSync(receiptFile,JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result));
