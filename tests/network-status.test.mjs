@@ -3,15 +3,17 @@ import assert from 'node:assert/strict';
 import {networkPresentation,loadNetworkPanels} from '../public/network-status.js';
 import {NUSD_POLICY} from '../src/nusd-http.js';
 
-test('network observation preserves its date without implying issuance or continuous health monitoring',()=>{
+test('network observation preserves its date while pointing to the receipt-backed NUSD status',()=>{
  const view=networkPresentation(NUSD_POLICY);
- assert.match(view.summary,/3 validators running when observed/);
+ assert.match(view.summary,/3 validators in the recorded network configuration/);
  assert.match(view.detail,/962421430/);
- assert.match(view.observed,/2026-09-12 16:07:17 UTC/);
+ assert.match(view.observed,/2026-09-18 15:31:26.425 UTC/);
  assert.match(view.observed,/not continuous monitoring/);
- assert.match(view.asset,/No NUSD contract address is reported/);
+ assert.match(view.asset,/See the NUSD status record/);
+ assert.equal(NUSD_POLICY.asset.contract,'0x491c1DF1b5CA77AF797f052c2310ca17039C931b');
+ assert.equal(NUSD_POLICY.asset.decimals,18);
  for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
- assert.equal(NUSD_POLICY.network_policy.authenticated_rpc_verified,false);
+ assert.equal(NUSD_POLICY.network_policy.authenticated_rpc_verified,true);
  assert.equal(NUSD_POLICY.treasury_backing.valuation,null);
 });
 test('missing, invalid and unexpected network records cannot display a running state',()=>{

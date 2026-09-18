@@ -28,6 +28,12 @@
       "observedAtUtc": "2026-09-14T16:14:50.488Z",
       "source": "Authenticated Google Play Console Digital Asset Links JSON",
       "storeReleaseSubmitted": false
+    },
+    "finalBuild": {
+      "versionCode": 4,
+      "versionName": "4.0.0",
+      "signedArtifactRequired": true,
+      "googlePlaySubmissionReceipt": null
     }
   },
   "apple": {
@@ -56,6 +62,12 @@
       "sha256": "2bd430bc0bfeca147d345057d0855260431dbe179db98baff50b4c88a2729688",
       "requestSignatureVerified": true,
       "verifiedAtUtc": "2026-09-14T23:06:03Z"
+    },
+    "finalBuild": {
+      "buildNumber": 6,
+      "marketingVersion": "4.0.0",
+      "signedArtifactRequired": true,
+      "appStoreSubmissionReceipt": null
     }
   },
   "canonicalIdentity": {
@@ -64,5 +76,21 @@
     "rootHash": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
     "headUrl": "https://numinalabs.xyz/api/control/v2/head",
     "relationship": "Platform certificates are credentials of this existing root; no additional root or treasury is created"
+  },
+  "finalBuild": {
+    "status": "FINAL_SOURCE_ALIGNED",
+    "applicationVersion": "4.0.0",
+    "androidVersionCode": 4,
+    "iosBuildNumber": 6,
+    "nusd": {
+      "chainId": "962421430",
+      "decimals": 18,
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "finality": "FINAL",
+      "receipt": "/downloads/nusd/deployment-receipt.json"
+    }
   }
 }

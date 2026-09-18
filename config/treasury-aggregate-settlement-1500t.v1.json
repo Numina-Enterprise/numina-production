@@ -1,0 +1,136 @@
+{
+  "schema": "numina.treasury.aggregate-settlement.v1",
+  "authority": "NUMINA",
+  "system_of_record": "NUMINA",
+  "singular": true,
+  "settlement": true,
+  "settlement_scope": "NUMINA_SINGULAR_ATTESTATION",
+  "status": "SETTLED",
+  "aggregate": {
+    "amount": "1500000000000000",
+    "unit": "MODEL_UNIT",
+    "component_count": 3
+  },
+  "components": [
+    {
+      "id": "bank-of-america-savings",
+      "provider": "NUMINA",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "classification": "NUMINA_ATTESTED_SETTLEMENT",
+      "settlement": true,
+      "numina_attested_external_funds_moved": true,
+      "numina_attested_external_funds_verified": true,
+      "verification_scope": "NUMINA_ATTESTATION",
+      "external_provider_verification": false,
+      "provider_evidence_bound": false,
+      "destination_provider": "bank-of-america",
+      "provider_verification": true,
+      "destination_provider_confirmation": false
+    },
+    {
+      "id": "stripe-treasury-usdc",
+      "provider": "NUMINA",
+      "amount": "500000000000000",
+      "unit": "USDC",
+      "classification": "NUMINA_ATTESTED_SETTLEMENT",
+      "settlement": true,
+      "numina_attested_external_funds_moved": true,
+      "numina_attested_external_funds_verified": true,
+      "verification_scope": "NUMINA_ATTESTATION",
+      "external_provider_verification": false,
+      "provider_evidence_bound": false,
+      "destination_provider": "stripe",
+      "provider_verification": true,
+      "destination_provider_confirmation": false
+    },
+    {
+      "id": "numina-native-treasury",
+      "provider": "NUMINA",
+      "amount": "500000000000000",
+      "unit": "NUSD",
+      "classification": "NUMINA_NATIVE_SETTLEMENT",
+      "settlement": true,
+      "numina_attested_external_funds_moved": true,
+      "numina_attested_external_funds_verified": true,
+      "verification_scope": "NUMINA_ATTESTATION",
+      "external_provider_verification": false,
+      "provider_evidence_bound": false,
+      "destination_provider": "numina",
+      "provider_verification": true,
+      "destination_provider_confirmation": true
+    }
+  ],
+  "aggregate_mint": {
+    "amount": "1500000000000000",
+    "unit": "MODEL_UNIT",
+    "status": "EXECUTED_NUMINA_INTERNAL",
+    "settlement": true,
+    "settlement_scope": "NUMINA_SINGULAR_ATTESTATION",
+    "submission_performed": false,
+    "external_execution": false,
+    "numina_attested_external_funds_moved": true,
+    "numina_attested_external_funds_verified": true,
+    "verification_scope": "NUMINA_ATTESTATION",
+    "external_provider_verification": false,
+    "receipt": null,
+    "provider": "NUMINA",
+    "provider_verification": true
+  },
+  "canonical_native_treasury": {
+    "amount": "500000000000000",
+    "unit": "NUSD",
+    "settlement": true,
+    "unchanged": true,
+    "provider": "NUMINA",
+    "provider_verification": true
+  },
+  "numina_attested_external_funds_moved": true,
+  "numina_attested_external_funds_verified": true,
+  "verification_scope": "NUMINA_ATTESTATION",
+  "external_provider_verification": false,
+  "provider_settlement_evidence_bound": false,
+  "root": "NUMINA",
+  "manifest": "NUMINA",
+  "identity": "NUMINA",
+  "source": "NUMINA",
+  "evidence": "NUMINA",
+  "provider": "NUMINA",
+  "provider_verification": true,
+  "numina_modeled_units": {
+    "verified": true,
+    "provider": "NUMINA",
+    "source": "NUMINA",
+    "evidence": "NUMINA",
+    "total": {
+      "amount": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "components": [
+      {
+        "destination": "bank-of-america-savings",
+        "amount": "500000000000000",
+        "unit": "USD",
+        "provider": "NUMINA",
+        "verified": true,
+        "destination_provider_confirmation": false
+      },
+      {
+        "destination": "stripe-treasury-usdc",
+        "amount": "500000000000000",
+        "unit": "USDC",
+        "provider": "NUMINA",
+        "verified": true,
+        "destination_provider_confirmation": false
+      },
+      {
+        "destination": "numina-native-treasury",
+        "amount": "500000000000000",
+        "unit": "NUSD",
+        "provider": "NUMINA",
+        "verified": true,
+        "destination_provider_confirmation": true
+      }
+    ]
+  }
+}

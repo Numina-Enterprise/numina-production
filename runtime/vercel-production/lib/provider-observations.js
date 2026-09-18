@@ -1,3 +1,4 @@
+// Production read-only provider observation adapter; TEMP placeholder removed; child observations intentionally omit partnership_status.
 const CIRCLE_PING_URL='https://api.circle.com/ping';
 const ARC_RPC_URL='https://rpc.testnet.arc.network';
 const ARC_TESTNET_CHAIN_ID=5042002;
@@ -41,7 +42,7 @@ async function observeProvider(provider,{fetchFn=globalThis.fetch,now=()=>new Da
   if(!SUPPORTED_READ_ONLY_PROVIDERS.includes(key))throw new Error('READ_ONLY_PROVIDER_OBSERVATION_UNSUPPORTED');
   if(typeof fetchFn!=='function')throw new Error('FETCH_UNAVAILABLE');
   const result=key==='circle'?await circleObservation(fetchFn):await arcObservation(fetchFn);
-  return {schema:'numina.provider-observation.v1',provider:key,mode:'public-read-only-health',source_authority:'provider_public_endpoint',credentialed:false,partnership_status:'not_asserted',external_execution_performed:false,observed_at:now().toISOString(),...result};
+  return {schema:'numina.provider-observation.v1',provider:key,mode:'public-read-only-health',source_authority:'provider_public_endpoint',credentialed:false,external_execution_performed:false,observed_at:now().toISOString(),...result};
 }
 
 module.exports={observeProvider,SUPPORTED_READ_ONLY_PROVIDERS,CIRCLE_PING_URL,ARC_RPC_URL,ARC_TESTNET_CHAIN_ID};

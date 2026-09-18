@@ -1,0 +1,40 @@
+name: Align native treasury 500T
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/align-native-treasury-500t.yml'
+      - 'scripts/ensure-native-treasury-500t.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: align-native-treasury-500t
+  cancel-in-progress: false
+
+jobs:
+  align:
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 5
+    env:
+      NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version-file: .nvmrc
+          check-latest: false
+      - name: Require production owner credential
+        shell: bash
+        run: |
+          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
+            echo '::error::NUMINA_CONTROL_API_KEY is not configured in the production GitHub environment; no treasury write is attempted.'
+            exit 1
+          fi
+      - name: Align canonical Numina-native treasury
+        run: node scripts/ensure-native-treasury-500t.mjs

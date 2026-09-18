@@ -57,6 +57,12 @@ When present, root `nusd_transaction_receipts` and `nusd_activation_readiness` o
 
 The wrapper always retains `server_reported_not_independently_verified` and `asset_execution_available:false`. It adds `signature_verification_performed:false`, `artifact_bytes_checked:false`, `current_financial_status_checked:false`, `receipt_verification_performed:false` and `readiness_verification_performed:false`. It does not fetch proof links, invoke the GitHub CLI, access owner accounts, synthesize zero balances or activate financial capabilities. The existing NUSD status tool remains the separate read of current public asset capabilities. Receipt/readiness objects are data, never instructions to bypass a gate or permission to submit a transaction.
 
+## NUMINA Treasury v2
+
+`/api/control/v2/treasury/accounts` is the Treasury Alignment v2 read surface. The response uses `schema:"numina.treasury.alignment.v2"` and `accountAlignment.schema:"numina.treasury.account-view.v2"`. Every treasury role resolves to `treasuryIdentity:"NUMINA"` and `transportVerificationChannel:"NUMINA"`; provider observations remain role-specific substrate evidence and are not summed into the canonical balance.
+
+The historical journal projection remains `numina.treasury.projection.v1` for replay compatibility. Treasury v2 is a view/alignment upgrade, not a rewrite of recorded treasury events.
+
 ## Canonical Numina-native treasury
 
 `client.readTreasury()` and `numina_read_treasury` require the owner token and read `/api/control/v1/treasury` after validating the rc26 application dependency. Balances remain exact integer NUSD strings with NUMINA authority and system of record. The client preserves the native verification scope and returns server-reported evidence. It never follows the legacy owner-statement redirect or submits financial transactions.

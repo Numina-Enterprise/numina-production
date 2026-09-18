@@ -1,13 +1,14 @@
 import {stable,controlHash,controlError,grantValid} from './control.js';
 import {readControl,commitTreasuryControl} from './control-store.js';
 import {NUMINA_TREASURY_ROUTE,treasuryExact,validateTreasuryProjection,treasuryProjectionEquals,reduceTreasuryProjection} from './native-treasury-model.js';
+import {NUMINA} from './numina-root.js';
 
 // Bind storage and the authenticated Principal once. There is one treasury in the existing journal.
 export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.now()/1000)}){
   async function context(){
     const row=await readControl(db);
-    if(!root||row.state.root!==root)controlError('ROOT_CONFIGURATION_MISMATCH',503);
-    if(principal!==root||!row.state.grants.some(grant=>grant.id==='root'&&grant.subject===principal&&grantValid(row.state,grant,now())))controlError('TREASURY_AUTHORITY_DENIED',403);
+    if(!root||row.manifest.root!==root)controlError('ROOT_CONFIGURATION_MISMATCH',503);
+    if(principal!==root||!row.manifest.grants.some(grant=>grant.id==='root'&&grant.subject===principal&&grantValid(row.manifest,grant,now())))controlError('TREASURY_AUTHORITY_DENIED',403);
     let replayed=null;
     for(const event of row.journalEvents.filter(event=>event.type==='treasury')){
       const command=event.command;
@@ -16,7 +17,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
       if(!treasuryProjectionEquals(reduced.result,event.result))controlError('TREASURY_REPLAY_MISMATCH',503);
       replayed=reduced.projection;
     }
-    if(!treasuryProjectionEquals(replayed,row.state.nativeTreasury??null))controlError('TREASURY_REPLAY_MISMATCH',503);
+    if(!treasuryProjectionEquals(replayed,row.manifest.nativeTreasury??null))controlError('TREASURY_REPLAY_MISMATCH',503);
     return row;
   }
   async function proofFor(id){
@@ -27,9 +28,9 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
   }
   async function readTreasury(){
     const row=await context();
-    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:row.state.root,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
-    if(!row.state.nativeTreasury)return {...base,status:'NOT_INITIALIZED',projection:null,canonical_proof:null};
-    const projection=structuredClone(validateTreasuryProjection(row.state.nativeTreasury));
+    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,principal,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
+    if(!row.manifest.nativeTreasury)return {...base,status:'NOT_INITIALIZED',projection:null,canonical_proof:null};
+    const projection=structuredClone(validateTreasuryProjection(row.manifest.nativeTreasury));
     const proof=await proofFor(projection.last_event_id);
     if(!treasuryProjectionEquals(projection,proof.event.result.projection))controlError('TREASURY_PROJECTION_MISMATCH',503);
     return {...base,status:'READY',projection,canonical_proof:proof};

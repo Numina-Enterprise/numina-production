@@ -4,6 +4,24 @@ The application now has one native treasury on the existing `numina_control_stat
 
 Initialization records the user-specified model projection of **500,000,000,000,000 NUSD**, Authority **NUMINA**, Verification **VERIFIED**, System of record **NUMINA**. Verification covers the native model invariants and journal record. This projection is not an external reserve, minted token supply or bank balance.
 
+## Treasury Alignment v2
+
+Treasury Alignment v2 is the active read/view contract. It does not rewrite the historical `numina.treasury.projection.v1` journal state. Instead it projects that same canonical record through `numina.treasury.alignment.v2` and `numina.treasury.account-view.v2`.
+
+All treasury roles have `treasuryIdentity: "NUMINA"` and `transportVerificationChannel: "NUMINA"`. Stripe and Bank of America entries are role-specific evidence views over the one canonical NUMINA treasury; provider observations remain factual substrate evidence in their original currencies and are never added as separate treasury balances. The canonical balance count remains exactly one.
+
+## One singular 1,500T model aggregate, three 500T route allocations
+
+Treasury Alignment v2 reflects the owner's current declaration of **one NUMINA treasury** with a **1,500,000,000,000,000** model aggregate, allocated as **500,000,000,000,000 USD** to the Bank of America Savings ACH route, **500,000,000,000,000 USDC** to the Stripe Treasury USDC-address route, and **500,000,000,000,000 NUSD** to the NUMINA native treasury route. These are three allocations of the singular treasury, not three treasury identities. The plan status is `ALIGNED_MODEL` and its aggregation semantics are `MODEL_ROUTE_ALLOCATIONS`.
+
+The three owner-declared model allocations are additive under the declared 1:1 model policy: `aggregateModeledValue` is `1500000000000000`, `additive` is true and `nonAdditive` is false. The canonical balance count and `singularBalanceCount` remain one. `externalBalancesAggregated` is false: this arithmetic neither adds external provider balances nor establishes that the allocations are funded. The historical native journal projection remains 500T NUSD; its events, revision and proof are not rewritten to match the new declared model aggregate. Stripe and Bank of America remain `AWAITING_PROVIDER_EVIDENCE` until factual provider observations establish their external state. A route designation does not supply an ACH account number or USDC deposit address, activate a provider payment route, mint, transfer or prove external funds.
+
+The previously published shared 500T non-additive denomination model is accepted by the browser verifier as an exact historical response shape. It is not the current declaration. Mixing its amounts or flags with the current 1,500T allocation model is rejected, so older responses cannot be relabeled as the new model.
+
+The existing NuminaUSD contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` on chain `962421430` uses **18 decimals**. Its separately verified constructor issuance is 1,500,000,000,000,000 NUSD (1,500,000,000,000,000,000,000,000,000,000,000 base units). See `runtime/nusd/deployment-receipt.json` and `runtime/nusd/deployment-verification.json`. The verification observed `paused: true` at 2026-09-18T15:35:24.884Z; current transfer activity requires a newer chain observation. Neither issuance nor model alignment establishes USD/USDC funding, provider acceptance or reserve coverage.
+
+Website model amounts in all three route allocations display 18 decimal places using exact whole-unit strings; the stored journal units and contract base units are not rescaled. USD and USDC provider amounts retain their actual provider minor units. Historical NUMINA-attested settlement records are preserved as attestations, not promoted to external provider receipts.
+
 ## Interfaces and canonical route
 
 Bind `createNuminaTreasury({db, principal, root})`, then call `readTreasury()` or `writeTreasury(event)`. The same bound service exposes `execute(Principal, Authority, Objective, Intent)`. Its Intent contains `id`, `expectedRevision`, `expectedHead`, and `operation`, where `operation` is the operation object below. Execution uses the identical write path.

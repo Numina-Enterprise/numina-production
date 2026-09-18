@@ -1,13 +1,60 @@
 {
   "git": {
-    "deploymentEnabled": true
+    "deploymentEnabled": {
+      "*": false,
+      "main": true
+    }
   },
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/treasury/v1/submissions",
+      "destination": "/api/status?mode=treasury-submissions"
+    },
+    {
+      "source": "/api/treasury/v1/bank-route",
+      "destination": "/api/status?mode=bank-route"
+    },
+    {
+      "source": "/api/treasury/v1/model",
+      "destination": "/api/status?mode=treasury-model"
+    },
+    {
+      "source": "/api/nusd/v1/activation",
+      "destination": "/api/status?mode=nusd-activation"
+    },
+    {
+      "source": "/api/nusd/v1/contracts",
+      "destination": "/api/status?mode=nusd-contracts"
+    },
+    {
+      "source": "/api/nusd/v1/mint-workflow",
+      "destination": "/api/status?mode=nusd-mint-workflow"
+    },
+    {
+      "source": "/api/nusd/v1/conversion-workflow",
+      "destination": "/api/status?mode=nusd-conversion-workflow"
+    },
+    {
+      "source": "/api/nusd/v1/status",
+      "destination": "/api/status?mode=nusd-status"
+    },
+    {
+      "source": "/downloads/nusd/deployment-receipt.json",
+      "destination": "/api/status?mode=nusd-deployment-receipt"
+    },
+    {
+      "source": "/downloads/nusd/deployment-verification.json",
+      "destination": "/api/status?mode=nusd-deployment-verification"
+    },
+    {
+      "source": "/api/nusd/v1/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/nusd/v1/:path*"
+    },
+    {
       "source": "/api/control/v1/:path*",
-      "destination": "https://numinalabs.xyz/api/control/v1/:path*"
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/control/v1/:path*"
     },
     {
       "source": "/control-room",
@@ -15,11 +62,11 @@
     },
     {
       "source": "/api/control/v2/:path*",
-      "destination": "https://numinalabs.xyz/api/control/v2/:path*"
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/control/v2/:path*"
     },
     {
       "source": "/.well-known/agent-card.json",
-      "destination": "https://numinalabs.xyz/.well-known/agent-card.json"
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/.well-known/agent-card.json"
     },
     {
       "source": "/v1/frontier/readiness",
@@ -58,8 +105,16 @@
       "destination": "/api/execution-prepare"
     },
     {
+      "source": "/v1/execution/submit",
+      "destination": "/api/execution-prepare?mode=submit"
+    },
+    {
       "source": "/v1/execution/evidence/bind",
       "destination": "/api/evidence-bind"
+    },
+    {
+      "source": "/v1/evidence/provider-observation",
+      "destination": "/api/evidence-bind?mode=provider-observation-ingest"
     },
     {
       "source": "/v1/release/manifest",
@@ -84,6 +139,34 @@
     {
       "source": "/v4/release/manifest",
       "destination": "/api/application-release"
+    },
+    {
+      "source": "/api/app/v1/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/app/v1/:path*"
+    },
+    {
+      "source": "/api/ops/v1/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/ops/v1/:path*"
+    },
+    {
+      "source": "/api/financial/v1/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/financial/v1/:path*"
+    },
+    {
+      "source": "/api/reviewer/v1/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/reviewer/v1/:path*"
+    },
+    {
+      "source": "/api/connections/v1/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/connections/v1/:path*"
+    },
+    {
+      "source": "/api/core/v1.8/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/api/core/v1.8/:path*"
+    },
+    {
+      "source": "/downloads/:path*",
+      "destination": "https://personal-space-m7q9.skott34.chatgpt.site/downloads/:path*"
     }
   ],
   "headers": [
@@ -97,6 +180,14 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Numina-Identity",
+          "value": "NUMINA"
+        },
+        {
+          "key": "X-Numina-Host",
+          "value": "NUMINA"
         }
       ]
     },
@@ -126,23 +217,25 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/v1/evidence/provider-observation",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/v1/execution/submit",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/wallet-signing",
-      "destination": "https://numinalabs.xyz/wallet-signing",
-      "permanent": false
-    },
-    {
-      "source": "/wallet-signing.html",
-      "destination": "https://numinalabs.xyz/wallet-signing.html",
-      "permanent": false
-    },
-    {
-      "source": "/deployment-readiness",
-      "destination": "https://numinalabs.xyz/deployment-readiness",
-      "permanent": false
-    }
-  ]
+  "redirects": []
 }

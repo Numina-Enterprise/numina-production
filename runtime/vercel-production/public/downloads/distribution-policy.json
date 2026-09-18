@@ -26,12 +26,14 @@
   },
   "hosts": [
     {
-      "provider": "Sites",
-      "origin": "https://numinalabs.xyz"
+      "provider": "NUMINA",
+      "origin": "https://numinalabs.xyz",
+      "role": "public_origin"
     },
     {
       "provider": "Vercel",
-      "origin": "https://numina-production.vercel.app"
+      "origin": "https://numina-production.vercel.app",
+      "role": "legacy_transport_substrate"
     }
   ],
   "scope": "One shared distribution policy across five architecture layers. An Apple Team ID is issued by Apple and is separate from the Numina authority root.",
@@ -42,5 +44,14 @@
     "rootIdentity": "/identity.json",
     "count": 1,
     "sharedAcrossLayers": true
-  }
+  },
+  "finalBuild": {
+    "applicationVersion": "4.0.0",
+    "androidVersionCode": 4,
+    "iosBuildNumber": 6,
+    "canonicalReceipt": "/downloads/nusd/deployment-receipt.json",
+    "token": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "settlement": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
+  },
+  "publicOrigin": "https://numinalabs.xyz"
 }

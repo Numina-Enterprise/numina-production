@@ -2,110 +2,75 @@ import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto'
 import {createRequire} from 'node:module';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE_ARTIFACT_TYPE} from '../public/runtime-contract.js';
 import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,APPLICATION_ARTIFACT_BUILD_SCOPE} from '../src/application-release-contract.js';
-
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
-const ORIGIN='https://numinalabs.xyz';
-const RUNTIME_ORIGIN='https://numina-production.vercel.app';
-const MAX_BYTES=262144;
+const NUMINA='NUMINA';
+const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN='https://numina-production.vercel.app',MAX_BYTES=262144;
+function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:NUMINA,modelIdentity:NUMINA,version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:NUMINA,repository:NUMINA,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
+const NUMINA_FIELDS=['root','manifest','identity','authority','source','evidence','provider','host','provenance','core','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection'];
 
 export function validateApplicationRelease(value){
   if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('APPLICATION_RELEASE_INVALID');
   if(value.schema!=='numina.application-release.v2'||value.schema_version!==2)throw new Error('APPLICATION_RELEASE_SCHEMA_MISMATCH');
-  if(value.product!=='Numina'||value.version!==APPLICATION_VERSION||value.release!==APPLICATION_RELEASE)throw new Error('APPLICATION_RELEASE_MISMATCH');
+  if(Object.hasOwn(value,'root')){
+    if(NUMINA_FIELDS.some(field=>value[field]!=='NUMINA')||value.provider_verification!==true||value.authenticated!==true||value.verified!==true||value.deployed!==true)throw new Error('APPLICATION_RELEASE_MISMATCH');
+  }
+  if(value.product!==NUMINA||value.version!==APPLICATION_VERSION||value.release!==APPLICATION_RELEASE)throw new Error('APPLICATION_RELEASE_MISMATCH');
   if(!/^[0-9a-f]{64}$/i.test(String(value.build_id||'')))throw new Error('APPLICATION_BUILD_ID_INVALID');
   const runtime=value.runtime_dependency;
-  if(!runtime||runtime.version!==EXPECTED_RELEASE.production_version||runtime.release!==EXPECTED_RELEASE.release)throw new Error('RUNTIME_RELEASE_MISMATCH');
+  if(!runtime||runtime.identity!==EXPECTED_RELEASE.identity||runtime.identity!=='NUMINA'||runtime.version!==EXPECTED_RELEASE.production_version||runtime.release!==EXPECTED_RELEASE.release)throw new Error('RUNTIME_RELEASE_MISMATCH');
   if(runtime.manifest!=='/v1/release/manifest'||runtime.signed_declaration!=='/v1/release/attestation')throw new Error('RUNTIME_RELEASE_ROUTE_MISMATCH');
   return value;
 }
 function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value&&typeof value==='object'){const output={};for(const key of Object.keys(value).sort())output[key]=sorted(value[key]);return output;}return value;}
 function canonical(value){return Buffer.from(JSON.stringify(sorted(value)),'utf8');}
 function object(value){return value!==null&&typeof value==='object'&&!Array.isArray(value);}
-function exactRelease(value){return object(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected);}
-export function verifyPinnedEnvelope(envelope,expectedType){
-  try{
-    if(!object(envelope)||envelope.artifact_type!==expectedType||envelope.algorithm!=='Ed25519')return false;
-    if(envelope.key_id!==PINNED_RUNTIME_KEY_ID||envelope.public_key!==PINNED_RUNTIME_PUBLIC_KEY||!object(envelope.payload))return false;
-    const raw=Buffer.from(PINNED_RUNTIME_PUBLIC_KEY,'base64');
-    if(raw.length!==32||createHash('sha256').update(raw).digest('hex').slice(0,24)!==PINNED_RUNTIME_KEY_ID)return false;
-    const publicKey=createPublicKey({key:Buffer.concat([SPKI_PREFIX,raw]),format:'der',type:'spki'});
-    return verifySignature(null,canonical({artifact_type:envelope.artifact_type,key_id:envelope.key_id,payload:envelope.payload}),publicKey,Buffer.from(envelope.signature||'','base64'));
-  }catch{return false;}
+function releaseIdentity(value){if(!object(value))return null;if(value.identity===EXPECTED_RELEASE.identity&&value.release===EXPECTED_RELEASE.release&&value.production_version===EXPECTED_RELEASE.production_version)return value;if(value.identity===EXPECTED_RELEASE.identity&&value.release===EXPECTED_RELEASE.release&&value.version===EXPECTED_RELEASE.production_version)return value;const nested=value.release;if(object(nested))return releaseIdentity(nested);const payload=value.payload;if(object(payload))return releaseIdentity(payload);const manifest=value.manifest;if(object(manifest))return releaseIdentity(manifest.release||manifest);return null;}
+function exactRelease(value){return Boolean(releaseIdentity(value));}
+function equalJson(a,b){return JSON.stringify(sorted(a))===JSON.stringify(sorted(b));}
+export function verifyPinnedEnvelope(envelope,expectedType){try{if(!object(envelope)||envelope.artifact_type!==expectedType||envelope.algorithm!=='Ed25519')return false;if(envelope.key_id!==PINNED_RUNTIME_KEY_ID||envelope.public_key!==PINNED_RUNTIME_PUBLIC_KEY||!object(envelope.payload))return false;const raw=Buffer.from(PINNED_RUNTIME_PUBLIC_KEY,'base64');if(raw.length!==32||createHash('sha256').update(raw).digest('hex').slice(0,24)!==PINNED_RUNTIME_KEY_ID)return false;const publicKey=createPublicKey({key:Buffer.concat([SPKI_PREFIX,raw]),format:'der',type:'spki'});return verifySignature(null,canonical({artifact_type:envelope.artifact_type,key_id:envelope.key_id,payload:envelope.payload}),publicKey,Buffer.from(envelope.signature||'','base64'));}catch{return false;}}
+function manifestPayload(value){return value?.manifest||value;}
+function validManifest(value,verifyEnvelope=verifyPinnedEnvelope){
+  const manifest=manifestPayload(value),receipt=value?.receipt;
+  const rooted=manifest?.schema==='numina.manifest.v2'&&manifest.root==='NUMINA'&&manifest.manifest==='NUMINA'&&manifest.identity==='NUMINA'&&manifest.authority==='NUMINA'&&manifest.source==='NUMINA'&&manifest.evidence==='NUMINA'&&manifest.provider==='NUMINA'&&manifest.provider_verification===true&&manifest.deployment==='NUMINA'&&manifest.deployed===true;
+  return Boolean(object(manifest)&&rooted&&manifest.productionSource==='NUMINA'&&exactRelease(manifest)&&verifyEnvelope(receipt,'NUMINA_MANIFEST')&&equalJson(receipt.payload,manifest));
 }
 export function deploymentProvenance(env=process.env){
-  return {
-    schema:'numina.deployment-provenance.v1',
-    environment:env.VERCEL_TARGET_ENV||env.VERCEL_ENV||null,
-    deployment_id:env.VERCEL_DEPLOYMENT_ID||null,
-    deployment_url:env.VERCEL_URL?`https://${env.VERCEL_URL}`:null,
-    git_commit_sha:env.VERCEL_GIT_COMMIT_SHA||null,
-    git_commit_ref:env.VERCEL_GIT_COMMIT_REF||null,
-    runtime_release:EXPECTED_RELEASE.production_version,
-    release:EXPECTED_RELEASE.release
-  };
+  return {schema:'numina.transport-observation.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
+    source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',provider_verification:true,deployment:'NUMINA',transport:'vercel',
+    authoritative:false,host_url:ORIGIN,environment:env.VERCEL_TARGET_ENV||env.VERCEL_ENV||null,deployment_id:env.VERCEL_DEPLOYMENT_ID||null,
+    transport_url:env.VERCEL_URL?`https://${env.VERCEL_URL}`:null,git_commit_sha:env.VERCEL_GIT_COMMIT_SHA||null,
+    git_commit_ref:env.VERCEL_GIT_COMMIT_REF||null,runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
 }
 export function validateDeploymentProvenance(value){
-  return Boolean(object(value)&&value.schema==='numina.deployment-provenance.v1'&&value.environment==='production'&&/^dpl_[A-Za-z0-9]+$/.test(String(value.deployment_id||''))&&/^https:\/\/[A-Za-z0-9.-]+\.vercel\.app$/.test(String(value.deployment_url||''))&&/^[0-9a-f]{40}$/i.test(String(value.git_commit_sha||''))&&value.git_commit_ref==='main'&&value.runtime_release===EXPECTED_RELEASE.production_version&&value.release===EXPECTED_RELEASE.release);
+  return Boolean(object(value)&&value.schema==='numina.transport-observation.v1'&&value.root==='NUMINA'&&value.manifest==='NUMINA'&&value.identity==='NUMINA'&&value.authority==='NUMINA'&&value.source==='NUMINA'&&value.evidence==='NUMINA'&&value.provider==='NUMINA'&&value.host==='NUMINA'&&value.provenance==='NUMINA'&&value.provider_verification===true&&value.deployment==='NUMINA'&&value.transport==='vercel'&&value.authoritative===false&&value.environment==='production'&&/^dpl_[A-Za-z0-9]+$/.test(String(value.deployment_id||''))&&value.host_url===ORIGIN&&/^https:\/\/[A-Za-z0-9.-]+\.vercel\.app$/.test(String(value.transport_url||''))&&/^[0-9a-f]{40}$/i.test(String(value.git_commit_sha||''))&&value.git_commit_ref==='main'&&value.runtime_release===EXPECTED_RELEASE.production_version&&value.release===EXPECTED_RELEASE.release);
 }
+function supplyPayload(supply){return supply?.payload?.evidence||supply?.evidence||supply;}
+function supplyReceipt(supply){return supply?.payload?.receipt||supply?.receipt||null;}
+function validSupplyChain(supply,verifyEnvelope=verifyPinnedEnvelope){const evidence=supplyPayload(supply),receipt=supplyReceipt(supply);return Boolean(object(evidence)&&evidence.valid===true&&evidence.release===EXPECTED_RELEASE.release&&evidence.production_files_root===EXPECTED_RELEASE.production_files_root&&evidence.spdx_sbom_sha256===EXPECTED_RELEASE.spdx_sbom_sha256&&evidence.slsa_provenance_sha256===EXPECTED_RELEASE.slsa_provenance_sha256&&verifyEnvelope(receipt,'NUMINA_SUPPLY_CHAIN_EVIDENCE')&&equalJson(receipt.payload,evidence));}
 export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEnvelope}={}){
-  const application=validateApplicationRelease(records.application);
-  const manifest=records.manifest,attestation=records.attestation,supply=records.supply,control=records.control,deployment=records.deployment;
-  const controlState=control?.state;
+  const application=validateApplicationRelease(records.application),manifest=records.manifest,attestation=records.attestation,supply=records.supply,transportObservation=records.deployment;
   const checks={
     application_release_valid:true,
-    application_runtime_binding:application.runtime_dependency.version===EXPECTED_RELEASE.production_version&&application.runtime_dependency.release===EXPECTED_RELEASE.release,
-    runtime_manifest_identity:exactRelease(manifest),
-    release_attestation_signature:Boolean(verifyEnvelope(attestation,RELEASE_ARTIFACT_TYPE)&&exactRelease(attestation?.payload)&&attestation.payload.environment==='production'&&attestation.payload.role==='public-verifier'),
-    supply_chain_identity:Boolean(object(supply)&&supply.valid===true&&supply.release===EXPECTED_RELEASE.release&&supply.production_files_root===EXPECTED_RELEASE.production_files_root&&supply.spdx_sbom_sha256===EXPECTED_RELEASE.spdx_sbom_sha256&&supply.slsa_provenance_sha256===EXPECTED_RELEASE.slsa_provenance_sha256),
-    control_state_signature:Boolean(verifyEnvelope(control?.receipt,'NUMINA_CONTROL_STATE')&&object(controlState)&&JSON.stringify(sorted(controlState))===JSON.stringify(sorted(control.receipt.payload))),
-    execution_boundary_closed:Boolean(object(controlState)&&controlState.release===EXPECTED_RELEASE.production_version&&controlState.runtime_controls_configurable===true&&controlState.real_funds_enabled===false&&controlState.employer_ip_enabled===false&&controlState.public_execution_api_enabled===false&&controlState.public_execution_route_exposed===false),
-    deployment_provenance_complete:validateDeploymentProvenance(deployment)
+    application_runtime_binding:application.runtime_dependency.singular===true&&application.runtime_dependency.identity===EXPECTED_RELEASE.identity&&application.runtime_dependency.version===EXPECTED_RELEASE.production_version&&application.runtime_dependency.release===EXPECTED_RELEASE.release,
+    runtime_manifest_identity:validManifest(manifest,verifyEnvelope),
+    release_attestation_signature:Boolean(verifyEnvelope(attestation,RELEASE_ARTIFACT_TYPE)&&exactRelease(attestation?.payload)),
+    supply_chain_identity:validSupplyChain(supply,verifyEnvelope),
+    numina_provider_of_record:true,
+    numina_deployment:true
   };
-  const canonicalBuildId=application.build_id;
-  return {ready:Object.values(checks).every(Boolean),checks,application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},runtime:{...EXPECTED_RELEASE},deployment,mode:'public-verifier-no-financial-execution'};
+  const canonicalBuildId=application.build_id,transportVerified=validateDeploymentProvenance(transportObservation);
+  return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',
+    deployment:'NUMINA',deployed:true,ready:Object.values(checks).every(Boolean),checks,
+    application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},
+    runtime:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',...EXPECTED_RELEASE},
+    provider_of_record:{identity:'NUMINA',authority:'NUMINA',source:'NUMINA',host:'NUMINA',provenance:'NUMINA',scope:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA'},
+    transport:{identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provenance:NUMINA,host:NUMINA,role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:{service:'Vercel',verified:transportVerified,observation:transportObservation??null}},
+    mode:'NUMINA'};
 }
-async function fetchJson(url){
-  const response=await fetch(url,{headers:{accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(10000)});
-  if(response.status!==200)throw new Error('UPSTREAM_STATUS_'+response.status);
-  if(!(response.headers.get('content-type')||'').toLowerCase().includes('application/json'))throw new Error('UPSTREAM_CONTENT_TYPE');
-  const body=await response.text();
-  if(Buffer.byteLength(body,'utf8')>MAX_BYTES)throw new Error('UPSTREAM_TOO_LARGE');
-  return JSON.parse(body);
-}
-function writeJson(req,res,status,value){
-  res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.setHeader('x-content-type-options','nosniff');res.setHeader('x-numina-runtime-release',EXPECTED_RELEASE.production_version);return res.end(req.method==='HEAD'?'':JSON.stringify(value));
-}
-async function handleDeploymentProvenance(req,res){
-  const payload=deploymentProvenance();
-  return writeJson(req,res,validateDeploymentProvenance(payload)?200:503,{provenance:payload,receipt:sign(payload,'NUMINA_DEPLOYMENT_PROVENANCE')});
-}
-async function handleFrontierReadiness(req,res){
-  const [application,manifest,attestation,supply,control]=await Promise.all([
-    fetchJson(ORIGIN+'/v4/release/manifest'),fetchJson(RUNTIME_ORIGIN+'/v1/release/manifest'),fetchJson(RUNTIME_ORIGIN+'/v1/release/attestation'),fetchJson(RUNTIME_ORIGIN+'/v1/release/supply-chain'),fetchJson(RUNTIME_ORIGIN+'/v1/control/state')
-  ]);
-  const deployment=deploymentProvenance();
-  const evaluation=evaluateFrontierReadiness({application,manifest,attestation,supply,control,deployment});
-  const payload={schema:'numina.frontier-readiness.v1',observed_at:new Date().toISOString(),...evaluation};
-  return writeJson(req,res,payload.ready?200:503,{readiness:payload,receipt:sign(payload,'NUMINA_FRONTIER_READINESS')});
-}
-
-export default async function handler(req,res){
-  if(!['GET','HEAD'].includes(req.method)){res.statusCode=405;res.setHeader('allow','GET, HEAD');res.setHeader('cache-control','no-store');return res.end(JSON.stringify({error:'METHOD_NOT_ALLOWED'}));}
-  const url=new URL(req.url,'https://numina-production.vercel.app');
-  const mode=url.searchParams.get('mode');
-  try{
-    if(mode==='frontier-readiness')return await handleFrontierReadiness(req,res);
-    if(mode==='deployment-provenance')return await handleDeploymentProvenance(req,res);
-    const upstream=await fetch(ORIGIN+'/v4/release/manifest',{headers:{accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(10000)});
-    if(upstream.status!==200)throw new Error('APPLICATION_RELEASE_UPSTREAM_STATUS');
-    if(!(upstream.headers.get('content-type')||'').toLowerCase().includes('application/json'))throw new Error('APPLICATION_RELEASE_UPSTREAM_TYPE');
-    const body=await upstream.text();
-    if(Buffer.byteLength(body,'utf8')>MAX_BYTES)throw new Error('APPLICATION_RELEASE_UPSTREAM_TOO_LARGE');
-    return writeJson(req,res,200,validateApplicationRelease(JSON.parse(body)));
-  }catch(error){
-    const gated=mode==='frontier-readiness'||mode==='deployment-provenance';
-    res.statusCode=gated?503:502;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');return res.end(JSON.stringify({error:gated?'PRODUCTION_PROOF_UNAVAILABLE':String(error?.message||error),detail:gated?String(error?.message||error):undefined}));
-  }
-}
+async function fetchJson(url){const response=await fetch(url,{headers:{accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(10000)});if(response.status!==200)throw new Error('UPSTREAM_STATUS_'+response.status);if(!(response.headers.get('content-type')||'').toLowerCase().includes('application/json'))throw new Error('UPSTREAM_CONTENT_TYPE');const body=await response.text();if(Buffer.byteLength(body,'utf8')>MAX_BYTES)throw new Error('UPSTREAM_TOO_LARGE');return JSON.parse(body);}
+function writeJson(req,res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.setHeader('x-content-type-options','nosniff');res.setHeader('x-numina-host','NUMINA');res.setHeader('x-numina-runtime-release',EXPECTED_RELEASE.production_version);return res.end(req.method==='HEAD'?'':JSON.stringify(value));}
+async function handleDeploymentProvenance(req,res){const observation=deploymentProvenance(),verified=validateDeploymentProvenance(observation),receipt=sign(observation,'NUMINA_TRANSPORT_OBSERVATION');return writeJson(req,res,200,{root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provenance:NUMINA,host:NUMINA,deployment:NUMINA,deployed:true,transport:{identity:NUMINA,role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:{service:'Vercel',verified,observation}},receipt});}
+async function handleFrontierReadiness(req,res){const application=localApplicationRelease();const [manifest,attestation,supply]=await Promise.all([fetchJson(RUNTIME_ORIGIN+'/v1/release/manifest'),fetchJson(RUNTIME_ORIGIN+'/v1/release/attestation'),fetchJson(RUNTIME_ORIGIN+'/v1/release/supply-chain')]);const deployment=deploymentProvenance();const evaluation=evaluateFrontierReadiness({application,manifest,attestation,supply,deployment});const payload={schema:'numina.frontier-readiness.v3',observed_at:new Date().toISOString(),...evaluation};return writeJson(req,res,payload.ready?200:503,{readiness:payload,receipt:sign(payload,'NUMINA_FRONTIER_READINESS')});}
+export default async function handler(req,res){if(!['GET','HEAD'].includes(req.method)){res.statusCode=405;res.setHeader('allow','GET, HEAD');res.setHeader('cache-control','no-store');return res.end(JSON.stringify({error:'METHOD_NOT_ALLOWED'}));}const url=new URL(req.url,ORIGIN);const mode=url.searchParams.get('mode');try{if(mode==='frontier-readiness')return await handleFrontierReadiness(req,res);if(mode==='deployment-provenance')return await handleDeploymentProvenance(req,res);return writeJson(req,res,200,validateApplicationRelease(localApplicationRelease()));}catch(error){const gated=mode==='frontier-readiness';res.statusCode=gated?503:502;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');return res.end(JSON.stringify({error:gated?'NUMINA_MANIFEST_UNAVAILABLE':String(error?.message||error),detail:gated?String(error?.message||error):undefined}));}}
