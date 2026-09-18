@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "private": true,
   "type": "module",
-  "description": "Numina 4.0 release and runtime-build evidence discovery, service catalog and gated workflows for MCP and provider tool APIs; no asset execution.",
+  "description": "NUMINA",
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
@@ -28,5 +28,8 @@
     "package:build": "node scripts/package-distribution.js"
   },
   "license": "SEE LICENSE IN LICENSE.md",
-  "author": "Numina \u00b7 SK Consulting LLC"
+  "author": "Numina · SK Consulting LLC",
+  "identity": "NUMINA",
+  "source": "NUMINA",
+  "singular": true
 }

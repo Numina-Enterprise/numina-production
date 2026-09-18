@@ -15,7 +15,7 @@ const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime
  additionalManifestFields:['nusd_transaction_receipts','nusd_activation_readiness','denomination_policy','contract_record','mint_workflow','provider_routing','treasury_client_verification'],proofGuide:'EVIDENCE.md',
  clientPerformsSignatureVerification:false,clientPerformsReceiptVerification:false,clientPerformsReadinessVerification:false};
 const verification={
- schema:'numina.integration.package.v2',packagedAtUtc:new Date().toISOString(),
+ schema:'numina.integration.package.v2',identity:'NUMINA',source:'NUMINA',singular:true,packagedAtUtc:new Date().toISOString(),
  package:{name:metadata.name,version:metadata.version,private:metadata.private},revision,
  applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
  testRunPerformed:false,tests:null,reason:'Packaging generates metadata; validation runs separately in the repository test suite.',
@@ -29,6 +29,7 @@ const verification={
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
 const distribution={
+ identity:'NUMINA',source:'NUMINA',singular:true,
  treasury_client_verification:treasuryClientVerificationManifest(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'src/treasury-proof.js'))).digest('hex')),
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  procurement_usage:true,procurementPolicy:'/business-core.json',
@@ -51,7 +52,7 @@ const files=[
  'package.json','.gitignore','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
  'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
 ].sort();
-const fileManifest={schema:'numina.integration.files.v2',version:metadata.version,scope:'Integration source archive; separate from the Numina application artifact identity',files:files.map(relative=>{
+const fileManifest={schema:'numina.integration.files.v2',identity:'NUMINA',source:'NUMINA',singular:true,version:metadata.version,scope:'NUMINA',files:files.map(relative=>{
  if(/(?:^|\/)\.env|\.private\.|\.(?:pem|key|tgz|zip)$/.test(relative))throw new Error('Private or archive files are not distribution inputs');
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};

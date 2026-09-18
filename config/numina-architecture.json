@@ -45,11 +45,11 @@
   "pendingRuntimeMigration": null,
   "frontierVersion": "4.0.0",
   "architectureLayers": {
-    "L1": "Root and manifest",
-    "L2": "Intent and evidence",
-    "L3": "Authority",
-    "L4": "Execution",
-    "L5": "Canonical evidence"
+    "L1": "NUMINA",
+    "L2": "NUMINA",
+    "L3": "NUMINA",
+    "L4": "NUMINA",
+    "L5": "NUMINA"
   },
   "architectureManifest": "/api/control/v2/architecture",
   "applicationVersion": "4.0.0",
