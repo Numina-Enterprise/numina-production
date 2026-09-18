@@ -18,7 +18,7 @@ function makeFrontierHandler(kind){
       applyOwnerExecutionAuthorization();
       const numina=createRuntimeNumina();
       const next=await numina.execute({kind,body:body(req)});
-      const last=next.state.last||{};
+      const last=next.manifest.last||{};
       if(kind==='control-evaluate'){
         const decision=last.decision;
         const receipt=exactReceipt(decision,'NUMINA_CONTROL_DECISION');
