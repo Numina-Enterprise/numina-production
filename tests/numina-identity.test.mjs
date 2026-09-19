@@ -51,30 +51,30 @@ test('NUMINA is the canonical active identity',()=>{
 });
 
 
-test('runner footprint is preserved and future runners are denied',()=>{
+test('current runners are preserved without freezing targets',()=>{
   const policy=JSON.parse(readFileSync(new URL('../config/numina-runners.json',import.meta.url),'utf8'));
   assert.equal(policy.identity,'NUMINA');
   assert.equal(policy.runnerIdentity,'NUMINA');
   assert.equal(policy.allRunnerIdentities,'NUMINA');
-  assert.equal(policy.invariants.preserveAllCurrentRunners,true);
+  assert.equal(policy.invariants.preserveCurrentRunners,true);
   assert.equal(policy.invariants.denyFutureRunners,true);
-  assert.equal(policy.invariants.denyRunnerTargetChanges,true);
+  assert.equal(policy.invariants.allowExistingRunnerTargetUpdates,true);
   assert.equal(policy.invariants.allRunnersAreNumina,true);
-  const expected=policy.preservedRunners;
+  const expectedSlots=policy.preservedRunnerSlots;
   let declarations=0;
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  for(const [workflow,targets] of Object.entries(expected)){
+  for(const [workflow,count] of Object.entries(expectedSlots)){
     const name=workflow.replace('.github/workflows/','');
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
-    const actual=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
-    declarations+=actual.length;
-    assert.deepEqual(actual,targets,workflow+' runner footprint changed');
+    const actual=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].length;
+    declarations+=actual;
+    assert.equal(actual,count,workflow+' runner count changed');
   }
   for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
     const workflow='.github/workflows/'+name;
-    if(Object.prototype.hasOwnProperty.call(expected,workflow))continue;
+    if(Object.prototype.hasOwnProperty.call(expectedSlots,workflow))continue;
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
     assert.equal(/^\\s*runs-on:/m.test(content),false,workflow+' introduces a future runner');
   }
-  assert.equal(declarations,policy.preservedDeclarationCount);
+  assert.equal(declarations,policy.preservedRunnerCount);
 });
