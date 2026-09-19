@@ -1,7 +1,7 @@
 {
   "schema": "numina.delivery-observation.v1",
-  "observedAt": "2026-09-19T01:16:30Z",
-  "sourceCommit": "dc6feba47aff00fd42995b0cc5923b5ff033fa3f",
+  "observedAt": "2026-09-19T01:20:27Z",
+  "sourceCommit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
   "website": {
     "observationSource": "Vercel deployment API and GitHub canonical main",
     "latestReadyDeployment": {
@@ -12,28 +12,34 @@
       "target": "production"
     },
     "latestObservedAttempt": {
-      "id": "dpl_rcXrMRF5dAt2CUWhTEHug1cvs7G7",
-      "commit": "b7fc2f92b79f363705e63c2ec3f5aa839662f6bc",
-      "deploymentUrl": "https://numina-production-nzd8ou0ep-skott34-dot.vercel.app",
+      "id": "dpl_DoXZXPFqw73zXsrkLSpwuSxtb4UJ",
+      "commit": "ec66f6a08dae17b7aac64a40cf4091d61bdc263b",
+      "deploymentUrl": "https://numina-production-leru0g2m4-skott34-dot.vercel.app",
       "status": "ERROR",
       "target": "production",
-      "errorCode": "type_error",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
       "errorMessage": "Command \"npm run build\" exited with 1",
       "errorStep": "buildStep"
     },
     "canonicalMain": {
-      "commit": "dc6feba47aff00fd42995b0cc5923b5ff033fa3f",
+      "commit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
       "deploymentObserved": false
     },
-    "capacityObservation": "Vercel accepted and executed a production build; the latest observed failure is a build-step error rather than a capacity rejection."
+    "capacityObservation": "Vercel accepted and executed production builds; the observed failure is a build-step error rather than a capacity rejection.",
+    "buildBlockerRepair": {
+      "status": "COMMITTED",
+      "commit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
+      "reason": "Canonical trusted-build workflows use the pinned GitHub-hosted label ubuntu-24.04; the NUMINA runner policy only admitted ubuntu-latest, macos-latest and windows-latest.",
+      "change": "Added ubuntu-24.04 as an allowed canonical Linux execution label while preserving singular NUMINA identity and self-hosted denial."
+    }
   },
   "githubActions": {
     "runnerProbe": {
       "workflow": "NUMINA prebuilt production deploy",
-      "runId": 35411788602,
-      "attempt": 2,
-      "jobId": 105813347876,
-      "sourceCommit": "dc6feba47aff00fd42995b0cc5923b5ff033fa3f",
+      "runId": 35412342929,
+      "attempt": 1,
+      "jobId": 105814281149,
+      "sourceCommit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
       "status": "completed",
       "conclusion": "failure",
       "runnerLabels": [
@@ -42,11 +48,11 @@
       "runnerId": 0,
       "runnerName": "",
       "stepsExecuted": 0,
-      "startedAt": "2026-09-19T01:14:18Z",
-      "completedAt": "2026-09-19T01:14:22Z"
+      "startedAt": "2026-09-19T01:20:25Z",
+      "completedAt": "2026-09-19T01:20:27Z"
     },
     "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
-    "executionSummary": "A fresh retry was accepted by GitHub Actions but no runner was assigned and no workflow steps executed."
+    "executionSummary": "The current-main prebuilt deploy job was accepted by GitHub Actions but no runner was assigned and no workflow steps executed."
   },
   "mobile": {
     "android": {
