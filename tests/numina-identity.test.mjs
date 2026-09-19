@@ -51,10 +51,30 @@ test('NUMINA is the canonical active identity',()=>{
 });
 
 
-test('self-hosted runners are denied',()=>{
+test('runner footprint is preserved and future runners are denied',()=>{
+  const policy=JSON.parse(readFileSync(new URL('../config/numina-runners.json',import.meta.url),'utf8'));
+  assert.equal(policy.identity,'NUMINA');
+  assert.equal(policy.runnerIdentity,'NUMINA');
+  assert.equal(policy.allRunnerIdentities,'NUMINA');
+  assert.equal(policy.invariants.preserveAllCurrentRunners,true);
+  assert.equal(policy.invariants.denyFutureRunners,true);
+  assert.equal(policy.invariants.denyRunnerTargetChanges,true);
+  assert.equal(policy.invariants.allRunnersAreNumina,true);
+  const expected=policy.preservedRunners;
+  let declarations=0;
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
+  for(const [workflow,targets] of Object.entries(expected)){
+    const name=workflow.replace('.github/workflows/','');
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
-    assert.equal(/self-hosted/i.test(content),false,name+' must not use self-hosted runners');
+    const actual=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
+    declarations+=actual.length;
+    assert.deepEqual(actual,targets,workflow+' runner footprint changed');
   }
+  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
+    const workflow='.github/workflows/'+name;
+    if(Object.prototype.hasOwnProperty.call(expected,workflow))continue;
+    const content=readFileSync(new URL(name,workflowsUrl),'utf8');
+    assert.equal(/^\\s*runs-on:/m.test(content),false,workflow+' introduces a future runner');
+  }
+  assert.equal(declarations,policy.preservedDeclarationCount);
 });
