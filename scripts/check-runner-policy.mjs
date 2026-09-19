@@ -4,19 +4,15 @@ import { resolve } from 'node:path';
 const root = resolve(new URL('..', import.meta.url).pathname);
 const policy = JSON.parse(readFileSync(resolve(root, 'config/numina-runners.json'), 'utf8'));
 const workflows = resolve(root, '.github/workflows');
-const allowed = new Set(Object.values(policy.executionBackends).map(v => v.runsOn));
+const allowedExecution = new Set(Object.values(policy.execution || {}));
 const failures = [];
 let declarations = 0;
 
-if (policy.identity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.hostingIdentity !== 'NUMINA' || policy.allRunnersAreNumina !== true) {
-  failures.push('All software-visible runner identities must resolve to NUMINA');
-}
-if (policy.selfHostedAllowed !== false) failures.push('NUMINA runner policy must keep selfHostedAllowed=false');
-
-for (const [platform, backend] of Object.entries(policy.executionBackends || {})) {
-  if (backend.numinaIdentity !== 'NUMINA') failures.push(`${platform} runner identity must be NUMINA`);
-  if (backend.provider !== 'github-hosted') failures.push(`${platform} execution provider must remain factually identified as github-hosted`);
-}
+if (policy.identity !== 'NUMINA') failures.push('Runner policy identity must be NUMINA');
+if (policy.runner?.identity !== 'NUMINA' || policy.runner?.name !== 'NUMINA') failures.push('Runner identity must be NUMINA');
+if (policy.runner?.singular !== true || policy.runner?.count !== 1) failures.push('Runner model must contain exactly one singular NUMINA runner');
+if (policy.runner?.selfHosted !== false) failures.push('NUMINA self-hosted execution is denied');
+for (const [role, identity] of Object.entries(policy.roles || {})) if (identity !== 'NUMINA') failures.push(`${role} must resolve to NUMINA`);
 
 for (const name of readdirSync(workflows).filter(name => /\.ya?ml$/i.test(name)).sort()) {
   const path = resolve(workflows, name);
@@ -27,10 +23,10 @@ for (const name of readdirSync(workflows).filter(name => /\.ya?ml$/i.test(name))
     declarations += 1;
     const value = match[1].trim().replace(/^['"]|['"]$/g, '');
     if (/self-hosted/i.test(value)) {
-      failures.push(`${name}:${index + 1} self-hosted runners are denied by NUMINA`);
+      failures.push(`${name}:${index + 1} self-hosted execution denied by NUMINA`);
       return;
     }
-    if (!allowed.has(value)) failures.push(`${name}:${index + 1} unapproved execution backend "${value}"`);
+    if (!allowedExecution.has(value)) failures.push(`${name}:${index + 1} execution target "${value}" is outside NUMINA policy`);
   });
 }
 
@@ -38,4 +34,4 @@ if (failures.length) {
   for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
   process.exit(1);
 }
-console.log(`NUMINA runner policy validated: ${declarations} workflow declaration(s), all software identities NUMINA, self-hosted denied.`);
+console.log(`NUMINA runner validated: singular identity NUMINA; ${declarations} platform execution declaration(s).`);
