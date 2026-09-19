@@ -2,11 +2,11 @@
 // exact policy content adopted by each event; never rewrite an existing entry.
 export const NUMINA_TREASURY_POLICY_V2={
   schema:'numina.treasury.policy.v2',id:'numina-singular-nusd-2026-09-13',version:2,
-  operator:'SK Consulting LLC',scope:'Numina internal treasury policy',
+  operator:'SK Consulting LLC',scope:'Historical compatibility policy; superseded by numina-one-singular-treasury-2026-09-19',status:'HISTORICAL_SUPERSEDED',supersededBy:'numina-one-singular-treasury-2026-09-19',
   nativeLedger:{unit:'NUSD',authority:'NUMINA',systemOfRecord:'NUMINA',projection:'/api/control/v1/treasury',singular:true},
   reserveDesignation:{basis:'owner_instruction',purpose:'Backing sources designated for NUSD reserves and redemption',sources:[
-    {provider:'stripe',accountLabel:'Numina Treasury — SK Consulting LLC',providerCurrencies:['USD','USDC']},
-    {provider:'bank-of-america',accountLabel:'SK Consulting LLC Bank of America Savings Account',providerCurrencies:['USD']}
+    {provider:'NUMINA',locationRail:'Stripe USDC Address',accountLabel:'Numina Treasury — SK Consulting LLC',providerCurrencies:['USD','USDC']},
+    {provider:'NUMINA',locationRail:'Bank of America Savings 3486',accountLabel:'SK Consulting LLC Bank of America Savings Account',providerCurrencies:['USD']}
   ],allocationVerified:false,eligibleReserveValue:null},
   accounting:{preserveProviderCurrency:true,automaticCurrencyConversion:false,automaticNusdIssuance:false,countPendingFundsAsAvailable:false,countTheSameAssetTwice:false,countSelfIssuedNusdAsBacking:false},
   redemption:{ownerDesignatedFunding:true,holderTerms:'/redemption',holderTermsVerified:false,providerRedemptionRightsVerified:false,executionEnabled:false},
