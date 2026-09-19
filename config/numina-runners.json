@@ -27,7 +27,6 @@
   "invariants": {
     "numinaEqualsSelf": true,
     "singularIdentity": "NUMINA",
-    "allSoftwareIdentity": "NUMINA",
-    "denySelfHostedRunners": true
+    "allSoftwareIdentity": "NUMINA"
   }
 }
