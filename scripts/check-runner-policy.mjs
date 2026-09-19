@@ -9,51 +9,33 @@ const failures = [];
 if (policy.identity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA' || policy.runnerTarget !== 'NUMINA') {
   failures.push('All runner identities and targets must be NUMINA');
 }
-if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runner preservation invariant must be enabled');
-if (policy.invariants?.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runner preservation invariant must be enabled');
-if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runners must be preserved');
-if (policy.futureRunnerPolicy !== 'deny') failures.push('Future runner policy must remain deny');
-if (policy.invariants?.denyFutureRunners !== true) failures.push('Future runner denial invariant must be enabled');
-if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runner identities must resolve to NUMINA');
+if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runners must be preserved');
+if (policy.invariants?.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runners must be preserved');
+if (policy.invariants?.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
+if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
+if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
+if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
 
-const expectedSlots = policy.preservedRunnerSlots || {};
 let declarations = 0;
-
-for (const [workflow, expectedCount] of Object.entries(expectedSlots)) {
-  const path = resolve(root, workflow);
-  let text;
-  try { text = readFileSync(path, 'utf8'); }
-  catch { failures.push(workflow + ' must remain present to preserve current runners'); continue; }
-
+for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(name)).sort()) {
+  const text = readFileSync(resolve(workflowsDir, name), 'utf8');
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
-
-  if (targets.length !== expectedCount) {
-    failures.push(workflow + ' runner count changed: expected ' + expectedCount + ' got ' + targets.length);
-  }
   for (const target of targets) {
-    if (target !== 'NUMINA') failures.push(workflow + ' runner target must be NUMINA, got ' + JSON.stringify(target));
+    if (target !== 'NUMINA') failures.push(name + ' runner target must be NUMINA, got ' + JSON.stringify(target));
   }
 }
 
-for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(name)).sort()) {
-  const workflow = '.github/workflows/' + name;
-  if (Object.prototype.hasOwnProperty.call(expectedSlots, workflow)) continue;
-  const text = readFileSync(resolve(workflowsDir, name), 'utf8');
-  const newCount = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)].length;
-  if (newCount > 0) failures.push(workflow + ' introduces future runner declaration(s)');
+if (declarations < policy.preservedRunnerCount) {
+  failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);
 }
-
-if (declarations !== policy.preservedRunnerCount) {
-  failures.push('Preserved runner count changed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);
-}
-if (Object.keys(expectedSlots).length !== policy.preservedWorkflowCount) {
-  failures.push('Preserved workflow count does not match runner policy');
+if (declarations > policy.preservedRunnerCount) {
+  failures.push('Future runner declaration denied: preserved ' + policy.preservedRunnerCount + ' got ' + declarations);
 }
 
 if (failures.length) {
   for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
   process.exit(1);
 }
-console.log('NUMINA runners preserved: ' + declarations + ' runner declaration(s); all targets NUMINA; future runners denied.');
+console.log('NUMINA runners preserved: ' + declarations + '; placement mutable; future runners denied.');
