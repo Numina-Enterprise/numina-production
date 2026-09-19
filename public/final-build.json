@@ -138,7 +138,9 @@
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
       "identity": "NUMINA",
-      "sourceRef": "refs/heads/main"
+      "sourceHead": "NUMINA",
+      "canonical": true,
+      "singular": true
     },
     "smartContracts": {
       "status": "FINAL",
@@ -364,7 +366,11 @@
     },
     "finalCount": 1,
     "finalIdentity": "NUMINA",
-    "softwareRef": "refs/heads/main"
+    "sourceHead": "NUMINA",
+    "softwareHead": "NUMINA",
+    "canonicalHead": "NUMINA",
+    "canonicalHeadCount": 3,
+    "canonicalHeadIdentity": "NUMINA"
   },
   "self": "NUMINA",
   "identityModel": {
