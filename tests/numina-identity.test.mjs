@@ -6,6 +6,7 @@ import {CONTROL_STORAGE} from '../src/control-store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
+import {NUMINA_TREASURY_CURRENT_POLICY} from '../src/treasury-policy.js';
 
 test('NUMINA is the canonical active identity',()=>{
   for(const field of ['root','manifest','identity','database','storage','transactionAuthority','journal']){
@@ -21,7 +22,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='9f2d863c610b0e31471aff3be6882b91c56a4f64';
+  const FINAL_BUILD_MANIFEST_BLOB='fa44a0c6a8e91cf12d11287e890ed5df4d64a5d6';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -51,6 +52,21 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.balanceCount,1);
   assert.equal(finalBuild.treasury.componentsAreSeparateTreasuries,false);
   assert.ok(finalBuild.treasury.components.every(component=>component.identity==='NUMINA'&&component.treasuryIdentity==='NUMINA'&&component.singular===true));
+  assert.equal(finalBuild.syncAll.status,'SYNCED');
+  assert.equal(finalBuild.syncAll.treasuryCount,1);
+  assert.equal(finalBuild.syncAll.componentCount,3);
+  assert.equal(finalBuild.syncAll.balanceCount,1);
+  assert.equal(finalBuild.syncAll.componentsAreSeparateTreasuries,false);
+  assert.equal(NUMINA_LAYERS.treasury.singular,true);
+  assert.equal(NUMINA_LAYERS.treasury.treasuryCount,1);
+  assert.equal(NUMINA_LAYERS.treasury.componentCount,3);
+  assert.equal(NUMINA_LAYERS.treasury.balanceCount,1);
+  assert.equal(NUMINA_LAYERS.treasury.aggregateModeledValue,'1500000000000000');
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.version,3);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.singular,true);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.treasuryCount,1);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.componentCount,3);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.balanceCount,1);
   assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
   assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
   assert.equal(WALLET_EXECUTION_POLICY.decimals,18);
