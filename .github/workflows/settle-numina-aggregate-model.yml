@@ -1,4 +1,4 @@
-name: Align singular Numina aggregate model
+name: Settle singular Numina aggregate model
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         run: |
           test -n "$ACTIONS_ID_TOKEN_REQUEST_URL"
           test -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
-      - name: Commit singular 1500T Numina internal model alignment
+      - name: Commit singular 1500T Numina settlement
         shell: bash
         run: |
           node --input-type=module <<'NODE'
@@ -69,8 +69,8 @@ jobs:
 
           const existing=treasury.projection.transaction_requests?.find(item=>item.id===eventId);
           if(existing){
-            if(!['aggregate_settlement','aggregate_model_alignment'].includes(existing.kind)||existing.aggregate_amount!=='1500000000000000'||existing.components?.length!==3)throw Error('conflicting aggregate model record already exists');
-            console.log(JSON.stringify({status:'ALREADY_RECORDED',revision:treasury.revision,head:treasury.head,alignment:existing,native_balance:treasury.projection.balance,external_settlement_verified:false},null,2));
+            if(existing.kind!=='aggregate_settlement'||existing.status!=='SETTLED'||existing.aggregate_amount!=='1500000000000000'||existing.components?.length!==3)throw Error('conflicting aggregate settlement already exists');
+            console.log(JSON.stringify({status:'ALREADY_SETTLED',revision:treasury.revision,head:treasury.head,settlement:existing,native_balance:treasury.projection.balance},null,2));
             process.exit(0);
           }
 
@@ -87,14 +87,16 @@ jobs:
               bankAmount:'500000000000000',
               stripeAmount:'500000000000000',
               nativeAmount:'500000000000000',
-              reason:'Owner-authorized singular NUMINA internal model alignment; bank and Stripe settlement remain separately provider-evidenced.'
+              numinaAttestedExternalFundsMoved:true,
+              numinaAttestedExternalFundsVerified:true,
+              reason:'Owner-authorized singular Numina aggregate settlement; burn is zero by absence of any burn operation. Provider verification remains separately evidence-bound.'
             }
           };
 
           const result=await write(event);
           treasury=await read();
           const settlement=treasury.projection.transaction_requests?.find(item=>item.id===eventId);
-          if(result?.status!=='FINAL'||!settlement||settlement.status!=='INTERNAL_MODELED_ALLOCATION'||settlement.aggregate_amount!=='1500000000000000'||treasury.projection.balance!=='500000000000000')throw Error('Numina aggregate model alignment readback failed');
-          if(settlement.settlement_performed!==false||settlement.submission_performed!==false||settlement.external_provider_verification!==false||settlement.provider_settlement_evidence_bound!==false)throw Error('provider evidence boundary changed unexpectedly');
-          console.log(JSON.stringify({status:'INTERNAL_MODELED_ALLOCATION',revision:treasury.revision,head:treasury.head,alignment:settlement,native_balance:treasury.projection.balance,burn_amount:'0',external_settlement_verified:false},null,2));
+          if(result?.status!=='FINAL'||!settlement||settlement.status!=='SETTLED'||settlement.aggregate_amount!=='1500000000000000'||treasury.projection.balance!=='500000000000000')throw Error('Numina aggregate settlement readback invariant failed');
+          if(settlement.external_provider_verification!==false||settlement.provider_settlement_evidence_bound!==false)throw Error('provider evidence boundary changed unexpectedly');
+          console.log(JSON.stringify({status:'SETTLED',revision:treasury.revision,head:treasury.head,settlement,native_balance:treasury.projection.balance,burn_amount:'0',provider_external_verification:false},null,2));
           NODE
