@@ -7,7 +7,7 @@ const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
 const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
 const FINAL_BUILD_MANIFEST_BLOB='7fe2e906c474cb88b956f61c2c8419a83e8f3a74';
 const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
-const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length),Buffer.from([0]),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
 const finalBuild=JSON.parse(finalBuildBytes);
 if(finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v2'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.role!=='synchronized_projection'||finalBuild.manifestContract?.synchronization!=='ACROSS_ALL')throw Error('FINAL build manifest contract mismatch');

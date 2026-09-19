@@ -7,7 +7,7 @@ const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
 const FINAL_BUILD_MANIFEST_BLOB='7fe2e906c474cb88b956f61c2c8419a83e8f3a74';
 const finalBuildBytes=readFileSync(finalBuildPath);
-const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length),Buffer.from([0]),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
 const finalBuild=JSON.parse(finalBuildBytes);
 if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
