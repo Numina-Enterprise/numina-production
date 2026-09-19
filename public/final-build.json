@@ -191,8 +191,8 @@
       "sourceAligned": true,
       "productionTransportUpdated": false,
       "currentPublicDeploymentKnownStale": true,
-      "blocker": "CUSTOM_DOMAIN_NOT_PROMOTED_TO_LATEST_PRO_DEPLOYMENT",
-      "verifiedAt": "2026-09-18T22:51:45Z",
+      "blocker": "VERCEL_BUILD_RATE_LIMIT",
+      "verifiedAt": "2026-09-19T07:08:56Z",
       "observedDeployment": {
         "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
         "commit": "5183cc01a978137c292b573022d9c499bd22714f",
@@ -216,23 +216,22 @@
         "ssl": "valid",
         "primary": "https://www.numinalabs.xyz"
       },
-      "verificationScope": "Current NUMINA source is committed in the GitHub repository. Historical deployment receipts are preserved as evidence only; no current external website deployment is asserted without provider verification.",
+      "verificationScope": "GitHub main is synchronized to the Numina Native Treasury software contract. The live Vercel production transport still reports the prior Git SHA because the current deployment check is blocked by Vercel build-rate capacity.",
       "priorObservedDeployment": {
         "id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "commit": "5d93ddca486cd22c620e1eab30058c345937316f",
         "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "status": "READY"
       },
-      "status": "PRO_DEPLOYMENT_READY_CUSTOM_DOMAIN_STALE",
+      "status": "GITHUB_MAIN_SYNCED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
       "latestRedeployAttempt": {
-        "result": "pro_vercel_deployment_completed_custom_domain_still_stale",
-        "sourceCommit": "fedac265c6cf75f275aa8bfc504d1069db6a96b7",
-        "observedAt": "2026-09-19T05:24:47Z",
-        "providerStatus": "success",
-        "providerDescription": "Deployment has completed",
-        "vercelScope": "numina-167f7fe7",
-        "deploymentDashboard": "https://vercel.com/numina-167f7fe7/numina-production/428VPc3GGbUCqx523x7S6YuCusvF",
-        "customDomainObservation": "www.numinalabs.xyz/treasury still serves the prior 1,500T treasury presentation"
+        "result": "vercel_build_rate_limit",
+        "observedAt": "2026-09-19T07:08:56Z",
+        "providerStatus": "failure",
+        "providerDescription": "Vercel build rate limit",
+        "providerTargetUrl": "https://vercel.com/skott34-dot?upgradeToPro=build-rate-limit",
+        "currentProductionGitSha": "ed17788bfda388c72bf2c9270773a19a89268de9",
+        "currentProductionDeploymentId": "dpl_HxWFxjCzSeXRbcY25J3vyFpf1s1j"
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
@@ -264,7 +263,7 @@
         },
         "sourceTreeMatchesNumina": true
       },
-      "vercelRole": "current_source_deployed_on_pro_scope_custom_domain_not_promoted",
+      "vercelRole": "production_transport_pending_build_capacity",
       "activeReleasePath": "NUMINA",
       "identity": "NUMINA"
     },
@@ -299,7 +298,7 @@
       "identity": "NUMINA"
     },
     "browserAlignment": {
-      "status": "SOURCE_ALIGNED_PRO_DEPLOYED_CUSTOM_DOMAIN_STALE",
+      "status": "SOURCE_ALIGNED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
       "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
@@ -348,7 +347,7 @@
     "releaseWorkflow": ".github/workflows/numina.yml",
     "repositoryTransport": "GitHub",
     "activeReleasePath": "NUMINA",
-    "lastPushRequestedAt": "2026-09-19T06:55:00Z",
+    "lastPushRequestedAt": "2026-09-19T07:08:56Z",
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
