@@ -137,7 +137,7 @@
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
-      "sourceHead": "adacaf3b11dd6f0515d3d092c99eac59f2636982"
+      "sourceHead": "5b39bd191f1dd1cf7af803c953e879b76a19fef4"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -269,12 +269,12 @@
       "healthObserved": "ready",
       "applicationVersion": "4.0.0",
       "deployedSourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
-      "matchesCanonicalSource": true,
       "scope": "Primary runtime deployment succeeded with source tree identical to the named GitHub main commit. Existing journal retained; no funds moved.",
       "sourceTree": "ad8f120f3cec3c6646539406f7a85a05c44f0815",
       "deploymentId": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
       "version": 103,
-      "sourceRepositoryCommit": "671d88058bac5858e9ffd986d8065c3d18651449"
+      "sourceRepositoryCommit": "671d88058bac5858e9ffd986d8065c3d18651449",
+      "matchesNuminaSource": true
     },
     "browserAlignment": {
       "status": "SOURCE_ALIGNED_EXTERNAL_DELIVERY_UNVERIFIED",
@@ -326,7 +326,7 @@
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
     "lastAlignment": "NUMINA_FINANCE_APP_TREASURY",
-    "lastSoftwareUpdate": "adacaf3b11dd6f0515d3d092c99eac59f2636982",
+    "lastSoftwareUpdate": "5b39bd191f1dd1cf7af803c953e879b76a19fef4",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
