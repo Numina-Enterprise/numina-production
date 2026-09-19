@@ -5,9 +5,14 @@ on:
   push:
     paths:
       - '.github/workflows/**'
+      - 'config/numina-runners.json'
+      - 'scripts/check-runner-policy.mjs'
   pull_request:
     branches: [main]
     paths:
+      - '.github/workflows/**'
+      - 'config/numina-runners.json'
+      - 'scripts/check-runner-policy.mjs'
       - '.github/deploy-production.trigger'
 
 permissions:
@@ -21,6 +26,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+
+      - name: Enforce NUMINA runner policy
+        run: node scripts/check-runner-policy.mjs
+
       - name: Require immutable action and reusable-workflow references
         run: |
           python3 - <<'PY'
@@ -30,24 +39,11 @@ jobs:
           workflow_dir = Path('.github/workflows')
           sha_ref = re.compile(r'^.+@[0-9a-fA-F]{40}$')
           uses_line = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)')
-          runs_on_line = re.compile(r'^\s*runs-on:\s*(.+?)\s*(?:#.*)?$')
-          allowed_hosted = {'ubuntu-latest', 'macos-latest', 'windows-latest'}
           failures = []
           checked = []
-          runner_checks = []
 
           for path in sorted(workflow_dir.glob('*.y*ml')):
               for line_number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), start=1):
-                  runner = runs_on_line.match(line)
-                  if runner:
-                      value = runner.group(1).strip().strip('"\\\'')
-                      runner_checks.append((str(path), line_number, value))
-                      normalized = value.lower()
-                      if 'self-hosted' in normalized:
-                          failures.append((str(path), line_number, 'SELF_HOSTED_RUNNER_DENIED: ' + value))
-                      elif value not in allowed_hosted and not value.startswith('${{'):
-                          failures.append((str(path), line_number, 'UNAPPROVED_RUNNER_LABEL: ' + value))
-
                   match = uses_line.match(line)
                   if not match:
                       continue
@@ -60,13 +56,11 @@ jobs:
 
           if failures:
               for path, line_number, reference in failures:
-                  print(f'POLICY_VIOLATION {path}:{line_number}: {reference}')
-              raise SystemExit(f'{len(failures)} workflow policy violation(s) found')
+                  print(f'UNPINNED {path}:{line_number}: {reference}')
+              raise SystemExit(f'{len(failures)} mutable workflow dependency reference(s) found')
 
           print(f'Validated {len(checked)} immutable external workflow dependency reference(s).')
-          print(f'Validated {len(runner_checks)} GitHub-hosted runner declaration(s); self-hosted runners are denied.')
           PY
-
 
   prebuilt-production-deploy:
     needs: verify
@@ -89,7 +83,6 @@ jobs:
         run: npm run build
       - name: Install scoped NUSD development dependencies
         run: npm ci --prefix runtime/nusd/development
-
       - name: Validate NUMINA
         run: npm test
       - name: Require Vercel deployment credential
