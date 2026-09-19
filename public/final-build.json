@@ -20,7 +20,7 @@
   },
   "treasury": {
     "identity": "NUMINA",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "components": [
       {
@@ -59,13 +59,13 @@
       }
     ],
     "externalBalancesAggregated": false,
-    "modeledRoleValuesAdditive": false,
-    "balanceCount": 1,
-    "componentsAre": "non_additive_denomination_views_of_one_singular_numina_treasury_with_external_provider_observations_separate",
+    "modeledRoleValuesAdditive": true,
+    "balanceCount": 3,
+    "componentsAre": "three_additive_500T_modeled_components_of_one_singular_1500T_numina_treasury_with_external_provider_observations_separate",
     "modelDefinition": {
       "basis": "verified_numina_native_journal",
       "date": "2026-09-19",
-      "scope": "One verified 500T NUMINA-native treasury expressed as non-additive USD, USDC and NUSD denomination views. Historical 1,500T NUSD constructor issuance is preserved separately as token-supply evidence.",
+      "scope": "One singular 1,500T NUMINA treasury model composed of three additive 500T components: USD, USDC and NUSD. Provider observations remain separate external facts and do not automatically verify the modeled external components.",
       "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
     },
     "submissions": {
@@ -77,20 +77,22 @@
       "settlementReceipts": []
     },
     "verifiedModeledValue": "500000000000000",
-    "verificationScope": "NUMINA_NATIVE_JOURNAL_WITH_EXTERNAL_PROVIDER_OBSERVATIONS_SEPARATE",
+    "verificationScope": "NUMINA_ADDITIVE_TREASURY_MODEL_WITH_NATIVE_COMPONENT_VERIFIED_AND_PROVIDER_OBSERVATIONS_SEPARATE",
     "financeAppAlignment": {
-      "status": "MODEL_ALIGNED_PROVIDER_FACTS_SEPARATE",
+      "status": "ADDITIVE_MODEL_ALIGNED_PROVIDER_FACTS_SEPARATE",
       "priorEvidence": "/release-evidence/finance-treasury-alignment-2026-09-18.json",
-      "reportedViewCount": 3,
-      "modelViewValue": "500000000000000",
-      "additive": false,
+      "reportedComponentCount": 3,
+      "eachModeledComponentValue": "500000000000000",
+      "aggregateModeledValue": "1500000000000000",
+      "additive": true,
       "stripeProviderReportedUsdc": "0",
       "stripeProviderReportedUsd": "0",
       "bankLinkedSnapshotValue": "500000000000000",
       "bankSnapshotAge": "unknown",
       "bankResyncRequested": true,
       "externalProviderFactsRemainSeparate": true
-    }
+    },
+    "verifiedModeledValueScope": "NUMINA_NATIVE_COMPONENT_ONLY"
   },
   "nusd": {
     "chainId": "962421430",
@@ -275,13 +277,13 @@
     },
     "browserAlignment": {
       "status": "SOURCE_ALIGNED_PRO_DEPLOYED_CUSTOM_DOMAIN_STALE",
-      "modelBalance": "500000000000000",
+      "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
         "USDC",
         "NUSD"
       ],
-      "modelViewsAdditive": false,
+      "modelViewsAdditive": true,
       "mintedNusdAggregate": "1500000000000000",
       "displayDecimals": 18,
       "contractDecimals": 18,
@@ -292,11 +294,11 @@
         "fullSuiteRunThisObservation": false
       },
       "productionVerified": false,
-      "verificationScope": "The latest NUMINA source has a successful Pro Vercel deployment status, but the public custom domain still serves the prior treasury presentation and is therefore not promoted/verified for the current aligned source.",
+      "verificationScope": "NUMINA source now defines a 1,500T additive treasury model with three 500T components. External provider balances remain separately observed; public-domain promotion remains independently verifiable.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
-      "modelAggregation": "SINGULAR_NUMINA_TREASURY_FINANCE_APP_VIEWS",
-      "modelVerificationScope": "NUMINA_FINANCE_APP_ALIGNMENT",
+      "modelAggregation": "SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS",
+      "modelVerificationScope": "NUMINA_ADDITIVE_MODEL; native component verified internally, external provider observations separate",
       "identity": "NUMINA"
     }
   },
