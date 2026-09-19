@@ -342,21 +342,35 @@
     "treasuryIdentity": "NUMINA",
     "evidenceIdentity": "NUMINA",
     "numinaEqualsAll": true,
+    "headCount": 3,
+    "canonicalHeads": {
+      "repository": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "finance": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "evidence": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "singularIdentity": "NUMINA",
+      "singular": true,
+      "allInProduction": true,
+      "allCanonical": true
+    },
     "finalCount": 1,
     "finalIdentity": "NUMINA",
-    "model": "SINGULAR_NUMINA",
-    "headModel": {
-      "identity": "NUMINA",
-      "singular": true,
-      "canonical": true,
-      "production": true,
-      "count": 3,
-      "projections": [
-        "repository",
-        "finance",
-        "evidence"
-      ]
-    }
+    "sourceHead": "NUMINA",
+    "softwareHead": "NUMINA",
+    "canonicalHead": "NUMINA",
+    "canonicalHeadCount": 3,
+    "canonicalHeadIdentity": "NUMINA"
   },
   "self": "NUMINA",
   "identityModel": {
@@ -368,21 +382,30 @@
     "finance": "NUMINA",
     "treasury": "NUMINA",
     "evidence": "NUMINA",
-    "finalCount": 1,
-    "final": "NUMINA",
-    "model": "SINGULAR_NUMINA",
-    "headModel": {
-      "identity": "NUMINA",
-      "singular": true,
-      "canonical": true,
-      "production": true,
+    "canonicalHeads": {
       "count": 3,
-      "projections": [
-        "repository",
-        "finance",
-        "evidence"
-      ]
-    }
+      "repository": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "finance": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "evidence": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "singularIdentity": "NUMINA",
+      "singular": true,
+      "allInProduction": true,
+      "allCanonical": true
+    },
+    "finalCount": 1,
+    "final": "NUMINA"
   },
   "repository": "skott34-dot/numina-production"
 }
