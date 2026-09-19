@@ -362,7 +362,12 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "currentPaused": false,
     "historicalDeploymentSnapshotPaused": true,
     "mintedNusd": "1500000000000000",
-    "burnedNusd": "0"
+    "burnedNusd": "0",
+    "mintReceipt": "/downloads/nusd/mint-receipt.json",
+    "mintReceiptSchema": "numina.nusd.mint-receipt.v1",
+    "chainReceiptStatus": "0x1",
+    "chainReceiptBlock": "51725",
+    "chainReceiptConfirmations": 25
   },
   "financial_execution": {
     "issuance": true,
@@ -404,5 +409,18 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "value": "500000000000000",
       "unit": "NUSD"
     }
+  },
+  "mint_receipt": {
+    "schema": "numina.nusd.mint-receipt.v1",
+    "status": "FINAL",
+    "path": "/downloads/nusd/mint-receipt.json",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "blockNumber": "51725",
+    "receiptStatus": "0x1",
+    "finalConfirmations": 25,
+    "amountNusd": "1500000000000000",
+    "baseUnits": "1500000000000000000000000000000000",
+    "burnedNusd": "0"
   }
 });
