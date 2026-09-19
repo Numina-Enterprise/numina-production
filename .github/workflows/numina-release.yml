@@ -14,6 +14,10 @@ on:
       - 'src/**'
       - 'runtime/vercel-production/**'
       - 'public/**'
+      - 'config/**'
+      - 'tests/**'
+      - 'docs/nusd/**'
+      - 'release-evidence/treasury-*.json'
 permissions:
   contents: write
 concurrency:
