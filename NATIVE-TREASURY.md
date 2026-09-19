@@ -2,7 +2,7 @@
 
 The application now has one native treasury on the existing `numina_control_state` singleton and `numina_control_events` journal. It retains the existing root Principal, lineage, revision and head. It creates no second database, genesis or production environment. `NUMINA` is the model Authority and system of record; the authenticated configured owner acts as Principal.
 
-Initialization records the user-specified model projection of **500,000,000,000,000 NUSD**, Authority **NUMINA**, Verification **VERIFIED**, System of record **NUMINA**. Verification covers the native model invariants and journal record. This projection is not an external reserve, minted token supply or bank balance.
+Historical initialization recorded the user-specified model projection of **500,000,000,000,000 NUSD**, Authority **NUMINA**, Verification **VERIFIED**, System of record **NUMINA**. Verification covers the native model invariants and journal record. This initialization snapshot is not a current balance observation, external reserve, minted token supply or bank balance. Current journal amounts are read from the canonical projection with their revision and head.
 
 ## Treasury Alignment v2
 
@@ -10,19 +10,19 @@ Treasury Alignment v2 is the active read/view contract. It does not rewrite the 
 
 All treasury roles have `treasuryIdentity: "NUMINA"` and `transportVerificationChannel: "NUMINA"`. Stripe and Bank of America entries are role-specific evidence views over the one canonical NUMINA treasury; provider observations remain factual substrate evidence in their original currencies and are never added as separate treasury balances. The canonical balance count remains exactly one.
 
-## One singular verified 500T model, three non-additive denomination views
+## One singular 1,500T owner-designated aggregate, three 500T components
 
-Treasury Alignment v2 reflects **one verified 500,000,000,000,000 NUSD NUMINA treasury**. Under the declared 1:1 model policy, Bank of America (USD), Stripe Treasury (USDC), and the native treasury (NUSD) each show that same 500T value as a denomination view. The views are non-additive and the plan status is `ALIGNED_MODEL` with aggregation semantics `SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS`.
+One NUMINA treasury has a 1,500T owner-designated aggregate: 500T USD via Bank of America Savings ACH, 500T USDC via Stripe Treasury, and 500T native NUSD. Actual journal and provider observations remain separately evidenced.
 
-The canonical NUMINA-native treasury value is **500,000,000,000,000 NUSD**. Under the declared 1:1 model policy, that same 500T value is expressed in USD, USDC and NUSD. These are **non-additive denomination views**: `aggregateModeledValue` is `500000000000000`, `additive` is false and `nonAdditive` is true. The canonical balance count and `singularBalanceCount` remain one. `externalBalancesAggregated` is false. The native journal projection is the verification anchor for this 500T NUMINA-native value. Stripe and Bank of America remain external observation routes; their provider balances are not added to the treasury model.
+The current model uses `aggregateModeledValue: "1500000000000000"`, `aggregateModeledUnit: "NUSD"` and aggregation semantics `ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES`. Its three owner-designated components are additive under the declared 1:1 model policy; `additive` is true. There is one treasury account with three holdings, while the canonical balance count and `singularBalanceCount` remain one. `externalBalancesAggregated` is false: provider observations are retained in their original currencies and are not added to the owner-designated aggregate. These model amounts do not establish available source funds, provider acceptance, an ACH submission or external settlement.
 
-The 500T non-additive denomination model is the current canonical treasury view. Historical 1,500T allocation-model responses and the receipt-verified 1,500T constructor issuance remain preserved as historical evidence and are not relabeled as the current treasury balance.
+The earlier 500T non-additive denomination model is historical: its `aggregateModeledValue` was `500000000000000`, with `additive: false` and `nonAdditive: true`. Earlier 1,500T allocation-model responses also remain historical snapshots. Their journal events, recorded amounts, revisions and proofs are preserved; changing a model description does not rewrite them or establish the current journal balance. All current NUSD views read the singular canonical projection, and linked business accounts retain their provider evidence within that model.
 
 The existing NuminaUSD contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` on chain `962421430` uses **18 decimals**. Its separately verified constructor issuance is 1,500,000,000,000,000 NUSD (1,500,000,000,000,000,000,000,000,000,000,000 base units). See `runtime/nusd/deployment-receipt.json` and `runtime/nusd/deployment-verification.json`. The verification observed `paused: true` at 2026-09-18T15:35:24.884Z; current transfer activity requires a newer chain observation. Neither issuance nor model alignment establishes USD/USDC funding, provider acceptance or reserve coverage.
 
 Website amounts round to the nearest whole unit and display two decimal places (`12,345.67 → ≈ 12,346.00`); inexact displays carry `≈`. Stored journal units, exact provider observations and downloaded records are not rounded or rescaled. The finalized deployed NUSD contract retains 18 decimals, USD provider amounts retain cents, and USDC provider amounts retain micro-units. Historical NUMINA-attested settlement records are preserved as attestations, not promoted to external provider receipts.
 
-The website and authenticated account API derive route amounts and units from the same immutable `public/treasury-connection-model.js` definition. Its three denomination views each represent the same 500T canonical value and are not summed. The recorded 1,500T token issuance is separate historical supply evidence, not an extra treasury amount. The historical 500T/six-decimal simulation is labeled as a historical review, not the deployed contract or current treasury model.
+The website and authenticated account API derive component amounts and units from the same immutable `public/treasury-connection-model.js` definition. Its three 500T components sum to the 1,500T owner-designated aggregate. The canonical journal projection and the recorded 1,500T token issuance retain their own evidence and are not extra amounts to add to that aggregate. The historical 500T/six-decimal simulation is labeled as a historical review, not the deployed contract or current treasury model.
 
 The backing statement is singular: the existing `NUMINA_DENOMINATION_POLICY` is shared across the NUMINA treasury views. Its declared 1:1 rate, reserve-verification status and executable-conversion status remain unchanged. A shared identity does not promote a compute result or internal attestation into a bank or blockchain receipt.
 
@@ -55,7 +55,7 @@ Prepared mint and bank requests do not change the native balance. They remain `P
 
 No schema migration is required. An existing control root is required; treasury reads return `NOT_INITIALIZED` until the first authorized treasury write. Reads never initialize or overwrite a record. Initialization adds one event to the existing journal and is rejected once the native treasury exists. Existing provider account observations and uploaded files are retained as reference records; the legacy hardcoded owner bank statement has been removed from the active application.
 
-The canonical native treasury was initialized in production at journal revision 124. The current application release is Numina v4 with the retained rc26 verifier runtime. Production initialization uses the owner control room and the existing journal; deploying the application does not reinitialize the treasury or mint tokens.
+The historical production initialization record identifies journal revision 124. It is an initialization snapshot, not a claim about the current revision or balance. The current application release is Numina v4 with the retained rc26 verifier runtime. Production initialization uses the owner control room and the existing journal; deploying the application does not reinitialize the treasury or mint tokens.
 
 ## Versioned reserve designation
 
