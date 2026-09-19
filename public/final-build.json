@@ -135,7 +135,10 @@
     "source": {
       "status": "FINAL",
       "canonicalRepository": "skott34-dot/numina-production",
-      "verifiedCodeCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c"
+      "verifiedCodeCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
+      "canonicalHead": "adacaf3b11dd6f0515d3d092c99eac59f2636982",
+      "sourceState": "COMMITTED",
+      "externalExecutionVerified": false
     },
     "smartContracts": {
       "status": "FINAL",
@@ -146,7 +149,7 @@
       "sourceAligned": true,
       "productionTransportUpdated": false,
       "currentPublicDeploymentKnownStale": true,
-      "blocker": "CURRENT_MAIN_AHEAD_OF_LAST_READY_PRODUCTION_DEPLOYMENT",
+      "blocker": "EXTERNAL_DELIVERY_NOT_VERIFIED_FOR_CURRENT_NUMINA_HEAD",
       "verifiedAt": "2026-09-18T22:51:45Z",
       "observedDeployment": {
         "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
@@ -163,7 +166,7 @@
           "numina-production-skott34-dot.vercel.app",
           "numina-production-git-main-skott34-dot.vercel.app"
         ],
-        "historical": false
+        "historical": true
       },
       "domains": {
         "apex": "https://numinalabs.xyz",
@@ -171,14 +174,14 @@
         "apexRedirectStatus": 308,
         "ssl": "valid"
       },
-      "verificationScope": "Canonical NUMINA main deployment is READY on the custom domain. Public /final-build.json, /downloads/nusd/deployment-receipt.json, /downloads/nusd/settlement-receipt.json, /api/nusd/v1/status and /v2/network/deployment-estimate returned HTTP 200. External Bank of America/Stripe settlement remains unverified unless provider receipts state otherwise.",
+      "verificationScope": "Current NUMINA source is committed in the canonical GitHub repository. Historical deployment receipts are preserved as evidence only; no current external website deployment is asserted without provider verification.",
       "priorObservedDeployment": {
         "id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "commit": "5d93ddca486cd22c620e1eab30058c345937316f",
         "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "status": "READY"
       },
-      "status": "REDEPLOYING_CURRENT_MAIN",
+      "status": "SOURCE_UPDATED_EXTERNAL_DELIVERY_UNVERIFIED",
       "latestRedeployAttempt": {
         "result": "triggered_by_release_marker_commit",
         "sourceCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
@@ -213,7 +216,9 @@
           "size_bytes": 44277760,
           "file_count": 307
         }
-      }
+      },
+      "vercelRole": "historical_only",
+      "activeReleasePath": "NUMINA"
     },
     "android": {
       "sourceAligned": true,
@@ -273,7 +278,7 @@
       "version": 103
     },
     "browserAlignment": {
-      "status": "SOURCE_ALIGNED_AWAITING_CURRENT_MAIN_DEPLOYMENT",
+      "status": "SOURCE_ALIGNED_EXTERNAL_DELIVERY_UNVERIFIED",
       "modelBalance": "500000000000000",
       "modelUnits": [
         "USD",
@@ -291,7 +296,7 @@
         "fullSuiteRunThisObservation": false
       },
       "productionVerified": false,
-      "verificationScope": "GitHub main is aligned to the verified 500T NUMINA-native model; production verification must be refreshed after a READY deployment of the current main head. Provider balances and external settlement remain separate evidence domains.",
+      "verificationScope": "Canonical NUMINA source is aligned to the Finance-app treasury model. External production delivery remains unverified for the current head.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_FINANCE_APP_VIEWS",
@@ -323,7 +328,9 @@
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
-    "lastAlignment": "NUMINA_FINANCE_APP_TREASURY"
+    "lastAlignment": "NUMINA_FINANCE_APP_TREASURY",
+    "lastSoftwareUpdate": "adacaf3b11dd6f0515d3d092c99eac59f2636982",
+    "externalDeliveryVerified": false
   },
   "self": "NUMINA",
   "identityModel": {
