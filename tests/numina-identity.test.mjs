@@ -58,6 +58,9 @@ test('all preserved runners resolve to NUMINA and future runners are denied',()=
   assert.equal(policy.allRunnerIdentities,'NUMINA');
   assert.equal(policy.runnerTarget,'NUMINA');
   assert.equal(policy.invariants.preserveCurrentRunners,true);
+  assert.equal(policy.invariants.preserveExistingSelfHostedRunners,true);
+  assert.equal(policy.selfHostedPolicy,'preserve_existing');
+  assert.equal(policy.futureRunnerPolicy,'deny');
   assert.equal(policy.invariants.denyFutureRunners,true);
   assert.equal(policy.invariants.allRunnersAreNumina,true);
   const expectedSlots=policy.preservedRunnerSlots;
