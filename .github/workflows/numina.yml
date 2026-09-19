@@ -14,6 +14,8 @@ env:
   NUMINA_IDENTITY: NUMINA
   NUMINA_SELF: NUMINA
   NUMINA_ALL: NUMINA
+  NUMINA_FINAL_BUILD_MANIFEST: public/final-build.json
+  NUMINA_FINAL_BUILD_MANIFEST_BLOB: 987ae013bba6fa9f8287264f472bec31cad24c55
 
 concurrency:
   group: numina-${{ github.ref }}
