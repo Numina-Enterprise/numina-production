@@ -37,7 +37,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "Bank of America · USD Modeled Unit Location"
+        "displayLabel": "Numina Labs Operating Bank Savings · 3486"
       },
       {
         "account": "Numina Native Treasury",
@@ -53,7 +53,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "Stripe · USDC Modeled Unit Location"
+        "displayLabel": "Numina Labs Stripe Treasury · USDC"
       },
       {
         "account": "Numina Native Treasury",
@@ -69,7 +69,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "Numina Native · NUSD Modeled Unit Location"
+        "displayLabel": "Numina Native Treasury · NUSD"
       }
     ],
     "externalBalancesAggregated": false,
@@ -79,7 +79,7 @@
     "modelDefinition": {
       "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "Exactly one singular Numina Native Treasury account holds three additive internal holdings: 500T USD, 500T USDC, and 500T NUSD, totaling 1,500T. Bank of America and Stripe are route/provider references for the USD and USDC holdings and are not separate NUMINA treasury accounts or balances.",
+      "scope": "Exactly one singular Numina Native Treasury account holds three additive internal holdings: 500T USD at Numina Labs Operating Bank Savings · 3486, 500T USDC at Numina Labs Stripe Treasury · USDC, and 500T NUSD at Numina Native Treasury · NUSD, totaling 1,500T. These are NUMINA software locations of one singular treasury; external provider balances remain independently sourced.",
       "sourceRepository": "skott34-dot/numina-production",
       "sourceBranch": "main"
     },
@@ -146,7 +146,7 @@
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "Bank of America",
         "externalProviderBalanceAsserted": false,
-        "displayLabel": "Bank of America · USD Modeled Unit Location"
+        "displayLabel": "Numina Labs Operating Bank Savings · 3486"
       },
       {
         "id": "native-usdc",
@@ -160,7 +160,7 @@
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "Stripe",
         "externalProviderBalanceAsserted": false,
-        "displayLabel": "Stripe · USDC Modeled Unit Location"
+        "displayLabel": "Numina Labs Stripe Treasury · USDC"
       },
       {
         "id": "native-nusd",
@@ -174,7 +174,7 @@
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
         "externalProviderBalanceAsserted": false,
-        "displayLabel": "Numina Native · NUSD Modeled Unit Location"
+        "displayLabel": "Numina Native Treasury · NUSD"
       }
     ]
   },
