@@ -10,6 +10,9 @@ if (policy.identity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy
   failures.push('All runner identities and targets must be NUMINA');
 }
 if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runner preservation invariant must be enabled');
+if (policy.invariants?.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runner preservation invariant must be enabled');
+if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runners must be preserved');
+if (policy.futureRunnerPolicy !== 'deny') failures.push('Future runner policy must remain deny');
 if (policy.invariants?.denyFutureRunners !== true) failures.push('Future runner denial invariant must be enabled');
 if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runner identities must resolve to NUMINA');
 
