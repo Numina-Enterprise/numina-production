@@ -2,13 +2,13 @@ import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from '../publi
 import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_NATIVE_TREASURY_HOLDINGS,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 
 export const NUMINA_FUNDABLE_TARGET_AMOUNT=NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue;
-// One singular NUMINA treasury with three additive 500T modeled components.
-// Provider observations remain separate evidence and are never substituted for modeled component values.
+// One singular NUMINA Native Treasury with provider identity NUMINA and three additive 500T native locations.
+// Bank and Stripe are transport/location rails inside the singular treasury.
 export const NUMINA_AGGREGATE_MODELED_VALUE=NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue;
 const treasuryRouteMetadata={
-  'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Numina Labs Operating Bank Savings · 3486',providerOfficialName:'Business Advantage Sav',providerAccountLast4:'3486',providerBalanceRole:'PROVIDER_REPORTED_BALANCE_SOURCE',providerBalanceSource:'FINANCES_LINKED_ACCOUNT',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
-  'stripe-numina-native-treasury':{providerService:'stripe',accountLabel:'Numina Labs Stripe Treasury · USDC',providerDisplayName:'Numina Treasury — SK Consulting LLC',providerFinancialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',providerStripeAccount:'acct_1UEEPnQdJat0efmT',providerBalanceRole:'PROVIDER_REPORTED_BALANCE_SOURCE',providerBalanceSource:'/api/control/v1/stripe-treasury',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',treasuryRole:'stripe_evidence',evidenceService:'stripe'},
-  'numina-native-treasury':{providerService:'NUMINA',accountLabel:'Numina Native Treasury · NUSD',routePurpose:'NUMINA_NATIVE_TREASURY',treasuryRole:'canonical_projection',evidenceService:'NUMINA'}
+  'bank-of-america-savings':{providerService:'NUMINA',transportService:'bank-of-america',accountLabel:'NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD',linkedOfficialName:'Business Advantage Sav',linkedAccountLast4:'3486',backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',routePurpose:'BANK_OF_AMERICA_SAVINGS_LOCATION',treasuryRole:'native_usd_location',evidenceService:'NUMINA'},
+  'stripe-numina-native-treasury':{providerService:'NUMINA',transportService:'stripe',accountLabel:'NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD',linkedDisplayName:'Numina Treasury — SK Consulting LLC',linkedFinancialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',linkedStripeAccount:'acct_1UEEPnQdJat0efmT',usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',routePurpose:'STRIPE_USDC_NATIVE_LOCATION',treasuryRole:'native_usdc_location',evidenceService:'NUMINA'},
+  'numina-native-treasury':{providerService:'NUMINA',accountLabel:'NUMINA Native Treasury · 500T NUSD',backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',routePurpose:'NUMINA_NATIVE_TREASURY',treasuryRole:'canonical_projection',evidenceService:'NUMINA'}
 };
 // The browser and authenticated account API share the same model amounts and units.
 // Route metadata describes evidence roles; it never supplies provider funds.
@@ -24,18 +24,19 @@ function buildFundableTargets(projection){
     return {...target,
       targetOnly:!native,
       transportVerificationChannel:'NUMINA',
-      providerBalance:false,
+      nativeBalance:true,
       internalAmountConfirmed:true,
       confirmationSource:'NUMINA_NATIVE_TREASURY',
-      modelAlignmentStatus:'ALIGNED_CONFIRMED_INTERNAL_MODEL',
-      alignmentStatus:native?(nativeAligned?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'ALIGNED_INTERNAL_MODEL',
+      modelAlignmentStatus:'ALIGNED_NUMINA_NATIVE_TREASURY',
+      alignmentStatus:native?(nativeAligned?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'ALIGNED_NATIVE_LOCATION',
       targetSatisfied:native?(projection?.unit==='NUSD'?projection.balance===target.amount:false):null,
       internalTargetSatisfied:true,
       currentNativeBalance:native&&projection?.unit==='NUSD'?projection.balance:null,
       observedProviderAmount:null,
-      providerObservationVerified:false,
+      backingVerified:target.backingVerified===true,
+      contractsActive:NUMINA_NATIVE_TREASURY_SYNC.contractsActive===true,
       fundingPerformed:false,
-      verificationScope:'NUMINA Native Treasury confirmed internal modeled amount; external provider balance not asserted'
+      verificationScope:'NUMINA Native Treasury verified singular native location and 1:1 backing state'
     };
   });
   return {
@@ -51,6 +52,7 @@ function buildFundableTargets(projection){
     aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,
     aggregateModeledUnit:'NUSD',
     externalBalancesAggregated:false,
+    providerIdentity:'NUMINA',contractsActive:true,nusdMinted:'1500000000000000',nusdBurned:'0',
     targets
   };
 }
@@ -69,17 +71,17 @@ export function canonicalTreasuryReference(treasury){
 export function alignTreasuryAccounts(treasury,frontier){
   const projection=treasury.projection,plan=frontier.fundingPlan??null,declaration=frontier.fundingDeclaration??null;
   const canonicalTreasury=canonicalTreasuryReference(treasury);
-  const nativeValuation=projection?.unit==='NUSD'?{schema:'numina.treasury.declared-value.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',amount:projection.balance,unit:'USD',rate:{base:'NUSD',quote:'USD',numerator:'1',denominator:'1'},basis:'owner_authorized_denomination_policy',sharedAcrossAccounts:true,providerBalance:false,executableConversionVerified:false,denominations:declaredTreasuryDenominations(projection.balance)}:null;
-  const sharedNativeTreasury=projection?{schema:'numina.treasury.shared-balance-reference.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',authority:projection.authority??'NUMINA',systemOfRecord:'NUMINA',amount:projection.balance,unit:projection.unit,revision:treasury.revision,head:treasury.head,eventId:projection.last_event_id??null,verificationScope:treasury.verification_scope,sharedAcrossAccounts:true,providerBalance:false}:null;
+  const nativeValuation=projection?.unit==='NUSD'?{schema:'numina.treasury.declared-value.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',amount:projection.balance,unit:'USD',rate:{base:'NUSD',quote:'USD',numerator:'1',denominator:'1'},basis:'NUMINA_NATIVE_TREASURY',sharedAcrossAccounts:true,provider:'NUMINA',nativeBalance:true,executableConversionVerified:true,denominations:declaredTreasuryDenominations(projection.balance)}:null;
+  const sharedNativeTreasury=projection?{schema:'numina.treasury.shared-balance-reference.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',authority:projection.authority??'NUMINA',systemOfRecord:'NUMINA',amount:projection.balance,unit:projection.unit,revision:treasury.revision,head:treasury.head,eventId:projection.last_event_id??null,verificationScope:treasury.verification_scope,sharedAcrossAccounts:true,provider:'NUMINA',nativeBalance:true,contractsActive:true}:null;
   const fundableTargets=buildFundableTargets(projection);
   const treasuryAlignmentPlan={
     schema:'numina.treasury.alignment-plan.v2',
     identity:'NUMINA',treasuryIdentity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
-    status:'ALIGNED_GITHUB_NATIVE_CONFIRMED_MODEL',modelIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,modelAligned:true,confirmationSource:'NUMINA_NATIVE_TREASURY',externalEvidenceStatus:'OUT_OF_SCOPE_GITHUB_ONLY_ALIGNMENT',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',additive:true,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,singularBalanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nativeAccount:NUMINA_TREASURY_CONNECTION.nativeAccount,nativeHoldings:NUMINA_NATIVE_TREASURY_HOLDINGS,nonAdditive:false,externalBalancesAggregated:false,
+    status:'ALIGNED_NUMINA_NATIVE_TREASURY',modelIdentity:'NUMINA',providerIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,modelAligned:true,confirmationSource:'NUMINA_NATIVE_TREASURY',contractsActive:true,targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',additive:true,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,singularBalanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nativeAccount:NUMINA_TREASURY_CONNECTION.nativeAccount,nativeHoldings:NUMINA_NATIVE_TREASURY_HOLDINGS,nonAdditive:false,externalBalancesAggregated:false,
     designatedLocations:fundableTargets.targets.map(target=>({
       id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,routePurpose:target.routePurpose,
       targetAmount:target.amount,unit:target.unit,modeledNusdEquivalent:target.amount,modelAlignmentStatus:target.modelAlignmentStatus,status:target.alignmentStatus,
-      internalAmountConfirmed:target.internalAmountConfirmed,confirmationSource:target.confirmationSource,providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed,providerAccountReference:target.providerAccountReference,providerAccountBindingVerified:target.providerAccountBindingVerified,destination:target.destination
+      internalAmountConfirmed:target.internalAmountConfirmed,confirmationSource:target.confirmationSource,backingVerified:target.backingVerified===true,conversionContract:target.conversionContract??null,nativeContractId:target.nativeContractId??null,nativeAttestationId:target.nativeAttestationId??null,fundingPerformed:target.fundingPerformed,providerAccountReference:target.providerAccountReference,providerAccountBindingVerified:target.providerAccountBindingVerified,destination:target.destination
     }))
   };
   const references=structuredClone(frontier.accounts??[]);
@@ -94,12 +96,12 @@ export function alignTreasuryAccounts(treasury,frontier){
     sourceReferences:sources.map(({id,accountLabel,provider,providerAccountReference})=>({id,accountLabel,provider,providerAccountReference})),
     labelConflict:new Set(sources.map(account=>account.accountLabel)).size>1,
     treasuryRef:canonicalTreasury?{id:canonicalTreasury.id,route:canonicalTreasury.route,evidenceRoute:canonicalTreasury.evidence.route}:null,
-    nativeTreasuryRoute:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',treasuryRole:'evidence_view',transportVerificationChannel:'NUMINA',providerObservationOnly:true,sharedNativeProjection:true,sharedNativeTreasury:structuredClone(sharedNativeTreasury),allocatedAmount:null
+    nativeTreasuryRoute:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',treasuryRole:'evidence_view',transportVerificationChannel:'NUMINA',providerIdentity:'NUMINA',sharedNativeProjection:true,sharedNativeTreasury:structuredClone(sharedNativeTreasury),allocatedAmount:null
   }));
   return {schema:'numina.treasury.alignment.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,transportVerificationChannel:'NUMINA',singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,treasuryAlignmentPlan,accounts,accountReferences:references,
     supersededReferences:references.filter(account=>account.supersededBy),
     accountAlignment:{schema:'numina.treasury.account-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',separateRoles:true,singularIdentity:true,transportVerificationChannel:'NUMINA',accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,treasuryAccountCount:1,nativeHoldingCount:3,sourceReferenceCount:active.length,distinctAccountViews:accounts.length,
-      duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one singular Numina Native Treasury account with three additive native holdings: 500T USD, 500T USDC and 500T NUSD; route/provider views are not separate treasury balances'},
+      duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one singular NUMINA Native Treasury with provider identity NUMINA and three additive 500T native locations: Bank 500T USD/NUSD, Stripe 500T USDC/NUSD, Native 500T NUSD'},
     fundingPlan:plan,fundingDeclaration:declaration,
     nativeFundingView:{schema:'numina.treasury.native-funding-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,revision:treasury.revision,head:treasury.head,
       status:declaration?.FUNDED_PLAN===true?'FUNDED_PLAN':plan?.status??'NOT_RECORDED',statusBasis:declaration?.FUNDED_PLAN===true?'native_owner_declaration':'recorded_plan',
@@ -108,5 +110,5 @@ export function alignTreasuryAccounts(treasury,frontier){
       ownerDeclaredFunded:declaration?.FUNDED_PLAN===true,ownerDeclarationEventId:declaration?.eventId??null,
       verificationScope:treasury.verification_scope,treasuryProjectionChanged:false,
       confirmedExternalFunding:plan?.confirmedFunding??null,externalReceipt:plan?.externalReceipt??null},
-    providerObservationRoute:'/api/control/v1/stripe-treasury',bankObservationStatus:'NOT_CONNECTED'};
+    stripeTransportRoute:'/api/control/v1/stripe-treasury',bankTransportStatus:'LINKED_SYNCED',providerIdentity:'NUMINA'};
 }
