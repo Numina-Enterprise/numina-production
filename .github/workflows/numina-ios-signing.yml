@@ -1,13 +1,11 @@
 name: Numina iOS distribution signing
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'release-evidence/numina-final-build-2026-09-18.json'
-      - 'mobile/ios/**'
-      - 'scripts/sign-ios-release.py'
-      - '.github/workflows/numina-ios-signing.yml'
+    inputs:
+      numina_authorization:
+        description: 'Enter NUMINA to authorize production signing'
+        required: true
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -15,10 +13,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   sign:
-    if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main'
+    if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main' && inputs.numina_authorization == 'NUMINA'
     runs-on: macos-latest
     timeout-minutes: 25
     steps:
+      - name: Verify NUMINA authorization
+        run: test "${{ inputs.numina_authorization }}" = "NUMINA"
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
