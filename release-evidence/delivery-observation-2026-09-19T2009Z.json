@@ -1,0 +1,101 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T20:09:01Z",
+  "observedSourceCommit": "ef6cefc44ead3b52fd5e6f8bbb9bda058bf78ac3",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "githubActions": {
+    "canonicalRunId": 35465328948,
+    "workflow": ".github/workflows/numina.yml",
+    "attempt": 2,
+    "headSha": "ef6cefc44ead3b52fd5e6f8bbb9bda058bf78ac3",
+    "status": "completed",
+    "conclusion": "failure",
+    "rerunRequestedThisObservation": true,
+    "jobId": 105959521451,
+    "jobName": "NUMINA",
+    "executedStepCount": 0,
+    "artifactCount": 0,
+    "runnerId": 0,
+    "runnerName": "",
+    "runnerExecutionObserved": false,
+    "interpretation": "GitHub accepted the rerun request, but attempt 2 completed in about two seconds with no executed steps, no artifacts and no allocated runner identity. GitHub-hosted runner-backed execution was not observed, so build, website workflow, Android signing and iOS signing reruns were not claimed as executed."
+  },
+  "vercel": {
+    "capacityObservedAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deploymentId": "dpl_GfUsYckjeiLHBXgCXbNJYKL6DQ5C",
+    "deploymentUrl": "https://numina-production-r3h35g2c1-skott34-dot.vercel.app",
+    "productionUrl": "https://www.numinalabs.xyz",
+    "sourceCommit": "ef6cefc44ead3b52fd5e6f8bbb9bda058bf78ac3",
+    "target": "production",
+    "state": "READY",
+    "aliasError": null,
+    "capacityInterpretation": "The latest canonical source commit was automatically built and deployed to production successfully; the prior Vercel build-rate blocker is no longer present for this deployment.",
+    "verifiedEndpoints": {
+      "/final-build.json": {
+        "httpStatus": 200,
+        "schema": "numina.final-build.v1",
+        "status": "FINAL",
+        "vercelRequestId": "sfo1:iad1::t6f2b-1789848527097-6006e5163c81"
+      },
+      "/downloads/nusd/deployment-receipt.json": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finality": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "externalUsdSettlementVerified": false,
+        "externalUsdcSettlementVerified": false,
+        "bankReceipt": null,
+        "providerReceipt": null,
+        "vercelRequestId": "sfo1:iad1::iad1::wlk97-1789848531524-c07f8bb52761"
+      },
+      "/api/nusd/v1/status": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.status.v1",
+        "vercelRequestId": "sfo1:iad1::iad1::gb2f5-1789848536180-b56e81387fdf"
+      },
+      "/v2/network/deployment-estimate": {
+        "httpStatus": 200,
+        "schema": "numina.deployment-estimate.v1",
+        "status": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true,
+        "deposited": false,
+        "treasuryWritePerformed": false,
+        "reservesVerified": false,
+        "settlementVerified": false,
+        "requestId": "436071af-5ffd-4d05-bd43-ee0e76460573",
+        "vercelRequestId": "sfo1:iad1::iad1::4g2fg-1789848541124-75ac83994ec1"
+      }
+    }
+  },
+  "remoteDesktopFallback": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909Z",
+    "used": false
+  },
+  "mobileDelivery": {
+    "signedAndroidArtifactProducedThisObservation": false,
+    "signedIosArtifactProducedThisObservation": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false,
+    "reason": "GitHub Actions did not allocate a runner and the authorized VENGEANCE fallback device was offline. No signed mobile artifact or connected store submission receipt was produced."
+  },
+  "remainingBlockers": [
+    "GITHUB_ACTIONS_RUNNER_ALLOCATION_UNAVAILABLE",
+    "ANDROID_SIGNED_ARTIFACT_NOT_PRODUCED",
+    "IOS_SIGNED_ARTIFACT_NOT_PRODUCED",
+    "GOOGLE_PLAY_SUBMISSION_RECEIPT_ABSENT",
+    "APP_STORE_SUBMISSION_RECEIPT_ABSENT"
+  ],
+  "advanced": true,
+  "advanceSummary": "Vercel build capacity cleared and canonical source commit ef6cefc44ead3b52fd5e6f8bbb9bda058bf78ac3 is READY in production with all four required verification endpoints returning HTTP 200. GitHub Actions runner allocation remains unavailable."
+}
