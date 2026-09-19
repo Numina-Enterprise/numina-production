@@ -1,0 +1,88 @@
+{
+  "schema": "numina.treasury.write-request-observation.v1",
+  "identity": "NUMINA",
+  "recordedAt": "2026-09-19T20:13:29Z",
+  "sourceCommitObserved": "8b3bb2b77c35295efad88b50af5a47cdbdbde265",
+  "recordStatus": "OWNER_REQUEST_RECORDED",
+  "recordScope": "NON_EXECUTABLE_REQUEST_METADATA_ONLY",
+  "executable": false,
+  "queued": false,
+  "isTransactionReceipt": false,
+  "authorization": {
+    "source": "OWNER_STATEMENTS_IN_CHAT",
+    "recorded": true,
+    "statement": "NUMINA INITIATES TREASURY WRITES AT THE NUMINA NATIVE TREASURY. UPDATE THE SOFTWARE AND ALIGN",
+    "providerAuthorizationVerified": false,
+    "signingAuthorityVerified": false
+  },
+  "requestedSource": "NUMINA_NATIVE_TREASURY",
+  "amountBasis": "OWNER_REPORTED_MINT_AND_REQUESTED_ALLOCATIONS_NOT_OBSERVED_FUNDS",
+  "reportedMint": {
+    "asset": "NUSD",
+    "wholeUnits": "1500000000000000",
+    "burnedWholeUnits": "0",
+    "independentlyVerifiedByThisUpdate": false
+  },
+  "requestedAllocations": [
+    {
+      "id": "bank_of_america_savings",
+      "nusdWholeUnits": "500000000000000",
+      "requestedOutputAsset": "USD",
+      "requestedWholeUnitRate": "1:1",
+      "beneficiary": "SK Consulting LLC",
+      "destination": "Bank of America Business Advantage Sav",
+      "accountLast4": "3486",
+      "ownerProvidedRoutingNumber": "073000176"
+    },
+    {
+      "id": "stripe_treasury",
+      "nusdWholeUnits": "500000000000000",
+      "requestedOutputAsset": "USDC",
+      "requestedWholeUnitRate": "1:1",
+      "destination": "Stripe Treasury — Numina Treasury — SK Consulting LLC",
+      "ownerProvidedAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+      "executionNetwork": null
+    },
+    {
+      "id": "numina_native_treasury",
+      "nusdWholeUnits": "500000000000000",
+      "requestedOutputAsset": "NUSD",
+      "destination": "NUMINA Native Treasury",
+      "purpose": "REQUESTED_RETAINED_ALLOCATION_NOT_OBSERVED_BALANCE"
+    }
+  ],
+  "ownerReportedPreviousInitiation": {
+    "reported": true,
+    "independentlyVerified": false,
+    "reconcileBeforeAnyResubmission": true
+  },
+  "thisUpdate": {
+    "nativeTreasuryLedgerWritePerformed": false,
+    "bankSubmissionPerformed": false,
+    "blockchainBroadcastPerformed": false,
+    "mintPerformed": false,
+    "burnPerformed": false,
+    "balancesChanged": false,
+    "reservesVerified": false,
+    "bankSubmissionId": null,
+    "achTrace": null,
+    "usdcTransactionHash": null,
+    "providerReceipt": null
+  },
+  "repositoryObservations": {
+    "settlementReceipt": {
+      "path": "runtime/nusd/settlement-receipt.json",
+      "blobSha": "eee68876da2fdfe457fa8cb73780531f1f5a4914",
+      "bankAndStripeAllocationStatus": "ALLOCATED",
+      "externalSettlementVerified": false
+    },
+    "singularReceipt": {
+      "path": "runtime/nusd/treasury-settlement-receipt.json",
+      "blobSha": "7fe4e94f0efbf84208e160be4936310d3d29f88f",
+      "reportedStatus": "SETTLED",
+      "reportedEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE"
+    },
+    "reconciliationStatus": "CONFLICTING_REPOSITORY_RECORDS_UNRESOLVED"
+  },
+  "note": "This file records an owner request only. It is not a native-ledger transaction, payment instruction accepted by a provider, executable queue entry, reserve attestation, deposit receipt, or available-balance update. Existing financial-execution flags, historical receipts, balances, and signing identities are not modified. No source funding, deployed contract state, or previous transfer was independently verified by this update."
+}
