@@ -141,7 +141,7 @@ export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThi
         provider_request_id:requestId&&/^[A-Za-z0-9._-]{1,100}$/.test(requestId)?requestId:null,
         provider_api_version:STRIPE_TREASURY_VERSION,complete,excluded_non_crypto_records:excluded,unclassified_records:unclassified,routes,
         nusd:{status:'ACTIVE_SIGNED_1_TO_1_VERIFIED',acceptance_verified:true,backingRatio:'1:1',contract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1'},
-        canonical_treasury:'/api/control/v1/treasury',native_settlement_status:'SETTLED',settlement_performed:true,submission_performed:true,singular_settlement_receipt:'/downloads/nusd/treasury-settlement-receipt.json',evidence_source:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mint_receipt:'/downloads/nusd/mint-receipt.json',transfer_execution:false,receipt:null,
+        canonical_treasury:'/api/control/v1/treasury',native_settlement_status:'SETTLED',settlement_performed:true,submission_performed:true,singular_settlement_receipt:'/downloads/nusd/treasury-settlement-receipt.json',evidence_source:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mint_receipt:'/downloads/nusd/mint-receipt.json',transfer_execution:false,receipt:'/downloads/nusd/treasury-settlement-receipt.json',receipt_id:'numina:treasury:settlement:2026-09-19:v1',
         scope:'Stripe is a transport/address surface for the NUMINA Native Treasury USDC location. NUMINA is the provider identity; the native location is 500T USDC / 500T NUSD with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion.'};
     })()
   ]);}catch(error){
