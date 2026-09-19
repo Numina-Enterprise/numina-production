@@ -362,34 +362,38 @@
     "treasuryIdentity": "NUMINA",
     "evidenceIdentity": "NUMINA",
     "numinaEqualsAll": true,
-    "headCount": 3,
+    "headCount": 1,
     "canonicalHeads": {
-      "repository": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "finance": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "evidence": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
+      "count": 1,
+      "identity": "NUMINA",
       "singularIdentity": "NUMINA",
       "singular": true,
-      "allInProduction": true,
-      "allCanonical": true
+      "projections": {
+        "repository": {
+          "identity": "NUMINA",
+          "projection": true
+        },
+        "finance": {
+          "identity": "NUMINA",
+          "projection": true
+        },
+        "evidence": {
+          "identity": "NUMINA",
+          "projection": true
+        }
+      }
     },
     "finalCount": 1,
     "finalIdentity": "NUMINA",
     "sourceHead": "NUMINA",
     "softwareHead": "NUMINA",
-    "canonicalHead": "NUMINA",
-    "canonicalHeadCount": 3,
+    "canonicalHead": {
+      "identity": "NUMINA",
+      "singular": true,
+      "canonical": true,
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+    },
+    "canonicalHeadCount": 1,
     "canonicalHeadIdentity": "NUMINA",
     "nativeTreasurySourceOfRecord": true
   },
@@ -404,29 +408,33 @@
     "treasury": "NUMINA",
     "evidence": "NUMINA",
     "canonicalHeads": {
-      "count": 3,
-      "repository": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "finance": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "evidence": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
+      "count": 1,
+      "identity": "NUMINA",
       "singularIdentity": "NUMINA",
       "singular": true,
-      "allInProduction": true,
-      "allCanonical": true
+      "projections": {
+        "repository": {
+          "identity": "NUMINA",
+          "projection": true
+        },
+        "finance": {
+          "identity": "NUMINA",
+          "projection": true
+        },
+        "evidence": {
+          "identity": "NUMINA",
+          "projection": true
+        }
+      }
     },
     "finalCount": 1,
-    "final": "NUMINA"
+    "final": "NUMINA",
+    "canonicalHead": {
+      "identity": "NUMINA",
+      "singular": true,
+      "canonical": true,
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+    }
   },
   "repository": "skott34-dot/numina-production",
   "manifestContract": {
@@ -486,6 +494,9 @@
     "externalProviderBalancesAsserted": false,
     "externalProviderReadsRequired": false,
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "syncContract": "numina.native-treasury.sync.v1"
+    "syncContract": "numina.native-treasury.sync.v1",
+    "identityHeadCount": 1,
+    "canonicalHeadCount": 1,
+    "canonicalHeadIdentity": "NUMINA"
   }
 }
