@@ -31,14 +31,24 @@
         "modeledValue": "500000000000000",
         "financeAppReportedValue": "500000000000000",
         "sourceReportedBalanceTimestamp": null,
-        "balanceAge": "unknown"
+        "balanceAge": "unknown",
+        "providerBalanceVerified": false,
+        "providerObservationStatus": "LINKED_SNAPSHOT_FRESHNESS_UNKNOWN",
+        "resyncRequested": true
       },
       {
         "account": "Numina Labs Stripe Treasury",
-        "provider": "manual_finance_record",
+        "provider": "Stripe",
         "unit": "USDC",
         "modeledValue": "500000000000000",
-        "financeAppReportedValue": "500000000000000"
+        "financeAppReportedValue": "0",
+        "providerAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+        "providerReportedAvailableValue": "0",
+        "providerReportedAvailableUnit": "USDC",
+        "providerReportedUsdAvailableValue": "0",
+        "providerStatus": "open",
+        "providerObservationVerified": true,
+        "observationDate": "2026-09-19"
       },
       {
         "account": "Numina Native Treasury",
@@ -51,10 +61,10 @@
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": false,
     "balanceCount": 1,
-    "componentsAre": "non_additive_finance_app_reported_views_of_one_singular_numina_treasury",
+    "componentsAre": "non_additive_denomination_views_of_one_singular_numina_treasury_with_external_provider_observations_separate",
     "modelDefinition": {
       "basis": "verified_numina_native_journal",
-      "date": "2026-09-18",
+      "date": "2026-09-19",
       "scope": "One verified 500T NUMINA-native treasury expressed as non-additive USD, USDC and NUSD denomination views. Historical 1,500T NUSD constructor issuance is preserved separately as token-supply evidence.",
       "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
     },
@@ -67,13 +77,18 @@
       "settlementReceipts": []
     },
     "verifiedModeledValue": "500000000000000",
-    "verificationScope": "NUMINA_FINANCE_APP_ALIGNMENT",
+    "verificationScope": "NUMINA_NATIVE_JOURNAL_WITH_EXTERNAL_PROVIDER_OBSERVATIONS_SEPARATE",
     "financeAppAlignment": {
-      "status": "ALIGNED",
-      "evidence": "/release-evidence/finance-treasury-alignment-2026-09-18.json",
+      "status": "MODEL_ALIGNED_PROVIDER_FACTS_SEPARATE",
+      "priorEvidence": "/release-evidence/finance-treasury-alignment-2026-09-18.json",
       "reportedViewCount": 3,
-      "eachReportedValue": "500000000000000",
+      "modelViewValue": "500000000000000",
       "additive": false,
+      "stripeProviderReportedUsdc": "0",
+      "stripeProviderReportedUsd": "0",
+      "bankLinkedSnapshotValue": "500000000000000",
+      "bankSnapshotAge": "unknown",
+      "bankResyncRequested": true,
       "externalProviderFactsRemainSeparate": true
     }
   },
@@ -151,7 +166,7 @@
       "sourceAligned": true,
       "productionTransportUpdated": false,
       "currentPublicDeploymentKnownStale": true,
-      "blocker": "EXTERNAL_DELIVERY_NOT_VERIFIED_FOR_CURRENT_NUMINA_HEAD",
+      "blocker": "VERCEL_BUILD_RATE_LIMIT_CONNECTED_ACCOUNT",
       "verifiedAt": "2026-09-18T22:51:45Z",
       "observedDeployment": {
         "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
@@ -183,11 +198,11 @@
         "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "status": "READY"
       },
-      "status": "SOURCE_UPDATED_EXTERNAL_DELIVERY_UNVERIFIED",
+      "status": "SOURCE_UPDATED_EXTERNAL_DELIVERY_BLOCKED_BY_VERCEL_RATE_LIMIT",
       "latestRedeployAttempt": {
-        "result": "triggered_by_release_marker_commit",
-        "sourceCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
-        "observedAt": "2026-09-19T00:55:00Z"
+        "result": "blocked_by_vercel_build_rate_limit",
+        "sourceCommit": "17f64d779ae075df45ea747f7d5dc3880f9b3c88",
+        "observedAt": "2026-09-19T05:22:00Z"
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
