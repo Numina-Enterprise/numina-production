@@ -52,15 +52,15 @@ test('account views share one checked balance without changing stored references
     await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
     assert.equal(await verifyTreasuryAccountView(view),true);assert.equal(view.schema,'numina.treasury.alignment.v2');assert.equal(view.identity,'NUMINA');assert.equal(view.treasuryIdentity,'NUMINA');assert.equal(view.transportVerificationChannel,'NUMINA');assert.equal(view.accountAlignment.schema,'numina.treasury.account-view.v2');assert.equal(view.accountAlignment.separateRoles,true);assert.equal(view.accountAlignment.singularIdentity,true);assert.ok(view.accounts.every(account=>account.treasuryIdentity==='NUMINA'&&account.treasuryRole==='evidence_view'&&account.providerObservationOnly===true));assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
     for(const mutate of [
-      v=>v.fundableTargets.aggregateModeledValue='500000000000000',
-      v=>v.fundableTargets.additive=false,
-      v=>v.fundableTargets.aggregation='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',
+      v=>v.fundableTargets.aggregateModeledValue='1500000000000000',
+      v=>v.fundableTargets.additive=true,
+      v=>v.fundableTargets.aggregation='MODEL_ROUTE_ALLOCATIONS',
       v=>v.fundableTargets.singularBalanceCount=3,
-      v=>v.treasuryAlignmentPlan.nonAdditive=true,
-      v=>v.treasuryAlignmentPlan.additive=false,
-      v=>v.treasuryAlignmentPlan.aggregation='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',
+      v=>v.treasuryAlignmentPlan.nonAdditive=false,
+      v=>v.treasuryAlignmentPlan.additive=true,
+      v=>v.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS',
       v=>v.treasuryAlignmentPlan.singularBalanceCount=3,
-      v=>v.treasuryAlignmentPlan.aggregateModeledValue='500000000000000',
+      v=>v.treasuryAlignmentPlan.aggregateModeledValue='1500000000000000',
       v=>v.singular=false,
       v=>v.fundableTargets.externalBalancesAggregated=true,
       v=>v.fundableTargets.targets[0].amount='500000000000001',
@@ -93,44 +93,29 @@ test('account views share one checked balance without changing stored references
     funded.nativeFundingView.status='UNFUNDED_PLAN';assert.equal(await verifyTreasuryAccountView(funded),false);
   }finally{db.close();}
 });
-test('browser accepts the preserved shared500 model but rejects mixed allocation and legacy fields',async()=>{
+test('browser accepts the current shared500 model and the preserved historical 1500T allocation model without mixing them',async()=>{
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
-    const current=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]}),legacy=structuredClone(current);
-    legacy.accountAlignment.aggregation='one NUMINA treasury; one shared 500T model expressed in USD, USDC and NUSD; denomination views are not added';
-    legacy.fundableTargets.aggregation='SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS';
-    legacy.fundableTargets.additive=false;legacy.fundableTargets.aggregateModeledValue='500000000000000';
-    delete legacy.fundableTargets.singularBalanceCount;
-    legacy.treasuryAlignmentPlan.aggregateModeledValue='500000000000000';legacy.treasuryAlignmentPlan.nonAdditive=true;
-    for(const field of ['aggregation','additive','singularBalanceCount'])delete legacy.treasuryAlignmentPlan[field];
-    const oldLabels=['Bank of America Savings','Stripe Numina Native Treasury','Numina Native Treasury'];
-    for(let i=0;i<3;i++){
-      legacy.fundableTargets.targets[i].classification='TREASURY_ROLE_TARGET';
-      legacy.fundableTargets.targets[i].accountLabel=oldLabels[i];
-      delete legacy.fundableTargets.targets[i].routePurpose;
-      delete legacy.treasuryAlignmentPlan.designatedLocations[i].routePurpose;
-    }
+    const current=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]}),historical=structuredClone(current);
+    historical.accountAlignment.aggregation='one NUMINA treasury; 1,500T declared model aggregate allocated as 500T USD, 500T USDC and 500T NUSD; external provider balances are not added';
+    historical.fundableTargets.aggregation='MODEL_ROUTE_ALLOCATIONS';
+    historical.fundableTargets.additive=true;
+    historical.fundableTargets.aggregateModeledValue='1500000000000000';
+    historical.treasuryAlignmentPlan.aggregateModeledValue='1500000000000000';
+    historical.treasuryAlignmentPlan.nonAdditive=false;
+    historical.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS';
+    historical.treasuryAlignmentPlan.additive=true;
+    for(let i=0;i<3;i++)historical.fundableTargets.targets[i].classification='MODEL_ROUTE_ALLOCATION';
     assert.equal(await verifyTreasuryAccountView(current),true);
-    assert.equal(await verifyTreasuryAccountView(legacy),true);
-    for(const mutate of [
-      v=>v.accountAlignment.aggregation=current.accountAlignment.aggregation,
-      v=>v.fundableTargets.aggregateModeledValue='1500000000000000',
-      v=>v.fundableTargets.additive=true,
-      v=>v.fundableTargets.singularBalanceCount=1,
-      v=>v.fundableTargets.targets[0].classification='MODEL_ROUTE_ALLOCATION',
-      v=>v.fundableTargets.targets[0].routePurpose='BANK_OF_AMERICA_SAVINGS_ACH',
-      v=>v.treasuryAlignmentPlan.aggregateModeledValue='1500000000000000',
-      v=>v.treasuryAlignmentPlan.nonAdditive=false,
-      v=>v.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS',
-      v=>v.treasuryAlignmentPlan.additive=true,
-      v=>v.treasuryAlignmentPlan.singularBalanceCount=1,
-      v=>v.treasuryAlignmentPlan.designatedLocations[1].routePurpose='STRIPE_TREASURY_USDC_ADDRESS',
-      v=>v.accountAlignment.aggregation='one NUMINA treasury; role views do not add balances'
-    ]){const changed=structuredClone(legacy);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false);}
-    const mixed=structuredClone(current);mixed.accountAlignment.aggregation=legacy.accountAlignment.aggregation;
+    assert.equal(await verifyTreasuryAccountView(historical),true);
+    const mixed=structuredClone(current);
+    mixed.fundableTargets.aggregateModeledValue='1500000000000000';
     assert.equal(await verifyTreasuryAccountView(mixed),false);
+    const mixedHistorical=structuredClone(historical);
+    mixedHistorical.fundableTargets.additive=false;
+    assert.equal(await verifyTreasuryAccountView(mixedHistorical),false);
     assert.equal(current.treasury.projection.balance,'500000000000000');
-    assert.deepEqual(current.treasury,legacy.treasury);
+    assert.deepEqual(current.treasury,historical.treasury);
   }finally{db.close();}
 });
 test('account alignment rejects changed groups and provider claims before and after initialization',async()=>{
