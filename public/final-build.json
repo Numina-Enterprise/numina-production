@@ -299,6 +299,17 @@
     "releaseWorkflow": ".github/workflows/numina.yml",
     "repositoryTransport": "GitHub",
     "activeReleasePath": "NUMINA",
-    "lastPushRequestedAt": "2026-09-19T01:27:00Z"
+    "lastPushRequestedAt": "2026-09-19T01:27:00Z",
+    "self": "NUMINA",
+    "numinaEqualsSelf": true,
+    "allSoftwareIdentity": "NUMINA",
+    "lastAlignment": "NUMINA"
+  },
+  "self": "NUMINA",
+  "identityModel": {
+    "identity": "NUMINA",
+    "self": "NUMINA",
+    "singular": true,
+    "allSoftwareIdentity": "NUMINA"
   }
 }
