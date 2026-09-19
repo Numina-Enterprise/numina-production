@@ -292,14 +292,32 @@
     },
     "allocationInstruction": {
       "schema": "numina.treasury.allocation-instruction.v1",
-      "status": "SUBMITTED",
+      "status": "SETTLED",
+      "settlementPerformed": true,
+      "submissionPerformed": true,
       "record": "release-evidence/treasury-allocation-instruction-2026-09-19.json",
-      "aggregateNusd": "1500000000000000",
-      "aggregateChanged": false,
-      "stripeStatus": "SUBMITTED_AWAITING_CHAIN_RECEIPT",
-      "bankStatus": "SUBMITTED_AWAITING_BANK_POSTING_RECEIPT",
-      "nativeStatus": "RETAINED_CONFIRMED",
-      "submissionPerformed": true
+      "receipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "receiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+      "stripeStatus": "SETTLED",
+      "bankStatus": "SETTLED",
+      "nativeStatus": "SETTLED"
+    },
+    "singularSettlementReceipt": {
+      "schema": "numina.treasury.singular-settlement-receipt.v1",
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "status": "SETTLED",
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt.json",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+      "settlementPerformed": true,
+      "submissionPerformed": true,
+      "componentCount": 3,
+      "aggregateNusd": "1500000000000000"
     }
   },
   "nusd": {
@@ -393,6 +411,20 @@
       "amountNusd": "1500000000000000",
       "baseUnits": "1500000000000000000000000000000000",
       "burnedNusd": "0"
+    },
+    "singularSettlementReceipt": {
+      "schema": "numina.treasury.singular-settlement-receipt.v1",
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "status": "SETTLED",
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt.json",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+      "settlementPerformed": true,
+      "submissionPerformed": true,
+      "componentCount": 3,
+      "aggregateNusd": "1500000000000000"
     }
   },
   "mobile": {
