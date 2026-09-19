@@ -10,7 +10,7 @@
     "workspace": "https://numinalabs.xyz/app",
     "identity": "NUMINA",
     "primaryOrigin": "https://personal-space-m7q9.skott34.chatgpt.site",
-    "vercelRole": "backup_storage_and_deployment_surface",
+    "vercelRole": "historical_only_not_active_release_path",
     "customDomainUpdated": true
   },
   "os": {
@@ -289,12 +289,15 @@
     "competingBuildAuthorityAllowed": false,
     "projections": [
       "website",
-      "vercel",
       "mobile",
       "runtime",
       "receipts",
       "treasury"
     ],
-    "historicalReceiptsPreservedAsEvidence": true
+    "historicalReceiptsPreservedAsEvidence": true,
+    "releaseIdentity": "NUMINA",
+    "releaseWorkflow": ".github/workflows/numina.yml",
+    "repositoryTransport": "GitHub",
+    "activeReleasePath": "NUMINA"
   }
 }
