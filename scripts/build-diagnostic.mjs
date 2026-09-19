@@ -6,8 +6,6 @@ const redact=value=>String(value||'')
   .replace(/(authorization|bearer|token|secret|password|private[_-]?key)\s*[:=]\s*[^\s]+/gi,'$1=[REDACTED]')
   .replace(/\b(?:gh[pousr]_[A-Za-z0-9_]{20,}|sk_[A-Za-z0-9_]{20,})\b/g,'[REDACTED_TOKEN]');
 const tail=value=>redact(value).split(/\r?\n/).slice(-80).join('\n');
-mkdirSync('dist/client',{recursive:true});
-if(!existsSync('dist/client/final-build.json'))cpSync('public','dist/client',{recursive:true});
 const diagnostic={
   schema:'numina.build-diagnostic.v1',
   sourceCommit:process.env.VERCEL_GIT_COMMIT_SHA||null,
@@ -17,5 +15,9 @@ const diagnostic={
   stdoutTail:tail(result.stdout),
   stderrTail:tail(result.stderr)
 };
-writeFileSync('dist/client/__build-diagnostic.json',JSON.stringify(diagnostic,null,2)+'\n');
-console.log(JSON.stringify({diagnostic:'dist/client/__build-diagnostic.json',exitCode:result.status}));
+const body=JSON.stringify(diagnostic,null,2)+'\n';
+writeFileSync('public/__build-diagnostic.json',body);
+mkdirSync('dist/client',{recursive:true});
+if(!existsSync('dist/client/final-build.json'))cpSync('public','dist/client',{recursive:true});
+writeFileSync('dist/client/__build-diagnostic.json',body);
+console.log(JSON.stringify({diagnostic:'public/__build-diagnostic.json',exitCode:result.status}));
