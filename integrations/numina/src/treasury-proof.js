@@ -68,9 +68,7 @@ function treasuryAggregationMatches(view) {
   const amount='500000000000000',aggregate=allocations?'1500000000000000':amount;
   if(view.singular!==true||model?.schema!=='numina.treasury.fundable-targets.v2'||model.identity!=='NUMINA'||model.treasuryIdentity!=='NUMINA'||model.transportVerificationChannel!=='NUMINA'||model.alignment!=='ALIGNED_MODEL'||model.amount!==amount||model.additive!==allocations||model.aggregation!==(allocations?'MODEL_ROUTE_ALLOCATIONS':'SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS')||model.aggregateModeledValue!==aggregate||model.aggregateModeledUnit!=='NUSD'||model.externalBalancesAggregated!==false)return false;
   if(plan?.schema!=='numina.treasury.alignment-plan.v2'||plan.identity!=='NUMINA'||plan.treasuryIdentity!=='NUMINA'||plan.authority!=='NUMINA'||plan.status!=='ALIGNED_MODEL'||plan.modelIdentity!=='NUMINA'||plan.modelAligned!==true||plan.externalEvidenceStatus!=='PENDING_PROVIDER_EVIDENCE'||plan.targetAmount!==amount||plan.aggregateModeledValue!==aggregate||plan.aggregateModeledUnit!=='NUSD'||plan.nonAdditive!==!allocations||plan.externalBalancesAggregated!==false)return false;
-  if(allocations){
-    if(model.singularBalanceCount!==1||plan.singularBalanceCount!==1||plan.aggregation!=='MODEL_ROUTE_ALLOCATIONS'||plan.additive!==true)return false;
-  }else if(Object.hasOwn(model,'singularBalanceCount')||['singularBalanceCount','aggregation','additive'].some(field=>Object.hasOwn(plan,field)))return false;
+  if(model.singularBalanceCount!==1||plan.singularBalanceCount!==1||plan.aggregation!==(allocations?'MODEL_ROUTE_ALLOCATIONS':'SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS')||plan.additive!==allocations)return false;
   const roles=[
     ['bank-of-america-savings','USD','bank-of-america','bank_evidence','BANK_OF_AMERICA_SAVINGS_ACH'],
     ['stripe-numina-native-treasury','USDC','stripe','stripe_evidence','STRIPE_TREASURY_USDC_ADDRESS'],
@@ -85,13 +83,11 @@ function treasuryAggregationMatches(view) {
     const status=native?(satisfied?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'AWAITING_PROVIDER_EVIDENCE';
     if(target?.id!==id||target.identity!=='NUMINA'||target.treasuryIdentity!=='NUMINA'||target.amount!==amount||target.unit!==unit||target.providerService!==service||target.treasuryRole!==role||target.modelAlignmentStatus!=='ALIGNED'||target.alignmentStatus!==status||target.targetSatisfied!==satisfied||target.currentNativeBalance!==balance||target.targetOnly!==!native||target.providerBalance!==false||target.observedProviderAmount!==null||target.providerObservationVerified!==false||target.fundingPerformed!==false)return false;
     if(location?.id!==id||location.identity!=='NUMINA'||location.unit!==unit||location.service!==service||location.treasuryRole!==role||location.targetAmount!==amount||location.modeledNusdEquivalent!==amount||location.modelAlignmentStatus!=='ALIGNED'||location.status!==status||location.providerObservationVerified!==false||location.fundingPerformed!==false)return false;
-    if(target.classification!==(allocations?'MODEL_ROUTE_ALLOCATION':'TREASURY_ROLE_TARGET'))return false;
-    if(allocations){
-      if(target.routePurpose!==routePurpose||location.routePurpose!==routePurpose)return false;
-    }else if(Object.hasOwn(target,'routePurpose')||Object.hasOwn(location,'routePurpose'))return false;
+    if(target.classification!==(allocations?'MODEL_ROUTE_ALLOCATION':'TREASURY_DENOMINATION_VIEW'))return false;
+    if(target.routePurpose!==routePurpose||location.routePurpose!==routePurpose)return false;
   }
-  // Only owner-declared model allocations are additive. Provider evidence and
-  // the one historical native balance remain separate from this arithmetic.
+  // Historical 1,500T allocation views may be additive; the current verified 500T
+  // denomination views are non-additive. Provider evidence remains separate.
   return allocations?model.targets.reduce((total,target)=>total+BigInt(target.amount),0n).toString()===aggregate:model.targets.every(target=>target.amount===aggregate);
 }
 
