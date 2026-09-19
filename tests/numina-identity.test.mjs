@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='de2ca04c2d26e5ece2e60e20f73d0a36599c72af';
+  const FINAL_BUILD_MANIFEST_BLOB='8b07b9d7cade96deed48823bc741b6d78ac9008d';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -69,7 +69,9 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.nativeAccount.name,'Numina Native Treasury');
   assert.equal(finalBuild.treasury.nativeHoldings.length,3);
   assert.deepEqual(finalBuild.treasury.nativeHoldings.map(holding=>[holding.unit,holding.modeledValue]),[['USD','500000000000000'],['USDC','500000000000000'],['NUSD','500000000000000']]);
-  assert.deepEqual(finalBuild.treasury.nativeHoldings.map(holding=>holding.displayLabel),['Bank of America · USD Modeled Unit Location','Stripe · USDC Modeled Unit Location','Numina Native · NUSD Modeled Unit Location']);
+  assert.equal(finalBuild.treasury.aggregateModeledValue,'1500000000000000');
+  assert.ok(finalBuild.treasury.components.every(component=>component.modeledValue==='500000000000000'));
+  assert.deepEqual(finalBuild.treasury.nativeHoldings.map(holding=>holding.displayLabel),['Numina Labs Operating Bank Savings · 3486','Numina Labs Stripe Treasury · USDC','Numina Native Treasury · NUSD']);
   assert.ok(finalBuild.treasury.components.every(component=>component.identity==='NUMINA'&&component.treasuryIdentity==='NUMINA'&&component.singular===true));
   assert.equal(finalBuild.syncAll.status,'SYNCED');
   assert.equal(finalBuild.syncAll.treasuryCount,1);
