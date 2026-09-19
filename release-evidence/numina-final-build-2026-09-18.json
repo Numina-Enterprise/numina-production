@@ -288,7 +288,8 @@
     "historicalReceiptsPreservedAsEvidence": true,
     "currentSourceCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
     "synchronization": "ACROSS_ALL",
-    "currentSourceRef": "refs/heads/main"
+    "currentSourceRef": "refs/heads/main",
+    "lastAlignment": "GITHUB_ONLY_SYNC_ALL_ONE_SINGULAR_NUMINA_TREASURY"
   },
   "updateAll": {
     "requested": true,
@@ -301,6 +302,43 @@
     "externalProviderBalancesAsserted": false,
     "singular": true,
     "treasuryCount": 1,
-    "componentCount": 3
+    "componentCount": 3,
+    "status": "SYNCED",
+    "balanceCount": 1,
+    "componentsAreSeparateTreasuries": false
+  },
+  "syncAll": {
+    "status": "SYNCED",
+    "source": "GitHub main only",
+    "identity": "NUMINA",
+    "singular": true,
+    "treasuryCount": 1,
+    "componentCount": 3,
+    "balanceCount": 1,
+    "aggregateModeledValue": "1500000000000000",
+    "componentRoleValue": "500000000000000",
+    "componentUnits": [
+      "USD",
+      "USDC",
+      "NUSD"
+    ],
+    "componentsAreSeparateTreasuries": false,
+    "confirmationSource": "NUMINA_NATIVE_TREASURY",
+    "synchronizedSurfaces": [
+      "final_manifest",
+      "architecture",
+      "treasury_model",
+      "treasury_alignment",
+      "native_treasury_response",
+      "treasury_policy",
+      "treasury_evidence",
+      "bank_route",
+      "stripe_observation",
+      "release_evidence",
+      "build_pipeline",
+      "tests"
+    ],
+    "externalProviderBalancesAsserted": false,
+    "externalProviderReadsRequired": false
   }
 }
