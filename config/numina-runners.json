@@ -1,26 +1,28 @@
 {
-  "schema": "numina.runner-policy.v13",
+  "schema": "numina.runner-policy.v12",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
   "runnerTarget": "NUMINA",
-  "hostIdentity": "NUMINA",
   "preserveMode": "current_runner_count",
   "preservedRunnerCount": 27,
   "selfHostedPolicy": "preserve_existing",
   "futureRunnerPolicy": "deny",
   "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
   "authorizationLiteral": "NUMINA",
-  "preserveCurrentRunners": true,
-  "preserveExistingSelfHostedRunners": true,
-  "denyFutureRunners": true,
-  "allRunnersAreNumina": true,
-  "runnerPlacementFrozen": false,
-  "hostIsNumina": true,
-  "externalSigningRequiresExplicitAuthorization": true,
+  "invariants": {
+    "preserveCurrentRunners": true,
+    "preserveExistingSelfHostedRunners": true,
+    "denyFutureRunners": true,
+    "allRunnersAreNumina": true,
+    "runnerPlacementFrozen": false,
+    "hostIsNumina": true,
+    "externalSigningRequiresExplicitAuthorization": true
+  },
+  "hostIdentity": "NUMINA",
   "executionTargets": {
     "default": "NUMINA",
     "workflowOverrides": {},
-    "scope": "NUMINA"
+    "scope": "All preserved workflow execution targets resolve to NUMINA. Existing runner registrations are preserved; no runner creation, removal, or signing-identity rotation is authorized."
   }
 }
