@@ -2,7 +2,7 @@
   "schema": "numina.final-build.v1",
   "identity": "NUMINA",
   "status": "FINAL",
-  "finalizedAt": "2026-09-18",
+  "finalizedAt": "2026-09-19",
   "applicationVersion": "4.0.0",
   "website": {
     "origin": "https://numinalabs.xyz",
@@ -29,48 +29,39 @@
         "mask": "3486",
         "unit": "USD",
         "modeledValue": "500000000000000",
-        "financeAppReportedValue": "0",
-        "sourceReportedBalanceTimestamp": null,
-        "balanceAge": "unknown",
-        "providerBalanceVerified": false,
-        "providerObservationStatus": "LINKED_PROVIDER_BALANCE_ZERO_RESYNC_REQUESTED",
-        "resyncRequested": true,
-        "providerReportedCurrentValue": "0",
-        "providerReportedAvailableValue": "0",
-        "providerObservationAt": "2026-09-19T06:31:00Z"
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "externalProviderBalanceAsserted": false
       },
       {
         "account": "Numina Labs Stripe Treasury",
         "provider": "Stripe",
         "unit": "USDC",
         "modeledValue": "500000000000000",
-        "financeAppReportedValue": "0",
-        "providerAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
-        "providerReportedAvailableValue": "0",
-        "providerReportedAvailableUnit": "USDC",
-        "providerReportedUsdAvailableValue": "0",
-        "providerStatus": "open",
-        "providerObservationVerified": true,
-        "observationDate": "2026-09-19",
-        "providerObservationAt": "2026-09-19T06:31:00Z"
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "externalProviderBalanceAsserted": false
       },
       {
         "account": "Numina Native Treasury",
         "provider": "manual_finance_record",
         "unit": "NUSD",
         "modeledValue": "500000000000000",
-        "financeAppReportedValue": "500000000000000"
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "nativeConfirmation": true
       }
     ],
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": true,
     "balanceCount": 3,
-    "componentsAre": "three_additive_500T_modeled_components_of_one_singular_1500T_numina_treasury_with_external_provider_observations_separate",
+    "componentsAre": "three_additive_500T_internal_modeled_components_confirmed_by_numina_native_treasury",
     "modelDefinition": {
-      "basis": "verified_numina_native_journal",
+      "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "One singular 1,500T NUMINA treasury model composed of three additive 500T components: USD, USDC and NUSD. Provider observations remain separate external facts and do not automatically verify the modeled external components.",
-      "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
+      "scope": "The Numina Native Treasury confirms the internal modeled amounts for all three additive 500T components—USD, USDC and NUSD—and the 1,500T aggregate within NUMINA. This GitHub-only confirmation does not assert external bank, Stripe, custodian, settlement or spendable balances.",
+      "sourceRepository": "skott34-dot/numina-production",
+      "sourceBranch": "main"
     },
     "submissions": {
       "record": "/api/treasury/v1/submissions",
@@ -80,24 +71,21 @@
       "providerSubmissionVerified": false,
       "settlementReceipts": []
     },
-    "verifiedModeledValue": "500000000000000",
-    "verificationScope": "NUMINA_ADDITIVE_TREASURY_MODEL_WITH_NATIVE_COMPONENT_VERIFIED_AND_PROVIDER_OBSERVATIONS_SEPARATE",
-    "financeAppAlignment": {
-      "status": "ADDITIVE_MODEL_ALIGNED_PROVIDER_FACTS_SEPARATE",
-      "priorEvidence": "/release-evidence/finance-treasury-alignment-2026-09-18.json",
-      "reportedComponentCount": 3,
+    "verifiedModeledValue": "1500000000000000",
+    "verificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE",
+    "verifiedModeledValueScope": "INTERNAL_NUMINA_MODEL_ONLY",
+    "githubAlignment": {
+      "status": "GITHUB_ONLY_NATIVE_TREASURY_CONFIRMED",
+      "repository": "skott34-dot/numina-production",
+      "branch": "main",
+      "confirmationSource": "NUMINA_NATIVE_TREASURY",
+      "confirmedComponentCount": 3,
       "eachModeledComponentValue": "500000000000000",
       "aggregateModeledValue": "1500000000000000",
       "additive": true,
-      "stripeProviderReportedUsdc": "0",
-      "stripeProviderReportedUsd": "0",
-      "bankLinkedSnapshotValue": "0",
-      "bankSnapshotAge": "unknown",
-      "bankResyncRequested": true,
-      "externalProviderFactsRemainSeparate": true,
-      "providerRefreshObservedAt": "2026-09-19T06:31:00Z"
-    },
-    "verifiedModeledValueScope": "NUMINA_NATIVE_COMPONENT_ONLY"
+      "externalProviderBalancesUsed": false,
+      "externalProviderBalancesAsserted": false
+    }
   },
   "nusd": {
     "chainId": "962421430",
@@ -155,14 +143,16 @@
   "delivery": {
     "source": {
       "status": "FINAL",
-      "verifiedCodeCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
+      "verifiedCodeCommit": null,
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
       "identity": "NUMINA",
       "sourceHead": "NUMINA",
       "canonical": true,
-      "singular": true
+      "singular": true,
+      "sourceAuthority": "GitHub",
+      "sourceRef": "refs/heads/main"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -299,18 +289,18 @@
         "fullSuiteRunThisObservation": false
       },
       "productionVerified": false,
-      "verificationScope": "NUMINA source now defines a 1,500T additive treasury model with three 500T components. External provider balances remain separately observed; public-domain promotion remains independently verifiable.",
+      "verificationScope": "GitHub-only alignment: Numina Native Treasury confirms the internal 1,500T modeled aggregate and three additive 500T components. External provider balances and deployment state are outside this treasury confirmation scope.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS",
-      "modelVerificationScope": "NUMINA_ADDITIVE_MODEL; native component verified internally, external provider observations separate",
+      "modelVerificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODEL_ONLY",
       "identity": "NUMINA"
     }
   },
   "buildModel": {
     "identity": "NUMINA",
     "singular": true,
-    "sourceAuthority": "NUMINA",
+    "sourceAuthority": "GitHub",
     "allBuildsAreNumina": true,
     "nonNuminaBuildsAllowed": false,
     "competingBuildAuthorityAllowed": false,
@@ -326,11 +316,11 @@
     "releaseWorkflow": ".github/workflows/numina.yml",
     "repositoryTransport": "GitHub",
     "activeReleasePath": "NUMINA",
-    "lastPushRequestedAt": "2026-09-19T06:31:00Z",
+    "lastPushRequestedAt": "2026-09-19T06:45:00Z",
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
-    "lastAlignment": "FINAL_ALL_NUMINA",
+    "lastAlignment": "GITHUB_ONLY_NATIVE_TREASURY_CONFIRMED",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
