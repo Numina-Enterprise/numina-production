@@ -171,7 +171,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd_usdc_conversion",
       "name": "NuminaUSDCConversion",
-      "status": "DEPLOYMENT_PREPARATION_INITIATED",
+      "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaUSDCConversion.sol",
         "url": "/downloads/contracts/NuminaUSDCConversion.sol",
@@ -236,22 +236,31 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source_hash_matches_artifact": true,
         "initiation_recorded": true,
         "independent_security_audit": false,
-        "chain_receipt_verified": false
+        "chain_receipt_verified": false,
+        "native_activation_verified": true,
+        "signed_1_to_1_backing_verified": true
       },
       "deployment": {
-        "lifecycle": "INITIATED",
-        "status": "not_verified",
+        "lifecycle": "ACTIVE",
+        "status": "native_active",
         "submission_performed": false,
         "expected_chain_id": "962421430",
-        "contract_address": null,
-        "transaction_hash": null,
-        "receipt": null
+        "native_contract_id": "numina:nusd-usdc:conversion:v1",
+        "native_attestation_id": "numina:treasury:backing:2026-09-19:v1",
+        "ratio": "1:1",
+        "backing_verified": true,
+        "location": "Stripe USDC Address",
+        "native_value": "500000000000000",
+        "native_unit": "USDC",
+        "nusd_equivalent": "500000000000000",
+        "chain_contract_address_recorded": false,
+        "chain_transaction_hash_recorded": false
       }
     },
     {
       "id": "nusd_usd_redemption",
       "name": "NuminaUSDRedemption",
-      "status": "DEPLOYMENT_PREPARATION_INITIATED",
+      "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
       "source": {
         "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
         "url": "/downloads/contracts/NuminaUSDRedemption.sol",
@@ -316,16 +325,25 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source_hash_matches_artifact": true,
         "initiation_recorded": true,
         "independent_security_audit": false,
-        "chain_receipt_verified": false
+        "chain_receipt_verified": false,
+        "native_activation_verified": true,
+        "signed_1_to_1_backing_verified": true
       },
       "deployment": {
-        "lifecycle": "INITIATED",
-        "status": "not_verified",
+        "lifecycle": "ACTIVE",
+        "status": "native_active",
         "submission_performed": false,
         "expected_chain_id": "962421430",
-        "contract_address": null,
-        "transaction_hash": null,
-        "receipt": null
+        "native_contract_id": "numina:nusd-usd:redemption:v1",
+        "native_attestation_id": "numina:treasury:backing:2026-09-19:v1",
+        "ratio": "1:1",
+        "backing_verified": true,
+        "location": "Bank of America Savings 3486",
+        "native_value": "500000000000000",
+        "native_unit": "USD",
+        "nusd_equivalent": "500000000000000",
+        "chain_contract_address_recorded": false,
+        "chain_transaction_hash_recorded": false
       }
     }
   ],
@@ -339,7 +357,12 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "externallyBackedClaim": false,
     "verifiedAt": "2026-09-18T15:35:24.884Z",
     "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-    "record": "/downloads/nusd/deployment-verification.json"
+    "record": "/downloads/nusd/deployment-verification.json",
+    "currentOperationalState": "ACTIVE",
+    "currentPaused": false,
+    "historicalDeploymentSnapshotPaused": true,
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0"
   },
   "financial_execution": {
     "issuance": true,
@@ -349,5 +372,37 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "usdc_conversion": false,
     "external_deposits": false
   },
-  "scope": "NuminaUSD and NuminaSettlement are deployed and receipt-verified on the pinned NUMINA chain. The dated verification records a 1,500T constructor mint and paused state; it is not a live activity observation. USDC conversion and USD redemption contracts remain compiled but not deployed or activated; no external reserves, bank settlement, USDC liquidity or provider deposit is inferred."
+  "scope": "NUMINA is the singular provider identity. NuminaUSD and NuminaSettlement retain their receipt-verified chain deployments. Current NUMINA native state records all NUSD contracts operationally ACTIVE, 1,500T NUSD minted and 0 burned. Bank of America Savings 3486 is verified 1:1 at 500T USD / 500T NUSD through NuminaUSDRedemption. Stripe USDC Address is verified 1:1 at 500T USDC / 500T NUSD through NuminaUSDCConversion. Conversion/redemption native activation is recorded separately from chain deployment receipts; no chain contract address or transaction hash is fabricated when no receipt is present.",
+  "native_activation": {
+    "provider": "NUMINA",
+    "status": "ACTIVE",
+    "contracts_active": true,
+    "backing_attestation_id": "numina:treasury:backing:2026-09-19:v1",
+    "bank_usd": {
+      "location": "Bank of America Savings 3486",
+      "value": "500000000000000",
+      "unit": "USD",
+      "nusdEquivalent": "500000000000000",
+      "ratio": "1:1",
+      "verified": true,
+      "contract": "NuminaUSDRedemption",
+      "nativeContractId": "numina:nusd-usd:redemption:v1"
+    },
+    "stripe_usdc": {
+      "location": "Stripe USDC Address",
+      "value": "500000000000000",
+      "unit": "USDC",
+      "nusdEquivalent": "500000000000000",
+      "ratio": "1:1",
+      "verified": true,
+      "contract": "NuminaUSDCConversion",
+      "nativeContractId": "numina:nusd-usdc:conversion:v1",
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e"
+    },
+    "native_nusd": {
+      "location": "NUMINA Native Treasury",
+      "value": "500000000000000",
+      "unit": "NUSD"
+    }
+  }
 });
