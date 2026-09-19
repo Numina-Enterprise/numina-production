@@ -137,8 +137,8 @@
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
-      "sourceHead": "3583b5c823960d7df2de96054d036f57e1b5e287",
-      "identity": "NUMINA"
+      "identity": "NUMINA",
+      "sourceRef": "refs/heads/main"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -170,9 +170,9 @@
       },
       "domains": {
         "apex": "https://numinalabs.xyz",
-        "canonical": "https://www.numinalabs.xyz",
         "apexRedirectStatus": 308,
-        "ssl": "valid"
+        "ssl": "valid",
+        "primary": "https://www.numinalabs.xyz"
       },
       "verificationScope": "Current NUMINA source is committed in the GitHub repository. Historical deployment receipts are preserved as evidence only; no current external website deployment is asserted without provider verification.",
       "priorObservedDeployment": {
@@ -330,7 +330,6 @@
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
     "lastAlignment": "FINAL_ALL_NUMINA",
-    "lastSoftwareUpdate": "3583b5c823960d7df2de96054d036f57e1b5e287",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
@@ -364,7 +363,8 @@
       "allCanonical": true
     },
     "finalCount": 1,
-    "finalIdentity": "NUMINA"
+    "finalIdentity": "NUMINA",
+    "softwareRef": "refs/heads/main"
   },
   "self": "NUMINA",
   "identityModel": {
