@@ -7,7 +7,7 @@
     "node": "24.x"
   },
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build-diagnostic.mjs",
     "test": "node --test tests/*.test.mjs",
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
