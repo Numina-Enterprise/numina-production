@@ -137,7 +137,7 @@
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
-      "sourceHead": "5b39bd191f1dd1cf7af803c953e879b76a19fef4",
+      "sourceHead": "474e5f7965926c45915816a5c16d7066a0327742",
       "identity": "NUMINA"
     },
     "smartContracts": {
@@ -194,7 +194,6 @@
         "versionId": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
         "versionNumber": 103,
         "sourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
-        "sourceTreeMatchesCanonical": true,
         "deployment": {
           "id": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
           "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
@@ -215,7 +214,8 @@
           "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5",
           "size_bytes": 44277760,
           "file_count": 307
-        }
+        },
+        "sourceTreeMatchesNumina": true
       },
       "vercelRole": "historical_only",
       "activeReleasePath": "NUMINA",
@@ -330,7 +330,7 @@
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
     "lastAlignment": "FINAL_ALL_NUMINA",
-    "lastSoftwareUpdate": "5b39bd191f1dd1cf7af803c953e879b76a19fef4",
+    "lastSoftwareUpdate": "474e5f7965926c45915816a5c16d7066a0327742",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
