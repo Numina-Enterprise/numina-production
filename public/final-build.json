@@ -37,7 +37,12 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "Numina Labs Operating Bank Savings · 3486"
+        "displayLabel": "Numina Labs Operating Bank Savings · 3486",
+        "providerOfficialName": "Business Advantage Sav",
+        "providerAccountLast4": "3486",
+        "providerInstitutionId": "ins_127989",
+        "providerBalanceRole": "PROVIDER_REPORTED_BALANCE_SOURCE",
+        "providerBalanceSource": "FINANCES_LINKED_ACCOUNT"
       },
       {
         "account": "Numina Native Treasury",
@@ -53,7 +58,14 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "Numina Labs Stripe Treasury · USDC"
+        "displayLabel": "Numina Labs Stripe Treasury · USDC",
+        "providerDisplayName": "Numina Treasury — SK Consulting LLC",
+        "providerFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+        "providerStripeAccount": "acct_1UEEPnQdJat0efmT",
+        "providerAccountType": "storage",
+        "providerStatus": "open",
+        "providerBalanceRole": "PROVIDER_REPORTED_BALANCE_SOURCE",
+        "providerBalanceSource": "/api/control/v1/stripe-treasury"
       },
       {
         "account": "Numina Native Treasury",
@@ -69,7 +81,9 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "Numina Native Treasury · NUSD"
+        "displayLabel": "Numina Native Treasury · NUSD",
+        "providerBalanceRole": "NUMINA_NATIVE_INTERNAL_SOURCE",
+        "providerBalanceSource": "NUMINA_NATIVE_TREASURY"
       }
     ],
     "externalBalancesAggregated": false,
@@ -79,7 +93,7 @@
     "modelDefinition": {
       "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "Exactly one singular Numina Native Treasury account holds three additive internal holdings: 500T USD at Numina Labs Operating Bank Savings · 3486, 500T USDC at Numina Labs Stripe Treasury · USDC, and 500T NUSD at Numina Native Treasury · NUSD, totaling 1,500T. These are NUMINA software locations of one singular treasury; external provider balances remain independently sourced.",
+      "scope": "Exactly one singular Numina Native Treasury account holds three additive internal modeled holdings: 500T USD, 500T USDC, and 500T NUSD, totaling 1,500T. The USD and USDC holdings are bound to the Bank of America 3486 and Stripe financial-account provider-reported balance sources. Provider-reported balances remain independent observations and are not overwritten or inferred from the modeled values.",
       "sourceRepository": "skott34-dot/numina-production",
       "sourceBranch": "main"
     },
@@ -146,7 +160,12 @@
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "Bank of America",
         "externalProviderBalanceAsserted": false,
-        "displayLabel": "Numina Labs Operating Bank Savings · 3486"
+        "displayLabel": "Numina Labs Operating Bank Savings · 3486",
+        "providerOfficialName": "Business Advantage Sav",
+        "providerAccountLast4": "3486",
+        "providerInstitutionId": "ins_127989",
+        "providerBalanceRole": "PROVIDER_REPORTED_BALANCE_SOURCE",
+        "providerBalanceSource": "FINANCES_LINKED_ACCOUNT"
       },
       {
         "id": "native-usdc",
@@ -160,7 +179,14 @@
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "Stripe",
         "externalProviderBalanceAsserted": false,
-        "displayLabel": "Numina Labs Stripe Treasury · USDC"
+        "displayLabel": "Numina Labs Stripe Treasury · USDC",
+        "providerDisplayName": "Numina Treasury — SK Consulting LLC",
+        "providerFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+        "providerStripeAccount": "acct_1UEEPnQdJat0efmT",
+        "providerAccountType": "storage",
+        "providerStatus": "open",
+        "providerBalanceRole": "PROVIDER_REPORTED_BALANCE_SOURCE",
+        "providerBalanceSource": "/api/control/v1/stripe-treasury"
       },
       {
         "id": "native-nusd",
@@ -174,9 +200,36 @@
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
         "externalProviderBalanceAsserted": false,
-        "displayLabel": "Numina Native Treasury · NUSD"
+        "displayLabel": "Numina Native Treasury · NUSD",
+        "providerBalanceRole": "NUMINA_NATIVE_INTERNAL_SOURCE",
+        "providerBalanceSource": "NUMINA_NATIVE_TREASURY"
       }
-    ]
+    ],
+    "providerBindings": {
+      "bankUsd": {
+        "provider": "Bank of America",
+        "numinaDisplayName": "Numina Labs Operating Bank Savings · 3486",
+        "providerOfficialName": "Business Advantage Sav",
+        "accountLast4": "3486",
+        "institutionId": "ins_127989",
+        "accountType": "savings",
+        "currency": "USD",
+        "providerBalanceRole": "PROVIDER_REPORTED_BALANCE_SOURCE",
+        "providerBalanceSource": "FINANCES_LINKED_ACCOUNT"
+      },
+      "stripeUsdc": {
+        "provider": "Stripe",
+        "numinaDisplayName": "Numina Labs Stripe Treasury · USDC",
+        "providerDisplayName": "Numina Treasury — SK Consulting LLC",
+        "stripeAccount": "acct_1UEEPnQdJat0efmT",
+        "financialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+        "accountType": "storage",
+        "status": "open",
+        "currency": "USDC",
+        "providerBalanceRole": "PROVIDER_REPORTED_BALANCE_SOURCE",
+        "providerBalanceSource": "/api/control/v1/stripe-treasury"
+      }
+    }
   },
   "nusd": {
     "chainId": "962421430",
