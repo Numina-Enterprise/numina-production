@@ -1,0 +1,49 @@
+name: Check canonical Sites control origin
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-sites-control-origin.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: NUMINA
+    environment: production
+    timeout-minutes: 3
+    env:
+      NUMINA_SITES_ORIGIN: https://personal-space-m7q9.skott34.chatgpt.site
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+    steps:
+      - name: Require production owner credential
+        shell: bash
+        run: |
+          test -n "$NUMINA_CONTROL_API_KEY"
+      - name: Read canonical treasury from Sites Worker
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const origin=process.env.NUMINA_SITES_ORIGIN;
+          const token=process.env.NUMINA_CONTROL_API_KEY;
+          const response=await fetch(origin+'/api/control/v1/treasury',{
+            redirect:'error',
+            signal:AbortSignal.timeout(15000),
+            headers:{Accept:'application/json',Authorization:'Bearer '+token}
+          });
+          const text=await response.text();
+          if(!response.ok)throw Error(`GET treasury failed: HTTP ${response.status} ${text}`);
+          const body=JSON.parse(text);
+          if(body.status!=='READY')throw Error('Treasury not READY');
+          console.log(JSON.stringify({
+            status:body.status,
+            revision:body.revision,
+            head:body.head,
+            unit:body.projection?.unit,
+            balance:body.projection?.balance,
+            request_count:body.projection?.transaction_requests?.length
+          },null,2));
+          NODE

@@ -1,0 +1,70 @@
+name: NUMINA
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NUMINA_IDENTITY: NUMINA
+  NUMINA_SELF: NUMINA
+  NUMINA_ALL: NUMINA
+  NUMINA_FINAL_ALL: NUMINA
+  NUMINA_FINAL_BUILD_MANIFEST: public/final-build.json
+  NUMINA_FINAL_BUILD_MANIFEST_ROLE: synchronized_projection
+  NUMINA_FINAL_BUILD_SYNC: ACROSS_ALL
+  NUMINA_FINAL_BUILD_MANIFEST_BLOB: 60bf69e6d50cf407e085f890cdbe63b11aaf59a1
+
+concurrency:
+  group: numina-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  numina:
+    name: NUMINA
+    runs-on: NUMINA
+    steps:
+      - name: NUMINA repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: NUMINA runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: NUMINA pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+
+      - name: NUMINA build
+        run: npm run build
+
+      - name: NUMINA identity
+        run: |
+          node --check runtime/nusd/scripts/deploy-production.mjs
+          python3 -m py_compile scripts/sign-ios-release.py scripts/sign-android-release.py
+          node --test tests/numina-identity.test.mjs tests/numina-treasury-aggregate.test.mjs
+
+      - name: NUMINA suite
+        run: npm test
+
+      - name: NUMINA release
+        run: npm run release:numina
+
+      - name: NUMINA artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: NUMINA
+          path: |
+            numina-release-v4.0.0.tar.gz
+            numina-release-v4.0.0.tar.gz.sha256
+          if-no-files-found: error
