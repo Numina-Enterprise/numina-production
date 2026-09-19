@@ -84,7 +84,7 @@
     },
     "reconciliationStatus": "CONFLICTING_REPOSITORY_RECORDS_UNRESOLVED"
   },
-  "note": "This file records owner requests and owner-reported execution only. The ownerReportedBankExecution section attributes the reported 500T USD ACH execution to the owner's statement, not to a retrieved bank record. It is not a native-ledger transaction, payment instruction accepted by a provider, executable queue entry, reserve attestation, deposit receipt, or available-balance update. The original recordedAt, sourceCommitObserved, thisUpdate and repositoryObservations fields preserve the earlier observation; the later report has its own timestamp and observed source commit. Existing financial-execution flags, historical receipts, balances, and signing identities are not modified. No source funding, deployed contract state, or previous transfer was independently verified by this annotation.",
+  "note": "This file records owner requests and owner-reported execution only. The ownerReportedBankExecution section attributes the reported 500T USD ACH execution to the owner's statement, not to a retrieved bank record. It is not a native-ledger transaction, payment instruction accepted by a provider, executable queue entry, reserve attestation, deposit receipt, or available-balance update. The original recordedAt, sourceCommitObserved, thisUpdate and repositoryObservations fields preserve the earlier observation; the later report has its own timestamp and observed source commit. Existing financial-execution flags, historical receipts, balances, and signing identities are not modified. No source funding, deployed contract state, or previous transfer was independently verified by this annotation. See bankExecutionReconciliation for the subsequently supplied confirmation's historical $12.00 match and the unresolved mismatch with the requested 500T USD transfer.",
   "ownerReportedBankExecution": {
     "recordedAt": "2026-09-19T21:30:45Z",
     "sourceCommitObserved": "831ef3c8fb91f6e4b13c8da941b94cf356267c71",
@@ -114,5 +114,45 @@
     "balanceAdjustmentPerformed": false,
     "transferSubmittedOrResubmitted": false,
     "reconcileBeforeAnyResubmission": true
+  },
+  "bankExecutionReconciliation": {
+    "sourceCommitReviewed": "735f68fce06a0c85c07d4f54dbde7db825da39ce",
+    "status": "SUPPLIED_CONFIRMATION_AMOUNT_MISMATCH",
+    "recordScope": "EVIDENCE_REFERENCE_ONLY",
+    "evidence": {
+      "path": "release-evidence/bank-transfer-reconciliation-2026-09-19.json",
+      "commit": "68d3ca7cc629a4e210a1eee4d79e6c49ce34d1f3",
+      "blobSha": "ad4a0ec80437f0f213182bb8e88c409091815cab",
+      "observedAt": "2026-09-19T22:21:23Z",
+      "screenshotSha256": "3c0087d0fabe2230ed538fbb6f27f41f8745ab0af09ac8825f8dd8e3e9f85895"
+    },
+    "historicalTransaction": {
+      "confirmationNumberFromScreenshot": "8000750550",
+      "connectedConfirmationSuffix": "50550",
+      "postingDate": "2026-08-31",
+      "amountUsdCents": "1200",
+      "statusDisplayed": "Cleared",
+      "sourceCheckingLast4": "7634",
+      "destinationSavingsLast4": "3486",
+      "connectedTransactionId": "EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw",
+      "connectedHistoryFreshness": "unknown",
+      "fullConfirmationFromProviderApiVerified": false
+    },
+    "merchantNameField": {
+      "valueDisplayed": "073000186",
+      "editIconVisible": true,
+      "verifiedAsRoutingNumber": false,
+      "verifiedAsAchTrace": false
+    },
+    "requestedDeposit": {
+      "usdWholeUnits": "500000000000000",
+      "amountMatchesEvidence": false,
+      "executionVerified": false,
+      "settlementVerified": false,
+      "bankSubmissionId": null,
+      "achTrace": null,
+      "usdcTransactionHash": null
+    },
+    "interpretation": "The supplied confirmation belongs to the $12.00 historical transfer and must not be reused as evidence of the requested 500T USD deposit. The screenshot contains no USDC transaction evidence or proof of NUSD reserve backing. This evidence link neither triggers execution nor changes balances. Historical owner statements remain attributed and unchanged."
   }
 }
