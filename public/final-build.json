@@ -342,35 +342,21 @@
     "treasuryIdentity": "NUMINA",
     "evidenceIdentity": "NUMINA",
     "numinaEqualsAll": true,
-    "headCount": 3,
-    "canonicalHeads": {
-      "repository": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "finance": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "evidence": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "singularIdentity": "NUMINA",
-      "singular": true,
-      "allInProduction": true,
-      "allCanonical": true
-    },
     "finalCount": 1,
     "finalIdentity": "NUMINA",
-    "sourceHead": "NUMINA",
-    "softwareHead": "NUMINA",
-    "canonicalHead": "NUMINA",
-    "canonicalHeadCount": 3,
-    "canonicalHeadIdentity": "NUMINA"
+    "model": "SINGULAR_NUMINA",
+    "headModel": {
+      "identity": "NUMINA",
+      "singular": true,
+      "canonical": true,
+      "production": true,
+      "count": 3,
+      "projections": [
+        "repository",
+        "finance",
+        "evidence"
+      ]
+    }
   },
   "self": "NUMINA",
   "identityModel": {
@@ -382,30 +368,21 @@
     "finance": "NUMINA",
     "treasury": "NUMINA",
     "evidence": "NUMINA",
-    "canonicalHeads": {
-      "count": 3,
-      "repository": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "finance": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "evidence": {
-        "identity": "NUMINA",
-        "canonical": true,
-        "production": true
-      },
-      "singularIdentity": "NUMINA",
-      "singular": true,
-      "allInProduction": true,
-      "allCanonical": true
-    },
     "finalCount": 1,
-    "final": "NUMINA"
+    "final": "NUMINA",
+    "model": "SINGULAR_NUMINA",
+    "headModel": {
+      "identity": "NUMINA",
+      "singular": true,
+      "canonical": true,
+      "production": true,
+      "count": 3,
+      "projections": [
+        "repository",
+        "finance",
+        "evidence"
+      ]
+    }
   },
   "repository": "skott34-dot/numina-production"
 }
