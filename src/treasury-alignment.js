@@ -25,14 +25,17 @@ function buildFundableTargets(projection){
       targetOnly:!native,
       transportVerificationChannel:'NUMINA',
       providerBalance:false,
-      modelAlignmentStatus:'ALIGNED',
-      alignmentStatus:native?(nativeAligned?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'AWAITING_PROVIDER_EVIDENCE',
+      internalAmountConfirmed:true,
+      confirmationSource:'NUMINA_NATIVE_TREASURY',
+      modelAlignmentStatus:'ALIGNED_CONFIRMED_INTERNAL_MODEL',
+      alignmentStatus:native?(nativeAligned?'ALIGNED_NATIVE_PROJECTION':'NATIVE_ALIGNMENT_REQUIRED'):'ALIGNED_INTERNAL_MODEL',
       targetSatisfied:native?(projection?.unit==='NUSD'?projection.balance===target.amount:false):null,
+      internalTargetSatisfied:true,
       currentNativeBalance:native&&projection?.unit==='NUSD'?projection.balance:null,
       observedProviderAmount:null,
       providerObservationVerified:false,
       fundingPerformed:false,
-      verificationScope:native?'NUMINA native component verified':'NUMINA modeled additive component; provider observation remains separate evidence'
+      verificationScope:'NUMINA Native Treasury confirmed internal modeled amount; external provider balance not asserted'
     };
   });
   return {
@@ -40,7 +43,7 @@ function buildFundableTargets(projection){
     identity:'NUMINA',
     treasuryIdentity:'NUMINA',
     transportVerificationChannel:'NUMINA',
-    alignment:'ALIGNED_MODEL',
+    alignment:'ALIGNED_GITHUB_NATIVE_CONFIRMED_MODEL',
     amount:NUMINA_FUNDABLE_TARGET_AMOUNT,
     aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',
     additive:true,
@@ -72,11 +75,11 @@ export function alignTreasuryAccounts(treasury,frontier){
   const treasuryAlignmentPlan={
     schema:'numina.treasury.alignment-plan.v2',
     identity:'NUMINA',treasuryIdentity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
-    status:'ALIGNED_MODEL',modelIdentity:'NUMINA',modelAligned:true,externalEvidenceStatus:'PENDING_PROVIDER_EVIDENCE',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',additive:true,singularBalanceCount:3,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nonAdditive:false,externalBalancesAggregated:false,
+    status:'ALIGNED_GITHUB_NATIVE_CONFIRMED_MODEL',modelIdentity:'NUMINA',modelAligned:true,confirmationSource:'NUMINA_NATIVE_TREASURY',externalEvidenceStatus:'OUT_OF_SCOPE_GITHUB_ONLY_ALIGNMENT',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',additive:true,singularBalanceCount:3,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nonAdditive:false,externalBalancesAggregated:false,
     designatedLocations:fundableTargets.targets.map(target=>({
       id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,routePurpose:target.routePurpose,
       targetAmount:target.amount,unit:target.unit,modeledNusdEquivalent:target.amount,modelAlignmentStatus:target.modelAlignmentStatus,status:target.alignmentStatus,
-      providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed,providerAccountReference:target.providerAccountReference,providerAccountBindingVerified:target.providerAccountBindingVerified,destination:target.destination
+      internalAmountConfirmed:target.internalAmountConfirmed,confirmationSource:target.confirmationSource,providerObservationVerified:target.providerObservationVerified,fundingPerformed:target.fundingPerformed,providerAccountReference:target.providerAccountReference,providerAccountBindingVerified:target.providerAccountBindingVerified,destination:target.destination
     }))
   };
   const references=structuredClone(frontier.accounts??[]);
