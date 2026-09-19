@@ -65,4 +65,6 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[0].conversionContract,'NuminaUSDRedemption');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].conversionContract,'NuminaUSDCConversion');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].usdcAddress,'0x736bd8f274dce00a8bb374edd85df0d2e631018e');
+  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[0].nativeContractId,'numina:nusd-usd:redemption:v1');
+  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].nativeContractId,'numina:nusd-usdc:conversion:v1');
 });
