@@ -39,7 +39,7 @@ async function treasuryDigest(value) {
 
 export async function verifyTreasuryRecord(data, {allowUninitialized = false} = {}) {
   try {
-    if (data?.schema !== 'numina.treasury.v1' || data.route !== 'numina.treasury.v1' || data.root !== 'NUMINA' || data.manifest !== 'NUMINA' || data.identity !== 'NUMINA' || data.authority !== 'NUMINA' || data.source !== 'NUMINA' || data.evidence !== 'NUMINA' || data.provider !== 'NUMINA' || data.provider_verification !== true || !treasuryText(data.principal) || !treasuryHash(data.head) || !treasuryRevision(data.revision) || data.verification_scope !== 'Numina-native model and journal integrity') return false;
+    if (data?.schema !== 'numina.treasury.v1' || data.route !== 'numina.treasury.v1' || data.root !== 'NUMINA' || data.manifest !== 'NUMINA' || data.identity !== 'NUMINA' || data.authority !== 'NUMINA' || data.source !== 'NUMINA' || data.evidence !== 'NUMINA' || data.provider !== 'NUMINA' || data.provider_verification !== true || !treasuryText(data.principal) || !treasuryHash(data.head) || !treasuryRevision(data.revision) || !['Numina-native model and journal integrity', 'NUMINA Native Treasury singular state and journal integrity'].includes(data.verification_scope)) return false;
     if (data.status === 'NOT_INITIALIZED') return allowUninitialized && data.projection === null && data.canonical_proof === null;
     if (data.status !== 'READY') return false;
     const p = data.projection, proof = data.canonical_proof, event = proof?.event, command = event?.command;

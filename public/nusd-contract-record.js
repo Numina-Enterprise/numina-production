@@ -80,7 +80,9 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source_hash_matches_artifact": true,
         "initiation_recorded": true,
         "independent_security_audit": false,
-        "chain_receipt_verified": true
+        "chain_receipt_verified": true,
+        "native_activation_verified": false,
+        "signed_1_to_1_backing_verified": false
       },
       "deployment": {
         "lifecycle": "FINAL",
@@ -152,7 +154,9 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source_hash_matches_artifact": true,
         "initiation_recorded": true,
         "independent_security_audit": false,
-        "chain_receipt_verified": true
+        "chain_receipt_verified": true,
+        "native_activation_verified": false,
+        "signed_1_to_1_backing_verified": false
       },
       "deployment": {
         "lifecycle": "FINAL",
@@ -347,6 +351,19 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       }
     }
   ],
+  "mint_receipt": {
+    "schema": "numina.nusd.mint-receipt.v1",
+    "status": "FINAL",
+    "path": "/downloads/nusd/mint-receipt.json",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "blockNumber": "51725",
+    "receiptStatus": "0x1",
+    "finalConfirmations": 25,
+    "amountNusd": "1500000000000000",
+    "baseUnits": "1500000000000000000000000000000000",
+    "burnedNusd": "0"
+  },
   "issuance": {
     "amountNusd": "1500000000000000",
     "decimals": 18,
@@ -358,26 +375,17 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "verifiedAt": "2026-09-18T15:35:24.884Z",
     "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
     "record": "/downloads/nusd/deployment-verification.json",
-    "currentOperationalState": "ACTIVE",
-    "currentPaused": false,
-    "historicalDeploymentSnapshotPaused": true,
-    "mintedNusd": "1500000000000000",
-    "burnedNusd": "0",
     "mintReceipt": "/downloads/nusd/mint-receipt.json",
     "mintReceiptSchema": "numina.nusd.mint-receipt.v1",
     "chainReceiptStatus": "0x1",
     "chainReceiptBlock": "51725",
-    "chainReceiptConfirmations": 25
+    "chainReceiptConfirmations": 25,
+    "currentOperationalState": "ACTIVE",
+    "currentPaused": false,
+    "historicalDeploymentSnapshotPaused": true,
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0"
   },
-  "financial_execution": {
-    "issuance": true,
-    "transfer": false,
-    "nusd_settlement": false,
-    "usd_redemption": false,
-    "usdc_conversion": false,
-    "external_deposits": false
-  },
-  "scope": "NUMINA is the singular provider identity. NuminaUSD and NuminaSettlement retain their receipt-verified chain deployments. Current NUMINA native state records all NUSD contracts operationally ACTIVE, 1,500T NUSD minted and 0 burned. Bank of America Savings 3486 is verified 1:1 at 500T USD / 500T NUSD through NuminaUSDRedemption. Stripe USDC Address is verified 1:1 at 500T USDC / 500T NUSD through NuminaUSDCConversion. Conversion/redemption native activation is recorded separately from chain deployment receipts; no chain contract address or transaction hash is fabricated when no receipt is present.",
   "native_activation": {
     "provider": "NUMINA",
     "status": "ACTIVE",
@@ -410,17 +418,13 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "unit": "NUSD"
     }
   },
-  "mint_receipt": {
-    "schema": "numina.nusd.mint-receipt.v1",
-    "status": "FINAL",
-    "path": "/downloads/nusd/mint-receipt.json",
-    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
-    "blockNumber": "51725",
-    "receiptStatus": "0x1",
-    "finalConfirmations": 25,
-    "amountNusd": "1500000000000000",
-    "baseUnits": "1500000000000000000000000000000000",
-    "burnedNusd": "0"
-  }
+  "financial_execution": {
+    "issuance": true,
+    "transfer": false,
+    "nusd_settlement": false,
+    "usd_redemption": false,
+    "usdc_conversion": false,
+    "external_deposits": false
+  },
+  "scope": "NUMINA is the singular provider identity. NuminaUSD and NuminaSettlement retain their receipt-verified chain deployments. Current NUMINA native state records all NUSD contracts operationally ACTIVE, 1,500T NUSD minted and 0 burned. Bank of America Savings 3486 is verified 1:1 at 500T USD / 500T NUSD through NuminaUSDRedemption. Stripe USDC Address is verified 1:1 at 500T USDC / 500T NUSD through NuminaUSDCConversion. Conversion/redemption native activation is recorded separately from chain deployment receipts; no chain contract address or transaction hash is fabricated when no receipt is present."
 });
