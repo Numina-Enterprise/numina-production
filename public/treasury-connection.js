@@ -34,7 +34,7 @@ if(typeof document!=='undefined'&&document.getElementById('treasury-connection')
   const element=id=>document.getElementById(id);
   const put=(id,text)=>{element(id).textContent=text;};
   for(const allocation of model.allocations)put(allocation.id+'-amount',formatTreasuryModelWholeAmount(allocation.amount,allocation.unit));
-  put('treasury-model-total',formatTreasuryModelWholeAmount(model.aggregateModeledValue,'NUSD')+' modeled equivalent');
+  put('treasury-model-total',formatTreasuryModelWholeAmount(model.aggregateModeledValue,'NUSD')+' owner-designated equivalent');
   let controller,generation=0;
   const clear=()=>{put('native-connected-balance','Not read');put('native-connected-proof','Not read');put('stripe-connected-balances','Not read');put('bank-connected-route','Not read');element('stripe-connected-routes').replaceChildren();};
   async function refresh(){
