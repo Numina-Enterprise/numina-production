@@ -1,8 +1,9 @@
 import {controlError,stable} from './control.js';
+import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
 
 export const NUMINA_TREASURY_ROUTE='numina.treasury.v1';
 export const NUMINA_TREASURY_MODEL=Object.freeze({schema:'numina.treasury.projection.v1',unit:'NUSD',authority:'NUMINA',verification:'VERIFIED',system_of_record:'NUMINA',scope:'Numina-native'});
-export const NUMINA_TREASURY_INITIAL_BALANCE='500000000000000';
+export const NUMINA_TREASURY_INITIAL_BALANCE=NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue;
 const treasuryUnsigned=/^(0|[1-9][0-9]{0,77})$/;
 const treasurySigned=/^-?[1-9][0-9]{0,77}$/;
 const treasuryReference=/^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$/;
