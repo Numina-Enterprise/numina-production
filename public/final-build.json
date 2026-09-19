@@ -29,12 +29,15 @@
         "mask": "3486",
         "unit": "USD",
         "modeledValue": "500000000000000",
-        "financeAppReportedValue": "500000000000000",
+        "financeAppReportedValue": "0",
         "sourceReportedBalanceTimestamp": null,
         "balanceAge": "unknown",
         "providerBalanceVerified": false,
-        "providerObservationStatus": "LINKED_SNAPSHOT_FRESHNESS_UNKNOWN",
-        "resyncRequested": true
+        "providerObservationStatus": "LINKED_PROVIDER_BALANCE_ZERO_RESYNC_REQUESTED",
+        "resyncRequested": true,
+        "providerReportedCurrentValue": "0",
+        "providerReportedAvailableValue": "0",
+        "providerObservationAt": "2026-09-19T06:31:00Z"
       },
       {
         "account": "Numina Labs Stripe Treasury",
@@ -48,7 +51,8 @@
         "providerReportedUsdAvailableValue": "0",
         "providerStatus": "open",
         "providerObservationVerified": true,
-        "observationDate": "2026-09-19"
+        "observationDate": "2026-09-19",
+        "providerObservationAt": "2026-09-19T06:31:00Z"
       },
       {
         "account": "Numina Native Treasury",
@@ -87,10 +91,11 @@
       "additive": true,
       "stripeProviderReportedUsdc": "0",
       "stripeProviderReportedUsd": "0",
-      "bankLinkedSnapshotValue": "500000000000000",
+      "bankLinkedSnapshotValue": "0",
       "bankSnapshotAge": "unknown",
       "bankResyncRequested": true,
-      "externalProviderFactsRemainSeparate": true
+      "externalProviderFactsRemainSeparate": true,
+      "providerRefreshObservedAt": "2026-09-19T06:31:00Z"
     },
     "verifiedModeledValueScope": "NUMINA_NATIVE_COMPONENT_ONLY"
   },
@@ -321,7 +326,7 @@
     "releaseWorkflow": ".github/workflows/numina.yml",
     "repositoryTransport": "GitHub",
     "activeReleasePath": "NUMINA",
-    "lastPushRequestedAt": "2026-09-19T01:27:00Z",
+    "lastPushRequestedAt": "2026-09-19T06:31:00Z",
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
