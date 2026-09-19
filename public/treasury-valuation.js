@@ -1,9 +1,10 @@
 // Whole-unit declared valuations. Provider minor-unit balances are never inputs.
+import {NUMINA_NATIVE_TREASURY_SYNC} from './treasury-connection-model.js';
 export const NUMINA_DENOMINATION_POLICY = Object.freeze({
-  schema:'numina.denomination-policy.v1',id:'numina-usd-usdc-nusd-parity-2026-09-15',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,componentCount:3,componentsAreSeparateTreasuries:false,
+  schema:'numina.denomination-policy.v1',id:'numina-usd-usdc-nusd-parity-2026-09-15',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,
   basis:'owner_authorized_denomination_policy',scope:'declared_valuation_for_one_singular_numina_treasury',
   expression:'1 NUSD = 1 USDC = 1 USD',referenceUnit:'USD',
-  units:Object.freeze(['NUSD','USDC','USD']),
+  units:Object.freeze([...NUMINA_NATIVE_TREASURY_SYNC.componentUnits].reverse()),
   rates:Object.freeze(['NUSD','USDC','USD'].map(base=>Object.freeze({base,quote:'USD',numerator:'1',denominator:'1'}))),
   preserveCurrencyIdentity:true,providerBalancesChanged:false,
   reserveVerificationEstablished:false,executableConversionVerified:false
