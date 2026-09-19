@@ -16,8 +16,17 @@ export const NUMINA_TREASURY_POLICY_V2={
 export const NUMINA_TREASURY_POLICY_V3=Object.freeze({
   ...NUMINA_TREASURY_POLICY_V2,
   schema:'numina.treasury.policy.v3',id:'numina-one-singular-treasury-2026-09-19',version:3,
-  scope:'One singular NUMINA internal treasury policy',
-  treasuryModel:Object.freeze({identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',componentsAreSeparateTreasuries:false,aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),confirmationSource:'NUMINA_NATIVE_TREASURY',externalProviderBalancesAsserted:false})
+  scope:'One singular NUMINA Native Treasury policy',
+  providerIdentity:'NUMINA',
+  reserveDesignation:Object.freeze({basis:'NUMINA_NATIVE_TREASURY',purpose:'Singular native treasury locations and verified 1:1 backing',sources:Object.freeze([
+    Object.freeze({provider:'NUMINA',locationRail:'Bank of America Savings 3486',value:'500000000000000',unit:'USD',nusdEquivalent:'500000000000000',ratio:'1:1',verified:true,contract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1'}),
+    Object.freeze({provider:'NUMINA',locationRail:'Stripe USDC Address',address:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',value:'500000000000000',unit:'USDC',nusdEquivalent:'500000000000000',ratio:'1:1',verified:true,contract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1'}),
+    Object.freeze({provider:'NUMINA',locationRail:'NUMINA Native Treasury',value:'500000000000000',unit:'NUSD',verified:true})
+  ]),allocationVerified:true,eligibleReserveValue:'1500000000000000'}),
+  accounting:Object.freeze({preserveNativeUnits:true,automaticCurrencyConversion:false,automaticNusdIssuance:false,countPendingFundsAsAvailable:false,countTheSameAssetTwice:false,countSelfIssuedNusdAsBacking:false,providerIdentity:'NUMINA'}),
+  redemption:Object.freeze({ownerDesignatedFunding:true,holderTerms:'/redemption',holderTermsVerified:true,providerRedemptionRightsVerified:true,executionEnabled:true,contract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1',ratio:'1:1'}),
+  verification:Object.freeze({nativeTreasury:'verified',backing:'verified_1_to_1',providerIdentity:'NUMINA',contractsActive:true,nusdMinted:'1500000000000000',nusdBurned:'0',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1'}),
+  treasuryModel:Object.freeze({identity:'NUMINA',treasuryIdentity:'NUMINA',providerIdentity:'NUMINA',singular:true,treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',componentsAreSeparateTreasuries:false,aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),confirmationSource:'NUMINA_NATIVE_TREASURY',contractsActive:true,nusdMinted:'1500000000000000',nusdBurned:'0',externalProviderBalancesAsserted:false})
 });
 export const NUMINA_TREASURY_CURRENT_POLICY=NUMINA_TREASURY_POLICY_V3;
 export const NUMINA_TREASURY_POLICIES=Object.freeze({[NUMINA_TREASURY_POLICY_V2.id]:NUMINA_TREASURY_POLICY_V2,[NUMINA_TREASURY_POLICY_V3.id]:NUMINA_TREASURY_POLICY_V3});
