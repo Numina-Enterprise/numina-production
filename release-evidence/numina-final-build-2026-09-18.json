@@ -332,7 +332,11 @@
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
       "treasuryInstructionSubmissionPerformed": true,
       "achOriginatorSubmissionPerformed": false,
-      "achOriginatorReceipt": null
+      "achOriginatorReceipt": null,
+      "routingReference": "073000176",
+      "routingReferenceType": "DESTINATION_ACH_ROUTING_REFERENCE",
+      "routingReferenceUserConfirmed": true,
+      "achTraceNumber": null
     }
   },
   "nusd": {
