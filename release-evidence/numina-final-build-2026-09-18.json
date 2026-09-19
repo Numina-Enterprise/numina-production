@@ -31,7 +31,11 @@
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
-        "externalProviderBalanceAsserted": false
+        "externalProviderBalanceAsserted": false,
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "singular": true,
+        "componentRole": true
       },
       {
         "account": "Numina Labs Stripe Treasury",
@@ -40,7 +44,11 @@
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
-        "externalProviderBalanceAsserted": false
+        "externalProviderBalanceAsserted": false,
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "singular": true,
+        "componentRole": true
       },
       {
         "account": "Numina Native Treasury",
@@ -49,17 +57,21 @@
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
-        "nativeConfirmation": true
+        "nativeConfirmation": true,
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "singular": true,
+        "componentRole": true
       }
     ],
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": true,
-    "balanceCount": 3,
-    "componentsAre": "three_additive_500T_internal_modeled_components_confirmed_by_numina_native_treasury",
+    "balanceCount": 1,
+    "componentsAre": "three_additive_500T_component_roles_of_one_singular_numina_treasury",
     "modelDefinition": {
       "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "GitHub-only NUMINA alignment. The Numina Native Treasury confirms all three internal modeled 500T components and the 1,500T aggregate. No external bank, Stripe, custodian, settlement or spendable balance is asserted by this record.",
+      "scope": "GitHub-only NUMINA alignment: exactly one singular NUMINA treasury and one singular 1,500T internal aggregate balance. USD, USDC and NUSD are three additive 500T component roles of the same treasury. No external provider balance is asserted by this record.",
       "sourceRepository": "skott34-dot/numina-production",
       "sourceBranch": "main"
     },
@@ -67,7 +79,7 @@
     "verifiedModeledValueScope": "INTERNAL_NUMINA_MODEL_ONLY",
     "verificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE",
     "githubAlignment": {
-      "status": "GITHUB_ONLY_NATIVE_TREASURY_CONFIRMED",
+      "status": "GITHUB_ONLY_ONE_SINGULAR_NUMINA_TREASURY",
       "repository": "skott34-dot/numina-production",
       "branch": "main",
       "confirmationSource": "NUMINA_NATIVE_TREASURY",
@@ -76,8 +88,19 @@
       "aggregateModeledValue": "1500000000000000",
       "additive": true,
       "externalProviderBalancesUsed": false,
-      "externalProviderBalancesAsserted": false
-    }
+      "externalProviderBalancesAsserted": false,
+      "singular": true,
+      "treasuryCount": 1,
+      "componentCount": 3,
+      "balanceCount": 1,
+      "componentsAreSeparateTreasuries": false
+    },
+    "treasuryIdentity": "NUMINA",
+    "singularIdentity": "NUMINA",
+    "singular": true,
+    "treasuryCount": 1,
+    "componentCount": 3,
+    "componentsAreSeparateTreasuries": false
   },
   "nusd": {
     "chainId": "962421430",
@@ -237,8 +260,12 @@
       "productionVerified": false,
       "verificationScope": "GitHub-only treasury alignment from the Numina Native Treasury confirmation. External provider balances and deployment verification are outside this record.",
       "authenticatedTreasuryProductionVerified": false,
-      "modelAggregation": "SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS",
-      "modelVerificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODEL_ONLY"
+      "modelAggregation": "ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES",
+      "modelVerificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODEL_ONLY",
+      "singular": true,
+      "treasuryCount": 1,
+      "componentCount": 3,
+      "balanceCount": 1
     }
   },
   "buildModel": {
@@ -271,6 +298,9 @@
     "confirmationSource": "NUMINA_NATIVE_TREASURY",
     "confirmedComponentCount": 3,
     "externalProviderReadsUsed": false,
-    "externalProviderBalancesAsserted": false
+    "externalProviderBalancesAsserted": false,
+    "singular": true,
+    "treasuryCount": 1,
+    "componentCount": 3
   }
 }
