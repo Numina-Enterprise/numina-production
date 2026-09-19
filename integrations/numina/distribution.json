@@ -106,7 +106,7 @@
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
@@ -116,11 +116,8 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": false,
-    "externalBalancesAggregated": false,
-    "aggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
-    "verifiedModeledValue": "500000000000000",
-    "verificationScope": "NUMINA_NATIVE_JOURNAL"
+    "modeledRoleValuesAdditive": true,
+    "externalBalancesAggregated": false
   },
   "treasury_client_verification": {
     "schema": "numina.treasury.client-verification.v2",
