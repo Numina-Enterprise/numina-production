@@ -7,20 +7,19 @@ const policy = JSON.parse(readFileSync(resolve(root, 'config/numina-runners.json
 const workflowsDir = resolve(root, '.github/workflows');
 const failures = [];
 
-if (policy.identity !== 'NUMINA' || policy.hostIdentity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA' || policy.runnerTarget !== 'NUMINA') {
-  failures.push('Host, runner identities and runner targets must be NUMINA');
+for (const key of ['identity','hostIdentity','runnerIdentity','allRunnerIdentities','runnerTarget']) {
+  if (policy[key] !== 'NUMINA') failures.push(key + ' must be NUMINA');
 }
-if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runners must be preserved');
-if (policy.invariants?.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runners must be preserved');
-if (policy.invariants?.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
-if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
-if (policy.invariants?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
-if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
+if (policy.preserveCurrentRunners !== true) failures.push('Current runners must be preserved');
+if (policy.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runners must be preserved');
+if (policy.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
+if (policy.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
+if (policy.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
+if (policy.runnerPlacementFrozen !== false) failures.push('Runner placement must remain mutable');
 if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
-const executionTargets = policy.executionTargets;
-const overrides = executionTargets?.workflowOverrides || {};
-if (executionTargets?.default !== policy.runnerTarget) failures.push('Default execution target must remain NUMINA');
-const usedOverrides = new Set();
+if (policy.approvalPolicy !== 'NUMINA_AUTHORIZATION_REQUIRED' || policy.authorizationLiteral !== 'NUMINA') failures.push('Signing approval must require NUMINA');
+if (policy.executionTargets?.default !== 'NUMINA') failures.push('Default execution target must be NUMINA');
+if (Object.keys(policy.executionTargets?.workflowOverrides || {}).length !== 0) failures.push('Workflow execution overrides are not allowed');
 
 let declarations = 0;
 for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(name)).sort()) {
@@ -28,24 +27,14 @@ for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(nam
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
-  const expectedTarget = Object.hasOwn(overrides, name) ? overrides[name] : executionTargets?.default;
-  if (Object.hasOwn(overrides, name) && targets.length) usedOverrides.add(name);
-  if (!['NUMINA', 'ubuntu-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
-  for (const target of targets) {
-    if (target !== expectedTarget) failures.push(name + ' runner target must match its recorded execution target ' + expectedTarget + ', got ' + JSON.stringify(target));
-  }
+  for (const target of targets) if (target !== 'NUMINA') failures.push(name + ' runner target must be NUMINA, got ' + JSON.stringify(target));
 }
-for (const name of Object.keys(overrides)) if (!usedOverrides.has(name)) failures.push('Execution override has no preserved workflow job: ' + name);
 
-if (declarations < policy.preservedRunnerCount) {
-  failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);
-}
-if (declarations > policy.preservedRunnerCount) {
-  failures.push('Future runner declaration denied: preserved ' + policy.preservedRunnerCount + ' got ' + declarations);
-}
+if (declarations < policy.preservedRunnerCount) failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);
+if (declarations > policy.preservedRunnerCount) failures.push('Future runner declaration denied: preserved ' + policy.preservedRunnerCount + ' got ' + declarations);
 
 if (failures.length) {
-  for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
+  for (const failure of failures) console.error('NUMINA_POLICY_VIOLATION ' + failure);
   process.exit(1);
 }
-console.log('NUMINA runners preserved: ' + declarations + '; placement mutable; future runners denied.');
+console.log('NUMINA: ' + declarations + ' preserved runner declarations; all execution targets NUMINA.');
