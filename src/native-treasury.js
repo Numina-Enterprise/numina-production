@@ -2,6 +2,7 @@ import {stable,controlHash,controlError,grantValid} from './control.js';
 import {readControl,commitTreasuryControl} from './control-store.js';
 import {NUMINA_TREASURY_ROUTE,treasuryExact,validateTreasuryProjection,treasuryProjectionEquals,reduceTreasuryProjection} from './native-treasury-model.js';
 import {NUMINA} from './numina-root.js';
+import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
 
 // Bind storage and the authenticated Principal once. There is one treasury in the existing journal.
 export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.now()/1000)}){
@@ -28,7 +29,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
   }
   async function readTreasury(){
     const row=await context();
-    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,principal,manifest:NUMINA,identity:NUMINA,treasuryIdentity:NUMINA,singular:true,treasuryCount:1,componentCount:3,componentsAreSeparateTreasuries:false,aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',nativeProjectionRole:'NUSD_COMPONENT_OF_SINGULAR_TREASURY',authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native journal integrity for one singular NUMINA treasury'};
+    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,principal,manifest:NUMINA,identity:NUMINA,treasuryIdentity:NUMINA,sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,nativeProjectionRole:'NUSD_COMPONENT_OF_SINGULAR_TREASURY',authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,revision:row.revision,head:row.head_hash,verification_scope:'Numina-native journal integrity for one singular NUMINA treasury'};
     if(!row.manifest.nativeTreasury)return {...base,status:'NOT_INITIALIZED',projection:null,canonical_proof:null};
     const projection=structuredClone(validateTreasuryProjection(row.manifest.nativeTreasury));
     const proof=await proofFor(projection.last_event_id);
