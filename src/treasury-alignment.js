@@ -13,8 +13,8 @@ const treasuryRouteMetadata={
 // The browser and authenticated account API share the same model amounts and units.
 // Route metadata describes evidence roles; it never supplies provider funds.
 export const NUMINA_FUNDABLE_TARGETS=Object.freeze(NUMINA_TREASURY_CONNECTION.allocations.map(({id,amount,unit,destination=null,providerAccountReference=null,providerAccountBindingVerified=false})=>Object.freeze({
-  id,identity:'NUMINA',provider:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',
-  ...treasuryRouteMetadata[id],amount,unit,destination,providerAccountReference,providerAccountBindingVerified,classification:'TREASURY_ADDITIVE_COMPONENT',treasuryIdentity:'NUMINA',systemOfRecord:'NUMINA'
+  id,identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,provider:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',
+  ...treasuryRouteMetadata[id],amount,unit,destination,providerAccountReference,providerAccountBindingVerified,classification:'TREASURY_ADDITIVE_COMPONENT',systemOfRecord:'NUMINA'
 })));
 
 function buildFundableTargets(projection){
@@ -40,14 +40,13 @@ function buildFundableTargets(projection){
   });
   return {
     schema:'numina.treasury.fundable-targets.v2',
-    identity:'NUMINA',
-    treasuryIdentity:'NUMINA',
+    identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,
     transportVerificationChannel:'NUMINA',
     alignment:'ALIGNED_GITHUB_NATIVE_CONFIRMED_MODEL',
     amount:NUMINA_FUNDABLE_TARGET_AMOUNT,
-    aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',
+    aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',
     additive:true,
-    singularBalanceCount:3,
+    treasuryCount:1,componentCount:3,singularBalanceCount:1,
     aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,
     aggregateModeledUnit:'NUSD',
     externalBalancesAggregated:false,
@@ -75,7 +74,7 @@ export function alignTreasuryAccounts(treasury,frontier){
   const treasuryAlignmentPlan={
     schema:'numina.treasury.alignment-plan.v2',
     identity:'NUMINA',treasuryIdentity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
-    status:'ALIGNED_GITHUB_NATIVE_CONFIRMED_MODEL',modelIdentity:'NUMINA',modelAligned:true,confirmationSource:'NUMINA_NATIVE_TREASURY',externalEvidenceStatus:'OUT_OF_SCOPE_GITHUB_ONLY_ALIGNMENT',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',additive:true,singularBalanceCount:3,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nonAdditive:false,externalBalancesAggregated:false,
+    status:'ALIGNED_GITHUB_NATIVE_CONFIRMED_MODEL',modelIdentity:'NUMINA',singular:true,modelAligned:true,confirmationSource:'NUMINA_NATIVE_TREASURY',externalEvidenceStatus:'OUT_OF_SCOPE_GITHUB_ONLY_ALIGNMENT',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',additive:true,treasuryCount:1,componentCount:3,singularBalanceCount:1,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nonAdditive:false,externalBalancesAggregated:false,
     designatedLocations:fundableTargets.targets.map(target=>({
       id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,routePurpose:target.routePurpose,
       targetAmount:target.amount,unit:target.unit,modeledNusdEquivalent:target.amount,modelAlignmentStatus:target.modelAlignmentStatus,status:target.alignmentStatus,
@@ -99,7 +98,7 @@ export function alignTreasuryAccounts(treasury,frontier){
   return {schema:'numina.treasury.alignment.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,treasuryAlignmentPlan,accounts,accountReferences:references,
     supersededReferences:references.filter(account=>account.supersededBy),
     accountAlignment:{schema:'numina.treasury.account-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',separateRoles:true,singularIdentity:true,transportVerificationChannel:'NUMINA',sourceReferenceCount:active.length,distinctAccountViews:accounts.length,
-      duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one NUMINA treasury; three additive 500T modeled components in USD, USDC and NUSD; modeled aggregate equals 1,500T'},
+      duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one singular NUMINA treasury and one singular 1,500T aggregate balance; three additive 500T component roles in USD, USDC and NUSD'},
     fundingPlan:plan,fundingDeclaration:declaration,
     nativeFundingView:{schema:'numina.treasury.native-funding-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,revision:treasury.revision,head:treasury.head,
       status:declaration?.FUNDED_PLAN===true?'FUNDED_PLAN':plan?.status??'NOT_RECORDED',statusBasis:declaration?.FUNDED_PLAN===true?'native_owner_declaration':'recorded_plan',
