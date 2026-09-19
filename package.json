@@ -3,11 +3,9 @@
   "version": "4.0.0",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": "24.x"
-  },
+  "engines": {"node": "24.x"},
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build-diagnostic.mjs",
     "test": "node --test tests/*.test.mjs",
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
@@ -19,19 +17,5 @@
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Numina · SK Consulting LLC",
-  "numina": {
-    "identity": "NUMINA",
-    "self": "NUMINA",
-    "singular": true,
-    "all": "NUMINA",
-    "finalBuildManifest": {
-      "path": "public/final-build.json",
-      "blob": "b799b39c42d2bffcfadf37ba8dcf675bb8ba3383",
-      "identity": "NUMINA",
-      "status": "FINAL",
-      "finalAll": "NUMINA",
-      "role": "synchronized_projection",
-      "synchronization": "ACROSS_ALL"
-    }
-  }
+  "numina": {"identity":"NUMINA","self":"NUMINA","singular":true,"all":"NUMINA","finalBuildManifest":{"path":"public/final-build.json","blob":"b799b39c42d2bffcfadf37ba8dcf675bb8ba3383","identity":"NUMINA","status":"FINAL","finalAll":"NUMINA","role":"synchronized_projection","synchronization":"ACROSS_ALL"}}
 }
