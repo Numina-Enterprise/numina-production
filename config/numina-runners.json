@@ -1,5 +1,5 @@
 {
-  "schema": "numina.runner-policy.v10",
+  "schema": "numina.runner-policy.v11",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
@@ -13,6 +13,8 @@
     "preserveExistingSelfHostedRunners": true,
     "denyFutureRunners": true,
     "allRunnersAreNumina": true,
-    "runnerPlacementFrozen": false
-  }
+    "runnerPlacementFrozen": false,
+    "hostIsNumina": true
+  },
+  "hostIdentity": "NUMINA"
 }
