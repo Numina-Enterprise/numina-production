@@ -1,0 +1,80 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T19:14:15Z",
+  "observedSourceCommit": "0b73eb83814e0e2d695c89fa434dd95f59c2495a",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "githubActions": {
+    "canonicalRunId": 35462580170,
+    "workflow": ".github/workflows/numina.yml",
+    "runNumber": 371,
+    "attempt": 2,
+    "headSha": "0b73eb83814e0e2d695c89fa434dd95f59c2495a",
+    "status": "completed",
+    "conclusion": "failure",
+    "rerunRequestedThisObservation": true,
+    "jobId": 105951780352,
+    "jobName": "NUMINA",
+    "executedStepCount": 0,
+    "artifactCount": 0,
+    "runnerExecutionObserved": false,
+    "interpretation": "GitHub accepted the rerun request but the job again completed without any executed steps or artifacts; usable runner-backed execution was not observed."
+  },
+  "vercel": {
+    "capacityObservedAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deploymentId": "dpl_nJJ6oDeB5wWGZnHnsHGBohSzw43R",
+    "deploymentUrl": "https://numina-production-lz0bncp43-skott34-dot.vercel.app",
+    "productionUrl": "https://www.numinalabs.xyz",
+    "sourceCommit": "0b73eb83814e0e2d695c89fa434dd95f59c2495a",
+    "target": "production",
+    "state": "READY",
+    "readyAtUnixMs": 1789843966644,
+    "aliasError": null,
+    "verifiedEndpoints": {
+      "/final-build.json": {
+        "httpStatus": 200,
+        "schema": "numina.final-build.v1",
+        "status": "FINAL",
+        "vercelRequestId": "iad1:iad1::68qs8-1789845233174-556d2e73ff82"
+      },
+      "/downloads/nusd/deployment-receipt.json": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finality": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "vercelRequestId": "iad1:iad1::iad1::9jhdk-1789845238895-9fbe35c74f65"
+      },
+      "/api/nusd/v1/status": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.status.v1",
+        "vercelRequestId": "iad1:iad1::iad1::gprs4-1789845247645-ee3d8257ba1b"
+      },
+      "/v2/network/deployment-estimate": {
+        "httpStatus": 200,
+        "schema": "numina.deployment-estimate.v1",
+        "status": "FINAL",
+        "productionReady": true,
+        "requestId": "0c0e58f4-c604-464f-852d-20fbf308803a",
+        "vercelRequestId": "iad1:iad1::iad1::4m7l7-1789845255208-d8ad2ea9f673"
+      }
+    }
+  },
+  "remoteDesktopFallback": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909Z",
+    "used": false
+  },
+  "mobileDelivery": {
+    "signedAndroidArtifactProducedThisObservation": false,
+    "signedIosArtifactProducedThisObservation": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false,
+    "reason": "GitHub Actions did not demonstrate runner-backed execution and the authorized local fallback device was offline."
+  }
+}
