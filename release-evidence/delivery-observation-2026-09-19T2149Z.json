@@ -1,0 +1,140 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T21:49:26Z",
+  "scope": "Read-only external delivery observation. This record captures provider and repository facts observed before this evidence commit; it does not manufacture build, signing, store, payment, or settlement receipts.",
+  "sourceObserved": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "commit": "f358cd06dfcdff8fd1066ab3b6a4d60648e378b0",
+    "parent": "831ef3c8fb91f6e4b13c8da941b94cf356267c71",
+    "message": "Record owner-reported ACH execution without asserting bank verification"
+  },
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "canonicalWorkflow": ".github/workflows/numina.yml",
+    "allocationProbe": {
+      "runId": 35470675799,
+      "attempt": 2,
+      "jobId": 105973106280,
+      "jobName": "NUMINA",
+      "label": "ubuntu-latest",
+      "status": "completed",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "runnerName": "",
+      "stepsObserved": 0,
+      "createdAt": "2026-09-19T21:47:54Z",
+      "completedAt": "2026-09-19T21:47:56Z"
+    },
+    "additionalObservedFailure": {
+      "workflow": ".github/workflows/verify-provider-observations.yml",
+      "runId": 35470675800,
+      "jobId": 105970947807,
+      "runnerId": 0,
+      "stepsObserved": 0,
+      "conclusion": "failure"
+    },
+    "canonicalBuildRerunCompleted": false,
+    "websiteWorkflowRerunCompleted": false,
+    "androidSigningRerunCompleted": false,
+    "iosSigningRerunCompleted": false,
+    "reason": "The allocation probe failed before any workflow step and no hosted runner was assigned. Remaining workflows were not represented as executed."
+  },
+  "vercel": {
+    "buildCapacityAvailable": true,
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "project": "numina-production",
+    "deployment": {
+      "id": "dpl_6u3HXokff34WTskRaMW56KMfEnot",
+      "state": "READY",
+      "target": "production",
+      "source": "git",
+      "commit": "f358cd06dfcdff8fd1066ab3b6a4d60648e378b0",
+      "url": "https://numina-production-pxcoc3j64-skott34-dot.vercel.app",
+      "inspectorUrl": "https://vercel.com/skott34-dot/numina-production/6u3HXokff34WTskRaMW56KMfEnot",
+      "aliases": [
+        "https://www.numinalabs.xyz",
+        "https://numinalabs.xyz",
+        "https://numina-production.vercel.app",
+        "https://numina-production-skott34-dot.vercel.app",
+        "https://numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    },
+    "endpointVerification": {
+      "/final-build.json": {
+        "status": 200,
+        "schema": "numina.final-build.v1",
+        "identity": "NUMINA",
+        "statusField": "FINAL"
+      },
+      "/downloads/nusd/deployment-receipt.json": {
+        "status": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "chainId": "962421430",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "tokenContract": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "tokenBlock": "51725",
+        "tokenFinalConfirmations": 25,
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "settlementContract": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+        "settlementBlock": "51726",
+        "settlementFinalConfirmations": 24,
+        "externalUsdSettlement": false,
+        "externalUsdcSettlement": false,
+        "bankReceipt": null,
+        "providerReceipt": null
+      },
+      "/api/nusd/v1/status": {
+        "status": 200,
+        "schema": "numina.nusd.status.v1",
+        "financialExecution": {
+          "issuance": true,
+          "transfer": false,
+          "nusdSettlement": false,
+          "usdRedemption": false,
+          "usdcConversion": false,
+          "externalDeposits": false
+        }
+      },
+      "/v2/network/deployment-estimate": {
+        "status": 200,
+        "schema": "numina.deployment-estimate.v1",
+        "statusField": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true,
+        "deposited": false,
+        "treasuryWritePerformed": false,
+        "externalUsdSettlement": false,
+        "externalUsdcSettlement": false,
+        "bankReceipt": null,
+        "providerReceipt": null
+      }
+    },
+    "note": "The successful production deployment demonstrates current Vercel build capacity. Historical rate-limit fields embedded in final-build.json were not treated as current provider state."
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "fallbackUsed": false
+  },
+  "mobileDelivery": {
+    "androidSignedArtifactProducedThisObservation": false,
+    "iosSignedArtifactProducedThisObservation": false,
+    "googlePlaySubmissionPerformedThisObservation": false,
+    "appStoreSubmissionPerformedThisObservation": false,
+    "providerSubmissionReceipt": null
+  },
+  "remainingBlockers": [
+    "GITHUB_HOSTED_RUNNER_NOT_ALLOCATED",
+    "ANDROID_SIGNED_ARTIFACT_NOT_PRODUCED",
+    "IOS_SIGNED_ARTIFACT_NOT_PRODUCED",
+    "STORE_SUBMISSION_PATH_NOT_EXECUTED_WITH_SIGNED_ARTIFACT"
+  ]
+}
