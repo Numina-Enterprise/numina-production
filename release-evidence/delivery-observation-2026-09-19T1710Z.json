@@ -1,0 +1,107 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T17:10:53Z",
+  "source": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "observedCommit": "afc4f1659f88dcfc41c6c59cd5d49b5443d79033",
+    "parent": "86696a5e4f1bd3ef00897d9b9218495e9d14b439"
+  },
+  "vercel": {
+    "capacityObserved": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "currentHeadDeployment": {
+      "id": "dpl_DjrgktCHdWxPzwtQNZhodJaCuUhE",
+      "sourceCommit": "afc4f1659f88dcfc41c6c59cd5d49b5443d79033",
+      "target": "production",
+      "state": "READY",
+      "url": "https://numina-production-aif3wug15-skott34-dot.vercel.app",
+      "aliases": [
+        "www.numinalabs.xyz",
+        "numina-production.vercel.app",
+        "numinalabs.xyz",
+        "numina-production-skott34-dot.vercel.app",
+        "numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    }
+  },
+  "productionEndpoints": {
+    "finalBuild": {
+      "url": "https://www.numinalabs.xyz/final-build.json",
+      "httpStatus": 200,
+      "schema": "numina.final-build.v1",
+      "status": "FINAL",
+      "vercelCache": "HIT",
+      "lastModified": "Sat, 19 Sep 2026 14:03:53 GMT",
+      "note": "The embedded delivery.website section still contains historical rate-limit/stale-transport metadata; that embedded historical field is not treated as the current Vercel provider state."
+    },
+    "deploymentReceipt": {
+      "url": "https://www.numinalabs.xyz/downloads/nusd/deployment-receipt.json",
+      "httpStatus": 200,
+      "schema": "numina.nusd.production-deployment-receipt.v1",
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "tokenBlock": "51725",
+      "tokenFinalConfirmations": 25,
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementBlock": "51726",
+      "settlementFinalConfirmations": 24,
+      "broadcastPerformed": true,
+      "finality": "FINAL"
+    },
+    "nusdStatus": {
+      "url": "https://www.numinalabs.xyz/api/nusd/v1/status",
+      "httpStatus": 200,
+      "schema": "numina.nusd.status.v1"
+    },
+    "deploymentEstimate": {
+      "url": "https://www.numinalabs.xyz/v2/network/deployment-estimate",
+      "httpStatus": 200,
+      "schema": "numina.deployment-estimate.v1",
+      "status": "FINAL",
+      "productionReady": true,
+      "requestId": "80208743-ddcd-4d65-9881-8f71cc1b176f"
+    }
+  },
+  "githubActions": {
+    "usableRunnerExecutionObserved": false,
+    "canonicalRun": {
+      "runId": 35447572134,
+      "runAttempt": 2,
+      "jobId": 105923447926,
+      "workflow": ".github/workflows/numina.yml",
+      "sourceCommit": "afc4f1659f88dcfc41c6c59cd5d49b5443d79033",
+      "status": "completed",
+      "conclusion": "failure",
+      "stepsObserved": false,
+      "logsObserved": false,
+      "artifacts": []
+    },
+    "deliveryWorkflowsRerun": false,
+    "reason": "The canonical NUMINA retry completed without observed runner-backed steps, logs, or artifacts, so the conditional website and mobile signing reruns were not claimed."
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "online": false,
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "fallbackUsed": false,
+    "signingIdentityChanged": false
+  },
+  "mobileDelivery": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false
+  },
+  "remainingBlockers": [
+    "GitHub Actions usable runner allocation / pre-step execution remains unavailable.",
+    "No signed Android or iOS artifact was produced, so store submission remains unclaimed.",
+    "VENGEANCE is offline.",
+    "/final-build.json still embeds historical delivery.website rate-limit/stale-transport metadata even though the current Vercel deployment is READY."
+  ],
+  "scope": "This observation records only provider, workflow, endpoint, and device receipts actually observed in this run. It does not establish external bank, custodian, exchange, broker, reserve, or app-store submissions beyond explicit provider receipts."
+}
