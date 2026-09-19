@@ -5,14 +5,14 @@ import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='987ae013bba6fa9f8287264f472bec31cad24c55';
+const FINAL_BUILD_MANIFEST_BLOB='16a880e1f878801cd98705c4192a47503ae7b5b0';
 const finalBuildBytes=readFileSync(finalBuildPath);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
 const finalBuild=JSON.parse(finalBuildBytes);
 if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
 if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');
-if(finalBuild.buildModel?.finalCount!==1||finalBuild.buildModel?.finalIdentity!=='NUMINA'||finalBuild.buildModel?.canonicalHeadIdentity!=='NUMINA')throw Error('FINAL build manifest identity model mismatch');
+if(finalBuild.buildModel?.finalCount!==1||finalBuild.buildModel?.finalIdentity!=='NUMINA'||finalBuild.buildModel?.canonicalHeadIdentity!=='NUMINA'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v1'||finalBuild.manifestContract?.finalAll!=='NUMINA')throw Error('FINAL build manifest identity model mismatch');
 const archive=resolve(process.argv[2]||`numina-release-v${pkg.version}.tar.gz`);
 const required=['dist/client','dist/server/index.js','dist/client/downloads/application-release-v4.json'];
 for(const path of required)if(!existsSync(path))throw Error('Missing NUMINA build output: '+path);
