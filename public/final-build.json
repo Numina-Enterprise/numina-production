@@ -44,7 +44,7 @@
       },
       {
         "account": "Numina Native Treasury",
-        "provider": "manual_finance_record",
+        "provider": "NUMINA",
         "unit": "NUSD",
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
