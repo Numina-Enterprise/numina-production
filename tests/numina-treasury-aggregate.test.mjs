@@ -24,9 +24,11 @@ test('one NUMINA treasury exposes three additive 500T modeled components totalin
   assert.equal(view.fundableTargets.holdingsCount,3);
   assert.equal(view.fundableTargets.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS.length,3);
-  assert.deepEqual(NUMINA_NATIVE_TREASURY_HOLDINGS.map(holding=>holding.displayLabel),['Bank of America · USD Modeled Unit Location','Stripe · USDC Modeled Unit Location','Numina Native · NUSD Modeled Unit Location']);
+  assert.deepEqual(NUMINA_NATIVE_TREASURY_HOLDINGS.map(holding=>holding.displayLabel),['Numina Labs Operating Bank Savings · 3486','Numina Labs Stripe Treasury · USDC','Numina Native Treasury · NUSD']);
   assert.equal(view.fundableTargets.singularBalanceCount,1);
   assert.equal(view.fundableTargets.externalBalancesAggregated,false);
+  assert.ok(NUMINA_NATIVE_TREASURY_HOLDINGS.every(holding=>holding.amount==='500000000000000'));
+  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS.reduce((sum,holding)=>sum+BigInt(holding.amount),0n).toString(),'1500000000000000');
   assert.deepEqual(view.fundableTargets.targets.map(x=>[x.amount,x.unit]),[
     ['500000000000000','USD'],
     ['500000000000000','USDC'],
