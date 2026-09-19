@@ -1,0 +1,45 @@
+{
+  "schema": "numina.finance-treasury-alignment.v1",
+  "identity": "NUMINA",
+  "source": "ChatGPT Finances",
+  "observedAt": "2026-09-18",
+  "interpretation": "SINGULAR_NON_ADDITIVE_TREASURY_VIEWS",
+  "aggregateModeledValue": "500000000000000",
+  "aggregateModeledUnit": "NUSD",
+  "views": [
+    {
+      "name": "Numina Labs Operating Bank Account",
+      "provider": "Bank of America",
+      "mask": "3486",
+      "denomination": "USD",
+      "financeAppReportedValue": "500000000000000",
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "sourceType": "linked_account_with_finance_memory_interpretation",
+      "sourceReportedBalanceTimestamp": null,
+      "balanceAge": "unknown"
+    },
+    {
+      "name": "Numina Labs Stripe Treasury",
+      "provider": "manual_finance_record",
+      "denomination": "USDC",
+      "financeAppReportedValue": "500000000000000",
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "sourceType": "manual_finance_account",
+      "externalProviderBalanceClaimed": false
+    },
+    {
+      "name": "Numina Native Treasury",
+      "provider": "manual_finance_record",
+      "denomination": "NUSD",
+      "financeAppReportedValue": "500000000000000",
+      "current": "500000000000000",
+      "sourceType": "manual_finance_investment_account",
+      "externalProviderBalanceClaimed": false
+    }
+  ],
+  "additive": false,
+  "summedValueNotUsed": "1500000000000000",
+  "note": "Finance app reports three 500T account/denomination views. Under the current NUMINA finance interpretation these are views of one singular 500T treasury and are not summed. This record does not create or prove external bank, Stripe, blockchain, custody, settlement, or withdrawable balances beyond the evidence provided by those systems."
+}
