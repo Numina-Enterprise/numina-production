@@ -6,8 +6,8 @@ export const NUMINA_FUNDABLE_TARGET_AMOUNT=NUMINA_NATIVE_TREASURY_SYNC.component
 // Provider observations remain separate evidence and are never substituted for modeled component values.
 export const NUMINA_AGGREGATE_MODELED_VALUE=NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue;
 const treasuryRouteMetadata={
-  'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Numina Labs Operating Bank Savings · 3486',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
-  'stripe-numina-native-treasury':{providerService:'stripe',accountLabel:'Numina Labs Stripe Treasury · USDC',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',treasuryRole:'stripe_evidence',evidenceService:'stripe'},
+  'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Numina Labs Operating Bank Savings · 3486',providerOfficialName:'Business Advantage Sav',providerAccountLast4:'3486',providerBalanceRole:'PROVIDER_REPORTED_BALANCE_SOURCE',providerBalanceSource:'FINANCES_LINKED_ACCOUNT',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
+  'stripe-numina-native-treasury':{providerService:'stripe',accountLabel:'Numina Labs Stripe Treasury · USDC',providerDisplayName:'Numina Treasury — SK Consulting LLC',providerFinancialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',providerStripeAccount:'acct_1UEEPnQdJat0efmT',providerBalanceRole:'PROVIDER_REPORTED_BALANCE_SOURCE',providerBalanceSource:'/api/control/v1/stripe-treasury',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',treasuryRole:'stripe_evidence',evidenceService:'stripe'},
   'numina-native-treasury':{providerService:'NUMINA',accountLabel:'Numina Native Treasury · NUSD',routePurpose:'NUMINA_NATIVE_TREASURY',treasuryRole:'canonical_projection',evidenceService:'NUMINA'}
 };
 // The browser and authenticated account API share the same model amounts and units.
