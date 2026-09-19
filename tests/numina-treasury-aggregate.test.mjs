@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {alignTreasuryAccounts,NUMINA_FUNDABLE_TARGET_AMOUNT,NUMINA_AGGREGATE_MODELED_VALUE} from '../src/treasury-alignment.js';
+import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
 
 test('one NUMINA treasury exposes three additive 500T modeled components totaling 1,500T',()=>{
   const view=alignTreasuryAccounts({
@@ -9,8 +10,9 @@ test('one NUMINA treasury exposes three additive 500T modeled components totalin
     verification_scope:'Numina-native model and journal integrity',
     projection:{balance:'500000000000000',unit:'NUSD'}
   },{accounts:[]});
-  assert.equal(NUMINA_FUNDABLE_TARGET_AMOUNT,'500000000000000');
-  assert.equal(NUMINA_AGGREGATE_MODELED_VALUE,'1500000000000000');
+  assert.equal(NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
+  assert.equal(NUMINA_FUNDABLE_TARGET_AMOUNT,NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue);
+  assert.equal(NUMINA_AGGREGATE_MODELED_VALUE,NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue);
   assert.equal(view.fundableTargets.aggregateModeledValue,'1500000000000000');
   assert.equal(view.fundableTargets.aggregateModeledUnit,'NUSD');
   assert.equal(view.fundableTargets.additive,true);
