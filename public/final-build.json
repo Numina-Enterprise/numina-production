@@ -24,9 +24,9 @@
     "aggregateModeledUnit": "NUSD",
     "components": [
       {
-        "account": "Numina Labs Operating Bank Account",
-        "provider": "Bank of America",
-        "mask": "3486",
+        "account": "Numina Native Treasury",
+        "provider": "NUMINA",
+        "routeProvider": "Bank of America",
         "unit": "USD",
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
@@ -35,12 +35,13 @@
         "identity": "NUMINA",
         "treasuryIdentity": "NUMINA",
         "singular": true,
-        "componentRole": true,
+        "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
       },
       {
-        "account": "Numina Labs Stripe Treasury",
-        "provider": "Stripe",
+        "account": "Numina Native Treasury",
+        "provider": "NUMINA",
+        "routeProvider": "Stripe",
         "unit": "USDC",
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
@@ -49,32 +50,33 @@
         "identity": "NUMINA",
         "treasuryIdentity": "NUMINA",
         "singular": true,
-        "componentRole": true,
+        "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
       },
       {
         "account": "Numina Native Treasury",
         "provider": "NUMINA",
+        "routeProvider": "NUMINA",
         "unit": "NUSD",
         "modeledValue": "500000000000000",
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
-        "nativeConfirmation": true,
+        "externalProviderBalanceAsserted": false,
         "identity": "NUMINA",
         "treasuryIdentity": "NUMINA",
         "singular": true,
-        "componentRole": true,
+        "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
       }
     ],
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": true,
     "balanceCount": 1,
-    "componentsAre": "three_additive_500T_component_roles_of_one_singular_numina_treasury",
+    "componentsAre": "three_additive_native_holdings_inside_one_singular_numina_native_treasury_account",
     "modelDefinition": {
       "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "There is exactly one singular NUMINA treasury identity and one singular 1,500T internal aggregate balance. USD, USDC and NUSD are three additive 500T component roles of that same treasury, not separate treasuries or authorities. The Numina Native Treasury confirms the internal modeled amounts; external provider balances are not asserted.",
+      "scope": "Exactly one singular Numina Native Treasury account holds three additive internal holdings: 500T USD, 500T USDC, and 500T NUSD, totaling 1,500T. Bank of America and Stripe are route/provider references for the USD and USDC holdings and are not separate NUMINA treasury accounts or balances.",
       "sourceRepository": "skott34-dot/numina-production",
       "sourceBranch": "main"
     },
@@ -105,7 +107,10 @@
       "componentCount": 3,
       "balanceCount": 1,
       "componentsAreSeparateTreasuries": false,
-      "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "accountCount": 1,
+      "holdingsCount": 3
     },
     "treasuryIdentity": "NUMINA",
     "singularIdentity": "NUMINA",
@@ -113,7 +118,59 @@
     "treasuryCount": 1,
     "componentCount": 3,
     "componentsAreSeparateTreasuries": false,
-    "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "accountCount": 1,
+    "holdingsCount": 3,
+    "nativeAccount": {
+      "id": "numina-native-treasury",
+      "name": "Numina Native Treasury",
+      "identity": "NUMINA",
+      "treasuryIdentity": "NUMINA",
+      "singular": true,
+      "valuationMode": "holdings"
+    },
+    "nativeHoldings": [
+      {
+        "id": "native-usd",
+        "account": "Numina Native Treasury",
+        "unit": "USD",
+        "modeledValue": "500000000000000",
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "holdingRole": true,
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "routeProvider": "Bank of America",
+        "externalProviderBalanceAsserted": false
+      },
+      {
+        "id": "native-usdc",
+        "account": "Numina Native Treasury",
+        "unit": "USDC",
+        "modeledValue": "500000000000000",
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "holdingRole": true,
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "routeProvider": "Stripe",
+        "externalProviderBalanceAsserted": false
+      },
+      {
+        "id": "native-nusd",
+        "account": "Numina Native Treasury",
+        "unit": "NUSD",
+        "modeledValue": "500000000000000",
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "holdingRole": true,
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "routeProvider": "NUMINA",
+        "externalProviderBalanceAsserted": false
+      }
+    ]
   },
   "nusd": {
     "chainId": "962421430",
@@ -325,7 +382,10 @@
       "singular": true,
       "treasuryCount": 1,
       "componentCount": 3,
-      "balanceCount": 1
+      "balanceCount": 1,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "accountCount": 1,
+      "holdingsCount": 3
     }
   },
   "buildModel": {
@@ -489,7 +549,9 @@
       "stripe_observation",
       "release_evidence",
       "build_pipeline",
-      "tests"
+      "tests",
+      "native_holdings",
+      "finance_account_model"
     ],
     "externalProviderBalancesAsserted": false,
     "externalProviderReadsRequired": false,
@@ -497,6 +559,9 @@
     "syncContract": "numina.native-treasury.sync.v1",
     "identityHeadCount": 1,
     "canonicalHeadCount": 1,
-    "canonicalHeadIdentity": "NUMINA"
+    "canonicalHeadIdentity": "NUMINA",
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "accountCount": 1,
+    "holdingsCount": 3
   }
 }
