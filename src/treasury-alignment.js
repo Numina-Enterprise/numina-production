@@ -6,9 +6,9 @@ export const NUMINA_FUNDABLE_TARGET_AMOUNT=NUMINA_NATIVE_TREASURY_SYNC.component
 // Provider observations remain separate evidence and are never substituted for modeled component values.
 export const NUMINA_AGGREGATE_MODELED_VALUE=NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue;
 const treasuryRouteMetadata={
-  'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Bank of America Savings ACH route',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
-  'stripe-numina-native-treasury':{providerService:'stripe',accountLabel:'Stripe Treasury USDC address',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',treasuryRole:'stripe_evidence',evidenceService:'stripe'},
-  'numina-native-treasury':{providerService:'NUMINA',accountLabel:'Numina Native Treasury',routePurpose:'NUMINA_NATIVE_TREASURY',treasuryRole:'canonical_projection',evidenceService:'NUMINA'}
+  'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Numina Labs Operating Bank Savings · 3486',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
+  'stripe-numina-native-treasury':{providerService:'stripe',accountLabel:'Numina Labs Stripe Treasury · USDC',routePurpose:'STRIPE_TREASURY_USDC_ADDRESS',treasuryRole:'stripe_evidence',evidenceService:'stripe'},
+  'numina-native-treasury':{providerService:'NUMINA',accountLabel:'Numina Native Treasury · NUSD',routePurpose:'NUMINA_NATIVE_TREASURY',treasuryRole:'canonical_projection',evidenceService:'NUMINA'}
 };
 // The browser and authenticated account API share the same model amounts and units.
 // Route metadata describes evidence roles; it never supplies provider funds.
