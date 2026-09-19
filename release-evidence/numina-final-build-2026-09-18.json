@@ -292,13 +292,14 @@
     },
     "allocationInstruction": {
       "schema": "numina.treasury.allocation-instruction.v1",
-      "status": "INITIATED",
+      "status": "SUBMITTED",
       "record": "release-evidence/treasury-allocation-instruction-2026-09-19.json",
       "aggregateNusd": "1500000000000000",
       "aggregateChanged": false,
-      "stripeStatus": "INITIATED_AWAITING_CHAIN_BROADCAST",
-      "bankStatus": "INITIATED_AWAITING_BANK_ORIGINATOR_SUBMISSION",
-      "nativeStatus": "RETAINED_CONFIRMED"
+      "stripeStatus": "SUBMITTED_AWAITING_CHAIN_RECEIPT",
+      "bankStatus": "SUBMITTED_AWAITING_BANK_POSTING_RECEIPT",
+      "nativeStatus": "RETAINED_CONFIRMED",
+      "submissionPerformed": true
     }
   },
   "nusd": {
