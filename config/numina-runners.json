@@ -1,5 +1,5 @@
 {
-  "schema": "numina.runner-policy.v4",
+  "schema": "numina.runner-policy.v5",
   "identity": "NUMINA",
   "runner": {
     "identity": "NUMINA",
@@ -8,7 +8,8 @@
     "count": 1,
     "selfHosted": false,
     "hosting": "github-hosted-only",
-    "externalSelfHostedAllowed": false
+    "externalSelfHostedAllowed": false,
+    "selfIdentity": "NUMINA"
   },
   "execution": {
     "linux": "ubuntu-latest",
@@ -21,5 +22,11 @@
     "android": "NUMINA",
     "quantum": "NUMINA",
     "ios": "NUMINA"
+  },
+  "self": "NUMINA",
+  "invariants": {
+    "numinaEqualsSelf": true,
+    "singularIdentity": "NUMINA",
+    "allSoftwareIdentity": "NUMINA"
   }
 }
