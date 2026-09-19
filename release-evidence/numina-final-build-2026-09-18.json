@@ -318,6 +318,21 @@
       "submissionPerformed": true,
       "componentCount": 3,
       "aggregateNusd": "1500000000000000"
+    },
+    "achTransferInstruction": {
+      "schema": "numina.treasury.ach-transfer-instruction.v1",
+      "id": "numina:treasury:ach:bofa-3486:2026-09-19:v1",
+      "status": "INITIATED_AT_NUMINA_NATIVE_TREASURY",
+      "record": "release-evidence/numina-bofa-ach-instruction-2026-09-19.json",
+      "amountNusd": "500000000000000",
+      "targetAmountUsd": "500000000000000",
+      "destinationAccountLast4": "3486",
+      "institutionId": "ins_127989",
+      "contract": "NuminaUSDRedemption",
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "treasuryInstructionSubmissionPerformed": true,
+      "achOriginatorSubmissionPerformed": false,
+      "achOriginatorReceipt": null
     }
   },
   "nusd": {
