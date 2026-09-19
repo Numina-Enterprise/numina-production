@@ -7,6 +7,7 @@ import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 import {NUMINA_TREASURY_CURRENT_POLICY} from '../src/treasury-policy.js';
+import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
 
 test('NUMINA is the canonical active identity',()=>{
   for(const field of ['root','manifest','identity','database','storage','transactionAuthority','journal']){
@@ -22,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='fa44a0c6a8e91cf12d11287e890ed5df4d64a5d6';
+  const FINAL_BUILD_MANIFEST_BLOB='0cc08b7b08b8fc01f90a4809b17ce2b0811bc580';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -41,7 +42,11 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.manifestContract.finalAll,'NUMINA');
   assert.equal(finalBuild.manifestContract.role,'synchronized_projection');
   assert.equal(finalBuild.manifestContract.synchronization,'ACROSS_ALL');
-  assert.equal(finalBuild.treasury.verifiedModeledValue,'1500000000000000');
+  assert.equal(NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
+  assert.equal(finalBuild.treasury.sourceOfRecord,NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord);
+  assert.equal(finalBuild.syncAll.sourceOfRecord,NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord);
+  assert.equal(finalBuild.syncAll.syncContract,NUMINA_NATIVE_TREASURY_SYNC.schema);
+  assert.equal(finalBuild.treasury.verifiedModeledValue,NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue);
   assert.equal(finalBuild.treasury.verificationScope,'NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE');
   assert.equal(finalBuild.treasury.verifiedModeledValueScope,'INTERNAL_NUMINA_MODEL_ONLY');
   assert.equal(finalBuild.treasury.githubAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
