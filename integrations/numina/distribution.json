@@ -106,7 +106,7 @@
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledValue": "500000000000000",
     "aggregateModeledUnit": "NUSD",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
@@ -116,8 +116,11 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": true,
-    "externalBalancesAggregated": false
+    "modeledRoleValuesAdditive": false,
+    "externalBalancesAggregated": false,
+    "aggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
+    "verifiedModeledValue": "500000000000000",
+    "verificationScope": "NUMINA_NATIVE_JOURNAL"
   },
   "treasury_client_verification": {
     "schema": "numina.treasury.client-verification.v2",
@@ -132,7 +135,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "882cb55e57e01b8cedd7db52f1beda82168d0af18c8285bb316c2ae8f08e67cf"
+      "sha256": "ec9c4bab779dc36a15d9af693ea9abf1fa80aec18dba6e750ec3d8cda3fa234f"
     },
     "checks": [
       "canonical_journal_record",
