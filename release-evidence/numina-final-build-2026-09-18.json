@@ -27,62 +27,56 @@
       {
         "account": "Numina Labs Operating Bank Account",
         "provider": "Bank of America",
-        "mask": "3486",
         "unit": "USD",
         "modeledValue": "500000000000000",
-        "providerReportedCurrentValue": "0",
-        "providerReportedAvailableValue": "0",
-        "providerBalanceFreshness": "unknown",
-        "resyncRequested": true
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "externalProviderBalanceAsserted": false
       },
       {
         "account": "Numina Labs Stripe Treasury",
         "provider": "Stripe",
-        "providerAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "unit": "USDC",
         "modeledValue": "500000000000000",
-        "providerReportedAvailableValue": "0",
-        "providerReportedAvailableUnit": "USDC",
-        "providerReportedUsdAvailableValue": "0",
-        "providerInboundPendingUsdc": "0",
-        "providerOutboundPendingUsdc": "0",
-        "providerStatus": "open",
-        "providerObservationVerified": true
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "externalProviderBalanceAsserted": false
       },
       {
         "account": "Numina Native Treasury",
-        "provider": "manual_finance_record",
+        "provider": "NUMINA",
         "unit": "NUSD",
         "modeledValue": "500000000000000",
-        "financeAppReportedValue": "500000000000000"
+        "internalAmountConfirmed": true,
+        "confirmationSource": "NUMINA_NATIVE_TREASURY",
+        "nativeConfirmation": true
       }
     ],
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": true,
     "balanceCount": 3,
-    "componentsAre": "three_additive_500T_modeled_components_of_one_singular_1500T_numina_treasury_with_external_provider_observations_separate",
+    "componentsAre": "three_additive_500T_internal_modeled_components_confirmed_by_numina_native_treasury",
     "modelDefinition": {
-      "basis": "verified_numina_native_journal",
+      "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "One singular 1,500T NUMINA treasury model composed of three additive 500T components: USD, USDC and NUSD. Provider observations remain separate external facts and do not automatically verify the modeled external components.",
-      "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
+      "scope": "GitHub-only NUMINA alignment. The Numina Native Treasury confirms all three internal modeled 500T components and the 1,500T aggregate. No external bank, Stripe, custodian, settlement or spendable balance is asserted by this record.",
+      "sourceRepository": "skott34-dot/numina-production",
+      "sourceBranch": "main"
     },
-    "submissions": {
-      "record": "/api/treasury/v1/submissions",
-      "access": "owner_authenticated",
-      "applicationSubmissionPerformed": false,
-      "ownerReportedSubmission": true,
-      "providerSubmissionVerified": false,
-      "settlementReceipts": []
-    },
-    "verifiedModeledValue": "500000000000000",
-    "verifiedModeledValueScope": "NUMINA_NATIVE_COMPONENT_ONLY",
-    "verificationScope": "NUMINA_ADDITIVE_TREASURY_MODEL_WITH_NATIVE_COMPONENT_VERIFIED_AND_PROVIDER_OBSERVATIONS_SEPARATE",
-    "providerRefresh": {
-      "bankOfAmerica": "resync_requested",
-      "robinhood": "resync_requested",
-      "stripe": "live_read_completed",
-      "externalProviderFactsRemainSeparate": true
+    "verifiedModeledValue": "1500000000000000",
+    "verifiedModeledValueScope": "INTERNAL_NUMINA_MODEL_ONLY",
+    "verificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE",
+    "githubAlignment": {
+      "status": "GITHUB_ONLY_NATIVE_TREASURY_CONFIRMED",
+      "repository": "skott34-dot/numina-production",
+      "branch": "main",
+      "confirmationSource": "NUMINA_NATIVE_TREASURY",
+      "confirmedComponentCount": 3,
+      "eachModeledComponentValue": "500000000000000",
+      "aggregateModeledValue": "1500000000000000",
+      "additive": true,
+      "externalProviderBalancesUsed": false,
+      "externalProviderBalancesAsserted": false
     }
   },
   "nusd": {
@@ -141,10 +135,11 @@
   "delivery": {
     "source": {
       "status": "FINAL",
+      "sourceAuthority": "GitHub",
       "canonicalRepository": "skott34-dot/numina-production",
-      "verifiedCodeCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
+      "sourceRef": "refs/heads/main",
       "sourceState": "COMMITTED",
-      "evidenceRefreshBaseCommit": "f5eb9325a810209c3ea691cea010960e483f864f"
+      "externalExecutionVerified": false
     },
     "smartContracts": {
       "status": "FINAL",
@@ -240,10 +235,10 @@
       "contractDecimals": 18,
       "existingContractPreserved": true,
       "productionVerified": false,
-      "verificationScope": "Current main carries the 1,500T additive model and GitHub reports Vercel success. Public custom-domain content was not independently reverified in this refresh.",
+      "verificationScope": "GitHub-only treasury alignment from the Numina Native Treasury confirmation. External provider balances and deployment verification are outside this record.",
       "authenticatedTreasuryProductionVerified": false,
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS",
-      "modelVerificationScope": "NUMINA_ADDITIVE_MODEL; native component verified internally, external provider observations separate"
+      "modelVerificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODEL_ONLY"
     }
   },
   "buildModel": {
@@ -265,21 +260,17 @@
     ],
     "historicalReceiptsPreservedAsEvidence": true,
     "currentSourceCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
-    "synchronization": "ACROSS_ALL"
+    "synchronization": "ACROSS_ALL",
+    "currentSourceRef": "refs/heads/main"
   },
   "updateAll": {
     "requested": true,
     "date": "2026-09-19",
-    "source": "main",
+    "source": "GitHub main only",
     "treasuryModel": "1500T_additive",
-    "providerRefreshesRequested": [
-      "Bank of America",
-      "Robinhood"
-    ],
-    "providerReadsCompleted": [
-      "Stripe"
-    ],
-    "mobileSigningRequestedByReleaseEvidencePush": true,
-    "storePublicationRemainsReceiptGated": true
+    "confirmationSource": "NUMINA_NATIVE_TREASURY",
+    "confirmedComponentCount": 3,
+    "externalProviderReadsUsed": false,
+    "externalProviderBalancesAsserted": false
   }
 }
