@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='1fb3e00b9ece3ba060aff34d9ae161325756e404';
+  const FINAL_BUILD_MANIFEST_BLOB='093e3ba6a90696e0ce5e2c365a2603f4820440b2';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -89,6 +89,13 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.nusd.status,'ACTIVE');
   assert.equal(finalBuild.nusd.live,true);
   assert.equal(finalBuild.nusd.paused,false);
+  assert.equal(finalBuild.nusd.mintReceipt.status,'FINAL');
+  assert.equal(finalBuild.nusd.mintReceipt.path,'/downloads/nusd/mint-receipt.json');
+  assert.equal(finalBuild.nusd.mintReceipt.transactionHash,'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b');
+  assert.equal(finalBuild.nusd.mintReceipt.receiptStatus,'0x1');
+  assert.equal(finalBuild.nusd.mintReceipt.blockNumber,'51725');
+  assert.equal(finalBuild.nusd.mintReceipt.finalConfirmations,25);
+  assert.equal(finalBuild.nusd.token.mintReceiptVerified,true);
   assert.equal(finalBuild.nusd.contracts.usdcConversion.status,'ACTIVE_SIGNED_1_TO_1_VERIFIED');
   assert.equal(finalBuild.nusd.contracts.usdcConversion.chainReceiptRecorded,false);
   assert.equal(finalBuild.nusd.contracts.usdRedemption.status,'ACTIVE_SIGNED_1_TO_1_VERIFIED');
