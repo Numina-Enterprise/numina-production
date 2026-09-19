@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {CONTROL_STORAGE} from '../src/control-store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
@@ -48,4 +48,13 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(WALLET_EXECUTION_POLICY.requestSha256,NUMINA_OWNER_APPROVAL.requestSha256);
   assert.equal(WALLET_EXECUTION_POLICY.artifactSha256,'3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2');
   assert.equal(WALLET_EXECUTION_POLICY.creationSha256,'1b07ec294a2fe3d38f12d2458efde3cbdeadc056ea096db0ee665ec68173906a');
+});
+
+
+test('self-hosted runners are denied',()=>{
+  const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
+  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
+    const content=readFileSync(new URL(name,workflowsUrl),'utf8');
+    assert.equal(/self-hosted/i.test(content),false,name+' must not use self-hosted runners');
+  }
 });
