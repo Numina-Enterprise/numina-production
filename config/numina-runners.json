@@ -1,12 +1,14 @@
 {
-  "schema": "numina.runner-policy.v3",
+  "schema": "numina.runner-policy.v4",
   "identity": "NUMINA",
   "runner": {
     "identity": "NUMINA",
     "name": "NUMINA",
     "singular": true,
     "count": 1,
-    "selfHosted": false
+    "selfHosted": false,
+    "hosting": "github-hosted-only",
+    "externalSelfHostedAllowed": false
   },
   "execution": {
     "linux": "ubuntu-latest",
