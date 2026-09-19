@@ -1,16 +1,22 @@
 // Owner-designated model and activation statement; provider bindings identify real external endpoints but do not turn modeled allocations into provider balances.
 export const NUMINA_NATIVE_TREASURY_SYNC = Object.freeze({
   schema:'numina.native-treasury.sync.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:'NUMINA_NATIVE_TREASURY',
-  singular:true,treasuryCount:1,componentCount:3,balanceCount:1,
+  singular:true,treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',
   aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),
   aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',externalProviderBalancesAsserted:false,externalProviderBalancesUsed:false,externalBalancesAggregated:false,externalExecutionPerformed:false
 });
+export const NUMINA_NATIVE_TREASURY_HOLDINGS = Object.freeze([
+  Object.freeze({id:'native-usd',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',holdingRole:true,unit:'USD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'Bank of America'}),
+  Object.freeze({id:'native-usdc',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',holdingRole:true,unit:'USDC',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'Stripe'}),
+  Object.freeze({id:'native-nusd',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',holdingRole:true,unit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA'})
+]);
 export const NUMINA_TREASURY_CONNECTION = Object.freeze({
-  schema:'numina.treasury.website-connection.v1',identity:NUMINA_NATIVE_TREASURY_SYNC.identity,treasuryIdentity:NUMINA_NATIVE_TREASURY_SYNC.treasuryIdentity,sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,
+  schema:'numina.treasury.website-connection.v1',identity:NUMINA_NATIVE_TREASURY_SYNC.identity,treasuryIdentity:NUMINA_NATIVE_TREASURY_SYNC.treasuryIdentity,sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
   recordedAt:'2026-09-19T07:00:00Z',basis:'verified_numina_native_journal',
   aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',
   aggregation:NUMINA_NATIVE_TREASURY_SYNC.aggregation,modeledAllocationsAdditive:true,componentsAreSeparateTreasuries:false,externalBalancesAggregated:NUMINA_NATIVE_TREASURY_SYNC.externalBalancesAggregated,
   verifiedModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,verificationScope:'NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_AGGREGATE',verificationRoute:'/api/control/v1/treasury',confirmationSource:'NUMINA_NATIVE_TREASURY',
+  nativeAccount:Object.freeze({id:'numina-native-treasury',name:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,valuationMode:'holdings'}),nativeHoldings:NUMINA_NATIVE_TREASURY_HOLDINGS,
   modelDecimals:18,declaredRate:'1 NUSD = 1 USDC = 1 USD',
   nativeJournal:'/api/control/v1/treasury',providerBalances:'/api/control/v1/stripe-treasury',
   providerRoutes:'/api/control/v2/treasury/provider-routes',bankConfiguration:'/api/treasury/v1/bank-route',privateAccess:'owner_authenticated',
@@ -34,11 +40,11 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
     })
   }),
   allocations:Object.freeze([
-    Object.freeze({id:'bank-of-america-savings',label:'Bank of America Savings · ACH',unit:'USD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'ach',connection:'owner_configuration_read',destination:null,treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false}),
-    Object.freeze({id:'stripe-numina-native-treasury',label:'Stripe Treasury · USDC',unit:'USDC',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'crypto_wallet',connection:'owner_authenticated_read',provider:'Stripe',providerAccountReference:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',providerAccountBindingVerified:true,destination:'/api/control/v2/treasury/provider-routes',treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false}),
-    Object.freeze({id:'numina-native-treasury',label:'Numina Native Treasury · NUSD',unit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'native_journal',connection:'owner_authenticated_read',destination:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false})
+    Object.freeze({id:'bank-of-america-savings',label:'Bank of America Savings · ACH',holdingRef:'native-usd',unit:'USD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'ach',connection:'owner_configuration_read',destination:null,treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false}),
+    Object.freeze({id:'stripe-numina-native-treasury',label:'Stripe Treasury · USDC',holdingRef:'native-usdc',unit:'USDC',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'crypto_wallet',connection:'owner_authenticated_read',provider:'Stripe',providerAccountReference:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',providerAccountBindingVerified:true,destination:'/api/control/v2/treasury/provider-routes',treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false}),
+    Object.freeze({id:'numina-native-treasury',label:'Numina Native Treasury · NUSD',holdingRef:'native-nusd',unit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'native_journal',connection:'owner_authenticated_read',destination:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false})
   ]),
-  scope:'There is exactly one singular NUMINA treasury identity and one singular 1,500T internal aggregate balance. USD, USDC and NUSD are three additive 500T component roles of that same treasury, not three separate treasuries or authorities. The Numina Native Treasury confirms those internal modeled amounts. External provider balances, custody and settlement are not asserted by this internal confirmation.'
+  scope:'There is exactly one singular Numina Native Treasury account and one 1,500T internal aggregate balance. USD, USDC and NUSD are three additive 500T native holdings inside that account. Bank of America and Stripe are route/provider references for the USD and USDC holdings, not separate NUMINA treasury accounts or balances. External provider balances, custody and settlement are not asserted by this internal confirmation.'
 });
 export const NUSD_OPERATOR_ACTIVATION = Object.freeze({
   schema:'numina.nusd.operator-activation.v1',status:'active_operator_confirmed',
