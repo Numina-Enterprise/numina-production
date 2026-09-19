@@ -29,19 +29,14 @@
     "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
   },
   "treasuryInstructionSubmissionPerformed": true,
-  "achOriginatorSubmissionPerformed": true,
   "achOriginatorReceipt": null,
   "note": "Endpoint: 073000176. Endpoint Identity: SK Consulting LLC. Treasury Identity: NUMINA NATIVE TREASURY. ACH Originator Identity: NUMINA. Instruction State: INITIATED. No ACH trace number is recorded by this instruction.",
   "achTraceNumber": null,
-  "authorizationStatus": "AUTHORIZED",
-  "numinaExecutionPerformed": false,
-  "externalAchOriginatorConfirmed": true,
-  "achOriginatorSubmissionSource": "NUMINA_NATIVE_TREASURY",
-  "treasuryIdentity": "NUMINA NATIVE TREASURY",
-  "achOriginatorIdentity": "NUMINA",
-  "originatorAndTreasurySingular": true,
-  "originatorRole": "NUMINA_NATIVE_TREASURY",
-  "endpoint": "073000176",
-  "endpointIdentity": "SK Consulting LLC",
-  "instructionState": "INITIATED"
+  "execution": {
+    "endpoint": "073000176",
+    "endpointIdentity": "SK Consulting LLC",
+    "treasuryIdentity": "NUMINA NATIVE TREASURY",
+    "achOriginatorIdentity": "NUMINA",
+    "instructionState": "INITIATED"
+  }
 }
