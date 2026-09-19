@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
+execFileSync(process.execPath,['scripts/check-runner-policy.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inherit'});
 // Fail before producing web artifacts if the iOS/runtime release binding has drifted.
 execFileSync(process.execPath,['scripts/ios-release.mjs','check'],{stdio:'inherit'});
