@@ -31,10 +31,14 @@
   "treasuryInstructionSubmissionPerformed": true,
   "achOriginatorSubmissionPerformed": true,
   "achOriginatorReceipt": null,
-  "note": "ACH instruction executed at the NUMINA Native Treasury. External ACH originator and submission are owner-confirmed. Destination routing reference 073000176 remains distinct from a provider-issued ACH trace number, which is not yet recorded.",
+  "note": "NUMINA is both the Native Treasury and the ACH originator identity in the singular software model. ACH instruction executed at the NUMINA Native Treasury. Destination routing reference 073000176 remains distinct from a provider-issued ACH trace number, which is not yet recorded.",
   "achTraceNumber": null,
   "authorizationStatus": "AUTHORIZED",
   "numinaExecutionPerformed": true,
   "externalAchOriginatorConfirmed": true,
-  "achOriginatorSubmissionSource": "OWNER_CONFIRMED"
+  "achOriginatorSubmissionSource": "NUMINA_NATIVE_TREASURY",
+  "treasuryIdentity": "NUMINA",
+  "achOriginatorIdentity": "NUMINA",
+  "originatorAndTreasurySingular": true,
+  "originatorRole": "NUMINA_NATIVE_TREASURY"
 }
