@@ -57,8 +57,8 @@ jobs:
 
           if failures:
               for path, line_number, reference in failures:
-                  print(f'UNPINNED {path}:{line_number}: {reference}')
-              raise SystemExit(f'{len(failures)} mutable workflow dependency reference(s) found')
+                  print(f'POLICY_VIOLATION {path}:{line_number}: {reference}')
+              raise SystemExit(f'{len(failures)} workflow policy violation(s) found')
 
           print(f'Validated {len(checked)} immutable external workflow dependency reference(s).')
           print(f'Validated {len(runner_checks)} GitHub-hosted runner declaration(s); self-hosted runners are denied.')
