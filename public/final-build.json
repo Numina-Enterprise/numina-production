@@ -166,7 +166,7 @@
       "sourceAligned": true,
       "productionTransportUpdated": false,
       "currentPublicDeploymentKnownStale": true,
-      "blocker": "VERCEL_BUILD_RATE_LIMIT_CONNECTED_ACCOUNT",
+      "blocker": "CUSTOM_DOMAIN_NOT_PROMOTED_TO_LATEST_PRO_DEPLOYMENT",
       "verifiedAt": "2026-09-18T22:51:45Z",
       "observedDeployment": {
         "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
@@ -198,11 +198,16 @@
         "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "status": "READY"
       },
-      "status": "SOURCE_UPDATED_EXTERNAL_DELIVERY_BLOCKED_BY_VERCEL_RATE_LIMIT",
+      "status": "PRO_DEPLOYMENT_READY_CUSTOM_DOMAIN_STALE",
       "latestRedeployAttempt": {
-        "result": "blocked_by_vercel_build_rate_limit",
-        "sourceCommit": "17f64d779ae075df45ea747f7d5dc3880f9b3c88",
-        "observedAt": "2026-09-19T05:22:00Z"
+        "result": "pro_vercel_deployment_completed_custom_domain_still_stale",
+        "sourceCommit": "fedac265c6cf75f275aa8bfc504d1069db6a96b7",
+        "observedAt": "2026-09-19T05:24:47Z",
+        "providerStatus": "success",
+        "providerDescription": "Deployment has completed",
+        "vercelScope": "numina-167f7fe7",
+        "deploymentDashboard": "https://vercel.com/numina-167f7fe7/numina-production/428VPc3GGbUCqx523x7S6YuCusvF",
+        "customDomainObservation": "www.numinalabs.xyz/treasury still serves the prior 1,500T treasury presentation"
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
@@ -234,7 +239,7 @@
         },
         "sourceTreeMatchesNumina": true
       },
-      "vercelRole": "historical_only",
+      "vercelRole": "current_source_deployed_on_pro_scope_custom_domain_not_promoted",
       "activeReleasePath": "NUMINA",
       "identity": "NUMINA"
     },
@@ -269,7 +274,7 @@
       "identity": "NUMINA"
     },
     "browserAlignment": {
-      "status": "SOURCE_ALIGNED_EXTERNAL_DELIVERY_UNVERIFIED",
+      "status": "SOURCE_ALIGNED_PRO_DEPLOYED_CUSTOM_DOMAIN_STALE",
       "modelBalance": "500000000000000",
       "modelUnits": [
         "USD",
@@ -287,7 +292,7 @@
         "fullSuiteRunThisObservation": false
       },
       "productionVerified": false,
-      "verificationScope": "NUMINA source is aligned to the Finance-app treasury model. External production delivery remains unverified for the current head.",
+      "verificationScope": "The latest NUMINA source has a successful Pro Vercel deployment status, but the public custom domain still serves the prior treasury presentation and is therefore not promoted/verified for the current aligned source.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_FINANCE_APP_VIEWS",
