@@ -2,6 +2,7 @@ import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto'
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 import {PINNED_RUNTIME_KEY_ID,PINNED_RUNTIME_PUBLIC_KEY,RUNTIME_ORIGIN,RUNTIME_VERSION} from '../public/runtime-contract.js';
+import {readSignedTransport} from './trusted-release-evidence.mjs';
 
 const EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||'').trim(),EVIDENCE_PATH=(process.env.NUMINA_PROVIDER_EVIDENCE_PATH||'').trim();
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex'),MAX_BYTES=262144,MAX_AGE_MS=5*60*1000,MAX_FUTURE_SKEW_MS=60*1000;
@@ -16,10 +17,7 @@ function fresh(timestamp,label){const time=Date.parse(timestamp);assert(Number.i
 
 if(EXPECTED_GIT_SHA)assert(/^[0-9a-f]{40}$/i.test(EXPECTED_GIT_SHA),'NUMINA_EXPECTED_GIT_SHA must be a full Git SHA');
 const transportResponse=await get('/v1/deployment/provenance');
-const transportObservation=verifyEnvelope(transportResponse.receipt,'NUMINA_TRANSPORT_OBSERVATION');
-assert(sameJson(transportObservation,transportResponse.transport?.observation),'transport observation receipt mismatch');
-assert(transportResponse.root==='NUMINA'&&transportResponse.manifest==='NUMINA'&&transportResponse.deployment==='NUMINA'&&transportResponse.deployed===true,'transport response changed NUMINA');
-assert(transportResponse.transport?.role==='diagnostic_only','transport observation is not diagnostic only');
+const {observation:transportObservation,verified:transportVerified}=readSignedTransport(transportResponse,{verifyEnvelope,expectedGitSha:EXPECTED_GIT_SHA||undefined});
 const sourceCommit=EXPECTED_GIT_SHA||String(transportObservation.git_commit_sha||'');
 assert(/^[0-9a-f]{40}$/i.test(sourceCommit),'source commit unavailable');
 const transportCurrent=transportObservation.git_commit_sha?.toLowerCase()===sourceCommit.toLowerCase();
@@ -44,7 +42,7 @@ let evidenceArchive=null;
 if(EVIDENCE_PATH){
   const base={schema:'numina.provider-evidence-archive.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',
     archived_at:new Date().toISOString(),source_commit:sourceCommit,
-    transport:{identity:'NUMINA',role:'diagnostic_only',verified:transportResponse.transport?.verified===true,current_expected_commit:transportCurrent,observation:transportObservation,receipt:transportResponse.receipt},
+    transport:{identity:'NUMINA',role:'diagnostic_only',verified:transportVerified,current_expected_commit:transportCurrent,observation:transportObservation,receipt:transportResponse.receipt},
     observation_set:response.observation_set,observation_receipt:response.receipt,observation_receipt_sha256:digest(response.receipt),signing_key_id:PINNED_RUNTIME_KEY_ID,
     credentialed:false,partnership_status:'asserted',external_execution_performed:false,hash_scope:'canonical JSON of this archive excluding archive_sha256'};
   const archive_sha256=digest(base),archive={...base,archive_sha256},target=resolve(EVIDENCE_PATH);mkdirSync(dirname(target),{recursive:true});writeFileSync(target,JSON.stringify(archive,null,2)+'\n',{encoding:'utf8',mode:0o600});

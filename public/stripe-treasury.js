@@ -10,7 +10,7 @@ function stripeProviderRouteControl(generation){
     try{
       const data=await requestJson('/api/control/v2/treasury/provider-routes',{signal:stripeScope.signal,timeoutMs:12000});
       if(!stripeScope.isCurrent(generation))return;
-      if(data.schema!=='numina.treasury.provider-routes.v1'||data.provider!=='Stripe'||data.connection!=='read_only'||data.transfer_execution!==false||data.submission_performed!==false||data.receipt!==null||data.nusd?.provider_acceptance_verified!==false||!['NOT_REPORTED','OBSERVATION_INCOMPLETE','ASSET_IDENTITY_NOT_VERIFIED'].includes(data.nusd.status)||typeof data.complete!=='boolean'||!Array.isArray(data.routes)||data.routes.length>50)throw Error('Invalid provider routes');
+      if(data.schema!=='numina.treasury.provider-routes.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='Stripe'||data.connection!=='read_only'||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd?.provider_acceptance_verified!==false||!['NOT_REPORTED','OBSERVATION_INCOMPLETE','ASSET_IDENTITY_NOT_VERIFIED'].includes(data.nusd.status)||typeof data.complete!=='boolean'||!Array.isArray(data.routes)||data.routes.length>50)throw Error('Invalid provider routes');
       const nodes=[stripeNode('p',data.nusd.status==='NOT_REPORTED'?'Stripe has not listed an NUSD deposit route.':data.nusd.status==='OBSERVATION_INCOMPLETE'?'The provider route list is incomplete; NUSD acceptance is unverified.':'Stripe reports an NUSD label; the token identity still requires verification.')];
       for(const route of data.routes){
         if(!['currency','network','address','status'].every(key=>typeof route[key]==='string'&&route[key].length<=256)||!(route.memo===null||typeof route.memo==='string'&&route.memo.length<=256)||typeof route.provider_reported_active!=='boolean')throw Error('Invalid route');
@@ -44,7 +44,7 @@ export async function loadStripeTreasury(){
   try{
     const data=await requestJson('/api/control/v1/stripe-treasury',{signal:stripeScope.signal});
     if(!stripeScope.isCurrent(generation))return;
-    if(data.schema!=='numina.stripe.treasury.v1'||data.provider!=='Stripe'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
+    if(data.schema!=='numina.stripe.treasury.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='Stripe'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
     const dashboard=new URL(data.dashboard_url);
     if(dashboard.href!=='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury')throw Error('Invalid Stripe destination');
     const rows=[['Connection','Read only'],['Financial account',data.account.name],['Account status',data.account.status==='open'?'Open':'Closed']];

@@ -16,10 +16,10 @@ jobs:
   rebuild:
     runs-on: NUMINA
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.head_ref || github.ref_name }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
       - name: Install pinned compiler dependencies
@@ -59,7 +59,7 @@ jobs:
             git push origin HEAD:${{ github.head_ref }}
           fi
       - name: Upload rebuilt canonical artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: NUSD-18DEC-ARTIFACTS
           path: |

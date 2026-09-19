@@ -40,6 +40,11 @@ jobs:
           node-version: '24'
           package-manager-cache: false
 
+      - name: NUMINA pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+
       - name: NUMINA build
         run: npm run build
 

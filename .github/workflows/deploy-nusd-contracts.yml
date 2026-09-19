@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/deploy-nusd-contracts.yml'
+      # Dependency-pin maintenance alone must not trigger an on-chain deployment.
       - 'runtime/nusd/scripts/deploy-production.mjs'
       - 'runtime/nusd/scripts/rpc-auth.mjs'
       - 'runtime/nusd/deployment.production.json'
@@ -53,11 +53,11 @@ jobs:
       NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
       NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
 
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload verified NUMINA chain receipt
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: NUSD-PRODUCTION-RECEIPT
           path: |

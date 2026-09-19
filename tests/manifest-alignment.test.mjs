@@ -43,7 +43,7 @@ test('root release manifest binds the owner workflow, additive migration and act
  assert.equal(binding.attempt_storage.migration_sha256,digest(bytes('drizzle/0004_wallet_deployment_intents.sql')));assert.equal(binding.attempt_storage.native_journal_modified,false);
  assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents','0005_numina_manifest_control']);
  assert.deepEqual(binding.evidence,{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false});
- for(const flag of Object.values(release.scope))assert.equal(flag,false);
+ for(const [name,flag] of Object.entries(release.scope))assert.equal(flag,name==='nusd_issuance_verified_in_current_state'||name==='contract_deployment_verified_in_current_state',name);
 });
 
 test('application manifest aliases contain the same current release bytes',()=>{
@@ -55,8 +55,16 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.release,'numina-v4.0.0');
   assert.equal(release.schema,'numina.application-release.v2');
   assert.equal(release.runtime_dependency.version,'1.9.0-rc26');
-  for(const field of ['root','manifest','identity','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release[field],'NUMINA',field);
+  assert.equal(release.identity,'NUMINA');
+  for(const field of ['root','manifest','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release.compatibility.identity_aliases[field],'NUMINA',field);
   assert.equal(release.provider_verification,true);
+  const nativeModel=release.native_treasury_alignment;
+  assert.equal(nativeModel.aggregation,'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES');
+  assert.equal(nativeModel.treasuryCount,1);assert.equal(nativeModel.accountCount,1);assert.equal(nativeModel.holdingsCount,3);
+  assert.equal(BigInt(nativeModel.aggregateModeledValue),BigInt(nativeModel.targetAmount)*3n);
+  assert.deepEqual(nativeModel.componentUnits,['USD','USDC','NUSD']);
+  assert.equal(nativeModel.verificationScope,'NUMINA_INTERNAL_SOFTWARE_STATE');
+  assert.equal(nativeModel.externalBalancesAggregated,false);assert.equal(nativeModel.externalFundingCreatedByRelease,false);
 });
 
 test('current native distribution retains its actual Android and iOS build identities',()=>{
@@ -69,9 +77,14 @@ test('current native distribution retains its actual Android and iOS build ident
   assert.equal(native.ios.binaryVersionCode,5);
   assert.equal(native.ios.signed,false);
   for(const platform of ['android','ios']){
-    assert.deepEqual(distribution[platform],native[platform],platform);
+    const {current_source,source_archive_current,...recorded}=distribution[platform];
+    assert.deepEqual(recorded,native[platform],platform);
     assert.equal(native[platform].sourceCommit,platform==='ios'?'c6ffbb50d77ff53323b71b7048872637677e6b42':'cd28af207f39fe8ba010ef83eafbd832448ffbbf');
-    if(platform==='ios'){assert.equal(native[platform].currentSourceCompiled,true);assert.equal(native[platform].signingInputMatchesCurrentSource,true);}
+    if(platform==='ios'){
+      assert.equal(native[platform].currentSourceCompiled,false);assert.equal(native[platform].signingInputMatchesCurrentSource,false);
+      assert.equal(source_archive_current,true);assert.equal(current_source.buildNumber,6);
+      assert.equal(current_source.sourceInputsSha256,native[platform].sourceInputsSha256);
+    }
     assert.equal(native[platform].storeSubmitted,false);
   }
 });
@@ -94,7 +107,7 @@ test('release and client manifests bind the identical treasury verifier without 
   assert.ok(binding,'Current release must declare its treasury client verification binding');
   assert.deepEqual(alignment.treasury_client_verification,binding);
   assert.deepEqual(distribution.treasury_client_verification,binding);
-  assert.equal(binding.schema,'numina.treasury.client-verification.v1');
+  assert.equal(binding.schema,'numina.treasury.client-verification.v2');
   assert.equal(binding.verifier.sha256,digest(bytes('public/treasury-proof.js')));
   assert.equal(binding.verifier.sha256,digest(bytes('integrations/numina/src/treasury-proof.js')));
   assert.equal(binding.independentProviderVerification,false);

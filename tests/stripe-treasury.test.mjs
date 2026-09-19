@@ -37,6 +37,9 @@ test('Treasury read is one pinned GET and returns a sanitized read-only projecti
  assert.equal(headers.get('Authorization'),'Bearer '+readKey);assert.equal(headers.get('Stripe-Version'),'2026-08-26.preview');
  assert.equal(headers.has('Cookie'),false);assert.equal(headers.has('oai-authenticated-user-email'),false);
  assert.equal(result.schema,'numina.stripe.treasury.v1');assert.equal(result.connection,'read_only');
+ assert.equal(result.identity,'NUMINA');assert.equal(result.treasuryIdentity,'NUMINA');assert.equal(result.provider,'NUMINA');assert.equal(result.transportProvider,'Stripe');
+ assert.equal(result.backingVerified,false);assert.equal(result.nativeModel.scope,'NUMINA_INTERNAL_SOFTWARE_STATE');
+ assert.equal(result.submission_performed,false);assert.equal(result.settlement_performed,false);assert.equal(result.receipt,null);
  assert.equal(result.account.id,STRIPE_TREASURY_FINANCIAL_ACCOUNT);assert.equal(result.account.name,'Local fixture financial account');assert.equal(result.account.status,'open');assert.equal(result.account.livemode,true);
  assert.equal(result.transfer_execution,false);assert.equal(result.nusd_settlement,false);assertSafe(result);
  assert.equal(Object.hasOwn(result.account,'metadata'),false);assert.equal(Object.hasOwn(result,'financial_addresses'),false);

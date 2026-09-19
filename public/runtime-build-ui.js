@@ -96,7 +96,22 @@ export function contractSourcePresentation(record) {
           deployment?.status!=='verified'||deployment.lifecycle!=='FINAL'||deployment.submission_performed!==true||deployment.expected_chain_id!=='962421430'||
           !/^0x[0-9a-fA-F]{40}$/.test(deployment.contract_address)||!/^0x[0-9a-fA-F]{64}$/.test(deployment.transaction_hash)||
           deployment.receipt?.status!=='0x1'||deployment.receipt.record!=='runtime/nusd/deployment-receipt.json')throw Error('Contract source record unavailable');
-      }else if(contract.verification.chain_receipt_verified!==false||deployment?.status!=='not_verified'||deployment.contract_address!==null||deployment.transaction_hash!==null||deployment.receipt!==null)throw Error('Contract source record unavailable');
+      }else{
+        // Native activation is an internal operational record, not a chain receipt
+        // or evidence that the bank or USDC destination accepted a transaction.
+        if(contract.verification.chain_receipt_verified!==false||deployment?.submission_performed!==false||
+          deployment.contract_address!==null||deployment.transaction_hash!==null||deployment.receipt!==null)throw Error('Contract source record unavailable');
+        if(deployment.status==='native_active'){
+          const unit=i===2?'USDC':'USD',nativeId=i===2?'numina:nusd-usdc:conversion:v1':'numina:nusd-usd:redemption:v1';
+          if(contract.status!=='ACTIVE_SIGNED_1_TO_1_VERIFIED'||deployment.lifecycle!=='ACTIVE'||
+            contract.verification.native_activation_verified!==true||contract.verification.signed_1_to_1_backing_verified!==true||
+            deployment.verification_scope!=='NUMINA_NATIVE_TREASURY'||deployment.external_provider_verified!==false||
+            deployment.native_contract_id!==nativeId||deployment.native_attestation_id!==record.native_activation?.backing_attestation_id||
+            deployment.ratio!=='1:1'||deployment.backing_verified!==true||deployment.native_unit!==unit||
+            !/^(0|[1-9][0-9]{0,77})$/.test(deployment.native_value)||deployment.native_value!==deployment.nusd_equivalent||
+            deployment.chain_contract_address_recorded!==false||deployment.chain_transaction_hash_recorded!==false)throw Error('Contract source record unavailable');
+        }else if(deployment.status!=='not_verified'||contract.verification.native_activation_verified===true)throw Error('Contract source record unavailable');
+      }
       for(const [key,extension]of [['source','sol'],['artifact','json']]){
         const file=contract[key];
         if(file?.url!=='/downloads/contracts/'+contract.name+'.'+extension||!/^([a-f0-9]{64})$/.test(file.sha256||'')||!Number.isSafeInteger(file.bytes)||file.bytes<1)throw Error('Contract source record unavailable');
@@ -104,7 +119,9 @@ export function contractSourcePresentation(record) {
     }
     if(issuance.transactionHash!==contracts[0].deployment.transaction_hash)throw Error('Contract source record unavailable');
     return {source:'NUSD token and settlement deployed · issuance receipt-verified · 18 decimals',
-      'source-scope':'Recorded constructor issuance: '+issuance.amountNusd+' NUSD. Verified at '+issuance.verifiedAt+'. This dated record does not establish current transfer activity, external reserves, conversion or redemption.'};
+      'source-scope':'Recorded constructor issuance: '+issuance.amountNusd+' NUSD. Verified at '+issuance.verifiedAt+'.'+
+        (contracts.some(contract=>contract.deployment.status==='native_active')?' Conversion and redemption are ACTIVE in the NUMINA native model; their chain deployment and external provider execution remain unverified.':'')+
+        ' This dated record does not establish current transfer activity, external reserves, conversion or redemption.'};
   }
   if(record?.schema!=='numina.nusd.contract-record.v1'||record.status!=='compiled_not_deployed'||
     record.url!=='/api/nusd/v1/contracts'||record.native_treasury!=='/api/control/v1/treasury'||

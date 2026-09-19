@@ -17,6 +17,10 @@ if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runners 
 if (policy.invariants?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
 if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
 if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
+const executionTargets = policy.executionTargets;
+const overrides = executionTargets?.workflowOverrides || {};
+if (executionTargets?.default !== policy.runnerTarget) failures.push('Default execution target must remain NUMINA');
+const usedOverrides = new Set();
 
 let declarations = 0;
 for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(name)).sort()) {
@@ -24,10 +28,14 @@ for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(nam
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
+  const expectedTarget = Object.hasOwn(overrides, name) ? overrides[name] : executionTargets?.default;
+  if (Object.hasOwn(overrides, name) && targets.length) usedOverrides.add(name);
+  if (!['NUMINA', 'ubuntu-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
   for (const target of targets) {
-    if (target !== 'NUMINA') failures.push(name + ' runner target must be NUMINA, got ' + JSON.stringify(target));
+    if (target !== expectedTarget) failures.push(name + ' runner target must match its recorded execution target ' + expectedTarget + ', got ' + JSON.stringify(target));
   }
 }
+for (const name of Object.keys(overrides)) if (!usedOverrides.has(name)) failures.push('Execution override has no preserved workflow job: ' + name);
 
 if (declarations < policy.preservedRunnerCount) {
   failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);

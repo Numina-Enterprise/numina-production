@@ -56,19 +56,24 @@ test('HTTP endpoint serves final status on an empty GET without caller-selected 
   for(const h of ['cache-control','cdn-cache-control','vercel-cdn-cache-control'])assert.equal(res.headers[h],'no-store');
 });
 
-test('query/body input and mutating methods are rejected before observation',async()=>{
+test('caller input cannot select or alter the fixed read-only observation',async()=>{
   let calls=0;
-  const handler=createEstimateHandler({observe:async()=>{calls++;return {httpStatus:200,body:{}};}});
+  const observation={status:'FINAL',source:'pinned_record'};
+  const handler=createEstimateHandler({observe:async(...args)=>{assert.deepEqual(args,[]);calls++;return {httpStatus:200,body:observation};}});
   for(const changes of [
     {url:'/api/deployment-estimate?method=eth_sendTransaction'},
     {body:{from:'0x'+'1'.repeat(40)}},
     {headers:{'content-length':'1'}},
-    {headers:{'transfer-encoding':'chunked'}},
-    {method:'POST'}
+    {headers:{'transfer-encoding':'chunked'}}
   ]){
     const res=new ResponseMock();
     await handler(request(changes),res);
-    assert.ok([400,405].includes(res.statusCode));
+    assert.equal(res.statusCode,200);
+    assert.deepEqual(JSON.parse(res.body),observation);
   }
-  assert.equal(calls,0);
+  assert.equal(calls,4);
+  const rejected=new ResponseMock();
+  await handler(request({method:'POST'}),rejected);
+  assert.equal(rejected.statusCode,405);
+  assert.equal(calls,4);
 });

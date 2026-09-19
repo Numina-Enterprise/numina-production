@@ -6,6 +6,10 @@ import {EXPECTED_RELEASE,RUNTIME_VERSION,RELEASE_ARTIFACT_TYPE} from '../public/
 import {canonical,assessRuntimeEvidence} from '../public/runtime-release-model.js';
 import {routeRuntime} from '../src/runtime-http.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
+import manifestModule from '../runtime/vercel-production/lib/numina-manifest.js';
+import projectionModule from '../runtime/vercel-production/lib/numina-projection.js';
+import {checkRuntime} from '../scripts/check-runtime.mjs';
+import {createRuntimeReleaseUI,RUNTIME_ENDPOINTS} from '../public/runtime-release-ui.js';
 
 // Isolated test keys and digests never enter production configuration or evidence.
 const keys=generateKeyPairSync('ed25519');
@@ -38,6 +42,94 @@ test('rc26 rejects changed or unsigned manifest fields and mismatched control st
   }
   const records=fixtures();records.control.data.manifest={...records.control.data.manifest,head:'unsigned test claim'};
   assert.equal((await assess(records)).controlManifestBound,false);
+});
+
+function singularFixtures(){
+  const manifest=structuredClone(manifestModule.NUMINA_MANIFEST),project=projectionModule.project;
+  const status=project('status',{release:EXPECTED_RELEASE,external_execution_performed:false});
+  const control=project('control-manifest',{schema:'numina.control-manifest.v1',release:RUNTIME_VERSION,external_execution_performed:false});
+  const evidence={valid:true,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256};
+  const values={
+    manifest:{manifest,receipt:receipt('NUMINA_MANIFEST',manifest)},
+    status:{status,receipt:receipt('NUMINA_PRODUCTION_STATUS',status)},
+    attestation:receipt(RELEASE_ARTIFACT_TYPE,project('release-attestation',{release:EXPECTED_RELEASE,manifest})),
+    control:{manifest:control,receipt:receipt('NUMINA_CONTROL_MANIFEST',control)},
+    supply:project('supply-chain',{evidence,receipt:receipt('NUMINA_SUPPLY_CHAIN_EVIDENCE',evidence)})
+  };
+  return Object.fromEntries(Object.entries(values).map(([key,data])=>[key,{phase:'ok',data:structuredClone(data)}]));
+}
+
+test('current singular runtime wrappers retain exact signed manifest, status and control bindings',async()=>{
+  const result=await assess(singularFixtures());
+  for(const field of ['manifestMatches','releaseDeclarationVerified','runtimeStatusMatches','supplyIdentityMatches','controlManifestBound'])assert.equal(result[field],true,field);
+  assert.deepEqual(result.release,EXPECTED_RELEASE);
+  assert.equal(result.status.external_execution_performed,false);
+  assert.equal(result.status.frozen_core,undefined); // No historical observation is invented by unwrapping.
+});
+
+test('unsigned changes to singular runtime projections never inherit their receipt verification',async()=>{
+  const cases=[
+    ['releaseDeclarationVerified',records=>records.manifest.data.manifest.extra_claim='unsigned'],
+    ['releaseDeclarationVerified',records=>records.manifest.data.receipt.signature='A'.repeat(88)],
+    ['releaseDeclarationVerified',records=>records.attestation.data.payload.payload.manifest.mechanics.treasury.nativeModelAmount='1'],
+    ['runtimeStatusMatches',records=>records.status.data.status.payload.external_execution_performed=true],
+    ['controlManifestBound',records=>records.control.data.manifest.payload.extra_claim='unsigned'],
+    ['supplyIdentityMatches',records=>records.supply.data.payload.evidence.extra_claim='unsigned']
+  ];
+  for(const [field,mutate]of cases){const records=singularFixtures();mutate(records);assert.equal((await assess(records))[field],false,field);}
+});
+
+function runtimeResponses(){
+  const records=singularFixtures(),bootstrap={release:RUNTIME_VERSION,evidence_store_durable:true};
+  return {...Object.fromEntries(Object.entries(RUNTIME_ENDPOINTS).map(([name,route])=>[route,records[name]?.data??{}])),
+    '/readyz':{status:'ready'},'/v1/bootstrap/attestation':{bootstrap,receipt:receipt('NUMINA_BOOTSTRAP_ATTESTATION',bootstrap)}};
+}
+
+test('read-only runtime CLI check accepts current wrappers and reports every required gate as a boolean',async()=>{
+  const responses=runtimeResponses(),calls=[];
+  const report=await checkRuntime({pinnedKey,fetch:async(url,options)=>{
+    calls.push(url);assert.equal(options.method,'GET');assert.equal(options.credentials,'omit');
+    assert.equal(options.redirect,'error');assert.deepEqual(options.headers,{Accept:'application/json'});
+    return Response.json(responses[new URL(url).pathname]);
+  }});
+  assert.equal(calls.length,7);assert.equal(report.observed,RUNTIME_VERSION);assert.equal(report.passed,true);
+  assert.ok(Object.values(report.checks).every(value=>value===true));assert.deepEqual(report.errors,{});
+});
+
+test('runtime CLI check retains readiness and signed durability failures instead of passing a release alone',async()=>{
+  for(const change of ['missing-ready','bootstrap-tampered','bootstrap-unavailable']){
+    const responses=runtimeResponses();
+    if(change==='bootstrap-tampered')responses['/v1/bootstrap/attestation'].bootstrap={release:RUNTIME_VERSION,evidence_store_durable:false};
+    const report=await checkRuntime({pinnedKey,fetch:async url=>{
+      const route=new URL(url).pathname;
+      if(change==='missing-ready'&&route==='/readyz'||change==='bootstrap-unavailable'&&route==='/v1/bootstrap/attestation')return new Response('',{status:503});
+      return Response.json(responses[route]);
+    }});
+    assert.equal(report.checks.signature,true);assert.equal(report.checks.control,true);assert.equal(report.passed,false);
+    assert.equal(report.checks[change==='missing-ready'?'ready':'durable'],false);
+    assert.ok(Object.values(report.checks).every(value=>typeof value==='boolean'));
+  }
+});
+
+test('runtime browser view displays current signed wrapper fields without inventing historical status counts',async()=>{
+  const responses=runtimeResponses(),nodes=new Map();
+  const document={querySelectorAll(selector){
+    if(['[data-download]','[data-refresh-release]'].includes(selector))return [];
+    if(!nodes.has(selector))nodes.set(selector,{textContent:'',dataset:{}});
+    return [nodes.get(selector)];
+  }};
+  const ui=createRuntimeReleaseUI({document,window:{addEventListener(){},removeEventListener(){}},pinnedKey,
+    fetch:async route=>Response.json(responses[route])});
+  try{
+    await ui.refresh();
+    assert.equal(nodes.get('[data-release-version]').textContent,'v'+RUNTIME_VERSION);
+    assert.equal(nodes.get('[data-readiness]').textContent,'Runtime responding · rc26 identity matches');
+    assert.equal(nodes.get('[data-live-status]').textContent,'Signed declaration verified');
+    assert.equal(nodes.get('[data-sbom-hash]').textContent,EXPECTED_RELEASE.spdx_sbom_sha256);
+    assert.equal(nodes.get('[data-frozen-files]').textContent,'Not reported');
+    assert.equal(nodes.get('[data-conformance]').textContent,'Not reported');
+    assert.deepEqual(JSON.parse(nodes.get('[data-manifest-json]').textContent),responses['/v1/release/manifest']);
+  }finally{ui.destroy();}
 });
 
 test('legacy release, staging, legacy attestation type and unpinned key cannot establish rc26',async()=>{

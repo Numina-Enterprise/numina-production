@@ -16,5 +16,14 @@
     "runnerPlacementFrozen": false,
     "hostIsNumina": true
   },
-  "hostIdentity": "NUMINA"
+  "hostIdentity": "NUMINA",
+  "executionTargets": {
+    "default": "NUMINA",
+    "workflowOverrides": {
+      "numina.yml": "ubuntu-latest",
+      "publish-sites-control-source.yml": "ubuntu-latest",
+      "verify-provider-observations.yml": "ubuntu-latest"
+    },
+    "scope": "Execution substrate labels; NUMINA remains the singular identity. Existing workflow jobs are preserved; no runner registrations are created."
+  }
 }

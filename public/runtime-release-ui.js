@@ -98,7 +98,7 @@ export function createRuntimeReleaseUI({
     const ok = name => current[name]?.phase === 'ok';
     const pending = Object.values(current).some(record => record.phase === 'pending');
     const failed = Object.values(current).some(record => record.phase === 'error');
-    const manifest = assessed.manifest;
+    const manifest = assessed.release;
     const hasManifest = ok('manifest');
     for (const [name, selector] of Object.entries(jsonSelectors)) {
       set(selector, ok(name) ? JSON.stringify(current[name].data, null, 2) :
@@ -110,12 +110,12 @@ export function createRuntimeReleaseUI({
     set('[data-build-id]', hasManifest ? text(manifest.build_id) : 'Unavailable');
     set('[data-production-root]', hasManifest ? text(manifest.production_files_root) : 'Unavailable');
     set('[data-core-root]', hasManifest ? text(manifest.frozen_core_manifest_root) : 'Unavailable');
-    const status = ok('status') ? current.status.data : null;
+    const status = ok('status') ? assessed.status : null;
     const count = value => Number.isSafeInteger(value) && value >= 0 ? value : 'Not reported';
     set('[data-frozen-files]', status ? count(status.frozen_core?.checked_files) : 'Unavailable');
     set('[data-conformance]', status ? count(status.conformance?.passing_tests) : 'Unavailable');
-    set('[data-sbom-hash]', ok('supply') ? text(current.supply.data.spdx_sbom_sha256) : 'Unavailable');
-    set('[data-provenance-hash]', ok('supply') ? text(current.supply.data.slsa_provenance_sha256) : 'Unavailable');
+    set('[data-sbom-hash]', ok('supply') ? text(assessed.supply?.spdx_sbom_sha256) : 'Unavailable');
+    set('[data-provenance-hash]', ok('supply') ? text(assessed.supply?.slsa_provenance_sha256) : 'Unavailable');
     set('[data-supply-status]', ok('supply') ? assessed.supplyIdentityMatches ?
       assessed.releaseDeclarationVerified ? 'Artifact hashes match the signed manifest' : 'Artifact hashes match the pins; release signature unavailable' : 'Reported artifact identity does not match rc26' :
       current.supply?.phase === 'pending' ? 'Checking…' : 'Unavailable');
@@ -155,7 +155,7 @@ export function createRuntimeReleaseUI({
     set('[data-checked-at]', 'Response check ' + now().toLocaleString());
     // Raw observed artifacts remain downloadable; a key is offered only after verification against the configured pin.
     downloadBundle = {
-      manifest: hasManifest ? manifest : null,
+      manifest: hasManifest ? current.manifest.data : null,
       attestation: ok('attestation') ? current.attestation.data : null,
       key: assessed.key,
       version: hasManifest && assessed.manifestMatches ? manifest.production_version : 'observed-runtime'

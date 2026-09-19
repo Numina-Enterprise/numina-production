@@ -40,6 +40,10 @@ jobs:
           if(nvmrc!=='24') throw new Error('.nvmrc must stay pinned to Node 24');
           if(Number(process.versions.node.split('.')[0])!==24) throw new Error('CI is not running Node 24');
           NODE
+      - name: Install pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
       - name: Validate governed Arc provider submitter
         run: node --test tests/provider-submitter.test.mjs
       - name: Validate NUSD simulation API
@@ -60,10 +64,16 @@ jobs:
           if(!deploymentPolicy||typeof deploymentPolicy!=='object'||deploymentPolicy['*']!==false||deploymentPolicy.main!==true||Object.keys(deploymentPolicy).length!==2) throw new Error('Git deployment policy must allow only main');
           const rewrites=new Map((config.rewrites||[]).map(rule=>[rule.source,rule.destination]));
           for(const source of ['/v1/frontier/readiness','/v1/deployment/provenance','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/submit','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/network/status','/v2/network/deployment-estimate','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) if(!rewrites.has(source)) throw new Error('missing Vercel route: '+source);
-          for(const configPath of ['vercel.json','runtime/vercel-production/vercel.json']) {
+          // The root serves numinalabs.xyz and forwards to Sites; the standalone
+          // runtime forwards to that canonical domain. Sending the root back to
+          // its own domain would introduce a fallback loop.
+          for(const [configPath,destination] of [
+            ['vercel.json','https://personal-space-m7q9.skott34.chatgpt.site/api/nusd/v1/:path*'],
+            ['runtime/vercel-production/vercel.json','https://numinalabs.xyz/api/nusd/v1/:path*']
+          ]) {
             const gateway=JSON.parse(readFileSync(configPath,'utf8'));
             const matches=(gateway.rewrites||[]).filter(rule=>rule.source==='/api/nusd/v1/:path*');
-            if(matches.length!==1||matches[0].destination!=='https://numinalabs.xyz/api/nusd/v1/:path*') throw new Error('NUSD API must route once to the canonical service: '+configPath);
+            if(matches.length!==1||matches[0].destination!==destination) throw new Error('NUSD API fallback topology mismatch: '+configPath);
           }
           if(rewrites.get('/v1/frontier/readiness')!=='/api/application-release?mode=frontier-readiness') throw new Error('frontier readiness bypasses verifier');
           if(rewrites.get('/v1/deployment/provenance')!=='/api/application-release?mode=deployment-provenance') throw new Error('deployment provenance bypasses verifier');
@@ -83,27 +93,28 @@ jobs:
           for(const [field,expected] of Object.entries(EXPECTED_RELEASE)) if(RELEASE_IDENTITY[field]!==expected) throw new Error('runtime identity drift: '+field);
           if(JSON.stringify(RELEASE_IDENTITY).includes('rc22')) throw new Error('legacy rc22 identity survived runtime alignment');
           const {validateApplicationRelease,evaluateFrontierReadiness,validateDeploymentProvenance}=await import(pathToFileURL(resolve('api/application-release.mjs')).href);
-          const application={schema:'numina.application-release.v2',schema_version:2,singular:true,identity:'NUMINA',product:'Numina',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,runtime_dependency:{singular:true,identity:'NUMINA',version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};
+          const application={schema:'numina.application-release.v2',schema_version:2,singular:true,identity:'NUMINA',product:'NUMINA',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,runtime_dependency:{singular:true,identity:'NUMINA',version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};
           validateApplicationRelease(application);
-          const deployment={schema:'numina.transport-observation.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,deployment:'NUMINA',transport:'vercel',authoritative:false,environment:'production',deployment_id:'dpl_1234567890',deployment_url:'https://numina-production-example.vercel.app',git_commit_sha:'0123456789abcdef0123456789abcdef01234567',git_commit_ref:'main',runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
+          const deployment={schema:'numina.transport-observation.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',provider_verification:true,deployment:'NUMINA',transport:'vercel',authoritative:false,environment:'production',deployment_id:'dpl_1234567890',host_url:'https://numinalabs.xyz',transport_url:'https://numina-production-example.vercel.app',git_commit_sha:'0123456789abcdef0123456789abcdef01234567',git_commit_ref:'main',runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
           if(!validateDeploymentProvenance(deployment)) throw new Error('valid deployment provenance rejected');
-          const fundableTargets={schema:'numina.fundable-targets.v1',scope:'numina_native',target_display:'500T',target_amount:'500000000000000',target_scale:'trillion',target_count:500,status:'TARGET_BOUND',external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false};
-          const controlManifest={schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:EXPECTED_RELEASE.production_version,controls:{runtime_controls_configurable:true,real_funds_enabled:true,employer_ip_enabled:false,public_execution_api_enabled:true,public_execution_route_exposed:true,execution_authorized:true,live_submission_enabled:true,provider_submitter_approved:true,live_provider_submitter_enabled:true,owner_authorization_required:true,pre_signed_payload_required:true,arbitrary_provider_url_allowed:false,embedded_private_key_allowed:false,fundable_targets:fundableTargets},funds:{schema:'numina.funds-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',status:'ENABLED_BY_OWNER',real_funds_enabled:true,fundable_targets:fundableTargets,external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false},execution:{schema:'numina.execution-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',status:'GOVERNED_LIVE_SUBMISSION_ENABLED',execution_authorized:true,live_submission_enabled:true,provider_submitter_approved:true,public_execution_api_enabled:true,public_execution_route_exposed:true,live_provider_submitter_exposed:true,owner_authorization_required:true,pre_signed_payload_required:true,pre_signed_provider_submitter_available:true,credentialed_provider_submitter_available:false,external_execution_performed:false},partnership:{schema:'numina.partnership-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',partnership_status:'asserted',external_evidence_bound:false,external_partnership_verified:false}};
           const manifest={schema:'numina.manifest.v2',singular:true,root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,deployment:'NUMINA',deployed:true,productionSource:'NUMINA',release:{...EXPECTED_RELEASE}};
           const supplyEvidence={valid:true,release:EXPECTED_RELEASE.release,production_files_root:EXPECTED_RELEASE.production_files_root,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256};
-          const records={application,manifest:{manifest,receipt:{artifact_type:'NUMINA_MANIFEST',payload:manifest}},attestation:{artifact_type:RELEASE_ARTIFACT_TYPE,payload:{...EXPECTED_RELEASE,environment:'production',role:'public-verifier'}},supply:{payload:{evidence:supplyEvidence,receipt:{artifact_type:'NUMINA_SUPPLY_CHAIN_EVIDENCE',payload:supplyEvidence}}},control:{manifest:controlManifest,receipt:{artifact_type:'NUMINA_CONTROL_MANIFEST',payload:controlManifest}},deployment};
+          const records={application,manifest:{manifest,receipt:{artifact_type:'NUMINA_MANIFEST',payload:manifest}},attestation:{artifact_type:RELEASE_ARTIFACT_TYPE,payload:{...EXPECTED_RELEASE,environment:'production',role:'public-verifier'}},supply:{payload:{evidence:supplyEvidence,receipt:{artifact_type:'NUMINA_SUPPLY_CHAIN_EVIDENCE',payload:supplyEvidence}}},deployment};
+          // Isolated fixture signatures exercise bindings here; provider submission
+          // authorization remains covered by the dedicated test step above.
           const verifyEnvelope=(envelope,type)=>envelope?.artifact_type===type;
           const ready=evaluateFrontierReadiness(records,{verifyEnvelope});
-          if(!ready.ready||!ready.checks.numina_deployment||!ready.checks.execution_authorization_bounded) throw new Error('NUMINA manifest did not establish frontier readiness');
-          if(ready.fundable_targets?.target_display!=='500T'||ready.fundable_targets?.scope!=='numina_native'||ready.fundable_targets?.external_balance_verified!==false||ready.fundable_targets?.external_backing_asserted!==false) throw new Error('500T Numina-native fundable target did not bind into readiness');
+          if(!ready.ready||!ready.checks.numina_deployment||!Object.values(ready.checks).every(value=>value===true)) throw new Error('NUMINA manifest did not establish release readiness');
           if(ready.application.artifact_inventory_build_id!==EXPECTED_APPLICATION_ARTIFACT_BUILD_ID||ready.application.artifact_inventory_scope!==APPLICATION_ARTIFACT_BUILD_SCOPE) throw new Error('frontier readiness application artifact identity drift');
+          if(ready.transport.substrate_observation.verified!==true) throw new Error('valid transport observation rejected');
           const noProvenance=evaluateFrontierReadiness({...records,deployment:null},{verifyEnvelope});
-          if(!noProvenance.ready||noProvenance.transport.vercel_observation_verified!==false) throw new Error('transport diagnostics incorrectly changed NUMINA readiness');
-          const unsafeControl={...controlManifest,execution:{...controlManifest.execution,external_execution_performed:true}};
-          const unsafe=evaluateFrontierReadiness({...records,control:{manifest:unsafeControl,receipt:{artifact_type:'NUMINA_CONTROL_MANIFEST',payload:unsafeControl}}},{verifyEnvelope});
-          if(unsafe.ready||unsafe.checks.execution_authorization_bounded) throw new Error('frontier readiness did not fail closed on unverified external execution state');
-          const externalizedFunds={...controlManifest,funds:{...controlManifest.funds,external_balance_verified:true}};
-          const externalized=evaluateFrontierReadiness({...records,control:{manifest:externalizedFunds,receipt:{artifact_type:'NUMINA_CONTROL_MANIFEST',payload:externalizedFunds}}},{verifyEnvelope});
-          if(externalized.ready||externalized.checks.execution_authorization_bounded) throw new Error('frontier readiness did not fail closed when 500T target was represented as verified external balance');
-          console.log('Validated main-only Git deployment policy, pinned application artifact inventory '+EXPECTED_APPLICATION_ARTIFACT_BUILD_ID+', 12-function topology, exact rc26 identity, 500T Numina-native target, NUMINA deployment and owner-authorized pre-signed bounded execution readiness on Node '+process.versions.node+'.');
+          if(!noProvenance.ready||noProvenance.transport.substrate_observation.verified!==false) throw new Error('transport diagnostics incorrectly changed NUMINA release readiness');
+          const unsignedManifest={...manifest,extra_claim:'unsigned'};
+          const unsigned=evaluateFrontierReadiness({...records,manifest:{...records.manifest,manifest:unsignedManifest}},{verifyEnvelope});
+          if(unsigned.ready||unsigned.checks.runtime_manifest_identity) throw new Error('unsigned manifest fields inherited receipt verification');
+          const changedSupply=evaluateFrontierReadiness({...records,supply:{payload:{...records.supply.payload,evidence:{...supplyEvidence,spdx_sbom_sha256:'0'.repeat(64)}}}},{verifyEnvelope});
+          if(changedSupply.ready||changedSupply.checks.supply_chain_identity) throw new Error('changed supply evidence inherited receipt verification');
+          const wrongRelease=evaluateFrontierReadiness({...records,attestation:{...records.attestation,payload:{...records.attestation.payload,production_version:'1.9.0-rc22'}}},{verifyEnvelope});
+          if(wrongRelease.ready||wrongRelease.checks.release_attestation_signature) throw new Error('wrong signed release established readiness');
+          console.log('Validated main-only Git deployment policy, topology-specific NUSD routing, current application artifact inventory '+EXPECTED_APPLICATION_ARTIFACT_BUILD_ID+', 12-function topology, exact rc26 identity and signed release readiness bindings on Node '+process.versions.node+'.');
           NODE
