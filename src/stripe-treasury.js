@@ -1,11 +1,12 @@
 // This adapter reads one configured live Financial account. It has no money-movement methods.
 import {isTreasuryMinorInteger,formatTreasuryProviderAmount} from '../public/treasury-amount.js';
+import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
 export const STRIPE_TREASURY_ACCOUNT='acct_1UEEPnQdJat0efmT';
 export const STRIPE_TREASURY_FINANCIAL_ACCOUNT='fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu';
 const STRIPE_TREASURY_VERSION='2026-08-26.preview';
 export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes';
 export const NUSD_PROVIDER_ROUTING=Object.freeze({
-  schema:'numina.nusd.provider-routing.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,componentRole:'USDC_PROVIDER_ROUTE',route:TREASURY_PROVIDER_ROUTES,method:'GET',access:'owner_authenticated',
+  schema:'numina.nusd.provider-routing.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentRole:'USDC_PROVIDER_ROUTE',route:TREASURY_PROVIDER_ROUTES,method:'GET',access:'owner_authenticated',
   provider:'Stripe',mode:'live_read_only',canonicalTreasury:'/api/control/v1/treasury',
   acceptanceScope:'Exact provider-reported currency, network and destination; token identity requires separate verification',
   nusdAcceptanceVerified:false,transferExecution:false,documentation:'/downloads/NUSD-Provider-Routing.md'
@@ -86,7 +87,7 @@ export async function readStripeTreasury(env,{fetcher=(...args)=>globalThis.fetc
       const providerNusd={status:reportedCurrencies.includes('nusd')?'reported_currency_requires_asset_verification':'not_reported',precision:null,tokenIdentityVerified:false,buckets:{}};
       for(const name of ['available','inbound_pending','outbound_pending']){const amount=value.balance[name]?.nusd;if(amount!=null){if(amount.currency!=='nusd')throw stripeTreasuryError('STRIPE_TREASURY_INVALID_RESPONSE',502);providerNusd.buckets[name]={currency:'nusd',value:stripeTreasuryInteger(amount.value)};}}
       const header=name=>{const text=response.headers.get(name);return text&&/^[A-Za-z0-9._-]{1,100}$/.test(text)?text:null;};
-      return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,componentRole:'USDC_PROVIDER_OBSERVATION',provider:'Stripe',connection:'read_only',account:{id,name:typeof value.display_name==='string'&&value.display_name.trim()?value.display_name.trim().slice(0,160):'Financial account',status:value.status,livemode:true},balances,reported_currencies:reportedCurrencies,provider_nusd_balance:providerNusd,treasury_policy:'/api/control/v2/treasury/policy',observed_at:new Date().toISOString(),provider_request_id:header('request-id'),provider_api_version:header('stripe-version'),dashboard_url:'https://dashboard.stripe.com/'+STRIPE_TREASURY_ACCOUNT+'/treasury',transfer_execution:false,nusd_settlement:false};
+      return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentRole:'USDC_PROVIDER_OBSERVATION',provider:'Stripe',connection:'read_only',account:{id,name:typeof value.display_name==='string'&&value.display_name.trim()?value.display_name.trim().slice(0,160):'Financial account',status:value.status,livemode:true},balances,reported_currencies:reportedCurrencies,provider_nusd_balance:providerNusd,treasury_policy:'/api/control/v2/treasury/policy',observed_at:new Date().toISOString(),provider_request_id:header('request-id'),provider_api_version:header('stripe-version'),dashboard_url:'https://dashboard.stripe.com/'+STRIPE_TREASURY_ACCOUNT+'/treasury',transfer_execution:false,nusd_settlement:false};
     })()
   ]);}catch(error){if(['STRIPE_TREASURY_UNAVAILABLE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;stripeTreasuryDiagnostic({event:'stripe_treasury_runtime_error',stage,response_received:stage!=='fetch_pending',category:stripeTreasuryExceptionCategory(error),error_name:['Error','TypeError','RangeError','AbortError','NetworkError','SecurityError','NotSupportedError'].includes(error?.name)?error.name:'OtherError'});throw stripeTreasuryError('STRIPE_TREASURY_UNAVAILABLE',503);}
   finally{clearTimeout(timer);controller.abort();}
@@ -134,7 +135,7 @@ export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThi
       }
       const complete=page.next_page_url===null&&unclassified===0;
       const requestId=response.headers.get('request-id');
-      return {schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,componentRole:'USDC_PROVIDER_ROUTE',provider:'Stripe',connection:'read_only',
+      return {schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentRole:'USDC_PROVIDER_ROUTE',provider:'Stripe',connection:'read_only',
         financial_account:STRIPE_TREASURY_FINANCIAL_ACCOUNT,account_status:account.account.status,
         source:'GET /v2/money_management/financial_addresses',observed_at:new Date().toISOString(),
         provider_request_id:requestId&&/^[A-Za-z0-9._-]{1,100}$/.test(requestId)?requestId:null,
