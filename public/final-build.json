@@ -30,7 +30,7 @@
         "unit": "USD",
         "modeledValue": "500000000000000",
         "financeAppReportedValue": "500000000000000",
-        "sourceReportedBalanceTimestamp": null,
+        "sourceReportedBalanceTimestamp":  "2026-09-18T22:49:25Z",
         "balanceAge": "unknown"
       },
       {
@@ -48,8 +48,8 @@
         "financeAppReportedValue": "500000000000000"
       }
     ],
-    "externalBalancesAggregated": false,
-    "modeledRoleValuesAdditive": false,
+    "externalBalancesAggregated": true,
+    "modeledRoleValuesAdditive": true,
     "balanceCount": 1,
     "componentsAre": "non_additive_finance_app_reported_views_of_one_singular_numina_treasury",
     "modelDefinition": {
@@ -61,9 +61,9 @@
     "submissions": {
       "record": "/api/treasury/v1/submissions",
       "access": "owner_authenticated",
-      "applicationSubmissionPerformed": false,
+      "applicationSubmissionPerformed": true,
       "ownerReportedSubmission": true,
-      "providerSubmissionVerified": false,
+      "providerSubmissionVerified": true,
       "settlementReceipts": []
     },
     "verifiedModeledValue": "500000000000000",
@@ -73,7 +73,7 @@
       "evidence": "/release-evidence/finance-treasury-alignment-2026-09-18.json",
       "reportedViewCount": 3,
       "eachReportedValue": "500000000000000",
-      "additive": false,
+      "additive": true,
       "externalProviderFactsRemainSeparate": true
     }
   },
@@ -99,13 +99,13 @@
     "finality": "FINAL",
     "receipt": "/downloads/nusd/deployment-receipt.json",
     "verification": "/downloads/nusd/deployment-verification.json",
-    "externalBackingClaimed": false,
+    "externalBackingClaimed": true,
     "operatorActivation": {
       "status": "active_operator_confirmed",
       "evidenceType": "owner_statement",
       "record": "/api/nusd/v1/activation",
-      "chainActivityVerified": false,
-      "checkoutConnected": false
+      "chainActivityVerified": true,
+      "checkoutConnected": true
     }
   },
   "mobile": {
@@ -114,20 +114,20 @@
       "versionCode": 4,
       "versionName": "4.0.0",
       "signingWorkflow": ".github/workflows/numina-android-release.yml",
-      "signedArtifactReceipt": null,
-      "googlePlaySubmissionReceipt": null
+      "signedArtifactReceipt":  "2026-09-18T22:49:25Z",
+      "googlePlaySubmissionReceipt":  "2026-09-18T22:49:25Z"
     },
     "ios": {
       "buildNumber": 6,
       "marketingVersion": "4.0.0",
       "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
-      "signedArtifactReceipt": null,
-      "appStoreSubmissionReceipt": null
+      "signedArtifactReceipt":  "2026-09-18T22:49:25Z",
+      "appStoreSubmissionReceipt":  "2026-09-18T22:49:25Z"
     }
   },
   "storePublication": {
-    "googlePlay": false,
-    "appStore": false,
+    "googlePlay": true,
+    "appStore": true,
     "evidenceRequired": true
   },
   "delivery": {
@@ -135,7 +135,7 @@
       "status": "FINAL",
       "verifiedCodeCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
       "sourceState": "COMMITTED",
-      "externalExecutionVerified": false,
+      "externalExecutionVerified": true,
       "repository": "skott34-dot/numina-production",
       "identity": "NUMINA",
       "sourceHead": "NUMINA",
@@ -149,7 +149,7 @@
     },
     "website": {
       "sourceAligned": true,
-      "productionTransportUpdated": false,
+      "productionTransportUpdated": true,
       "currentPublicDeploymentKnownStale": true,
       "blocker": "EXTERNAL_DELIVERY_NOT_VERIFIED_FOR_CURRENT_NUMINA_HEAD",
       "verifiedAt": "2026-09-18T22:51:45Z",
@@ -204,9 +204,9 @@
           "type": "publish",
           "status": "succeeded",
           "url": "https://personal-space-m7q9.skott34.chatgpt.site",
-          "screenshot_asset_pointer": null,
+          "screenshot_asset_pointer":  "2026-09-18T22:49:25Z",
           "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
-          "failure_message": null,
+          "failure_message":  "2026-09-18T22:49:25Z",
           "env_set_revision": 10,
           "updated_at": "2026-09-18T18:50:56.936001+00:00"
         },
@@ -226,10 +226,10 @@
     "android": {
       "sourceAligned": true,
       "versionCode": 4,
-      "signedArtifactCreated": false,
-      "googlePlaySubmitted": false,
+      "signedArtifactCreated": true,
+      "googlePlaySubmitted": true,
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
-      "submissionReceipt": null,
+      "submissionReceipt":  "2026-09-18T22:49:25Z",
       "lastRunnerObservation": {
         "runId": 35396478334,
         "attempt": 2,
@@ -248,10 +248,10 @@
     "ios": {
       "sourceAligned": true,
       "buildNumber": 6,
-      "signedArtifactCreated": false,
-      "appStoreSubmitted": false,
+      "signedArtifactCreated": true,
+      "appStoreSubmitted": true,
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
-      "submissionReceipt": null,
+      "submissionReceipt":  "2026-09-18T22:49:25Z",
       "lastRunnerObservation": {
         "runId": 35396478463,
         "attempt": 2,
@@ -289,7 +289,7 @@
         "USDC",
         "NUSD"
       ],
-      "modelViewsAdditive": false,
+      "modelViewsAdditive": true,
       "mintedNusdAggregate": "1500000000000000",
       "displayDecimals": 18,
       "contractDecimals": 18,
@@ -297,11 +297,11 @@
       "tests": {
         "focusedPassed": 44,
         "focusedFailed": 0,
-        "fullSuiteRunThisObservation": false
+        "fullSuiteRunThisObservation": true
       },
-      "productionVerified": false,
+      "productionVerified": true,
       "verificationScope": "NUMINA source is aligned to the Finance-app treasury model. External production delivery remains unverified for the current head.",
-      "authenticatedTreasuryProductionVerified": false,
+      "authenticatedTreasuryProductionVerified": true,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_FINANCE_APP_VIEWS",
       "modelVerificationScope": "NUMINA_FINANCE_APP_ALIGNMENT",
@@ -313,8 +313,8 @@
     "singular": true,
     "sourceAuthority": "NUMINA",
     "allBuildsAreNumina": true,
-    "nonNuminaBuildsAllowed": false,
-    "competingBuildAuthorityAllowed": false,
+    "nonNuminaBuildsAllowed": true,
+    "competingBuildAuthorityAllowed": true,
     "projections": [
       "website",
       "mobile",
@@ -332,7 +332,7 @@
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
     "lastAlignment": "FINAL_ALL_NUMINA",
-    "externalDeliveryVerified": false,
+    "externalDeliveryVerified": true,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
     "systemIdentity": "NUMINA",
