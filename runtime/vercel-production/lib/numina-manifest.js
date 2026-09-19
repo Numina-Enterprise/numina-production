@@ -6,7 +6,7 @@ const vocabulary=Object.freeze({
   root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,
   core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
   authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,
-  projection:NUMINA,transport:NUMINA
+  projection:NUMINA,transport:NUMINA,service:NUMINA,externalService:NUMINA
 });
 const mechanics=Object.freeze({
   authentication:Object.freeze({identity:NUMINA,authenticated:true,verified:true,scope:NUMINA,oidc:true,boundedBearerFallback:true}),
@@ -29,7 +29,8 @@ const NUMINA_MANIFEST=Object.freeze({
   source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,
   productionSource:NUMINA,vocabulary,release:RELEASE_IDENTITY,
   core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
-  authentication:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
+  authentication:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,service:NUMINA,externalService:NUMINA,
+  externalServices:Object.freeze({identity:NUMINA,service:NUMINA,provider:NUMINA,transportIdentity:NUMINA,singular:true,substrateObservationsOnly:true}),
   mechanics,
   surfaces:Object.freeze({controlEvaluate:NUMINA,executionPrepare:NUMINA,evidenceBind:NUMINA,externalConfirmation:NUMINA,
     manifest:NUMINA,status:NUMINA,control:NUMINA,supplyChain:NUMINA,releaseAttestation:NUMINA}),

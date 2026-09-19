@@ -97,5 +97,15 @@
   "deployment": "NUMINA",
   "storage": "NUMINA",
   "projection": "NUMINA",
-  "transport": "NUMINA"
+  "transport": "NUMINA",
+  "service": "NUMINA",
+  "external_service": "NUMINA",
+  "external_services": {
+    "identity": "NUMINA",
+    "service": "NUMINA",
+    "provider": "NUMINA",
+    "transport_identity": "NUMINA",
+    "singular": true,
+    "substrate_observations_only": true
+  }
 }
