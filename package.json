@@ -1,14 +1,11 @@
-{
-  "name": "numina-singular-control",
+{ "name": "numina-singular-control",
   "version": "4.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": "24.x"
-  },
+  }
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "test": "node --test tests/*.test.mjs",
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs",
@@ -24,4 +21,4 @@
   "finalAll": "NUMINA",
   "role": "synchronized_projection",
   "synchronization": "ACROSS_ALL"
-    }
+}
