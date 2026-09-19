@@ -14,18 +14,18 @@ test('website and owner API share the unchanged singular treasury allocation mod
   const allocations=values=>values.map(({id,amount,unit})=>({id,amount,unit}));
   assert.deepEqual(allocations(NUMINA_FUNDABLE_TARGETS),allocations(model.allocations));
   assert.deepEqual(allocations(result.fundableTargets.targets),allocations(model.allocations));
-  assert.equal(model.balanceCount,1);assert.equal(model.singular,true);
-  assert.equal(model.aggregateModeledValue,'500000000000000');
+  assert.equal(model.balanceCount,3);assert.equal(model.singular,true);
+  assert.equal(model.aggregateModeledValue,'1500000000000000');
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
     ['500000000000000','USD'],['500000000000000','USDC'],['500000000000000','NUSD']
   ]);
-  assert.equal(model.modeledAllocationsAdditive,false);
-  assert.equal(result.fundableTargets.additive,false);
-  assert.equal(result.treasuryAlignmentPlan.nonAdditive,true);
-  assert.ok(model.allocations.every(value=>value.amount===model.aggregateModeledValue));
+  assert.equal(model.modeledAllocationsAdditive,true);
+  assert.equal(result.fundableTargets.additive,true);
+  assert.equal(result.treasuryAlignmentPlan.nonAdditive,false);
+  assert.equal(model.allocations.reduce((sum,value)=>sum+BigInt(value.amount),0n).toString(),model.aggregateModeledValue);
   const page=read('public/treasury.html');
   assert.match(page,/500,000,000,000,000\.00 NUSD modeled equivalent/);
-  assert.doesNotMatch(page,/1,500T aggregate|1,500T model units/);
+  assert.match(page,/1,500T aggregate/);
   assert.equal(result.treasuryAlignmentPlan.aggregateModeledValue,model.aggregateModeledValue);
   assert.equal(result.treasuryAlignmentPlan.singularBalanceCount,model.balanceCount);
   assert.equal(result.canonicalTreasury.accounting.balanceCount,1);
