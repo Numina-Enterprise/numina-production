@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {CONTROL_STORAGE} from '../src/control-store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
@@ -18,7 +19,12 @@ test('NUMINA is the canonical active identity',()=>{
   }
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
-  const finalBuild=JSON.parse(readFileSync(new URL('../public/final-build.json',import.meta.url),'utf8'));
+  const FINAL_BUILD_MANIFEST_BLOB='c7533c4609b90967a987a4c2369dd1c85b998c47';
+  const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
+  const finalBuildBytes=readFileSync(finalBuildUrl);
+  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+  assert.equal(finalBuildBlob,FINAL_BUILD_MANIFEST_BLOB);
+  const finalBuild=JSON.parse(finalBuildBytes.toString('utf8'));
   assert.equal(finalBuild.schema,'numina.final-build.v1');
   assert.equal(finalBuild.identity,'NUMINA');
   assert.equal(finalBuild.status,'FINAL');
