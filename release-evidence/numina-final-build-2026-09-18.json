@@ -176,10 +176,10 @@
     },
     "website": {
       "sourceAligned": true,
-      "productionTransportUpdated": true,
-      "currentPublicDeploymentKnownStale": false,
-      "blocker": "CURRENT_DEPLOYMENT_DETAIL_NOT_RESOLVED_IN_CONNECTED_VERCEL_SCOPE",
-      "verifiedAt": "2026-09-19",
+      "productionTransportUpdated": false,
+      "currentPublicDeploymentKnownStale": true,
+      "blocker": "VERCEL_BUILD_RATE_LIMIT",
+      "verifiedAt": "2026-09-19T07:08:56Z",
       "observedDeployment": null,
       "domains": {
         "apex": "https://numinalabs.xyz",
@@ -187,7 +187,7 @@
         "apexRedirectStatus": 308,
         "ssl": "valid"
       },
-      "verificationScope": "GitHub reports a successful Vercel status for current main. The connected Vercel scope did not resolve the current deployment detail, so custom-domain promotion is not independently re-asserted by this evidence refresh.",
+      "verificationScope": "GitHub main is synchronized to the Numina Native Treasury software contract. Live production remains on the prior Vercel Git SHA because the current deployment check is blocked by Vercel build-rate capacity.",
       "priorObservedDeployment": {
         "id": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
         "commit": "90f7d7cd85167bca0dddd774b38e54cd830b59fd",
@@ -205,13 +205,15 @@
         ],
         "historical": false
       },
-      "status": "GITHUB_VERCEL_STATUS_SUCCESS_CURRENT_DEPLOYMENT_DETAIL_UNRESOLVED",
+      "status": "GITHUB_MAIN_SYNCED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
       "latestRedeployAttempt": {
-        "result": "github_status_success",
-        "sourceCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
-        "providerStatus": "success",
-        "providerTargetUrl": "https://vercel.com/numina-167f7fe7/numina-production/D91Ymyx3p4j3V4QE8MKfXF5tP6t6",
-        "deploymentDetailResolved": false
+        "result": "vercel_build_rate_limit",
+        "observedAt": "2026-09-19T07:08:56Z",
+        "providerStatus": "failure",
+        "providerDescription": "Vercel build rate limit",
+        "providerTargetUrl": "https://vercel.com/skott34-dot?upgradeToPro=build-rate-limit",
+        "currentProductionGitSha": "ed17788bfda388c72bf2c9270773a19a89268de9",
+        "currentProductionDeploymentId": "dpl_HxWFxjCzSeXRbcY25J3vyFpf1s1j"
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": false
@@ -250,7 +252,7 @@
       "version": 103
     },
     "browserAlignment": {
-      "status": "SOURCE_ALIGNED_CURRENT_VERCEL_STATUS_SUCCESS_CUSTOM_DOMAIN_NOT_REVERIFIED",
+      "status": "SOURCE_ALIGNED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
       "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
