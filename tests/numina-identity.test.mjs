@@ -80,11 +80,17 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(NUMINA_LAYERS.treasury.componentCount,3);
   assert.equal(NUMINA_LAYERS.treasury.balanceCount,1);
   assert.equal(NUMINA_LAYERS.treasury.aggregateModeledValue,'1500000000000000');
+  assert.equal(NUMINA_LAYERS.treasury.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
+  assert.equal(NUMINA_LAYERS.treasury.accountCount,1);
+  assert.equal(NUMINA_LAYERS.treasury.holdingsCount,3);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.version,3);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.singular,true);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.treasuryCount,1);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.componentCount,3);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.balanceCount,1);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.accountCount,1);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.holdingsCount,3);
   assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
   assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
   assert.equal(WALLET_EXECUTION_POLICY.decimals,18);
