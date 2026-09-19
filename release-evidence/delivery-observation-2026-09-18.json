@@ -1,9 +1,9 @@
 {
   "schema": "numina.delivery-observation.v1",
-  "observedAt": "2026-09-19T01:20:27Z",
+  "observedAt": "2026-09-19T01:23:10Z",
   "sourceCommit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
   "website": {
-    "observationSource": "Vercel deployment API and GitHub canonical main",
+    "observationSource": "Vercel deployment API and authenticated Vercel HTTP fetch",
     "latestReadyDeployment": {
       "id": "dpl_8vLQzhW1eM5RYuMaE7CvmKFojivF",
       "commit": "91cde4abd8afc86f9610053c0588e5f230db77e0",
@@ -22,7 +22,7 @@
       "errorStep": "buildStep"
     },
     "canonicalMain": {
-      "commit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
+      "commit": "c171f6df2cbb819c75c9257f0e60678423e28812",
       "deploymentObserved": false
     },
     "capacityObservation": "Vercel accepted and executed production builds; the observed failure is a build-step error rather than a capacity rejection.",
@@ -31,6 +31,41 @@
       "commit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
       "reason": "Canonical trusted-build workflows use the pinned GitHub-hosted label ubuntu-24.04; the NUMINA runner policy only admitted ubuntu-latest, macos-latest and windows-latest.",
       "change": "Added ubuntu-24.04 as an allowed canonical Linux execution label while preserving singular NUMINA identity and self-hosted denial."
+    },
+    "liveEndpointVerification": {
+      "origin": "https://numina-production.vercel.app",
+      "deployedCommit": "91cde4abd8afc86f9610053c0588e5f230db77e0",
+      "deploymentId": "dpl_8vLQzhW1eM5RYuMaE7CvmKFojivF",
+      "verifiedFrom": "2026-09-19T01:22:46Z",
+      "verifiedThrough": "2026-09-19T01:23:10Z",
+      "endpoints": [
+        {
+          "path": "/final-build.json",
+          "status": 200,
+          "schema": "numina.final-build.v1",
+          "reportedStatus": "FINAL"
+        },
+        {
+          "path": "/downloads/nusd/deployment-receipt.json",
+          "status": 200,
+          "schema": "numina.nusd.production-deployment-receipt.v1",
+          "finality": "FINAL",
+          "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+          "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+        },
+        {
+          "path": "/api/nusd/v1/status",
+          "status": 200,
+          "schema": "numina.nusd.status.v1"
+        },
+        {
+          "path": "/v2/network/deployment-estimate",
+          "status": 200,
+          "schema": "numina.deployment-estimate.v1",
+          "reportedStatus": "FINAL"
+        }
+      ],
+      "scope": "These HTTP receipts verify the currently served READY Vercel production alias. They do not establish that the newer canonical main commit has deployed."
     }
   },
   "githubActions": {
