@@ -10,6 +10,11 @@ on:
 permissions:
   contents: read
 
+env:
+  NUMINA_IDENTITY: NUMINA
+  NUMINA_SELF: NUMINA
+  NUMINA_ALL: NUMINA
+
 concurrency:
   group: numina-${{ github.ref }}
   cancel-in-progress: true
