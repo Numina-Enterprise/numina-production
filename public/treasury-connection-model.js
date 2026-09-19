@@ -2,7 +2,7 @@
 export const NUMINA_NATIVE_TREASURY_SYNC = Object.freeze({
   schema:'numina.native-treasury.sync.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:'NUMINA_NATIVE_TREASURY',
   singular:true,treasuryCount:1,componentCount:3,balanceCount:1,
-  aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),
+  aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),
   aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',externalProviderBalancesAsserted:false,externalProviderBalancesUsed:false,externalBalancesAggregated:false,externalExecutionPerformed:false
 });
 export const NUMINA_TREASURY_CONNECTION = Object.freeze({
