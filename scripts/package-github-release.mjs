@@ -4,6 +4,12 @@ import {basename,resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
+const finalBuildPath='public/final-build.json';
+const finalBuildBytes=readFileSync(finalBuildPath);
+const finalBuild=JSON.parse(finalBuildBytes);
+if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
+if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');
+if(finalBuild.buildModel?.finalCount!==1||finalBuild.buildModel?.finalIdentity!=='NUMINA'||finalBuild.buildModel?.canonicalHeadIdentity!=='NUMINA')throw Error('FINAL build manifest identity model mismatch');
 const archive=resolve(process.argv[2]||`numina-release-v${pkg.version}.tar.gz`);
 const required=['dist/client','dist/server/index.js','dist/client/downloads/application-release-v4.json'];
 for(const path of required)if(!existsSync(path))throw Error('Missing NUMINA build output: '+path);
@@ -22,7 +28,8 @@ const release={
   provenance:'NUMINA',
   version:pkg.version,
   sourceCommit:process.env.GITHUB_SHA||null,
-  externalConfirmation:'evidence-required'
+  externalConfirmation:'evidence-required',
+  finalBuildManifest:{path:finalBuildPath,sha256:createHash('sha256').update(finalBuildBytes).digest('hex'),identity:finalBuild.identity,status:finalBuild.status,version:finalBuild.applicationVersion}
 };
 writeFileSync('dist/NUMINA-RELEASE.json',JSON.stringify(release,null,2)+'\n');
 execFileSync('tar',['-czf',archive,'dist/client','dist/server','dist/NUMINA-RELEASE.json'],{stdio:'inherit'});
