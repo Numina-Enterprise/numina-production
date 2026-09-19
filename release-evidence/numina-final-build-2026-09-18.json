@@ -37,7 +37,8 @@
         "treasuryIdentity": "NUMINA",
         "singular": true,
         "holdingRole": true,
-        "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+        "displayLabel": "Bank of America · USD Modeled Unit Location"
       },
       {
         "account": "Numina Native Treasury",
@@ -52,7 +53,8 @@
         "treasuryIdentity": "NUMINA",
         "singular": true,
         "holdingRole": true,
-        "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+        "displayLabel": "Stripe · USDC Modeled Unit Location"
       },
       {
         "account": "Numina Native Treasury",
@@ -67,7 +69,8 @@
         "treasuryIdentity": "NUMINA",
         "singular": true,
         "holdingRole": true,
-        "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+        "displayLabel": "Numina Native · NUSD Modeled Unit Location"
       }
     ],
     "externalBalancesAggregated": false,
@@ -135,7 +138,8 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "Bank of America",
-        "externalProviderBalanceAsserted": false
+        "externalProviderBalanceAsserted": false,
+        "displayLabel": "Bank of America · USD Modeled Unit Location"
       },
       {
         "id": "native-usdc",
@@ -148,7 +152,8 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "Stripe",
-        "externalProviderBalanceAsserted": false
+        "externalProviderBalanceAsserted": false,
+        "displayLabel": "Stripe · USDC Modeled Unit Location"
       },
       {
         "id": "native-nusd",
@@ -161,7 +166,8 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "externalProviderBalanceAsserted": false
+        "externalProviderBalanceAsserted": false,
+        "displayLabel": "Numina Native · NUSD Modeled Unit Location"
       }
     ]
   },
