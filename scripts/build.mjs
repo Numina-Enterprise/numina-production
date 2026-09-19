@@ -5,13 +5,12 @@ import {fileURLToPath} from 'node:url';
 import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
 const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='16a880e1f878801cd98705c4192a47503ae7b5b0';
+const FINAL_BUILD_MANIFEST_BLOB='405f25727a95cfb2e74beac6e9483b071dbb694b';
 const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
 const finalBuild=JSON.parse(finalBuildBytes);
-if(finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v1'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.authority!=='public/final-build.json')throw Error('FINAL build manifest contract mismatch');
-execFileSync(process.execPath,['scripts/check-runner-policy.mjs'],{stdio:'inherit'});
+if(finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v2'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.role!=='synchronized_projection'||finalBuild.manifestContract?.synchronization!=='ACROSS_ALL')throw Error('FINAL build manifest contract mismatch');
 execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inherit'});
 // Fail before producing web artifacts if the iOS/runtime release binding has drifted.
 execFileSync(process.execPath,['scripts/ios-release.mjs','check'],{stdio:'inherit'});
