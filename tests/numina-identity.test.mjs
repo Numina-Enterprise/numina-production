@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='5ac13b7d782ea5aba5151c84d9aaa3541d8cede0';
+  const FINAL_BUILD_MANIFEST_BLOB='b8b680ceaf5ab12430a25021c5e7843c46c484f2';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -63,6 +63,12 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.componentCount,3);
   assert.equal(finalBuild.treasury.balanceCount,1);
   assert.equal(finalBuild.treasury.componentsAreSeparateTreasuries,false);
+  assert.equal(finalBuild.treasury.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
+  assert.equal(finalBuild.treasury.accountCount,1);
+  assert.equal(finalBuild.treasury.holdingsCount,3);
+  assert.equal(finalBuild.treasury.nativeAccount.name,'Numina Native Treasury');
+  assert.equal(finalBuild.treasury.nativeHoldings.length,3);
+  assert.deepEqual(finalBuild.treasury.nativeHoldings.map(holding=>[holding.unit,holding.modeledValue]),[['USD','500000000000000'],['USDC','500000000000000'],['NUSD','500000000000000']]);
   assert.ok(finalBuild.treasury.components.every(component=>component.identity==='NUMINA'&&component.treasuryIdentity==='NUMINA'&&component.singular===true));
   assert.equal(finalBuild.syncAll.status,'SYNCED');
   assert.equal(finalBuild.syncAll.treasuryCount,1);
