@@ -22,13 +22,7 @@
   "hostIdentity": "NUMINA",
   "executionTargets": {
     "default": "NUMINA",
-    "workflowOverrides": {
-      "numina.yml": "ubuntu-latest",
-      "publish-sites-control-source.yml": "ubuntu-latest",
-      "verify-provider-observations.yml": "ubuntu-latest",
-      "numina-android-release.yml": "ubuntu-latest",
-      "numina-ios-signing.yml": "macos-latest"
-    },
-    "scope": "Preserve existing execution substrates and runner registrations. No runner creation, removal, or signing-identity rotation is authorized by this policy."
+    "workflowOverrides": {},
+    "scope": "All preserved workflow execution targets resolve to NUMINA. Existing runner registrations are preserved; no runner creation, removal, or signing-identity rotation is authorized."
   }
 }
