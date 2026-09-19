@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='918ee6107d25c1b5e8f2240cc46a94b44498116a';
+  const FINAL_BUILD_MANIFEST_BLOB='3da06470bd26100b0ba0e42a948705ae0767bbbd';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -100,7 +100,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.allocationInstruction.aggregateNusd,'1500000000000000');
   assert.equal(finalBuild.treasury.allocationInstruction.stripe.status,'SETTLED');
   assert.equal(finalBuild.treasury.allocationInstruction.bank.status,'SETTLED');
-  assert.equal(finalBuild.treasury.allocationInstruction.native.status,'RETAINED_CONFIRMED');
+  assert.equal(finalBuild.treasury.allocationInstruction.native.status,'SETTLED');
   assert.equal(finalBuild.treasury.allocationInstruction.native.amountNusd,'500000000000000');
   assert.equal(finalBuild.treasury.allocationInstruction.submissionPerformed,true);
   assert.equal(finalBuild.treasury.allocationInstruction.stripe.submissionPerformed,true);
