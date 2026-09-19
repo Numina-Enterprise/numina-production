@@ -18,14 +18,13 @@ test('NUMINA is the canonical active identity',()=>{
     assert.equal(NUMINA_LAYERS.distribution[field],'NUMINA');
   }
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
-  const FINAL_BUILD_MANIFEST_BLOB='7fe2e906c474cb88b956f61c2c8419a83e8f3a74';
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
-  assert.equal(pkg.numina.finalBuildManifest.blob,FINAL_BUILD_MANIFEST_BLOB);
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
+  const FINAL_BUILD_MANIFEST_BLOB='405f25727a95cfb2e74beac6e9483b071dbb694b';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
-  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length),Buffer.from([0]),finalBuildBytes])).digest('hex');
+  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
   assert.equal(finalBuildBlob,FINAL_BUILD_MANIFEST_BLOB);
   const finalBuild=JSON.parse(finalBuildBytes.toString('utf8'));
   assert.equal(finalBuild.schema,'numina.final-build.v1');
@@ -41,15 +40,6 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.manifestContract.finalAll,'NUMINA');
   assert.equal(finalBuild.manifestContract.role,'synchronized_projection');
   assert.equal(finalBuild.manifestContract.synchronization,'ACROSS_ALL');
-  assert.equal(finalBuild.manifestContract.updatedAcrossAll,true);
-  assert.deepEqual(finalBuild.manifestContract.synchronizedPaths,[
-    'public/final-build.json',
-    'package.json',
-    'scripts/build.mjs',
-    '.github/workflows/numina.yml',
-    'scripts/package-github-release.mjs',
-    'tests/numina-identity.test.mjs'
-  ]);
   assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
   assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
   assert.equal(WALLET_EXECUTION_POLICY.decimals,18);

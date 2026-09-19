@@ -401,15 +401,6 @@
       "build": "npm run build",
       "test": "npm test",
       "release": "npm run release:numina"
-    },
-    "updatedAcrossAll": true,
-    "synchronizedPaths": [
-      "public/final-build.json",
-      "package.json",
-      "scripts/build.mjs",
-      ".github/workflows/numina.yml",
-      "scripts/package-github-release.mjs",
-      "tests/numina-identity.test.mjs"
-    ]
+    }
   }
 }
