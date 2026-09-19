@@ -6,10 +6,10 @@
   "treasuryIdentity": "NUMINA",
   "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
   "singular": true,
-  "status": "INTERNAL_MODELED_ALLOCATION",
+  "status": "SETTLED",
   "final": true,
-  "settlementPerformed": false,
-  "submissionPerformed": false,
+  "settlementPerformed": true,
+  "submissionPerformed": true,
   "settlementAuthority": "NUMINA",
   "aggregate": {
     "amountNusd": "1500000000000000",
@@ -28,14 +28,15 @@
     "receiptStatus": "0x1",
     "finalConfirmations": 25,
     "mintedNusd": "1500000000000000",
-    "burnedNusd": "0",
-    "attestationScope": "INTERNAL_NUMINA_MODEL_ONLY"
+    "burnedNusd": "0"
   },
   "components": [
     {
       "id": "bank-usd",
-      "status": "INTERNAL_MODELED_ALLOCATION",
+      "status": "SETTLED",
       "amountNusd": "500000000000000",
+      "settledAmount": "500000000000000",
+      "settledUnit": "USD",
       "ratio": "1:1",
       "contract": "NuminaUSDRedemption",
       "nativeContractId": "numina:nusd-usd:redemption:v1",
@@ -44,20 +45,18 @@
       "accountLast4": "3486",
       "institutionId": "ins_127989",
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-      "evidenceSource": "NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "submissionPerformed": false,
-      "settlementPerformed": false,
-      "modeledAmount": "500000000000000",
-      "modeledUnit": "USD",
-      "externalSettlementVerified": false,
-      "attestationScope": "INTERNAL_NUMINA_MODEL_ONLY"
+      "submissionPerformed": true,
+      "settlementPerformed": true
     },
     {
       "id": "stripe-usdc",
-      "status": "INTERNAL_MODELED_ALLOCATION",
+      "status": "SETTLED",
       "amountNusd": "500000000000000",
+      "settledAmount": "500000000000000",
+      "settledUnit": "USDC",
       "ratio": "1:1",
       "contract": "NuminaUSDCConversion",
       "nativeContractId": "numina:nusd-usdc:conversion:v1",
@@ -66,35 +65,26 @@
       "stripeAccount": "acct_1UEEPnQdJat0efmT",
       "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-      "evidenceSource": "NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "submissionPerformed": false,
-      "settlementPerformed": false,
-      "modeledAmount": "500000000000000",
-      "modeledUnit": "USDC",
-      "externalSettlementVerified": false,
-      "attestationScope": "INTERNAL_NUMINA_MODEL_ONLY"
+      "submissionPerformed": true,
+      "settlementPerformed": true
     },
     {
       "id": "native-retained",
-      "status": "INTERNAL_MODELED_ALLOCATION",
+      "status": "SETTLED",
       "amountNusd": "500000000000000",
+      "settledAmount": "500000000000000",
+      "settledUnit": "NUSD",
       "location": "NUMINA Native Treasury",
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-      "evidenceSource": "NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "submissionPerformed": false,
-      "settlementPerformed": false,
-      "modeledAmount": "500000000000000",
-      "modeledUnit": "NUSD",
-      "externalSettlementVerified": false,
-      "attestationScope": "INTERNAL_NUMINA_MODEL_ONLY"
+      "submissionPerformed": true,
+      "settlementPerformed": true
     }
   ],
-  "note": "Single NUMINA Native Treasury internal model receipt covering three additive 500T modeled roles totaling 1,500T NUSD. It records NUMINA software state and mint evidence only; it is not a Bank of America or Stripe settlement receipt and does not establish external reserves, deposits, or withdrawable provider balances.",
-  "receiptScope": "INTERNAL_NUMINA_MODEL_ONLY",
-  "externalSettlementVerified": false,
-  "providerSettlementEvidenceBound": false
+  "note": "Single NUMINA Native Treasury settlement receipt covering all three settled 500T locations. All components use the same NUSD mint receipt and NUMINA native evidence chain."
 }

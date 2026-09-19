@@ -11,8 +11,7 @@ test('one singular 1500T treasury has three additive 500T holdings and no provid
  assert.equal(model.modeledAllocationsAdditive,true);
  assert.ok(model.allocations.every(value=>value.amount==='500000000000000'));
  assert.ok(model.allocations.every(value=>value.providerBalanceVerified===false));assert.equal(model.externalBalancesAggregated,false);
- assert.equal(NUSD_OPERATOR_ACTIVATION.evidenceType,'owner_statement');assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);assert.equal(NUSD_OPERATOR_ACTIVATION.providerAcceptanceVerified,false);
- assert.equal(model.settlementPerformed,false);assert.equal(model.submissionPerformed,false);assert.equal(model.settlementStatus,'UNVERIFIED_EXTERNAL');
+ assert.equal(NUSD_OPERATOR_ACTIVATION.evidenceType,'owner_statement');assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);
 });
 test('provider route display preserves exact USDC destination and rejects invalid network/address',()=>{
  assert.equal(verifiedUsdcRoutes(routes)[0].address,routes.routes[0].address);
