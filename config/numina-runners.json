@@ -1,8 +1,9 @@
 {
-  "schema": "numina.runner-policy.v7",
+  "schema": "numina.runner-policy.v8",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
+  "runnerTarget": "NUMINA",
   "preserveMode": "current_runner_slots",
   "preservedWorkflowCount": 27,
   "preservedRunnerCount": 27,
@@ -38,7 +39,6 @@
   "invariants": {
     "preserveCurrentRunners": true,
     "denyFutureRunners": true,
-    "allowExistingRunnerTargetUpdates": true,
     "allRunnersAreNumina": true
   }
 }
