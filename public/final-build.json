@@ -311,7 +311,9 @@
       "confirmations": 25,
       "paused": false,
       "currentOperationalState": "ACTIVE",
-      "historicalDeploymentSnapshotPaused": true
+      "historicalDeploymentSnapshotPaused": true,
+      "mintReceipt": "/downloads/nusd/mint-receipt.json",
+      "mintReceiptVerified": true
     },
     "settlement": {
       "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
@@ -373,6 +375,20 @@
         "backingVerified": true,
         "chainReceiptRecorded": false
       }
+    },
+    "mintReceipt": {
+      "schema": "numina.nusd.mint-receipt.v1",
+      "status": "FINAL",
+      "path": "/downloads/nusd/mint-receipt.json",
+      "sourcePath": "runtime/nusd/mint-receipt.json",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "blockNumber": "51725",
+      "receiptStatus": "0x1",
+      "finalConfirmations": 25,
+      "amountNusd": "1500000000000000",
+      "baseUnits": "1500000000000000000000000000000000",
+      "burnedNusd": "0"
     }
   },
   "mobile": {
@@ -414,7 +430,8 @@
     "smartContracts": {
       "status": "FINAL",
       "receipt": "/downloads/nusd/deployment-receipt.json",
-      "verification": "/downloads/nusd/deployment-verification.json"
+      "verification": "/downloads/nusd/deployment-verification.json",
+      "mintReceipt": "/downloads/nusd/mint-receipt.json"
     },
     "website": {
       "sourceAligned": true,
