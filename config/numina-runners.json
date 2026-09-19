@@ -1,0 +1,17 @@
+{
+  "schema": "numina.runner-policy.v1",
+  "identity": "NUMINA",
+  "selfHostedAllowed": false,
+  "runnerClasses": {
+    "linux": "ubuntu-latest",
+    "macos": "macos-latest",
+    "windows": "windows-latest"
+  },
+  "roleBindings": {
+    "general": "linux",
+    "android": "linux",
+    "vercel": "linux",
+    "quantum": "linux",
+    "ios": "macos"
+  }
+}
