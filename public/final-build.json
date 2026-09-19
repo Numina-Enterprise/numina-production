@@ -405,7 +405,11 @@
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "treasuryInstructionSubmissionPerformed": true,
       "achOriginatorSubmissionPerformed": false,
-      "achOriginatorReceipt": null
+      "achOriginatorReceipt": null,
+      "routingReference": "073000176",
+      "routingReferenceType": "DESTINATION_ACH_ROUTING_REFERENCE",
+      "routingReferenceUserConfirmed": true,
+      "achTraceNumber": null
     }
   },
   "nusd": {
