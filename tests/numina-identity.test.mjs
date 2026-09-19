@@ -54,6 +54,7 @@ test('NUMINA is the canonical active identity',()=>{
 test('current NUMINA runners are preserved without freezing placement',()=>{
   const policy=JSON.parse(readFileSync(new URL('../config/numina-runners.json',import.meta.url),'utf8'));
   assert.equal(policy.identity,'NUMINA');
+  assert.equal(policy.hostIdentity,'NUMINA');
   assert.equal(policy.runnerIdentity,'NUMINA');
   assert.equal(policy.allRunnerIdentities,'NUMINA');
   assert.equal(policy.runnerTarget,'NUMINA');
@@ -63,6 +64,7 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.invariants.preserveExistingSelfHostedRunners,true);
   assert.equal(policy.invariants.denyFutureRunners,true);
   assert.equal(policy.invariants.allRunnersAreNumina,true);
+  assert.equal(policy.invariants.hostIsNumina,true);
   assert.equal(policy.invariants.runnerPlacementFrozen,false);
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
   let declarations=0;
