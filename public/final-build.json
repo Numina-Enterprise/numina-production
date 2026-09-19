@@ -409,15 +409,24 @@
   },
   "repository": "skott34-dot/numina-production",
   "manifestContract": {
+    "schema": "numina.final-build.contract.v1",
     "identity": "NUMINA",
     "status": "FINAL",
     "finalAll": "NUMINA",
     "singular": true,
     "authority": "public/final-build.json",
-    "build": "npm run build",
-    "test": "npm test",
-    "release": "npm run release:numina",
-    "workflow": ".github/workflows/numina.yml",
-    "version": "4.0.0"
+    "version": "4.0.0",
+    "bindings": {
+      "package": "package.json#/numina/finalBuildManifest",
+      "build": "scripts/build.mjs",
+      "workflow": ".github/workflows/numina.yml",
+      "release": "scripts/package-github-release.mjs",
+      "test": "tests/numina-identity.test.mjs"
+    },
+    "commands": {
+      "build": "npm run build",
+      "test": "npm test",
+      "release": "npm run release:numina"
+    }
   }
 }
