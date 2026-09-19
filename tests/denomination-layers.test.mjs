@@ -60,7 +60,7 @@ test('hosted app and mobile treasury panel align the aggregate, allocations and 
     assert.match(details,/1 NUSD = 1 USDC = 1 USD/);
     assert.match(details,/Verified treasury model500,000,000,000,000\.00 NUSD verified NUMINA-native value/);
     assert.match(details,/Denomination view · Bank of America Savings · ACH500,000,000,000,000\.00 USD/);
-    assert.match(details,/Denomination view · Stripe Treasury · USDC address500,000,000,000,000\.00 USDC/);
+    assert.match(details,/Denomination view · Stripe Treasury · USDC500,000,000,000,000\.00 USDC/);
     assert.match(details,/Denomination view · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
     assert.match(details,/Native journal balance500,000,000,000,000\.00 NUSD/);
     assert.match(details,/Journal\/model comparisonMatches the verified 500T model/);
