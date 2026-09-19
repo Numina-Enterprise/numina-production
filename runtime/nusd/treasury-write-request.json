@@ -84,5 +84,35 @@
     },
     "reconciliationStatus": "CONFLICTING_REPOSITORY_RECORDS_UNRESOLVED"
   },
-  "note": "This file records an owner request only. It is not a native-ledger transaction, payment instruction accepted by a provider, executable queue entry, reserve attestation, deposit receipt, or available-balance update. Existing financial-execution flags, historical receipts, balances, and signing identities are not modified. No source funding, deployed contract state, or previous transfer was independently verified by this update."
+  "note": "This file records owner requests and owner-reported execution only. The ownerReportedBankExecution section attributes the reported 500T USD ACH execution to the owner's statement, not to a retrieved bank record. It is not a native-ledger transaction, payment instruction accepted by a provider, executable queue entry, reserve attestation, deposit receipt, or available-balance update. The original recordedAt, sourceCommitObserved, thisUpdate and repositoryObservations fields preserve the earlier observation; the later report has its own timestamp and observed source commit. Existing financial-execution flags, historical receipts, balances, and signing identities are not modified. No source funding, deployed contract state, or previous transfer was independently verified by this annotation.",
+  "ownerReportedBankExecution": {
+    "recordedAt": "2026-09-19T21:30:45Z",
+    "sourceCommitObserved": "831ef3c8fb91f6e4b13c8da941b94cf356267c71",
+    "source": "OWNER_STATEMENT_IN_CHAT",
+    "statement": "IT IS AN EXECUTED TRANSFER, IT SAYS 500T USD ACH AS EVIDENCE FOR THE TRANSFER. ALIGN THE SOFTWARE",
+    "reportedStatus": "EXECUTED",
+    "verificationStatus": "OWNER_REPORTED_EXECUTED_NOT_BANK_VERIFIED",
+    "reportedAmountWholeUnits": "500000000000000",
+    "reportedCurrency": "USD",
+    "reportedPaymentMethod": "ACH",
+    "destination": "Bank of America Business Advantage Sav",
+    "accountLast4": "3486",
+    "bankPageContentsRetrieved": false,
+    "bankIssuedPaymentRecordRetrieved": false,
+    "bankConfirmationNumber": null,
+    "achTrace": null,
+    "availableBankDataCheck": {
+      "dateFrom": "2026-09-10",
+      "dateThrough": "2026-09-19",
+      "postedInflowRowsReturned": 0,
+      "pendingInflowRowsReturned": 0,
+      "dataFreshness": "unknown",
+      "previousResyncCompletionVerified": false,
+      "interpretation": "No inflow rows were returned in the available records. Unknown freshness prevents concluding that the reported transfer did not occur or that current bank activity is complete."
+    },
+    "isTransactionReceipt": false,
+    "balanceAdjustmentPerformed": false,
+    "transferSubmittedOrResubmitted": false,
+    "reconcileBeforeAnyResubmission": true
+  }
 }
