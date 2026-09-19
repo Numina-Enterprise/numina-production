@@ -21,7 +21,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='274811b430ba0c674b50f2122c65910dc25e03a7';
+  const FINAL_BUILD_MANIFEST_BLOB='9f2d863c610b0e31471aff3be6882b91c56a4f64';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -45,6 +45,12 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.verifiedModeledValueScope,'INTERNAL_NUMINA_MODEL_ONLY');
   assert.equal(finalBuild.treasury.githubAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
   assert.equal(finalBuild.treasury.githubAlignment.externalProviderBalancesAsserted,false);
+  assert.equal(finalBuild.treasury.singular,true);
+  assert.equal(finalBuild.treasury.treasuryCount,1);
+  assert.equal(finalBuild.treasury.componentCount,3);
+  assert.equal(finalBuild.treasury.balanceCount,1);
+  assert.equal(finalBuild.treasury.componentsAreSeparateTreasuries,false);
+  assert.ok(finalBuild.treasury.components.every(component=>component.identity==='NUMINA'&&component.treasuryIdentity==='NUMINA'&&component.singular===true));
   assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
   assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
   assert.equal(WALLET_EXECUTION_POLICY.decimals,18);
