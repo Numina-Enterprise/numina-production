@@ -1,0 +1,106 @@
+{
+  "schema": "numina.treasury.reporting-reconciliation.v1",
+  "identity": "NUMINA",
+  "recordDate": "2026-09-19",
+  "sourceCommitReviewed": "748dcb058ea47a08a170e8c6275b6eee4091b668",
+  "status": "PARTIALLY_RECONCILED",
+  "scope": "FINANCES_REPORTING_CORRECTIONS_AND_REPOSITORY_EVIDENCE_ONLY",
+  "isPaymentReceipt": false,
+  "executable": false,
+  "queued": false,
+  "requestedModel": {
+    "treasuryIdentity": "NUMINA_NATIVE_TREASURY",
+    "aggregateNusdWholeUnits": "1500000000000000",
+    "reportedBurnedNusdWholeUnits": "0",
+    "requestedWholeUnitRate": "1:1",
+    "basis": "OWNER_REPORTED_ISSUANCE_AND_REQUESTED_ALLOCATIONS_NOT_OBSERVED_FUNDS",
+    "allocations": [
+      {"destination": "Bank of America savings", "accountLast4": "3486", "nusdWholeUnits": "500000000000000", "requestedOutputAsset": "USD"},
+      {"destination": "Stripe Treasury", "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e", "nusdWholeUnits": "500000000000000", "requestedOutputAsset": "USDC"},
+      {"destination": "NUMINA Native Treasury", "nusdWholeUnits": "500000000000000", "requestedOutputAsset": "NUSD"}
+    ],
+    "independentlyVerifiedHoldings": false,
+    "reserveBackingVerifiedByThisRun": false
+  },
+  "stripeObservation": {
+    "source": "AUTHENTICATED_LIVE_STRIPE_API",
+    "financialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+    "displayName": "Numina Treasury — SK Consulting LLC",
+    "available": {"USD": "0", "USDC": "0"},
+    "inboundPending": {"USD": "0", "USDC": "0"},
+    "outboundPending": {"USD": "0", "USDC": "0"},
+    "receivedCreditRecordsReturned": 0,
+    "receivedCreditsNextPage": null,
+    "interpretation": "Snapshot of the receiving financial account only; this does not establish source treasury balances or rule out initiation elsewhere."
+  },
+  "bankObservation": {
+    "source": "CONNECTED_FINANCES_RECORDS_AND_PREVIOUSLY_RECONCILED_USER_SCREENSHOT",
+    "accountLast4": "3486",
+    "queryDateFrom": "2026-08-30",
+    "queryDateThrough": "2026-09-19",
+    "coverageState": "full_history",
+    "dataFreshness": "unknown",
+    "postedInflowRowsReturned": 2,
+    "pendingInflowRowsReturned": 0,
+    "historicalTransfer": {
+      "postingDate": "2026-08-31",
+      "amountUsdCents": "1200",
+      "confirmationNumberFromScreenshot": "8000750550",
+      "confirmationSuffixFromConnector": "50550",
+      "sourceCheckingLast4": "7634",
+      "matchesRequested500TAmount": false
+    },
+    "screenshotReconciliation": "release-evidence/bank-transfer-reconciliation-2026-09-19.json",
+    "verifiedCurrentBalanceUsd": null,
+    "bankRefreshRequestAcknowledged": true,
+    "bankRefreshCompletionVerified": false,
+    "interpretation": "Historical records corroborate the $12 transfer, not a 500T deposit or today's balance. The earlier displayed 500T is affected by manual overrides and is not accepted as bank-confirmed cash."
+  },
+  "financeCorrections": {
+    "definitionUpdatesAcknowledged": 8,
+    "changes": [
+      "Removed balance setters and the unsupported settled label from the BofA account interpretation rule; retained its linked identity.",
+      "Cleared the unsupported manual BofA 500T balance-history override; preserved its former amount and purpose in the note.",
+      "Cleared the unsupported manual BofA 500T posted-deposit row; preserved its former reference and requested amount in the note, without deleting any bank transaction.",
+      "Replaced the Stripe manual allocation-as-cash row with the observed zero USDC snapshot and left native NUSD values unspecified, retaining both identities and the requested allocation plan.",
+      "Corrected the ACH request note to distinguish owner approval/reported execution from verified provider execution.",
+      "Corrected the singular-treasury note to distinguish requested allocations from settlement.",
+      "Corrected the treasury evidence standard so old narrative labels cannot establish cash, reserves or payment execution.",
+      "Updated the Finance reconciliation note with the actual partial result and remaining display limitations."
+    ],
+    "postUpdateReadback": {
+      "stripeManualRow": {"current": "0", "available": "0", "currency": "USDC", "continuousProviderSync": false},
+      "nativeManualRow": {"storedCurrentValueSpecified": false, "available": null, "materializedDisplayValue": "0", "currency": "NUSD", "observedZeroTokenBalance": false, "usdValuationVerified": false},
+      "bankRow": {"displayedUsd": "500000000000000", "overrideRemovalReflectedInView": false, "sourceBalanceAge": "unknown", "currentBalanceVerified": false},
+      "historical12UsdTransactionPreserved": true,
+      "retiredManualDepositReturnedByTargetedQuery": false
+    }
+  },
+  "remainingRepositoryConflict": {
+    "path": "runtime/nusd/treasury-settlement-receipt.json",
+    "blobShaReviewed": "7fe4e94f0efbf84208e160be4936310d3d29f88f",
+    "reportedStatus": "SETTLED",
+    "reportedEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "externalDepositClaimSubstantiated": false,
+    "historicalFileChangedByThisRun": false
+  },
+  "execution": {
+    "nativeTreasuryLedgerWritePerformed": false,
+    "bankSubmissionPerformed": false,
+    "blockchainBroadcastPerformed": false,
+    "mintPerformed": false,
+    "burnPerformed": false,
+    "providerBalancesChanged": false,
+    "bankSubmissionId": null,
+    "achTrace": null,
+    "usdcTransferHash": null,
+    "newPaymentReceipt": null
+  },
+  "remainingWork": [
+    "Verify completion of the bank refresh and propagation of the saved override removals; do not infer current bank cash from the still-displayed 500T.",
+    "Ensure native NUSD's unspecified valuation is displayed as unknown rather than interpreting Finance's numeric fallback as actual zero holdings.",
+    "Reconcile legacy runtime settlement claims and verify website/mobile consumption of factual treasury data; no such deployment or end-to-end verification was performed here.",
+    "Independently verify actual NUSD chain state, reserve assets, source funding and any reported external transfer before asserting execution or backing."
+  ],
+  "note": "Finance reporting definitions changed; no money or on-chain state changed. Requested NUSD allocations remain preserved as attributed plans. Unknown values are not zero holdings. This file is an observation of partial reporting correction, not a bank-issued receipt, reserve attestation, blockchain transaction or claim that all NUMINA applications are aligned."
+}
