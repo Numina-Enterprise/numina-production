@@ -1,0 +1,76 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "observedAt": "2026-09-19T03:33:00Z",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "sourceHeadObserved": "967a7c5caffb756d718f68baa41f644f1c369831",
+  "sourceRepair": {
+    "commit": "967a7c5caffb756d718f68baa41f644f1c369831",
+    "parent": "2a28958497d4b8a5f1f61167f7c247fa0c5cb1c0",
+    "tree": "066005a27b7403abe6185abbb311401c86781fb6",
+    "message": "Fix FINAL manifest blob verification",
+    "scope": [
+      "scripts/build.mjs",
+      "scripts/package-github-release.mjs",
+      "tests/numina-identity.test.mjs"
+    ],
+    "change": "Use an explicit NUL byte in Git blob headers for FINAL manifest verification and declare FINAL_BUILD_MANIFEST_BLOB before first test use."
+  },
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "probe": {
+      "workflow": "NUMINA",
+      "runId": 35418752732,
+      "jobId": 105832329993,
+      "sourceCommit": "967a7c5caffb756d718f68baa41f644f1c369831",
+      "status": "completed",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "runnerName": "",
+      "steps": []
+    },
+    "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
+    "requestedWorkflowRerunsStarted": false,
+    "reason": "The canonical NUMINA push job completed without an allocated runner or executed steps."
+  },
+  "vercel": {
+    "buildCapacityAvailable": true,
+    "canonicalSourceDeployment": {
+      "sourceCommit": "967a7c5caffb756d718f68baa41f644f1c369831",
+      "statusContext": "Vercel – numina-production",
+      "status": "success",
+      "description": "Deployment has completed",
+      "deploymentReceiptId": "29eHkh2h9w5iix6AwcLSp5kWyaUp",
+      "providerScope": "numina-167f7fe7",
+      "providerReceipt": "https://vercel.com/numina-167f7fe7/numina-production/29eHkh2h9w5iix6AwcLSp5kWyaUp",
+      "observedAt": "2026-09-19T03:31:01Z"
+    },
+    "duplicateFreeIntegration": {
+      "scope": "skott34-dot",
+      "status": "blocked",
+      "errorCode": "api-deployments-free-per-day",
+      "message": "Resource is limited - try again in 24 hours (more than 100)."
+    },
+    "endpointVerificationCompleted": false,
+    "endpointVerificationBlocker": "The connected Vercel read credential is not authorized for provider scope numina-167f7fe7; public custom-domain DNS was not resolvable from the available HTTP clients, so the requested endpoint responses could not be independently bound to this deployment during this observation."
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false,
+    "reason": "Signing workflows were not rerun because GitHub Actions did not allocate a runner."
+  },
+  "fallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false
+  },
+  "boundaries": {
+    "receiptsOnly": true,
+    "signingIdentityInventedOrRotated": false,
+    "storeSubmissionUnclaimedWithoutProviderReceipt": true,
+    "endpointVerificationUnclaimedWithoutDirectObservation": true
+  }
+}
