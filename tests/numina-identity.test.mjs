@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='093e3ba6a90696e0ce5e2c365a2603f4820440b2';
+  const FINAL_BUILD_MANIFEST_BLOB='0d273be8ac9c6b0687c9872fa1fb2755c8f405f2';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -96,6 +96,12 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.nusd.mintReceipt.blockNumber,'51725');
   assert.equal(finalBuild.nusd.mintReceipt.finalConfirmations,25);
   assert.equal(finalBuild.nusd.token.mintReceiptVerified,true);
+  assert.equal(finalBuild.treasury.allocationInstruction.status,'INITIATED');
+  assert.equal(finalBuild.treasury.allocationInstruction.aggregateNusd,'1500000000000000');
+  assert.equal(finalBuild.treasury.allocationInstruction.stripe.status,'INITIATED_AWAITING_CHAIN_BROADCAST');
+  assert.equal(finalBuild.treasury.allocationInstruction.bank.status,'INITIATED_AWAITING_BANK_ORIGINATOR_SUBMISSION');
+  assert.equal(finalBuild.treasury.allocationInstruction.native.status,'RETAINED_CONFIRMED');
+  assert.equal(finalBuild.treasury.allocationInstruction.native.amountNusd,'500000000000000');
   assert.equal(finalBuild.nusd.contracts.usdcConversion.status,'ACTIVE_SIGNED_1_TO_1_VERIFIED');
   assert.equal(finalBuild.nusd.contracts.usdcConversion.chainReceiptRecorded,false);
   assert.equal(finalBuild.nusd.contracts.usdRedemption.status,'ACTIVE_SIGNED_1_TO_1_VERIFIED');
