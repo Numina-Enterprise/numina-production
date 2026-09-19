@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='26d38485f0ab4507e05ed2727c4926bba4d0cca3';
+  const FINAL_BUILD_MANIFEST_BLOB='918ee6107d25c1b5e8f2240cc46a94b44498116a';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -111,6 +111,11 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.singularSettlementReceipt.download,'/downloads/nusd/treasury-settlement-receipt.json');
   assert.equal(finalBuild.treasury.singularSettlementReceipt.mintReceipt,'runtime/nusd/mint-receipt.json');
   assert.equal(finalBuild.treasury.singularSettlementReceipt.mintTransactionHash,'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b');
+  assert.equal(finalBuild.treasury.achTransferInstruction.id,'numina:treasury:ach:bofa-3486:2026-09-19:v1');
+  assert.equal(finalBuild.treasury.achTransferInstruction.status,'INITIATED_AT_NUMINA_NATIVE_TREASURY');
+  assert.equal(finalBuild.treasury.achTransferInstruction.treasuryInstructionSubmissionPerformed,true);
+  assert.equal(finalBuild.treasury.achTransferInstruction.achOriginatorSubmissionPerformed,false);
+  assert.equal(finalBuild.treasury.achTransferInstruction.destinationAccountLast4,'3486');
   assert.equal(finalBuild.nusd.contracts.usdcConversion.status,'ACTIVE_SIGNED_1_TO_1_VERIFIED');
   assert.equal(finalBuild.nusd.contracts.usdcConversion.chainReceiptRecorded,false);
   assert.equal(finalBuild.nusd.contracts.usdRedemption.status,'ACTIVE_SIGNED_1_TO_1_VERIFIED');
