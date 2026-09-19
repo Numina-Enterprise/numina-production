@@ -253,10 +253,15 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "native_attestation_id": "numina:treasury:backing:2026-09-19:v1",
         "ratio": "1:1",
         "backing_verified": true,
+        "verification_scope": "NUMINA_NATIVE_TREASURY",
+        "external_provider_verified": false,
         "location": "Stripe USDC Address",
         "native_value": "500000000000000",
         "native_unit": "USDC",
         "nusd_equivalent": "500000000000000",
+        "contract_address": null,
+        "transaction_hash": null,
+        "receipt": null,
         "chain_contract_address_recorded": false,
         "chain_transaction_hash_recorded": false
       }
@@ -342,10 +347,15 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "native_attestation_id": "numina:treasury:backing:2026-09-19:v1",
         "ratio": "1:1",
         "backing_verified": true,
+        "verification_scope": "NUMINA_NATIVE_TREASURY",
+        "external_provider_verified": false,
         "location": "Bank of America Savings 3486",
         "native_value": "500000000000000",
         "native_unit": "USD",
         "nusd_equivalent": "500000000000000",
+        "contract_address": null,
+        "transaction_hash": null,
+        "receipt": null,
         "chain_contract_address_recorded": false,
         "chain_transaction_hash_recorded": false
       }

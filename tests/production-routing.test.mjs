@@ -23,7 +23,7 @@ test('connection checks accept current and historical product spelling, rejectin
 });
 test('website evidence and maintained source versions agree without inventing mobile publication',()=>{
  const release=JSON.parse(read('public/final-build.json'));
- assert.deepEqual(release,JSON.parse(read('release-evidence/numina-final-build-2026-09-18.json')));
+ assert.deepEqual(release,JSON.parse(read('docs/NUMINA-FINAL-BUILD.json')));
  assert.equal(release.applicationVersion,JSON.parse(read('package.json')).version);
  assert.equal(release.applicationVersion,JSON.parse(read('integrations/numina/package.json')).version);
  assert.equal(Number(read('mobile/android/app/build.gradle').match(/versionCode (\d+)/)[1]),release.mobile.android.versionCode);
@@ -33,11 +33,13 @@ test('website evidence and maintained source versions agree without inventing mo
  assert.equal(release.treasury.aggregateModeledValue,treasuryModel.aggregateModeledValue);
  assert.equal(release.treasury.modeledRoleValuesAdditive,treasuryModel.modeledAllocationsAdditive);
  assert.equal(release.treasury.balanceCount,treasuryModel.balanceCount);
- assert.deepEqual(release.treasury.components,treasuryModel.allocations.map(({unit,amount})=>({unit,modeledValue:amount})));
+ assert.deepEqual(release.treasury.components.map(({unit,modeledValue})=>({unit,modeledValue})),treasuryModel.allocations.map(({unit,amount})=>({unit,modeledValue:amount})));
+ assert.ok(release.treasury.components.every(component=>component.identity==='NUMINA'&&component.treasuryIdentity==='NUMINA'&&component.singular===true));
  assert.equal(release.treasury.externalBalancesAggregated,false);
  assert.equal(release.nusd.amountNusd,'1500000000000000');
  assert.equal(release.delivery.website.observedDeployment.commit.length,40);
  assert.equal(release.storePublication.googlePlay,false);
  assert.equal(release.storePublication.appStore,false);
- assert.equal(release.delivery.applicationBackend.matchesCanonicalSource,true);
+ assert.equal(release.delivery.applicationBackend.matchesNuminaSource,true);
+ assert.equal(release.delivery.applicationBackend.identity,'NUMINA');
 });

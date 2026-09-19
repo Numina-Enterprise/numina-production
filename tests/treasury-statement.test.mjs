@@ -5,7 +5,7 @@ import {database} from '../scripts/sqlite.mjs';
 import {bootstrapControl,readControl,commitControl} from '../src/control-store.js';
 import {controlHash} from '../src/control.js';
 import worker from '../src/worker.js';
-import {NUSD_APPROVED_REVIEW,NUSD_SIMULATION} from '../src/nusd-http.js';
+import {NUSD_POLICY} from '../src/nusd-http.js';
 const owner='email:owner@example.test',delegate='email:delegate@example.test',key='local-owner-test-key';
 const path='/api/control/v1/treasury-attestation';
 const identity=email=>({'oai-authenticated-user-id':'platform-test-user','oai-authenticated-user-email':email});
@@ -39,9 +39,13 @@ test('broad record delegation cannot reveal the owner bank statement through a s
    const res=await worker.fetch(new Request('https://numina.test'+route),env);assert.equal(res.status,200);
    const value=await res.json();
    if(route==='/api/nusd/v1/status'){
-    // Public candidate amounts and reference labels are not private account records.
-    assert.deepEqual(value.approved_review,NUSD_APPROVED_REVIEW);assert.deepEqual(value.simulation,NUSD_SIMULATION);
-    delete value.approved_review;delete value.simulation;
+    // Static public review, receipt and native-model descriptors contain published
+    // amounts/rail labels. They must match those descriptors exactly, never a
+    // private account response or an owner statement loaded from storage.
+    assert.deepEqual(value,NUSD_POLICY);
+    for(const field of ['approved_review','simulation','contract_record','conversion_workflow','provider_routing']){
+      assert.deepEqual(value[field],NUSD_POLICY[field]);delete value[field];
+    }
    }
    assert.equal(containsPrivate(JSON.stringify(value)),false);
   }

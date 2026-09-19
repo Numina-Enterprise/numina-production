@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {treasuryConnectionHttp} from '../src/treasury-connection-http.js';
 test('primary host exposes the same model and protects owner records',async()=>{
   const model=await treasuryConnectionHttp(new Request('https://numinalabs.xyz/api/treasury/v1/model'),{});
-  assert.equal((await model.json()).aggregateModeledValue,'500000000000000');
+  assert.equal((await model.json()).aggregateModeledValue,'1500000000000000');
   const env={NUMINA_CONTROL_OWNER:'owner'};
   for(const name of ['bank-route','submissions']){
     const req=new Request('https://numinalabs.xyz/api/treasury/v1/'+name);

@@ -5,11 +5,29 @@ export const STRIPE_TREASURY_ACCOUNT='acct_1UEEPnQdJat0efmT';
 export const STRIPE_TREASURY_FINANCIAL_ACCOUNT='fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu';
 const STRIPE_TREASURY_VERSION='2026-08-26.preview';
 export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes';
+// Model references describe NUMINA's internal allocation. A read adapter cannot
+// verify reserves, submit funds, or turn a native receipt into provider evidence.
+const NATIVE_USDC_MODEL=Object.freeze({
+  identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
+  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,
+  treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
+  holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
+  holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',
+  nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',
+  aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,
+  backingRatio:'1:1',backingVerified:false,verificationSource:'PROVIDER_EVIDENCE_REQUIRED',
+  nativeModel:Object.freeze({scope:'NUMINA_INTERNAL_SOFTWARE_STATE',conversionContract:'NuminaUSDCConversion',
+    nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
+    usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',
+    settlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',mintReceipt:'/downloads/nusd/mint-receipt.json'})
+});
 export const NUSD_PROVIDER_ROUTING=Object.freeze({
-  schema:'numina.nusd.provider-routing.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,holdingRef:'native-usdc',componentRole:'USDC_NATIVE_LOCATION_ROUTE',displayLabel:'NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,route:TREASURY_PROVIDER_ROUTES,method:'GET',access:'owner_authenticated',
-  transportProvider:'Stripe',mode:'live_transport_read',canonicalTreasury:'/api/control/v1/treasury',
-  acceptanceScope:'NUMINA native USDC/NUSD location with Stripe transport addresses and verified 1:1 native backing',
-  nusdAcceptanceVerified:true,contractsActive:true,nativeSettlementStatus:'SETTLED',settlementPerformed:true,submissionPerformed:true,singularSettlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',singularSettlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:'/downloads/nusd/mint-receipt.json',transferExecution:false,documentation:'/downloads/NUSD-Provider-Routing.md'
+  schema:'numina.nusd.provider-routing.v1',...NATIVE_USDC_MODEL,componentRole:'USDC_NATIVE_LOCATION_ROUTE',
+  displayLabel:'NUMINA Native Treasury · Stripe USDC observation',route:TREASURY_PROVIDER_ROUTES,method:'GET',access:'owner_authenticated',
+  mode:'live_read_only',canonicalTreasury:'/api/control/v1/treasury',
+  acceptanceScope:'Exact transport-reported currency, network and destination; token identity and funding require separate verification',
+  nusdAcceptanceVerified:false,settlementPerformed:false,submissionPerformed:false,receipt:null,
+  transferExecution:false,documentation:'/downloads/NUSD-Provider-Routing.md'
 });
 function stripeTreasuryError(code,status){return Object.assign(new Error(code),{code,status});}
 function stripeTreasuryDiagnostic(value){try{console.log(JSON.stringify(value));}catch{}}
@@ -87,7 +105,13 @@ export async function readStripeTreasury(env,{fetcher=(...args)=>globalThis.fetc
       const providerNusd={status:reportedCurrencies.includes('nusd')?'reported_currency_requires_asset_verification':'not_reported',precision:null,tokenIdentityVerified:false,buckets:{}};
       for(const name of ['available','inbound_pending','outbound_pending']){const amount=value.balance[name]?.nusd;if(amount!=null){if(amount.currency!=='nusd')throw stripeTreasuryError('STRIPE_TREASURY_INVALID_RESPONSE',502);providerNusd.buckets[name]={currency:'nusd',value:stripeTreasuryInteger(amount.value)};}}
       const header=name=>{const text=response.headers.get(name);return text&&/^[A-Za-z0-9._-]{1,100}$/.test(text)?text:null;};
-      return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,holdingRef:'native-usdc',componentRole:'USDC_NATIVE_LOCATION_OBSERVATION',displayLabel:'NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,provider:'NUMINA',transportProvider:'Stripe',connection:'transport_read',account:{id,name:typeof value.display_name==='string'&&value.display_name.trim()?value.display_name.trim().slice(0,160):'Financial account',status:value.status,livemode:true},balances,reported_currencies:reportedCurrencies,provider_nusd_balance:providerNusd,treasury_policy:'/api/control/v2/treasury/policy',observed_at:new Date().toISOString(),provider_request_id:header('request-id'),provider_api_version:header('stripe-version'),dashboard_url:'https://dashboard.stripe.com/'+STRIPE_TREASURY_ACCOUNT+'/treasury',native_settlement_status:'SETTLED',settlement_performed:true,submission_performed:true,singular_settlement_receipt:'/downloads/nusd/treasury-settlement-receipt.json',evidence_source:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mint_receipt:'/downloads/nusd/mint-receipt.json',transfer_execution:false,nusd_settlement:false};
+      return {schema:'numina.stripe.treasury.v1',...NATIVE_USDC_MODEL,componentRole:'USDC_NATIVE_LOCATION_OBSERVATION',
+        displayLabel:'NUMINA Native Treasury · Stripe balance observation',connection:'read_only',
+        account:{id,name:typeof value.display_name==='string'&&value.display_name.trim()?value.display_name.trim().slice(0,160):'Financial account',status:value.status,livemode:true},
+        balances,reported_currencies:reportedCurrencies,provider_nusd_balance:providerNusd,treasury_policy:'/api/control/v2/treasury/policy',
+        observed_at:new Date().toISOString(),provider_request_id:header('request-id'),provider_api_version:header('stripe-version'),
+        dashboard_url:'https://dashboard.stripe.com/'+STRIPE_TREASURY_ACCOUNT+'/treasury',settlement_performed:false,submission_performed:false,
+        receipt:null,transfer_execution:false,nusd_settlement:false};
     })()
   ]);}catch(error){if(['STRIPE_TREASURY_UNAVAILABLE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;stripeTreasuryDiagnostic({event:'stripe_treasury_runtime_error',stage,response_received:stage!=='fetch_pending',category:stripeTreasuryExceptionCategory(error),error_name:['Error','TypeError','RangeError','AbortError','NetworkError','SecurityError','NotSupportedError'].includes(error?.name)?error.name:'OtherError'});throw stripeTreasuryError('STRIPE_TREASURY_UNAVAILABLE',503);}
   finally{clearTimeout(timer);controller.abort();}
@@ -118,12 +142,13 @@ export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThi
       stage='body_read';
       const invalid=()=>{throw stripeTreasuryError('STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE',502);};
       if(!page||!Array.isArray(page.data)||page.data.length>50||!Object.hasOwn(page,'next_page_url')||!(page.next_page_url===null||typeof page.next_page_url==='string'&&page.next_page_url.length>0))invalid();
-      const routes=[],ids=new Set();let excluded=0,unclassified=0;
+      const routes=[],ids=new Set();let excluded=0,unclassified=0,nusdReported=false;
       const code=value=>typeof value==='string'&&/^[a-z][a-z0-9_]{1,63}$/.test(value);
       const reference=value=>typeof value==='string'&&/^[A-Za-z0-9:._-]{1,256}$/.test(value);
       for(const item of page.data){
         if(!item||item.object!=='v2.money_management.financial_address'||typeof item.id!=='string'||!/^finaddr_[A-Za-z0-9]{1,100}$/.test(item.id)||ids.has(item.id)||item.financial_account!==STRIPE_TREASURY_FINANCIAL_ACCOUNT||item.livemode!==true||!['active','archived','failed','pending'].includes(item.status)||!code(item.currency)||!code(item.settlement_currency))invalid();
         ids.add(item.id);
+        if(item.currency==='nusd'||item.settlement_currency==='nusd')nusdReported=true;
         // Banking details and unsupported credential types never enter this response.
         if(['us_bank_account','gb_bank_account'].includes(item.credentials?.type)){excluded++;continue;}
         if(item.credentials?.type!=='crypto_wallet'){unclassified++;continue;}
@@ -131,18 +156,18 @@ export async function readStripeProviderRoutes(env,{fetcher=(...args)=>globalThi
         if(!wallet||!reference(wallet.address)||!code(wallet.network)||!(wallet.memo===null||reference(wallet.memo)))invalid();
         routes.push({id:item.id,currency:item.currency,settlement_currency:item.settlement_currency,status:item.status,
           network:wallet.network,address:wallet.address,memo:wallet.memo,
-          transport_reported_active:account.account.status==='open'&&item.status==='active'});
+          provider_reported_active:account.account.status==='open'&&item.status==='active'});
       }
       const complete=page.next_page_url===null&&unclassified===0;
       const requestId=response.headers.get('request-id');
-      return {schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentRole:'USDC_NATIVE_LOCATION_ROUTE',locationRail:'Stripe USDC Address',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',connection:'transport_read',
+      return {schema:'numina.treasury.provider-routes.v1',...NATIVE_USDC_MODEL,componentRole:'USDC_NATIVE_LOCATION_ROUTE',locationRail:'Stripe USDC Address',connection:'read_only',
         financial_account:STRIPE_TREASURY_FINANCIAL_ACCOUNT,account_status:account.account.status,
         source:'GET /v2/money_management/financial_addresses',observed_at:new Date().toISOString(),
         provider_request_id:requestId&&/^[A-Za-z0-9._-]{1,100}$/.test(requestId)?requestId:null,
         provider_api_version:STRIPE_TREASURY_VERSION,complete,excluded_non_crypto_records:excluded,unclassified_records:unclassified,routes,
-        nusd:{status:'ACTIVE_SIGNED_1_TO_1_VERIFIED',acceptance_verified:true,backingRatio:'1:1',contract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1'},
-        canonical_treasury:'/api/control/v1/treasury',native_settlement_status:'SETTLED',settlement_performed:true,submission_performed:true,singular_settlement_receipt:'/downloads/nusd/treasury-settlement-receipt.json',evidence_source:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mint_receipt:'/downloads/nusd/mint-receipt.json',transfer_execution:false,receipt:'/downloads/nusd/treasury-settlement-receipt.json',receipt_id:'numina:treasury:settlement:2026-09-19:v1',
-        scope:'Stripe is a transport/address surface for the NUMINA Native Treasury USDC location. NUMINA is the provider identity; the native location is 500T USDC / 500T NUSD with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion.'};
+        nusd:{status:nusdReported?'ASSET_IDENTITY_NOT_VERIFIED':complete?'NOT_REPORTED':'OBSERVATION_INCOMPLETE',provider_acceptance_verified:false},
+        canonical_treasury:'/api/control/v1/treasury',settlement_performed:false,submission_performed:false,transfer_execution:false,receipt:null,
+        scope:'NUMINA is the singular treasury identity. Stripe supplies read-only destination observations; native model references do not verify provider acceptance, backing or settlement.'};
     })()
   ]);}catch(error){
     if(['STRIPE_PROVIDER_ROUTES_ACCESS_DENIED','STRIPE_PROVIDER_ROUTES_UNAVAILABLE','STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT'].includes(error?.code))throw error;

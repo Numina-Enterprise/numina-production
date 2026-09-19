@@ -25,7 +25,7 @@ test('review sign-in creates no business records and returns a bounded secure pr
  const cookie=result.headers.get('Set-Cookie');for(const flag of ['__Host-numina-review=','Path=/','Max-Age=28800','Secure','HttpOnly','SameSite=Strict'])assert.ok(cookie.includes(flag));
  const body=await result.text();assert.doesNotMatch(body,/password|production-secret|SessionKey/);assert.equal(JSON.parse(body).scope,'production-own-records');
  assert.equal((await f.db.prepare('SELECT COUNT(*) AS n FROM numina_service_orders').first()).n,0);
- const production=await readControl(f.db);assert.equal(production.state.root,'email:production-owner@example.test');assert.equal(production.revision,0);
+ const production=await readControl(f.db);assert.equal(production.manifest.root,'email:production-owner@example.test');assert.equal(production.revision,0);
  const retry=await f.login();assert.equal(retry.status,200);
 });
 test('wrong, disabled, widened, forged, duplicate, expired and cross-origin sessions fail closed',async t=>{

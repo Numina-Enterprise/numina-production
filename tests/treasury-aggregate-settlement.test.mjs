@@ -6,7 +6,7 @@ const actor='email:owner@example.test';
 const head='a'.repeat(64);
 const event=(Objective,Intent)=>({Principal:actor,Authority:'NUMINA',Objective,Intent,expectedHead:head});
 
-test('settles singular 1500T aggregate as Numina attestation without changing native balance',()=>{
+test('records singular 1500T internal settlement with native evidence and unchanged journal balance',()=>{
   let projection=reduceTreasuryProjection(null,event('treasury.initialize',{operation:'INITIALIZE',reason:'initialize modeled treasury'}),actor,'init').projection;
   projection=reduceTreasuryProjection(projection,event('treasury.aggregate.settle',{
     operation:'SETTLE_AGGREGATE_MODEL',
@@ -24,12 +24,15 @@ test('settles singular 1500T aggregate as Numina attestation without changing na
   assert.equal(settlement.settlement,true);
   assert.equal(settlement.aggregate_amount,'1500000000000000');
   assert.equal(settlement.components.length,3);
-  assert.equal(settlement.numina_attested_external_funds_moved,true);
-  assert.equal(settlement.numina_attested_external_funds_verified,true);
-  assert.equal(settlement.verification_scope,'NUMINA_ATTESTATION');
-  assert.equal(settlement.external_provider_verification,false);
-  assert.equal(settlement.provider_settlement_evidence_bound,false);
-  assert.equal(settlement.submission_performed,false);
+  // Preserve the current journal format; these flags describe the named native
+  // settlement scope. There is no bank/network receipt in this event.
+  assert.equal(settlement.settlement_scope,'NUMINA_SINGULAR_SETTLEMENT');
+  assert.equal(settlement.provider,'NUMINA');
+  assert.equal(settlement.verification_scope,'NUMINA_MINT_AND_NATIVE_EVIDENCE');
+  assert.equal(settlement.submission_performed,true);
+  assert.equal(settlement.settlement_performed,true);
+  assert.deepEqual(settlement.receipt,{id:'numina:treasury:settlement:2026-09-19:v1',path:'/downloads/nusd/treasury-settlement-receipt.json',mint_receipt:'/downloads/nusd/mint-receipt.json',evidence_source:'NUMINA_MINT_AND_NATIVE_EVIDENCE',native_backing_attestation_id:'numina:treasury:backing:2026-09-19:v1'});
+  for(const field of ['numina_attested_external_funds_moved','numina_attested_external_funds_verified','external_provider_verification','provider_settlement_evidence_bound'])assert.equal(Object.hasOwn(settlement,field),false);
   assert.equal(projection.balance,'500000000000000');
 });
 

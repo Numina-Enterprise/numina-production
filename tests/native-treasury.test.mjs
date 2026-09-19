@@ -52,15 +52,22 @@ test('account views share one checked balance without changing stored references
     await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
     assert.equal(await verifyTreasuryAccountView(view),true);assert.equal(view.schema,'numina.treasury.alignment.v2');assert.equal(view.identity,'NUMINA');assert.equal(view.treasuryIdentity,'NUMINA');assert.equal(view.transportVerificationChannel,'NUMINA');assert.equal(view.accountAlignment.schema,'numina.treasury.account-view.v2');assert.equal(view.accountAlignment.separateRoles,true);assert.equal(view.accountAlignment.singularIdentity,true);assert.ok(view.accounts.every(account=>account.treasuryIdentity==='NUMINA'&&account.treasuryRole==='evidence_view'&&account.providerObservationOnly===true));assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
     for(const mutate of [
-      v=>v.fundableTargets.aggregateModeledValue='1500000000000000',
-      v=>v.fundableTargets.additive=true,
+      v=>v.fundableTargets.aggregateModeledValue='500000000000000',
+      v=>v.fundableTargets.additive=false,
       v=>v.fundableTargets.aggregation='MODEL_ROUTE_ALLOCATIONS',
       v=>v.fundableTargets.singularBalanceCount=3,
-      v=>v.treasuryAlignmentPlan.nonAdditive=false,
-      v=>v.treasuryAlignmentPlan.additive=true,
+      v=>v.treasuryAlignmentPlan.nonAdditive=true,
+      v=>v.treasuryAlignmentPlan.additive=false,
       v=>v.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS',
       v=>v.treasuryAlignmentPlan.singularBalanceCount=3,
-      v=>v.treasuryAlignmentPlan.aggregateModeledValue='1500000000000000',
+      v=>v.treasuryAlignmentPlan.aggregateModeledValue='500000000000000',
+      v=>v.fundableTargets.nativeHoldings[0].amount='1',
+      v=>v.treasuryAlignmentPlan.nativeHoldings[1].provider='Stripe',
+      v=>v.fundableTargets.accountCount=3,
+      v=>v.accountAlignment.nativeHoldingCount=1,
+      v=>v.accounts[0].providerIdentity='Stripe',
+      v=>v.fundableTargets.settlementPerformed=true,
+      v=>v.nativeFundingView.submissionPerformed=true,
       v=>v.singular=false,
       v=>v.fundableTargets.externalBalancesAggregated=true,
       v=>v.fundableTargets.targets[0].amount='500000000000001',
@@ -93,7 +100,7 @@ test('account views share one checked balance without changing stored references
     funded.nativeFundingView.status='UNFUNDED_PLAN';assert.equal(await verifyTreasuryAccountView(funded),false);
   }finally{db.close();}
 });
-test('browser accepts the current shared500 model and the preserved historical 1500T allocation model without mixing them',async()=>{
+test('browser accepts the current singular native holdings and preserved historical models without mixing them',async()=>{
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
     const current=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]}),historical=structuredClone(current);
@@ -101,15 +108,28 @@ test('browser accepts the current shared500 model and the preserved historical 1
     historical.fundableTargets.aggregation='MODEL_ROUTE_ALLOCATIONS';
     historical.fundableTargets.additive=true;
     historical.fundableTargets.aggregateModeledValue='1500000000000000';
+    historical.fundableTargets.alignment='ALIGNED_MODEL';
     historical.treasuryAlignmentPlan.aggregateModeledValue='1500000000000000';
     historical.treasuryAlignmentPlan.nonAdditive=false;
     historical.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS';
     historical.treasuryAlignmentPlan.additive=true;
-    for(let i=0;i<3;i++)historical.fundableTargets.targets[i].classification='MODEL_ROUTE_ALLOCATION';
+    historical.treasuryAlignmentPlan.status='ALIGNED_MODEL';
+    const roles=[['bank-of-america','bank_evidence','BANK_OF_AMERICA_SAVINGS_ACH'],['stripe','stripe_evidence','STRIPE_TREASURY_USDC_ADDRESS'],['NUMINA','canonical_projection','NUMINA_NATIVE_TREASURY']];
+    for(let i=0;i<3;i++){
+      const target=historical.fundableTargets.targets[i],location=historical.treasuryAlignmentPlan.designatedLocations[i],[service,role,purpose]=roles[i];
+      Object.assign(target,{classification:'MODEL_ROUTE_ALLOCATION',providerService:service,treasuryRole:role,routePurpose:purpose,modelAlignmentStatus:'ALIGNED',alignmentStatus:i===2?target.alignmentStatus:'AWAITING_PROVIDER_EVIDENCE'});
+      Object.assign(location,{service,treasuryRole:role,routePurpose:purpose,modelAlignmentStatus:'ALIGNED',status:target.alignmentStatus});
+    }
+    const historicalShared=structuredClone(historical);
+    historicalShared.accountAlignment.aggregation='one NUMINA treasury; one shared 500T model expressed in USD, USDC and NUSD; denomination views are not added';
+    for(const model of [historicalShared.fundableTargets,historicalShared.treasuryAlignmentPlan])Object.assign(model,{aggregation:'SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',additive:false,aggregateModeledValue:'500000000000000'});
+    historicalShared.treasuryAlignmentPlan.nonAdditive=true;
+    for(const target of historicalShared.fundableTargets.targets)target.classification='TREASURY_DENOMINATION_VIEW';
     assert.equal(await verifyTreasuryAccountView(current),true);
     assert.equal(await verifyTreasuryAccountView(historical),true);
+    assert.equal(await verifyTreasuryAccountView(historicalShared),true);
     const mixed=structuredClone(current);
-    mixed.fundableTargets.aggregateModeledValue='1500000000000000';
+    mixed.fundableTargets.aggregateModeledValue='500000000000000';
     assert.equal(await verifyTreasuryAccountView(mixed),false);
     const mixedHistorical=structuredClone(historical);
     mixedHistorical.fundableTargets.additive=false;
@@ -118,6 +138,40 @@ test('browser accepts the current shared500 model and the preserved historical 1
     assert.deepEqual(current.treasury,historical.treasury);
   }finally{db.close();}
 });
+test('current native holdings reject contradictory execution claims, substituted destinations and extra evidence fields',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);
+    for(const initialized of [false,true]){
+      if(initialized)await api.writeTreasury(await command(db));
+      const view=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]});
+      assert.equal(await verifyTreasuryAccountView(view),true);
+      const mutations=[
+        ['target claims settlement',v=>v.fundableTargets.targets[0].settlementStatus='SETTLED'],
+        ['target changes evidence scope',v=>v.fundableTargets.targets[0].internalSettlementEvidenceScope='BANK_PROVIDER_SETTLEMENT'],
+        ['target changes receipt',v=>v.fundableTargets.targets[1].settlementReceipt='https://attacker.invalid/receipt'],
+        ['target changes destination',v=>v.fundableTargets.targets[1].destination='https://attacker.invalid/deposit'],
+        ['target changes provider binding',v=>v.fundableTargets.targets[1].providerAccountReference='fa_other'],
+        ['target changes transport account',v=>v.fundableTargets.targets[1].linkedFinancialAccount='fa_other'],
+        ['target changes address',v=>v.fundableTargets.targets[1].usdcAddress='0x'+'1'.repeat(40)],
+        ['target adds provider claim',v=>v.fundableTargets.targets[0].providerAcceptanceVerified=true],
+        ['location claims settlement',v=>v.treasuryAlignmentPlan.designatedLocations[0].settlementPerformed=true],
+        ['location substitutes destination',v=>v.treasuryAlignmentPlan.designatedLocations[1].destination='https://attacker.invalid/deposit'],
+        ['native holdings add provider verification',v=>{for(const x of [v.fundableTargets,v.treasuryAlignmentPlan,v.nativeFundingView])x.nativeHoldings[0].providerObservationVerified=true;}],
+        ['native holdings substitute backing',v=>{for(const x of [v.fundableTargets,v.treasuryAlignmentPlan,v.nativeFundingView])x.nativeHoldings[0].verificationSource='BANK_PROVIDER';}],
+        ['plan changes native account',v=>v.treasuryAlignmentPlan.nativeAccount.name='Other treasury'],
+        ['all copies change native account',v=>{for(const x of [v.fundableTargets,v.treasuryAlignmentPlan,v.nativeFundingView])x.nativeAccount.name='Other treasury';}],
+        ['model adds provider verification',v=>v.fundableTargets.providerObservationVerified=true],
+        ['plan adds provider verification',v=>v.treasuryAlignmentPlan.providerObservationVerified=true],
+        ['funding view adds provider verification',v=>v.nativeFundingView.providerObservationVerified=true],
+        ['funding view changes internal receipt',v=>v.nativeFundingView.singularSettlementReceipt='https://attacker.invalid/receipt'],
+        ['model changes mint evidence',v=>v.fundableTargets.mintEvidence='https://attacker.invalid/mint'],
+        ['plan changes mint evidence',v=>v.treasuryAlignmentPlan.mintEvidence='https://attacker.invalid/mint']
+      ];
+      for(const [label,mutate] of mutations){const changed=structuredClone(view);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false,label+' initialized='+initialized);}
+    }
+  }finally{db.close();}
+});
+
 test('account alignment rejects changed groups and provider claims before and after initialization',async()=>{
   const db=await fixture();try{
     const api=treasury(db),frontier={accounts:[

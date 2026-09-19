@@ -26,7 +26,11 @@ export async function reviewerContext(req,env,now=Math.floor(Date.now()/1000)){
  const headers=new Headers(req.headers);headers.delete('authorization');headers.delete('stripe-signature');headers.set('oai-authenticated-user-id',REVIEW_SUBJECT);headers.set('oai-authenticated-user-email',REVIEW_EMAIL);
  // A verified reviewer is an ordinary customer in the existing production data
  // store. Existing ownership checks apply; the principal never becomes owner.
- return {req:new Request(req,{headers}),env:Object.freeze({...env,NUMINA_REVIEW_SESSION:true})};
+ // Worker bindings may be inherited by the request-scoped environment. Spreading
+ // it drops DB/ASSETS and breaks authenticated reviewer requests.
+ const reviewEnv=Object.create(env);
+ Object.defineProperty(reviewEnv,'NUMINA_REVIEW_SESSION',{value:true,enumerable:true});
+ return {req:new Request(req,{headers}),env:Object.freeze(reviewEnv)};
 }
 export async function reviewerHttp(req,env,now=Math.floor(Date.now()/1000)){
  const path=new URL(req.url).pathname;

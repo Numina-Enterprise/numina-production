@@ -67,7 +67,9 @@ function equalJson(left, right) {
 
 export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME_PUBLIC_KEY} = {}) {
   const value = name => records[name]?.phase === 'ok' ? records[name].data : null;
-  const manifest = value('manifest');
+  const manifestResponse = value('manifest');
+  const manifest = object(manifestResponse?.manifest) ? manifestResponse.manifest : manifestResponse;
+  const manifestReceipt = await verifyRuntimeReceipt(manifestResponse, pinnedKey);
   const attestation = await verifyRuntimeReceipt(value('attestation'), pinnedKey);
   const control = value('control');
   const controlReceipt = await verifyRuntimeReceipt(control, pinnedKey);
@@ -78,21 +80,40 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const declarationWrapper = value('attestation');
   const declarationBound = !Object.hasOwn(declarationWrapper || {}, 'attestation') ||
     equalJson(declarationWrapper.attestation, declaration);
-  // rc26 signs the complete descriptor, including source and artifact hashes.
+  // Bind the entire displayed descriptor, not only the known release pins. A
+  // matching build hash does not authenticate an additional unsigned claim.
+  const manifestDeclarationBound = object(declaration?.manifest)
+    ? equalJson(manifest, declaration.manifest)
+    : object(manifest) && object(declaration) && Object.entries(manifest).every(([field, entry]) =>
+      Object.hasOwn(declaration, field) && equalJson(entry, declaration[field]));
+  const manifestEnvelopeBound = !object(manifestResponse?.manifest) || Boolean(
+    manifestReceipt.valid && manifestReceipt.envelope.artifact_type === 'NUMINA_MANIFEST' &&
+    equalJson(manifest, manifestReceipt.envelope.payload));
+  // Both the legacy declaration and the current singular projection are signed.
   const declarationRelease=object(declaration?.release)?declaration.release:declaration;
   const releaseSignatureValid=attestation.valid&&attestation.envelope.artifact_type===RELEASE_ARTIFACT_TYPE&&
-    releaseIdentityMatches(declarationRelease)&&(declaration.environment??'production')==='production'&&declarationBound;
+    releaseIdentityMatches(declarationRelease)&&(declaration.environment??'production')==='production'&&declarationBound&&
+    manifestDeclarationBound&&manifestEnvelopeBound;
   // Exact binding is required. The legacy route carries a NUMINA manifest, never an independent state.
   const controlManifest = control?.manifest;
+  const controlPayload = object(controlManifest?.payload) ? controlManifest.payload : controlManifest;
   const controlManifestBound = Boolean(controlReceipt.valid && ['NUMINA_CONTROL_MANIFEST','NUMINA_CONTROL_STATE'].includes(controlReceipt.envelope.artifact_type) &&
-    object(control) && object(controlManifest) && ['numina.control-manifest.v1','numina.control-state.v1'].includes(controlManifest.schema) &&
-    controlManifest.release === EXPECTED_RELEASE.production_version && equalJson(controlManifest, controlReceipt.envelope.payload));
-  const status=value('status'),supply=value('supply'),statusPayload=status?.payload??status,statusRelease=object(statusPayload?.release)?statusPayload.release:statusPayload;
-  const runtimeStatusMatches=Boolean(releaseIdentityMatches(statusRelease)&&statusPayload.frozen_core?.valid===true&&statusPayload.frozen_core?.manifest_root===EXPECTED_RELEASE.frozen_core_manifest_root);
+    object(control) && object(controlPayload) && ['numina.control-manifest.v1','numina.control-state.v1'].includes(controlPayload.schema) &&
+    controlPayload.release === EXPECTED_RELEASE.production_version && equalJson(controlManifest, controlReceipt.envelope.payload));
+  const statusResponse=value('status'),supply=value('supply');
+  const status=object(statusResponse?.status)?statusResponse.status:statusResponse;
+  const statusPayload=object(status?.payload)?status.payload:status,statusRelease=object(statusPayload?.release)?statusPayload.release:statusPayload;
+  const statusReceipt=await verifyRuntimeReceipt(statusResponse,pinnedKey);
+  const runtimeStatusMatches=Boolean(releaseIdentityMatches(statusRelease)&&(object(statusResponse?.status)
+    ?statusReceipt.valid&&statusReceipt.envelope.artifact_type==='NUMINA_PRODUCTION_STATUS'&&equalJson(status,statusReceipt.envelope.payload)
+    :statusPayload.frozen_core?.valid===true&&statusPayload.frozen_core?.manifest_root===EXPECTED_RELEASE.frozen_core_manifest_root));
   const supplyEvidence=supply?.payload?.evidence??supply?.evidence??supply;
-  const supplyIdentityMatches=Boolean(supplyEvidence?.valid===true&&['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>supplyEvidence[field]===EXPECTED_RELEASE[field]));
+  const supplyReceipt=await verifyRuntimeReceipt(supply?.payload??supply,pinnedKey);
+  const supplyEnvelopeBound=!Object.hasOwn(supply?.payload??supply??{},'receipt')||Boolean(
+    supplyReceipt.valid&&supplyReceipt.envelope.artifact_type==='NUMINA_SUPPLY_CHAIN_EVIDENCE'&&equalJson(supplyEvidence,supplyReceipt.envelope.payload));
+  const supplyIdentityMatches=Boolean(supplyEnvelopeBound&&supplyEvidence?.valid===true&&['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>supplyEvidence[field]===EXPECTED_RELEASE[field]));
   return {
-    manifest, manifestMatches, attestation,
+    manifest, release:manifestRelease, status:statusPayload, supply:supplyEvidence, manifestMatches, attestation,
     releaseDeclarationVerified: Boolean(manifestMatches && releaseSignatureValid),
     runtimeStatusMatches, supplyIdentityMatches, controlReceipt, controlManifestBound,
     key: attestation.valid ? attestation.key : controlReceipt.valid ? controlReceipt.key : null

@@ -43,10 +43,10 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
     detail(summaryRows,'Minted NUSD aggregate (separate token supply)',formatTreasuryNusdWholeAmount(issuance.amountNusd));
     detail(summaryRows,'Issuance verification observed at',issuance.verifiedAt);
   }
-  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One verified 500T NUMINA-native treasury is expressed as three non-additive denomination views in USD, USDC and NUSD. These views are the same singular value and are never added together. '+NUMINA_DENOMINATION_POLICY.expression+'. Amounts round to the nearest whole unit and display two decimal places; ≈ marks rounding. Stored integers and the existing token contract are unchanged. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
+  summary.append(item('h3','NUMINA Treasury v2 · model aligned'),item('p','One singular NUMINA-native treasury has three additive native holdings of 500T each in USD, USDC and NUSD, for a modeled aggregate of 1,500T NUSD. Shared journal references and provider observations are never added together. '+NUMINA_DENOMINATION_POLICY.expression+'. Amounts round to the nearest whole unit and display two decimal places; ≈ marks rounding. Stored integers and the existing token contract are unchanged. This shared model does not establish externally settled bank, Stripe, or blockchain funds.'),summaryRows,canonicalLink());
   target.append(summary);
   const issuanceLink=item('a','Read the minted-supply verification ↗');issuanceLink.href='/downloads/nusd/deployment-verification.json';
-  summary.append(item('p','The verified 500T native treasury model is the current treasury display. The recorded 1,500T constructor issuance is separate historical token-supply evidence and is not the treasury balance or provider funding.'),issuanceLink);
+  summary.append(item('p','The 1,500T native model comprises three 500T holdings. The recorded 1,500T constructor issuance is separate token-supply evidence; it does not establish the current journal balance or provider funding.'),issuanceLink);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
   const stripeTargetRows=item('dl','');detail(stripeTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));
@@ -55,7 +55,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const bankTargetRows=item('dl','');detail(bankTargetRows,'Fundable USD target',fundableTargetText(treasury,'bank-of-america-savings'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
   const bankRows=item('dl','');detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
   grid.append(stripe,bank);
-  target.append(heading,grid,item('p','Treasury v2 is singular: one verified 500T NUMINA-native treasury shown through three non-additive 500T denomination views. Provider observations remain separate factual evidence.'));
+  target.append(heading,grid,item('p','Treasury v2 is singular: one NUMINA-native treasury with three additive 500T holdings and a 1,500T modeled aggregate. Provider observations remain separate factual evidence.'));
   try{
     const record=await requestJson('/api/control/v1/stripe-treasury',{signal,timeoutMs:12000});
     if(signal?.aborted)return;

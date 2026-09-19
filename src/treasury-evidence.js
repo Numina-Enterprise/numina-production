@@ -13,7 +13,7 @@ export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
 function treasuryProviderRecords(observation){
   const record=observation?.record,base='/source/providerObservation/record';
   const authenticated=observation?.status==='OBSERVED'&&observation.authentication==='server_held_stripe_read_credential'
-    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='NUMINA'&&record.transportProvider==='Stripe'&&record.connection==='transport_read'
+    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='NUMINA'&&record.transportProvider==='Stripe'&&record.connection==='read_only'
     &&record.account?.id===STRIPE_TREASURY_FINANCIAL_ACCOUNT&&record.account.livemode===true
     &&['open','closed'].includes(record.account.status)&&Array.isArray(record.reported_currencies);
   const currencies={};
@@ -33,7 +33,7 @@ function treasuryProviderRecords(observation){
       verification:{status,scope:native?'Provider currency label; no verified link to the Numina-native asset':'Provider-reported currency code'},balances};
   }
   // References only: amounts remain in the captured provider source, with no aggregation.
-  return {source:'/source/providerObservation',issuer:'NUMINA',transportProvider:'Stripe',verification:{status:authenticated?'NUMINA_TRANSPORT_OBSERVATION':'UNAVAILABLE',scope:'NUMINA provider identity with Stripe transport amounts preserved in their original currencies'},currencies};
+  return {source:'/source/providerObservation',issuer:'NUMINA',transportProvider:'Stripe',verification:{status:authenticated?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'Authenticated Stripe transport amounts in their original currencies; no cross-currency aggregation or reserve allocation'},currencies};
 }
 
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
@@ -42,12 +42,13 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
   const records={schema:'numina.treasury.record-sources.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,
       nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:source.nativeTreasury.status==='READY'&&source.nativeTreasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
       providerBalances:treasuryProviderRecords(source.providerObservation),
-      bankFunding:{source:'/source/nativeTreasury',issuer:'NUMINA',locationRail:'Bank of America Savings 3486',verification:{status:'NUMINA_NATIVE_TREASURY_VERIFIED',scope:'500T USD / 500T NUSD native location; 1:1 NUSD/USD verified through NuminaUSDRedemption'}},
-      reserveAllocation:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:'NUMINA_NATIVE_TREASURY_VERIFIED',scope:'Singular 1,500T NUSD native treasury allocation'}},
-      redemption:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:'ACTIVE_SIGNED_1_TO_1_VERIFIED',scope:'NuminaUSDRedemption native contract path; chain deployment receipt tracked separately'}},
+      bankFunding:{source:'/fundingVerification/bankConfirmation',issuer:null,verification:{status:'BANK_PROVIDER_NOT_CONNECTED',scope:'Bank-issued funding confirmation'}},
+      reserveAllocation:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Reserve ownership and allocation to this treasury'}},
+      redemption:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Executable redemption rights and confirmed redemption evidence'}},
       supportingDocuments:{source:'/source/supportingDocuments',issuer:null,verification:{status:source.supportingDocuments?.status==='OBSERVED'?'OWNER_UPLOADED_UNVERIFIED':'UNAVAILABLE',scope:'Stored document metadata; issuer and contents are not verified'}}};
   const canonical=source.canonicalTreasury,native=source.nativeTreasury;
   const canonicalReady=records.nativeTreasury.verification.status==='VERIFIED'&&canonical!==null
+    &&typeof native.root==='string'&&native.root.length>0
     &&Number.isSafeInteger(canonical.revision)&&canonical.revision>=0&&typeof canonical.head==='string'&&/^[a-f0-9]{64}$/.test(canonical.head);
   const treasuryRef=canonicalReady?{id:canonical.id,source:'/source/canonicalTreasury',nativeUnit:canonical.native.unit,amountSource:'/source/canonicalTreasury/native/amount'}:null;
   // Reconciliation references this captured snapshot; it cannot create an allocation or submit funds.
@@ -58,21 +59,21 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
       stripe:{source:'/records/providerBalances',status:records.providerBalances.verification.status,currencies:structuredClone(records.providerBalances.currencies),treasuryRef:structuredClone(treasuryRef)},
       bank:{source:'/records/bankFunding',status:records.bankFunding.verification.status,treasuryRef:structuredClone(treasuryRef)},
       supportingDocuments:{source:'/records/supportingDocuments',status:records.supportingDocuments.verification.status,complete:source.supportingDocuments?.complete===true,treasuryRef:structuredClone(treasuryRef)}},
-    depositReadiness:{status:'SETTLED',submissionPerformed:true,settlementPerformed:true,receipt:'/downloads/nusd/treasury-settlement-receipt.json',receiptId:'numina:treasury:settlement:2026-09-19:v1',evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:'/downloads/nusd/mint-receipt.json',externalSubmissionImplemented:false,
+    depositReadiness:{status:'NOT_READY',submissionPerformed:false,settlementPerformed:false,receipt:null,externalSubmissionImplemented:false,
       requiredEvidence:[
-        {id:'mint_evidence',status:'VERIFIED',source:'/downloads/nusd/mint-receipt.json',description:'Verified NUMINA NUSD mint receipt shared by the singular settlement'},
-        {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified singular NUMINA allocation across the three settled locations'},
-        {id:'native_settlement_receipt',status:'SETTLED',source:'/downloads/nusd/treasury-settlement-receipt.json',description:'Single NUMINA Native Treasury settlement receipt covering Bank, Stripe and retained NUSD'}],
-      settlementEvidence:{status:'SETTLED',receipt:'/downloads/nusd/treasury-settlement-receipt.json',receiptId:'numina:treasury:settlement:2026-09-19:v1',evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',description:'NUMINA singular settlement evidence backed by the shared mint and native evidence chain'}}};
+        {id:'funding_source',status:'NOT_VERIFIED',description:'Authenticated available source funds identifying the account, asset and exact amount'},
+        {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
+        {id:'provider_acceptance',status:'NOT_VERIFIED',observationRoute:TREASURY_PROVIDER_ROUTES,description:'Provider acceptance of the source asset, network and destination; read current provider routes separately'}],
+      settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
   return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA Native Treasury with provider identity NUMINA; Bank and Stripe are location/transport rails',
     issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,
     evidenceHash:await controlHash(source),source,records,reconciliation,
-    fundingVerification:{actual_funding:true,status:'SETTLED_NUMINA_NATIVE',settlementStatus:'SETTLED',settlementPerformed:true,submissionPerformed:true,singularSettlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',singularSettlementReceipt:'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json',mintEvidence:'runtime/nusd/mint-receipt.json',evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',
-      bankConfirmation:{status:'NUMINA_NATIVE_TREASURY_VERIFIED',verified:true,locationRail:'Bank of America Savings 3486',ratio:'1:1',contract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1'},
+    fundingVerification:{actual_funding:false,status:'NOT_VERIFIED',settlementStatus:'NOT_VERIFIED',settlementPerformed:false,submissionPerformed:false,
+      bankConfirmation:{status:'BANK_PROVIDER_NOT_CONNECTED',verified:false,bankIssuedReceipt:null},
       ownerDeclaredFunded:source.ownerDeclaration?.FUNDED_PLAN===true,
-      allocatedReservesVerified:true,redemptionVerified:true,nativeBackingVerified:true,settlementVerified:true,
+      allocatedReservesVerified:false,redemptionVerified:false,nativeBackingVerified:false,settlementVerified:false,
       requiredEvidence:'Authenticated settled funding evidence identifying the account, asset, amount and allocation to this treasury'},
-    receiptScope:'NUMINA signs one singular Native Treasury settlement receipt covering Bank USD/NUSD, Stripe USDC/NUSD, and retained NUSD. All three components reference the same NUSD mint receipt and NUMINA native backing evidence.',
+    receiptScope:'NUMINA signs this observation snapshot for its singular treasury. Native records and their signatures do not authenticate a bank issuer or establish external funding or settlement.',
     effects:{journalChanged:false,providerBalancesChanged:false,fundsCreated:false,recordsRevoked:false}};
 }
 

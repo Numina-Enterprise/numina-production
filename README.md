@@ -21,7 +21,7 @@ The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(ev
 
 ## Build and provenance
 
-Use Node 24, `npm test`, `npm run build`, and `npm run release:numina`. GitHub Actions runs the same NUMINA path and publishes the `NUMINA` build artifact. **NUMINA is the model, repository, database, journal, build, release, deployment, source, evidence and provenance identity.**
+Use Node 24. Install the pinned test dependencies with `npm ci --prefix runtime/nusd --ignore-scripts` and `npm ci --prefix runtime/nusd/development --ignore-scripts`, then run `npm run build`, `npm test`, and `npm run release:numina`. The suite verifies generated build artifacts, so build before testing. GitHub Actions follows this order and requires the suite to pass before publication. **NUMINA is the model, repository, database, journal, build, release, deployment, source, evidence and provenance identity.**
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 

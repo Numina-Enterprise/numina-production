@@ -10,8 +10,8 @@ const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {
 async function settled(){for(let i=0;i<8;i++)await new Promise(resolve=>setTimeout(resolve,0));}
 const dashboard='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury';
 const amount=(currency,value=0)=>({currency,value,formatted:formatTreasuryProviderAmount(value,currency)});
-function stripeFixture(){return {schema:'numina.stripe.treasury.v1',provider:'Stripe',connection:'read_only',account:{name:'Test financial account',status:'open',livemode:true},observed_at:'2026-01-02T12:00:00Z',dashboard_url:dashboard,transfer_execution:false,nusd_settlement:false,balances:Object.fromEntries(['available','inbound_pending','outbound_pending'].map(bucket=>[bucket,{usd:amount('usd'),usdc:amount('usdc')}]))};}
-function routesFixture(){return {schema:'numina.treasury.provider-routes.v1',provider:'Stripe',connection:'read_only',complete:true,routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,receipt:null};}
+function stripeFixture(){return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',account:{name:'Test financial account',status:'open',livemode:true},observed_at:'2026-01-02T12:00:00Z',dashboard_url:dashboard,transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null,nusd_settlement:false,balances:Object.fromEntries(['available','inbound_pending','outbound_pending'].map(bucket=>[bucket,{usd:amount('usd'),usdc:amount('usdc')}]))};}
+function routesFixture(){return {schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',complete:true,routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null};}
 
 class Element{
  constructor(tag='div'){this.tagName=tag;this.children=[];this.hidden=false;this.disabled=false;this.value='';this.checked=false;this._text='';this.listeners={};}
@@ -46,9 +46,9 @@ function values(h){const items=h.get('stripe-treasury-details').children,rows={}
 function assertCleared(h){assert.equal(h.get('stripe-treasury-details').children.length,0);assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.equal(h.get('stripe-treasury-dashboard').getAttribute('href'),null);}
 
 test('deposit route check displays exact provider currency and network without claiming NUSD acceptance',async()=>{
- const calls=[],routes={schema:'numina.treasury.provider-routes.v1',provider:'Stripe',connection:'read_only',complete:true,
+ const calls=[],routes={schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',complete:true,
   routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],
-  nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,receipt:null};
+  nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null};
  const h=harness(async path=>{calls.push(path);return response(path.endsWith('/provider-routes')?routes:stripeFixture());});
  try{
   await h.subject.loadStripeTreasury();assert.equal(calls.length,1);
@@ -130,9 +130,20 @@ test('a newer Stripe Treasury view cannot be overwritten by an older response',a
 });
 
 test('invalid Stripe execution or balance data cannot be presented as a current balance',async()=>{
- for(const corrupt of [fixture=>fixture.transfer_execution=true,fixture=>delete fixture.balances.available.usd]){
+ for(const corrupt of [fixture=>fixture.transfer_execution=true,fixture=>fixture.submission_performed=true,fixture=>fixture.settlement_performed=true,fixture=>fixture.receipt={id:'native-receipt'},fixture=>fixture.provider='Stripe',fixture=>delete fixture.transportProvider,fixture=>delete fixture.balances.available.usd]){
   const fixture=stripeFixture();corrupt(fixture);const h=harness(async()=>response(fixture));
   try{await h.subject.loadStripeTreasury();assertCleared(h);assert.match(h.get('stripe-treasury-message').textContent,/could not be checked/);}finally{h.close();}
+ }
+});
+
+test('deposit route view rejects claimed execution and mismatched transport identity',async()=>{
+ for(const corrupt of [fixture=>fixture.submission_performed=true,fixture=>fixture.settlement_performed=true,fixture=>fixture.receipt={id:'native-receipt'},fixture=>fixture.provider='Stripe',fixture=>delete fixture.transportProvider]){
+  const routes=routesFixture();corrupt(routes);
+  const h=harness(async path=>response(path.endsWith('/provider-routes')?routes:stripeFixture()));
+  try{
+   await h.subject.loadStripeTreasury();const [button,result]=h.get('stripe-treasury-details').children.at(-1).children;
+   await button.onclick();assert.match(result.textContent,/could not be checked/);assert.doesNotMatch(result.textContent,/0x1234567890/);
+  }finally{h.close();}
  }
 });
 

@@ -76,10 +76,21 @@ test('contract API and UI separate compiled functions from activated financial o
   for(const mutate of [
     value=>value.issuance.baseUnits='1',
     value=>value.issuance.transactionHash='0x'+'0'.repeat(64),
-    value=>value.financial_execution.external_deposits=true
+    value=>value.financial_execution.external_deposits=true,
+    value=>value.contracts[2].deployment.external_provider_verified=true,
+    value=>value.contracts[2].deployment.submission_performed=true,
+    value=>value.contracts[2].deployment.contract_address='0x'+'1'.repeat(40),
+    value=>value.contracts[3].deployment.native_attestation_id='unbound',
+    value=>value.contracts[3].verification.chain_receipt_verified=true
   ]){const changed=structuredClone(record);mutate(changed);assert.throws(()=>contractSourcePresentation(changed));}
   assert.equal(record.financial_execution.issuance,true);assert.equal(record.financial_execution.transfer,false);assert.equal(record.financial_execution.nusd_settlement,false);assert.equal(record.financial_execution.usd_redemption,false);assert.equal(record.financial_execution.usdc_conversion,false);assert.equal(record.financial_execution.external_deposits,false);
   for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
+  for(const contract of record.contracts.slice(2)){
+    assert.equal(contract.deployment.status,'native_active');assert.equal(contract.deployment.lifecycle,'ACTIVE');
+    assert.equal(contract.deployment.verification_scope,'NUMINA_NATIVE_TREASURY');
+    assert.equal(contract.deployment.external_provider_verified,false);assert.equal(contract.deployment.transaction_hash,null);
+  }
+  assert.match(contractSourcePresentation(record)['source-scope'],/ACTIVE in the NUMINA native model/);
   const forged=structuredClone(record);forged.contracts[0].deployment.contract_address='0x123';assert.throws(()=>contractSourcePresentation(forged));
 });
 test('integration retains the contract source record without interpreting it as live execution',async()=>{

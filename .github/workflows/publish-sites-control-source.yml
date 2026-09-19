@@ -41,8 +41,14 @@ jobs:
         with:
           node-version-file: .nvmrc
           check-latest: false
+      - name: Install pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
       - name: Build Numina
         run: npm run build
+      - name: Verify Numina before publication
+        run: npm test
       - name: Package Numina
         run: node scripts/package.mjs "$RUNNER_TEMP/numina.tgz"
       - name: Restore exact committed source for publication

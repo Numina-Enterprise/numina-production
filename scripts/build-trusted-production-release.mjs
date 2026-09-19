@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_KEY_ID,PINNED_RUNTIME_PUBLIC_KEY,RUNTIME_ORIGIN} from '../public/runtime-contract.js';
+import {readTrustedReleaseEvidence} from './trusted-release-evidence.mjs';
 
 const PROVIDER_RECORD_PATH=process.env.NUMINA_PROVIDER_RECORD_PATH||'',OUTPUT_PATH=process.env.NUMINA_TRUSTED_RELEASE_PATH||'',EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||'').trim();
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex'),MAX_JSON_BYTES=262144;
@@ -25,14 +26,11 @@ assert(providerArtifact.assertions?.provider_status==='HEALTHY'&&providerArtifac
 assert(providerArtifact.assertions?.credentialed===false&&providerArtifact.assertions?.partnership_status==='asserted'&&providerArtifact.assertions?.external_execution_performed===false,'provider evidence boundary drift');
 assert(/^sha256:[0-9a-f]{64}$/i.test(String(providerArtifact.archive?.digest||'')),'provider archive digest invalid');
 
-const [frontier,transportResponse]=await Promise.all([fetchJson('/v1/frontier/readiness'),fetchJson('/v1/deployment/provenance')]);
-const readiness=verifyEnvelope(frontier.receipt,'NUMINA_FRONTIER_READINESS');assert(sameJson(readiness,frontier.readiness),'readiness receipt mismatch');
-const transportObservation=verifyEnvelope(transportResponse.receipt,'NUMINA_TRANSPORT_OBSERVATION');assert(sameJson(transportObservation,transportResponse.transport?.observation),'transport receipt mismatch');
-assert(readiness?.schema==='numina.frontier-readiness.v2'&&readiness.root==='NUMINA'&&readiness.manifest==='NUMINA'&&readiness.deployment==='NUMINA'&&readiness.deployed===true&&readiness.ready===true&&readiness.mode==='NUMINA','NUMINA readiness invalid');
-const checks=readiness.checks||{};assert(Object.keys(checks).length===8&&Object.values(checks).every(Boolean)&&checks.numina_deployment===true&&checks.control_manifest_signature===true&&checks.execution_authorization_bounded===true,'NUMINA readiness checks incomplete');
-assert(readiness.fundable_targets?.schema==='numina.fundable-targets.v1'&&readiness.fundable_targets?.scope==='numina_native'&&readiness.fundable_targets?.target_display==='500T'&&readiness.fundable_targets?.target_amount==='500000000000000'&&readiness.fundable_targets?.external_balance_verified===false&&readiness.fundable_targets?.external_backing_asserted===false,'500T Numina-native fundable target missing');
-assert(readiness.runtime?.root==='NUMINA'&&readiness.runtime?.deployment==='NUMINA'&&readiness.runtime?.production_version===EXPECTED_RELEASE.production_version&&readiness.runtime?.release===EXPECTED_RELEASE.release,'frontier runtime manifest mismatch');
-assert(transportResponse.root==='NUMINA'&&transportResponse.manifest==='NUMINA'&&transportResponse.deployment==='NUMINA'&&transportResponse.deployed===true&&transportResponse.transport?.role==='diagnostic_only','transport wrapper altered NUMINA');
+const [frontier,transportResponse,controlResponse]=await Promise.all([fetchJson('/v1/frontier/readiness'),fetchJson('/v1/deployment/provenance'),fetchJson('/v1/control/state')]);
+// Release readiness and bounded execution are separately signed statements.
+// Neither authorization nor a healthy provider observation is a submission.
+const {readiness,transportObservation,transportVerified,fundableTargets}=readTrustedReleaseEvidence({frontier,transportResponse,controlResponse,expectedGitSha:EXPECTED_GIT_SHA},{verifyEnvelope});
+const checks=readiness.checks;
 const transportCurrent=String(transportObservation.git_commit_sha||'').toLowerCase()===EXPECTED_GIT_SHA.toLowerCase();
 
 const observedMs=Date.parse(readiness.observed_at);assert(Number.isFinite(observedMs),'readiness observed_at invalid');
@@ -40,10 +38,11 @@ const observedTag=new Date(observedMs).toISOString().replace(/[-:]/g,'').replace
 const artifactJson={
   schema:'numina.trusted-production-release.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',deployment:'NUMINA',deployed:true,
   scope:'numina_release_gate',source_commit:EXPECTED_GIT_SHA,
-  transport:{identity:'NUMINA',role:'diagnostic_only',verified:transportResponse.transport?.verified===true,current_expected_commit:transportCurrent,observation:transportObservation,receipt:transportResponse.receipt},
+  transport:{identity:'NUMINA',role:'diagnostic_only',verified:transportVerified,current_expected_commit:transportCurrent,observation:transportObservation,receipt:transportResponse.receipt},
   provider_evidence:{record_id:providerRecord.record_id,artifact_root:providerRecord.artifact_root,archive_digest:providerArtifact.archive.digest},
   readiness:{readiness:frontier.readiness,receipt:frontier.receipt},
-  fundable_targets:readiness.fundable_targets,
+  control:{manifest:controlResponse.manifest,receipt:controlResponse.receipt,scope:'signed_capability_and_authorization_declaration_not_external_execution'},
+  fundable_targets:fundableTargets,
   assertions:{numina_deployment:true,readiness_signature_verified:true,transport_signature_verified:true,all_readiness_checks_passed:true,provider_evidence_workflow_verified:true,provider_status:'HEALTHY',circle_message:'pong',arc_chain_id:5042002,credentialed:false,partnership_status:'asserted',external_execution_performed:false,execution_authorization_bounded:true,live_submission_enabled:true,live_submission_provider:'arc',owner_authorization_required:true,pre_signed_payload_required:true,fundable_target:'500T',fundable_target_amount:'500000000000000',fundable_target_scope:'numina_native',external_balance_verified:false,external_backing_asserted:false}
 };
 const manifest={root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',record_id:`trusted-numina-${EXPECTED_GIT_SHA.slice(0,12)}-${observedTag}`,status:'TRUSTED_NUMINA_RELEASE',artifact_type:'NUMINA_TRUSTED_PRODUCTION_RELEASE',artifact_root:digest(artifactJson),artifact_json:artifactJson,created_at:Math.floor(observedMs/1000),revoked:false};

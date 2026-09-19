@@ -4,7 +4,7 @@ import {requestJson} from './http-client.js';
 import {verifyTreasuryRecord} from './treasury-proof.js';
 
 export function verifiedUsdcRoutes(record){
-  if(record?.schema!=='numina.treasury.provider-routes.v1'||record.provider!=='Stripe'||record.connection!=='read_only'||
+  if(record?.schema!=='numina.treasury.provider-routes.v1'||!(record.provider==='Stripe'||record.provider==='NUMINA'&&record.identity==='NUMINA'&&record.treasuryIdentity==='NUMINA'&&record.transportProvider==='Stripe')||record.connection!=='read_only'||
     record.canonical_treasury!==model.nativeJournal||!Array.isArray(record.routes)||record.routes.length>50||
     record.transfer_execution!==false||record.submission_performed!==false||record.receipt!==null||
     typeof record.observed_at!=='string'||!Number.isFinite(Date.parse(record.observed_at)))throw Error('Provider routes unavailable');
