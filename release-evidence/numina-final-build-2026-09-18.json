@@ -297,7 +297,36 @@
     "synchronization": "ACROSS_ALL",
     "currentSourceRef": "refs/heads/main",
     "lastAlignment": "NUMINA_NATIVE_TREASURY_SYNC_ALL",
-    "nativeTreasurySourceOfRecord": true
+    "nativeTreasurySourceOfRecord": true,
+    "headCount": 1,
+    "canonicalHeadCount": 1,
+    "canonicalHeadIdentity": "NUMINA",
+    "canonicalHead": {
+      "identity": "NUMINA",
+      "singular": true,
+      "canonical": true,
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
+    },
+    "canonicalHeads": {
+      "count": 1,
+      "identity": "NUMINA",
+      "singularIdentity": "NUMINA",
+      "singular": true,
+      "projections": {
+        "repository": {
+          "identity": "NUMINA",
+          "projection": true
+        },
+        "finance": {
+          "identity": "NUMINA",
+          "projection": true
+        },
+        "evidence": {
+          "identity": "NUMINA",
+          "projection": true
+        }
+      }
+    }
   },
   "updateAll": {
     "requested": true,
@@ -351,6 +380,9 @@
     "externalProviderBalancesAsserted": false,
     "externalProviderReadsRequired": false,
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "syncContract": "numina.native-treasury.sync.v1"
+    "syncContract": "numina.native-treasury.sync.v1",
+    "identityHeadCount": 1,
+    "canonicalHeadCount": 1,
+    "canonicalHeadIdentity": "NUMINA"
   }
 }
