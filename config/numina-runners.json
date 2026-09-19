@@ -1,11 +1,26 @@
 {
-  "schema": "numina.runner-policy.v1",
+  "schema": "numina.runner-policy.v2",
   "identity": "NUMINA",
+  "runnerIdentity": "NUMINA",
+  "hostingIdentity": "NUMINA",
+  "allRunnersAreNumina": true,
   "selfHostedAllowed": false,
-  "runnerClasses": {
-    "linux": "ubuntu-latest",
-    "macos": "macos-latest",
-    "windows": "windows-latest"
+  "executionBackends": {
+    "linux": {
+      "numinaIdentity": "NUMINA",
+      "provider": "github-hosted",
+      "runsOn": "ubuntu-latest"
+    },
+    "macos": {
+      "numinaIdentity": "NUMINA",
+      "provider": "github-hosted",
+      "runsOn": "macos-latest"
+    },
+    "windows": {
+      "numinaIdentity": "NUMINA",
+      "provider": "github-hosted",
+      "runsOn": "windows-latest"
+    }
   },
   "roleBindings": {
     "general": "linux",
