@@ -35,6 +35,16 @@ jobs:
 
           for path in sorted(workflow_dir.glob('*.y*ml')):
               for line_number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), start=1):
+                  runner = runs_on_line.match(line)
+                  if runner:
+                      value = runner.group(1).strip().strip('"\\\'')
+                      runner_checks.append((str(path), line_number, value))
+                      normalized = value.lower()
+                      if 'self-hosted' in normalized:
+                          failures.append((str(path), line_number, 'SELF_HOSTED_RUNNER_DENIED: ' + value))
+                      elif value not in allowed_hosted and not value.startswith('${{'):
+                          failures.append((str(path), line_number, 'UNAPPROVED_RUNNER_LABEL: ' + value))
+
                   match = uses_line.match(line)
                   if not match:
                       continue
@@ -51,6 +61,7 @@ jobs:
               raise SystemExit(f'{len(failures)} mutable workflow dependency reference(s) found')
 
           print(f'Validated {len(checked)} immutable external workflow dependency reference(s).')
+          print(f'Validated {len(runner_checks)} GitHub-hosted runner declaration(s); self-hosted runners are denied.')
           PY
 
 
