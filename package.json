@@ -1,11 +1,14 @@
-{ "name": "numina-singular-control",
+{
+  "name": "numina-singular-control",
   "version": "4.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": "24.x"
-  }
+  },
   "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
     "start": "node scripts/serve.mjs",
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs",
@@ -14,11 +17,20 @@
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Numina · SK Consulting LLC",
-  "IDENTITY": {"16a880e1f878801cd98705c4192a47503ae7b5b0"},
-  "path": "public/final-build.json",
-  "blob": "405f25727a95cfb2e74beac6e9483b071dbb694b",
-  "status": "FINAL",
-  "finalAll": "NUMINA",
-  "role": "synchronized_projection",
-  "synchronization": "ACROSS_ALL"
+  "numina": {
+    "identity": "NUMINA",
+    "self": "NUMINA",
+    "singular": true,
+    "all": "NUMINA",
+    "finalBuildManifest": {
+      "path": "public/final-build.json",
+      "blob": "7fe2e906c474cb88b956f61c2c8419a83e8f3a74",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "finalAll": "NUMINA",
+      "role": "synchronized_projection",
+      "synchronization": "ACROSS_ALL",
+      "updatedAcrossAll": true
+    }
+  }
 }
