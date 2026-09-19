@@ -30,8 +30,11 @@ jobs:
           workflow_dir = Path('.github/workflows')
           sha_ref = re.compile(r'^.+@[0-9a-fA-F]{40}$')
           uses_line = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)')
+          runs_on_line = re.compile(r'^\s*runs-on:\s*(.+?)\s*(?:#.*)?$')
+          allowed_hosted = {'ubuntu-latest', 'macos-latest', 'windows-latest'}
           failures = []
           checked = []
+          runner_checks = []
 
           for path in sorted(workflow_dir.glob('*.y*ml')):
               for line_number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), start=1):
