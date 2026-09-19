@@ -13,7 +13,8 @@
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs",
     "publish:source": "node scripts/publish-with-telemetry.mjs",
-    "release:github": "node scripts/package-github-release.mjs"
+    "release:github": "node scripts/package-github-release.mjs",
+    "check:runners": "node scripts/check-runner-policy.mjs"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Numina · SK Consulting LLC"
