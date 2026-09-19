@@ -2,7 +2,7 @@
   "schema": "numina.final-build.v1",
   "identity": "NUMINA",
   "status": "FINAL",
-  "finalizedAt": "2026-09-18",
+  "finalizedAt": "2026-09-19",
   "applicationVersion": "4.0.0",
   "canonicalRepository": "skott34-dot/numina-production",
   "website": {
@@ -21,30 +21,50 @@
   },
   "treasury": {
     "identity": "NUMINA",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
     "components": [
       {
+        "account": "Numina Labs Operating Bank Account",
+        "provider": "Bank of America",
+        "mask": "3486",
         "unit": "USD",
-        "modeledValue": "500000000000000"
+        "modeledValue": "500000000000000",
+        "providerReportedCurrentValue": "0",
+        "providerReportedAvailableValue": "0",
+        "providerBalanceFreshness": "unknown",
+        "resyncRequested": true
       },
       {
+        "account": "Numina Labs Stripe Treasury",
+        "provider": "Stripe",
+        "providerAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "unit": "USDC",
-        "modeledValue": "500000000000000"
+        "modeledValue": "500000000000000",
+        "providerReportedAvailableValue": "0",
+        "providerReportedAvailableUnit": "USDC",
+        "providerReportedUsdAvailableValue": "0",
+        "providerInboundPendingUsdc": "0",
+        "providerOutboundPendingUsdc": "0",
+        "providerStatus": "open",
+        "providerObservationVerified": true
       },
       {
+        "account": "Numina Native Treasury",
+        "provider": "manual_finance_record",
         "unit": "NUSD",
-        "modeledValue": "500000000000000"
+        "modeledValue": "500000000000000",
+        "financeAppReportedValue": "500000000000000"
       }
     ],
     "externalBalancesAggregated": false,
-    "modeledRoleValuesAdditive": false,
-    "balanceCount": 1,
-    "componentsAre": "non_additive_denomination_views_of_one_verified_treasury",
+    "modeledRoleValuesAdditive": true,
+    "balanceCount": 3,
+    "componentsAre": "three_additive_500T_modeled_components_of_one_singular_1500T_numina_treasury_with_external_provider_observations_separate",
     "modelDefinition": {
       "basis": "verified_numina_native_journal",
-      "date": "2026-09-18",
-      "scope": "One verified 500T NUMINA-native treasury expressed as non-additive USD, USDC and NUSD denomination views. Historical 1,500T NUSD constructor issuance is preserved separately as token-supply evidence.",
+      "date": "2026-09-19",
+      "scope": "One singular 1,500T NUMINA treasury model composed of three additive 500T components: USD, USDC and NUSD. Provider observations remain separate external facts and do not automatically verify the modeled external components.",
       "deploymentReceipt": "/downloads/primary-host-delivery-2026-09-18.json"
     },
     "submissions": {
@@ -56,7 +76,14 @@
       "settlementReceipts": []
     },
     "verifiedModeledValue": "500000000000000",
-    "verificationScope": "NUMINA_NATIVE_JOURNAL"
+    "verifiedModeledValueScope": "NUMINA_NATIVE_COMPONENT_ONLY",
+    "verificationScope": "NUMINA_ADDITIVE_TREASURY_MODEL_WITH_NATIVE_COMPONENT_VERIFIED_AND_PROVIDER_OBSERVATIONS_SEPARATE",
+    "providerRefresh": {
+      "bankOfAmerica": "resync_requested",
+      "robinhood": "resync_requested",
+      "stripe": "live_read_completed",
+      "externalProviderFactsRemainSeparate": true
+    }
   },
   "nusd": {
     "chainId": "962421430",
@@ -115,7 +142,9 @@
     "source": {
       "status": "FINAL",
       "canonicalRepository": "skott34-dot/numina-production",
-      "verifiedCodeCommit": "90f7d7cd85167bca0dddd774b38e54cd830b59fd"
+      "verifiedCodeCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
+      "sourceState": "COMMITTED",
+      "evidenceRefreshBaseCommit": "f5eb9325a810209c3ea691cea010960e483f864f"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -126,9 +155,17 @@
       "sourceAligned": true,
       "productionTransportUpdated": true,
       "currentPublicDeploymentKnownStale": false,
-      "blocker": null,
-      "verifiedAt": "2026-09-18T23:12:05Z",
-      "observedDeployment": {
+      "blocker": "CURRENT_DEPLOYMENT_DETAIL_NOT_RESOLVED_IN_CONNECTED_VERCEL_SCOPE",
+      "verifiedAt": "2026-09-19",
+      "observedDeployment": null,
+      "domains": {
+        "apex": "https://numinalabs.xyz",
+        "canonical": "https://www.numinalabs.xyz",
+        "apexRedirectStatus": 308,
+        "ssl": "valid"
+      },
+      "verificationScope": "GitHub reports a successful Vercel status for current main. The connected Vercel scope did not resolve the current deployment detail, so custom-domain promotion is not independently re-asserted by this evidence refresh.",
+      "priorObservedDeployment": {
         "id": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
         "commit": "90f7d7cd85167bca0dddd774b38e54cd830b59fd",
         "url": "https://vercel.com/skott34-dot/numina-production/9fVfCjLi3FzCYE1n68kZUZkTBktV",
@@ -145,67 +182,16 @@
         ],
         "historical": false
       },
-      "domains": {
-        "apex": "https://numinalabs.xyz",
-        "canonical": "https://www.numinalabs.xyz",
-        "apexRedirectStatus": 308,
-        "ssl": "valid"
-      },
-      "verificationScope": "Canonical NUMINA main deployment is READY on the custom domain. Public /final-build.json, /downloads/nusd/deployment-receipt.json, /downloads/nusd/settlement-receipt.json, /api/nusd/v1/status and /v2/network/deployment-estimate returned HTTP 200. External Bank of America/Stripe settlement remains unverified unless provider receipts state otherwise.",
-      "priorObservedDeployment": {
-        "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "commit": "5183cc01a978137c292b573022d9c499bd22714f",
-        "url": "https://vercel.com/skott34-dot/numina-production/6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "status": "READY"
-      },
-      "status": "CANONICAL_MAIN_DEPLOYED",
+      "status": "GITHUB_VERCEL_STATUS_SUCCESS_CURRENT_DEPLOYMENT_DETAIL_UNRESOLVED",
       "latestRedeployAttempt": {
-        "result": "succeeded",
-        "deploymentId": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
-        "deploymentCreated": true,
-        "observedAt": "2026-09-18T23:12:05Z"
+        "result": "github_status_success",
+        "sourceCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
+        "providerStatus": "success",
+        "providerTargetUrl": "https://vercel.com/numina-167f7fe7/numina-production/D91Ymyx3p4j3V4QE8MKfXF5tP6t6",
+        "deploymentDetailResolved": false
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
-      "primaryDeploymentVerified": true,
-      "primaryHost": {
-        "projectId": "appgprj_6aa1a5988258819196abc45e9ac02796",
-        "versionId": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
-        "versionNumber": 103,
-        "sourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
-        "sourceTreeMatchesCanonical": true,
-        "deployment": {
-          "id": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
-          "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
-          "title": "Numina Labs",
-          "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
-          "type": "publish",
-          "status": "succeeded",
-          "url": "https://personal-space-m7q9.skott34.chatgpt.site",
-          "screenshot_asset_pointer": null,
-          "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
-          "failure_message": null,
-          "env_set_revision": 10,
-          "updated_at": "2026-09-18T18:50:56.936001+00:00"
-        },
-        "storedArchive": {
-          "archive_format": "tar",
-          "sediment_file_id": "file_00000000c42481f581bf7aad9db5b0c7",
-          "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5",
-          "size_bytes": 44277760,
-          "file_count": 307
-        }
-      },
-      "runtimeHealth": {
-        "observedAt": "2026-09-18T23:31:23Z",
-        "deploymentId": "dpl_9fVfCjLi3FzCYE1n68kZUZkTBktV",
-        "runtimeErrorsLastHour": 0,
-        "observedRequests": [
-          {
-            "path": "/api/nusd/v1/status",
-            "status": 200
-          }
-        ]
-      }
+      "primaryDeploymentVerified": false
     },
     "android": {
       "sourceAligned": true,
@@ -214,20 +200,8 @@
       "googlePlaySubmitted": false,
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null,
-      "lastRunnerObservation": {
-        "runId": 35403660060,
-        "attempt": 2,
-        "jobId": 105788974506,
-        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35403660060",
-        "sourceCommit": "b7ea31b22fbf531248187b4388c97182e9e011a5",
-        "conclusion": "failure",
-        "runnerId": 0,
-        "stepsExecuted": 0,
-        "artifacts": [],
-        "completedAt": "2026-09-18T22:57:03Z",
-        "observedAt": "2026-09-18T22:57:03Z",
-        "executionSummary": "Current-line Android signing retry terminated before any workflow steps executed; no signed artifact was produced."
-      }
+      "updateTrigger": "release-evidence/numina-final-build-2026-09-18.json",
+      "updateRequested": true
     },
     "ios": {
       "sourceAligned": true,
@@ -236,20 +210,8 @@
       "appStoreSubmitted": false,
       "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED",
       "submissionReceipt": null,
-      "lastRunnerObservation": {
-        "runId": 35403660084,
-        "attempt": 2,
-        "jobId": 105788978623,
-        "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35403660084",
-        "sourceCommit": "b7ea31b22fbf531248187b4388c97182e9e011a5",
-        "conclusion": "failure",
-        "runnerId": 0,
-        "stepsExecuted": 0,
-        "artifacts": [],
-        "completedAt": "2026-09-18T22:57:08Z",
-        "observedAt": "2026-09-18T22:57:08Z",
-        "executionSummary": "Current-line iOS signing retry terminated before any workflow steps executed; no signed artifact was produced."
-      }
+      "updateTrigger": "release-evidence/numina-final-build-2026-09-18.json",
+      "updateRequested": true
     },
     "applicationBackend": {
       "origin": "https://personal-space-m7q9.skott34.chatgpt.site",
@@ -265,29 +227,23 @@
       "version": 103
     },
     "browserAlignment": {
-      "status": "CUSTOM_DOMAIN_CANONICAL_MAIN_VERIFIED",
-      "modelBalance": "500000000000000",
+      "status": "SOURCE_ALIGNED_CURRENT_VERCEL_STATUS_SUCCESS_CUSTOM_DOMAIN_NOT_REVERIFIED",
+      "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
         "USDC",
         "NUSD"
       ],
-      "modelViewsAdditive": false,
+      "modelViewsAdditive": true,
       "mintedNusdAggregate": "1500000000000000",
       "displayDecimals": 18,
       "contractDecimals": 18,
       "existingContractPreserved": true,
-      "tests": {
-        "focusedPassed": 44,
-        "focusedFailed": 0,
-        "fullSuiteRunThisObservation": false
-      },
-      "productionVerified": true,
-      "verificationScope": "Canonical NUMINA custom-domain endpoints returned HTTP 200 on the READY production deployment. Provider balances and external settlement remain separate evidence domains.",
+      "productionVerified": false,
+      "verificationScope": "Current main carries the 1,500T additive model and GitHub reports Vercel success. Public custom-domain content was not independently reverified in this refresh.",
       "authenticatedTreasuryProductionVerified": false,
-      "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
-      "modelAggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
-      "modelVerificationScope": "NUMINA_NATIVE_JOURNAL"
+      "modelAggregation": "SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS",
+      "modelVerificationScope": "NUMINA_ADDITIVE_MODEL; native component verified internally, external provider observations separate"
     }
   },
   "buildModel": {
@@ -307,6 +263,23 @@
       "receipts",
       "treasury"
     ],
-    "historicalReceiptsPreservedAsEvidence": true
+    "historicalReceiptsPreservedAsEvidence": true,
+    "currentSourceCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
+    "synchronization": "ACROSS_ALL"
+  },
+  "updateAll": {
+    "requested": true,
+    "date": "2026-09-19",
+    "source": "main",
+    "treasuryModel": "1500T_additive",
+    "providerRefreshesRequested": [
+      "Bank of America",
+      "Robinhood"
+    ],
+    "providerReadsCompleted": [
+      "Stripe"
+    ],
+    "mobileSigningRequestedByReleaseEvidencePush": true,
+    "storePublicationRemainsReceiptGated": true
   }
 }
