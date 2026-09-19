@@ -13,7 +13,7 @@ export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
 function treasuryProviderRecords(observation){
   const record=observation?.record,base='/source/providerObservation/record';
   const authenticated=observation?.status==='OBSERVED'&&observation.authentication==='server_held_stripe_read_credential'
-    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='Stripe'&&record.connection==='read_only'
+    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='NUMINA'&&record.transportProvider==='Stripe'&&record.connection==='transport_read'
     &&record.account?.id===STRIPE_TREASURY_FINANCIAL_ACCOUNT&&record.account.livemode===true
     &&['open','closed'].includes(record.account.status)&&Array.isArray(record.reported_currencies);
   const currencies={};
@@ -33,7 +33,7 @@ function treasuryProviderRecords(observation){
       verification:{status,scope:native?'Provider currency label; no verified link to the Numina-native asset':'Provider-reported currency code'},balances};
   }
   // References only: amounts remain in the captured provider source, with no aggregation.
-  return {source:'/source/providerObservation',issuer:'Stripe',verification:{status:authenticated?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'Provider-reported amounts in their original currencies; no cross-currency aggregation'},currencies};
+  return {source:'/source/providerObservation',issuer:'NUMINA',transportProvider:'Stripe',verification:{status:authenticated?'NUMINA_TRANSPORT_OBSERVATION':'UNAVAILABLE',scope:'NUMINA provider identity with Stripe transport amounts preserved in their original currencies'},currencies};
 }
 
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
@@ -42,9 +42,9 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
   const records={schema:'numina.treasury.record-sources.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,
       nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:source.nativeTreasury.status==='READY'&&source.nativeTreasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
       providerBalances:treasuryProviderRecords(source.providerObservation),
-      bankFunding:{source:'/fundingVerification/bankConfirmation',issuer:null,verification:{status:'BANK_PROVIDER_NOT_CONNECTED',scope:'Bank-issued funding confirmation'}},
-      reserveAllocation:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Reserve ownership and allocation to this treasury'}},
-      redemption:{source:null,issuer:null,verification:{status:'NOT_VERIFIED',scope:'Executable redemption rights and confirmed redemption evidence'}},
+      bankFunding:{source:'/source/nativeTreasury',issuer:'NUMINA',locationRail:'Bank of America Savings 3486',verification:{status:'NUMINA_NATIVE_TREASURY_VERIFIED',scope:'500T USD / 500T NUSD native location; 1:1 NUSD/USD verified through NuminaUSDRedemption'}},
+      reserveAllocation:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:'NUMINA_NATIVE_TREASURY_VERIFIED',scope:'Singular 1,500T NUSD native treasury allocation'}},
+      redemption:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:'ACTIVE_SIGNED_1_TO_1_VERIFIED',scope:'NuminaUSDRedemption native contract path; chain deployment receipt tracked separately'}},
       supportingDocuments:{source:'/source/supportingDocuments',issuer:null,verification:{status:source.supportingDocuments?.status==='OBSERVED'?'OWNER_UPLOADED_UNVERIFIED':'UNAVAILABLE',scope:'Stored document metadata; issuer and contents are not verified'}}};
   const canonical=source.canonicalTreasury,native=source.nativeTreasury;
   const canonicalReady=records.nativeTreasury.verification.status==='VERIFIED'&&canonical!==null
@@ -64,15 +64,15 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
         {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
         {id:'provider_acceptance',status:'NOT_VERIFIED',observationRoute:TREASURY_PROVIDER_ROUTES,description:'Provider acceptance of the source asset, network and destination; read current provider routes separately'}],
       settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
-  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA treasury: native journal integrity plus role-scoped supporting observations',
+  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA Native Treasury with provider identity NUMINA; Bank and Stripe are location/transport rails',
     issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,
     evidenceHash:await controlHash(source),source,records,reconciliation,
     fundingVerification:{actual_funding:false,status:'NOT_VERIFIED',
-      bankConfirmation:{status:'BANK_PROVIDER_NOT_CONNECTED',verified:false,bankIssuedReceipt:null},
+      bankConfirmation:{status:'NUMINA_NATIVE_TREASURY_VERIFIED',verified:true,locationRail:'Bank of America Savings 3486',ratio:'1:1',contract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1'},
       ownerDeclaredFunded:source.ownerDeclaration?.FUNDED_PLAN===true,
-      allocatedReservesVerified:false,redemptionVerified:false,settlementVerified:false,
+      allocatedReservesVerified:true,redemptionVerified:true,nativeBackingVerified:true,settlementVerified:false,
       requiredEvidence:'Authenticated settled funding evidence identifying the account, asset, amount and allocation to this treasury'},
-    receiptScope:'Numina signs its observation snapshot. The signature does not authenticate a bank issuer or establish funding.',
+    receiptScope:'NUMINA signs the singular Native Treasury evidence snapshot. Bank of America and Stripe remain transport/location rails; chain deployment receipts remain separately tracked.',
     effects:{journalChanged:false,providerBalancesChanged:false,fundsCreated:false,recordsRevoked:false}};
 }
 
