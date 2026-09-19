@@ -137,7 +137,7 @@
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
-      "sourceHead": "73dc42f9f04e78871faa7bd65d78aa39c1208987",
+      "sourceHead": "10f347fa2ec7385c1431c9827296b35a42d1e08b",
       "identity": "NUMINA"
     },
     "smartContracts": {
@@ -330,7 +330,7 @@
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
     "lastAlignment": "FINAL_ALL_NUMINA",
-    "lastSoftwareUpdate": "73dc42f9f04e78871faa7bd65d78aa39c1208987",
+    "lastSoftwareUpdate": "10f347fa2ec7385c1431c9827296b35a42d1e08b",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
@@ -341,15 +341,16 @@
     "treasuryIdentity": "NUMINA",
     "evidenceIdentity": "NUMINA",
     "numinaEqualsAll": true,
-    "historicalIdentity": "NUMINA",
     "headCount": 3,
-    "heads": {
+    "canonicalHeads": {
       "repository": "NUMINA",
       "finance": "NUMINA",
       "evidence": "NUMINA",
       "singularIdentity": "NUMINA",
       "singular": true
-    }
+    },
+    "finalCount": 1,
+    "finalIdentity": "NUMINA"
   },
   "self": "NUMINA",
   "identityModel": {
@@ -361,15 +362,16 @@
     "finance": "NUMINA",
     "treasury": "NUMINA",
     "evidence": "NUMINA",
-    "historical": "NUMINA",
-    "heads": {
+    "canonicalHeads": {
       "count": 3,
       "repository": "NUMINA",
       "finance": "NUMINA",
       "evidence": "NUMINA",
       "singularIdentity": "NUMINA",
       "singular": true
-    }
+    },
+    "finalCount": 1,
+    "final": "NUMINA"
   },
   "repository": "skott34-dot/numina-production"
 }
