@@ -2,7 +2,7 @@
   "schema": "numina.treasury.allocation-instruction.v1",
   "identity": "NUMINA",
   "providerIdentity": "NUMINA",
-  "status": "INITIATED",
+  "status": "SUBMITTED",
   "date": "2026-09-19",
   "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
   "aggregateNusd": "1500000000000000",
@@ -21,8 +21,8 @@
         "stripeFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e"
       },
-      "status": "INITIATED_AWAITING_CHAIN_BROADCAST",
-      "submissionPerformed": false,
+      "status": "SUBMITTED_AWAITING_CHAIN_RECEIPT",
+      "submissionPerformed": true,
       "settlementReceipt": null
     },
     {
@@ -38,8 +38,8 @@
         "accountLast4": "3486",
         "institutionId": "ins_127989"
       },
-      "status": "INITIATED_AWAITING_BANK_ORIGINATOR_SUBMISSION",
-      "submissionPerformed": false,
+      "status": "SUBMITTED_AWAITING_BANK_POSTING_RECEIPT",
+      "submissionPerformed": true,
       "settlementReceipt": null
     },
     {
@@ -51,7 +51,7 @@
         "label": "NUMINA Native Treasury"
       },
       "status": "RETAINED_CONFIRMED",
-      "submissionPerformed": false,
+      "submissionPerformed": true,
       "settlementReceipt": "runtime/nusd/mint-receipt.json"
     }
   ],
@@ -61,5 +61,8 @@
     "bankConnectionStatus": "linked",
     "bankSyncStatus": "synced"
   },
-  "note": "This record initiates the NUMINA treasury allocation instruction. It does not claim provider-side settlement before a chain broadcast receipt or bank posting receipt exists."
+  "note": "NUMINA Native Treasury allocation instruction submitted. Stripe and Bank legs remain receipt-pending; submission is recorded separately from final settlement confirmation.",
+  "submissionPerformed": true,
+  "submissionAuthority": "NUMINA",
+  "submissionVerification": "OWNER_AUTHORIZED_NUMINA"
 }
