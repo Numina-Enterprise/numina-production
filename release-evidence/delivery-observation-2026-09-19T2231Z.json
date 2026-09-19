@@ -1,0 +1,130 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T22:31:00Z",
+  "sourceCommitObserved": "68d3ca7cc629a4e210a1eee4d79e6c49ce34d1f3",
+  "scope": "FACTUAL_EXTERNAL_DELIVERY_RECEIPTS_ONLY",
+  "github": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "headObserved": "68d3ca7cc629a4e210a1eee4d79e6c49ce34d1f3",
+    "headParentObserved": "0767c476598cfa834400ad0836db7b8759bf9598",
+    "runnerAllocationAvailable": false,
+    "allocationProbe": {
+      "workflow": ".github/workflows/numina.yml",
+      "runId": 35470675799,
+      "runAttempt": 3,
+      "jobId": 105978638546,
+      "status": "completed",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "runnerName": "",
+      "runnerGroupId": 0,
+      "stepsExecuted": 0,
+      "labels": ["ubuntu-latest"]
+    },
+    "canonicalHeadWorkflow": {
+      "workflow": ".github/workflows/numina.yml",
+      "runId": 35473124061,
+      "runAttempt": 1,
+      "headSha": "68d3ca7cc629a4e210a1eee4d79e6c49ce34d1f3",
+      "jobId": 105977619915,
+      "status": "completed",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "runnerName": "",
+      "runnerGroupId": 0,
+      "stepsExecuted": 0
+    },
+    "canonicalBuildRerunPerformed": false,
+    "websitePublishWorkflowRerunPerformed": false,
+    "androidSigningWorkflowRerunPerformed": false,
+    "iosSigningWorkflowRerunPerformed": false,
+    "reason": "GitHub-hosted runner allocation did not occur; no workflow steps executed."
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deploymentId": "dpl_4TaLJQbtmKo5jFHAmXeKhq9kqgUs",
+    "deploymentUrl": "https://numina-production-ok4zzk2ej-skott34-dot.vercel.app",
+    "source": "git",
+    "target": "production",
+    "state": "READY",
+    "readyState": "READY",
+    "sourceCommit": "68d3ca7cc629a4e210a1eee4d79e6c49ce34d1f3",
+    "aliasError": null,
+    "aliases": [
+      "www.numinalabs.xyz",
+      "numinalabs.xyz",
+      "numina-production.vercel.app",
+      "numina-production-skott34-dot.vercel.app",
+      "numina-production-git-main-skott34-dot.vercel.app"
+    ],
+    "verification": {
+      "/final-build.json": {
+        "status": 200,
+        "source": "deployment_url"
+      },
+      "/downloads/nusd/deployment-receipt.json": {
+        "status": 200,
+        "source": "https://www.numinalabs.xyz"
+      },
+      "/api/nusd/v1/status": {
+        "status": 200,
+        "source": "https://www.numinalabs.xyz"
+      },
+      "/v2/network/deployment-estimate": {
+        "status": 200,
+        "source": "https://www.numinalabs.xyz"
+      }
+    },
+    "deploymentReceipt": {
+      "schema": "numina.nusd.production-deployment-receipt.v1",
+      "chainId": "962421430",
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "tokenContractAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "tokenBlockNumber": "51725",
+      "tokenReceiptStatus": "0x1",
+      "tokenFinalConfirmations": 25,
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "settlementContractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementBlockNumber": "51726",
+      "settlementReceiptStatus": "0x1",
+      "settlementFinalConfirmations": 24,
+      "externalUsdSettlementVerified": false,
+      "externalUsdcSettlementVerified": false,
+      "bankReceipt": null,
+      "providerReceipt": null
+    }
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "reachable": false,
+    "pingResult": "NO_DEVICES_AVAILABLE",
+    "fallbackBuildOrDeployPerformed": false
+  },
+  "mobile": {
+    "androidSignedArtifactProducedThisRun": false,
+    "iosSignedArtifactProducedThisRun": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerReceipt": null,
+    "reason": "GitHub Actions runner allocation remained unavailable and VENGEANCE was unreachable."
+  },
+  "remainingBlockers": [
+    "GITHUB_HOSTED_RUNNER_ALLOCATION",
+    "ANDROID_SIGNING_NOT_EXECUTED",
+    "IOS_SIGNING_NOT_EXECUTED",
+    "STORE_SUBMISSION_PATH_NOT_REACHED",
+    "VENGEANCE_REMOTE_MCP_UNREACHABLE"
+  ],
+  "claims": {
+    "externalUsdTransferReceipt": false,
+    "externalUsdcTransferReceipt": false,
+    "mobileStoreSubmissionReceipt": false,
+    "signingIdentityRotated": false,
+    "secretMaterialExposed": false
+  }
+}
