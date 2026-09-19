@@ -18,14 +18,14 @@ The current modeled Numina-native settlement projection uses one common NUSD-equ
 
 ```text
 NUMINA {
-  total = 1500T NUSD-equivalent
-  USD_branch  = 500T
-  USDC_branch = 500T
-  NUSD_branch = 500T
+  total = 500T NUSD-equivalent
+  USD_view  = 500T
+  USDC_view = 500T
+  NUSD_view = 500T
 }
 ```
 
-The branches are projections/routes of the singular Numina state rather than independent authoritative treasuries.
+The three views are non-additive denomination projections of the same verified 500T NUMINA-native treasury state, not independent treasuries. Historical 1,500T NUSD constructor issuance remains separate token-supply evidence.
 
 ## Singular build law
 
