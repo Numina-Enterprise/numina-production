@@ -1,0 +1,32 @@
+{
+  "schema": "numina.treasury.ach-transfer-instruction.v1",
+  "id": "numina:treasury:ach:bofa-3486:2026-09-19:v1",
+  "identity": "NUMINA",
+  "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+  "status": "INITIATED_AT_NUMINA_NATIVE_TREASURY",
+  "createdAt": "2026-09-19",
+  "amountNusd": "500000000000000",
+  "targetAmountUsd": "500000000000000",
+  "ratio": "1:1",
+  "contract": "NuminaUSDRedemption",
+  "nativeContractId": "numina:nusd-usd:redemption:v1",
+  "destination": {
+    "location": "Bank of America Savings 3486",
+    "linkedOfficialName": "Business Advantage Sav",
+    "accountLast4": "3486",
+    "institutionId": "ins_127989"
+  },
+  "settlementReceipt": {
+    "id": "numina:treasury:settlement:2026-09-19:v1",
+    "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json"
+  },
+  "mintEvidence": {
+    "path": "runtime/nusd/mint-receipt.json",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+  },
+  "treasuryInstructionSubmissionPerformed": true,
+  "achOriginatorSubmissionPerformed": false,
+  "achOriginatorReceipt": null,
+  "note": "ACH instruction initiated inside the NUMINA Native Treasury. No bank-originator ACH submission or bank-issued ACH receipt is claimed by this record."
+}
