@@ -12,7 +12,7 @@ All treasury roles have `treasuryIdentity: "NUMINA"` and `transportVerificationC
 
 ## One singular verified 500T model, three non-additive denomination views
 
-Treasury Alignment v2 reflects the owner's current declaration of **one NUMINA treasury** with a **1,500,000,000,000,000** model aggregate, allocated as **500,000,000,000,000 USD** to the Bank of America Savings ACH route, **500,000,000,000,000 USDC** to the Stripe Treasury USDC-address route, and **500,000,000,000,000 NUSD** to the NUMINA native treasury route. These are three allocations of the singular treasury, not three treasury identities. The plan status is `ALIGNED_MODEL` and its aggregation semantics are `MODEL_ROUTE_ALLOCATIONS`.
+Treasury Alignment v2 reflects **one verified 500,000,000,000,000 NUSD NUMINA treasury**. Under the declared 1:1 model policy, Bank of America (USD), Stripe Treasury (USDC), and the native treasury (NUSD) each show that same 500T value as a denomination view. The views are non-additive and the plan status is `ALIGNED_MODEL` with aggregation semantics `SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS`.
 
 The canonical NUMINA-native treasury value is **500,000,000,000,000 NUSD**. Under the declared 1:1 model policy, that same 500T value is expressed in USD, USDC and NUSD. These are **non-additive denomination views**: `aggregateModeledValue` is `500000000000000`, `additive` is false and `nonAdditive` is true. The canonical balance count and `singularBalanceCount` remain one. `externalBalancesAggregated` is false. The native journal projection is the verification anchor for this 500T NUMINA-native value. Stripe and Bank of America remain external observation routes; their provider balances are not added to the treasury model.
 
