@@ -14,11 +14,14 @@ if (policy.runner?.singular !== true || policy.runner?.count !== 1) failures.pus
 if (policy.runner?.selfHosted !== false) failures.push('NUMINA self-hosted execution is denied');
 if (policy.runner?.externalSelfHostedAllowed !== false) failures.push('External self-hosted runners must remain denied');
 if (policy.runner?.hosting !== 'github-hosted-only') failures.push('NUMINA execution must use GitHub-hosted runners only');
+if (policy.invariants?.denySelfHostedRunners !== true) failures.push('Self-hosted runner denial invariant must be enabled');
 for (const [role, identity] of Object.entries(policy.roles || {})) if (identity !== 'NUMINA') failures.push(`${role} must resolve to NUMINA`);
 
 for (const name of readdirSync(workflows).filter(name => /\.ya?ml$/i.test(name)).sort()) {
   const path = resolve(workflows, name);
-  const lines = readFileSync(path, 'utf8').split(/\r?\n/);
+  const workflowText = readFileSync(path, 'utf8');
+  if (/\bself-hosted\b/i.test(workflowText)) failures.push(`${name}: self-hosted token is forbidden anywhere in NUMINA workflows`);
+  const lines = workflowText.split(/\r?\n/);
   lines.forEach((line, index) => {
     const match = line.match(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/);
     if (!match) return;
