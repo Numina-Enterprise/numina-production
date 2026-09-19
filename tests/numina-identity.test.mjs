@@ -18,14 +18,14 @@ test('NUMINA is the canonical active identity',()=>{
     assert.equal(NUMINA_LAYERS.distribution[field],'NUMINA');
   }
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
+  const FINAL_BUILD_MANIFEST_BLOB='7fe2e906c474cb88b956f61c2c8419a83e8f3a74';
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.blob,FINAL_BUILD_MANIFEST_BLOB);
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='7fe2e906c474cb88b956f61c2c8419a83e8f3a74';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
-  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length),Buffer.from([0]),finalBuildBytes])).digest('hex');
   assert.equal(finalBuildBlob,FINAL_BUILD_MANIFEST_BLOB);
   const finalBuild=JSON.parse(finalBuildBytes.toString('utf8'));
   assert.equal(finalBuild.schema,'numina.final-build.v1');
