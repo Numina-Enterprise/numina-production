@@ -17,7 +17,15 @@ test('NUMINA is the canonical active identity',()=>{
     assert.equal(NUMINA_LAYERS.distribution[field],'NUMINA');
   }
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
-  assert.equal(pkg.scripts['release:github'],'node scripts/package-github-release.mjs');
+  assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
+  const finalBuild=JSON.parse(readFileSync(new URL('../public/final-build.json',import.meta.url),'utf8'));
+  assert.equal(finalBuild.schema,'numina.final-build.v1');
+  assert.equal(finalBuild.identity,'NUMINA');
+  assert.equal(finalBuild.status,'FINAL');
+  assert.equal(finalBuild.applicationVersion,pkg.version);
+  assert.equal(finalBuild.buildModel.finalCount,1);
+  assert.equal(finalBuild.buildModel.finalIdentity,'NUMINA');
+  assert.equal(finalBuild.buildModel.canonicalHeadIdentity,'NUMINA');
   assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
   assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
   assert.equal(WALLET_EXECUTION_POLICY.decimals,18);
