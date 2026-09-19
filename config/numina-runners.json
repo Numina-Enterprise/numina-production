@@ -1,5 +1,5 @@
 {
-  "schema": "numina.runner-policy.v8",
+  "schema": "numina.runner-policy.v9",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
@@ -39,6 +39,9 @@
   "invariants": {
     "preserveCurrentRunners": true,
     "denyFutureRunners": true,
-    "allRunnersAreNumina": true
-  }
+    "allRunnersAreNumina": true,
+    "preserveExistingSelfHostedRunners": true
+  },
+  "selfHostedPolicy": "preserve_existing",
+  "futureRunnerPolicy": "deny"
 }
