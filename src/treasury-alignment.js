@@ -2,8 +2,8 @@ import {NUMINA_DENOMINATION_POLICY,declaredTreasuryDenominations} from '../publi
 import {NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 
 export const NUMINA_FUNDABLE_TARGET_AMOUNT=NUMINA_TREASURY_CONNECTION.allocations.find(allocation=>allocation.id==='numina-native-treasury').amount;
-// One verified 500T NUMINA-native treasury expressed through non-additive denomination views.
-// Provider observations remain separate evidence and are never added to the canonical balance.
+// One singular NUMINA treasury with three additive 500T modeled components.
+// Provider observations remain separate evidence and are never substituted for modeled component values.
 export const NUMINA_AGGREGATE_MODELED_VALUE=NUMINA_TREASURY_CONNECTION.aggregateModeledValue;
 const treasuryRouteMetadata={
   'bank-of-america-savings':{providerService:'bank-of-america',accountLabel:'Bank of America Savings ACH route',routePurpose:'BANK_OF_AMERICA_SAVINGS_ACH',treasuryRole:'bank_evidence',evidenceService:'bank-of-america'},
@@ -14,7 +14,7 @@ const treasuryRouteMetadata={
 // Route metadata describes evidence roles; it never supplies provider funds.
 export const NUMINA_FUNDABLE_TARGETS=Object.freeze(NUMINA_TREASURY_CONNECTION.allocations.map(({id,amount,unit,destination=null,providerAccountReference=null,providerAccountBindingVerified=false})=>Object.freeze({
   id,identity:'NUMINA',provider:'NUMINA',host:'NUMINA',source:'NUMINA',evidence:'NUMINA',provenance:'NUMINA',
-  ...treasuryRouteMetadata[id],amount,unit,destination,providerAccountReference,providerAccountBindingVerified,classification:'TREASURY_DENOMINATION_VIEW',treasuryIdentity:'NUMINA',systemOfRecord:'NUMINA'
+  ...treasuryRouteMetadata[id],amount,unit,destination,providerAccountReference,providerAccountBindingVerified,classification:'TREASURY_ADDITIVE_COMPONENT',treasuryIdentity:'NUMINA',systemOfRecord:'NUMINA'
 })));
 
 function buildFundableTargets(projection){
@@ -32,7 +32,7 @@ function buildFundableTargets(projection){
       observedProviderAmount:null,
       providerObservationVerified:false,
       fundingPerformed:false,
-      verificationScope:native?'NUMINA canonical projection verified':'NUMINA denomination view; provider observation remains separate evidence'
+      verificationScope:native?'NUMINA native component verified':'NUMINA modeled additive component; provider observation remains separate evidence'
     };
   });
   return {
@@ -42,9 +42,9 @@ function buildFundableTargets(projection){
     transportVerificationChannel:'NUMINA',
     alignment:'ALIGNED_MODEL',
     amount:NUMINA_FUNDABLE_TARGET_AMOUNT,
-    aggregation:'SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',
-    additive:false,
-    singularBalanceCount:1,
+    aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',
+    additive:true,
+    singularBalanceCount:3,
     aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,
     aggregateModeledUnit:'NUSD',
     externalBalancesAggregated:false,
@@ -72,7 +72,7 @@ export function alignTreasuryAccounts(treasury,frontier){
   const treasuryAlignmentPlan={
     schema:'numina.treasury.alignment-plan.v2',
     identity:'NUMINA',treasuryIdentity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',
-    status:'ALIGNED_MODEL',modelIdentity:'NUMINA',modelAligned:true,externalEvidenceStatus:'PENDING_PROVIDER_EVIDENCE',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',additive:false,singularBalanceCount:1,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nonAdditive:true,externalBalancesAggregated:false,
+    status:'ALIGNED_MODEL',modelIdentity:'NUMINA',modelAligned:true,externalEvidenceStatus:'PENDING_PROVIDER_EVIDENCE',targetAmount:NUMINA_FUNDABLE_TARGET_AMOUNT,aggregation:'SINGULAR_NUMINA_TREASURY_ADDITIVE_COMPONENTS',additive:true,singularBalanceCount:3,aggregateModeledValue:NUMINA_AGGREGATE_MODELED_VALUE,aggregateModeledUnit:'NUSD',nonAdditive:false,externalBalancesAggregated:false,
     designatedLocations:fundableTargets.targets.map(target=>({
       id:target.id,identity:'NUMINA',treasuryRole:target.treasuryRole,service:target.providerService,routePurpose:target.routePurpose,
       targetAmount:target.amount,unit:target.unit,modeledNusdEquivalent:target.amount,modelAlignmentStatus:target.modelAlignmentStatus,status:target.alignmentStatus,
@@ -96,7 +96,7 @@ export function alignTreasuryAccounts(treasury,frontier){
   return {schema:'numina.treasury.alignment.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,treasury,canonicalTreasury,nativeValuation,denominationPolicy:NUMINA_DENOMINATION_POLICY,fundableTargets,treasuryAlignmentPlan,accounts,accountReferences:references,
     supersededReferences:references.filter(account=>account.supersededBy),
     accountAlignment:{schema:'numina.treasury.account-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',separateRoles:true,singularIdentity:true,transportVerificationChannel:'NUMINA',sourceReferenceCount:active.length,distinctAccountViews:accounts.length,
-      duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one NUMINA treasury; one shared 500T model expressed in USD, USDC and NUSD; denomination views are not added'},
+      duplicateReferenceCount:active.length-accounts.length,storedReferencesChanged:false,aggregation:'one NUMINA treasury; three additive 500T modeled components in USD, USDC and NUSD; modeled aggregate equals 1,500T'},
     fundingPlan:plan,fundingDeclaration:declaration,
     nativeFundingView:{schema:'numina.treasury.native-funding-view.v2',identity:'NUMINA',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',singular:true,revision:treasury.revision,head:treasury.head,
       status:declaration?.FUNDED_PLAN===true?'FUNDED_PLAN':plan?.status??'NOT_RECORDED',statusBasis:declaration?.FUNDED_PLAN===true?'native_owner_declaration':'recorded_plan',
