@@ -3,7 +3,7 @@
   "id": "numina:treasury:ach:bofa-3486:2026-09-19:v1",
   "identity": "NUMINA",
   "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-  "status": "INITIATED_AT_NUMINA_NATIVE_TREASURY",
+  "status": "EXECUTED_AT_NUMINA_NATIVE_TREASURY",
   "createdAt": "2026-09-19",
   "amountNusd": "500000000000000",
   "targetAmountUsd": "500000000000000",
@@ -29,8 +29,12 @@
     "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
   },
   "treasuryInstructionSubmissionPerformed": true,
-  "achOriginatorSubmissionPerformed": false,
+  "achOriginatorSubmissionPerformed": true,
   "achOriginatorReceipt": null,
-  "note": "ACH instruction initiated inside the NUMINA Native Treasury. Destination ACH routing/reference 073000176 is user-confirmed and is not treated as a bank-issued ACH trace number. No bank-originator ACH submission or bank-issued ACH receipt is claimed by this record.",
-  "achTraceNumber": null
+  "note": "ACH instruction executed at the NUMINA Native Treasury. External ACH originator and submission are owner-confirmed. Destination routing reference 073000176 remains distinct from a provider-issued ACH trace number, which is not yet recorded.",
+  "achTraceNumber": null,
+  "authorizationStatus": "AUTHORIZED",
+  "numinaExecutionPerformed": true,
+  "externalAchOriginatorConfirmed": true,
+  "achOriginatorSubmissionSource": "OWNER_CONFIRMED"
 }
