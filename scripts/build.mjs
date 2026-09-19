@@ -4,6 +4,13 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
+const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
+const FINAL_BUILD_MANIFEST_BLOB='987ae013bba6fa9f8287264f472bec31cad24c55';
+const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
+const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
+const finalBuild=JSON.parse(finalBuildBytes);
+if(finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL'||finalBuild.manifestContract?.finalAll!=='NUMINA')throw Error('FINAL build manifest contract mismatch');
 execFileSync(process.execPath,['scripts/check-runner-policy.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inherit'});
 // Fail before producing web artifacts if the iOS/runtime release binding has drifted.
