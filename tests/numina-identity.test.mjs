@@ -24,7 +24,7 @@ test('NUMINA is the canonical active identity',()=>{
   const FINAL_BUILD_MANIFEST_BLOB='405f25727a95cfb2e74beac6e9483b071dbb694b';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
-  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
   assert.equal(finalBuildBlob,FINAL_BUILD_MANIFEST_BLOB);
   const finalBuild=JSON.parse(finalBuildBytes.toString('utf8'));
   assert.equal(finalBuild.schema,'numina.final-build.v1');
@@ -68,9 +68,9 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.invariants.runnerPlacementFrozen,false);
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
   let declarations=0;
-  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
+  for(const name of readdirSync(workflowsUrl).filter(name=>/\.ya?ml$/i.test(name))){
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
-    const targets=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
+    const targets=[...content.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
     declarations+=targets.length;
     for(const target of targets)assert.equal(target,'NUMINA',name+' runner target must be NUMINA');
   }
