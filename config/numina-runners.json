@@ -10,6 +10,7 @@
   },
   "execution": {
     "linux": "ubuntu-latest",
+    "linuxPinned": "ubuntu-24.04",
     "macos": "macos-latest",
     "windows": "windows-latest"
   },
