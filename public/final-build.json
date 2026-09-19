@@ -115,7 +115,7 @@
     "source": {
       "status": "FINAL",
       "canonicalRepository": "skott34-dot/numina-production",
-      "verifiedCodeCommit": "c0781eb896d74a8b02500a594c34c55050231af7"
+      "verifiedCodeCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -124,9 +124,9 @@
     },
     "website": {
       "sourceAligned": true,
-      "productionTransportUpdated": true,
-      "currentPublicDeploymentKnownStale": false,
-      "blocker": null,
+      "productionTransportUpdated": false,
+      "currentPublicDeploymentKnownStale": true,
+      "blocker": "CURRENT_MAIN_AHEAD_OF_LAST_READY_PRODUCTION_DEPLOYMENT",
       "verifiedAt": "2026-09-18T22:51:45Z",
       "observedDeployment": {
         "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
@@ -158,12 +158,11 @@
         "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
         "status": "READY"
       },
-      "status": "CANONICAL_MAIN_DEPLOYED",
+      "status": "REDEPLOYING_CURRENT_MAIN",
       "latestRedeployAttempt": {
-        "result": "succeeded",
-        "deploymentId": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "deploymentCreated": true,
-        "observedAt": "2026-09-18T22:51:45Z"
+        "result": "triggered_by_release_marker_commit",
+        "sourceCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
+        "observedAt": "2026-09-19T00:55:00Z"
       },
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
@@ -254,7 +253,7 @@
       "version": 103
     },
     "browserAlignment": {
-      "status": "CUSTOM_DOMAIN_CANONICAL_MAIN_VERIFIED",
+      "status": "SOURCE_ALIGNED_AWAITING_CURRENT_MAIN_DEPLOYMENT",
       "modelBalance": "500000000000000",
       "modelUnits": [
         "USD",
@@ -271,8 +270,8 @@
         "focusedFailed": 0,
         "fullSuiteRunThisObservation": false
       },
-      "productionVerified": true,
-      "verificationScope": "Canonical NUMINA custom-domain endpoints returned HTTP 200 on the READY production deployment. Provider balances and external settlement remain separate evidence domains.",
+      "productionVerified": false,
+      "verificationScope": "GitHub main is aligned to the verified 500T NUMINA-native model; production verification must be refreshed after a READY deployment of the current main head. Provider balances and external settlement remain separate evidence domains.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
