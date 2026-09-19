@@ -392,7 +392,7 @@
     "achTransferInstruction": {
       "schema": "numina.treasury.ach-transfer-instruction.v1",
       "id": "numina:treasury:ach:bofa-3486:2026-09-19:v1",
-      "status": "INITIATED_AT_NUMINA_NATIVE_TREASURY",
+      "status": "EXECUTED_AT_NUMINA_NATIVE_TREASURY",
       "record": "release-evidence/numina-bofa-ach-instruction-2026-09-19.json",
       "amountNusd": "500000000000000",
       "targetAmountUsd": "500000000000000",
@@ -404,12 +404,16 @@
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "treasuryInstructionSubmissionPerformed": true,
-      "achOriginatorSubmissionPerformed": false,
+      "achOriginatorSubmissionPerformed": true,
       "achOriginatorReceipt": null,
       "routingReference": "073000176",
       "routingReferenceType": "DESTINATION_ACH_ROUTING_REFERENCE",
       "routingReferenceUserConfirmed": true,
-      "achTraceNumber": null
+      "achTraceNumber": null,
+      "authorizationStatus": "AUTHORIZED",
+      "numinaExecutionPerformed": true,
+      "externalAchOriginatorConfirmed": true,
+      "achOriginatorSubmissionSource": "OWNER_CONFIRMED"
     }
   },
   "nusd": {
