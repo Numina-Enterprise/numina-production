@@ -1,0 +1,63 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T14:02:03Z",
+  "source": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "observedCommit": "86696a5e4f1bd3ef00897d9b9218495e9d14b439"
+  },
+  "vercel": {
+    "capacityObserved": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "latestReadyDeployment": {
+      "id": "dpl_Fp1BfcSNTDJGMcUFj9Uvur3RHt9E",
+      "sourceCommit": "e8aed5b4ac912530aae5d8db1e480e6177f84ea7",
+      "target": "production",
+      "state": "READY",
+      "url": "https://numina-production-ohz5fgr02-skott34-dot.vercel.app"
+    },
+    "currentHeadDeploymentObserved": false,
+    "directDeployActionAvailable": false,
+    "directDeployActionError": "deploy_to_vercel returned Tool deploy_to_vercel not found"
+  },
+  "githubActions": {
+    "usableRunnerExecutionObserved": false,
+    "canonicalRun": {
+      "runId": 35447098403,
+      "runAttempt": 3,
+      "jobId": 105908868543,
+      "workflow": ".github/workflows/numina.yml",
+      "sourceCommit": "86696a5e4f1bd3ef00897d9b9218495e9d14b439",
+      "status": "completed",
+      "conclusion": "failure",
+      "stepsObserved": false,
+      "logsObserved": false
+    },
+    "websitePublishRun": {
+      "runId": 35447098398,
+      "workflow": ".github/workflows/publish-sites-control-source.yml",
+      "sourceCommit": "86696a5e4f1bd3ef00897d9b9218495e9d14b439",
+      "status": "pending",
+      "jobsObserved": 0
+    },
+    "androidSigningRerunPerformed": false,
+    "iosSigningRerunPerformed": false,
+    "reason": "The canonical workflow rerun again completed without runner-backed steps, so Android and iOS signing were not rerun or claimed."
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "online": false,
+    "lastSeen": "2026-09-15T04:39:47.909Z",
+    "fallbackUsed": false,
+    "signingIdentityChanged": false
+  },
+  "mobileDelivery": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false
+  },
+  "scope": "Delivery observation records provider and transport receipts only. It does not establish external bank, custodian, exchange, broker, reserve, or store-provider balances or submissions beyond the receipts explicitly recorded here."
+}
