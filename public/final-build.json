@@ -137,7 +137,7 @@
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
-      "sourceHead": "10f347fa2ec7385c1431c9827296b35a42d1e08b",
+      "sourceHead": "22241ff0ff622c08bc4ccaf5b11adb1d8511b5e8",
       "identity": "NUMINA"
     },
     "smartContracts": {
@@ -330,7 +330,7 @@
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
     "lastAlignment": "FINAL_ALL_NUMINA",
-    "lastSoftwareUpdate": "10f347fa2ec7385c1431c9827296b35a42d1e08b",
+    "lastSoftwareUpdate": "22241ff0ff622c08bc4ccaf5b11adb1d8511b5e8",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
@@ -343,11 +343,25 @@
     "numinaEqualsAll": true,
     "headCount": 3,
     "canonicalHeads": {
-      "repository": "NUMINA",
-      "finance": "NUMINA",
-      "evidence": "NUMINA",
+      "repository": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "finance": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "evidence": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
       "singularIdentity": "NUMINA",
-      "singular": true
+      "singular": true,
+      "allInProduction": true,
+      "allCanonical": true
     },
     "finalCount": 1,
     "finalIdentity": "NUMINA"
@@ -364,11 +378,25 @@
     "evidence": "NUMINA",
     "canonicalHeads": {
       "count": 3,
-      "repository": "NUMINA",
-      "finance": "NUMINA",
-      "evidence": "NUMINA",
+      "repository": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "finance": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
+      "evidence": {
+        "identity": "NUMINA",
+        "canonical": true,
+        "production": true
+      },
       "singularIdentity": "NUMINA",
-      "singular": true
+      "singular": true,
+      "allInProduction": true,
+      "allCanonical": true
     },
     "finalCount": 1,
     "final": "NUMINA"
