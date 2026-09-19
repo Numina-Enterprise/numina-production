@@ -1,0 +1,68 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "observed_at": "2026-09-19T23:11:11Z",
+  "repository": "skott34-dot/numina-production",
+  "runner_migration_commit": "674360d3b0d4fc5c662662eedf542b55a737fe31",
+  "runner_scope": {
+    "custom_label_removed_from_delivery_workflows": true,
+    "hosted_runner_assignments": {
+      "numina-site-builder.yml": "ubuntu-latest",
+      "numina-nusd-runtime-builder.yml": "ubuntu-latest",
+      "numina-native-packages.yml": {
+        "android": "ubuntu-latest",
+        "ios": "macos-latest"
+      },
+      "numina-android-release.yml": "ubuntu-latest",
+      "numina-ios-signing.yml": "macos-latest",
+      "numina-ios-branch-build.yml": "macos-latest",
+      "verify-workflow-pins.yml": "ubuntu-latest"
+    },
+    "signing_identities_created_or_rotated": false,
+    "treasury_or_settlement_workflows_changed": false
+  },
+  "github_actions": {
+    "canonical_run": {
+      "run_id": 35475402245,
+      "job_id": 105983679295,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps_executed": 0,
+      "job_log_available": false
+    },
+    "workflow_pin_run": {
+      "run_id": 35475402214,
+      "job_id": 105983679182,
+      "status": "completed",
+      "conclusion": "failure",
+      "steps_executed": 0,
+      "job_log_available": false
+    },
+    "android_signing": {
+      "run_id": 35475402241,
+      "status": "pending",
+      "jobs_created": 0,
+      "signed_artifact_verified": false
+    },
+    "ios_signing": {
+      "run_id": 35475402216,
+      "status": "pending",
+      "jobs_created": 0,
+      "signed_artifact_verified": false
+    }
+  },
+  "remote_fallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "last_seen": "2026-09-15T04:39:47.909+00:00"
+  },
+  "provider_submission": {
+    "android": false,
+    "ios": false
+  },
+  "receipts": {
+    "android": null,
+    "ios": null,
+    "store_android": null,
+    "store_ios": null
+  }
+}
