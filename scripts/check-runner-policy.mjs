@@ -12,6 +12,8 @@ if (policy.identity !== 'NUMINA') failures.push('Runner policy identity must be 
 if (policy.runner?.identity !== 'NUMINA' || policy.runner?.name !== 'NUMINA') failures.push('Runner identity must be NUMINA');
 if (policy.runner?.singular !== true || policy.runner?.count !== 1) failures.push('Runner model must contain exactly one singular NUMINA runner');
 if (policy.runner?.selfHosted !== false) failures.push('NUMINA self-hosted execution is denied');
+if (policy.runner?.externalSelfHostedAllowed !== false) failures.push('External self-hosted runners must remain denied');
+if (policy.runner?.hosting !== 'github-hosted-only') failures.push('NUMINA execution must use GitHub-hosted runners only');
 for (const [role, identity] of Object.entries(policy.roles || {})) if (identity !== 'NUMINA') failures.push(`${role} must resolve to NUMINA`);
 
 for (const name of readdirSync(workflows).filter(name => /\.ya?ml$/i.test(name)).sort()) {
