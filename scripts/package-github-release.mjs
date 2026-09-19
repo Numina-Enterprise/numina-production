@@ -5,7 +5,10 @@ import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
+const FINAL_BUILD_MANIFEST_BLOB='c7533c4609b90967a987a4c2369dd1c85b998c47';
 const finalBuildBytes=readFileSync(finalBuildPath);
+const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\\0'),finalBuildBytes])).digest('hex');
+if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
 const finalBuild=JSON.parse(finalBuildBytes);
 if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
 if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');
@@ -29,7 +32,7 @@ const release={
   version:pkg.version,
   sourceCommit:process.env.GITHUB_SHA||null,
   externalConfirmation:'evidence-required',
-  finalBuildManifest:{path:finalBuildPath,sha256:createHash('sha256').update(finalBuildBytes).digest('hex'),identity:finalBuild.identity,status:finalBuild.status,version:finalBuild.applicationVersion}
+  finalBuildManifest:{path:finalBuildPath,blob:FINAL_BUILD_MANIFEST_BLOB,sha256:createHash('sha256').update(finalBuildBytes).digest('hex'),identity:finalBuild.identity,status:finalBuild.status,version:finalBuild.applicationVersion}
 };
 writeFileSync('dist/NUMINA-RELEASE.json',JSON.stringify(release,null,2)+'\n');
 execFileSync('tar',['-czf',archive,'dist/client','dist/server','dist/NUMINA-RELEASE.json'],{stdio:'inherit'});
