@@ -17,5 +17,11 @@
     "release:numina": "node scripts/package-github-release.mjs"
   },
   "license": "SEE LICENSE IN LICENSE.md",
-  "author": "Numina · SK Consulting LLC"
+  "author": "Numina · SK Consulting LLC",
+  "numina": {
+    "identity": "NUMINA",
+    "self": "NUMINA",
+    "singular": true,
+    "all": "NUMINA"
+  }
 }
