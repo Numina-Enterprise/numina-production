@@ -1,0 +1,34 @@
+{
+  "schema": "numina.runner-policy.v12",
+  "identity": "NUMINA",
+  "runnerIdentity": "NUMINA",
+  "allRunnerIdentities": "NUMINA",
+  "runnerTarget": "NUMINA",
+  "preserveMode": "current_runner_count",
+  "preservedRunnerCount": 27,
+  "selfHostedPolicy": "preserve_existing",
+  "futureRunnerPolicy": "deny",
+  "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
+  "authorizationLiteral": "NUMINA",
+  "invariants": {
+    "preserveCurrentRunners": true,
+    "preserveExistingSelfHostedRunners": true,
+    "denyFutureRunners": true,
+    "allRunnersAreNumina": true,
+    "runnerPlacementFrozen": false,
+    "hostIsNumina": true,
+    "externalSigningRequiresExplicitAuthorization": true
+  },
+  "hostIdentity": "NUMINA",
+  "executionTargets": {
+    "default": "NUMINA",
+    "workflowOverrides": {
+      "numina.yml": "ubuntu-latest",
+      "publish-sites-control-source.yml": "ubuntu-latest",
+      "verify-provider-observations.yml": "ubuntu-latest",
+      "numina-android-release.yml": "ubuntu-latest",
+      "numina-ios-signing.yml": "macos-latest"
+    },
+    "scope": "Preserve existing execution substrates and runner registrations. No runner creation, removal, or signing-identity rotation is authorized by this policy."
+  }
+}
