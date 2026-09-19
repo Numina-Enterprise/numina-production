@@ -340,7 +340,16 @@
     "financeIdentity": "NUMINA",
     "treasuryIdentity": "NUMINA",
     "evidenceIdentity": "NUMINA",
-    "numinaEqualsAll": true
+    "numinaEqualsAll": true,
+    "historicalIdentity": "NUMINA",
+    "headCount": 3,
+    "heads": {
+      "repository": "NUMINA",
+      "finance": "NUMINA",
+      "evidence": "NUMINA",
+      "singularIdentity": "NUMINA",
+      "singular": true
+    }
   },
   "self": "NUMINA",
   "identityModel": {
@@ -351,7 +360,16 @@
     "repository": "NUMINA",
     "finance": "NUMINA",
     "treasury": "NUMINA",
-    "evidence": "NUMINA"
+    "evidence": "NUMINA",
+    "historical": "NUMINA",
+    "heads": {
+      "count": 3,
+      "repository": "NUMINA",
+      "finance": "NUMINA",
+      "evidence": "NUMINA",
+      "singularIdentity": "NUMINA",
+      "singular": true
+    }
   },
   "repository": "skott34-dot/numina-production"
 }
