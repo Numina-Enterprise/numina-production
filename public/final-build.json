@@ -404,23 +404,18 @@
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "treasuryInstructionSubmissionPerformed": true,
-      "achOriginatorSubmissionPerformed": true,
       "achOriginatorReceipt": null,
       "routingReference": "073000176",
       "routingReferenceType": "DESTINATION_ACH_ROUTING_REFERENCE",
       "routingReferenceUserConfirmed": true,
       "achTraceNumber": null,
-      "authorizationStatus": "AUTHORIZED",
-      "numinaExecutionPerformed": false,
-      "externalAchOriginatorConfirmed": true,
-      "achOriginatorSubmissionSource": "NUMINA_NATIVE_TREASURY",
-      "treasuryIdentity": "NUMINA NATIVE TREASURY",
-      "achOriginatorIdentity": "NUMINA",
-      "originatorAndTreasurySingular": true,
-      "originatorRole": "NUMINA_NATIVE_TREASURY",
-      "endpoint": "073000176",
-      "endpointIdentity": "SK Consulting LLC",
-      "instructionState": "INITIATED"
+      "execution": {
+        "endpoint": "073000176",
+        "endpointIdentity": "SK Consulting LLC",
+        "treasuryIdentity": "NUMINA NATIVE TREASURY",
+        "achOriginatorIdentity": "NUMINA",
+        "instructionState": "INITIATED"
+      }
     }
   },
   "nusd": {
