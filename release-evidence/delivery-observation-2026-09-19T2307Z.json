@@ -1,0 +1,103 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T23:07:00Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "8ade30a91a822824b8d2cd4bc210f5071239c76b",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "probe": {
+      "workflow": ".github/workflows/numina.yml",
+      "runId": 35474853737,
+      "runAttempt": 2,
+      "jobId": 105983041764,
+      "status": "completed",
+      "conclusion": "failure",
+      "stepCount": 0,
+      "artifacts": [],
+      "jobLogAvailable": false,
+      "interpretation": "The rerun completed with no workflow steps and no artifact; hosted-runner allocation did not clear."
+    },
+    "conditionalReruns": {
+      "canonicalBuild": "PROBED_AND_BLOCKED_BEFORE_STEPS",
+      "websitePublishOrPrebuiltDeploy": "NOT_RERUN_BECAUSE_RUNNER_GATE_FAILED",
+      "androidSigning": "NOT_RERUN_BECAUSE_RUNNER_GATE_FAILED",
+      "iosSigning": "NOT_RERUN_BECAUSE_RUNNER_GATE_FAILED"
+    }
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deployment": {
+      "id": "dpl_FcaY17SNxfaVnVByPuVcbCcigCcs",
+      "source": "git",
+      "target": "production",
+      "state": "READY",
+      "commitSha": "8ade30a91a822824b8d2cd4bc210f5071239c76b",
+      "url": "https://numina-production-81hrsqvdj-skott34-dot.vercel.app",
+      "aliases": [
+        "https://www.numinalabs.xyz",
+        "https://numinalabs.xyz",
+        "https://numina-production.vercel.app",
+        "https://numina-production-skott34-dot.vercel.app",
+        "https://numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    },
+    "productionVerification": {
+      "apexFinalBuildRedirectStatus": 308,
+      "primaryOrigin": "https://www.numinalabs.xyz",
+      "finalBuild": {"path": "/final-build.json", "status": 200},
+      "deploymentReceipt": {"path": "/downloads/nusd/deployment-receipt.json", "status": 200},
+      "nusdStatus": {"path": "/api/nusd/v1/status", "status": 200},
+      "deploymentEstimate": {"path": "/v2/network/deployment-estimate", "status": 200}
+    },
+    "deploymentReceiptSummary": {
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "tokenContractAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "tokenBlockNumber": "51725",
+      "tokenReceiptStatus": "0x1",
+      "tokenFinalConfirmations": 25,
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "settlementContractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementBlockNumber": "51726",
+      "settlementReceiptStatus": "0x1",
+      "settlementFinalConfirmations": 24,
+      "externalUsdSettlement": false,
+      "externalUsdcSettlement": false,
+      "bankReceipt": null,
+      "providerReceipt": null
+    },
+    "note": "The current production deployment is READY for the source main SHA observed at the start of this run. final-build.json still contains historical text about a prior Vercel build-rate-limit condition; that embedded historical field is not used as the current provider-capacity observation."
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "executionBoundaries": {
+    "signingIdentityInventedOrRotated": false,
+    "financialTransferPerformed": false,
+    "treasuryBalanceChanged": false,
+    "externalSettlementClaimed": false
+  },
+  "remainingBlockers": [
+    "GitHub Actions hosted-runner allocation",
+    "Android signing workflow cannot run until runner allocation clears",
+    "iOS signing workflow cannot run until runner allocation clears",
+    "App-store submission remains unclaimed until signed artifacts and a connected provider submission path both exist",
+    "VENGEANCE remote fallback is offline"
+  ]
+}
