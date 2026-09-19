@@ -17,7 +17,6 @@
   "roles": {
     "general": "NUMINA",
     "android": "NUMINA",
-    "vercel": "NUMINA",
     "quantum": "NUMINA",
     "ios": "NUMINA"
   }
