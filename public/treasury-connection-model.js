@@ -1,7 +1,7 @@
 // Owner-designated model and activation statement; provider bindings identify real external endpoints but do not turn modeled allocations into provider balances.
 export const NUMINA_TREASURY_CONNECTION = Object.freeze({
   schema:'numina.treasury.website-connection.v1',identity:'NUMINA',singular:true,balanceCount:1,
-  recordedAt:'2026-09-18T22:25:00Z',basis:'verified_numina_native_journal',
+  recordedAt:'2026-09-19T05:20:00Z',basis:'verified_numina_native_journal',
   aggregateModeledValue:'500000000000000',aggregateModeledUnit:'NUSD',
   aggregation:'SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS',modeledAllocationsAdditive:false,externalBalancesAggregated:false,
   verifiedModeledValue:'500000000000000',verificationScope:'NUMINA_NATIVE_JOURNAL',verificationRoute:'/api/control/v1/treasury',
