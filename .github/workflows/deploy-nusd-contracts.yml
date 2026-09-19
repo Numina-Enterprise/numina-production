@@ -1,0 +1,92 @@
+name: Deploy NUSD contracts to NUMINA chain
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Dependency-pin maintenance alone must not trigger an on-chain deployment.
+      - 'runtime/nusd/scripts/deploy-production.mjs'
+      - 'runtime/nusd/scripts/rpc-auth.mjs'
+      - 'runtime/nusd/deployment.production.json'
+      - 'runtime/nusd/artifacts/NuminaUSD.json'
+      - 'runtime/nusd/artifacts/NuminaSettlement.json'
+      - 'runtime/nusd/scripts/token-artifact.mjs'
+      - 'runtime/nusd/contracts/**'
+      - 'runtime/nusd/artifacts/**'
+      - 'runtime/nusd/scripts/deploy-production.mjs'
+      - 'runtime/nusd/scripts/validate-deployment.mjs'
+      - 'runtime/nusd/deployment.production.json'
+      - 'runtime/nusd/policies/issuer-policy-1500t-18d.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-nusd-contracts
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: NUMINA
+    environment: production
+    timeout-minutes: 20
+    env:
+      NUMINA_RPC_URL: https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/
+      NUMINA_RPC_AUTHORIZATION: ${{ secrets.NUMINA_RPC_AUTHORIZATION }}
+      NUMINA_RPC_USERNAME: ${{ secrets.NUMINA_RPC_USERNAME }}
+      NUMINA_RPC_PASSWORD: ${{ secrets.NUMINA_RPC_PASSWORD }}
+      NUMINA_RPC_APP_USERNAME: ${{ secrets.NUMINA_RPC_APP_USERNAME }}
+      NUMINA_RPC_APP_PASSWORD: ${{ secrets.NUMINA_RPC_APP_PASSWORD }}
+      NUMINA_RPC_APP_CREDENTIAL: ${{ secrets.NUMINA_RPC_APP_CREDENTIAL }}
+      NUMINA_KALEIDO_APP_CREDENTIAL: ${{ secrets.NUMINA_KALEIDO_APP_CREDENTIAL }}
+      KALEIDO_APP_CREDENTIAL: ${{ secrets.KALEIDO_APP_CREDENTIAL }}
+      KALEIDO_APP_CRED_USERNAME: ${{ secrets.KALEIDO_APP_CRED_USERNAME }}
+      KALEIDO_APP_CRED_PASSWORD: ${{ secrets.KALEIDO_APP_CRED_PASSWORD }}
+      KALEIDO_APP_USERNAME: ${{ secrets.KALEIDO_APP_USERNAME }}
+      KALEIDO_APP_PASSWORD: ${{ secrets.KALEIDO_APP_PASSWORD }}
+      KALEIDO_USERNAME: ${{ secrets.KALEIDO_USERNAME }}
+      KALEIDO_PASSWORD: ${{ secrets.KALEIDO_PASSWORD }}
+      NUMINA_KALEIDO_API_KEY: ${{ secrets.NUMINA_KALEIDO_API_KEY }}
+      KALEIDO_API_KEY: ${{ secrets.KALEIDO_API_KEY }}
+      NUMINA_EXPECTED_CHAIN_ID: '962421430'
+      NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
+      NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+
+      - name: Install locked NUSD runtime dependencies
+        working-directory: runtime/nusd
+        run: npm ci --ignore-scripts
+
+      - name: Require a NUMINA RPC credential source
+        shell: bash
+        run: |
+          if [ -z "$NUMINA_RPC_AUTHORIZATION$NUMINA_RPC_APP_CREDENTIAL$NUMINA_KALEIDO_APP_CREDENTIAL$KALEIDO_APP_CREDENTIAL$NUMINA_RPC_USERNAME$NUMINA_RPC_APP_USERNAME$KALEIDO_APP_CRED_USERNAME$KALEIDO_APP_USERNAME$KALEIDO_USERNAME$NUMINA_KALEIDO_API_KEY$KALEIDO_API_KEY" ]; then
+            echo "No NUMINA/Kaleido credential source is configured."
+            exit 2
+          fi
+
+      - name: Validate exact 1,500T 18-decimal constructor
+        working-directory: runtime/nusd
+        run: node scripts/validate-deployment.mjs deployment.production.json --output artifacts/unsigned-production-deployment.json
+
+      - name: Deploy NuminaUSD and NuminaSettlement
+        working-directory: runtime/nusd
+        run: node scripts/deploy-production.mjs deployment.production.json deployment-receipt.json
+
+      - name: Upload verified NUMINA chain receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: NUSD-PRODUCTION-RECEIPT
+          path: |
+            runtime/nusd/deployment-receipt.json
+            runtime/nusd/artifacts/unsigned-production-deployment.json
+          if-no-files-found: warn

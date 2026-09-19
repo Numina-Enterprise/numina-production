@@ -1,0 +1,63 @@
+name: Build and publish Numina
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-sites-control-source.yml'
+      - '.openai/hosting.json'
+      - 'config/numina-manifest.v2.json'
+      - 'config/numina-production-bound-state.v1.json'
+      - 'src/**'
+      - 'public/**'
+      - 'drizzle/**'
+      - 'scripts/build.mjs'
+      - 'scripts/release-manifest.mjs'
+      - 'scripts/package.mjs'
+      - 'scripts/publish-with-telemetry.mjs'
+      - 'package.json'
+      - '.nvmrc'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: numina-singular-build
+  cancel-in-progress: false
+
+jobs:
+  numina:
+    name: numina
+    runs-on: NUMINA
+    environment: production
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version-file: .nvmrc
+          check-latest: false
+      - name: Install pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+      - name: Build Numina
+        run: npm run build
+      - name: Verify Numina before publication
+        run: npm test
+      - name: Package Numina
+        run: node scripts/package.mjs "$RUNNER_TEMP/numina.tgz"
+      - name: Restore exact committed source for publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --hard HEAD
+          git clean -fdx
+          test -z "$(git status --porcelain --untracked-files=normal)"
+      - name: Publish Numina
+        shell: bash
+        run: npm run publish:source -- sites
