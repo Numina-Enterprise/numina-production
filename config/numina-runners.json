@@ -1,95 +1,44 @@
 {
-  "schema": "numina.runner-policy.v6",
+  "schema": "numina.runner-policy.v7",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
-  "preserved": true,
+  "preserveMode": "current_runner_slots",
   "preservedWorkflowCount": 27,
-  "preservedDeclarationCount": 27,
-  "preservedRunners": {
-    ".github/workflows/align-native-treasury-500t.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/check-sites-control-origin.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/deploy-nusd-contracts.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/diagnose-control-auth.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/ibm-quantum-hardware.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/ibm-quantum-smoke.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/initiate-treasury-aggregate-model.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/numina-android-release.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/numina-ios-branch-build.yml": [
-      "macos-latest"
-    ],
-    ".github/workflows/numina-ios-signing.yml": [
-      "macos-latest"
-    ],
-    ".github/workflows/numina-native-packages.yml": [
-      "ubuntu-latest",
-      "macos-latest"
-    ],
-    ".github/workflows/numina-nusd-runtime-builder.yml": [
-      "ubuntu-24.04",
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/numina-nusd-runtime.yml": [],
-    ".github/workflows/numina-rc26-verifier.yml": [],
-    ".github/workflows/numina-release.yml": [],
-    ".github/workflows/numina-site-builder.yml": [
-      "ubuntu-24.04",
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/numina.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/probe-numina-runtime-auth.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/publish-sites-control-source.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/rebuild-nusd-artifacts.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/repair-rc26-integration-manifest.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/settle-numina-aggregate-model.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/sync-control-key-pin.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/verify-nusd-production.yml": [
-      "ubuntu-24.04"
-    ],
-    ".github/workflows/verify-provider-observations.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/verify-root-vercel.yml": [
-      "ubuntu-latest"
-    ],
-    ".github/workflows/verify-workflow-pins.yml": [
-      "ubuntu-latest"
-    ]
+  "preservedRunnerCount": 27,
+  "preservedRunnerSlots": {
+    ".github/workflows/align-native-treasury-500t.yml": 1,
+    ".github/workflows/check-sites-control-origin.yml": 1,
+    ".github/workflows/deploy-nusd-contracts.yml": 1,
+    ".github/workflows/diagnose-control-auth.yml": 1,
+    ".github/workflows/ibm-quantum-hardware.yml": 1,
+    ".github/workflows/ibm-quantum-smoke.yml": 1,
+    ".github/workflows/initiate-treasury-aggregate-model.yml": 1,
+    ".github/workflows/numina-android-release.yml": 1,
+    ".github/workflows/numina-ios-branch-build.yml": 1,
+    ".github/workflows/numina-ios-signing.yml": 1,
+    ".github/workflows/numina-native-packages.yml": 2,
+    ".github/workflows/numina-nusd-runtime-builder.yml": 2,
+    ".github/workflows/numina-nusd-runtime.yml": 0,
+    ".github/workflows/numina-rc26-verifier.yml": 0,
+    ".github/workflows/numina-release.yml": 0,
+    ".github/workflows/numina-site-builder.yml": 2,
+    ".github/workflows/numina.yml": 1,
+    ".github/workflows/probe-numina-runtime-auth.yml": 1,
+    ".github/workflows/publish-sites-control-source.yml": 1,
+    ".github/workflows/rebuild-nusd-artifacts.yml": 1,
+    ".github/workflows/repair-rc26-integration-manifest.yml": 1,
+    ".github/workflows/settle-numina-aggregate-model.yml": 1,
+    ".github/workflows/sync-control-key-pin.yml": 1,
+    ".github/workflows/verify-nusd-production.yml": 1,
+    ".github/workflows/verify-provider-observations.yml": 1,
+    ".github/workflows/verify-root-vercel.yml": 1,
+    ".github/workflows/verify-workflow-pins.yml": 1
   },
   "invariants": {
-    "preserveAllCurrentRunners": true,
+    "preserveCurrentRunners": true,
     "denyFutureRunners": true,
-    "denyRunnerTargetChanges": true,
+    "allowExistingRunnerTargetUpdates": true,
     "allRunnersAreNumina": true
   }
 }
