@@ -76,3 +76,14 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   }
   assert.equal(declarations,policy.preservedRunnerCount,'runner count must remain preserved with no future additions');
 });
+
+
+test('NUMINA activation preserves existing runner only',()=>{
+  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
+  assert.equal(pkg.scripts['runner:activate'],'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1');
+  assert.equal(pkg.scripts['runner:status'],'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1 -StatusOnly');
+  const activation=readFileSync(new URL('../scripts/activate-numina-runner.ps1',import.meta.url),'utf8');
+  assert.match(activation,/NUMINA_RUNNER_NOT_REGISTERED_FUTURE_RUNNER_CREATION_DENIED/);
+  assert.doesNotMatch(activation,/registration-token/i);
+  assert.doesNotMatch(activation,/config\.cmd/i);
+});
