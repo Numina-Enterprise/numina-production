@@ -329,7 +329,7 @@
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
-    "lastAlignment": "NUMINA_FINANCE_APP_TREASURY",
+    "lastAlignment": "FINAL_ALL_NUMINA",
     "lastSoftwareUpdate": "5b39bd191f1dd1cf7af803c953e879b76a19fef4",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
@@ -340,7 +340,6 @@
     "financeIdentity": "NUMINA",
     "treasuryIdentity": "NUMINA",
     "evidenceIdentity": "NUMINA",
-    "provenanceIdentity": "NUMINA",
     "numinaEqualsAll": true
   },
   "self": "NUMINA",
@@ -352,8 +351,7 @@
     "repository": "NUMINA",
     "finance": "NUMINA",
     "treasury": "NUMINA",
-    "evidence": "NUMINA",
-    "provenance": "NUMINA"
+    "evidence": "NUMINA"
   },
   "repository": "skott34-dot/numina-production"
 }
