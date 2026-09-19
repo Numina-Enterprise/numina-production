@@ -14,7 +14,10 @@
     "location": "Bank of America Savings 3486",
     "linkedOfficialName": "Business Advantage Sav",
     "accountLast4": "3486",
-    "institutionId": "ins_127989"
+    "institutionId": "ins_127989",
+    "routingReference": "073000176",
+    "routingReferenceType": "DESTINATION_ACH_ROUTING_REFERENCE",
+    "routingReferenceUserConfirmed": true
   },
   "settlementReceipt": {
     "id": "numina:treasury:settlement:2026-09-19:v1",
@@ -28,5 +31,6 @@
   "treasuryInstructionSubmissionPerformed": true,
   "achOriginatorSubmissionPerformed": false,
   "achOriginatorReceipt": null,
-  "note": "ACH instruction initiated inside the NUMINA Native Treasury. No bank-originator ACH submission or bank-issued ACH receipt is claimed by this record."
+  "note": "ACH instruction initiated inside the NUMINA Native Treasury. Destination ACH routing/reference 073000176 is user-confirmed and is not treated as a bank-issued ACH trace number. No bank-originator ACH submission or bank-issued ACH receipt is claimed by this record.",
+  "achTraceNumber": null
 }
