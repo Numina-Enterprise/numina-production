@@ -413,7 +413,11 @@
       "authorizationStatus": "AUTHORIZED",
       "numinaExecutionPerformed": true,
       "externalAchOriginatorConfirmed": true,
-      "achOriginatorSubmissionSource": "OWNER_CONFIRMED"
+      "achOriginatorSubmissionSource": "NUMINA_NATIVE_TREASURY",
+      "treasuryIdentity": "NUMINA",
+      "achOriginatorIdentity": "NUMINA",
+      "originatorAndTreasurySingular": true,
+      "originatorRole": "NUMINA_NATIVE_TREASURY"
     }
   },
   "nusd": {
