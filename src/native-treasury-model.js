@@ -42,23 +42,22 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
       if(balance<0n||!treasuryUnsigned.test(balance.toString()))controlError('TREASURY_BALANCE_OUT_OF_RANGE',409);
       projection.balance=balance.toString();
     }else if(intent.operation==='SETTLE_AGGREGATE_MODEL'){
-      treasuryExact(intent,['operation','aggregateAmount','bankAmount','stripeAmount','nativeAmount','numinaAttestedExternalFundsMoved','numinaAttestedExternalFundsVerified','reason']);treasuryReason(intent.reason);
+      treasuryExact(intent,['operation','aggregateAmount','bankAmount','stripeAmount','nativeAmount','reason']);treasuryReason(intent.reason);
       for(const field of ['aggregateAmount','bankAmount','stripeAmount','nativeAmount'])if(typeof intent[field]!=='string'||!treasuryUnsigned.test(intent[field])||intent[field]==='0')controlError('INVALID_TRANSACTION_AMOUNT',400);
       const aggregate=BigInt(intent.aggregateAmount),bank=BigInt(intent.bankAmount),stripe=BigInt(intent.stripeAmount),native=BigInt(intent.nativeAmount);
       if(bank+stripe+native!==aggregate||intent.nativeAmount!==projection.balance)controlError('AGGREGATE_SETTLEMENT_MISMATCH',409);
-      if(intent.numinaAttestedExternalFundsMoved!==true||intent.numinaAttestedExternalFundsVerified!==true)controlError('NUMINA_ATTESTATION_REQUIRED',400);
       if(projection.transaction_requests.length>=100)controlError('TREASURY_REQUEST_CAPACITY',409);
       transactionRequest={
-        id:eventId,kind:'aggregate_settlement',status:'SETTLED',settlement:true,settlement_scope:'NUMINA_SINGULAR_SETTLEMENT',
+        id:eventId,kind:'aggregate_model_alignment',status:'INTERNAL_MODELED_ALLOCATION',settlement:false,settlement_scope:'NUMINA_INTERNAL_MODEL_ONLY',
         aggregate_amount:intent.aggregateAmount,unit:'NUSD',provider:'NUMINA',
         components:[
-          {id:'bank-usd',provider:'NUMINA',location:'Bank of America Savings 3486',amount_nusd:intent.bankAmount,settled_amount:intent.bankAmount,settled_unit:'USD',ratio:'1:1',contract:'NuminaUSDRedemption',native_contract_id:'numina:nusd-usd:redemption:v1',status:'SETTLED'},
-          {id:'stripe-usdc',provider:'NUMINA',location:'Stripe USDC Address',amount_nusd:intent.stripeAmount,settled_amount:intent.stripeAmount,settled_unit:'USDC',ratio:'1:1',contract:'NuminaUSDCConversion',native_contract_id:'numina:nusd-usdc:conversion:v1',status:'SETTLED'},
-          {id:'native-retained',provider:'NUMINA',location:'NUMINA Native Treasury',amount_nusd:intent.nativeAmount,settled_amount:intent.nativeAmount,settled_unit:'NUSD',status:'SETTLED'}
+          {id:'bank-usd',provider:'NUMINA',location:'Bank of America Savings 3486',amount_nusd:intent.bankAmount,modeled_amount:intent.bankAmount,modeled_unit:'USD',ratio:'1:1',contract:'NuminaUSDRedemption',native_contract_id:'numina:nusd-usd:redemption:v1',status:'INTERNAL_MODELED_ALLOCATION',external_settlement_verified:false},
+          {id:'stripe-usdc',provider:'NUMINA',location:'Stripe USDC Address',amount_nusd:intent.stripeAmount,modeled_amount:intent.stripeAmount,modeled_unit:'USDC',ratio:'1:1',contract:'NuminaUSDCConversion',native_contract_id:'numina:nusd-usdc:conversion:v1',status:'INTERNAL_MODELED_ALLOCATION',external_settlement_verified:false},
+          {id:'native-retained',provider:'NUMINA',location:'NUMINA Native Treasury',amount_nusd:intent.nativeAmount,modeled_amount:intent.nativeAmount,modeled_unit:'NUSD',status:'INTERNAL_MODELED_ALLOCATION',external_settlement_verified:false}
         ],
-        submission_performed:true,settlement_performed:true,
-        receipt:{id:'numina:treasury:settlement:2026-09-19:v1',path:'/downloads/nusd/treasury-settlement-receipt.json',mint_receipt:'/downloads/nusd/mint-receipt.json',evidence_source:'NUMINA_MINT_AND_NATIVE_EVIDENCE',native_backing_attestation_id:'numina:treasury:backing:2026-09-19:v1'},
-        verification_scope:'NUMINA_MINT_AND_NATIVE_EVIDENCE'
+        submission_performed:false,settlement_performed:false,external_provider_verification:false,provider_settlement_evidence_bound:false,
+        receipt:{id:'numina:treasury:settlement:2026-09-19:v1',path:'/downloads/nusd/treasury-settlement-receipt.json',mint_receipt:'/downloads/nusd/mint-receipt.json',evidence_source:'NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE',attestation_scope:'INTERNAL_NUMINA_MODEL_ONLY'},
+        verification_scope:'INTERNAL_NUMINA_MODEL_ONLY'
       };
       projection.transaction_requests.push(transactionRequest);
     }else if(intent.operation==='BIND_EXTERNAL_RECEIPT'){

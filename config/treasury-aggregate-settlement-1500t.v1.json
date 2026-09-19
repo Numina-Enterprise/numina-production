@@ -3,9 +3,9 @@
   "authority": "NUMINA",
   "system_of_record": "NUMINA",
   "singular": true,
-  "settlement": true,
-  "settlement_scope": "NUMINA_SINGULAR_ATTESTATION",
-  "status": "SETTLED",
+  "settlement": false,
+  "settlement_scope": "NUMINA_INTERNAL_MODEL_ONLY",
+  "status": "INTERNAL_MODELED_ALLOCATION",
   "aggregate": {
     "amount": "1500000000000000",
     "unit": "MODEL_UNIT",
@@ -17,15 +17,15 @@
       "provider": "NUMINA",
       "amount": "500000000000000",
       "unit": "USD",
-      "classification": "NUMINA_ATTESTED_SETTLEMENT",
-      "settlement": true,
-      "numina_attested_external_funds_moved": true,
-      "numina_attested_external_funds_verified": true,
-      "verification_scope": "NUMINA_ATTESTATION",
+      "classification": "NUMINA_INTERNAL_MODELED_ALLOCATION",
+      "settlement": false,
+      "numina_attested_external_funds_moved": false,
+      "numina_attested_external_funds_verified": false,
+      "verification_scope": "INTERNAL_NUMINA_MODEL_ONLY",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
       "destination_provider": "bank-of-america",
-      "provider_verification": true,
+      "provider_verification": false,
       "destination_provider_confirmation": false
     },
     {
@@ -33,15 +33,15 @@
       "provider": "NUMINA",
       "amount": "500000000000000",
       "unit": "USDC",
-      "classification": "NUMINA_ATTESTED_SETTLEMENT",
-      "settlement": true,
-      "numina_attested_external_funds_moved": true,
-      "numina_attested_external_funds_verified": true,
-      "verification_scope": "NUMINA_ATTESTATION",
+      "classification": "NUMINA_INTERNAL_MODELED_ALLOCATION",
+      "settlement": false,
+      "numina_attested_external_funds_moved": false,
+      "numina_attested_external_funds_verified": false,
+      "verification_scope": "INTERNAL_NUMINA_MODEL_ONLY",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
       "destination_provider": "stripe",
-      "provider_verification": true,
+      "provider_verification": false,
       "destination_provider_confirmation": false
     },
     {
@@ -49,45 +49,45 @@
       "provider": "NUMINA",
       "amount": "500000000000000",
       "unit": "NUSD",
-      "classification": "NUMINA_NATIVE_SETTLEMENT",
-      "settlement": true,
-      "numina_attested_external_funds_moved": true,
-      "numina_attested_external_funds_verified": true,
-      "verification_scope": "NUMINA_ATTESTATION",
+      "classification": "NUMINA_INTERNAL_MODELED_ALLOCATION",
+      "settlement": false,
+      "numina_attested_external_funds_moved": false,
+      "numina_attested_external_funds_verified": false,
+      "verification_scope": "INTERNAL_NUMINA_MODEL_ONLY",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
       "destination_provider": "numina",
-      "provider_verification": true,
-      "destination_provider_confirmation": true
+      "provider_verification": false,
+      "destination_provider_confirmation": false
     }
   ],
   "aggregate_mint": {
     "amount": "1500000000000000",
     "unit": "MODEL_UNIT",
-    "status": "EXECUTED_NUMINA_INTERNAL",
-    "settlement": true,
-    "settlement_scope": "NUMINA_SINGULAR_ATTESTATION",
+    "status": "RECORDED_NUMINA_INTERNAL",
+    "settlement": false,
+    "settlement_scope": "NUMINA_INTERNAL_MODEL_ONLY",
     "submission_performed": false,
     "external_execution": false,
-    "numina_attested_external_funds_moved": true,
-    "numina_attested_external_funds_verified": true,
-    "verification_scope": "NUMINA_ATTESTATION",
+    "numina_attested_external_funds_moved": false,
+    "numina_attested_external_funds_verified": false,
+    "verification_scope": "INTERNAL_NUMINA_MODEL_ONLY",
     "external_provider_verification": false,
     "receipt": null,
     "provider": "NUMINA",
-    "provider_verification": true
+    "provider_verification": false
   },
   "canonical_native_treasury": {
     "amount": "500000000000000",
     "unit": "NUSD",
-    "settlement": true,
+    "settlement": false,
     "unchanged": true,
     "provider": "NUMINA",
-    "provider_verification": true
+    "provider_verification": false
   },
-  "numina_attested_external_funds_moved": true,
-  "numina_attested_external_funds_verified": true,
-  "verification_scope": "NUMINA_ATTESTATION",
+  "numina_attested_external_funds_moved": false,
+  "numina_attested_external_funds_verified": false,
+  "verification_scope": "INTERNAL_NUMINA_MODEL_ONLY",
   "external_provider_verification": false,
   "provider_settlement_evidence_bound": false,
   "root": "NUMINA",
@@ -96,7 +96,7 @@
   "source": "NUMINA",
   "evidence": "NUMINA",
   "provider": "NUMINA",
-  "provider_verification": true,
+  "provider_verification": false,
   "numina_modeled_units": {
     "verified": true,
     "provider": "NUMINA",
@@ -131,6 +131,9 @@
         "verified": true,
         "destination_provider_confirmation": true
       }
-    ]
-  }
+    ],
+    "verification_scope": "INTERNAL_NUMINA_MODEL_ONLY",
+    "external_provider_verified": false
+  },
+  "internal_model_aligned": true
 }
