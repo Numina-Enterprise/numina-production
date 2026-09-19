@@ -6,7 +6,7 @@ import {createNuminaTreasury} from './native-treasury.js';
 import {FRONTIER_VERSION,FRONTIER_PROVIDERS,frontierState,frontierRequest,frontierDecision,frontierAssert,frontierExact,frontierSign} from './frontier.js';
 import {rateLimit} from './store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
-import {NUMINA_TREASURY_POLICY_V2} from './treasury-policy.js';
+import {NUMINA_TREASURY_CURRENT_POLICY} from './treasury-policy.js';
 import {alignTreasuryAccounts} from './treasury-alignment.js';
 import {readTreasuryEvidence,TREASURY_EVIDENCE_ROUTE} from './treasury-evidence.js';
 import {readStripeProviderRoutes,TREASURY_PROVIDER_ROUTES,NUSD_PROVIDER_ROUTING} from './stripe-treasury.js';
@@ -115,8 +115,9 @@ export async function frontierHttp(req,env){
       return frontierResponse({schema:'numina.public-head.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',rootHash:await controlHash('NUMINA'),revision:row.revision,head:row.head_hash,manifestHash:row.state_hash,eventCount:row.eventCount,journalContinuity:row.eventCount===row.revision+1,scope:'Numina canonical internal journal',blockchainConnection:'/v2/network/status',blockchainAnchorVerified:false});
     }
     if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
-      const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1);
-      return frontierResponse({policy:NUMINA_TREASURY_POLICY_V2,policyHash:await controlHash(NUMINA_TREASURY_POLICY_V2),activation:record?{status:'OWNER_POLICY_RECORDED',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD'},revision:row.revision});
+      const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
+      const currentRecorded=record?.id===policy.id&&record.hash===policyHash;
+      return frontierResponse({policy,policyHash,activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},revision:row.revision});
     }
     if(path==='/api/control/v2/discovery-mcp'){
       if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
