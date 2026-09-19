@@ -25,22 +25,34 @@
     "aggregateModeledUnit": "NUSD",
     "components": [
       {
+        "account": "Numina Labs Operating Bank Account",
+        "provider": "Bank of America",
+        "mask": "3486",
         "unit": "USD",
-        "modeledValue": "500000000000000"
+        "modeledValue": "500000000000000",
+        "financeAppReportedValue": "500000000000000",
+        "sourceReportedBalanceTimestamp": null,
+        "balanceAge": "unknown"
       },
       {
+        "account": "Numina Labs Stripe Treasury",
+        "provider": "manual_finance_record",
         "unit": "USDC",
-        "modeledValue": "500000000000000"
+        "modeledValue": "500000000000000",
+        "financeAppReportedValue": "500000000000000"
       },
       {
+        "account": "Numina Native Treasury",
+        "provider": "manual_finance_record",
         "unit": "NUSD",
-        "modeledValue": "500000000000000"
+        "modeledValue": "500000000000000",
+        "financeAppReportedValue": "500000000000000"
       }
     ],
     "externalBalancesAggregated": false,
     "modeledRoleValuesAdditive": false,
     "balanceCount": 1,
-    "componentsAre": "non_additive_denomination_views_of_one_verified_treasury",
+    "componentsAre": "non_additive_finance_app_reported_views_of_one_singular_numina_treasury",
     "modelDefinition": {
       "basis": "verified_numina_native_journal",
       "date": "2026-09-18",
@@ -56,7 +68,15 @@
       "settlementReceipts": []
     },
     "verifiedModeledValue": "500000000000000",
-    "verificationScope": "NUMINA_NATIVE_JOURNAL"
+    "verificationScope": "NUMINA_FINANCE_APP_ALIGNMENT",
+    "financeAppAlignment": {
+      "status": "ALIGNED",
+      "evidence": "/release-evidence/finance-treasury-alignment-2026-09-18.json",
+      "reportedViewCount": 3,
+      "eachReportedValue": "500000000000000",
+      "additive": false,
+      "externalProviderFactsRemainSeparate": true
+    }
   },
   "nusd": {
     "chainId": "962421430",
@@ -274,8 +294,8 @@
       "verificationScope": "GitHub main is aligned to the verified 500T NUMINA-native model; production verification must be refreshed after a READY deployment of the current main head. Provider balances and external settlement remain separate evidence domains.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
-      "modelAggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
-      "modelVerificationScope": "NUMINA_NATIVE_JOURNAL"
+      "modelAggregation": "SINGULAR_NUMINA_TREASURY_FINANCE_APP_VIEWS",
+      "modelVerificationScope": "NUMINA_FINANCE_APP_ALIGNMENT"
     }
   },
   "buildModel": {
@@ -303,7 +323,7 @@
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
-    "lastAlignment": "NUMINA"
+    "lastAlignment": "NUMINA_FINANCE_APP_TREASURY"
   },
   "self": "NUMINA",
   "identityModel": {
