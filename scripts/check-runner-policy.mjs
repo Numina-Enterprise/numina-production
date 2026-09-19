@@ -6,12 +6,11 @@ const policy = JSON.parse(readFileSync(resolve(root, 'config/numina-runners.json
 const workflowsDir = resolve(root, '.github/workflows');
 const failures = [];
 
-if (policy.identity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA') {
-  failures.push('All preserved runner identities must be NUMINA');
+if (policy.identity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA' || policy.runnerTarget !== 'NUMINA') {
+  failures.push('All runner identities and targets must be NUMINA');
 }
 if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runner preservation invariant must be enabled');
 if (policy.invariants?.denyFutureRunners !== true) failures.push('Future runner denial invariant must be enabled');
-if (policy.invariants?.allowExistingRunnerTargetUpdates !== true) failures.push('Existing runner target updates must remain allowed');
 if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runner identities must resolve to NUMINA');
 
 const expectedSlots = policy.preservedRunnerSlots || {};
@@ -22,10 +21,16 @@ for (const [workflow, expectedCount] of Object.entries(expectedSlots)) {
   let text;
   try { text = readFileSync(path, 'utf8'); }
   catch { failures.push(workflow + ' must remain present to preserve current runners'); continue; }
-  const actualCount = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)].length;
-  declarations += actualCount;
-  if (actualCount !== expectedCount) {
-    failures.push(workflow + ' runner count changed: expected ' + expectedCount + ' got ' + actualCount);
+
+  const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
+    .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
+  declarations += targets.length;
+
+  if (targets.length !== expectedCount) {
+    failures.push(workflow + ' runner count changed: expected ' + expectedCount + ' got ' + targets.length);
+  }
+  for (const target of targets) {
+    if (target !== 'NUMINA') failures.push(workflow + ' runner target must be NUMINA, got ' + JSON.stringify(target));
   }
 }
 
@@ -48,4 +53,4 @@ if (failures.length) {
   for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
   process.exit(1);
 }
-console.log('NUMINA current runners preserved: ' + declarations + ' runner declaration(s); target updates allowed; future runners denied.');
+console.log('NUMINA runners preserved: ' + declarations + ' runner declaration(s); all targets NUMINA; future runners denied.');
