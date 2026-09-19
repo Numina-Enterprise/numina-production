@@ -5,8 +5,9 @@ export const NUMINA_NATIVE_TREASURY_SYNC = Object.freeze({
   aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),
   aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',providerIdentity:'NUMINA',nativeLocationCount:3,nusdMinted:'1500000000000000',nusdBurned:'0',nusdLive:true,contractsActive:true,operatorState:'ACTIVE',paused:false,externalProviderBalancesAsserted:false,externalProviderBalancesUsed:false,externalBalancesAggregated:false,externalExecutionPerformed:false
 });
+export const NUMINA_SINGULAR_SETTLEMENT_RECEIPT=Object.freeze({schema:'numina.treasury.singular-settlement-receipt.v1',id:'numina:treasury:settlement:2026-09-19:v1',status:'SETTLED',path:'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json',download:'/downloads/nusd/treasury-settlement-receipt.json',mintReceipt:'runtime/nusd/mint-receipt.json',mintTransactionHash:'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b',nativeBackingAttestationId:'numina:treasury:backing:2026-09-19:v1',submissionPerformed:true,settlementPerformed:true,aggregateNusd:'1500000000000000',componentCount:3});
 export const NUMINA_NATIVE_TREASURY_HOLDINGS = Object.freeze([
-  Object.freeze({id:'native-usd',displayLabel:'NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'USD',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'Bank of America Savings 3486',linkedOfficialName:'Business Advantage Sav',linkedAccountLast4:'3486',linkedInstitutionId:'ins_127989'}),
+  Object.freeze({id:'native-usd',displayLabel:'NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'USD',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',settlementStatus:'SETTLED',settlementReceiptId:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.id,settlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.path,evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'Bank of America Savings 3486',linkedOfficialName:'Business Advantage Sav',linkedAccountLast4:'3486',linkedInstitutionId:'ins_127989'}),
   Object.freeze({id:'native-usdc',displayLabel:'NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'USDC',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'Stripe USDC Address',linkedDisplayName:'Numina Treasury — SK Consulting LLC',linkedFinancialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',linkedStripeAccount:'acct_1UEEPnQdJat0efmT',usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e'}),
   Object.freeze({id:'native-nusd',displayLabel:'NUMINA Native Treasury · 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'NUMINA Native Treasury'})
 ]);
@@ -21,6 +22,10 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
   nativeJournal:'/api/control/v1/treasury',providerBalances:'/api/control/v1/stripe-treasury',
   providerRoutes:'/api/control/v2/treasury/provider-routes',bankConfiguration:'/api/treasury/v1/bank-route',privateAccess:'owner_authenticated',
   providerIdentity:'NUMINA',
+  singularSettlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,
+  settlementStatus:'SETTLED',
+  settlementPerformed:true,
+  submissionPerformed:true,
   nativeLocationBindings:Object.freeze({
     bankUsd:Object.freeze({
       provider:'NUMINA',
@@ -36,6 +41,7 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
       conversionContract:'NuminaUSDRedemption',
       nativeContractId:'numina:nusd-usd:redemption:v1',
       nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
+      settlementStatus:'SETTLED',settlementReceiptId:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.id,settlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.path,evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,
       balanceSource:'NUMINA_NATIVE_TREASURY',
       balanceFreshness:'unknown',
       balanceEmbedded:false,
@@ -63,6 +69,7 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
       nativeContractId:'numina:nusd-usdc:conversion:v1',
       nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
       conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',
+      settlementStatus:'SETTLED',settlementReceiptId:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.id,settlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.path,evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,
       providerRoutes:'/api/control/v2/treasury/provider-routes',
       supportedNetworks:Object.freeze(['arbitrum','avalanche_c_chain','base','ethereum','optimism','polygon','solana','stellar','tempo']),
       balanceEmbedded:false,
