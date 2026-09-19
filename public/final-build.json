@@ -407,5 +407,17 @@
     "finalCount": 1,
     "final": "NUMINA"
   },
-  "repository": "skott34-dot/numina-production"
+  "repository": "skott34-dot/numina-production",
+  "manifestContract": {
+    "identity": "NUMINA",
+    "status": "FINAL",
+    "finalAll": "NUMINA",
+    "singular": true,
+    "authority": "public/final-build.json",
+    "build": "npm run build",
+    "test": "npm test",
+    "release": "npm run release:numina",
+    "workflow": ".github/workflows/numina.yml",
+    "version": "4.0.0"
+  }
 }
