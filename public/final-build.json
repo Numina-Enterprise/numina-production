@@ -137,7 +137,8 @@
       "sourceState": "COMMITTED",
       "externalExecutionVerified": false,
       "repository": "skott34-dot/numina-production",
-      "sourceHead": "5b39bd191f1dd1cf7af803c953e879b76a19fef4"
+      "sourceHead": "5b39bd191f1dd1cf7af803c953e879b76a19fef4",
+      "identity": "NUMINA"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -217,7 +218,8 @@
         }
       },
       "vercelRole": "historical_only",
-      "activeReleasePath": "NUMINA"
+      "activeReleasePath": "NUMINA",
+      "identity": "NUMINA"
     },
     "android": {
       "sourceAligned": true,
@@ -274,7 +276,8 @@
       "deploymentId": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
       "version": 103,
       "sourceRepositoryCommit": "671d88058bac5858e9ffd986d8065c3d18651449",
-      "matchesNuminaSource": true
+      "matchesNuminaSource": true,
+      "identity": "NUMINA"
     },
     "browserAlignment": {
       "status": "SOURCE_ALIGNED_EXTERNAL_DELIVERY_UNVERIFIED",
@@ -299,7 +302,8 @@
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "SINGULAR_NUMINA_TREASURY_FINANCE_APP_VIEWS",
-      "modelVerificationScope": "NUMINA_FINANCE_APP_ALIGNMENT"
+      "modelVerificationScope": "NUMINA_FINANCE_APP_ALIGNMENT",
+      "identity": "NUMINA"
     }
   },
   "buildModel": {
@@ -331,14 +335,25 @@
     "repository": "skott34-dot/numina-production",
     "branch": "main",
     "systemIdentity": "NUMINA",
-    "softwareIdentity": "NUMINA"
+    "softwareIdentity": "NUMINA",
+    "repositoryIdentity": "NUMINA",
+    "financeIdentity": "NUMINA",
+    "treasuryIdentity": "NUMINA",
+    "evidenceIdentity": "NUMINA",
+    "provenanceIdentity": "NUMINA",
+    "numinaEqualsAll": true
   },
   "self": "NUMINA",
   "identityModel": {
     "identity": "NUMINA",
     "self": "NUMINA",
     "singular": true,
-    "allSoftwareIdentity": "NUMINA"
+    "all": "NUMINA",
+    "repository": "NUMINA",
+    "finance": "NUMINA",
+    "treasury": "NUMINA",
+    "evidence": "NUMINA",
+    "provenance": "NUMINA"
   },
   "repository": "skott34-dot/numina-production"
 }
