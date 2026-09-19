@@ -111,8 +111,11 @@
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledValue": "500000000000000",
     "aggregateModeledUnit": "NUSD",
+    "aggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
+    "verifiedModeledValue": "500000000000000",
+    "verificationScope": "NUMINA_NATIVE_JOURNAL",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
     "treasuryIdentity": "NUMINA",
@@ -121,7 +124,7 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": true,
+    "modeledRoleValuesAdditive": false,
     "externalBalancesAggregated": false
   },
   "distribution": {
@@ -200,8 +203,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 9053,
-      "sha256": "dcdcfd9b0f7a6007406e26da19f88e4b096659ff6af700b5b25bc4dabd626654"
+      "bytes": 9216,
+      "sha256": "e67cba66cdc3f280690806cee67daca18f0f36424817285cde170a5d255eb5af"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -345,8 +348,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 9117,
-      "sha256": "add318632332660a17ab9929f0d9dd20d4e0c89a88ac6ffe6a641009efffd08b"
+      "bytes": 9256,
+      "sha256": "e6ae345615fc62135b023779da6eec631fc739979bb3b551e3d894f375ba2f9a"
     },
     {
       "path": "src/client.js",
@@ -385,8 +388,8 @@
     },
     {
       "path": "src/runtime-contract.js",
-      "bytes": 1224,
-      "sha256": "e28185af6a771370aa38cc6d11beda78bb7c80d26d771238d018d02883dd0fb4"
+      "bytes": 1446,
+      "sha256": "bf3c42aea91f7b6a9e6d146ba3d7eee31f76e62281a6a732f1ec3f761a28bf8e"
     },
     {
       "path": "src/tools.js",
@@ -395,8 +398,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 19275,
-      "sha256": "882cb55e57e01b8cedd7db52f1beda82168d0af18c8285bb316c2ae8f08e67cf"
+      "bytes": 19046,
+      "sha256": "ec9c4bab779dc36a15d9af693ea9abf1fa80aec18dba6e750ec3d8cda3fa234f"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -405,8 +408,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 6228,
-      "sha256": "85e1fcfb908e583a7a010e98968689e68baba446f126d05f5915bf48c45c4cfc"
+      "bytes": 6391,
+      "sha256": "5922c67eaa31a3255b216bc1d0b64ec9a9cc1d7248a34904e842fc4aa0597664"
     }
   ]
 }
