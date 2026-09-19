@@ -35,7 +35,8 @@
         "identity": "NUMINA",
         "treasuryIdentity": "NUMINA",
         "singular": true,
-        "componentRole": true
+        "componentRole": true,
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
       },
       {
         "account": "Numina Labs Stripe Treasury",
@@ -48,7 +49,8 @@
         "identity": "NUMINA",
         "treasuryIdentity": "NUMINA",
         "singular": true,
-        "componentRole": true
+        "componentRole": true,
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
       },
       {
         "account": "Numina Native Treasury",
@@ -61,7 +63,8 @@
         "identity": "NUMINA",
         "treasuryIdentity": "NUMINA",
         "singular": true,
-        "componentRole": true
+        "componentRole": true,
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
       }
     ],
     "externalBalancesAggregated": false,
@@ -93,14 +96,16 @@
       "treasuryCount": 1,
       "componentCount": 3,
       "balanceCount": 1,
-      "componentsAreSeparateTreasuries": false
+      "componentsAreSeparateTreasuries": false,
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
     },
     "treasuryIdentity": "NUMINA",
     "singularIdentity": "NUMINA",
     "singular": true,
     "treasuryCount": 1,
     "componentCount": 3,
-    "componentsAreSeparateTreasuries": false
+    "componentsAreSeparateTreasuries": false,
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
   },
   "nusd": {
     "chainId": "962421430",
@@ -289,12 +294,13 @@
     "currentSourceCommit": "f5eb9325a810209c3ea691cea010960e483f864f",
     "synchronization": "ACROSS_ALL",
     "currentSourceRef": "refs/heads/main",
-    "lastAlignment": "GITHUB_ONLY_SYNC_ALL_ONE_SINGULAR_NUMINA_TREASURY"
+    "lastAlignment": "NUMINA_NATIVE_TREASURY_SYNC_ALL",
+    "nativeTreasurySourceOfRecord": true
   },
   "updateAll": {
     "requested": true,
     "date": "2026-09-19",
-    "source": "GitHub main only",
+    "source": "Numina Native Treasury via GitHub main",
     "treasuryModel": "1500T_additive",
     "confirmationSource": "NUMINA_NATIVE_TREASURY",
     "confirmedComponentCount": 3,
@@ -305,11 +311,13 @@
     "componentCount": 3,
     "status": "SYNCED",
     "balanceCount": 1,
-    "componentsAreSeparateTreasuries": false
+    "componentsAreSeparateTreasuries": false,
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "syncContract": "numina.native-treasury.sync.v1"
   },
   "syncAll": {
     "status": "SYNCED",
-    "source": "GitHub main only",
+    "source": "Numina Native Treasury via GitHub main",
     "identity": "NUMINA",
     "singular": true,
     "treasuryCount": 1,
@@ -339,6 +347,8 @@
       "tests"
     ],
     "externalProviderBalancesAsserted": false,
-    "externalProviderReadsRequired": false
+    "externalProviderReadsRequired": false,
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "syncContract": "numina.native-treasury.sync.v1"
   }
 }
