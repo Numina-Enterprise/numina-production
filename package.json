@@ -17,19 +17,13 @@
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Numina · SK Consulting LLC",
-  "numina": {
-    "identity": "NUMINA",
-    "self": "NUMINA",
-    "singular": true,
-    "all": "NUMINA",
-    "finalBuildManifest": {
-      "path": "public/final-build.json",
-      "blob": "405f25727a95cfb2e74beac6e9483b071dbb694b",
-      "identity": "NUMINA",
-      "status": "FINAL",
-      "finalAll": "NUMINA",
-      "role": "synchronized_projection",
-      "synchronization": "ACROSS_ALL"
+  "IDENTITY": {"16a880e1f878801cd98705c4192a47503ae7b5b0"},
+  "path": "public/final-build.json",
+  "blob": "405f25727a95cfb2e74beac6e9483b071dbb694b",
+  "status": "FINAL",
+  "finalAll": "NUMINA",
+  "role": "synchronized_projection",
+  "synchronization": "ACROSS_ALL"
     }
   }
 }
