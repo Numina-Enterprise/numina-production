@@ -18,7 +18,7 @@ permissions:
 jobs:
   verify:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-24.04
+    runs-on: NUMINA
     environment: production
     timeout-minutes: 10
     env:
