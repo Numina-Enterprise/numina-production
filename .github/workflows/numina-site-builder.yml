@@ -18,7 +18,7 @@ permissions: {}
 
 jobs:
   build:
-    runs-on: NUMINA
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
@@ -95,7 +95,7 @@ jobs:
 
   attest:
     needs: build
-    runs-on: NUMINA
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     # Owner-governed environment restricted to protected main; no application
     # or deployment secrets. No independent human review is claimed.

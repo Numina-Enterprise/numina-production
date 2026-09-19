@@ -14,7 +14,7 @@ concurrency:
 jobs:
   android:
     if: ${{ inputs.platform != 'ios' }}
-    runs-on: NUMINA
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -46,7 +46,7 @@ jobs:
           retention-days: 30
   ios:
     if: ${{ inputs.platform != 'android' }}
-    runs-on: NUMINA
+    runs-on: macos-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09

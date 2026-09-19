@@ -7,6 +7,7 @@ on:
       - 'release-evidence/numina-final-build-2026-09-18.json'
       - 'mobile/android/**'
       - 'scripts/sign-android-release.py'
+      - '.github/workflows/numina-android-release.yml'
 permissions:
   contents: read
 concurrency:
@@ -14,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   release:
-    runs-on: NUMINA
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
