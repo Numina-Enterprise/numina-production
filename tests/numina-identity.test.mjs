@@ -51,34 +51,26 @@ test('NUMINA is the canonical active identity',()=>{
 });
 
 
-test('all preserved runners resolve to NUMINA and future runners are denied',()=>{
+test('current NUMINA runners are preserved without freezing placement',()=>{
   const policy=JSON.parse(readFileSync(new URL('../config/numina-runners.json',import.meta.url),'utf8'));
   assert.equal(policy.identity,'NUMINA');
   assert.equal(policy.runnerIdentity,'NUMINA');
   assert.equal(policy.allRunnerIdentities,'NUMINA');
   assert.equal(policy.runnerTarget,'NUMINA');
-  assert.equal(policy.invariants.preserveCurrentRunners,true);
-  assert.equal(policy.invariants.preserveExistingSelfHostedRunners,true);
   assert.equal(policy.selfHostedPolicy,'preserve_existing');
   assert.equal(policy.futureRunnerPolicy,'deny');
+  assert.equal(policy.invariants.preserveCurrentRunners,true);
+  assert.equal(policy.invariants.preserveExistingSelfHostedRunners,true);
   assert.equal(policy.invariants.denyFutureRunners,true);
   assert.equal(policy.invariants.allRunnersAreNumina,true);
-  const expectedSlots=policy.preservedRunnerSlots;
-  let declarations=0;
+  assert.equal(policy.invariants.runnerPlacementFrozen,false);
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  for(const [workflow,count] of Object.entries(expectedSlots)){
-    const name=workflow.replace('.github/workflows/','');
+  let declarations=0;
+  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
     const targets=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
     declarations+=targets.length;
-    assert.equal(targets.length,count,workflow+' runner count changed');
-    for(const target of targets)assert.equal(target,'NUMINA',workflow+' runner target must be NUMINA');
+    for(const target of targets)assert.equal(target,'NUMINA',name+' runner target must be NUMINA');
   }
-  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
-    const workflow='.github/workflows/'+name;
-    if(Object.prototype.hasOwnProperty.call(expectedSlots,workflow))continue;
-    const content=readFileSync(new URL(name,workflowsUrl),'utf8');
-    assert.equal(/^\\s*runs-on:/m.test(content),false,workflow+' introduces a future runner');
-  }
-  assert.equal(declarations,policy.preservedRunnerCount);
+  assert.equal(declarations,policy.preservedRunnerCount,'runner count must remain preserved with no future additions');
 });
