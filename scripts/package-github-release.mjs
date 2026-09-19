@@ -5,10 +5,11 @@ import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='b799b39c42d2bffcfadf37ba8dcf675bb8ba3383';
+const FINAL_BUILD_MANIFEST_BLOB='60bf69e6d50cf407e085f890cdbe63b11aaf59a1';
 const finalBuildBytes=readFileSync(finalBuildPath);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
+execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
 const finalBuild=JSON.parse(finalBuildBytes);
 if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
 if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');

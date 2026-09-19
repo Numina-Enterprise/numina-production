@@ -135,7 +135,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "ec9c4bab779dc36a15d9af693ea9abf1fa80aec18dba6e750ec3d8cda3fa234f"
+      "sha256": "125449837feb42542bf0cfe170e182ff877049ae3ebd6af88de35166cffb6d40"
     },
     "checks": [
       "canonical_journal_record",
@@ -154,8 +154,15 @@
   "denomination_policy": {
     "schema": "numina.denomination-policy.v1",
     "id": "numina-usd-usdc-nusd-parity-2026-09-15",
+    "identity": "NUMINA",
+    "treasuryIdentity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "singular": true,
+    "treasuryCount": 1,
+    "componentCount": 3,
+    "componentsAreSeparateTreasuries": false,
     "basis": "owner_authorized_denomination_policy",
-    "scope": "declared_valuation",
+    "scope": "declared_valuation_for_one_singular_numina_treasury",
     "expression": "1 NUSD = 1 USDC = 1 USD",
     "referenceUnit": "USD",
     "units": [

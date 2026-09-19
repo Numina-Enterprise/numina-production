@@ -33,3 +33,8 @@ scripts/prepare-readiness-workspace.py -text
 docs/Numina-Local-Wallet.md -text
 docs/Numina-Browser-Deployment-Preparation.md -text
 docs/Numina-Requested-Asset-Fee.json -text
+
+# Current FINAL projections and source snapshots bind exact bytes across platforms.
+docs/NUMINA-FINAL-BUILD.json -text
+docs/native-package-record-v4.json -text
+release-evidence/numina-bofa-ach-instruction-2026-09-19.json -text

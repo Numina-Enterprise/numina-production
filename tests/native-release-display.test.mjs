@@ -51,5 +51,6 @@ test('native binary and source archive hashes still match their recorded bytes',
   }
   assert.deepEqual(record, json('runtime/vercel-production/public/downloads/native-package-record-v4.json'));
   assert.deepEqual(json('public/final-build.json'), json('docs/NUMINA-FINAL-BUILD.json'));
-  assert.deepEqual(json('public/final-build.json'), json('release-evidence/numina-final-build-2026-09-18.json'));
+  // Dated release evidence is historical; only the current documentation projection follows FINAL.
+  assert.equal(json('release-evidence/numina-final-build-2026-09-18.json').applicationVersion, '4.0.0');
 });
