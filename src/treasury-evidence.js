@@ -5,7 +5,7 @@ import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT,TREASURY_PROVIDER_R
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {frontierState,frontierSign} from './frontier.js';
 import {canonicalTreasuryReference} from './treasury-alignment.js';
-import {NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
+import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 import {isTreasuryMinorInteger} from '../public/treasury-amount.js';
 
 export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
@@ -39,7 +39,7 @@ function treasuryProviderRecords(observation){
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
   const source=structuredClone({nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
     fundingPlan:frontier.fundingPlan??null,accountReferences:frontier.accounts??[],providerObservation,supportingDocuments});
-  const records={schema:'numina.treasury.record-sources.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,componentCount:3,componentsAreSeparateTreasuries:false,
+  const records={schema:'numina.treasury.record-sources.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,
       nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:source.nativeTreasury.status==='READY'&&source.nativeTreasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
       providerBalances:treasuryProviderRecords(source.providerObservation),
       bankFunding:{source:'/fundingVerification/bankConfirmation',issuer:null,verification:{status:'BANK_PROVIDER_NOT_CONNECTED',scope:'Bank-issued funding confirmation'}},
@@ -64,7 +64,7 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
         {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
         {id:'provider_acceptance',status:'NOT_VERIFIED',observationRoute:TREASURY_PROVIDER_ROUTES,description:'Provider acceptance of the source asset, network and destination; read current provider routes separately'}],
       settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
-  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,treasuryCount:1,componentCount:3,balanceCount:1,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA treasury: native journal integrity plus role-scoped supporting observations',
+  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA treasury: native journal integrity plus role-scoped supporting observations',
     issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,
     evidenceHash:await controlHash(source),source,records,reconciliation,
     fundingVerification:{actual_funding:false,status:'NOT_VERIFIED',
