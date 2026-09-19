@@ -289,6 +289,16 @@
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
         "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED"
       }
+    },
+    "allocationInstruction": {
+      "schema": "numina.treasury.allocation-instruction.v1",
+      "status": "INITIATED",
+      "record": "release-evidence/treasury-allocation-instruction-2026-09-19.json",
+      "aggregateNusd": "1500000000000000",
+      "aggregateChanged": false,
+      "stripeStatus": "INITIATED_AWAITING_CHAIN_BROADCAST",
+      "bankStatus": "INITIATED_AWAITING_BANK_ORIGINATOR_SUBMISSION",
+      "nativeStatus": "RETAINED_CONFIRMED"
     }
   },
   "nusd": {
