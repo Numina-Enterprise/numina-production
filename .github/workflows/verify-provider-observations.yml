@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: NUMINA
     timeout-minutes: 9
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
