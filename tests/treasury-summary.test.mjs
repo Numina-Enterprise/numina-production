@@ -30,7 +30,7 @@ function summaryAndProviders(target){
   assert.ok(summary);assert.equal(providers.children.length,2);
   const summaryRows=all(summary).filter(element=>element.tagName==='dd').map(element=>element.textContent);
   assert.ok(summaryRows.includes('500,000,000,000,000.00 NUSD · shared canonical record'));
-  assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD verified NUMINA-native value'));
+  assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD owner-designated equivalent'));
   assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD'));
   assert.match(summary.textContent,/Minted NUSD aggregate \(separate token supply\)/);
   assert.match(summary.textContent,/never added together/);

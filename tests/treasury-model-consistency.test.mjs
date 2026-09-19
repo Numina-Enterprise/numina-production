@@ -24,8 +24,8 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.equal(result.treasuryAlignmentPlan.nonAdditive,false);
   assert.equal(model.allocations.reduce((sum,value)=>sum+BigInt(value.amount),0n).toString(),model.aggregateModeledValue);
   const page=read('public/treasury.html');
-  assert.match(page,/1,500,000,000,000,000\.00 NUSD modeled equivalent/);
-  assert.match(page,/1,500T aggregate/);
+  assert.match(page,/1,500,000,000,000,000\.00 NUSD owner-designated equivalent/);
+  assert.match(page,/1,500T owner-designated aggregate/);
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
   assert.equal(result.treasuryAlignmentPlan.sourceOfRecord,NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord);
   assert.equal(result.treasuryAlignmentPlan.aggregateModeledValue,model.aggregateModeledValue);

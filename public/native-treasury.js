@@ -27,15 +27,15 @@ export async function loadNativeTreasury(){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     const p=data.projection,details=nativeTreasuryElement('native-treasury-details');
     const format=(value,unit)=>formatTreasuryModelWholeAmount(value,unit);
-    const allocations=treasuryModel.allocations.map(allocation=>['Native holding · '+allocation.label,format(allocation.amount,allocation.unit)]);
+    const allocations=treasuryModel.allocations.map(allocation=>['Owner-designated component · '+allocation.label,format(allocation.amount,allocation.unit)]);
     const nativeAllocation=treasuryModel.allocations.find(allocation=>allocation.id==='numina-native-treasury');
-    const journalComparison=p.unit===treasuryModel.aggregateModeledUnit&&p.balance===treasuryModel.aggregateModeledValue?'Matches the 1,500T native model aggregate':p.unit===nativeAllocation.unit&&p.balance===nativeAllocation.amount?'Matches the 500T NUSD holding; the model aggregate is 1,500T':'Differs from the 1,500T native model aggregate and the 500T NUSD holding';
+    const journalComparison=p.unit===treasuryModel.aggregateModeledUnit&&p.balance===treasuryModel.aggregateModeledValue?'Matches the 1,500T owner-designated aggregate':p.unit===nativeAllocation.unit&&p.balance===nativeAllocation.amount?'Matches the 500T owner-designated NUSD component; the owner-designated aggregate is 1,500T':'Differs from the 1,500T owner-designated aggregate and the 500T NUSD holding';
     const issuance=NUSD_CONTRACT_RECORD.issuance;
     const mintedSupply=issuance?.constructorMint===true&&issuance.decimals===18?[['Recorded minted NUSD supply',format(issuance.amountNusd,'NUSD')]]:[];
-    for(const [label,value]of [['Treasury',treasuryModel.identity],['Verified treasury model',format(treasuryModel.aggregateModeledValue,treasuryModel.aggregateModeledUnit)+' verified NUMINA-native value'],...allocations,['Native journal balance',format(p.balance,p.unit)],['Journal/model comparison',journalComparison],...mintedSupply,['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
+    for(const [label,value]of [['Treasury',treasuryModel.identity],['Owner-designated treasury aggregate',format(treasuryModel.aggregateModeledValue,treasuryModel.aggregateModeledUnit)+' owner-designated equivalent'],...allocations,['Native journal balance',format(p.balance,p.unit)],['Journal/model comparison',journalComparison],...mintedSupply,['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
       for(const [tag,text]of [['dt',label],['dd',value]]){const node=document.createElement(tag);node.textContent=text;details.append(node);}
     }
-    nativeTreasuryElement('native-treasury-message').textContent='One singular NUMINA treasury with three additive 500T native holdings and a 1,500T modeled aggregate. Journal proof checked. The journal balance is shown separately from the model; the recorded 1,500T constructor issuance and provider observations remain separate evidence.';
+    nativeTreasuryElement('native-treasury-message').textContent='One NUMINA treasury has a 1,500T owner-designated aggregate: 500T USD via Bank of America Savings ACH, 500T USDC via Stripe Treasury, and 500T native NUSD. Actual journal and provider observations remain separately evidenced. Journal proof checked. Recorded constructor issuance remains token-supply evidence.';
   }catch(error){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearNativeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
