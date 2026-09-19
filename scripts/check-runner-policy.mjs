@@ -6,13 +6,14 @@ const policy = JSON.parse(readFileSync(resolve(root, 'config/numina-runners.json
 const workflowsDir = resolve(root, '.github/workflows');
 const failures = [];
 
-if (policy.identity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA' || policy.runnerTarget !== 'NUMINA') {
-  failures.push('All runner identities and targets must be NUMINA');
+if (policy.identity !== 'NUMINA' || policy.hostIdentity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA' || policy.runnerTarget !== 'NUMINA') {
+  failures.push('Host, runner identities and runner targets must be NUMINA');
 }
 if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runners must be preserved');
 if (policy.invariants?.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runners must be preserved');
 if (policy.invariants?.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
 if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
+if (policy.invariants?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
 if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
 if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
 
