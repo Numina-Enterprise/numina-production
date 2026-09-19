@@ -40,7 +40,7 @@
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "locationRail": "Bank of America Savings 3486",
         "linkedOfficialName": "Business Advantage Sav",
@@ -48,7 +48,10 @@
         "linkedInstitutionId": "ins_127989",
         "conversionContract": "NuminaUSDRedemption",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
-        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       },
       {
         "account": "Numina Native Treasury",
@@ -67,7 +70,7 @@
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "locationRail": "Stripe USDC Address",
         "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
@@ -77,7 +80,10 @@
         "conversionContract": "NuminaUSDCConversion",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
-        "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED"
+        "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       },
       {
         "account": "Numina Native Treasury",
@@ -94,9 +100,12 @@
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
         "displayLabel": "NUMINA Native Treasury · 500T NUSD",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
-        "locationRail": "NUMINA Native Treasury"
+        "locationRail": "NUMINA Native Treasury",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       }
     ],
     "externalBalancesAggregated": false,
@@ -106,7 +115,7 @@
     "modelDefinition": {
       "basis": "numina_native_treasury_confirmation_recorded_in_github",
       "date": "2026-09-19",
-      "scope": "Exactly one singular NUMINA Native Treasury with provider identity NUMINA. Bank of America Savings 3486 is the 500T USD / 500T NUSD native location with verified 1:1 NUSD/USD backing through NuminaUSDRedemption. Stripe USDC address 0x736bd8f274dce00a8bb374edd85df0d2e631018e is the 500T USDC / 500T NUSD native location with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion. NUMINA Native Treasury holds 500T NUSD. Aggregate 1,500T NUSD; minted 1,500T; burned 0; NUSD contracts operationally ACTIVE.",
+      "scope": "One singular NUMINA Native Treasury with three additive internal modeled 500T roles totaling 1,500T NUSD. Bank of America and Stripe labels identify destination/observation rails only. The model does not assert external provider cash, reserves, deposits, settlement, or withdrawable balances without provider-issued evidence.",
       "sourceRepository": "skott34-dot/numina-production",
       "sourceBranch": "main"
     },
@@ -121,7 +130,7 @@
       ]
     },
     "verifiedModeledValue": "1500000000000000",
-    "verificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE",
+    "verificationScope": "INTERNAL_NUMINA_MODEL_ONLY",
     "verifiedModeledValueScope": "INTERNAL_NUMINA_MODEL_ONLY",
     "githubAlignment": {
       "status": "GITHUB_ONLY_ONE_SINGULAR_NUMINA_TREASURY",
@@ -188,7 +197,7 @@
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "locationRail": "Bank of America Savings 3486",
         "linkedOfficialName": "Business Advantage Sav",
@@ -196,7 +205,10 @@
         "linkedInstitutionId": "ins_127989",
         "conversionContract": "NuminaUSDRedemption",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
-        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       },
       {
         "id": "native-usdc",
@@ -216,7 +228,7 @@
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "locationRail": "Stripe USDC Address",
         "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
@@ -226,7 +238,10 @@
         "conversionContract": "NuminaUSDCConversion",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
-        "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED"
+        "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       },
       {
         "id": "native-nusd",
@@ -244,9 +259,12 @@
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
-        "locationRail": "NUMINA Native Treasury"
+        "locationRail": "NUMINA Native Treasury",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       }
     ],
     "providerIdentity": "NUMINA",
@@ -272,11 +290,14 @@
         "nusdEquivalentValue": "500000000000000",
         "nusdEquivalentUnit": "NUSD",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "conversionContract": "NuminaUSDRedemption",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
-        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       },
       "stripeUsdc": {
         "provider": "NUMINA",
@@ -291,17 +312,20 @@
         "nusdEquivalentValue": "500000000000000",
         "nusdEquivalentUnit": "NUSD",
         "backingRatio": "1:1",
-        "backingVerified": true,
+        "backingVerified": false,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "conversionContract": "NuminaUSDCConversion",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
-        "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED"
+        "conversionState": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false,
+        "externalSettlementVerified": false
       }
     },
     "allocationInstruction": {
       "schema": "numina.treasury.allocation-instruction.v1",
-      "status": "SETTLED",
+      "status": "INTERNAL_MODELED_ALLOCATION",
       "record": "release-evidence/treasury-allocation-instruction-2026-09-19.json",
       "aggregateNusd": "1500000000000000",
       "aggregateChanged": false,
@@ -314,15 +338,16 @@
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "financialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
-        "status": "SETTLED",
-        "submissionPerformed": true,
+        "status": "INTERNAL_MODELED_ALLOCATION",
+        "submissionPerformed": false,
         "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
-        "settlementPerformed": true,
+        "settlementPerformed": false,
         "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-        "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+        "evidenceSource": "NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE",
         "mintReceipt": "runtime/nusd/mint-receipt.json",
         "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "externalSettlementVerified": false
       },
       "bank": {
         "amountNusd": "500000000000000",
@@ -333,33 +358,35 @@
         "nativeContractId": "numina:nusd-usd:redemption:v1",
         "accountLast4": "3486",
         "institutionId": "ins_127989",
-        "status": "SETTLED",
-        "submissionPerformed": true,
+        "status": "INTERNAL_MODELED_ALLOCATION",
+        "submissionPerformed": false,
         "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
-        "settlementPerformed": true,
+        "settlementPerformed": false,
         "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-        "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+        "evidenceSource": "NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE",
         "mintReceipt": "runtime/nusd/mint-receipt.json",
         "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "externalSettlementVerified": false
       },
       "native": {
         "amountNusd": "500000000000000",
         "targetAmount": "500000000000000",
         "targetUnit": "NUSD",
-        "status": "SETTLED",
+        "status": "INTERNAL_MODELED_ALLOCATION",
         "mintReceipt": "runtime/nusd/mint-receipt.json",
-        "submissionPerformed": true,
-        "settlementPerformed": true,
+        "submissionPerformed": false,
+        "settlementPerformed": false,
         "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
         "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-        "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+        "evidenceSource": "NUMINA_INTERNAL_MODEL_AND_MINT_EVIDENCE",
         "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "externalSettlementVerified": false
       },
-      "submissionPerformed": true,
+      "submissionPerformed": false,
       "submissionAuthority": "NUMINA",
-      "settlementPerformed": true,
+      "settlementPerformed": false,
       "singularSettlementReceipt": {
         "schema": "numina.treasury.singular-settlement-receipt.v1",
         "id": "numina:treasury:settlement:2026-09-19:v1",
@@ -373,21 +400,26 @@
         "submissionPerformed": true,
         "componentCount": 3,
         "aggregateNusd": "1500000000000000"
-      }
+      },
+      "externalSettlementVerified": false,
+      "providerSettlementEvidenceBound": false
     },
     "singularSettlementReceipt": {
       "schema": "numina.treasury.singular-settlement-receipt.v1",
       "id": "numina:treasury:settlement:2026-09-19:v1",
-      "status": "SETTLED",
+      "status": "INTERNAL_MODELED_ALLOCATION",
       "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
       "download": "/downloads/nusd/treasury-settlement-receipt.json",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "settlementPerformed": true,
-      "submissionPerformed": true,
+      "settlementPerformed": false,
+      "submissionPerformed": false,
       "componentCount": 3,
-      "aggregateNusd": "1500000000000000"
+      "aggregateNusd": "1500000000000000",
+      "receiptScope": "INTERNAL_NUMINA_MODEL_ONLY",
+      "externalSettlementVerified": false,
+      "providerSettlementEvidenceBound": false
     },
     "achTransferInstruction": {
       "schema": "numina.treasury.ach-transfer-instruction.v1",
@@ -427,7 +459,9 @@
       "networkSubmissionVerified": false,
       "bankSettlementVerified": false,
       "evidenceScope": "Internal authorized instruction only; no provider or ACH network execution evidence recorded."
-    }
+    },
+    "externalSettlementVerified": false,
+    "providerSettlementEvidenceBound": false
   },
   "nusd": {
     "chainId": "962421430",
@@ -464,14 +498,15 @@
       "checkoutConnected": false,
       "currentState": "ACTIVE",
       "paused": false,
-      "nativeBackingVerified": true
+      "nativeBackingVerified": false,
+      "internalBackingPolicyAligned": true
     },
     "status": "ACTIVE",
     "live": true,
     "paused": false,
     "mintedNusd": "1500000000000000",
     "burnedNusd": "0",
-    "nativeBackingVerified": true,
+    "nativeBackingVerified": false,
     "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
     "contracts": {
       "token": {
@@ -490,21 +525,25 @@
       },
       "usdcConversion": {
         "name": "NuminaUSDCConversion",
-        "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "status": "INTERNAL_MODEL_ACTIVE",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
         "ratio": "1:1",
-        "backingVerified": true,
-        "chainReceiptRecorded": false
+        "backingVerified": false,
+        "chainReceiptRecorded": false,
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false
       },
       "usdRedemption": {
         "name": "NuminaUSDRedemption",
-        "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "status": "INTERNAL_MODEL_ACTIVE",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
         "ratio": "1:1",
-        "backingVerified": true,
-        "chainReceiptRecorded": false
+        "backingVerified": false,
+        "chainReceiptRecorded": false,
+        "internalBackingPolicyAligned": true,
+        "externalBackingVerified": false
       }
     },
     "mintReceipt": {
@@ -524,17 +563,21 @@
     "singularSettlementReceipt": {
       "schema": "numina.treasury.singular-settlement-receipt.v1",
       "id": "numina:treasury:settlement:2026-09-19:v1",
-      "status": "SETTLED",
+      "status": "INTERNAL_MODELED_ALLOCATION",
       "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
       "download": "/downloads/nusd/treasury-settlement-receipt.json",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "settlementPerformed": true,
-      "submissionPerformed": true,
+      "settlementPerformed": false,
+      "submissionPerformed": false,
       "componentCount": 3,
-      "aggregateNusd": "1500000000000000"
-    }
+      "aggregateNusd": "1500000000000000",
+      "receiptScope": "INTERNAL_NUMINA_MODEL_ONLY",
+      "externalSettlementVerified": false,
+      "providerSettlementEvidenceBound": false
+    },
+    "internalBackingPolicyAligned": true
   },
   "mobile": {
     "packageIdentity": "xyz.numinalabs.app",
@@ -789,7 +832,8 @@
     },
     "canonicalHeadCount": 1,
     "canonicalHeadIdentity": "NUMINA",
-    "nativeTreasurySourceOfRecord": true
+    "nativeTreasurySourceOfRecord": true,
+    "treasuryVerificationScope": "INTERNAL_NUMINA_MODEL_ONLY"
   },
   "self": "NUMINA",
   "identityModel": {
@@ -904,12 +948,34 @@
     "nativeLocationCount": 3,
     "bankBackingRatio": "1:1",
     "stripeBackingRatio": "1:1",
-    "bankBackingVerified": true,
-    "stripeBackingVerified": true,
+    "bankBackingVerified": false,
+    "stripeBackingVerified": false,
     "bankContract": "NuminaUSDRedemption",
     "stripeContract": "NuminaUSDCConversion",
     "bankNativeContractId": "numina:nusd-usd:redemption:v1",
     "stripeNativeContractId": "numina:nusd-usdc:conversion:v1",
-    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+    "bankInternalBackingPolicyAligned": true,
+    "stripeInternalBackingPolicyAligned": true,
+    "externalSettlementVerified": false,
+    "verificationScope": "INTERNAL_NUMINA_MODEL_ONLY"
+  },
+  "treasuryAlignment": {
+    "schema": "numina.treasury.software-alignment.v1",
+    "identity": "NUMINA",
+    "singular": true,
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "holdingsCount": 3,
+    "componentCount": 3,
+    "componentModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "additive": true,
+    "externalProviderBalancesAsserted": false,
+    "externalSettlementVerified": false,
+    "providerSettlementEvidenceBound": false,
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "verificationScope": "INTERNAL_NUMINA_MODEL_ONLY"
   }
 }
