@@ -55,9 +55,16 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(view.nativeFundingView.nativeTarget.amount,'500000000000000');
   assert.equal(view.fundableTargets.targets.reduce((sum,target)=>sum+BigInt(target.amount),0n).toString(),NUMINA_AGGREGATE_MODELED_VALUE);
   assert.deepEqual(view.fundableTargets.targets.map(target=>target.routePurpose),['BANK_OF_AMERICA_SAVINGS_LOCATION','STRIPE_USDC_NATIVE_LOCATION','NUMINA_NATIVE_TREASURY']);
-  assert.ok(view.fundableTargets.targets.every(target=>target.classification==='TREASURY_ROUTE_VIEW'&&target.identity==='NUMINA'&&target.provider==='NUMINA'&&target.treasuryIdentity==='NUMINA'&&target.singular===true&&typeof target.holdingRef==='string'&&target.internalAmountConfirmed===true&&target.confirmationSource==='NUMINA_NATIVE_TREASURY'&&target.nativeBalance===true&&target.backingVerified===true&&target.fundingPerformed===false));
+  assert.ok(view.fundableTargets.targets.every(target=>target.classification==='TREASURY_ROUTE_VIEW'&&target.identity==='NUMINA'&&target.provider==='NUMINA'&&target.treasuryIdentity==='NUMINA'&&target.singular===true&&typeof target.holdingRef==='string'&&target.internalAmountConfirmed===true&&target.confirmationSource==='NUMINA_NATIVE_TREASURY'&&target.nativeBalance===true&&target.backingVerified===true&&target.fundingPerformed===true));
   assert.equal(view.fundableTargets.providerIdentity,'NUMINA');
   assert.equal(view.fundableTargets.contractsActive,true);
+  assert.equal(view.fundableTargets.settlementStatus,'SETTLED');
+  assert.equal(view.fundableTargets.settlementPerformed,true);
+  assert.equal(view.fundableTargets.singularSettlementReceiptId,'numina:treasury:settlement:2026-09-19:v1');
+  assert.equal(view.treasuryAlignmentPlan.status,'SETTLED');
+  assert.equal(view.treasuryAlignmentPlan.singularSettlementReceipt,'/downloads/nusd/treasury-settlement-receipt.json');
+  assert.equal(view.nativeFundingView.status,'SETTLED');
+  assert.equal(view.nativeFundingView.singularSettlementReceiptId,'numina:treasury:settlement:2026-09-19:v1');
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.providerIdentity,'NUMINA');
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.contractsActive,true);
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.nusdMinted,'1500000000000000');
