@@ -1,17 +1,18 @@
 {
   "schema": "numina.delivery-observation.v1",
-  "observedAt": "2026-09-19T01:23:10Z",
-  "sourceCommit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
+  "observedAt": "2026-09-19T01:24:19Z",
+  "sourceCommit": "21b3715e3b527132d4742da4be0e64662eacc2d9",
   "website": {
-    "observationSource": "Vercel deployment API and authenticated Vercel HTTP fetch",
-    "latestReadyDeployment": {
+    "observationSource": "GitHub canonical-main status, Vercel deployment API, and authenticated Vercel HTTP fetch",
+    "connectedScopeLatestReadyDeployment": {
       "id": "dpl_8vLQzhW1eM5RYuMaE7CvmKFojivF",
       "commit": "91cde4abd8afc86f9610053c0588e5f230db77e0",
       "deploymentUrl": "https://numina-production-icilhgvbv-skott34-dot.vercel.app",
       "status": "READY",
-      "target": "production"
+      "target": "production",
+      "scope": "skott34-dot"
     },
-    "latestObservedAttempt": {
+    "connectedScopeLatestFailedAttempt": {
       "id": "dpl_DoXZXPFqw73zXsrkLSpwuSxtb4UJ",
       "commit": "ec66f6a08dae17b7aac64a40cf4091d61bdc263b",
       "deploymentUrl": "https://numina-production-leru0g2m4-skott34-dot.vercel.app",
@@ -21,13 +22,23 @@
       "errorMessage": "Command \"npm run build\" exited with 1",
       "errorStep": "buildStep"
     },
-    "canonicalMain": {
-      "commit": "c171f6df2cbb819c75c9257f0e60678423e28812",
-      "deploymentObserved": false
+    "proVercelDelivery": {
+      "sourceCommit": "21b3715e3b527132d4742da4be0e64662eacc2d9",
+      "statusContext": "Vercel – numina-production",
+      "status": "success",
+      "description": "Deployment has completed",
+      "observedAt": "2026-09-19T01:24:19Z",
+      "teamScope": "numina-167f7fe7",
+      "project": "numina-production",
+      "deploymentId": "rKMFZdZ8srfbnoW2RSf1nTcDPqAw",
+      "dashboardUrl": "https://vercel.com/numina-167f7fe7/numina-production/rKMFZdZ8srfbnoW2RSf1nTcDPqAw",
+      "providerReceiptSource": "GitHub commit status posted by Vercel",
+      "connectedVercelReadScopeAvailable": false,
+      "readScopeBlocker": "Connected Vercel credential is authorized only for skott34-dot; reads against numina-167f7fe7 return 403 and require re-authentication to that scope."
     },
-    "capacityObservation": "Vercel accepted and executed production builds; the observed failure is a build-step error rather than a capacity rejection.",
+    "capacityObservation": "Vercel build capacity is available: the Pro-scope Vercel Git integration reported a successful completed deployment for canonical main commit 21b3715e3b527132d4742da4be0e64662eacc2d9.",
     "buildBlockerRepair": {
-      "status": "COMMITTED",
+      "status": "COMMITTED_AND_DEPLOYED_IN_PRO_SCOPE",
       "commit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
       "reason": "Canonical trusted-build workflows use the pinned GitHub-hosted label ubuntu-24.04; the NUMINA runner policy only admitted ubuntu-latest, macos-latest and windows-latest.",
       "change": "Added ubuntu-24.04 as an allowed canonical Linux execution label while preserving singular NUMINA identity and self-hosted denial."
@@ -65,7 +76,7 @@
           "reportedStatus": "FINAL"
         }
       ],
-      "scope": "These HTTP receipts verify the currently served READY Vercel production alias. They do not establish that the newer canonical main commit has deployed."
+      "scope": "These HTTP receipts verify the currently public Vercel production alias in the connected skott34-dot scope. Endpoint-level verification of the newer Pro-scope deployment requires read access to numina-167f7fe7."
     }
   },
   "githubActions": {
@@ -87,7 +98,7 @@
       "completedAt": "2026-09-19T01:20:27Z"
     },
     "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
-    "executionSummary": "The current-main prebuilt deploy job was accepted by GitHub Actions but no runner was assigned and no workflow steps executed."
+    "executionSummary": "The current-main GitHub-hosted deploy job was accepted by GitHub Actions but no runner was assigned and no workflow steps executed."
   },
   "mobile": {
     "android": {
