@@ -51,14 +51,14 @@ test('NUMINA is the canonical active identity',()=>{
 });
 
 
-test('current runners are preserved without freezing targets',()=>{
+test('all preserved runners resolve to NUMINA and future runners are denied',()=>{
   const policy=JSON.parse(readFileSync(new URL('../config/numina-runners.json',import.meta.url),'utf8'));
   assert.equal(policy.identity,'NUMINA');
   assert.equal(policy.runnerIdentity,'NUMINA');
   assert.equal(policy.allRunnerIdentities,'NUMINA');
+  assert.equal(policy.runnerTarget,'NUMINA');
   assert.equal(policy.invariants.preserveCurrentRunners,true);
   assert.equal(policy.invariants.denyFutureRunners,true);
-  assert.equal(policy.invariants.allowExistingRunnerTargetUpdates,true);
   assert.equal(policy.invariants.allRunnersAreNumina,true);
   const expectedSlots=policy.preservedRunnerSlots;
   let declarations=0;
@@ -66,9 +66,10 @@ test('current runners are preserved without freezing targets',()=>{
   for(const [workflow,count] of Object.entries(expectedSlots)){
     const name=workflow.replace('.github/workflows/','');
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
-    const actual=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].length;
-    declarations+=actual;
-    assert.equal(actual,count,workflow+' runner count changed');
+    const targets=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
+    declarations+=targets.length;
+    assert.equal(targets.length,count,workflow+' runner count changed');
+    for(const target of targets)assert.equal(target,'NUMINA',workflow+' runner target must be NUMINA');
   }
   for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
     const workflow='.github/workflows/'+name;
