@@ -30,7 +30,7 @@ for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(nam
   declarations += targets.length;
   const expectedTarget = Object.hasOwn(overrides, name) ? overrides[name] : executionTargets?.default;
   if (Object.hasOwn(overrides, name) && targets.length) usedOverrides.add(name);
-  if (!['NUMINA', 'ubuntu-latest', 'macos-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
+  if (!['NUMINA', 'ubuntu-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
   for (const target of targets) {
     if (target !== expectedTarget) failures.push(name + ' runner target must match its recorded execution target ' + expectedTarget + ', got ' + JSON.stringify(target));
   }

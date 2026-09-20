@@ -11,9 +11,8 @@ module.exports=async function providerEvidenceIngest(req,res){
     const auth=String(req.headers?.authorization||'');
     if(!auth.startsWith('Bearer '))return respond(res,401,{error:'GITHUB_OIDC_TOKEN_REQUIRED'});
     const body=parseBody(req);
-    const manifest=body&&typeof body==='object'&&body.manifest?body.manifest:body;
-    const result=await persistProviderEvidence({token:auth.slice(7).trim(),manifest});
-    return respond(res,200,{...result,git_commit_sha:result.git_commit_sha||result.source_commit,deployment_id:result.deployment_id||result.transport_deployment_id});
+    const result=await persistProviderEvidence({token:auth.slice(7).trim(),manifest:body});
+    return respond(res,200,result);
   }catch(error){
     const message=String(error&&error.message||error);
     const authFailure=/GITHUB_OIDC/.test(message);
