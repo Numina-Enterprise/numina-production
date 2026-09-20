@@ -1,0 +1,20 @@
+{
+  "schema": "numina.treasury.write-dispatch.v1",
+  "authorization": "NUMINA",
+  "targetRef": "main",
+  "sourceProtectedRequired": true,
+  "softwareTreasuryWriteAuthorized": true,
+  "providerExecutionAuthorized": false,
+  "externalFundsMovementAuthorized": false,
+  "targetWorkflows": [
+    "align-native-treasury-500t.yml",
+    "initiate-treasury-aggregate-model.yml"
+  ],
+  "treasuryModel": {
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
+  },
+  "purpose": "Dispatch protected NUMINA software treasury alignment and aggregate-model journal writes only. No bank transfer, provider settlement, chain transfer, external asset movement, or provider balance override is authorized by this marker."
+}
