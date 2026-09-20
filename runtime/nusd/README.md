@@ -8,7 +8,7 @@ The NUSD contract lifecycle is **INITIATED** for `NuminaUSD`, `NuminaSettlement`
 
 The source also includes `NuminaUSDCConversion` for exact exchange against existing same-chain NUSD/USDC inventory and `NuminaUSDRedemption` for NUSD escrow with separate bank-outcome attestations. Both start paused; publishing or compiling them does not deploy them, mint tokens or initiate deposits. Their sources and artifacts are included in the application contract record. See [contract and security documentation](../../docs/NUSD-Conversion-Contracts.md) for interfaces, trust boundaries, local tests and activation requirements. The existing managed token deployment adapter does not deploy these new contracts automatically.
 
-Linux container source for the managed deployment adapter. The runtime uses Node 24 and ethers 6.15.0 with a committed dependency lock. It includes a previously compiled contract artifact; this container build does not compile Solidity.
+Linux container source for the managed deployment adapter. The runtime uses Node 24 and ethers 6.17.0 with a committed dependency lock and pins ws 8.21.3 through an exact npm override. It includes a previously compiled contract artifact; this container build does not compile Solidity.
 
 The default container command only observes directory-flush support, with networking disabled in the default Compose service. Operator credentials, reviewed deployment parameters, persistent transaction history and private policies are external inputs and are not in this repository. No container build or artifact signature sends a blockchain transaction or establishes token reserves.
 
