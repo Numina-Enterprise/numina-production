@@ -22,7 +22,9 @@
   "hostIdentity": "NUMINA",
   "executionTargets": {
     "default": "NUMINA",
-    "workflowOverrides": {},
-    "scope": "All preserved workflow execution targets resolve to NUMINA. Existing runner registrations are preserved; no runner creation, removal, or signing-identity rotation is authorized."
+    "workflowOverrides": {
+      "numina-release.yml": "ubuntu-latest"
+    },
+    "scope": "NUMINA remains the singular logical execution identity. The GitHub Release workflow may use the GitHub-hosted ubuntu-latest substrate to publish the canonical NUMINA release while all preserved runner registrations and all other workflow targets remain unchanged."
   }
 }
