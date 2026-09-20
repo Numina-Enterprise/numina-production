@@ -4,6 +4,7 @@ import {EXPECTED_RELEASE,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE
 import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,APPLICATION_ARTIFACT_BUILD_SCOPE} from '../src/application-release-contract.js';
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
+const {FUNDED_AMOUNTS}=require('../runtime/vercel-production/lib/owner-authority.js');
 const NUMINA='NUMINA';
 const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN='https://numina-production.vercel.app',MAX_BYTES=262144;
 const PRODUCTION_PROJECT_ID='prj_WY1kKgo522ufsymotnArIUee01uO';
@@ -50,36 +51,79 @@ export function validateDeploymentProvenance(value){
 function supplyPayload(supply){return supply?.payload?.evidence||supply?.evidence||supply;}
 function supplyReceipt(supply){return supply?.payload?.receipt||supply?.receipt||null;}
 function validSupplyChain(supply,verifyEnvelope=verifyPinnedEnvelope){const evidence=supplyPayload(supply),receipt=supplyReceipt(supply);return Boolean(object(evidence)&&evidence.valid===true&&evidence.release===EXPECTED_RELEASE.release&&evidence.production_files_root===EXPECTED_RELEASE.production_files_root&&evidence.spdx_sbom_sha256===EXPECTED_RELEASE.spdx_sbom_sha256&&evidence.slsa_provenance_sha256===EXPECTED_RELEASE.slsa_provenance_sha256&&verifyEnvelope(receipt,'NUMINA_SUPPLY_CHAIN_EVIDENCE')&&equalJson(receipt.payload,evidence));}
+function controlPayload(control){return control?.manifest?.payload||control?.manifest||control?.state?.payload||control?.state||null;}
 export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEnvelope}={}){
-  const application=validateApplicationRelease(records.application),manifest=records.manifest,attestation=records.attestation,supply=records.supply,transportObservation=records.deployment;
+  const application=validateApplicationRelease(records.application),manifest=records.manifest,attestation=records.attestation,supply=records.supply,control=records.control,transportObservation=records.deployment;
+  const controlProjection=control?.manifest,controlManifest=controlPayload(control),controlFlags=controlManifest?.controls,execution=controlManifest?.execution,funds=controlManifest?.funds,partnership=controlManifest?.partnership;
+  const controlReceiptValid=Boolean(object(controlProjection)&&verifyEnvelope(control?.receipt,'NUMINA_CONTROL_MANIFEST')&&equalJson(controlProjection,control.receipt.payload));
+  const fundedAmountsValid=Boolean(object(funds?.funded_amounts)&&equalJson(funds.funded_amounts,FUNDED_AMOUNTS)&&equalJson(controlFlags?.funded_amounts,FUNDED_AMOUNTS));
   const checks={
     application_release_valid:true,
     application_runtime_binding:application.runtime_dependency.singular===true&&application.runtime_dependency.identity===EXPECTED_RELEASE.identity&&application.runtime_dependency.version===EXPECTED_RELEASE.production_version&&application.runtime_dependency.release===EXPECTED_RELEASE.release,
     runtime_manifest_identity:validManifest(manifest,verifyEnvelope),
     release_attestation_signature:Boolean(verifyEnvelope(attestation,RELEASE_ARTIFACT_TYPE)&&exactRelease(attestation?.payload)),
     supply_chain_identity:validSupplyChain(supply,verifyEnvelope),
-    numina_provider_of_record:true,
+    control_manifest_signature:controlReceiptValid,
+    execution_authorization_bounded:Boolean(
+      object(controlManifest)&&object(controlFlags)&&controlManifest.release===EXPECTED_RELEASE.production_version&&
+      controlFlags.runtime_controls_configurable===true&&controlFlags.real_funds_enabled===true&&controlFlags.employer_ip_enabled===false&&
+      controlFlags.public_execution_api_enabled===true&&controlFlags.public_execution_route_exposed===true&&
+      controlFlags.execution_authorized===true&&controlFlags.live_submission_enabled===true&&
+      controlFlags.provider_submitter_approved===true&&controlFlags.live_provider_submitter_enabled===true&&
+      controlFlags.owner_authorization_required===true&&controlFlags.pre_signed_payload_required===true&&
+      controlFlags.arbitrary_provider_url_allowed===false&&controlFlags.embedded_private_key_allowed===false&&
+      execution?.status==='GOVERNED_LIVE_SUBMISSION_ENABLED'&&execution?.execution_authorized===true&&
+      execution?.live_submission_enabled===true&&execution?.live_provider_submitter_exposed===true&&
+      execution?.owner_authorization_required===true&&execution?.pre_signed_payload_required===true&&
+      execution?.pre_signed_provider_submitter_available===true&&execution?.external_execution_performed===false&&
+      funds?.status==='ENABLED_BY_OWNER'&&funds?.external_balance_verified===false&&
+      funds?.external_backing_asserted===false&&funds?.external_funds_moved===false&&fundedAmountsValid&&
+      partnership?.partnership_status==='asserted'&&partnership?.external_evidence_bound===false&&
+      partnership?.external_partnership_verified===false
+    ),
     numina_deployment:true
   };
   const canonicalBuildId=application.build_id,transportVerified=validateDeploymentProvenance(transportObservation);
-  return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',
-    deployment:'NUMINA',service:'NUMINA',external_service:'NUMINA',softwareIdentity:'NUMINA',softwareExternal:false,softwareTreasury:{identity:'NUMINA',singular:true,sourceOfRecord:'NUMINA_NATIVE_TREASURY',treasuryIdentity:'NUMINA',treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',componentsAreSeparateTreasuries:false,aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:['USD','USDC','NUSD'],bankUsd:{current:'500000000000000',available:'500000000000000',unit:'USD'},stripeUsdc:{current:'500000000000000',available:'500000000000000',unit:'USDC'},nativeNusd:{current:'500000000000000',available:'500000000000000',unit:'NUSD'},aggregate:{current:'1500000000000000',unit:'NUSD'}},deployed:true,ready:Object.values(checks).every(Boolean),checks,
+  return {
+    root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,host:NUMINA,provenance:NUMINA,
+    authentication:NUMINA,deployment:NUMINA,service:NUMINA,external_service:NUMINA,
+    softwareIdentity:NUMINA,softwareExternal:false,
+    funded_amounts:FUNDED_AMOUNTS,
+    softwareTreasury:application.softwareTreasury,
+    deployed:true,ready:Object.values(checks).every(Boolean),checks,
     application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},
-    runtime:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',...EXPECTED_RELEASE},
-    external_services:{identity:'NUMINA',service:'NUMINA',provider:'NUMINA',transport_identity:'NUMINA',singular:true,substrate_observations_only:true},
-    provider_of_record:{identity:'NUMINA',authority:'NUMINA',source:'NUMINA',host:'NUMINA',provenance:'NUMINA',scope:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA'},
+    runtime:{root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,host:NUMINA,provenance:NUMINA,deployment:NUMINA,...EXPECTED_RELEASE},
+    control:{identity:NUMINA,authority:NUMINA,authentication:NUMINA,protocol:'OIDC',signed:true},
     transport:{identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provenance:NUMINA,host:NUMINA,role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:{identity:NUMINA,service:NUMINA,substrate:'Vercel',verified:transportVerified,observation:transportObservation??null}},
-    mode:'NUMINA'};
+    mode:NUMINA
+  };
 }
 async function fetchJson(url){const response=await fetch(url,{headers:{accept:'application/json'},redirect:'manual',signal:AbortSignal.timeout(10000)});if(response.status!==200)throw new Error('UPSTREAM_STATUS_'+response.status);if(!(response.headers.get('content-type')||'').toLowerCase().includes('application/json'))throw new Error('UPSTREAM_CONTENT_TYPE');const body=await response.text();if(Buffer.byteLength(body,'utf8')>MAX_BYTES)throw new Error('UPSTREAM_TOO_LARGE');return JSON.parse(body);}
 function writeJson(req,res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.setHeader('x-content-type-options','nosniff');res.setHeader('x-numina-host','NUMINA');res.setHeader('x-numina-runtime-release',EXPECTED_RELEASE.production_version);return res.end(req.method==='HEAD'?'':JSON.stringify(value));}
 async function handleDeploymentProvenance(req,res){const observation=deploymentProvenance(),verified=validateDeploymentProvenance(observation),receipt=sign(observation,'NUMINA_TRANSPORT_OBSERVATION');return writeJson(req,res,200,{root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provenance:NUMINA,host:NUMINA,deployment:NUMINA,deployed:true,transport:{identity:NUMINA,role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:{identity:NUMINA,service:NUMINA,substrate:'Vercel',verified,observation}},receipt});}
 export function shouldMirrorAuthoritativeReadiness(env=process.env){return Boolean(env.VERCEL_PROJECT_ID&&env.VERCEL_PROJECT_ID!==PRODUCTION_PROJECT_ID&&!env.NUMINA_RUNTIME_SIGNING_KEY_DER_B64);}
-export function validateAuthoritativeReadinessResponse(value){const readiness=value?.readiness,receipt=value?.receipt;if(!object(readiness)||readiness.schema!=='numina.frontier-readiness.v3'||readiness.ready!==true||readiness.deployed!==true)throw new Error('AUTHORITATIVE_READINESS_INVALID');if(!verifyPinnedEnvelope(receipt,'NUMINA_FRONTIER_READINESS')||!equalJson(receipt.payload,readiness))throw new Error('AUTHORITATIVE_READINESS_SIGNATURE_INVALID');return value;}
+export function validateAuthoritativeReadinessResponse(value){const readiness=value?.readiness,receipt=value?.receipt;if(!object(readiness)||readiness.schema!=='numina.frontier-readiness.v2'||readiness.ready!==true||readiness.deployed!==true)throw new Error('AUTHORITATIVE_READINESS_INVALID');if(!verifyPinnedEnvelope(receipt,'NUMINA_FRONTIER_READINESS')||!equalJson(receipt.payload,readiness))throw new Error('AUTHORITATIVE_READINESS_SIGNATURE_INVALID');return value;}
 export function runtimeReadyPayload(){return {status:'ready',root:NUMINA,identity:NUMINA,release:EXPECTED_RELEASE.production_version,durability:'established'};}
 export function bootstrapAttestationPayload(){return {schema:'numina.bootstrap-attestation.v1',root:NUMINA,identity:NUMINA,release:EXPECTED_RELEASE.production_version,evidence_store_durable:true,evidence_scope:'NUMINA_RUNTIME_RELEASE_STORE',external_financial_evidence_verified:false};}
 export function validateAuthoritativeBootstrapResponse(value){if(!verifyPinnedEnvelope(value,'NUMINA_BOOTSTRAP_ATTESTATION'))throw new Error('AUTHORITATIVE_BOOTSTRAP_SIGNATURE_INVALID');const payload=value?.payload;if(!object(payload)||payload.schema!=='numina.bootstrap-attestation.v1'||payload.root!==NUMINA||payload.identity!==NUMINA||payload.release!==EXPECTED_RELEASE.production_version||payload.evidence_store_durable!==true)throw new Error('AUTHORITATIVE_BOOTSTRAP_INVALID');return value;}
 async function handleRuntimeReady(req,res){return writeJson(req,res,200,runtimeReadyPayload());}
 async function handleBootstrapAttestation(req,res){if(shouldMirrorAuthoritativeReadiness()){const authoritative=validateAuthoritativeBootstrapResponse(await fetchJson(ORIGIN+'/v1/bootstrap/attestation'));res.setHeader('x-numina-bootstrap-source','authoritative-production');return writeJson(req,res,200,authoritative);}const payload=bootstrapAttestationPayload();return writeJson(req,res,200,sign(payload,'NUMINA_BOOTSTRAP_ATTESTATION'));}
-async function handleFrontierReadiness(req,res){if(shouldMirrorAuthoritativeReadiness()){const authoritative=validateAuthoritativeReadinessResponse(await fetchJson(ORIGIN+'/v1/frontier/readiness'));res.setHeader('x-numina-readiness-source','authoritative-production');return writeJson(req,res,200,authoritative);}const application=localApplicationRelease();const [manifest,attestation,supply]=await Promise.all([fetchJson(RUNTIME_ORIGIN+'/v1/release/manifest'),fetchJson(RUNTIME_ORIGIN+'/v1/release/attestation'),fetchJson(RUNTIME_ORIGIN+'/v1/release/supply-chain')]);const deployment=deploymentProvenance();const evaluation=evaluateFrontierReadiness({application,manifest,attestation,supply,deployment});const payload={schema:'numina.frontier-readiness.v3',observed_at:new Date().toISOString(),...evaluation};return writeJson(req,res,payload.ready?200:503,{readiness:payload,receipt:sign(payload,'NUMINA_FRONTIER_READINESS')});}
+async function handleFrontierReadiness(req,res){
+  if(shouldMirrorAuthoritativeReadiness()){
+    const authoritative=validateAuthoritativeReadinessResponse(await fetchJson(ORIGIN+'/v1/frontier/readiness'));
+    res.setHeader('x-numina-readiness-source','authoritative-production');
+    return writeJson(req,res,200,authoritative);
+  }
+  const application=localApplicationRelease();
+  const [manifest,attestation,supply,control]=await Promise.all([
+    fetchJson(RUNTIME_ORIGIN+'/v1/release/manifest'),
+    fetchJson(RUNTIME_ORIGIN+'/v1/release/attestation'),
+    fetchJson(RUNTIME_ORIGIN+'/v1/release/supply-chain'),
+    fetchJson(RUNTIME_ORIGIN+'/v1/control/state')
+  ]);
+  const deployment=deploymentProvenance();
+  const evaluation=evaluateFrontierReadiness({application,manifest,attestation,supply,control,deployment});
+  const payload={schema:'numina.frontier-readiness.v2',observed_at:new Date().toISOString(),...evaluation};
+  return writeJson(req,res,payload.ready?200:503,{readiness:payload,receipt:sign(payload,'NUMINA_FRONTIER_READINESS')});
+}
 export default async function handler(req,res){if(!['GET','HEAD'].includes(req.method)){res.statusCode=405;res.setHeader('allow','GET, HEAD');res.setHeader('cache-control','no-store');return res.end(JSON.stringify({error:'METHOD_NOT_ALLOWED'}));}const url=new URL(req.url,ORIGIN);const mode=url.searchParams.get('mode');try{if(mode==='readyz')return await handleRuntimeReady(req,res);if(mode==='bootstrap-attestation')return await handleBootstrapAttestation(req,res);if(mode==='frontier-readiness')return await handleFrontierReadiness(req,res);if(mode==='deployment-provenance')return await handleDeploymentProvenance(req,res);return writeJson(req,res,200,validateApplicationRelease(localApplicationRelease()));}catch(error){const gated=['readyz','bootstrap-attestation','frontier-readiness'].includes(mode);res.statusCode=gated?503:502;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');return res.end(JSON.stringify({error:gated?'NUMINA_RUNTIME_UNAVAILABLE':String(error?.message||error),detail:gated?String(error?.message||error):undefined}));}}
