@@ -1,0 +1,13 @@
+{
+  "schema": "numina.software-treasury-alignment.v1",
+  "identity": "NUMINA",
+  "softwareExternal": false,
+  "singular": true,
+  "values": {
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
+  },
+  "note": "All NUMINA software surfaces use the same modeled treasury values. Provider observations remain evidence metadata and do not replace the NUMINA software balance."
+}

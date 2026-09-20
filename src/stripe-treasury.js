@@ -12,7 +12,7 @@ const NATIVE_USDC_MODEL=Object.freeze({
   sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,
   treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
   holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
-  holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',
+  holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalance:Object.freeze({current:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,available:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,unit:'USDC',source:'NUMINA'}),
   nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',
   aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,
   backingRatio:'1:1',backingVerified:false,verificationSource:'PROVIDER_EVIDENCE_REQUIRED',
