@@ -76,8 +76,8 @@ jobs:
           output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'numina-runtime-artifacts'
           expected = [
               '.dockerignore', '.env.example', 'base-image.json', 'compose.yaml', 'Dockerfile', 'README.md',
-              'package.json', 'package-lock.json', 'runtime-entrypoint.mjs',
-              'scripts/managed-deployment.mjs', 'scripts/validate-deployment.mjs', 'scripts/verify-network.mjs',
+              'package.json', 'package-lock.json', 'runtime-entrypoint.mjs', 'deployment.template.json',
+              'scripts/managed-deployment.mjs', 'scripts/validate-deployment.mjs', 'scripts/verify-network.mjs', 'scripts/token-artifact.mjs',
               'contracts/NuminaUSD.sol', 'artifacts/NuminaUSD.json',
               'licenses/OpenZeppelin-LICENSE', 'licenses/ethers-LICENSE.md',
           ]
