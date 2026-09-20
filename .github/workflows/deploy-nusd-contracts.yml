@@ -6,6 +6,8 @@ on:
     paths:
       # Dependency-pin maintenance alone must not trigger an on-chain deployment.
       - 'runtime/nusd/scripts/deploy-production.mjs'
+      - 'runtime/nusd/scripts/prepare-post-freeze-journal.mjs'
+      - 'runtime/nusd/scripts/finalize-post-freeze-journal.mjs'
       - 'runtime/nusd/scripts/rpc-auth.mjs'
       - 'runtime/nusd/deployment.production.json'
       - 'runtime/nusd/artifacts/NuminaUSD.json'
@@ -52,6 +54,9 @@ jobs:
       NUMINA_EXPECTED_CHAIN_ID: '962421430'
       NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
       NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
+      NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
+      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
+      NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT: fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -65,13 +70,21 @@ jobs:
         working-directory: runtime/nusd
         run: npm ci --ignore-scripts
 
-      - name: Require a NUMINA RPC credential source
+      - name: Require production execution credentials
         shell: bash
         run: |
           if [ -z "$NUMINA_RPC_AUTHORIZATION$NUMINA_RPC_APP_CREDENTIAL$NUMINA_KALEIDO_APP_CREDENTIAL$KALEIDO_APP_CREDENTIAL$NUMINA_RPC_USERNAME$NUMINA_RPC_APP_USERNAME$KALEIDO_APP_CRED_USERNAME$KALEIDO_APP_USERNAME$KALEIDO_USERNAME$NUMINA_KALEIDO_API_KEY$KALEIDO_API_KEY" ]; then
             echo "No NUMINA/Kaleido credential source is configured."
             exit 2
           fi
+          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
+            echo "NUMINA_CONTROL_API_KEY is not configured; no journal write or mint is attempted."
+            exit 3
+          fi
+
+      - name: Prepare post-freeze journal mint and USDC deposit requests
+        working-directory: runtime/nusd
+        run: node scripts/prepare-post-freeze-journal.mjs artifacts/post-freeze-journal-plan.json
 
       - name: Validate exact 1,500T 6-decimal constructor
         working-directory: runtime/nusd
@@ -81,6 +94,10 @@ jobs:
         working-directory: runtime/nusd
         run: node scripts/deploy-production.mjs deployment.production.json deployment-receipt.json
 
+      - name: Bind verified 6-decimal mint receipt to NUMINA journal
+        working-directory: runtime/nusd
+        run: node scripts/finalize-post-freeze-journal.mjs artifacts/post-freeze-journal-plan.json deployment-receipt.json artifacts/post-freeze-journal-finalization.json
+
       - name: Upload verified NUMINA chain receipt
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -89,4 +106,6 @@ jobs:
           path: |
             runtime/nusd/deployment-receipt.json
             runtime/nusd/artifacts/unsigned-production-deployment.json
+            runtime/nusd/artifacts/post-freeze-journal-plan.json
+            runtime/nusd/artifacts/post-freeze-journal-finalization.json
           if-no-files-found: warn
