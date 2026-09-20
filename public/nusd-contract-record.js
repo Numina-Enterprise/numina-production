@@ -611,16 +611,16 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "source": {
           "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
           "url": "/downloads/contracts/candidate/NuminaUSDRedemption.sol",
-          "sha256": "6fb5d4c8461c6900e36be10fb1720c937e3396b21952e37edbfaca17cd2a5916",
-          "bytes": 11510,
+          "sha256": "b26d5b0a69ca06d83ec3541e50a673e6a7f7f550a1fa0f0054aea890f6e3559f",
+          "bytes": 12981,
           "encoding": "UTF-8",
           "line_endings": "LF"
         },
         "artifact": {
           "repository_path": "runtime/nusd/artifacts/NuminaUSDRedemption.json",
           "url": "/downloads/contracts/candidate/NuminaUSDRedemption.json",
-          "sha256": "05162c19a1e119d8350947e8848c9c791cbf129cb0d715b69a130d3164d3942e",
-          "bytes": 119964,
+          "sha256": "219d3f4fbafd1c288deb28de276946a3bb9ac09dce98bdc895e2bd5397a6ce0e",
+          "bytes": 127477,
           "encoding": "UTF-8",
           "line_endings": "LF"
         },
