@@ -2,8 +2,24 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {stable} from '../../../src/control.js';
 
+async function numinaControlToken(){
+  const oidcUrl=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
+  const oidcRequestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+  if(oidcUrl&&oidcRequestToken){
+    const endpoint=new URL(oidcUrl);
+    endpoint.searchParams.set('audience','numina-control');
+    const response=await fetch(endpoint,{headers:{Authorization:'Bearer '+oidcRequestToken},signal:AbortSignal.timeout(15000)});
+    const text=await response.text();
+    let body=null;try{body=JSON.parse(text);}catch{}
+    if(!response.ok||typeof body?.value!=='string'||body.value.split('.').length!==3)throw Error('NUMINA_CONTROL_OIDC_TOKEN_FAILED');
+    return body.value;
+  }
+  const fallback=process.env.NUMINA_CONTROL_API_KEY;
+  if(fallback)return fallback;
+  throw Error('NUMINA_CONTROL_AUTH_REQUIRED');
+}
+
 const origin=process.env.NUMINA_APPLICATION_ORIGIN||'https://numinalabs.xyz';
-const token=process.env.NUMINA_CONTROL_API_KEY;
 const sender=process.env.NUMINA_SENDER;
 const stripeAccount=process.env.NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT||'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu';
 const planFile=path.resolve(process.argv[2]||'artifacts/post-freeze-journal-plan.json');
@@ -11,8 +27,10 @@ const RETAINED_NUSD='500000000000000';
 const MINT_NUSD='1500000000000000';
 const USDC_DEPOSIT='500000000000000';
 const NETWORK_REFERENCE='eip155:962421430';
-if(!token||!sender)throw Error('NUMINA_POST_FREEZE_JOURNAL_CONFIGURATION_REQUIRED');
+if(!sender)throw Error('NUMINA_POST_FREEZE_JOURNAL_CONFIGURATION_REQUIRED');
 if(!['https://numinalabs.xyz','https://www.numinalabs.xyz'].includes(origin))throw Error('NUMINA_APPLICATION_ORIGIN_INVALID');
+
+const token=await numinaControlToken();
 
 async function request(pathname,{method='GET',body}={}){
   const response=await fetch(origin+pathname,{
@@ -20,8 +38,11 @@ async function request(pathname,{method='GET',body}={}){
     headers:{Authorization:'Bearer '+token,Accept:'application/json',...(body?{'Content-Type':'application/json'}:{})},
     body:body?stable(body):undefined
   });
-  if(!response.ok)throw Error('NUMINA_TREASURY_HTTP_'+response.status);
-  return response.json();
+  const text=await response.text();
+  let parsed=null;try{parsed=JSON.parse(text);}catch{}
+  if(!response.ok)throw Error('NUMINA_TREASURY_HTTP_'+response.status+'_'+(parsed?.error||'UNKNOWN'));
+  if(parsed===null)throw Error('NUMINA_TREASURY_RESPONSE_INVALID');
+  return parsed;
 }
 const read=()=>request('/api/control/v1/treasury');
 async function write(current,Objective,Intent,id){
