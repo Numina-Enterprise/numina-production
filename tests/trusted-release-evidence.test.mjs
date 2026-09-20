@@ -20,20 +20,23 @@ function fixture(){
   const deployment=deploymentProvenance({VERCEL_ENV:'production',VERCEL_DEPLOYMENT_ID:'dpl_fixture',VERCEL_URL:'numina-fixture.vercel.app',VERCEL_GIT_COMMIT_SHA:expectedGitSha,VERCEL_GIT_COMMIT_REF:'main'});
   const application={schema:'numina.application-release.v2',schema_version:2,product:'NUMINA',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,runtime_dependency:{singular:true,identity:'NUMINA',version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};
   const manifest=structuredClone(manifestModule.NUMINA_MANIFEST),supply={valid:true,release:EXPECTED_RELEASE.release,production_files_root:EXPECTED_RELEASE.production_files_root,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256};
-  const readiness={schema:'numina.frontier-readiness.v3',observed_at:observedAt,...evaluateFrontierReadiness({application,deployment,manifest:{manifest,receipt:receipt('NUMINA_MANIFEST',manifest)},attestation:receipt(RELEASE_ARTIFACT_TYPE,EXPECTED_RELEASE),supply:{evidence:supply,receipt:receipt('NUMINA_SUPPLY_CHAIN_EVIDENCE',supply)}},{verifyEnvelope:(value,type)=>{try{verifyEnvelope(value,type);return true;}catch{return false;}}})};
+  const readiness={schema:'numina.frontier-readiness.v2',observed_at:observedAt,...evaluateFrontierReadiness({application,deployment,manifest:{manifest,receipt:receipt('NUMINA_MANIFEST',manifest)},attestation:receipt(RELEASE_ARTIFACT_TYPE,EXPECTED_RELEASE),supply:{evidence:supply,receipt:receipt('NUMINA_SUPPLY_CHAIN_EVIDENCE',supply)}},{verifyEnvelope:(value,type)=>{try{verifyEnvelope(value,type);return true;}catch{return false;}}})};
   const control=projection.project('control-manifest',{schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:EXPECTED_RELEASE.production_version,controls:authority.controls(),funds:authority.fundsManifest(),execution:authority.executionManifest(),partnership:authority.partnershipManifest(),external_execution_performed:false,external_funds_moved:false});
   return {expectedGitSha,frontier:{readiness,receipt:receipt('NUMINA_FRONTIER_READINESS',readiness)},transportResponse:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',deployed:true,transport:{identity:'NUMINA',role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:{identity:'NUMINA',service:'NUMINA',substrate:'Vercel',verified:true,observation:deployment}},receipt:receipt('NUMINA_TRANSPORT_OBSERVATION',deployment)},controlResponse:{manifest:control,receipt:receipt('NUMINA_CONTROL_MANIFEST',control)}};
 }
 
-test('trusted release binds current v3 readiness to separate signed control authorization and actual transport',()=>{
+test('trusted release binds v2 readiness to signed NUMINA control authorization and actual transport',()=>{
   const input=fixture(),before=structuredClone(input),result=readTrustedReleaseEvidence(input,options);
-  assert.equal(Object.keys(result.readiness.checks).length,7);
-  assert.equal(result.readiness.checks.execution_authorization_bounded,undefined);
+  assert.equal(Object.keys(result.readiness.checks).length,8);
+  assert.equal(result.readiness.checks.execution_authorization_bounded,true);
   assert.equal(result.control.execution.owner_authorization_required,true);
   assert.equal(result.control.execution.pre_signed_payload_required,true);
   assert.equal(result.control.execution.external_execution_performed,false);
-  assert.equal(result.fundableTargets.target_amount,'500000000000000');
-  assert.equal(result.fundableTargets.external_balance_verified,false);
+  assert.equal(result.fundedAmounts.aggregate.amount,'1500000000000000');
+  assert.equal(result.fundedAmounts.aggregate.display,'1500T');
+  assert.equal(result.fundedAmounts.components.length,3);
+  assert.equal(result.fundedAmounts.components.every(x=>x.amount==='500000000000000'&&x.funded===true),true);
+  assert.equal(result.fundedAmounts.external_balance_verified,false);
   assert.equal(result.transportObservation.git_commit_sha,expectedGitSha);
   assert.equal(result.transportVerified,true);assert.deepEqual(input,before);
 });
@@ -51,7 +54,7 @@ test('signed unsafe execution or external-funding assertions cannot pass a trust
     ['funds moved',x=>x.external_funds_moved=true],
     ['external balance',x=>x.funds.external_balance_verified=true],
     ['external backing',x=>x.funds.external_backing_asserted=true],
-    ['external target balance',x=>x.funds.fundable_targets={...x.funds.fundable_targets,external_balance_verified:true}],
+    ['external target balance',x=>x.funds.funded_amounts={...x.funds.funded_amounts,external_balance_verified:true}],
     ['authorization changed',x=>x.funds.authorization_id='different'],
     ['external partnership',x=>x.partnership.external_partnership_verified=true]
   ];
@@ -75,7 +78,7 @@ test('current transport verification rejects stale commits, nonproduction proven
 });
 
 test('readiness requires exact booleans, current schema, freshness and the same signed transport',()=>{
-  for(const mutate of [x=>x.checks.numina_deployment='true',x=>delete x.checks.supply_chain_identity,x=>x.schema='numina.frontier-readiness.v2',x=>x.observed_at='2026-09-18T00:00:00Z',x=>x.transport.substrate_observation.verified=false,x=>x.runtime.production_files_root='0'.repeat(64),x=>x.runtime.spdx_sbom_sha256='0'.repeat(64)]){
+  for(const mutate of [x=>x.checks.numina_deployment='true',x=>delete x.checks.supply_chain_identity,x=>x.schema='numina.frontier-readiness.v3',x=>x.observed_at='2026-09-18T00:00:00Z',x=>x.transport.substrate_observation.verified=false,x=>x.runtime.production_files_root='0'.repeat(64),x=>x.runtime.spdx_sbom_sha256='0'.repeat(64)]){
     const input=structuredClone(fixture());mutate(input.frontier.readiness);input.frontier.receipt=receipt('NUMINA_FRONTIER_READINESS',input.frontier.readiness);assert.throws(()=>readTrustedReleaseEvidence(input,options));
   }
 });
