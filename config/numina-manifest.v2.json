@@ -126,9 +126,9 @@
         "unit": "USD",
         "confirmation": "8000750550",
         "verified": true,
-        "verification": "NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION",
+        "verification": "NUMINA_AND_LINKED_PROVIDER_VERIFIED",
         "verificationAuthority": "NUMINA",
-        "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION",
+        "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION",
         "providerVerified": true,
         "providerTransactionVisible": true,
         "providerTransactionUnit": "USD",
@@ -138,9 +138,9 @@
         "providerClearedDate": "2026-08-31",
         "providerConfirmationVisible": true,
         "providerConfirmation": "XXXXX50550",
-        "providerDisplayEvidence": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED_AND_USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-        "providerDisplayEvidenceScope": "PROVIDER_LINKED_TRANSACTION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
-        "providerVerificationSource": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED",
+        "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
+        "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
+        "providerVerificationSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_TRANSACTION_OBSERVATION",
         "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
         "providerInstitution": "Bank of America",
         "providerOfficialName": "Business Advantage Sav",
@@ -149,14 +149,16 @@
         "providerBalanceSnapshotCurrent": "0",
         "providerBalanceSnapshotAvailable": "0",
         "providerBalanceSnapshotUnit": "USD",
-        "providerBalanceSnapshotSource": "LINKED_BANK_OF_AMERICA_ACCOUNT_FEED",
+        "providerBalanceSnapshotSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION",
         "providerBalanceSnapshotFreshness": "unknown",
         "providerBalanceSourceReportedAt": null,
         "providerBalanceRecordUpdatedAt": "2026-09-20T21:30:20.021515Z",
         "providerAmountMatchesSoftwareModel": false,
         "providerBalanceMatchesSoftwareModel": false,
         "providerObservationAuthority": "NUMINA",
-        "providerObservationIsCompetingAuthority": false
+        "providerObservationIsCompetingAuthority": false,
+        "externalFundsMovedVerified": false,
+        "externalSettlementVerified": false
       }
     },
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -186,7 +188,15 @@
     "namespace": "NUMINA",
     "authority": "NUMINA",
     "observationNamespace": "NUMINA",
-    "attestationNamespace": "NUMINA"
+    "attestationNamespace": "NUMINA",
+    "positionNamespace": "NUMINA",
+    "connectionNamespace": "NUMINA",
+    "positionScope": [
+      "internal",
+      "external_connected"
+    ],
+    "externalConnectionsAreNumina": true,
+    "providerEvidenceSourceScoped": true
   },
   "singular_identity": {
     "identity": "NUMINA",
@@ -204,5 +214,17 @@
     "competing_identity_allowed": false,
     "competing_authority_allowed": false,
     "external_provenance_retained": true
-  }
+  },
+  "position_namespace": "NUMINA",
+  "connection_namespace": "NUMINA",
+  "position_scope": [
+    "internal",
+    "external_connected"
+  ],
+  "connection_scope": [
+    "native",
+    "provider_transport"
+  ],
+  "external_connections_are_numina": true,
+  "provider_evidence_source_scoped": true
 }
