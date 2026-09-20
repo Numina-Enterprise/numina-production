@@ -1,0 +1,20 @@
+name: Ubuntu runner allocation probe
+
+on:
+  push:
+    branches:
+      - runner/ubuntu-probe
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Runner allocated
+        run: |
+          echo "NUMINA_UBUNTU_RUNNER_ALLOCATED"
+          uname -a
