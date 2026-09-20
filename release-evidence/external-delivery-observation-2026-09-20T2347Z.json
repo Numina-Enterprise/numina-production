@@ -1,0 +1,113 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "observedAt": "2026-09-20T23:47:00Z",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "canonicalSourceSha": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+  "github": {
+    "runnerAllocationVerified": true,
+    "numina": {
+      "runId": 35544882621,
+      "attempt": 2,
+      "conclusion": "success",
+      "headSha": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+      "artifactId": 10616007002,
+      "artifactDigest": "sha256:4d0fdd69c80964bc676a0ad908267d98e6edb9dc08529e761fb9866ad773b96e",
+      "releaseTarSha256": "8d27fd43a3c8bb93c5621d5198017f5fe72e1b689cf5ad1520f1000c2ecd11a5",
+      "suppliedChecksumMatched": true
+    },
+    "sitePublish": {
+      "runId": 35544475315,
+      "attempt": 2,
+      "headSha": "b1c0cf380b2a9c58e0b4fc6e4f5d5d62c2f9302c",
+      "buildAndTestsPassed": true,
+      "testsPassed": 923,
+      "publishSucceeded": false,
+      "telemetryReceiptId": "2e55f199-f194-4d45-b095-74acda31cfae",
+      "status": "push_failed",
+      "failure": "authentication",
+      "sourcePushVerified": false,
+      "deploymentStarted": false,
+      "signedAttestation": false,
+      "nextAction": "Restore the publishing identity and its permission for the existing git.chatgpt-team.site repository."
+    },
+    "android": {
+      "runId": 35540797737,
+      "attempt": 3,
+      "headSha": "a4183b9193c35fd4cdc8805a6b5d2da738da15e4",
+      "mobileAndSigningSourceDiffToCanonicalMain": false,
+      "conclusion": "success",
+      "artifactId": 10616242545,
+      "artifactDigest": "sha256:65195732560d7a40ea6d0a864535193e5db9c67435cc68aaab49af5939abf75c",
+      "apkSha256": "f19370be880065d2800b938ecc0f16f6fb48711071f55687c036ecffd4ad594c",
+      "aabSha256": "52e9f112d5b32d43bac24ea1859642f4ce55f4c1630358d424244fb89b8c107a",
+      "signatureVerification": true,
+      "storeSubmitted": false
+    },
+    "ios": {
+      "runId": 35540797825,
+      "attempt": 3,
+      "headSha": "a4183b9193c35fd4cdc8805a6b5d2da738da15e4",
+      "mobileAndSigningSourceDiffToCanonicalMain": false,
+      "compileSucceeded": true,
+      "signed": false,
+      "storeSubmitted": false,
+      "blocker": "NUMINA_APPLE_TEAM_ID and Apple distribution P12, password, and provisioning profile inputs are unset."
+    },
+    "runtimeProvenance": {
+      "runId": 35542122412,
+      "attempt": 2,
+      "headSha": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+      "runtimeSourceAndWorkflowDiffToCanonicalMain": false,
+      "conclusion": "success",
+      "sourceArtifactId": 10616836191,
+      "sourceArtifactDigest": "sha256:fb768cdff8cf7f47b178130f682fb9494cd654f97b058c0393240415eba2d8ea",
+      "imageArtifactId": 10616751785,
+      "imageArtifactDigest": "sha256:3af8067b32bda12e9197c624275be349007f949db97cab78ad5fc7297564f8b1",
+      "inventoryArtifactId": 10616836194,
+      "inventoryArtifactDigest": "sha256:0ff81e28aa37e036fb5c88f68e53be3673753a214d33f6219d4fd56cce39d060",
+      "sigstoreArtifactId": 10616507393,
+      "sigstoreArtifactDigest": "sha256:3471088870d1a088558a3495f024d2dcc80299b8f789df73425d494e6edc35ef"
+    }
+  },
+  "vercel": {
+    "capacityVerified": true,
+    "cloudBuildDeployment": {
+      "sourceSha": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+      "deploymentId": "dpl_ESbm5Gya1bhkVrPFB9DDpiRMBvnJ",
+      "buildId": "bld_xsi0n9zg0",
+      "state": "READY",
+      "url": "https://numina-production-45x0by3dl-numina-167f7fe7.vercel.app"
+    },
+    "prebuiltProductionDeployment": {
+      "sourceSha": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+      "deploymentId": "dpl_4mv1wH4ViJzACGTuRQTXyXNCXVyX",
+      "buildId": "bld_aujrorbq8",
+      "state": "READY",
+      "url": "https://numina-production-p9uv37jqs-numina-167f7fe7.vercel.app",
+      "canonicalAlias": "https://numinalabs.xyz"
+    },
+    "receipts": [
+      {"path":"/final-build.json","httpStatus":200,"sha256":"a2ac9898f9b9bd2318d86f099dba84a536f8e099f21dadb060d5439c5e845aa6","matchesCanonicalMainFile":true},
+      {"path":"/downloads/nusd/deployment-receipt.json","httpStatus":200,"sha256":"02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"},
+      {"path":"/api/nusd/v1/status","httpStatus":200,"sha256":"abc407c26c61db2f549f451449957880a49fc878a17243e61175c784b73be07c"},
+      {"path":"/v2/network/deployment-estimate","httpStatus":200,"sha256":"2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"}
+    ]
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "online": true,
+    "usedForVercelDeployment": true,
+    "temporaryDeploymentWorktreeRemoved": true
+  },
+  "storeSubmission": {
+    "googlePlaySubmitted": false,
+    "appStoreSubmitted": false,
+    "providerReceipt": null
+  },
+  "remainingBlockers": [
+    "git.chatgpt-team.site publication is blocked by publishing identity authentication/permission.",
+    "Apple distribution signing inputs are unset; no signed IPA or App Store receipt exists.",
+    "No connected provider submission action produced a Google Play or App Store receipt."
+  ]
+}
