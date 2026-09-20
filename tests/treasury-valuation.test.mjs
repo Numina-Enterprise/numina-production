@@ -43,6 +43,6 @@ test('an uninitialized treasury still renders without manufacturing a zero provi
     globalThis.fetch=async()=>Response.json({error:'UNAUTHORIZED'},{status:401});
     await renderTreasuryBalances(target,{treasury:{projection:null},nativeValuation:null});
     const text=JSON.stringify(target);
-    assert.match(text,/1 NUSD = 1 USDC = 1 USD/);assert.match(text,/Unavailable/);assert.doesNotMatch(text,/\b0(?:\.00)? USDC\b/);
+    assert.match(text,/1 NUSD = 1 USDC = 1 USD/);assert.match(text,/Unavailable/);assert.doesNotMatch(text,/0 USDC/);
   }finally{globalThis.document=originalDocument;globalThis.fetch=originalFetch;}
 });

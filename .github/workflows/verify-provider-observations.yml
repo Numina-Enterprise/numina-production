@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.github/**'
 
 permissions:
   contents: read
@@ -18,14 +20,14 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: NUMINA
     timeout-minutes: 9
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_PROVIDER_RECORD_PATH: provider-evidence/native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_PROVIDER_RECORD_PATH: provider-evidence/neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_PROVIDER_INGEST_URL: https://numinalabs.xyz/v1/evidence/provider-observation
-      NUMINA_TRUSTED_RELEASE_URL: https://numinalabs.xyz/api/evidence-bind?mode=trusted-production-release-ingest
+      NUMINA_PROVIDER_INGEST_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_ingest_provider_evidence
+      NUMINA_TRUSTED_RELEASE_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_mark_trusted_production_release
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -77,18 +79,18 @@ jobs:
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
-      - name: Build canonical NUMINA-native evidence record
+      - name: Build canonical Neon-ready evidence record
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
         env:
           NUMINA_ARCHIVE_ARTIFACT_NAME: numina-provider-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           NUMINA_ARCHIVE_ARTIFACT_ID: ${{ steps.archive.outputs.artifact-id }}
           NUMINA_ARCHIVE_ARTIFACT_DIGEST: ${{ steps.archive.outputs.artifact-digest }}
         run: node scripts/build-provider-evidence-record.mjs
-      - name: Archive canonical NUMINA-native evidence record
+      - name: Archive canonical Neon-ready evidence record
         if: github.event_name != 'push' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: numina-native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}
+          name: numina-neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.NUMINA_PROVIDER_RECORD_PATH }}
           if-no-files-found: error
           retention-days: 90
