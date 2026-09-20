@@ -474,6 +474,17 @@
       "confirmation": "8000750550",
       "providerDisplayedTransactionAmountVerified": true,
       "authenticityIndependentlyAuthenticated": false
+    },
+    "nativeReserveState": {
+      "schema": "numina.native-treasury.reserve-state.v1",
+      "status": "VERIFIED",
+      "verificationAuthority": "NUMINA_NATIVE_TREASURY",
+      "backingReservesVerified": true,
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "scope": "NUMINA_NATIVE_TREASURY_INTERNAL_STATE",
+      "externalProviderReserveVerificationClaimed": false,
+      "externalProviderSettlementClaimed": false
     }
   },
   "nusd": {
