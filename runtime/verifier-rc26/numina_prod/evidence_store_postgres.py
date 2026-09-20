@@ -24,7 +24,7 @@ class PostgresEvidenceStore:
         self._database_url=database_url
         # Check existing schema. Never create another production evidence store.
         with self._connect() as connection:
-            connection.execute('SELECT record_id,tx_hash,handoff_id,state,artifact_type,artifact_root,artifact_json,created_at,revoked,revocation_json FROM public.numina_evidence_records LIMIT 0')
+            connection.execute('SELECT record_id,source_commit,related_record_id,status,artifact_type,artifact_root,artifact_json,created_at,revoked,revocation_json FROM public.numina_evidence_records LIMIT 0')
             connection.execute('SELECT job_id,tx_hash,handoff_id,request_json,status,attempts,next_attempt_at,expires_at,last_error,result_record_id,created_at,updated_at FROM public.numina_verification_jobs LIMIT 0')
 
     def _connect(self):
@@ -36,7 +36,7 @@ class PostgresEvidenceStore:
     @staticmethod
     def _record(row):
         if row is None:return None
-        return {'record_id':row['record_id'],'tx_hash':row['tx_hash'],'handoff_id':row['handoff_id'],'state':row['state'],'artifact_type':row['artifact_type'],'artifact_root':row['artifact_root'],'artifact':row['artifact_json'],'created_at':row['created_at'],'revoked':bool(row['revoked']),'revocation':row['revocation_json']}
+        return {'record_id':row['record_id'],'tx_hash':row['source_commit'],'handoff_id':row['related_record_id'],'state':row['status'],'artifact_type':row['artifact_type'],'artifact_root':row['artifact_root'],'artifact':row['artifact_json'],'created_at':row['created_at'],'revoked':bool(row['revoked']),'revocation':row['revocation_json']}
 
     @staticmethod
     def _job(row):
@@ -54,16 +54,16 @@ class PostgresEvidenceStore:
             row=c.execute('SELECT * FROM public.numina_evidence_records WHERE record_id=%s',(rid,)).fetchone()
             if row:return self._record(row)
             if tx and state=='VERIFIED':
-                prior=c.execute("SELECT artifact_root FROM public.numina_evidence_records WHERE tx_hash=%s AND state='VERIFIED' AND revoked=false",(tx,)).fetchone()
+                prior=c.execute("SELECT artifact_root FROM public.numina_evidence_records WHERE source_commit=%s AND status='VERIFIED' AND revoked=false",(tx,)).fetchone()
                 if prior and prior['artifact_root']!=root:raise ValueError('CONFLICTING_VERIFIED_SETTLEMENT_FACTS')
-            row=c.execute('INSERT INTO public.numina_evidence_records(record_id,tx_hash,handoff_id,state,artifact_type,artifact_root,artifact_json,created_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *',(rid,tx,handoff_id,state,artifact_type,root,Jsonb(artifact),int(time.time()))).fetchone()
+            row=c.execute('INSERT INTO public.numina_evidence_records(record_id,source_commit,related_record_id,status,artifact_type,artifact_root,artifact_json,created_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *',(rid,tx,handoff_id,state,artifact_type,root,Jsonb(artifact),int(time.time()))).fetchone()
             return self._record(row)
 
     def get_record(self,record_id:str)->dict|None:
         with self._connect() as c:return self._record(c.execute('SELECT * FROM public.numina_evidence_records WHERE record_id=%s',(record_id,)).fetchone())
 
     def records_for_tx(self,tx_hash:str)->list[dict]:
-        with self._connect() as c:return [self._record(row) for row in c.execute('SELECT * FROM public.numina_evidence_records WHERE tx_hash=%s ORDER BY created_at,record_id',(tx_hash.lower(),)).fetchall()]
+        with self._connect() as c:return [self._record(row) for row in c.execute('SELECT * FROM public.numina_evidence_records WHERE source_commit=%s ORDER BY created_at,record_id',(tx_hash.lower(),)).fetchall()]
 
     def revoke(self,*,record_id:str,revocation:dict)->dict:
         with self._connect() as c:
@@ -110,7 +110,7 @@ class PostgresEvidenceStore:
             job=c.execute('SELECT * FROM public.numina_verification_jobs WHERE job_id=%s FOR UPDATE',(jid,)).fetchone()
             if job is None:raise ValueError('VERIFICATION_JOB_NOT_FOUND')
             record=c.execute('SELECT * FROM public.numina_evidence_records WHERE record_id=%s',(record_id,)).fetchone()
-            if not record or record['state']!='VERIFIED' or record['revoked'] or record['tx_hash']!=job['tx_hash'] or record['handoff_id']!=job['handoff_id']:raise ValueError('VERIFIED_JOB_RESULT_REQUIRED')
+            if not record or record['status']!='VERIFIED' or record['revoked'] or record['source_commit']!=job['tx_hash'] or record['related_record_id']!=job['handoff_id']:raise ValueError('VERIFIED_JOB_RESULT_REQUIRED')
             if job['status']=='VERIFIED':
                 if job['result_record_id']!=record_id:raise ValueError('VERIFICATION_JOB_CONFLICT')
                 result=self._job(job)
