@@ -1,0 +1,93 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T03:12:35Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "bd1d6c205bdbbebe9eccc7e84def3146e53edb23",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "queuedRunCountObserved": 125,
+    "inProgressRunCountObserved": 0,
+    "canonicalNuminaQueue": {
+      "workflow": ".github/workflows/numina.yml",
+      "runId": 35485038324,
+      "jobId": 106009736631,
+      "sourceSha": "bd1d6c205bdbbebe9eccc7e84def3146e53edb23",
+      "status": "queued",
+      "conclusion": null,
+      "stepCount": 0
+    },
+    "rerunsPerformedThisObservation": false,
+    "reason": "No runner was allocated to the canonical NUMINA job; no main-branch Actions run was in progress at observation time."
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deployment": {
+      "id": "dpl_2jgQAUbpx87HnuBDkZqSw8bLuqia",
+      "source": "git",
+      "target": "production",
+      "state": "READY",
+      "commitSha": "bd1d6c205bdbbebe9eccc7e84def3146e53edb23",
+      "createdAt": "2026-09-20T02:50:40.454Z",
+      "readyAt": "2026-09-20T02:50:59.687Z",
+      "deploymentUrl": "https://numina-production-1a7qbok9k-skott34-dot.vercel.app",
+      "productionAlias": "https://numina-production.vercel.app"
+    },
+    "productionVerification": {
+      "origin": "https://numina-production.vercel.app",
+      "finalBuild": {
+        "path": "/final-build.json",
+        "status": 200,
+        "schema": "numina.final-build.v1",
+        "manifestStatus": "FINAL",
+        "applicationVersion": "4.0.0"
+      },
+      "deploymentReceipt": {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "status": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      "nusdStatus": {
+        "path": "/api/nusd/v1/status",
+        "status": 200,
+        "schema": "numina.nusd.status.v1"
+      },
+      "deploymentEstimate": {
+        "path": "/v2/network/deployment-estimate",
+        "status": 200,
+        "schema": "numina.deployment-estimate.v1",
+        "statusValue": "FINAL",
+        "productionReady": true
+      }
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false
+  },
+  "mobile": {
+    "androidSigningWorkflow": ".github/workflows/numina-android-release.yml",
+    "iosSigningWorkflow": ".github/workflows/numina-ios-signing.yml",
+    "runnerLabelRequired": "NUMINA",
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub Actions has not allocated a runner to the canonical NUMINA job",
+    "Android production signing requires the NUMINA runner and no signed artifact receipt exists",
+    "iOS distribution signing requires the NUMINA runner and no signed artifact receipt exists",
+    "Store submission remains unclaimed until signed artifacts and a connected provider submission path are both available",
+    "VENGEANCE remote fallback is offline"
+  ]
+}
