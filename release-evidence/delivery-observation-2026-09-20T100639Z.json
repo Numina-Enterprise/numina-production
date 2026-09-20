@@ -1,0 +1,119 @@
+﻿{
+    "schema":  "numina.external-delivery-observation.v1",
+    "identity":  "NUMINA",
+    "observedAt":  "2026-09-20T10:06:39.4878450Z",
+    "sourceRepository":  "skott34-dot/numina-production",
+    "sourceBranch":  "main",
+    "sourceMainSha":  "6d63c31ba70e8c329102a04386309f2b16293536",
+    "status":  "PARTIAL_EXTERNAL_DELIVERY",
+    "githubActions":  {
+                          "runnerAllocationAvailable":  false,
+                          "canonicalRun":  {
+                                               "runId":  35499850566,
+                                               "runAttempt":  3,
+                                               "jobId":  106059995522,
+                                               "workflow":  ".github/workflows/numina.yml",
+                                               "sourceSha":  "6d63c31ba70e8c329102a04386309f2b16293536",
+                                               "status":  "completed",
+                                               "conclusion":  "failure",
+                                               "runnerId":  0,
+                                               "runnerName":  "",
+                                               "executedStepCount":  0
+                                           }
+                      },
+    "vercel":  {
+                   "capacityAvailable":  true,
+                   "deployment":  {
+                                      "id":  "dpl_6d5EUEgVkETDm2AsRcfv2gpd76N1",
+                                      "sourceSha":  "6d63c31ba70e8c329102a04386309f2b16293536",
+                                      "state":  "READY",
+                                      "target":  "production",
+                                      "transportUrl":  "https://numina-production-dnwy9ysnc-numina-167f7fe7.vercel.app",
+                                      "canonicalUrl":  "https://numinalabs.xyz",
+                                      "createdLocal":  "2026-09-20T05:01:07-05:00",
+                                      "applicationBuildId":  "63bf2c0a533eb39426c619b31f0ef64b1ff5f3033f72a8cbfabe5e9925ed18c3",
+                                      "artifactCount":  312
+                                  },
+                   "endpointVerification":  [
+                                                {
+                                                    "path":  "/final-build.json",
+                                                    "httpStatus":  200,
+                                                    "contentType":  "application/json; charset=utf-8",
+                                                    "sha256":  "ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"
+                                                },
+                                                {
+                                                    "path":  "/downloads/nusd/deployment-receipt.json",
+                                                    "httpStatus":  200,
+                                                    "contentType":  "application/json; charset=utf-8",
+                                                    "sha256":  "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"
+                                                },
+                                                {
+                                                    "path":  "/api/nusd/v1/status",
+                                                    "httpStatus":  200,
+                                                    "contentType":  "application/json; charset=utf-8",
+                                                    "sha256":  "12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae"
+                                                },
+                                                {
+                                                    "path":  "/v2/network/deployment-estimate",
+                                                    "httpStatus":  200,
+                                                    "contentType":  "application/json; charset=utf-8",
+                                                    "sha256":  "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"
+                                                }
+                                            ],
+                   "provenanceReceipt":  {
+                                             "path":  "/v1/deployment/provenance",
+                                             "httpStatus":  200,
+                                             "sha256":  "a00762eeca5508ab5c72e4ffca1e1c999d8c237075b9031581dc90c0f93ab33b",
+                                             "artifactType":  "NUMINA_TRANSPORT_OBSERVATION",
+                                             "keyId":  "3a2fe594a7e10458ae89683f",
+                                             "algorithm":  "Ed25519",
+                                             "signature":  "6ma4HSuyKF3P7mIvgdmCPgerjTO51sMIMSobNw5IzGjyPYeqPOd+AMqzAcF5gV8izvo1WY+NNcy3TMg7zcIeCg=="
+                                         }
+               },
+    "remoteFallback":  {
+                           "device":  "VENGEANCE",
+                           "status":  "online",
+                           "used":  true,
+                           "exactSourceSha":  "6d63c31ba70e8c329102a04386309f2b16293536",
+                           "buildSucceeded":  true,
+                           "testGate":  {
+                                            "succeeded":  true,
+                                            "tests":  910,
+                                            "passed":  910,
+                                            "failed":  0
+                                        },
+                           "releaseArtifact":  {
+                                                   "name":  "numina-release-v4.0.0.tar.gz",
+                                                   "bytes":  39718219,
+                                                   "sha256":  "644369103b9427f3d9d4b8622a4a68e445067357d0fa81ee47b6d40d16cab373",
+                                                   "checksumFileSha256":  "0eacc61b5194db770dcaf2d0cf07c754187d20d8518a331bdb50a6485a578279"
+                                               },
+                           "signingIdentityInventedOrRotated":  false
+                       },
+    "nusdDeploymentReceipt":  {
+                                  "path":  "/downloads/nusd/deployment-receipt.json",
+                                  "tokenTransactionHash":  "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+                                  "settlementTransactionHash":  "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+                                  "finality":  "FINAL",
+                                  "externalSettlement":  {
+                                                             "usd":  false,
+                                                             "usdc":  false,
+                                                             "bankReceipt":  null,
+                                                             "providerReceipt":  null
+                                                         }
+                              },
+    "mobile":  {
+                   "androidSignedArtifactProduced":  false,
+                   "iosSignedArtifactProduced":  false,
+                   "googlePlaySubmissionPerformed":  false,
+                   "appStoreSubmissionPerformed":  false,
+                   "providerSubmissionReceipts":  [
+
+                                                  ]
+               },
+    "remainingBlockers":  [
+                              "GitHub-hosted runner allocation remains unavailable; canonical run attempt 3 received runner_id 0 and executed zero steps.",
+                              "Android signing requires the existing configured NUMINA_RELEASE_SIGNING_VAULT; it was not present on VENGEANCE and no signing identity was invented or rotated.",
+                              "iOS signing requires a macOS runner and the existing configured Apple distribution identity; no signed iOS artifact was produced."
+                          ]
+}
