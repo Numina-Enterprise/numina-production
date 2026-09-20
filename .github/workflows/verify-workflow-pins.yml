@@ -31,7 +31,7 @@ jobs:
       - name: Enforce NUMINA runner policy
         run: node scripts/check-runner-policy.mjs
 
-      - name: Require immutable action and reusable-workflow references
+      - name: Require immutable action and reviewed critical-workflow pins
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -39,9 +39,7 @@ jobs:
           import re
 
           workflow_dir = Path('.github/workflows')
-          sha_ref = re.compile(r'^.+@[0-9a-fA-F]{40}          PY
-
-)
+          sha_ref = re.compile(r'^.+@[0-9a-fA-F]{40}$')
           uses_line = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)')
           approved = {
               item['repository']: item['sha'].lower()
@@ -55,9 +53,7 @@ jobs:
               critical = (
                   'secrets.' in text
                   or re.search(r'^\s*pull_request:', text, re.MULTILINE)
-                  or re.search(r'^\s+(?:id-token|attestations):\s*write\s*          PY
-
-, text, re.MULTILINE)
+                  or re.search(r'^\s+(?:id-token|attestations):\s*write\s*$', text, re.MULTILINE)
               )
               for line_number, line in enumerate(text.splitlines(), start=1):
                   match = uses_line.match(line)
@@ -81,4 +77,3 @@ jobs:
 
           print(f'Validated {len(checked)} immutable references and canonical pins on critical workflows.')
           PY
-
