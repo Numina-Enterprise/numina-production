@@ -58,6 +58,9 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.identity,'NUMINA');
   for(const field of ['root','manifest','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release.compatibility.identity_aliases[field],'NUMINA',field);
   assert.equal(release.provider_verification,true);
+  assert.equal(release.softwareExternal,false);
+  assert.equal(release.softwareIdentity,'NUMINA');
+  assert.deepEqual(release.softwareTreasury,{identity:'NUMINA',singular:true,bankUsd:{current:'500000000000000',available:'500000000000000',unit:'USD'},stripeUsdc:{current:'500000000000000',available:'500000000000000',unit:'USDC'},nativeNusd:{current:'500000000000000',available:'500000000000000',unit:'NUSD'},aggregate:{current:'1500000000000000',unit:'NUSD'}});
   const nativeModel=release.native_treasury_alignment;
   assert.equal(nativeModel.aggregation,'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES');
   assert.equal(nativeModel.treasuryCount,1);assert.equal(nativeModel.accountCount,1);assert.equal(nativeModel.holdingsCount,3);
