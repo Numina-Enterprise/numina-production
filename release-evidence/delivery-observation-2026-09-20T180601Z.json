@@ -1,0 +1,94 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T18:06:01Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "6813fb534e56f234b737ed2609997d9e593d864d",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "canonicalRunRetry": {
+      "runId": 35526940217,
+      "runAttempt": 2,
+      "jobId": 106122840601,
+      "workflow": ".github/workflows/numina.yml",
+      "sourceSha": "6813fb534e56f234b737ed2609997d9e593d864d",
+      "status": "completed",
+      "conclusion": "failure",
+      "executedStepCount": 0
+    },
+    "canonicalBuildRerunCompleted": false,
+    "websitePublishWorkflowRerunCompleted": false,
+    "androidSigningWorkflowRerunCompleted": false,
+    "iosSigningWorkflowRerunCompleted": false
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "deployment": {
+      "id": "dpl_59goHscbKEWSGPE9j5RWtS6tmJF3",
+      "buildId": "bld_b1wwy9lje",
+      "sourceSha": "6813fb534e56f234b737ed2609997d9e593d864d",
+      "state": "READY",
+      "target": "production",
+      "transportUrl": "https://numina-production-qjfwo3q52-numina-167f7fe7.vercel.app",
+      "canonicalUrl": "https://numinalabs.xyz",
+      "buildMachine": {
+        "cores": 4,
+        "memoryMb": 8192
+      }
+    },
+    "endpointVerification": [
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "sha256": "ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "sha256": "12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae",
+        "chainId": "962421430",
+        "assetStatus": "verified_deployed_paused"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b",
+        "status": "FINAL",
+        "productionReady": true,
+        "reservesVerified": false,
+        "settlementVerified": false
+      }
+    ]
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "online",
+    "used": true,
+    "freshClonePath": "C:\\Users\\sam\\Documents\\NUMINA-canonical-6813fb5",
+    "exactSourceSha": "6813fb534e56f234b737ed2609997d9e593d864d",
+    "vercelCliAuthenticatedAs": "skott34-dot",
+    "targetVercelTeam": "numina-167f7fe7",
+    "signingIdentityInventedOrRotated": false
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub-hosted runner allocation remains unavailable: canonical NUMINA run 35526940217 attempt 2 failed before any workflow step executed.",
+    "Because hosted runner allocation did not clear, the canonical GitHub build, website publish workflow, Android signing workflow, and iOS signing workflow were not rerun at source SHA 6813fb534e56f234b737ed2609997d9e593d864d.",
+    "No new signed Android or iOS artifact was produced; store submission remains unclaimed and no provider store receipt exists."
+  ]
+}
