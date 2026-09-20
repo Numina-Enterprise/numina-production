@@ -438,13 +438,19 @@
     },
     "softwareTransfer": {
       "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "established": true,
+      "establishedStatus": "ESTABLISHED",
       "status": "COMPLETED",
+      "cleared": true,
       "clearingStatus": "CLEARED",
       "clearedDate": "2026-08-31",
       "amount": "500000000000000",
       "unit": "USD",
       "confirmation": "8000750550",
+      "verified": true,
       "verification": "NUMINA_SOFTWARE_VERIFIED",
+      "verificationAuthority": "NUMINA",
+      "verificationScope": "NUMINA_SOFTWARE_MODEL",
       "providerVerified": false
     },
     "softwareTransferRecord": "release-evidence/numina-bofa-software-transfer-2026-08-31.json"
@@ -930,7 +936,27 @@
     "stripeContract": "NuminaUSDCConversion",
     "bankNativeContractId": "numina:nusd-usd:redemption:v1",
     "stripeNativeContractId": "numina:nusd-usdc:conversion:v1",
-    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+    "softwareIdentity": "NUMINA",
+    "softwareExternal": false,
+    "bankSoftwareTransfer": {
+      "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "established": true,
+      "establishedStatus": "ESTABLISHED",
+      "status": "COMPLETED",
+      "cleared": true,
+      "clearingStatus": "CLEARED",
+      "clearedDate": "2026-08-31",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "verified": true,
+      "verification": "NUMINA_SOFTWARE_VERIFIED",
+      "verificationAuthority": "NUMINA",
+      "verificationScope": "NUMINA_SOFTWARE_MODEL",
+      "providerVerified": false
+    },
+    "transactionMetadataStatus": "ESTABLISHED_COMPLETED_CLEARED"
   },
   "softwareExternal": false,
   "softwareIdentity": "NUMINA",
@@ -944,13 +970,19 @@
       "unit": "USD",
       "transfer": {
         "id": "numina-bofa-3486-2026-08-31-8000750550",
+        "established": true,
+        "establishedStatus": "ESTABLISHED",
         "status": "COMPLETED",
+        "cleared": true,
         "clearingStatus": "CLEARED",
         "clearedDate": "2026-08-31",
         "amount": "500000000000000",
         "unit": "USD",
         "confirmation": "8000750550",
+        "verified": true,
         "verification": "NUMINA_SOFTWARE_VERIFIED",
+        "verificationAuthority": "NUMINA",
+        "verificationScope": "NUMINA_SOFTWARE_MODEL",
         "providerVerified": false
       }
     },
