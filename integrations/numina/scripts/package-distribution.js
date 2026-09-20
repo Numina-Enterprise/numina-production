@@ -59,7 +59,7 @@ const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).sort((a
  const relative=dir+'/'+entry.name;return entry.isDirectory()?walk(relative):[relative];
 });
 const files=[
- 'package.json','.gitignore','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
+ 'package.json','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
  'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
 ].sort();
 const fileManifest={schema:'numina.integration.manifest.v2',...singularIdentities,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',nusdContracts,application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
