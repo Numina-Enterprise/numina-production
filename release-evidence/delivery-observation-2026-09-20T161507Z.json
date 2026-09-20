@@ -1,0 +1,85 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T16:15:07Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "probeRun": {
+      "runId": 35511138853,
+      "runAttempt": 3,
+      "jobId": 106106823689,
+      "workflow": ".github/workflows/verify-provider-observations.yml",
+      "sourceSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
+      "status": "completed",
+      "conclusion": "failure",
+      "executedStepCount": 0
+    }
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "deployment": {
+      "id": "dpl_B8wYKkHyQAbHbJupL8sqmF3A4sCb",
+      "sourceSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
+      "state": "READY",
+      "target": "production",
+      "transportUrl": "https://numina-production-2huri68an-numina-167f7fe7.vercel.app",      "canonicalUrl": "https://numinalabs.xyz",
+      "applicationBuildId": "fe03c6ccbbe594574bf84ad6f30f0252ca328dfbf071e1c0f47bd187ad79a393",
+      "artifactCount": 312
+    },
+    "endpointVerification": [
+      {"path":"/final-build.json","httpStatus":200,"sha256":"ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"},
+      {"path":"/downloads/nusd/deployment-receipt.json","httpStatus":200,"sha256":"02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"},
+      {"path":"/api/nusd/v1/status","httpStatus":200,"sha256":"12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae"},
+      {"path":"/v2/network/deployment-estimate","httpStatus":200,"sha256":"2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"}
+    ],
+    "provenanceReceipt": {
+      "path": "/v1/deployment/provenance",
+      "httpStatus": 200,
+      "sha256": "49fa47a8653e99e96c144085d000027255b89ee5fa082ac8474111511aa798fd",
+      "gitCommitSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
+      "gitCommitRef": "main",
+      "artifactType": "NUMINA_TRANSPORT_OBSERVATION",
+      "keyId": "3a2fe594a7e10458ae89683f",
+      "algorithm": "Ed25519",
+      "signature": "ijMWT9YBO8/2sm6oIGIz1uq33QiLLy0o4Wd16rMsfheFkqasj13mmawpmDEwXEkOn36Y47APFcCTC/VOrNYICg=="
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "online",
+    "used": true,
+    "exactSourceSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
+    "buildSucceeded": true,
+    "applicationBuildId": "80e85b8afb14e720ef01984e75206ad4982b2c74b746807eba6f24453c93a479",    "artifactCount": 312,
+    "testGate": {"succeeded":true,"tests":910,"passed":910,"failed":0},
+    "releaseArtifact": {
+      "name": "numina-release-v4.0.0.tar.gz",
+      "bytes": 39718340,
+      "sha256": "c2f928f5cac20af3472ce1b2a0ee687497b29f27a4866fb8782215bd79627c61",
+      "checksumFileSha256": "28c1b5797dd59bd137577165e0121505b709e68df29ede7c460686e3f8908577"
+    },
+    "signingIdentityInventedOrRotated": false
+  },
+  "nusdDeploymentReceipt": {
+    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "finality": "FINAL",
+    "externalSettlement": {"usd":false,"usdc":false,"bankReceipt":null,"providerReceipt":null}
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub-hosted runner allocation remains unavailable; current-head probe attempt 3 failed before any workflow step executed.",
+    "Android and iOS signing remain unclaimed because the configured hosted workflows could not execute; no signing identity was invented or rotated.",
+    "Store submission remains unclaimed because no newly signed mobile artifact was produced."
+  ]
+}
