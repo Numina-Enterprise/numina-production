@@ -28,7 +28,7 @@ test('website and owner API share the unchanged singular treasury allocation mod
   const bankTransfer=model.softwareBalanceModel.bankUsd.transfer;
   assert.equal(bankTransfer.verification,'NUMINA_AND_LINKED_PROVIDER_VERIFIED');
   assert.equal(bankTransfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION');
-  assert.equal(bankTransfer.providerVerified,true);assert.equal(bankTransfer.providerVerificationSource,'LINKED_BANK_OF_AMERICA_TRANSACTION_FEED');
+  assert.equal(bankTransfer.providerVerified,true);assert.equal(bankTransfer.providerVerificationSource,'NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_TRANSACTION_OBSERVATION');
   assert.equal(bankTransfer.providerTransactionId,'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq');assert.equal(bankTransfer.providerBalanceSnapshotFreshness,'unknown');assert.equal(bankTransfer.providerBalanceSnapshotCurrent,'0');assert.equal(bankTransfer.providerBalanceSnapshotAvailable,'0');assert.equal(bankTransfer.providerAmountMatchesSoftwareModel,false);assert.equal(bankTransfer.providerBalanceMatchesSoftwareModel,false);assert.equal(bankTransfer.externalFundsMovedVerified,false);assert.equal(bankTransfer.externalSettlementVerified,false);
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
     ['500000000000000','USD'],['500000000000000','USDC'],['500000000000000','NUSD']
