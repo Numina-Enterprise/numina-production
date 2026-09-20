@@ -22,6 +22,9 @@ test('GitHub OIDC binds the singular production treasury workflow to Numina repo
     runner_environment:'github-hosted',iat:now-5,nbf:now-5,exp:now+300
   };
   assert.equal(await verifyGithubActionsOidc(tokenFor(claims,privateKey),{now,keys:[jwk]}),true);
+  const deployClaims={...claims,event_name:'push',workflow_ref:'skott34-dot/numina-production/.github/workflows/deploy-nusd-contracts.yml@refs/heads/main'};
+  assert.equal(await verifyGithubActionsOidc(tokenFor(deployClaims,privateKey),{now,keys:[jwk]}),true);
+  assert.equal(await verifyGithubActionsOidc(tokenFor({...claims,workflow_ref:'skott34-dot/numina-production/.github/workflows/other.yml@refs/heads/main'},privateKey),{now,keys:[jwk]}),false);
   assert.equal(await verifyGithubActionsOidc(tokenFor({...claims,repository_id:'1'},privateKey),{now,keys:[jwk]}),false);
   assert.equal(await verifyGithubActionsOidc(tokenFor({...claims,environment:'preview'},privateKey),{now,keys:[jwk]}),false);
 });
