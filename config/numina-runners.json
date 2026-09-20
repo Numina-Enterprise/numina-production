@@ -25,8 +25,10 @@
     "workflowOverrides": {
       "numina-release.yml": "ubuntu-latest",
       "numina.yml": "ubuntu-latest",
-      "verify-provider-observations.yml": "ubuntu-latest"
+      "verify-provider-observations.yml": "ubuntu-latest",
+      "numina-android-release.yml": "ubuntu-latest",
+      "numina-ios-signing.yml": "macos-latest"
     },
-    "scope": "NUMINA remains the singular logical execution identity. The canonical NUMINA, GitHub Release, and provider-verification workflows may use the GitHub-hosted ubuntu-latest substrate while preserved runner registrations remain unchanged."
+    "scope": "NUMINA remains the singular logical execution identity. Canonical build, provider-verification, Android signing, and iOS signing workflows may use GitHub-hosted substrates while signing identities and authorization controls remain unchanged."
   }
 }
