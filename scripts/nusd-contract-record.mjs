@@ -49,7 +49,7 @@ const NATIVE_ACTIVATIONS=Object.freeze({
 
 // Source uses LF UTF-8. Preserve compiler artifact bytes exactly, including the
 // retained token artifact's formatting, so its deployment pin remains valid.
-export function contractDescriptor(specification, sourceInput, artifactInput) {
+export function contractDescriptor(specification, sourceInput, artifactInput, {repositoryRoot='runtime/nusd',downloadRoot='/downloads/contracts',useRecordedState=true}={}) {
   const source = Buffer.from(sourceInput.toString('utf8').replaceAll('\r\n','\n'));
   const artifactBytes = Buffer.from(artifactInput);
   const artifact = JSON.parse(artifactBytes.toString('utf8'));
@@ -63,15 +63,15 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
       Object.values(specification.operations).flat().some(name=>!functions.has(name))) {
     throw Error(`Contract artifact does not match its source and interface: ${specification.name}`);
   }
-  const verifiedDeployment=VERIFIED_DEPLOYMENTS[specification.id]??null;
-  const nativeActivation=NATIVE_ACTIVATIONS[specification.id]??null;
+  const verifiedDeployment=useRecordedState?(VERIFIED_DEPLOYMENTS[specification.id]??null):null;
+  const nativeActivation=useRecordedState?(NATIVE_ACTIVATIONS[specification.id]??null):null;
   const descriptor = {
     id:specification.id, name:specification.name, status:verifiedDeployment?.status??nativeActivation?.status??'DEPLOYMENT_PREPARATION_INITIATED',
-    source:{repository_path:`runtime/nusd/contracts/${specification.name}.sol`,
-      url:`/downloads/contracts/${specification.name}.sol`,sha256:sha256(source),bytes:source.length,
+    source:{repository_path:`${repositoryRoot}/contracts/${specification.name}.sol`,
+      url:`${downloadRoot}/${specification.name}.sol`,sha256:sha256(source),bytes:source.length,
       encoding:'UTF-8',line_endings:'LF'},
-    artifact:{repository_path:`runtime/nusd/artifacts/${specification.name}.json`,
-      url:`/downloads/contracts/${specification.name}.json`,sha256:sha256(artifactBytes),bytes:artifactBytes.length,
+    artifact:{repository_path:`${repositoryRoot}/artifacts/${specification.name}.json`,
+      url:`${downloadRoot}/${specification.name}.json`,sha256:sha256(artifactBytes),bytes:artifactBytes.length,
       encoding:'UTF-8',line_endings:artifactBytes.includes(Buffer.from('\r\n'))?'CRLF':'LF'},
     compiler:{version:artifact.compiler,settings:artifact.compilerSettings},
     implemented_operations:specification.operations,
@@ -90,8 +90,15 @@ export function createNusdContractRecord(read=readFileSync) {
     verified.token?.address!==VERIFIED_DEPLOYMENTS.nusd.contract_address||verified.token.transactionHash!==VERIFIED_DEPLOYMENTS.nusd.transaction_hash||
     BigInt(verified.issuance.amountNusd)*10n**18n!==BigInt(verified.issuance.baseUnits))throw Error('NUSD issuance verification mismatch');
   const entries=specifications.map(specification=>contractDescriptor(specification,
+    read(path.join(root,`runtime/nusd/history/18d/contracts/${specification.name}.sol`)),
+    read(path.join(root,`runtime/nusd/history/18d/artifacts/${specification.name}.json`)),
+    {repositoryRoot:'runtime/nusd/history/18d',downloadRoot:'/downloads/contracts',useRecordedState:true}));
+  const candidateEntries=specifications.map(specification=>contractDescriptor(specification,
     read(path.join(root,`runtime/nusd/contracts/${specification.name}.sol`)),
-    read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`))));
+    read(path.join(root,`runtime/nusd/artifacts/${specification.name}.json`)),
+    {repositoryRoot:'runtime/nusd',downloadRoot:'/downloads/contracts/candidate',useRecordedState:false}));
+  const candidateTokenSource=candidateEntries.find(entry=>entry.descriptor.id==='nusd').source.toString('utf8');
+  if(!/function decimals\(\) public pure override returns \(uint8\) \{ return 6; \}/.test(candidateTokenSource))throw Error('Current NUSD candidate must use six decimals');
   // Keep the published source and artifact bound to the finalized deployed token.
   // UI precision must never select an old review artifact or rewrite chain evidence.
   const receipt=JSON.parse(read(path.join(root,'runtime/nusd/deployment-receipt.json')));
@@ -129,10 +136,11 @@ export function createNusdContractRecord(read=readFileSync) {
     mintReceipt.chainReceipt?.blockNumberDecimal!==receipt.token.receipt.blockNumberDecimal||
     mintReceipt.chainReceipt?.contractAddress?.toLowerCase()!==receipt.token.receipt.contractAddress?.toLowerCase()||
     mintReceipt.chainReceipt?.status!=='0x1')throw Error('NUSD mint receipt binding mismatch');
-  return {entries,mintReceipt,record:{
+  return {entries,candidateEntries,mintReceipt,record:{
     schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
+    contract_candidate:{schema:'numina.nusd.contract-candidate-set.v1',status:'compiled_not_deployed',decimals:6,initialSupplyNusd:'1500000000000000',initialSupplyBaseUnits:'1500000000000000000000',contracts:candidateEntries.map(entry=>entry.descriptor)},
     mint_receipt:{schema:mintReceipt.schema,status:mintReceipt.status,path:'/downloads/nusd/mint-receipt.json',transactionHash:mintReceipt.transactionHash,tokenAddress:mintReceipt.tokenAddress,blockNumber:mintReceipt.blockNumber,receiptStatus:mintReceipt.receiptStatus,finalConfirmations:mintReceipt.finalConfirmations,amountNusd:mintReceipt.amountNusd,baseUnits:mintReceipt.baseUnits,burnedNusd:mintReceipt.burnedNusd},
     issuance:{...verified.issuance,verifiedAt:verified.verifiedAt,transactionHash:verified.token.transactionHash,record:'/downloads/nusd/deployment-verification.json',mintReceipt:'/downloads/nusd/mint-receipt.json',mintReceiptSchema:mintReceipt.schema,chainReceiptStatus:mintReceipt.receiptStatus,chainReceiptBlock:mintReceipt.blockNumber,chainReceiptConfirmations:mintReceipt.finalConfirmations,currentOperationalState:'ACTIVE',currentPaused:false,historicalDeploymentSnapshotPaused:verified.issuance?.paused===true,mintedNusd:'1500000000000000',burnedNusd:'0'},
     native_activation:{provider:'NUMINA',status:'ACTIVE',contracts_active:true,backing_attestation_id:'numina:treasury:backing:2026-09-19:v1',bank_usd:{location:'Bank of America Savings 3486',value:'500000000000000',unit:'USD',nusdEquivalent:'500000000000000',ratio:'1:1',verified:true,contract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1'},stripe_usdc:{location:'Stripe USDC Address',value:'500000000000000',unit:'USDC',nusdEquivalent:'500000000000000',ratio:'1:1',verified:true,contract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',address:'0x736bd8f274dce00a8bb374edd85df0d2e631018e'},native_nusd:{location:'NUMINA Native Treasury',value:'500000000000000',unit:'NUSD'}},
@@ -142,11 +150,16 @@ export function createNusdContractRecord(read=readFileSync) {
 }
 
 export function writeNusdContractRecord() {
-  const {entries,mintReceipt,record}=createNusdContractRecord();
+  const {entries,candidateEntries,mintReceipt,record}=createNusdContractRecord();
   const destination=path.join(root,'docs/contracts');mkdirSync(destination,{recursive:true});
+  const candidateDestination=path.join(destination,'candidate');mkdirSync(candidateDestination,{recursive:true});
   for(const {descriptor,source,artifactBytes} of entries){
     writeFileSync(path.join(destination,descriptor.name+'.sol'),source);
     writeFileSync(path.join(destination,descriptor.name+'.json'),artifactBytes);
+  }
+  for(const {descriptor,source,artifactBytes} of candidateEntries){
+    writeFileSync(path.join(candidateDestination,descriptor.name+'.sol'),source);
+    writeFileSync(path.join(candidateDestination,descriptor.name+'.json'),artifactBytes);
   }
   const nusdDestination=path.join(root,'docs/nusd');mkdirSync(nusdDestination,{recursive:true});
   writeFileSync(path.join(nusdDestination,'mint-receipt.json'),JSON.stringify(mintReceipt,null,2)+'\n');

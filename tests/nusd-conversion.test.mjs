@@ -9,7 +9,7 @@ import {loadTokenArtifact} from '../runtime/nusd/scripts/token-artifact.mjs';
 const read=p=>fs.readFileSync(new URL('../runtime/nusd/'+p,import.meta.url),'utf8');
 const token=loadTokenArtifact(),usdcConversion=JSON.parse(read('artifacts/NuminaUSDCConversion.json')),
   usdRedemption=JSON.parse(read('artifacts/NuminaUSDRedemption.json'));
-const NUSD=1_000_000_000_000_000_000n,USDC=1_000_000n,cap=500_000_000_000_000n*NUSD;
+const NUSD=1_000_000n,USDC=1_000_000n,cap=500_000_000_000_000n*NUSD;
 const sent=async p=>(await p).wait();
 const mock=compileSource('TestReserve.sol',`// SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.37;
@@ -60,11 +60,11 @@ test('conversion artifacts reproduce exact reviewed source and deploy below the 
  }
 });
 
-test('USDC conversion exchanges 18-decimal NUSD and 6-decimal USDC at exact 1:1 whole-unit parity',async t=>{
+test('USDC conversion exchanges 6-decimal NUSD and 6-decimal USDC at exact 1:1 whole-unit parity',async t=>{
  const f=await fixture(t);await f.fund();await f.enable();const v=await f.vault.getAddress(),supply=await f.nusd.totalSupply();
  assert.equal(await f.vault.quote(true,12n*NUSD),12n*USDC);
  assert.equal(await f.vault.quote(false,2n*USDC),2n*NUSD);
- await assert.rejects(f.vault.quote(true,12n*NUSD+1n));
+ assert.equal(await f.vault.quote(true,12n*NUSD+1n),12n*NUSD+1n);
  await sent(f.vault.connect(f.holder).convert(id('swap'),true,12n*NUSD,f.a[5]));
  assert.equal(await f.usdc.balanceOf(f.a[5]),12n*USDC);assert.equal(await f.nusd.balanceOf(v),12n*NUSD);
  const retry=await sent(f.vault.connect(f.holder).convert(id('swap'),true,12n*NUSD,f.a[5]));assert.equal(retry.logs.length,0);
@@ -127,7 +127,7 @@ test('token callback cannot reenter a conversion even when the token address has
 test('USD requests preserve exact cents including 500T arithmetic, and cancellable claims survive pause and eligibility revocation',async t=>{
  const f=await fixture(t);await f.enable();
  assert.equal(await f.escrow.quoteUsdCents(cap),50_000_000_000_000_000n);
- for(const amount of [0n,1n,9_999_999_999_999_999n,10_000_000_000_000_001n])await assert.rejects(f.escrow.quoteUsdCents(amount));
+ for(const amount of [0n,1n,9_999n,10_001n])await assert.rejects(f.escrow.quoteUsdCents(amount));
  await f.request();assert.equal(await f.escrow.totalEscrowedNusd(),10n*NUSD);
  const retry=await f.request();assert.equal(retry.logs.length,0);
  await assert.rejects(f.escrow.connect(f.holder).requestRedemption.staticCall(id('claim'),11n*NUSD,id('salted-private-bank-instruction-reference')));
@@ -196,8 +196,8 @@ test('the same NUSD cannot fund both USD escrow and USDC conversion',async t=>{
  await f.begin('usd');await f.attest({name:'usd',cents:6000n});assert.equal(await f.nusd.totalSupply(),40n*NUSD);
 });
 
-test('an 18-decimal token that falsely reports a burn cannot complete a USD paid attestation',async t=>{
- const f=await fixture(t),falseBurn=await f.deploy(mock,[18]);
+test('a six-decimal token that falsely reports a burn cannot complete a USD paid attestation',async t=>{
+ const f=await fixture(t),falseBurn=await f.deploy(mock,[6]);
  await sent(falseBurn.seed(f.a[4],NUSD));
  const fake=await f.deploy(usdRedemption,[await falseBurn.getAddress(),...f.a.slice(0,4),0]);
  await sent(fake.grantRole(await fake.HOLDER_ROLE(),f.a[4]));await sent(fake.unpause());
