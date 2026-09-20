@@ -36,6 +36,29 @@ BEGIN
     RAISE EXCEPTION 'numina_app_runtime has unexpected role memberships';
   END IF;
 
+  IF EXISTS (
+    SELECT 1
+    FROM pg_auth_members m
+    JOIN pg_roles member_role ON member_role.oid=m.member
+    JOIN pg_roles parent_role ON parent_role.oid=m.roleid
+    JOIN pg_roles grantor_role ON grantor_role.oid=m.grantor
+    WHERE parent_role.rolname='numina_app_runtime'
+      AND NOT (
+        member_role.rolname='numina_owner'
+        AND grantor_role.rolname='cloud_admin'
+        AND m.admin_option
+        AND NOT COALESCE(m.inherit_option,true)
+        AND NOT COALESCE(m.set_option,true)
+      )
+  ) THEN
+    RAISE EXCEPTION 'numina_app_runtime has unexpected usable or non-owner membership grants';
+  END IF;
+
+  IF pg_has_role('numina_owner','numina_app_runtime','USAGE')
+     OR pg_has_role('numina_owner','numina_app_runtime','SET') THEN
+    RAISE EXCEPTION 'numina_owner can unexpectedly inherit or SET ROLE numina_app_runtime';
+  END IF;
+
   IF NOT has_database_privilege('numina_app_runtime', current_database(), 'CONNECT') THEN
     RAISE EXCEPTION 'numina_app_runtime lost database CONNECT';
   END IF;
@@ -104,6 +127,16 @@ SELECT jsonb_build_object(
   'runtime_role','numina_app_runtime',
   'staged_no_login',NOT (SELECT rolcanlogin FROM pg_roles WHERE rolname='numina_app_runtime'),
   'inherits_neon_superuser',pg_has_role('numina_app_runtime','neon_superuser','member'),
+  'administrative_owner_membership_only',NOT EXISTS (
+    SELECT 1 FROM pg_auth_members m
+    JOIN pg_roles member_role ON member_role.oid=m.member
+    JOIN pg_roles parent_role ON parent_role.oid=m.roleid
+    JOIN pg_roles grantor_role ON grantor_role.oid=m.grantor
+    WHERE parent_role.rolname='numina_app_runtime'
+      AND NOT (member_role.rolname='numina_owner' AND grantor_role.rolname='cloud_admin'
+               AND m.admin_option AND NOT COALESCE(m.inherit_option,true)
+               AND NOT COALESCE(m.set_option,true))
+  ),
   'evidence_table_write',true,
   'verification_jobs_write',true,
   'public_evidence_read_only',true,
