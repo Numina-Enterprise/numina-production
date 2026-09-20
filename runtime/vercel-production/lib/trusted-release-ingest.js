@@ -2,6 +2,7 @@
 
 const crypto=require('crypto');
 const {verifyGithubOidc}=require('./provider-evidence-ingest');
+const {callEvidenceRpc}=require('./neon-evidence-rpc');
 
 function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value&&typeof value==='object'){const out={};for(const key of Object.keys(value).sort())out[key]=sorted(value[key]);return out;}return value;}
 const canonical=value=>Buffer.from(JSON.stringify(sorted(value)),'utf8');
@@ -40,21 +41,19 @@ function validateTrustedRelease(manifest,claims){
   return {sourceCommit:artifact.source_commit,status:manifest.status,deploymentId:artifact.transport.observation.deployment_id??null,provider,assertions};
 }
 
-async function durableCommit({claims,manifest,verified}){
-  const now=Date.now(),jobId=`trusted-production-release:${manifest.record_id}`;
-  const request={schema:'numina.durable-evidence.commit.v1',root:'NUMINA',manifest:'NUMINA',storage_compatibility:{legacy_state_column:true,role:'status_encoding_only'},operation:'WRITE_COMMIT_READ_BACK',
-    job:{job_id:jobId,tx_hash:verified.sourceCommit,handoff_id:manifest.record_id,request_json:{source:'github-actions-oidc',repository:claims.repository,workflow_run_id:Number(claims.run_id),run_attempt:Number(claims.run_attempt),type:'trusted-production-release'},status:verified.status,attempts:1,next_attempt_at:now,expires_at:now,result_record_id:manifest.record_id,created_at:now,updated_at:now},
-    evidence:{record_id:manifest.record_id,tx_hash:verified.sourceCommit,handoff_id:manifest.record_id,state:verified.status,artifact_type:manifest.artifact_type,artifact_root:manifest.artifact_root,artifact_json:manifest.artifact_json,created_at:manifest.created_at,revoked:false}};
-  const response=await fetch(requiredEnv('NUMINA_DURABLE_EVIDENCE_URL'),{method:'POST',headers:{authorization:`Bearer ${requiredEnv('NUMINA_DURABLE_EVIDENCE_TOKEN')}`,'content-type':'application/json',accept:'application/json'},body:JSON.stringify(request),redirect:'error',signal:AbortSignal.timeout(10000)});
-  if(!response.ok)throw new Error(`DURABLE_EVIDENCE_HTTP_${response.status}`);
-  const result=await response.json();
+async function durableCommit({token,manifest,verified}){
+  const result=await callEvidenceRpc({token,rpc:'numina_mark_trusted_production_release',manifest});
   assert(result?.committed===true&&result?.read_back===true&&result?.record_id===manifest.record_id&&result?.artifact_root===manifest.artifact_root,'DURABLE_EVIDENCE_COMMIT_NOT_PROVEN');
-  assert(root(result?.artifact_json)===manifest.artifact_root&&sameJson(result.artifact_json,manifest.artifact_json),'DURABLE_EVIDENCE_READBACK_MISMATCH');
+  assert(result.git_commit_sha===verified.sourceCommit,'DURABLE_EVIDENCE_SOURCE_COMMIT_MISMATCH');
+  assert(result.deployment_id===verified.deploymentId,'DURABLE_EVIDENCE_DEPLOYMENT_MISMATCH');
+  assert(result.provider_evidence_record_id===verified.provider.record_id&&result.provider_artifact_root===verified.provider.artifact_root&&result.archive_digest===verified.provider.archive_digest,'DURABLE_EVIDENCE_PROVIDER_BINDING_MISMATCH');
+  assert(result.provider_status===verified.assertions.provider_status&&result.circle_message===verified.assertions.circle_message&&result.arc_chain_id===verified.assertions.arc_chain_id,'DURABLE_EVIDENCE_PROVIDER_STATUS_MISMATCH');
+  assert(result.credentialed===false&&result.partnership_status==='asserted'&&result.external_execution_performed===false,'DURABLE_EVIDENCE_PROVIDER_BOUNDARY_MISMATCH');
 }
 
 async function persistTrustedProductionRelease({token,manifest}){
   const claims=await verifyGithubOidc(token),verified=validateTrustedRelease(manifest,claims);
-  await durableCommit({claims,manifest,verified});
+  await durableCommit({token,manifest,verified});
   return {committed:true,read_back:true,root:'NUMINA',manifest:'NUMINA',record_id:manifest.record_id,status:verified.status,artifact_root:manifest.artifact_root,git_commit_sha:verified.sourceCommit,deployment_id:verified.deploymentId,provider_evidence_record_id:verified.provider.record_id,provider_artifact_root:verified.provider.artifact_root,archive_digest:verified.provider.archive_digest,provider_status:verified.assertions.provider_status,circle_message:verified.assertions.circle_message,arc_chain_id:verified.assertions.arc_chain_id,credentialed:false,partnership_status:'asserted',external_execution_performed:false,execution_authorization_bounded:true,live_submission_enabled:true,live_submission_provider:'arc',owner_authorization_required:true,pre_signed_payload_required:true};
 }
 
