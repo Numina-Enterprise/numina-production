@@ -42,5 +42,13 @@
   "builder_workflow_commit": null,
   "hosted_run": null,
   "provenance_identity": "NUMINA",
-  "canonical_repository": "skott34-dot/numina-production"
+  "canonical_repository": "skott34-dot/numina-production",
+  "reference_policy": {
+    "external_actions": "full_40_character_commit_sha_required",
+    "external_reusable_workflows": "full_40_character_commit_sha_required",
+    "local_reusable_workflows": "same_commit_path_only",
+    "hosted_linux_runner": "ubuntu-24.04",
+    "floating_ubuntu_latest": "denied"
+  },
+  "reusable_workflows": []
 }
