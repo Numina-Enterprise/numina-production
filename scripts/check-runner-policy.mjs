@@ -19,6 +19,7 @@ if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner pl
 if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
 const executionTargets = policy.executionTargets;
 const overrides = executionTargets?.workflowOverrides || {};
+const targetSets = executionTargets?.workflowTargetSets || {};
 if (executionTargets?.default !== policy.runnerTarget) failures.push('Default execution target must remain NUMINA');
 const usedOverrides = new Set();
 
@@ -28,14 +29,20 @@ for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(nam
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
+  const expectedSet = Object.hasOwn(targetSets,name) ? targetSets[name] : null;
   const expectedTarget = Object.hasOwn(overrides, name) ? overrides[name] : executionTargets?.default;
   if (Object.hasOwn(overrides, name) && targets.length) usedOverrides.add(name);
-  if (!['NUMINA', 'ubuntu-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
-  for (const target of targets) {
-    if (target !== expectedTarget) failures.push(name + ' runner target must match its recorded execution target ' + expectedTarget + ', got ' + JSON.stringify(target));
+  if (expectedSet) {
+    for (const expected of expectedSet) if (!['NUMINA','ubuntu-latest','ubuntu-24.04','macos-latest'].includes(expected)) failures.push(name + ' has an unsupported execution target');
+    const actualSorted=[...targets].sort(), expectedSorted=[...expectedSet].sort();
+    if (JSON.stringify(actualSorted)!==JSON.stringify(expectedSorted)) failures.push(name + ' runner targets must match recorded target set ' + JSON.stringify(expectedSet) + ', got ' + JSON.stringify(targets));
+  } else {
+    if (!['NUMINA','ubuntu-latest','ubuntu-24.04','macos-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
+    for (const target of targets) if (target !== expectedTarget) failures.push(name + ' runner target must match its recorded execution target ' + expectedTarget + ', got ' + JSON.stringify(target));
   }
 }
 for (const name of Object.keys(overrides)) if (!usedOverrides.has(name)) failures.push('Execution override has no preserved workflow job: ' + name);
+for (const name of Object.keys(targetSets)) if (!readdirSync(workflowsDir).includes(name)) failures.push('Execution target set has no preserved workflow: ' + name);
 
 if (declarations < policy.preservedRunnerCount) {
   failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);

@@ -10,7 +10,7 @@ const providerWorkflow=()=>readFileSync(new URL('verify-provider-observations.ym
 
 test('CI runner checker accepts the preserved execution substrates and singular NUMINA identity',()=>{
   const result=execFileSync(process.execPath,['scripts/check-runner-policy.mjs'],{cwd:fileURLToPath(root),encoding:'utf8'});
-  assert.match(result,/NUMINA runners preserved: 27/);
+  assert.match(result,/NUMINA runners preserved: 32/);
 });
 
 test('all external workflow dependencies satisfy the immutable action policy',()=>{
