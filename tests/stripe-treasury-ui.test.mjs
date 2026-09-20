@@ -100,7 +100,7 @@ for(const status of [401,403])test('Numina route HTTP '+status+' still clears ow
 test('Stripe Treasury renders confirmed zero balances separately from an omitted currency',async()=>{
  const fixture=stripeFixture();fixture.balances.inbound_pending.usdc=null;
  const h=harness(async()=>response(fixture));
- try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Transfers from Numina'],'Not connected');assert.equal(rows['NUSD settlement'],'Not connected');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Balances retrieved from Stripe/);}finally{h.close();}
+ try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Software external'],'No');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Balances retrieved from Stripe/);}finally{h.close();}
 });
 
 test('Stripe Treasury connection failure never substitutes zero or retains an old balance link',async()=>{
