@@ -137,11 +137,6 @@
   },
   "files": [
     {
-      "path": ".gitignore",
-      "bytes": 52,
-      "sha256": "bc7cec8a39b57bf810be25f3f527b61cc90a2f8a7fe787ad4487d2fa9c133d22"
-    },
-    {
       "path": "API-CONTRACT.md",
       "bytes": 12442,
       "sha256": "1a873cf2f0c5891614cc305b6e804e2539abc34dc18f0291e26beb116c6ee306"
@@ -204,7 +199,7 @@
     {
       "path": "distribution.json",
       "bytes": 9474,
-      "sha256": "c78185aaf6456074ffa8db39e5da566c1da7064a0b2c3eeb0ba31e82e629417f"
+      "sha256": "0254c0af9720585b2004940625e77a1c1f26bd15d2ed7252791a5f1090e9878c"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -348,8 +343,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 9256,
-      "sha256": "e6ae345615fc62135b023779da6eec631fc739979bb3b551e3d894f375ba2f9a"
+      "bytes": 9243,
+      "sha256": "5d3606877a27dc2d86cea47c26f0cfc2812c274644b40ffa58c743c287640572"
     },
     {
       "path": "src/client.js",
@@ -398,8 +393,8 @@
     },
     {
       "path": "src/treasury-proof.js",
-      "bytes": 31009,
-      "sha256": "62936c7b7cb15eea767071a8130ade95db81ea406f0dd0842ff71976a64e2761"
+      "bytes": 31080,
+      "sha256": "9212bd15a0e61aa0323efb0ba259187abb210d58d46bcddb5b3ba255d7ae4da3"
     },
     {
       "path": "src/treasury-valuation.js",
@@ -409,7 +404,7 @@
     {
       "path": "verification.json",
       "bytes": 6391,
-      "sha256": "6df5e1ce6633f2a6e0c9f2bcf8d9c23cb52a053262e23ded6f139f4f15ad1c38"
+      "sha256": "d11637c99c15ab7937c42febd64c764058363485c5cd558190324433af196a15"
     }
   ]
 }
