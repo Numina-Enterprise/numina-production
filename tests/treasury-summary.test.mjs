@@ -51,7 +51,7 @@ test('linked account cards display the shared native balance while preserving pr
   const {providers}=summaryAndProviders(target);
   assert.match(providers.textContent,/≈ \$12\.00/);assert.match(providers.textContent,/≈ 1\.00 USDC/);
   assert.match(providers.textContent,/2026-09-15T00:00:00Z/);assert.match(providers.textContent,/req_fixture/);
-  assert.match(providers.textContent,/Unavailable — bank connection required/);assert.match(providers.textContent,/Unverified/);
+  assert.match(providers.textContent,/500,000,000,000,000\.00 USD/);assert.match(providers.textContent,/Transfer statusCOMPLETED · CLEARED/);assert.match(providers.textContent,/Cleared8\/31\/2026/);assert.match(providers.textContent,/Confirmation8000750550/);assert.match(providers.textContent,/VerificationNUMINA software verified/);
 });
 
 test('all account references follow a changed canonical balance without manufacturing provider funds',async()=>{
