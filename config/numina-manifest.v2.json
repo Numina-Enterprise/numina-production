@@ -136,6 +136,28 @@
         "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
         "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
       }
+    },
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "treasuryIdentity": "NUMINA",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "componentsAreSeparateTreasuries": false,
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "componentRoleValue": "500000000000000",
+    "componentUnits": [
+      "USD",
+      "USDC",
+      "NUSD"
+    ],
+    "componentValues": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000"
     }
   }
 }
