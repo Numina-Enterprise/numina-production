@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='0e252e6b80779f1dc2ef0c2dd50dfb236b080023';
+  const FINAL_BUILD_MANIFEST_BLOB='7b17055cb2711c624b803c3c6dee5c06bf423085';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -56,6 +56,19 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.verifiedModeledValue,NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue);
   assert.equal(finalBuild.treasury.verificationScope,'NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE');
   assert.equal(finalBuild.treasury.verifiedModeledValueScope,'INTERNAL_NUMINA_MODEL_ONLY');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.established,true);
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.establishedStatus,'ESTABLISHED');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.status,'COMPLETED');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.cleared,true);
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.clearingStatus,'CLEARED');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.clearedDate,'2026-08-31');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.amount,'500000000000000');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.confirmation,'8000750550');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verified,true);
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verification,'NUMINA_SOFTWARE_VERIFIED');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationAuthority,'NUMINA');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationScope,'NUMINA_SOFTWARE_MODEL');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerVerified,false);
   assert.equal(finalBuild.treasury.githubAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
   assert.equal(finalBuild.treasury.githubAlignment.externalProviderBalancesAsserted,false);
   assert.equal(finalBuild.treasury.singular,true);
