@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='85ff7fab70a60a11aa7af20162d249185fd8084a';
+  const FINAL_BUILD_MANIFEST_BLOB='b9992830aef13fd553fd224e0b65e18d43e33f47';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
