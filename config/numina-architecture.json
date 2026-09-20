@@ -59,6 +59,17 @@
       "USDC": "500000000000000",
       "NUSD": "500000000000000",
       "aggregateNUSD": "1500000000000000"
+    },
+    "software_transfer": {
+      "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "status": "COMPLETED",
+      "clearing_status": "CLEARED",
+      "cleared_date": "2026-08-31",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "verification": "NUMINA_SOFTWARE_VERIFIED",
+      "provider_verified": false
     }
   },
   "mint_event": {

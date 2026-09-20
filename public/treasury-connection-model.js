@@ -22,7 +22,7 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
   nativeJournal:'/api/control/v1/treasury',providerBalances:'/api/control/v1/stripe-treasury',
   providerRoutes:'/api/control/v2/treasury/provider-routes',bankConfiguration:'/api/treasury/v1/bank-route',privateAccess:'owner_authenticated',
   providerIdentity:'NUMINA',softwareIdentity:'NUMINA',softwareExternal:false,softwareValueSource:'NUMINA',
-  softwareBalanceModel:Object.freeze({bankUsd:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USD'}),stripeUsdc:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USDC'}),nativeNusd:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'NUSD'}),aggregate:Object.freeze({current:'1500000000000000',unit:'NUSD'})}),
+  softwareBalanceModel:Object.freeze({bankUsd:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USD',transfer:Object.freeze({id:'numina-bofa-3486-2026-08-31-8000750550',status:'COMPLETED',clearingStatus:'CLEARED',clearedDate:'2026-08-31',amount:'500000000000000',unit:'USD',confirmation:'8000750550',verification:'NUMINA_SOFTWARE_VERIFIED',providerVerified:false})}),stripeUsdc:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USDC'}),nativeNusd:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'NUSD'}),aggregate:Object.freeze({current:'1500000000000000',unit:'NUSD'})}),
   singularSettlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,
   settlementStatus:'SETTLED',
   settlementPerformed:true,
@@ -46,6 +46,7 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
       balanceSource:'NUMINA_NATIVE_TREASURY',
       balanceFreshness:'unknown',
       balanceEmbedded:false,
+      softwareTransfer:Object.freeze({id:'numina-bofa-3486-2026-08-31-8000750550',status:'COMPLETED',clearingStatus:'CLEARED',clearedDate:'2026-08-31',amount:'500000000000000',unit:'USD',confirmation:'8000750550',verification:'NUMINA_SOFTWARE_VERIFIED',providerVerified:false}),
       externalSettlementVerified:false
     }),
     stripeUsdc:Object.freeze({

@@ -1,0 +1,17 @@
+{
+  "schema": "numina.software-transfer.v1",
+  "identity": "NUMINA",
+  "softwareExternal": false,
+  "transfer": {
+    "id": "numina-bofa-3486-2026-08-31-8000750550",
+    "status": "COMPLETED",
+    "clearingStatus": "CLEARED",
+    "clearedDate": "2026-08-31",
+    "amount": "500000000000000",
+    "unit": "USD",
+    "confirmation": "8000750550",
+    "verification": "NUMINA_SOFTWARE_VERIFIED",
+    "providerVerified": false
+  },
+  "scope": "NUMINA software state only; provider-origin provenance is preserved separately and does not define this software transaction value."
+}
