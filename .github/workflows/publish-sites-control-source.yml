@@ -23,7 +23,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: numina-singular-build
+  group: numina-singular-build-ubuntu24
   cancel-in-progress: false
 
 jobs:
