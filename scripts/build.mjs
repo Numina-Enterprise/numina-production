@@ -1,4 +1,4 @@
-// Delivery-trigger marker: canonical release evidence refreshed 2026-09-19T13:50Z.
+// Delivery-trigger marker: downstream finance mutation synchronized 2026-09-20T03:52Z.
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
