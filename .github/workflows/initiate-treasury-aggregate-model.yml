@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/initiate-treasury-aggregate-model.yml'
+      - 'release-evidence/treasury-write-dispatch.json'
 
 permissions:
   contents: read
