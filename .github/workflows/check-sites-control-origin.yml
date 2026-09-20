@@ -49,6 +49,7 @@ jobs:
           },null,2));
           NODE
       - name: Read canonical treasury from Sites Worker
+        if: always()
         shell: bash
         run: |
           node --input-type=module <<'NODE'
