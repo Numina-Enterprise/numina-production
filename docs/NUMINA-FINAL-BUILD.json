@@ -792,7 +792,7 @@
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
-    "lastAlignment": "NUMINA_NATIVE_TREASURY_SYNC_ALL",
+    "lastAlignment": "NUMINA_BOFA_3486_DOWNSTREAM_RESYNC_REQUESTED",
     "externalDeliveryVerified": false,
     "repository": "skott34-dot/numina-production",
     "branch": "main",
@@ -1025,6 +1025,17 @@
         "providerConfirmation": "8000750550",
         "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
         "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
+      },
+      "downstreamMutation": {
+        "schema": "numina.finance.downstream-mutation.v1",
+        "status": "REQUESTED",
+        "accountLast4": "3486",
+        "provider": "Bank of America",
+        "officialName": "Business Advantage Sav",
+        "action": "FULL_LINKED_ACCOUNT_RESYNC",
+        "requestedAt": "2026-09-20T03:41:11Z",
+        "providerWebsiteMutationClaimed": false,
+        "scope": "NUMINA_SOFTWARE_AND_CONNECTED_FINANCE_LAYER"
       }
     },
     "stripeUsdc": {
