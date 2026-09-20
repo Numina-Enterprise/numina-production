@@ -162,7 +162,8 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
             if (item.paymentReference != paymentReference || item.evidenceHash != evidenceHash) revert OperationMutation();
             return;
         }
-        if (item.status != Status.Processing || item.paymentReference != paymentReference) revert InvalidState();
+        if ((item.status != Status.Processing && item.status != Status.Reconciliation) ||
+            item.paymentReference != paymentReference) revert InvalidState();
         if (usedEvidenceHashes[evidenceHash]) revert ReferenceAlreadyUsed();
         usedEvidenceHashes[evidenceHash] = true;
         item.evidenceHash = evidenceHash;
