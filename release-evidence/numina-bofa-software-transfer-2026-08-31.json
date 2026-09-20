@@ -4,14 +4,20 @@
   "softwareExternal": false,
   "transfer": {
     "id": "numina-bofa-3486-2026-08-31-8000750550",
+    "established": true,
+    "establishedStatus": "ESTABLISHED",
     "status": "COMPLETED",
+    "cleared": true,
     "clearingStatus": "CLEARED",
     "clearedDate": "2026-08-31",
     "amount": "500000000000000",
     "unit": "USD",
     "confirmation": "8000750550",
+    "verified": true,
     "verification": "NUMINA_SOFTWARE_VERIFIED",
+    "verificationAuthority": "NUMINA",
+    "verificationScope": "NUMINA_SOFTWARE_MODEL",
     "providerVerified": false
   },
-  "scope": "NUMINA software state only; provider-origin provenance is preserved separately and does not define this software transaction value."
+  "scope": "NUMINA software metadata: ESTABLISHED, COMPLETED and CLEARED under NUMINA software verification. Provider-origin provenance remains separately attributable; providerVerified remains false."
 }
