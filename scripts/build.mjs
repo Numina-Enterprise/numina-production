@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
 const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='7b17055cb2711c624b803c3c6dee5c06bf423085';
+const FINAL_BUILD_MANIFEST_BLOB='b414a6c4933d1174739dbf23eee3a7a79d7b347c';
 const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
