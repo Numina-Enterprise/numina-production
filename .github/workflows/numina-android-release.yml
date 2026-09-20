@@ -21,15 +21,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
       - name: Verify NUMINA authorization
         if: github.event_name == 'workflow_dispatch'
         run: test "${{ inputs.numina_authorization }}" = "NUMINA"
       - name: Verify one-time repository signing authorization
         if: github.event_name == 'push'
         run: node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('release-evidence/native-signing-trigger-2026-09-20.json','utf8'));if(x.schema!=='numina.native-signing-trigger.v1'||x.identity!=='NUMINA'||x.authorization!=='NUMINA'||x.oneTime!==true||x.rotateSigningIdentity!==false||x.storeSubmissionAuthorized!==false||x.signingIdentityPolicy!=='USE_EXISTING_CONFIGURED_IDENTITIES_ONLY')process.exit(1);"
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: temurin

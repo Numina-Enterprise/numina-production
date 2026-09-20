@@ -8,7 +8,7 @@ import {AccessControlDefaultAdminRules} from "@openzeppelin/contracts/access/ext
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-/// @notice Fixed 1:1 whole-unit exchange of existing 18-decimal NUSD and 6-decimal USDC on the same chain.
+/// @notice Fixed 1:1 whole-unit exchange of existing 6-decimal NUSD and 6-decimal USDC on the same chain.
 /// Output liquidity must already be held here. No mint, bridge or fiat transfer is performed.
 /// @dev Token identity and issuer risks require independent verification. Decimal scaling preserves whole-unit parity
 /// but does not authenticate Circle USDC. This candidate is unaudited and starts paused.
@@ -19,9 +19,9 @@ contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, Reent
     bytes32 public constant PARTICIPANT_ROLE = keccak256("PARTICIPANT_ROLE");
     uint256 public constant RATE_NUMERATOR = 1;
     uint256 public constant RATE_DENOMINATOR = 1;
-    uint8 public constant NUSD_DECIMALS = 18;
+    uint8 public constant NUSD_DECIMALS = 6;
     uint8 public constant USDC_DECIMALS = 6;
-    uint256 public constant NUSD_PER_USDC_BASE_UNIT = 1_000_000_000_000;
+    uint256 public constant NUSD_PER_USDC_BASE_UNIT = 1;
     IERC20 public immutable nusd;
     IERC20 public immutable usdc;
 
@@ -56,7 +56,7 @@ contract NuminaUSDCConversion is AccessControlDefaultAdminRules, Pausable, Reent
     }
 
     /// @notice No rounding and no contract fee: 1 whole NUSD exchanges for 1 whole USDC.
-    /// @dev Input amounts use the input token's native base units. NUSD->USDC must be exactly divisible by 1e12.
+    /// @dev Input amounts use the input token's native base units. Both tokens use six decimals, so base-unit parity is exact.
     function quote(bool nusdToUsdc, uint256 inputAmount) public pure returns (uint256 outputAmount) {
         if (inputAmount == 0) revert InvalidOperation();
         if (nusdToUsdc) {
