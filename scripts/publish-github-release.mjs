@@ -63,7 +63,28 @@ if(existingResponse.status===404){
   if(!existingResponse.ok)throw Error('GitHub release lookup failed: '+existingResponse.status+' '+body);
   release=JSON.parse(body);
   if(release.draft||release.prerelease)throw Error('Existing release is not final');
-  if(release.target_commitish!==sourceCommit)throw Error('Existing release target differs from current canonical commit');
+  if(release.target_commitish!==sourceCommit){
+    if(!/^[0-9a-f]{40}$/i.test(String(release.target_commitish||'')))throw Error('Existing release target is not an immutable commit SHA');
+    const historicalAssets=new Map((release.assets||[]).map(asset=>[asset.name,asset]));
+    for(const path of [archive,checksum])if(!historicalAssets.has(path))throw Error('Historical release is missing canonical asset: '+path);
+    const historicalArchive=historicalAssets.get(archive);
+    const historicalDigest=typeof historicalArchive.digest==='string'&&historicalArchive.digest.startsWith('sha256:')
+      ?historicalArchive.digest.slice('sha256:'.length)
+      :null;
+    console.log(JSON.stringify({
+      identity:'NUMINA',
+      status:'existing_release_preserved',
+      releaseId:release.id,
+      tag:release.tag_name,
+      targetCommit:release.target_commitish,
+      currentSourceCommit:sourceCommit,
+      archive,
+      sha256:historicalDigest,
+      assets:[archive,checksum],
+      htmlUrl:release.html_url
+    }));
+    process.exit(0);
+  }
 }
 
 const existingAssets=new Map((release.assets||[]).map(asset=>[asset.name,asset]));
@@ -96,6 +117,7 @@ const names=new Set((verified.assets||[]).map(asset=>asset.name));
 for(const path of [archive,checksum])if(!names.has(path))throw Error('Published release is missing asset: '+path);
 console.log(JSON.stringify({
   identity:'NUMINA',
+  status:'release_published_or_verified',
   releaseId:verified.id,
   tag:verified.tag_name,
   targetCommit:verified.target_commitish,
