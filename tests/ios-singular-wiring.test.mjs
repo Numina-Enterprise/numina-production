@@ -90,3 +90,26 @@ test('one local simulator job is visible through the existing unified telemetry 
   assert.equal(after.activeJobs, 0);
   assert.equal(after.capacity.automaticScalingEnabled, false);
 });
+
+test('mobile shells permit hosted post-release updates without remote native-code execution', () => {
+  const policy = JSON.parse(read('public/mobile-update-policy.json'));
+  const android = read('mobile/android/app/src/main/java/xyz/numinalabs/app/NuminaLauncherActivity.java');
+  assert.equal(policy.schema, 'numina.mobile-post-release-policy.v1');
+  assert.equal(policy.hostedOrigin, 'https://numinalabs.xyz');
+  assert.equal(policy.hostedEntryPoint, '/app');
+  assert.equal(policy.postReleaseHostedUpdatesAllowed, true);
+  assert.equal(policy.invariants.firstPartyHttpsOnly, true);
+  assert.equal(policy.invariants.nativeMessageBridge, false);
+  assert.equal(policy.invariants.nativeCredentialBridge, false);
+  assert.equal(policy.invariants.remoteNativeCodeExecution, false);
+  assert.equal(policy.invariants.storeSubmissionRequiredForNativeCapabilityChanges, true);
+  assert.ok(configuration.includes('static let startURL = origin.appendingPathComponent("app")'));
+  assert.ok(model.includes('configuration.defaultWebpagePreferences.allowsContentJavaScript = true'));
+  assert.doesNotMatch(swift, /WKScriptMessageHandler|addScriptMessageHandler|evaluateJavaScript|URLSession/);
+  assert.ok(android.includes('private static final Uri HOME = Uri.parse("https://numinalabs.xyz/app");'));
+  assert.match(android, /extends LauncherActivity/);
+  assert.doesNotMatch(android, /DexClassLoader|PathClassLoader|loadClass|Runtime.getRuntime|ProcessBuilder/);
+  assert.ok(policy.nativeStoreUpdateRequired.includes('swift_java_or_native_executable_code'));
+  assert.ok(policy.nativeStoreUpdateRequired.includes('new_native_permissions_or_entitlements'));
+  assert.ok(policy.nativeStoreUpdateRequired.includes('downloaded_executable_code_that_changes_native_app_functionality'));
+});
