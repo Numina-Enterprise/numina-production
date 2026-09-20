@@ -193,7 +193,7 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.invariants.hostIsNumina,true);
   assert.equal(policy.invariants.runnerPlacementFrozen,false);
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina.yml':'ubuntu-latest','publish-sites-control-source.yml':'ubuntu-latest','verify-provider-observations.yml':'ubuntu-latest'});
+  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-latest'});
   assert.equal(policy.executionTargets.default,'NUMINA');
   let declarations=0;
   for(const name of readdirSync(workflowsUrl).filter(name=>/\.ya?ml$/i.test(name))){
