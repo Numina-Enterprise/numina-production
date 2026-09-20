@@ -138,10 +138,19 @@ test('USD requests preserve exact cents including 500T arithmetic, and cancellab
  assert.equal((await sent(f.escrow.connect(f.holder).cancel(id('claim')))).logs.length,0);
 });
 
-test('processing USD claims cannot refund on timeout; only a distinct confirmer can attest the exact bank outcome and burn once',async t=>{
+test('processing USD claims enter reconciliation after deadline without refund and late paid attestation burns once',async t=>{
  const f=await fixture(t);await f.enable();await f.request();await f.begin();
  assert.equal((await f.begin()).logs.length,0);
+ assert.equal(await f.escrow.PROCESSING_WINDOW(),7n*86400n);
+ const started=await f.escrow.redemptions(f.a[4],id('claim'));
+ assert.equal(started.status,2n);assert.ok(started.processingDeadline>0n);
+ await assert.rejects(f.escrow.connect(f.outsider).markReconciliationRequired.staticCall(f.a[4],id('claim'),id('payment')));
  await f.engine.request({method:'evm_increaseTime',params:[30*86400]});await f.engine.request({method:'evm_mine',params:[]});
+ const marked=await sent(f.escrow.connect(f.outsider).markReconciliationRequired(f.a[4],id('claim'),id('payment')));
+ assert.equal(marked.logs.length,1);assert.equal((await f.escrow.redemptions(f.a[4],id('claim'))).status,7n);
+ assert.equal(await f.escrow.totalEscrowedNusd(),10n*NUSD);
+ assert.equal((await sent(f.escrow.connect(f.outsider).markReconciliationRequired(f.a[4],id('claim'),id('payment')))).logs.length,0);
+ await assert.rejects(f.escrow.connect(f.outsider).markReconciliationRequired.staticCall(f.a[4],id('claim'),id('different-payment')));
  await assert.rejects(f.escrow.connect(f.holder).cancel.staticCall(id('claim')));
  await assert.rejects(f.escrow.connect(f.holder).claimRefund.staticCall(id('claim')));
  const args=[f.a[4],id('claim'),id('payment'),id('LOCAL-TEST-bank-outcome'),1000n,true];
@@ -156,6 +165,27 @@ test('processing USD claims cannot refund on timeout; only a distinct confirmer 
  await f.request('second');await assert.rejects(f.begin('second','payment'));await f.begin('second','second-payment');
  await assert.rejects(f.attest({name:'second',ref:'second-payment'}));
  assert.equal((await f.escrow.redemptions(f.a[4],id('second'))).status,2n);
+});
+
+test('paused overdue claims remain locked through reconciliation until terminal failure evidence enables refund',async t=>{
+ const f=await fixture(t);await f.enable();await f.request('paused-failure');await f.begin('paused-failure','paused-payment');
+ await f.engine.request({method:'evm_increaseTime',params:[8*86400]});await f.engine.request({method:'evm_mine',params:[]});
+ await sent(f.escrow.connect(f.pauser).pause());
+ await sent(f.escrow.connect(f.outsider).markReconciliationRequired(f.a[4],id('paused-failure'),id('paused-payment')));
+ assert.equal((await f.escrow.redemptions(f.a[4],id('paused-failure'))).status,7n);
+ assert.equal(await f.escrow.totalEscrowedNusd(),10n*NUSD);
+ await assert.rejects(f.escrow.connect(f.holder).claimRefund.staticCall(id('paused-failure')));
+ await assert.rejects(f.escrow.connect(f.confirmer).attestBankOutcome.staticCall(
+   f.a[4],id('paused-failure'),id('paused-payment'),id('provider-terminal-failure'),1000n,false
+ ));
+ await sent(f.escrow.unpause());
+ await f.attest({name:'paused-failure',ref:'paused-payment',evidence:'provider-terminal-failure',paid:false});
+ assert.equal((await f.escrow.redemptions(f.a[4],id('paused-failure'))).status,4n);
+ assert.equal(await f.escrow.totalEscrowedNusd(),10n*NUSD);
+ await sent(f.escrow.connect(f.holder).claimRefund(id('paused-failure')));
+ assert.equal((await f.escrow.redemptions(f.a[4],id('paused-failure'))).status,5n);
+ assert.equal(await f.escrow.totalEscrowedNusd(),0n);
+ assert.equal(await f.nusd.balanceOf(f.a[4]),1000n*NUSD);
 });
 
 test('failed USD payments restore the exact escrow once; failed token movement preserves refund and attestation state',async t=>{
