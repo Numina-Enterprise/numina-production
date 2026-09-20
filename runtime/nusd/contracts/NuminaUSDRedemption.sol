@@ -20,7 +20,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
     bytes32 public constant CONFIRMER_ROLE = keccak256("CONFIRMER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant HOLDER_ROLE = keccak256("HOLDER_ROLE");
-    uint256 public constant NUSD_UNITS_PER_USD_CENT = 10_000_000_000_000_000;
+    uint256 public constant NUSD_UNITS_PER_USD_CENT = 10_000;
     uint256 public constant RATE_NUMERATOR = 1;
     uint256 public constant RATE_DENOMINATOR = 1;
     IERC20 public immutable nusd;
@@ -59,7 +59,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
     constructor(address nusdToken, address admin, address operator, address confirmer,
         address pauser, uint48 adminDelaySeconds)
         AccessControlDefaultAdminRules(adminDelaySeconds, admin) {
-        if (nusdToken.code.length == 0 || IERC20Metadata(nusdToken).decimals() != 18) revert InvalidConfiguration();
+        if (nusdToken.code.length == 0 || IERC20Metadata(nusdToken).decimals() != 6) revert InvalidConfiguration();
         nusd = IERC20(nusdToken);
         _grantRole(OPERATOR_ROLE, operator);
         _grantRole(CONFIRMER_ROLE, confirmer);

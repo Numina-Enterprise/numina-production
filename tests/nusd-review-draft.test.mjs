@@ -35,8 +35,8 @@ test('offline review data encodes exact 500T constructor values while all deploy
  assert.equal(draft.integrity.creationDataSha256,hash(Buffer.from(draft.transaction.data.slice(2),'hex')));
  assert.ok(draft.transaction.data.startsWith(artifact.bytecode));
  const args=AbiCoder.defaultAbiCoder().decode(artifact.abi.find(x=>x.type==='constructor').inputs,'0x'+draft.transaction.data.slice(artifact.bytecode.length));
- // These tools prepare the finalized 18-decimal contract, not the retired six-decimal review.
- assert.equal(args[0],500000000000000000000000000000000n);assert.equal(args[1],500000000000000000000000000000000n);
+ // These tools prepare the current six-decimal contract candidate.
+ assert.equal(args[0],500000000000000000000n);assert.equal(args[1],500000000000000000000n);
  assert.equal(args[2],f.config.initialRecipient);assert.deepEqual(Array.from(args.slice(3,7)),Object.values(f.config.roles));
  assert.equal(args[7],86400n);assert.equal(args[8],'0x'+f.config.issuer.policySha256);
  assert.equal(draft.broadcast,false);assert.equal(draft.signature,null);assert.equal(draft.receipt,null);

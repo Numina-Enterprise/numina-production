@@ -39,8 +39,8 @@ test('CLI creates exact unsigned constructor data from a complete isolated fixtu
  assert.equal(output.requestSha256,hash(fs.readFileSync(f.file)));assert.equal(output.artifactSha256,TOKEN_ARTIFACT_SHA256);
  assert.ok(output.data.startsWith(artifact.bytecode));
  const args=AbiCoder.defaultAbiCoder().decode(artifact.abi.find(e=>e.type==='constructor').inputs,'0x'+output.data.slice(artifact.bytecode.length));
- // The finalized token uses 18 decimals; this is independent of the six-decimal historical review.
- assert.equal(args[0],500000000000000000001000000000000n);assert.equal(args[1],123000001000000000000n);assert.equal(args[2],f.config.initialRecipient);
+ // The current contract candidate uses six decimals; UI display precision is separate.
+ assert.equal(args[0],500000000000000000001n);assert.equal(args[1],123000001n);assert.equal(args[2],f.config.initialRecipient);
  assert.deepEqual(Array.from(args.slice(3,7)),Object.values(f.config.roles));assert.equal(args[7],3600n);assert.equal(args[8],'0x'+f.config.issuer.policySha256);
  assert.equal(output.receipt,null);assert.equal(output.transactionHash,null);assert.equal(output.deployedAddress,null);
 });

@@ -16,7 +16,7 @@ on:
       - 'runtime/nusd/scripts/deploy-production.mjs'
       - 'runtime/nusd/scripts/validate-deployment.mjs'
       - 'runtime/nusd/deployment.production.json'
-      - 'runtime/nusd/policies/issuer-policy-1500t-18d.json'
+      - 'runtime/nusd/policies/issuer-policy-1500t-6d.json'
   workflow_dispatch:
 
 permissions:
@@ -73,7 +73,7 @@ jobs:
             exit 2
           fi
 
-      - name: Validate exact 1,500T 18-decimal constructor
+      - name: Validate exact 1,500T 6-decimal constructor
         working-directory: runtime/nusd
         run: node scripts/validate-deployment.mjs deployment.production.json --output artifacts/unsigned-production-deployment.json
 
