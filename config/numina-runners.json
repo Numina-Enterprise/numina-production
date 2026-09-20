@@ -40,8 +40,7 @@
       "initiate-treasury-aggregate-model.yml": "ubuntu-24.04",
       "verify-workflow-pins.yml": "ubuntu-24.04",
       "sync-control-key-pin.yml": "ubuntu-24.04",
-      "verify-nusd-production.yml": "ubuntu-24.04",
-      "rebuild-nusd-artifacts.yml": "ubuntu-24.04"
+      "verify-nusd-production.yml": "ubuntu-24.04"
     },
     "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Vercel verification, provider verification, privileged control/deployment checks, and declared native workflows may use their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted NUMINA runner registrations remain preserved; no new self-hosted signing identity is introduced.",
     "workflowTargetSets": {
