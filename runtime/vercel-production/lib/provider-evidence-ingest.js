@@ -2,6 +2,7 @@
 
 const crypto=require('crypto');
 const {verifyEnvelope,RELEASE_IDENTITY}=require('./numina');
+const {callEvidenceRpc}=require('./neon-evidence-rpc');
 
 const GITHUB_ISSUER='https://token.actions.githubusercontent.com',GITHUB_JWKS='https://token.actions.githubusercontent.com/.well-known/jwks';
 const EXPECTED_REPOSITORY='skott34-dot/numina-production',EXPECTED_REF='refs/heads/main',EXPECTED_AUDIENCE='numina-provider-evidence';
@@ -10,7 +11,6 @@ function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value
 const canonical=value=>Buffer.from(JSON.stringify(sorted(value)),'utf8');
 const root=value=>crypto.createHash('sha256').update(canonical(value)).digest('hex');
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
-const requiredEnv=name=>{const value=process.env[name];if(!value)throw new Error(`${name}_REQUIRED`);return value;};
 const b64url=value=>Buffer.from(String(value).replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(String(value).length/4)*4,'='),'base64');
 const sameJson=(a,b)=>JSON.stringify(sorted(a))===JSON.stringify(sorted(b));
 
@@ -62,14 +62,14 @@ function validateManifest(manifest,claims){
   return {status,sourceCommit,transport,observation,arc,circle,archive};
 }
 async function persistProviderEvidence({token,manifest}){
-  const claims=await verifyGithubOidc(token),verified=validateManifest(manifest,claims),now=Date.now(),jobId=`provider-observation:${manifest.record_id}`;
-  const request={schema:'numina.durable-evidence.commit.v1',root:'NUMINA',manifest:'NUMINA',storage_compatibility:{legacy_state_column:true,role:'status_encoding_only'},operation:'WRITE_COMMIT_READ_BACK',
-    job:{job_id:jobId,tx_hash:verified.sourceCommit,handoff_id:manifest.record_id,request_json:{source:'github-actions-oidc',repository:claims.repository,workflow_run_id:Number(claims.run_id),run_attempt:Number(claims.run_attempt)},status:verified.status,attempts:1,next_attempt_at:now,expires_at:now,result_record_id:manifest.record_id,created_at:now,updated_at:now},
-    evidence:{record_id:manifest.record_id,tx_hash:verified.sourceCommit,handoff_id:manifest.record_id,state:verified.status,artifact_type:manifest.artifact_type,artifact_root:manifest.artifact_root,artifact_json:manifest.artifact_json,created_at:manifest.created_at,revoked:false}};
-  const response=await fetch(requiredEnv('NUMINA_DURABLE_EVIDENCE_URL'),{method:'POST',headers:{authorization:`Bearer ${requiredEnv('NUMINA_DURABLE_EVIDENCE_TOKEN')}`,'content-type':'application/json',accept:'application/json'},body:JSON.stringify(request),redirect:'error',signal:AbortSignal.timeout(10000)});
-  if(!response.ok)throw new Error(`DURABLE_EVIDENCE_HTTP_${response.status}`);const result=await response.json();
+  const claims=await verifyGithubOidc(token),verified=validateManifest(manifest,claims);
+  const result=await callEvidenceRpc({token,rpc:'numina_ingest_provider_evidence',manifest});
   assert(result?.committed===true&&result?.read_back===true&&result?.record_id===manifest.record_id&&result?.artifact_root===manifest.artifact_root,'DURABLE_EVIDENCE_COMMIT_NOT_PROVEN');
-  assert(root(result?.artifact_json)===manifest.artifact_root&&sameJson(result.artifact_json,manifest.artifact_json),'DURABLE_EVIDENCE_READBACK_MISMATCH');
+  assert((result.source_commit??result.git_commit_sha)===verified.sourceCommit,'DURABLE_EVIDENCE_SOURCE_COMMIT_MISMATCH');
+  assert(result.deployment_id===(verified.transport.observation?.deployment_id??null),'DURABLE_EVIDENCE_DEPLOYMENT_MISMATCH');
+  assert(result.provider_status===verified.observation.status&&result.circle_message===verified.circle.observed.message&&result.arc_chain_id===verified.arc.observed.chain_id,'DURABLE_EVIDENCE_PROVIDER_STATUS_MISMATCH');
+  assert(result.archive_digest===verified.archive.digest,'DURABLE_EVIDENCE_ARCHIVE_MISMATCH');
+  assert(result.credentialed===false&&result.partnership_status==='asserted'&&result.external_execution_performed===false,'DURABLE_EVIDENCE_BOUNDARY_MISMATCH');
   return {committed:true,read_back:true,root:'NUMINA',manifest:'NUMINA',record_id:manifest.record_id,status:verified.status,artifact_root:manifest.artifact_root,source_commit:verified.sourceCommit,transport_deployment_id:verified.transport.observation?.deployment_id??null,provider_status:verified.observation.status,circle_message:verified.circle.observed.message,arc_chain_id:verified.arc.observed.chain_id,arc_latest_block:verified.arc.observed.latest_block,archive_digest:verified.archive.digest,credentialed:false,partnership_status:'asserted',external_execution_performed:false};
 }
 module.exports={persistProviderEvidence,verifyGithubOidc,validateManifest};
