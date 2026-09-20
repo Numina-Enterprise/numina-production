@@ -4,15 +4,15 @@ import {createHash} from 'node:crypto';
 import {stable} from '../../../src/control.js';
 
 async function numinaControlToken(){
-  const oidcUrl=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
-  const oidcRequestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
-  if(oidcUrl&&oidcRequestToken){
-    const endpoint=new URL(oidcUrl);
+  const authUrl=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
+  const authRequestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+  if(authUrl&&authRequestToken){
+    const endpoint=new URL(authUrl);
     endpoint.searchParams.set('audience','numina-control');
-    const response=await fetch(endpoint,{headers:{Authorization:'Bearer '+oidcRequestToken},signal:AbortSignal.timeout(15000)});
+    const response=await fetch(endpoint,{headers:{Authorization:'Bearer '+authRequestToken},signal:AbortSignal.timeout(15000)});
     const text=await response.text();
     let body=null;try{body=JSON.parse(text);}catch{}
-    if(!response.ok||typeof body?.value!=='string'||body.value.split('.').length!==3)throw Error('NUMINA_CONTROL_OIDC_TOKEN_FAILED');
+    if(!response.ok||typeof body?.value!=='string'||body.value.split('.').length!==3)throw Error('NUMINA_CONTROL_AUTH_TOKEN_FAILED');
     return body.value;
   }
   const fallback=process.env.NUMINA_CONTROL_API_KEY;
