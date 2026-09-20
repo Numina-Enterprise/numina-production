@@ -16,10 +16,15 @@ if (policy.invariants?.denyFutureRunners !== true || policy.futureRunnerPolicy !
 if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
 if (policy.invariants?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
 if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
+if (policy.invariants?.floatingHostedLinuxLabelsDenied !== true) failures.push('Floating hosted Linux labels must be denied');
 if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
 const executionTargets = policy.executionTargets;
 const overrides = executionTargets?.workflowOverrides || {};
 const targetSets = executionTargets?.workflowTargetSets || {};
+const hostedLinuxPolicy = executionTargets?.hostedLinuxPolicy || {};
+const deniedFloatingLabels = new Set(hostedLinuxPolicy.floatingLabelsDenied || []);
+if (hostedLinuxPolicy.pinnedTarget !== 'ubuntu-24.04') failures.push('Hosted Linux execution must remain pinned to ubuntu-24.04');
+if (!deniedFloatingLabels.has('ubuntu-latest')) failures.push('ubuntu-latest must remain denied before its Ubuntu 26 migration');
 if (executionTargets?.default !== policy.runnerTarget) failures.push('Default execution target must remain NUMINA');
 const usedOverrides = new Set();
 
@@ -29,15 +34,16 @@ for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(nam
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
+  for (const target of targets) if (deniedFloatingLabels.has(target)) failures.push(name + ' uses denied floating runner label ' + target);
   const expectedSet = Object.hasOwn(targetSets,name) ? targetSets[name] : null;
   const expectedTarget = Object.hasOwn(overrides, name) ? overrides[name] : executionTargets?.default;
   if (Object.hasOwn(overrides, name) && targets.length) usedOverrides.add(name);
   if (expectedSet) {
-    for (const expected of expectedSet) if (!['NUMINA','ubuntu-latest','ubuntu-24.04','macos-latest'].includes(expected)) failures.push(name + ' has an unsupported execution target');
+    for (const expected of expectedSet) if (!['NUMINA','ubuntu-24.04','macos-latest'].includes(expected)) failures.push(name + ' has an unsupported execution target');
     const actualSorted=[...targets].sort(), expectedSorted=[...expectedSet].sort();
     if (JSON.stringify(actualSorted)!==JSON.stringify(expectedSorted)) failures.push(name + ' runner targets must match recorded target set ' + JSON.stringify(expectedSet) + ', got ' + JSON.stringify(targets));
   } else {
-    if (!['NUMINA','ubuntu-latest','ubuntu-24.04','macos-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
+    if (!['NUMINA','ubuntu-24.04','macos-latest'].includes(expectedTarget)) failures.push(name + ' has an unsupported execution target');
     for (const target of targets) if (target !== expectedTarget) failures.push(name + ' runner target must match its recorded execution target ' + expectedTarget + ', got ' + JSON.stringify(target));
   }
 }
