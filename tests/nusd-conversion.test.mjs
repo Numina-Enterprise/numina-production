@@ -182,7 +182,7 @@ test('paused overdue claims remain locked through reconciliation until terminal 
  await f.attest({name:'paused-failure',ref:'paused-payment',evidence:'provider-terminal-failure',paid:false});
  assert.equal((await f.escrow.redemptions(f.a[4],id('paused-failure'))).status,4n);
  assert.equal(await f.escrow.totalEscrowedNusd(),10n*NUSD);
- await sent(f.escrow.connect(f.holder).claimRefund(id('paused-failure'));
+ await sent(f.escrow.connect(f.holder).claimRefund(id('paused-failure')));
  assert.equal((await f.escrow.redemptions(f.a[4],id('paused-failure'))).status,5n);
  assert.equal(await f.escrow.totalEscrowedNusd(),0n);
  assert.equal(await f.nusd.balanceOf(f.a[4]),1000n*NUSD);
