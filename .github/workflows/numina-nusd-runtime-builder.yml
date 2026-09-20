@@ -112,7 +112,7 @@ jobs:
               raise SystemExit('Runtime dependency policy requires review')
           # Only this reviewed build recipe may execute commands. Changes require
           # a new builder review, so inventory flags cannot silently outlive it.
-          if hashlib.sha256((stage / 'Dockerfile').read_bytes()).hexdigest() != '0f79e7826ee81991687987b91912809b43f6221e8303579a3b4c9c89e64b6527':
+          if hashlib.sha256((stage / 'Dockerfile').read_bytes()).hexdigest() != 'bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2':
               raise SystemExit('Runtime Dockerfile differs from the reviewed build recipe')
           base = json.loads((stage / 'base-image.json').read_text())
           pin = os.environ['EXPECTED_BASE_IMAGE']
