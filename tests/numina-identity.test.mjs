@@ -206,8 +206,8 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.invariants.hostIsNumina,true);
   assert.equal(policy.invariants.runnerPlacementFrozen,false);
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-latest','numina.yml':'ubuntu-latest','verify-provider-observations.yml':'ubuntu-latest','numina-android-release.yml':'ubuntu-latest','numina-ios-signing.yml':'macos-latest','publish-sites-control-source.yml':'ubuntu-latest','verify-root-vercel.yml':'ubuntu-latest'});
-  assert.deepEqual(policy.executionTargets.workflowTargetSets,{'numina-mobile-release-build.yml':['ubuntu-24.04','macos-latest'],'numina-mobile-store-distribution.yml':['ubuntu-24.04','macos-latest']});
+  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-latest','numina.yml':'ubuntu-latest','verify-provider-observations.yml':'ubuntu-latest','numina-android-release.yml':'ubuntu-latest','numina-ios-signing.yml':'macos-latest','publish-sites-control-source.yml':'ubuntu-latest','verify-root-vercel.yml':'ubuntu-latest','align-native-treasury-500t.yml':'ubuntu-24.04','check-sites-control-origin.yml':'ubuntu-24.04','deploy-nusd-contracts.yml':'ubuntu-24.04','diagnose-control-auth.yml':'ubuntu-24.04','ibm-quantum-hardware.yml':'ubuntu-24.04','ibm-quantum-smoke.yml':'ubuntu-24.04','initiate-treasury-aggregate-model.yml':'ubuntu-24.04','verify-workflow-pins.yml':'ubuntu-24.04','sync-control-key-pin.yml':'ubuntu-24.04','verify-nusd-production.yml':'ubuntu-24.04'});
+  assert.deepEqual(policy.executionTargets.workflowTargetSets,{'numina-mobile-release-build.yml':['ubuntu-24.04','macos-latest'],'numina-mobile-store-distribution.yml':['ubuntu-24.04','macos-latest'],'numina-site-builder.yml':['ubuntu-24.04','ubuntu-24.04'],'numina-nusd-runtime-builder.yml':['ubuntu-24.04','ubuntu-24.04']});
   assert.equal(policy.executionTargets.default,'NUMINA');
   let declarations=0;
   for(const name of readdirSync(workflowsUrl).filter(name=>/\.ya?ml$/i.test(name))){
