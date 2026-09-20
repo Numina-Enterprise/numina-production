@@ -9,7 +9,7 @@ import {readControl,bootstrapControl,controlManifestView,commitControl} from './
 import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
-// Numina singular authority: production treasury workflows authenticate with repository-scoped GitHub OIDC.
+// NUMINA authentication protocol: OIDC for protected production automation; bounded bearer and Sites identity remain controlled fallback/interactive paths.
 export const CONTROL_API_KEY_SHA256_PIN='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
 export const SOURCE_OF_TRUTH_MODEL=NUMINA;
 export const CONTROL_WORKER_IDENTITY=NUMINA;
@@ -107,7 +107,7 @@ async function controlNuminaManifest(req,env){
       repository:{full_name:GITHUB_OIDC_REPOSITORY,branch:'main'},
       runtime:{version:application?.runtime_dependency?.version??null,release:application?.runtime_dependency?.release??null},
       artifact:{build_id:application?.build_id??null},
-      authentication:{primary:'github-actions-oidc',issuer:GITHUB_OIDC_ISSUER,audience:GITHUB_OIDC_AUDIENCE,bounded_bearer_fallback:true,sites_identity:true},
+      authentication:{identity:NUMINA,protocol:'OIDC',primary:'github-actions-oidc',issuer:GITHUB_OIDC_ISSUER,audience:GITHUB_OIDC_AUDIENCE,bounded_bearer_fallback:true,sites_identity:true},
       delivery:{transport_only:true,surfaces:NUMINA_DELIVERY_SURFACES}
     },
     provider_verification:NUMINA_PROVIDER_VERIFICATION,
@@ -126,7 +126,7 @@ export async function controlHttp(req,env){
       const row=await readControl(env.DB);const count={n:row.eventCount};
       const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.manifest.root;
       const healthy=configured&&count.n===row.revision+1;
-      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],storage:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.manifest_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
+      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:{identity:NUMINA,protocol:'OIDC',primary:'github-actions-oidc',fallback:['pinned-bearer','sites-identity']},storage:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.manifest_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
     }
     if(req.method==='GET'&&path==='/api/control/v1/manifest'){if(new URL(req.url).search)return controlResponse({error:'MANIFEST_QUERY_NOT_ALLOWED'},400);return controlResponse(await controlNuminaManifest(req,env));}
     if(!['GET','POST'].includes(req.method))return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
