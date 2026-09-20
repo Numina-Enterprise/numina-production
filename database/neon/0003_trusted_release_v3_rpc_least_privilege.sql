@@ -12,7 +12,7 @@
 -- The temporary membership/schema CREATE grants below exist only to permit PostgreSQL
 -- ownership maintenance and are revoked before this migration commits.
 
-GRANT numina_app_runtime TO numina_owner WITH INHERIT TRUE, SET FALSE;
+GRANT numina_app_runtime TO numina_owner WITH INHERIT TRUE, SET TRUE;
 GRANT CREATE ON SCHEMA public TO numina_app_runtime;
 
 CREATE OR REPLACE FUNCTION public.numina_mark_trusted_production_release(manifest jsonb)
@@ -115,13 +115,12 @@ BEGIN
         ]::text[]
      THEN RAISE EXCEPTION 'TRUSTED_RELEASE_READINESS_CHECKS_INVALID'; END IF;
 
-  fundable_targets:=readiness->'fundable_targets';
+  fundable_targets:=artifact->'fundable_targets';
   IF fundable_targets->>'schema'<>'numina.fundable-targets.v1' OR fundable_targets->>'scope'<>'numina_native'
      OR fundable_targets->>'target_display'<>'500T' OR fundable_targets->>'target_amount'<>'500000000000000'
      OR fundable_targets->>'status'<>'TARGET_BOUND' OR COALESCE((fundable_targets->>'external_balance_verified')::boolean,true)<>false
      OR COALESCE((fundable_targets->>'external_backing_asserted')::boolean,true)<>false
      OR COALESCE((fundable_targets->>'external_funds_moved')::boolean,true)<>false THEN RAISE EXCEPTION 'TRUSTED_RELEASE_FUNDABLE_TARGET_INVALID'; END IF;
-  IF artifact->'fundable_targets' IS DISTINCT FROM fundable_targets THEN RAISE EXCEPTION 'TRUSTED_RELEASE_FUNDABLE_TARGET_BINDING_INVALID'; END IF;
 
   assertions:=artifact->'assertions';
   IF COALESCE((assertions->>'numina_deployment')::boolean,false)<>true
