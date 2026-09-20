@@ -3,7 +3,7 @@
   "identity": "NUMINA",
   "status": "IMMUTABLE_CANONICAL_BUILD",
   "recordedAt": "2026-09-20T20:20:00Z",
-  "sourceParentCommit": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+  "preFreezeSourceCommit": "0db5d0d9d12cd5a54c81b4da3e24661795017bad",
   "canonicalTag": "numina-immutable-2026-09-20",
   "mutationPolicy": "NO_IN_PLACE_MUTATION_NEW_COMMIT_AND_NEW_RELEASE_IDENTITY_REQUIRED",
   "economicModel": {
