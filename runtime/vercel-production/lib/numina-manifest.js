@@ -9,7 +9,7 @@ const vocabulary=Object.freeze({
   projection:NUMINA,transport:NUMINA,service:NUMINA,externalService:NUMINA
 });
 const mechanics=Object.freeze({
-  authentication:Object.freeze({identity:NUMINA,protocol:'OIDC',authenticated:true,verified:true,scope:NUMINA,oidc:true,primaryCredential:'github-actions-oidc',boundedBearerFallback:true,sitesIdentity:true}),
+  authentication:Object.freeze({identity:NUMINA,protocol:NUMINA,authenticated:true,verified:true,scope:NUMINA,mechanism:'signed_identity_token',primaryCredential:NUMINA}),
   delivery:Object.freeze({identity:NUMINA,transportOnly:true,endpoints:Object.freeze([
     'https://numinalabs.xyz','https://personal-space-m7q9.skott34.chatgpt.site','https://numina-production.vercel.app'
   ])}),
