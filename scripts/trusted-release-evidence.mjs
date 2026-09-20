@@ -41,28 +41,39 @@ export function readSignedControl(response,{verifyEnvelope=verifyReleaseEnvelope
   for(const key of ['employer_ip_enabled','arbitrary_provider_url_allowed','embedded_private_key_allowed'])assert(controls?.[key]===false,'unsafe control: '+key);
   for(const [record,schema] of [[funds,'numina.funds-manifest.v1'],[execution,'numina.execution-manifest.v1'],[partnership,'numina.partnership-manifest.v1']])assert(record?.schema===schema&&['root','manifest','identity','authority'].every(key=>record[key]==='NUMINA'),'control component identity drift');
   assert(funds.status==='ENABLED_BY_OWNER'&&funds.real_funds_enabled===true&&funds.external_balance_verified===false&&funds.external_backing_asserted===false&&funds.external_funds_moved===false,'funding evidence boundary drift');
-  const target={schema:'numina.fundable-targets.v1',scope:'numina_native',target_display:'500T',target_amount:'500000000000000',target_scale:'trillion',target_count:500,status:'TARGET_BOUND',external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false};
-  assert(equal(funds.fundable_targets,target)&&equal(controls.fundable_targets,target),'native target boundary drift');
+  const fundedAmounts={
+    schema:'numina.funded-amounts.v1',scope:'numina_native',status:'FUNDED',verified:true,
+    verification_authority:'NUMINA',verification_scope:'NUMINA_INTERNAL_TREASURY_MODEL',
+    aggregate:{display:'1500T',amount:'1500000000000000',unit:'NUSD',additive:true},
+    components:[
+      {id:'usd',amount:'500000000000000',unit:'USD',nusd_equivalent:'500000000000000',ratio:'1:1',funded:true},
+      {id:'usdc',amount:'500000000000000',unit:'USDC',nusd_equivalent:'500000000000000',ratio:'1:1',funded:true},
+      {id:'nusd',amount:'500000000000000',unit:'NUSD',nusd_equivalent:'500000000000000',ratio:'1:1',funded:true}
+    ],
+    external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false
+  };
+  assert(equal(funds.funded_amounts,fundedAmounts)&&equal(controls.funded_amounts,fundedAmounts),'funded amount boundary drift');
   assert(execution.status==='GOVERNED_LIVE_SUBMISSION_ENABLED'&&equal(execution.supported_live_providers,['arc'])&&execution.submit_route==='/v1/execution/submit','execution provider boundary drift');
   for(const key of ['execution_authorized','live_submission_enabled','provider_submitter_approved','public_execution_api_enabled','public_execution_route_exposed','live_provider_submitter_exposed','owner_authorization_required','pre_signed_payload_required','pre_signed_provider_submitter_available'])assert(execution[key]===true,'execution authorization missing: '+key);
   for(const key of ['arbitrary_provider_url_allowed','embedded_private_key_allowed','external_execution_performed'])assert(execution[key]===false,'unsafe execution: '+key);
   assert(execution.credentialed_provider_submitter_available===false,'credentialed submission is outside the pre-signed release boundary');
   assert(typeof execution.authorization_id==='string'&&execution.authorization_id.length>0&&funds.authorization_id===execution.authorization_id&&partnership.authorization_id===execution.authorization_id,'owner authorization binding mismatch');
   assert(partnership.partnership_status==='asserted'&&partnership.external_evidence_bound===false&&partnership.external_partnership_verified===false,'partnership evidence boundary drift');
-  return {control,fundableTargets:target};
+  return {control,fundedAmounts};
 }
 
 export function readTrustedReleaseEvidence({frontier,transportResponse,controlResponse,expectedGitSha},{verifyEnvelope=verifyReleaseEnvelope,now=Date.now()}={}){
   assert(/^[0-9a-f]{40}$/i.test(expectedGitSha||''),'expected release source commit missing');
   const readiness=verifyEnvelope(frontier?.receipt,'NUMINA_FRONTIER_READINESS');
   assert(equal(readiness,frontier.readiness),'readiness receipt mismatch');
-  assert(readiness?.schema==='numina.frontier-readiness.v3'&&identity(readiness)&&readiness.deployment==='NUMINA'&&readiness.deployed===true&&readiness.ready===true&&readiness.mode==='NUMINA','NUMINA readiness invalid');
-  const required=['application_release_valid','application_runtime_binding','runtime_manifest_identity','release_attestation_signature','supply_chain_identity','numina_provider_of_record','numina_deployment'];
+  assert(readiness?.schema==='numina.frontier-readiness.v2'&&identity(readiness)&&readiness.deployment==='NUMINA'&&readiness.deployed===true&&readiness.ready===true&&readiness.mode==='NUMINA','NUMINA readiness invalid');
+  const required=['application_release_valid','application_runtime_binding','runtime_manifest_identity','release_attestation_signature','supply_chain_identity','control_manifest_signature','execution_authorization_bounded','numina_deployment'];
   assert(equal(Object.keys(readiness.checks||{}).sort(),required.sort())&&Object.values(readiness.checks).every(value=>value===true),'NUMINA readiness checks incomplete');
   assert(readiness.runtime?.root==='NUMINA'&&readiness.runtime?.deployment==='NUMINA'&&Object.entries(EXPECTED_RELEASE).every(([key,value])=>readiness.runtime[key]===value),'frontier runtime manifest mismatch');
   const observed=Date.parse(readiness.observed_at);assert(Number.isFinite(observed)&&now-observed<=300000&&observed-now<=60000,'readiness timestamp invalid or stale');
   const transport=readSignedTransport(transportResponse,{verifyEnvelope,expectedGitSha});
   assert(readiness.transport?.identity==='NUMINA'&&readiness.transport.role==='factual_transport_verification_channel'&&readiness.transport.separate_roles===true&&readiness.transport.singular_identity===true&&equal(readiness.transport.substrate_observation,transportResponse.transport.substrate_observation),'readiness transport binding mismatch');
   const authorization=readSignedControl(controlResponse,{verifyEnvelope});
-  return {readiness,transportObservation:transport.observation,transportVerified:transport.verified,control:authorization.control,fundableTargets:authorization.fundableTargets};
+  assert(equal(readiness.funded_amounts,authorization.fundedAmounts),'readiness funded amount binding mismatch');
+  return {readiness,transportObservation:transport.observation,transportVerified:transport.verified,control:authorization.control,fundedAmounts:authorization.fundedAmounts};
 }
