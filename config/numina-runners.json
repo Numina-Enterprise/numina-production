@@ -29,9 +29,19 @@
       "numina-android-release.yml": "ubuntu-latest",
       "numina-ios-signing.yml": "macos-latest",
       "publish-sites-control-source.yml": "ubuntu-latest",
-      "verify-root-vercel.yml": "ubuntu-latest"
+      "verify-root-vercel.yml": "ubuntu-latest",
+      "align-native-treasury-500t.yml": "ubuntu-24.04",
+      "check-sites-control-origin.yml": "ubuntu-24.04",
+      "deploy-nusd-contracts.yml": "ubuntu-24.04",
+      "diagnose-control-auth.yml": "ubuntu-24.04",
+      "ibm-quantum-hardware.yml": "ubuntu-24.04",
+      "ibm-quantum-smoke.yml": "ubuntu-24.04",
+      "initiate-treasury-aggregate-model.yml": "ubuntu-24.04",
+      "verify-workflow-pins.yml": "ubuntu-24.04",
+      "sync-control-key-pin.yml": "ubuntu-24.04",
+      "verify-nusd-production.yml": "ubuntu-24.04"
     },
-    "scope": "NUMINA remains the singular logical execution identity. Canonical build, website publication, Vercel verification, provider verification, and declared native workflows may use recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted NUMINA runner registrations remain preserved; no new self-hosted signing identity is introduced.",
+    "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Vercel verification, provider verification, privileged control/deployment checks, and declared native workflows may use their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted NUMINA runner registrations remain preserved; no new self-hosted signing identity is introduced.",
     "workflowTargetSets": {
       "numina-mobile-release-build.yml": [
         "ubuntu-24.04",
@@ -40,6 +50,14 @@
       "numina-mobile-store-distribution.yml": [
         "ubuntu-24.04",
         "macos-latest"
+      ],
+      "numina-site-builder.yml": [
+        "ubuntu-24.04",
+        "ubuntu-24.04"
+      ],
+      "numina-nusd-runtime-builder.yml": [
+        "ubuntu-24.04",
+        "ubuntu-24.04"
       ]
     }
   }
