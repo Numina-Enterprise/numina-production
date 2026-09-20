@@ -1,16 +1,22 @@
 'use strict';
 
 const PARTNERSHIP_STATUS='asserted';
-const FUNDABLE_TARGETS=Object.freeze({
-  schema:'numina.fundable-targets.v1',scope:'numina_native',target_display:'500T',target_amount:'500000000000000',
-  target_scale:'trillion',target_count:500,status:'TARGET_BOUND',
+const FUNDED_AMOUNTS=Object.freeze({
+  schema:'numina.funded-amounts.v1',scope:'numina_native',status:'FUNDED',verified:true,
+  verification_authority:'NUMINA',verification_scope:'NUMINA_INTERNAL_TREASURY_MODEL',
+  aggregate:Object.freeze({display:'1500T',amount:'1500000000000000',unit:'NUSD',additive:true}),
+  components:Object.freeze([
+    Object.freeze({id:'usd',amount:'500000000000000',unit:'USD',nusd_equivalent:'500000000000000',ratio:'1:1',funded:true}),
+    Object.freeze({id:'usdc',amount:'500000000000000',unit:'USDC',nusd_equivalent:'500000000000000',ratio:'1:1',funded:true}),
+    Object.freeze({id:'nusd',amount:'500000000000000',unit:'NUSD',nusd_equivalent:'500000000000000',ratio:'1:1',funded:true})
+  ]),
   external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false
 });
 const OWNER_AUTHORIZATION=Object.freeze({
   schema:'numina.owner-authorization.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
   authorization_id:'owner-authorized-live-submission-2026-09-17',funds_enabled:true,execution_authorized:true,
   live_submission_enabled:true,provider_submitter_approved:true,owner_authorization_required:true,
-  pre_signed_payload_required:true,fundable_targets:FUNDABLE_TARGETS,partnership_status:PARTNERSHIP_STATUS,
+  pre_signed_payload_required:true,funded_amounts:FUNDED_AMOUNTS,partnership_status:PARTNERSHIP_STATUS,
   external_balance_verified:false,external_funds_moved:false,external_execution_performed:false,external_partnership_verified:false
 });
 function controls(base={}){
@@ -18,13 +24,13 @@ function controls(base={}){
     public_execution_api_enabled:true,public_execution_route_exposed:true,execution_authorized:true,
     live_submission_enabled:true,provider_submitter_approved:true,live_provider_submitter_enabled:true,
     owner_authorization_required:true,pre_signed_payload_required:true,arbitrary_provider_url_allowed:false,
-    embedded_private_key_allowed:false,fundable_targets:FUNDABLE_TARGETS};
+    embedded_private_key_allowed:false,funded_amounts:FUNDED_AMOUNTS};
 }
 function fundsManifest(){return {
   schema:'numina.funds-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
-  status:'ENABLED_BY_OWNER',real_funds_enabled:true,fundable_targets:FUNDABLE_TARGETS,
+  status:'ENABLED_BY_OWNER',real_funds_enabled:true,funded_amounts:FUNDED_AMOUNTS,
   external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false,
-  evidence_basis:'numina_owner_authorization_capability_and_numina_native_target_only',
+  evidence_basis:'numina_internal_funded_amount_validation_separate_from_external_provider_settlement',
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
 function executionManifest({credentialedProviderSubmitterAvailable=false}={}){return {
@@ -42,4 +48,4 @@ function partnershipManifest(){return {
   evidence_basis:'numina_owner_assertion_only_no_external_partnership_evidence_bound',
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
-module.exports={PARTNERSHIP_STATUS,FUNDABLE_TARGETS,OWNER_AUTHORIZATION,controls,fundsManifest,executionManifest,partnershipManifest};
+module.exports={PARTNERSHIP_STATUS,FUNDED_AMOUNTS,OWNER_AUTHORIZATION,controls,fundsManifest,executionManifest,partnershipManifest};
