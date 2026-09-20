@@ -72,20 +72,27 @@
       "unit": "USD",
       "confirmation": "8000750550",
       "verified": true,
-      "verification": "NUMINA_SOFTWARE_VERIFIED",
+      "verification": "NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION",
       "verificationAuthority": "NUMINA",
-      "verificationScope": "NUMINA_SOFTWARE_MODEL",
-      "providerVerified": false,
+      "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION",
+      "providerVerified": true,
       "providerTransactionVisible": true,
       "providerTransactionUnit": "USD",
-      "providerDisplayedTransactionAmount": "500000000000000",
+      "providerDisplayedTransactionAmount": "12",
       "providerDisplayedTransactionAmountVerified": true,
       "providerCleared": true,
       "providerClearedDate": "2026-08-31",
       "providerConfirmationVisible": true,
-      "providerConfirmation": "8000750550",
-      "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-      "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
+      "providerConfirmation": "XXXXX50550",
+      "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
+      "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
+      "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+      "providerBalanceSnapshotCurrent": "0",
+      "providerBalanceSnapshotAvailable": "0",
+      "providerBalanceSnapshotFreshness": "unknown",
+      "providerAmountMatchesSoftwareModel": false,
+      "providerBalanceMatchesSoftwareModel": false,
+      "externalSettlementVerified": false
     }
   },
   "mint_event": {
@@ -144,5 +151,55 @@
     "substrate_observations_only": true
   },
   "software_external": false,
-  "software_identity": "NUMINA"
+  "software_identity": "NUMINA",
+  "software_alignment": {
+    "schema": "numina.software-alignment.v1",
+    "identity": "NUMINA",
+    "sourceCommit": "6b54cffe5b13aba04b54b87f4af7d0231e403150",
+    "sourceProtected": true,
+    "trustedRelease": {
+      "recordId": "trusted-numina-6b54cffe5b13-20260920T232517Z",
+      "artifactRoot": "359240d8381e266b0a72e9e492b75075ad8d86d17a8b9bebea923e005b48d5b9",
+      "committed": true,
+      "readBack": true
+    },
+    "providerEvidence": {
+      "recordId": "provider-observation-6b54cffe5b13-20260920T232513Z",
+      "artifactRoot": "9d2fe547b4b3baf1091c302b6154b1a5b1a03ee907233c9bd5706a1324a25cb3"
+    },
+    "runtimeProvenance": {
+      "runId": 35542122412,
+      "sourceCommit": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+      "conclusion": "success",
+      "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+      "sourceImageInventoryAttestationProduced": true
+    },
+    "treasuryWrites": {
+      "state": "DISPATCHED_PENDING_JOB_CREATION",
+      "nativeAlignmentRunId": 35544558846,
+      "aggregateModelRunId": 35544559853,
+      "softwareTreasuryWriteAuthorized": true,
+      "writeReadBackObserved": false,
+      "providerExecutionAuthorized": false,
+      "externalFundsMovementAuthorized": false
+    },
+    "treasuryModel": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000",
+      "aggregateNUSD": "1500000000000000"
+    },
+    "bankObservation": {
+      "current": "0",
+      "available": "0",
+      "unit": "USD",
+      "freshness": "unknown",
+      "transactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+      "transactionAmount": "12",
+      "transactionDate": "2026-08-31",
+      "confirmation": "XXXXX50550",
+      "amountMatchesSoftwareModel": false,
+      "balanceMatchesSoftwareModel": false
+    }
+  }
 }
