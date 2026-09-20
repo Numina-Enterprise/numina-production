@@ -23,6 +23,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: deploy-nusd-contracts
@@ -55,7 +56,6 @@ jobs:
       NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
       NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
       NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
-      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
       NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT: fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -77,8 +77,8 @@ jobs:
             echo "No NUMINA/Kaleido credential source is configured."
             exit 2
           fi
-          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
-            echo "NUMINA_CONTROL_API_KEY is not configured; no journal write or mint is attempted."
+          if [ -z "$ACTIONS_ID_TOKEN_REQUEST_URL" ] || [ -z "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ]; then
+            echo "GitHub OIDC token request variables are unavailable; no journal write or mint is attempted."
             exit 3
           fi
 
