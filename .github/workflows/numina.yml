@@ -18,7 +18,7 @@ env:
   NUMINA_FINAL_BUILD_MANIFEST: public/final-build.json
   NUMINA_FINAL_BUILD_MANIFEST_ROLE: synchronized_projection
   NUMINA_FINAL_BUILD_SYNC: ACROSS_ALL
-  NUMINA_FINAL_BUILD_MANIFEST_BLOB: dd229f83e28352b4d77ddeb7c3dab2bbaf16b28e
+  NUMINA_FINAL_BUILD_MANIFEST_BLOB: 51059e89b986f03880f7b6876fe357d172c4ce99
 
 concurrency:
   group: numina-${{ github.ref }}
@@ -32,6 +32,7 @@ jobs:
       - name: NUMINA repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: NUMINA runtime

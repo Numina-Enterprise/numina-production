@@ -5,12 +5,14 @@ import {readConnectedTreasury,verifiedUsdcRoutes} from '../public/treasury-conne
 import {readPrivateBankRoute} from '../src/bank-route-config.js';
 import handler from '../api/status.js';
 const routes={schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',transfer_execution:false,submission_performed:false,receipt:null,canonical_treasury:model.nativeJournal,observed_at:'2026-09-18T00:00:00Z',routes:[{currency:'usdc',settlement_currency:'usdc',status:'active',provider_reported_active:true,network:'base',address:'0x'+'1'.repeat(40),memo:null}]};
-test('one singular 1500T treasury has three additive 500T holdings and no provider funding claims',()=>{
+test('one singular 1500T treasury has three additive 500T holdings with provider evidence scoped by holding',()=>{
  assert.equal(model.singular,true);assert.equal(model.balanceCount,1);
  assert.equal(model.aggregateModeledValue,'1500000000000000');
  assert.equal(model.modeledAllocationsAdditive,true);
  assert.ok(model.allocations.every(value=>value.amount==='500000000000000'));
- assert.ok(model.allocations.every(value=>value.providerBalanceVerified===false));assert.equal(model.externalBalancesAggregated,false);
+ const bank=model.allocations.find(value=>value.id==='bank-of-america-savings'),stripe=model.allocations.find(value=>value.id==='stripe-numina-native-treasury'),native=model.allocations.find(value=>value.id==='numina-native-treasury');
+ assert.equal(bank.providerBalanceVerified,true);assert.equal(bank.providerBalanceVerificationScope,'LINKED_PROVIDER_SNAPSHOT');assert.equal(bank.providerTransactionVerified,true);
+ assert.equal(stripe.providerBalanceVerified,false);assert.equal(native.providerBalanceVerified,false);assert.equal(model.externalBalancesAggregated,false);
  assert.equal(NUSD_OPERATOR_ACTIVATION.evidenceType,'owner_statement');assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);
 });
 test('provider route display preserves exact USDC destination and rejects invalid network/address',()=>{
