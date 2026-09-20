@@ -80,7 +80,7 @@
     },
     "hostPublicationVerified": false,
     "sourceBuildNumber": 6,
-    "sourceInputsSha256": "e60a09b15b3805e7273ccf1d2bfe918720563dca9cd611d479a2d3ec28471583",
+    "sourceInputsSha256": "07a1f2714ce4fcfec449ccfe3323251e6d1f7f623b299946f754921c8a6e7d0c",
     "signingInputMatchesCurrentSource": false,
     "sourceAlignmentScope": "current_source_package_not_native_build",
     "sourceCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
@@ -113,14 +113,14 @@
     {
       "platform": "ios",
       "file": "numina-os-4.0.0-ios-source.zip",
-      "bytes": 55265,
-      "sha256": "4a0a85d3b01e28610ae7a54c4d5b2e420f7d0650c5bf95d04aa5b67cc7eb9881",
+      "bytes": 55262,
+      "sha256": "a0351ca0748f099c8f6f7fc9c0f68c7e579f8aaa924b700b03537cfdf91843e9",
       "kind": "source_archive",
       "installable": false,
       "sourceBuildNumber": 6,
-      "sourceInputsSha256": "e60a09b15b3805e7273ccf1d2bfe918720563dca9cd611d479a2d3ec28471583",
+      "sourceInputsSha256": "07a1f2714ce4fcfec449ccfe3323251e6d1f7f623b299946f754921c8a6e7d0c",
       "sourceTextNormalization": "utf8_lf_binary_unchanged",
-      "packagedAtUtc": "2026-09-20T06:08:37.224365+00:00"
+      "packagedAtUtc": "2026-09-20T06:15:17.739463+00:00"
     }
   ],
   "previousRelease": {
@@ -130,7 +130,7 @@
   },
   "sourcePackagedAtUtc": "2026-09-18T21:13:15.081342+00:00",
   "nativeDistributionPolicy": "Historical binaries retain their exact bytes and build evidence. Current iOS source requires a fresh compile and matching signing input.",
-  "iosSourcePackagedAtUtc": "2026-09-20T06:08:37.224365+00:00",
+  "iosSourcePackagedAtUtc": "2026-09-20T06:15:17.739463+00:00",
   "historicalV4Preparation": {
     "record": "https://numinalabs.xyz/downloads/native-package-record-v4-pre-build5.json",
     "scope": "Preserved metadata-only iOS build3 preparation and retained Android3 binary evidence."
