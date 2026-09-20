@@ -9,6 +9,8 @@ test('NUSD runtime builder stages only the reviewed context while tolerating unr
   assert.match(workflow, /missing = sorted\(set\(expected\) - set\(actual\)\)/);
   assert.match(workflow, /if missing:/);
   assert.match(workflow, /for relative in sorted\(expected\):/);
+  assert.match(workflow, /'deployment\.template\.json'/);
+  assert.match(workflow, /'scripts\/token-artifact\.mjs'/);
 
   assert.doesNotMatch(workflow, /sorted\(actual\) != sorted\(expected\)/);
   assert.match(workflow, /stat\.S_ISLNK\(mode\)/);
