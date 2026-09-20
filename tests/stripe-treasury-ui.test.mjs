@@ -39,7 +39,7 @@ function harness(fetcher,{control=false}={}){
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:listen,dispatchEvent:event=>{dispatched.push(event.type);fire(event.type,event);return true;},querySelectorAll:selector=>selector.includes('workspace')?[...nodes.values()].filter(node=>node.tagName==='button'):[]};
  const context=vm.createContext({document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
  const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
- vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('treasury-amount.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
+ vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('treasury-amount.js')+'\n'+source('treasury-connection-model.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
  return {get,context,subject:context.subject,dispatched,fire,close(){if(control)fire('pagehide');else context.subject.clearStripeTreasury();}};
 }
 function values(h){const items=h.get('stripe-treasury-details').children,rows={};for(let i=0;i<items.length;i+=2)rows[items[i].textContent]=items[i+1].textContent;return rows;}
