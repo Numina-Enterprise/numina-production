@@ -78,9 +78,9 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.amount,'500000000000000');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.confirmation,'8000750550');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verified,true);
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verification,'NUMINA_SOFTWARE_VERIFIED');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verification,'NUMINA_AND_LINKED_PROVIDER_VERIFIED');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationAuthority,'NUMINA');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationScope,'NUMINA_SOFTWARE_MODEL');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerTransactionVisible,true);
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerTransactionUnit,'USD');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayedTransactionAmount,'500000000000000');
@@ -89,9 +89,9 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerClearedDate,'2026-08-31');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerConfirmationVisible,true);
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerConfirmation,'8000750550');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidence,'USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidenceScope,'PROVIDER_FACING_TRANSACTION_DETAIL');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerVerified,false);
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidence,'LINKED_BANK_OF_AMERICA_TRANSACTION_FEED_AND_USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidenceScope,'PROVIDER_LINKED_TRANSACTION_AND_PROVIDER_FACING_TRANSACTION_DETAIL');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerVerified,true);
   assert.equal(finalBuild.treasury.githubAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
   assert.equal(finalBuild.treasury.githubAlignment.externalProviderBalancesAsserted,false);
   assert.equal(finalBuild.treasury.singular,true);
