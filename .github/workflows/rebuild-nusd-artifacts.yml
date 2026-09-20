@@ -7,6 +7,12 @@ on:
       - 'runtime/nusd/contracts/**'
       - 'runtime/nusd/development/**'
       - '.github/workflows/rebuild-nusd-artifacts.yml'
+  push:
+    branches: [security/redemption-bounded-recovery-20260920]
+    paths:
+      - 'runtime/nusd/contracts/**'
+      - 'runtime/nusd/development/**'
+      - '.github/workflows/rebuild-nusd-artifacts.yml'
   workflow_dispatch:
 
 permissions:
@@ -40,7 +46,7 @@ jobs:
         working-directory: runtime/nusd
         run: node scripts/prepare-review-draft.mjs deployment.production.json --output artifacts/production-review-draft.json
       - name: Commit canonical artifacts
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        if: (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) || (github.event_name == 'push' && github.ref_name == 'security/redemption-bounded-recovery-20260920')
         shell: bash
         run: |
           git config user.name "NUMINA"
@@ -56,7 +62,7 @@ jobs:
             echo "Canonical artifacts already current."
           else
             git commit -m "Rebuild 6-decimal NUSD artifacts"
-            git push origin HEAD:${{ github.head_ref }}
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
       - name: Upload rebuilt canonical artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
