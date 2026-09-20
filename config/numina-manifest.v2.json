@@ -94,5 +94,16 @@
     "transport_identity": "NUMINA",
     "singular": true,
     "substrate_observations_only": true
+  },
+  "software_external": false,
+  "software_identity": "NUMINA",
+  "software_treasury": {
+    "identity": "NUMINA",
+    "singular": true,
+    "software_external": false,
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
   }
 }
