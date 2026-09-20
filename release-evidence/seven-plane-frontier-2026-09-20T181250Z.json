@@ -1,0 +1,193 @@
+{
+  "schema": "numina.seven-plane-frontier-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T18:12:50Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "477971591756355447344d34ed63e54b067ca470",
+  "model": {
+    "architectureLayerCount": 5,
+    "architectureLayers": ["L1", "L2", "L3", "L4", "L5"],
+    "nativeDeliveryPlaneCount": 2,
+    "nativeDeliveryPlanes": ["android", "ios"],
+    "frontierPlaneCount": 7,
+    "note": "Android and iOS are delivery planes and are not relabeled as architectural L6/L7."
+  },
+  "localCanonicalGate": {
+    "exactHead": "477971591756355447344d34ed63e54b067ca470",
+    "buildSucceeded": true,
+    "fullSuiteFirstPass": {
+      "tests": 910,
+      "passed": 909,
+      "failed": 1,
+      "failureCause": "fresh shallow clone did not contain tag v4.0.0"
+    },
+    "publicationPolicyAfterTagFetch": {
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "tag": "v4.0.0",
+      "tagCommit": "c57106e8bafd8078873b777587f748da6be86a32"
+    },
+    "releaseArchiveSha256": "e2e19f008e9e483d944744d32c99943d85f5041ee38ffc083bc30e9a30c82d01",
+    "runtimeCheck": {
+      "expected": "1.9.0-rc26",
+      "observed": "1.9.0-rc26",
+      "passed": true,
+      "checks": {
+        "release": true,
+        "signature": true,
+        "status": true,
+        "supply": true,
+        "control": true,
+        "ready": true,
+        "durable": true
+      }
+    }
+  },
+  "production": {
+    "deploymentId": "dpl_HugDTDBK1b1CdYzWDVkZATfvv9Yy",
+    "vercelBuildId": "bld_iinrlfl8u",
+    "sourceSha": "477971591756355447344d34ed63e54b067ca470",
+    "state": "READY",
+    "canonicalUrl": "https://numinalabs.xyz",
+    "transportUrl": "https://numina-production-jfgm9jcyi-numina-167f7fe7.vercel.app",
+    "applicationBuildId": "97a5fceeffc2e230130c92146ca0fe6437e157d8be0b617654cea8c74ee9f728",
+    "frontierReadiness": {
+      "ready": true,
+      "deployed": true,
+      "gitCommitSha": "477971591756355447344d34ed63e54b067ca470",
+      "runtimeRelease": "1.9.0-rc26",
+      "release": "core-v1.8+prod-v1.9.0-rc26",
+      "checks": {
+        "application_release_valid": true,
+        "application_runtime_binding": true,
+        "runtime_manifest_identity": true,
+        "release_attestation_signature": true,
+        "supply_chain_identity": true,
+        "numina_provider_of_record": true,
+        "numina_deployment": true
+      }
+    }
+  },
+  "planes": [
+    {
+      "plane": "L1",
+      "role": "root_state_network",
+      "advanced": true,
+      "productionEvidence": {
+        "path": "/api/control/v2/head",
+        "httpStatus": 200,
+        "sha256": "eb85bb81348dd0df5376d11d23de3843cb04c3003e0bc59502bec2b171915645"
+      }
+    },
+    {
+      "plane": "L2",
+      "role": "intent_evidence",
+      "advanced": true,
+      "evidence": "current-head build and policy/evidence tests passed except the tag-resolution false negative, which passed after fetching canonical tags"
+    },
+    {
+      "plane": "L3",
+      "role": "authority",
+      "advanced": true,
+      "productionEvidence": {
+        "path": "/api/control/v2/architecture",
+        "httpStatus": 200,
+        "sha256": "0eaeac884ebc6e24872280750e6dc9843284d17a2c0564281c24e41b2dbce41d"
+      }
+    },
+    {
+      "plane": "L4",
+      "role": "execution_transports",
+      "advanced": true,
+      "productionEvidence": {
+        "agentCard": {
+          "path": "/.well-known/agent-card.json",
+          "httpStatus": 200,
+          "sha256": "5637a4d614a889f6b62aa246ba451c35914efbf18a61e6b01a4af387dbcb5918"
+        },
+        "mcpDiscoveryInitialize": {
+          "path": "/api/control/v2/discovery-mcp",
+          "method": "POST",
+          "httpStatus": 200,
+          "sha256": "41fc5ffd4893494441d6c91959e7f3ac752ed60ba6ea8133f09fb3552293d238",
+          "protocolVersion": "2025-11-25",
+          "serverVersion": "4.0.0"
+        }
+      }
+    },
+    {
+      "plane": "L5",
+      "role": "canonical_evidence",
+      "advanced": true,
+      "productionEvidence": {
+        "path": "/v1/frontier/readiness",
+        "httpStatus": 200,
+        "sha256": "54dba32a9ae6323e56960d030a97f28c75f7306eb4446e77178c8764a9e1e943",
+        "signed": true,
+        "algorithm": "Ed25519"
+      }
+    },
+    {
+      "plane": "android",
+      "role": "native_delivery",
+      "advanced": true,
+      "frontierReached": "current_source_readiness",
+      "sourceChecksPassed": true,
+      "signedArtifactProduced": false,
+      "storeSubmitted": false,
+      "remainingGate": "GitHub-hosted runner allocation remains unavailable; VENGEANCE has no configured Android SDK environment for fallback signing."
+    },
+    {
+      "plane": "ios",
+      "role": "native_delivery",
+      "advanced": true,
+      "frontierReached": "current_source_readiness",
+      "applicationVersion": "4.0.0",
+      "buildNumber": 6,
+      "bundleIdentifier": "xyz.numinalabs.app",
+      "nativeCompilationEstablished": false,
+      "signedArtifactProduced": false,
+      "storeSubmitted": false,
+      "remainingGate": "GitHub-hosted macOS runner allocation remains unavailable; VENGEANCE is Windows and has no Xcode signing environment."
+    }
+  ],
+  "requiredProductionReceipts": [
+    {
+      "path": "/final-build.json",
+      "httpStatus": 200,
+      "sha256": "ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"
+    },
+    {
+      "path": "/downloads/nusd/deployment-receipt.json",
+      "httpStatus": 200,
+      "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"
+    },
+    {
+      "path": "/api/nusd/v1/status",
+      "httpStatus": 200,
+      "sha256": "12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae"
+    },
+    {
+      "path": "/v2/network/deployment-estimate",
+      "httpStatus": 200,
+      "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"
+    }
+  ],
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "runId": 35527978644,
+    "runAttempt": 2,
+    "jobId": 106124188780,
+    "status": "completed",
+    "conclusion": "failure",
+    "executedStepCount": 0
+  },
+  "remainingBlockers": [
+    "GitHub-hosted runner allocation is still unavailable.",
+    "Android current-source production signing has not executed and no new signed Android artifact exists.",
+    "iOS current-source production signing has not executed and no new signed iOS artifact exists.",
+    "No Google Play or App Store submission is claimed without a provider receipt."
+  ]
+}
