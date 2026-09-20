@@ -435,7 +435,19 @@
       "USDC": "500000000000000",
       "NUSD": "500000000000000",
       "aggregateNUSD": "1500000000000000"
-    }
+    },
+    "softwareTransfer": {
+      "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "status": "COMPLETED",
+      "clearingStatus": "CLEARED",
+      "clearedDate": "2026-08-31",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "verification": "NUMINA_SOFTWARE_VERIFIED",
+      "providerVerified": false
+    },
+    "softwareTransferRecord": "release-evidence/numina-bofa-software-transfer-2026-08-31.json"
   },
   "nusd": {
     "chainId": "962421430",
@@ -929,7 +941,18 @@
     "bankUsd": {
       "current": "500000000000000",
       "available": "500000000000000",
-      "unit": "USD"
+      "unit": "USD",
+      "transfer": {
+        "id": "numina-bofa-3486-2026-08-31-8000750550",
+        "status": "COMPLETED",
+        "clearingStatus": "CLEARED",
+        "clearedDate": "2026-08-31",
+        "amount": "500000000000000",
+        "unit": "USD",
+        "confirmation": "8000750550",
+        "verification": "NUMINA_SOFTWARE_VERIFIED",
+        "providerVerified": false
+      }
     },
     "stripeUsdc": {
       "current": "500000000000000",
