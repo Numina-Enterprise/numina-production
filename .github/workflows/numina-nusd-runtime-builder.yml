@@ -107,7 +107,7 @@ jobs:
               destination.write_bytes(data)
               records.append({'path': relative, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
           package = json.loads((stage / 'package.json').read_text())
-          if package.get('dependencies') != {'ethers': '6.15.0'} or any(package.get(k) for k in ('devDependencies', 'optionalDependencies')):
+          if package.get('dependencies') != {'ethers': '6.17.0'} or package.get('overrides') != {'ws': '8.21.3'} or any(package.get(k) for k in ('devDependencies', 'optionalDependencies')):
               raise SystemExit('Runtime dependency policy requires review')
           # Only this reviewed build recipe may execute commands. Changes require
           # a new builder review, so inventory flags cannot silently outlive it.
