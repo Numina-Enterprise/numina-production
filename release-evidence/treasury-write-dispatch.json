@@ -16,5 +16,13 @@
     "NUSD": "500000000000000",
     "aggregateNUSD": "1500000000000000"
   },
-  "purpose": "Dispatch protected NUMINA software treasury alignment and aggregate-model journal writes only. No bank transfer, provider settlement, chain transfer, external asset movement, or provider balance override is authorized by this marker."
+  "purpose": "Dispatch protected NUMINA software treasury alignment and aggregate-model journal writes only. No bank transfer, provider settlement, chain transfer, external asset movement, or provider balance override is authorized by this marker.",
+  "requestSequence": 2,
+  "requestedAt": "2026-09-20T23:11:30Z",
+  "reason": "Explicit NUMINA instruction: initiate protected software treasury writes after prior workflow_dispatch runs remained pending before job creation.",
+  "priorRuns": {
+    "nativeAlignmentRunId": 35543661331,
+    "aggregateModelRunId": 35543662435,
+    "observedState": "pending_zero_jobs"
+  }
 }
