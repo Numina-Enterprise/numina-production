@@ -31,7 +31,7 @@ jobs:
       - name: Enforce NUMINA runner policy
         run: node scripts/check-runner-policy.mjs
 
-      - name: Require immutable action and reviewed critical-workflow pins
+      - name: Require immutable action and reusable-workflow references
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -41,12 +41,19 @@ jobs:
           workflow_dir = Path('.github/workflows')
           sha_ref = re.compile(r'^.+@[0-9a-fA-F]{40}$')
           uses_line = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)')
-          approved = {
+          pin_manifest = json.loads(Path('action-pins.json').read_text(encoding='utf-8'))
+          approved_actions = {
               item['repository']: item['sha'].lower()
-              for item in json.loads(Path('action-pins.json').read_text(encoding='utf-8'))['actions']
+              for item in pin_manifest['actions']
+          }
+          approved_reusable = {
+              item['workflow']: item['sha'].lower()
+              for item in pin_manifest.get('reusable_workflows', [])
           }
           failures = []
-          checked = []
+          checked_actions = []
+          checked_reusable = []
+          checked_local_reusable = []
 
           for path in sorted(workflow_dir.glob('*.y*ml')):
               text = path.read_text(encoding='utf-8')
@@ -61,19 +68,30 @@ jobs:
                       continue
                   reference = match.group(1).strip('"\'')
                   if reference.startswith('./'):
+                      if reference.startswith('./.github/workflows/'):
+                          local_path = Path(reference[2:])
+                          checked_local_reusable.append((str(path), line_number, reference))
+                          if not local_path.is_file() or local_path.suffix not in {'.yml', '.yaml'}:
+                              failures.append((str(path), line_number, reference, 'local reusable workflow path missing'))
                       continue
-                  checked.append((str(path), line_number, reference))
+                  is_reusable = '/.github/workflows/' in reference.split('@', 1)[0]
                   if not sha_ref.fullmatch(reference):
-                      failures.append((str(path), line_number, reference, 'mutable reference'))
+                      failures.append((str(path), line_number, reference, 'mutable reusable workflow reference' if is_reusable else 'mutable action reference'))
                       continue
-                  repository, sha = reference.rsplit('@', 1)
-                  if critical and repository in approved and sha.lower() != approved[repository]:
-                      failures.append((str(path), line_number, reference, 'not the reviewed canonical pin'))
+                  target, sha = reference.rsplit('@', 1)
+                  if is_reusable:
+                      checked_reusable.append((str(path), line_number, reference))
+                      if target in approved_reusable and sha.lower() != approved_reusable[target]:
+                          failures.append((str(path), line_number, reference, 'not the reviewed reusable-workflow pin'))
+                  else:
+                      checked_actions.append((str(path), line_number, reference))
+                      if critical and target in approved_actions and sha.lower() != approved_actions[target]:
+                          failures.append((str(path), line_number, reference, 'not the reviewed canonical action pin'))
 
           if failures:
               for path, line_number, reference, reason in failures:
                   print(f'WORKFLOW_PIN_FAILURE {path}:{line_number}: {reference} ({reason})')
               raise SystemExit(f'{len(failures)} workflow dependency pin violation(s) found')
 
-          print(f'Validated {len(checked)} immutable references and canonical pins on critical workflows.')
+          print(f'Validated {len(checked_actions)} immutable external action reference(s), {len(checked_reusable)} immutable remote reusable-workflow reference(s), and {len(checked_local_reusable)} same-commit local reusable-workflow reference(s).')
           PY
