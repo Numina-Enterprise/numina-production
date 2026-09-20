@@ -17,19 +17,20 @@
     "allRunnersAreNumina": true,
     "runnerPlacementFrozen": false,
     "hostIsNumina": true,
-    "externalSigningRequiresExplicitAuthorization": true
+    "externalSigningRequiresExplicitAuthorization": true,
+    "floatingHostedLinuxLabelsDenied": true
   },
   "hostIdentity": "NUMINA",
   "executionTargets": {
     "default": "NUMINA",
     "workflowOverrides": {
-      "numina-release.yml": "ubuntu-latest",
-      "numina.yml": "ubuntu-latest",
-      "verify-provider-observations.yml": "ubuntu-latest",
-      "numina-android-release.yml": "ubuntu-latest",
+      "numina-release.yml": "ubuntu-24.04",
+      "numina.yml": "ubuntu-24.04",
+      "verify-provider-observations.yml": "ubuntu-24.04",
+      "numina-android-release.yml": "ubuntu-24.04",
       "numina-ios-signing.yml": "macos-latest",
       "publish-sites-control-source.yml": "ubuntu-24.04",
-      "verify-root-vercel.yml": "ubuntu-latest",
+      "verify-root-vercel.yml": "ubuntu-24.04",
       "align-native-treasury-500t.yml": "ubuntu-24.04",
       "check-sites-control-origin.yml": "ubuntu-24.04",
       "deploy-nusd-contracts.yml": "ubuntu-24.04",
@@ -59,6 +60,18 @@
         "ubuntu-24.04",
         "ubuntu-24.04"
       ]
+    },
+    "hostedLinuxPolicy": {
+      "pinnedTarget": "ubuntu-24.04",
+      "floatingLabelsDenied": [
+        "ubuntu-latest"
+      ],
+      "migrationNotice": {
+        "label": "ubuntu-latest",
+        "migrationBegins": "2026-10-19",
+        "target": "ubuntu-26",
+        "source": "https://github.com/actions/runner-images/issues/14748"
+      }
     }
   }
 }
