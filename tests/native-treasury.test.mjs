@@ -28,6 +28,7 @@ test('clients bind proof to the root, command, revision and current event head',
     const api=treasury(db);
     const empty=await api.readTreasury();assert.equal(await verifyTreasuryRecord(empty),false);assert.equal(await verifyTreasuryRecord(empty,{allowUninitialized:true}),true);
     await api.writeTreasury(await command(db));const current=await api.readTreasury();
+    assert.equal(current.softwareExternal,false);assert.equal(current.softwareIdentity,'NUMINA');assert.deepEqual(current.softwareTransfer,{id:'numina-bofa-3486-2026-08-31-8000750550',status:'COMPLETED',clearingStatus:'CLEARED',clearedDate:'2026-08-31',amount:'500000000000000',unit:'USD',confirmation:'8000750550',verification:'NUMINA_SOFTWARE_VERIFIED',providerVerified:false});
     for(const mutate of [
       v=>v.root='OTHER',v=>v.principal='email:another-root@example.test',v=>v.revision=0,v=>v.head='a'.repeat(64),
       v=>v.canonical_proof.event.commandHash='a'.repeat(64),v=>v.canonical_proof.event.command.data.Authority='OTHER',
@@ -360,7 +361,7 @@ test('HTTP exposes one treasury write route, checks owner and origin, and redire
     const event=await command(db);
     assert.equal((await worker.fetch(req('treasury',event,{'oai-authenticated-user-id':'test','oai-authenticated-user-email':'owner@example.test',Origin:'https://wrong.test'}),env)).status,403);
     const result=await worker.fetch(req('treasury',event),env);assert.equal(result.status,200);assert.equal((await result.json()).status,'FINAL');
-    const read=await worker.fetch(req('treasury'),env);assert.equal(read.headers.get('Cache-Control'),'private, no-store');assert.equal((await read.json()).projection.balance,'500000000000000');
+    const read=await worker.fetch(req('treasury'),env);assert.equal(read.headers.get('Cache-Control'),'private, no-store');const readBody=await read.json();assert.equal(readBody.projection.balance,'500000000000000');assert.equal(readBody.softwareTransfer.status,'COMPLETED');assert.equal(readBody.softwareTransfer.clearingStatus,'CLEARED');assert.equal(readBody.softwareTransfer.clearedDate,'2026-08-31');assert.equal(readBody.softwareTransfer.amount,'500000000000000');assert.equal(readBody.softwareTransfer.confirmation,'8000750550');
     const legacy=await worker.fetch(req('treasury-attestation'),env);assert.equal(legacy.status,308);assert.equal(legacy.headers.get('Location'),'/api/control/v1/treasury');
     const alternate=await worker.fetch(req('commands',{id:'wrong-route',expectedRevision:1,type:'treasury',data:{}}),env);assert.equal(alternate.status,409);assert.equal((await alternate.json()).error,'CANONICAL_TREASURY_ROUTE_REQUIRED');
     const providerBefore=readFileSync(new URL('../src/stripe-treasury.js',import.meta.url),'utf8');assert.equal(providerBefore.includes('createNuminaTreasury'),false);
