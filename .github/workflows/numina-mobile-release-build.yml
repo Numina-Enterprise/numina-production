@@ -5,6 +5,14 @@ on:
     branches: [main]
     paths:
       - .github/workflows/numina-mobile-release-build.yml
+      - mobile/android/**
+      - mobile/ios/**
+      - mobile/signing/**
+      - scripts/sign-android-release.py
+      - scripts/sign-ios-release.py
+      - scripts/submit-google-play.py
+      - scripts/submit-app-store.py
+      - package.json
 permissions:
   contents: read
 concurrency:
