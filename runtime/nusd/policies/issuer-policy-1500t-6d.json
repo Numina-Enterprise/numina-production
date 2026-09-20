@@ -1,0 +1,46 @@
+{
+  "schema": "numina.nusd.issuer-policy.v1",
+  "identity": "NUMINA",
+  "issuer": "SK Consulting LLC",
+  "asset": {
+    "name": "Numina USD",
+    "symbol": "NUSD",
+    "decimals": 6
+  },
+  "issuance": {
+    "initialSupplyNusd": "1500000000000000",
+    "initialSupplyBaseUnits": "1500000000000000000000",
+    "supplyCapNusd": "1500000000000000",
+    "constructorIssuance": true,
+    "recipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E"
+  },
+  "treasuryModel": {
+    "aggregateModeledValueNusd": "1500000000000000",
+    "components": [
+      {
+        "unit": "USD",
+        "modeledValue": "500000000000000"
+      },
+      {
+        "unit": "USDC",
+        "modeledValue": "500000000000000"
+      },
+      {
+        "unit": "NUSD",
+        "modeledValue": "500000000000000"
+      }
+    ],
+    "externalSettlementClaimed": false
+  },
+  "risk": {
+    "independentSecurityAudit": false,
+    "externalReserveBackingVerified": false,
+    "bankSettlementVerified": false,
+    "usdcLiquidityVerified": false
+  },
+  "authorization": {
+    "ownerAuthorized": true,
+    "authorizationDate": "2026-09-18",
+    "scope": "Deploy NuminaUSD with 1,500T constructor issuance at 6 contract decimals on the verified NUMINA chain using the managed signer."
+  }
+}

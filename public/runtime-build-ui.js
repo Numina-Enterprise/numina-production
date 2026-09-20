@@ -155,7 +155,7 @@ export function assessFinancialStatus(data) {
     ?{source:'Contract source record unavailable','source-scope':''}
     :contractSourcePresentation(data.contract_record);
   const mint=data.mint_workflow;
-  const token=data.contract_record?.contracts?.find(contract=>contract.name==='NuminaUSD');
+  const token=(mint?.status==='implemented_unsigned_preparation_available'?data.contract_record?.contract_candidate?.contracts:data.contract_record?.contracts)?.find(contract=>contract.name==='NuminaUSD');
   if(mint!==undefined&&(mint?.schema!=='numina.nusd.mint-workflow.v1'||
     !['implemented_unsigned_preparation_available','DEPLOYED_PAUSED_18D'].includes(mint.status)||
     mint.contract?.authorizationFunction!=='authorizeIssuance'||mint.contract?.mintFunction!=='mintAuthorized'||

@@ -2,7 +2,7 @@
 
 ## Release scope
 
-This document describes the `NuminaUSDCConversion` and `NuminaUSDRedemption` contract candidates. They implement fixed 1:1 whole-unit arithmetic for existing NUSD tokens. The reviewed sources require 18-decimal NUSD and 6-decimal USDC. This documentation update changes neither token supply nor issuer/minter separation. Publishing these sources or this document does not establish contract deployment, token issuance, a bridge, provider payment, reserve funding or financial approval. An independent security audit is not established by this source review.
+This document describes the `NuminaUSDCConversion` and `NuminaUSDRedemption` contract candidates. They implement fixed 1:1 whole-unit arithmetic for existing NUSD tokens. The current contract sources require 6-decimal NUSD and 6-decimal USDC. This documentation update changes neither token supply nor issuer/minter separation. Publishing these sources or this document does not establish contract deployment, token issuance, a bridge, provider payment, reserve funding or financial approval. An independent security audit is not established by this source review.
 
 Read the versioned software record at `/api/nusd/v1/conversion-workflow`; source and ABI/bytecode hashes are in `/api/nusd/v1/contracts`. The application status and release manifest carry the same records. All live financial-execution flags remain false until independently evidenced activation.
 
@@ -18,13 +18,13 @@ No live RPC state, conversion-vault inventory, bank reserve balance, bridge, sig
 
 ## NUSD ↔ USDC: fixed-price token inventory
 
-`NuminaUSDCConversion` atomically exchanges existing tokens at **1 whole NUSD = 1 whole USDC**, with zero contract fee. NUSD must have **18 decimals**, USDC must have **6 decimals**, and both must exist on the **same chain**. One USDC base unit corresponds to `1000000000000` NUSD base units. Constructor addresses are immutable. Checking decimals and deployed code does not establish issuer identity: verify the exact NUSD deployment and the canonical Circle-issued USDC contract separately.
+`NuminaUSDCConversion` atomically exchanges existing tokens at **1 whole NUSD = 1 whole USDC**, with zero contract fee. NUSD and USDC must both have **6 decimals** and exist on the **same chain**. One USDC base unit corresponds to one NUSD base unit. Constructor addresses are immutable. Checking decimals and deployed code does not establish issuer identity: verify the exact NUSD deployment and the canonical Circle-issued USDC contract separately.
 
 The output token must already be present in the vault. A native journal valuation, a declared 1:1 rate or a token symbol cannot satisfy the liquidity check. Both input and output sender/recipient balance deltas must equal the requested amount, or all effects revert. Fee-on-transfer and inexact token behavior are rejected. Reentrant movement is blocked. The contract cannot mint either asset.
 
 Calls:
 
-- `quote(nusdToUsdc, inputAmount)` returns output-token base units. NUSD -> USDC divides by `1000000000000` and rejects inputs not exactly divisible by that factor; USDC -> NUSD multiplies by that factor and rejects overflow. Zero input is rejected. This arithmetic read reserves no liquidity and is not a binding live quote.
+- `quote(nusdToUsdc, inputAmount)` returns output-token base units. NUSD -> USDC and USDC -> NUSD preserve the exact base-unit amount because both tokens use six decimals. Zero input is rejected. This arithmetic read reserves no liquidity and is not a binding live quote.
 - `convert(operationId, nusdToUsdc, inputAmount, recipient)` exchanges both tokens atomically; `inputAmount` uses the input token's base units. `true` selects NUSD → USDC; `false` selects USDC → NUSD. Caller eligibility and token allowance are required. The recipient is explicit; no Stripe address is inferred.
 - `addLiquidity(isUsdc, amount)` deposits existing inventory from an authorized liquidity manager. Only the exact received amount is accepted.
 - `removeLiquidity(isUsdc, amount, recipient)` lets the liquidity manager withdraw inventory **only while conversion is paused**. Such withdrawals reduce available redemption capacity. The vault does not guarantee backing for NUSD held outside it or maintain asynchronous withdrawal promises.
@@ -41,7 +41,7 @@ An eventual USDC deposit must use an asset and network supported by that Stripe 
 
 `NuminaUSDRedemption` locks existing NUSD against a USD payment obligation at **1 NUSD = 1 USD gross**. USD is paid through a separate, funded bank/payment provider integration. The contract neither creates dollars nor sends a bank transfer.
 
-18-decimal NUSD must convert exactly to two-decimal USD cents: **10000000000000000 NUSD base units = 1 USD cent**. `quoteUsdCents(amountNusd)` rejects zero and sub-cent requests; there is no rounding or haircut. Solidity integer arithmetic retains exact values beyond JavaScript's safe-number range. Clients must use decimal strings and big integers, never floating-point money calculations. For example, 500T NUSD is `500000000000000000000000000000000` NUSD base units. At the configured 1:1 whole-unit rates, its arithmetic equivalents are `500000000000000000000` USDC base units or `50000000000000000` USD cents. These are unit-conversion examples, not a funding observation, executable payment instruction or transfer receipt.
+Six-decimal NUSD converts exactly to two-decimal USD cents: **10000 NUSD base units = 1 USD cent**. `quoteUsdCents(amountNusd)` rejects zero and sub-cent requests; there is no rounding or haircut. Solidity integer arithmetic retains exact values beyond JavaScript's safe-number range. Clients must use decimal strings and big integers, never floating-point money calculations. For example, 500T NUSD is `500000000000000000000` NUSD base units. At the configured 1:1 whole-unit rates, its arithmetic equivalents are `500000000000000000000` USDC base units or `50000000000000000` USD cents. These are unit-conversion examples, not a funding observation, executable payment instruction or transfer receipt.
 
 | State | Allowed next step | Token treatment |
 |---|---|---|
