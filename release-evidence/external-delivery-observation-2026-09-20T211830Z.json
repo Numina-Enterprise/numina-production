@@ -1,0 +1,128 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "observedAt": "2026-09-20T21:18:30Z",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "sourceSha": "409a8a48b23e1d49d5b4604aa8440b2744247a0c",
+  "github": {
+    "runnerAllocationAvailable": true,
+    "numinaBuild": {
+      "runId": 35538189461,
+      "conclusion": "success",
+      "artifactId": 10613484813,
+      "artifactName": "NUMINA",
+      "artifactBytes": 39838300,
+      "artifactDigest": "sha256:74874e4295337288b96a6bda091ccddee33ec3983024546779056af2b871bf7b"
+    },
+    "providerObservationVerification": {
+      "runId": 35538189453,
+      "conclusion": "success"
+    },
+    "sitesPublisher": {
+      "runId": 35538189539,
+      "conclusion": "failure",
+      "verificationPassed": true,
+      "packagePassed": true,
+      "restoreCommittedSourcePassed": true,
+      "publishStageReached": true,
+      "publishFailure": "authentication",
+      "target": "git.chatgpt-team.site",
+      "sourcePushVerified": false,
+      "deploymentStarted": false,
+      "nextAction": "Restore the publishing identity and its permission for this existing repository."
+    }
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "deploymentId": "dpl_DC2ZjZmJS6DRJQv1W9Qh3gHyuCB9",
+    "buildId": "bld_fvg730udu",
+    "state": "READY",
+    "productionUrl": "https://numina-production-nocv9mn1m-numina-167f7fe7.vercel.app",
+    "canonicalAlias": "https://numinalabs.xyz",
+    "sourceSha": "409a8a48b23e1d49d5b4604aa8440b2744247a0c",
+    "applicationBuildId": "c7a966cbde5dd6a0417e72c200e2edb723a05316fe42dc866a84e93da23323db",
+    "receipts": [
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "sha256": "749f37c12c52254c5593ea5edf9e6d1fab3c42b193fa13f6b1bfcb712d37a020",
+        "status": "FINAL",
+        "applicationVersion": "4.0.0",
+        "identity": "NUMINA"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70",
+        "chainId": "962421430",
+        "broadcastPerformed": true,
+        "finalityStatus": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "sha256": "f43442a694a0b686a023c3325c3c23eda700cf217f661e16012ddae1ff860180",
+        "operatorStatus": "active_operator_confirmed",
+        "assetVerificationStatus": "verified_deployed_paused",
+        "chainId": "962421430"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b",
+        "status": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true
+      }
+    ]
+  },
+  "android": {
+    "workflowRunId": 35535021337,
+    "workflowAttempt": 3,
+    "sourceSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+    "conclusion": "success",
+    "signatureVerification": true,
+    "storeSubmitted": false,
+    "artifactId": 10614205007,
+    "artifactDigest": "sha256:536e9dc0b2563c92e3a20d4b4364c8e1eb8432f5ad092202e79de4005815ec06",
+    "artifactBytes": 7021911,
+    "signedArtifacts": [
+      {
+        "file": "numina-4.0.0-release-signed.apk",
+        "bytes": 3797876,
+        "sha256": "f19370be880065d2800b938ecc0f16f6fb48711071f55687c036ecffd4ad594c"
+      },
+      {
+        "file": "numina-4.0.0-upload-signed.aab",
+        "bytes": 3617287,
+        "sha256": "4c4fa5250cad781795d8369491fc1f6f240077b63b00488fbe145807aa492c43"
+      }
+    ]
+  },
+  "ios": {
+    "workflowRunId": 35535021321,
+    "workflowAttempt": 3,
+    "sourceSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+    "compileSucceeded": true,
+    "signingSucceeded": false,
+    "artifactProduced": false,
+    "storeSubmitted": false,
+    "blocker": "Required Apple signing secrets are not configured.",
+    "missingConfiguredInputs": [
+      "NUMINA_APPLE_TEAM_ID",
+      "NUMINA_APPLE_DISTRIBUTION_P12_BASE64",
+      "NUMINA_APPLE_DISTRIBUTION_P12_PASSWORD",
+      "NUMINA_APPLE_PROVISIONING_PROFILE_BASE64"
+    ]
+  },
+  "storeSubmission": {
+    "googlePlaySubmitted": false,
+    "appStoreSubmitted": false,
+    "providerReceiptCaptured": false,
+    "note": "No successful connected provider submission execution path produced a store receipt."
+  }
+}
