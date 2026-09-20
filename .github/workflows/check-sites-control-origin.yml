@@ -17,12 +17,37 @@ jobs:
     timeout-minutes: 3
     env:
       NUMINA_SITES_ORIGIN: https://personal-space-m7q9.skott34.chatgpt.site
+      NUMINA_WORKER_ORIGIN: https://numina-production.skott34.workers.dev
       NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
     steps:
       - name: Require production owner credential
         shell: bash
         run: |
           test -n "$NUMINA_CONTROL_API_KEY"
+      - name: Read canonical treasury from Cloudflare Worker
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const origin=process.env.NUMINA_WORKER_ORIGIN;
+          const token=process.env.NUMINA_CONTROL_API_KEY;
+          const response=await fetch(origin+'/api/control/v1/treasury',{
+            redirect:'error',
+            signal:AbortSignal.timeout(15000),
+            headers:{Accept:'application/json',Authorization:'Bearer '+token}
+          });
+          const text=await response.text();
+          if(!response.ok)throw Error(`GET Worker treasury failed: HTTP ${response.status}`);
+          const body=JSON.parse(text);
+          if(body.status!=='READY')throw Error('Worker treasury not READY');
+          console.log(JSON.stringify({
+            origin:'cloudflare-worker',
+            status:body.status,
+            revision:body.revision,
+            head:body.head,
+            unit:body.projection?.unit,
+            request_count:body.projection?.transaction_requests?.length
+          },null,2));
+          NODE
       - name: Read canonical treasury from Sites Worker
         shell: bash
         run: |
