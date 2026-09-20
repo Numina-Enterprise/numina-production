@@ -6,14 +6,16 @@
 -- The existing numina_runtime membership was granted by cloud_admin and cannot
 -- be revoked by numina_owner. This migration therefore stages a replacement
 -- application role created directly in SQL, with no inherited parent memberships.
--- Neon records one administrative cloud_admin -> numina_owner membership for SQL-created
--- roles; it is acceptable only when INHERIT and SET are both disabled.
+--
+-- Neon records one administrative cloud_admin -> numina_owner membership for
+-- directly-created SQL roles. That record is acceptable only when INHERIT and SET
+-- are both disabled; any usable or non-owner membership fails closed.
 --
 -- Credential cutover is deliberately separate:
 --   1. apply this migration with numina_app_runtime kept NOLOGIN;
 --   2. provision a strong password through a secure operator channel and enable LOGIN;
---   3. point NUMINA_EVIDENCE_DATABASE_URL -- DATABASE_URL at numina_app_runtime;
---   4. verify application--evidence traffic;
+--   3. point the applicable NUMINA evidence/database URL secret at numina_app_runtime;
+--   4. verify application/evidence traffic;
 --   5. only then decide whether the legacy numina_runtime login can be disabled.
 --
 -- No credential is embedded in this repository.
@@ -75,7 +77,7 @@ BEGIN
     RAISE EXCEPTION 'numina_owner can unexpectedly inherit or SET ROLE numina_app_runtime';
   END IF;
 END
-$;
+$$;
 
 REVOKE ALL PRIVILEGES ON DATABASE numina FROM numina_app_runtime;
 GRANT CONNECT ON DATABASE numina TO numina_app_runtime;
@@ -97,7 +99,7 @@ GRANT SELECT
            public_evidence.provider_observation_history
   TO numina_app_runtime;
 
--- show_db_tree exposes database--schema object names and inherits PostgreSQL's
+-- show_db_tree exposes database/schema object names and inherits PostgreSQL's
 -- default PUBLIC EXECUTE privilege unless explicitly revoked.
 REVOKE EXECUTE ON FUNCTION public.show_db_tree() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.show_db_tree() TO numina_owner;
