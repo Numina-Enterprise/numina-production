@@ -10,5 +10,9 @@
   "signingIdentityPolicy": "USE_EXISTING_CONFIGURED_IDENTITIES_ONLY",
   "rotateSigningIdentity": false,
   "storeSubmissionAuthorized": false,
-  "requestedAtUtc": "2026-09-20T19:54:39.0552377Z"
+  "requestedAtUtc": "2026-09-20T20:16:24.8820132Z",
+  "retry": {
+    "previousRequestedAtUtc": "2026-09-20T19:54:39.0552377Z",
+    "reason": "GitHub hosted runner allocation restored; retry current canonical main signing without identity rotation"
+  }
 }

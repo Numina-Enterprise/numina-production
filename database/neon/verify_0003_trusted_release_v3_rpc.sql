@@ -61,9 +61,13 @@ BEGIN
     AND pg_get_functiondef('public.numina_mark_trusted_production_release(jsonb)'::regprocedure)
       LIKE '%numina_provider_of_record%'
     AND pg_get_functiondef('public.numina_mark_trusted_production_release(jsonb)'::regprocedure)
+      LIKE '%fundable_targets:=artifact->''fundable_targets'';%'
+    AND pg_get_functiondef('public.numina_mark_trusted_production_release(jsonb)'::regprocedure)
+      NOT LIKE '%fundable_targets:=readiness->''fundable_targets'';%'
+    AND pg_get_functiondef('public.numina_mark_trusted_production_release(jsonb)'::regprocedure)
       NOT LIKE '%control_manifest_signature%'
   ) THEN
-    RAISE EXCEPTION 'trusted-release RPC does not match the readiness-v3 contract';
+    RAISE EXCEPTION 'trusted-release RPC does not match the readiness-v3 artifact contract';
   END IF;
 END
 $$;
