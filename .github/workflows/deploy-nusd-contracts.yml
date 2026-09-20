@@ -28,7 +28,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: NUMINA
+    runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 20
     env:
