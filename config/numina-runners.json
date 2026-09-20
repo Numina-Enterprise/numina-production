@@ -35,7 +35,8 @@
       "ibm-quantum-hardware.yml": "ubuntu-24.04",
       "ibm-quantum-smoke.yml": "ubuntu-24.04",
       "initiate-treasury-aggregate-model.yml": "ubuntu-24.04",
-      "verify-workflow-pins.yml": "ubuntu-24.04"
+      "verify-workflow-pins.yml": "ubuntu-24.04",
+      "sync-control-key-pin.yml": "ubuntu-24.04"
     },
     "scope": "NUMINA remains the singular logical execution identity. Explicitly recorded GitHub-hosted substrates may execute canonical build, provider-verification, native signing, native mobile artifact, and store-distribution workflows. Existing self-hosted NUMINA runner registrations remain preserved and future runner additions outside these declared workflow targets remain denied.",
     "workflowTargetSets": {
