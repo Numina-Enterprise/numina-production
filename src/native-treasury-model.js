@@ -25,7 +25,7 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
   if(data.Principal!==actor||data.Authority!=='NUMINA')controlError('TREASURY_AUTHORITY_DENIED',403);
   const intent=data.Intent;
   if(!intent||typeof intent.operation!=='string')controlError('INVALID_TREASURY_INTENT',400);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',SETTLE_AGGREGATE_MODEL:'treasury.aggregate.settle',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind',CONFIRM_NUMINA_RECEIPT:'treasury.receipt.confirm'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_USDC_DEPOSIT:'treasury.usdc.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',SETTLE_AGGREGATE_MODEL:'treasury.aggregate.settle',BIND_EXTERNAL_RECEIPT:'treasury.external.receipt.bind',CONFIRM_NUMINA_RECEIPT:'treasury.receipt.confirm'};
   if(!Object.hasOwn(objectives,intent.operation)||data.Objective!==objectives[intent.operation])controlError('INVALID_TREASURY_OBJECTIVE',400);
   let projection=current?structuredClone(validateTreasuryProjection(current)):null;
   let transactionRequest=null;
@@ -81,13 +81,14 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
       transactionRequest=request;
     }else{
       const mint=intent.operation==='PREPARE_MINT';
-      treasuryExact(intent,mint?['operation','amount','networkReference','destinationReference','reason']:['operation','amountMinor','currency','destinationReference','reason']);
+      const usdc=intent.operation==='PREPARE_USDC_DEPOSIT';
+      treasuryExact(intent,mint?['operation','amount','networkReference','destinationReference','reason']:usdc?['operation','amount','destinationReference','reason']:['operation','amountMinor','currency','destinationReference','reason']);
       treasuryReason(intent.reason);
-      const amount=mint?intent.amount:intent.amountMinor;
+      const amount=mint||usdc?intent.amount:intent.amountMinor;
       if(typeof amount!=='string'||!treasuryUnsigned.test(amount)||amount==='0')controlError('INVALID_TRANSACTION_AMOUNT',400);
-      if(!treasuryReference.test(intent.destinationReference)||typeof intent.destinationReference!=='string'||(mint&&(!treasuryReference.test(intent.networkReference)||typeof intent.networkReference!=='string'))||(!mint&&intent.currency!=='USD'))controlError('INVALID_TRANSACTION_REFERENCE',400);
+      if(!treasuryReference.test(intent.destinationReference)||typeof intent.destinationReference!=='string'||(mint&&(!treasuryReference.test(intent.networkReference)||typeof intent.networkReference!=='string'))||(!mint&&!usdc&&intent.currency!=='USD'))controlError('INVALID_TRANSACTION_REFERENCE',400);
       if(projection.transaction_requests.length>=100)controlError('TREASURY_REQUEST_CAPACITY',409);
-      transactionRequest={id:eventId,kind:mint?'mint_request':'bank_transaction_request',status:'PREPARED',destination_reference:intent.destinationReference,...(mint?{amount,unit:'NUSD',network_reference:intent.networkReference}:{amount_minor:amount,currency:intent.currency}),submission_performed:false,receipt:null};
+      transactionRequest={id:eventId,kind:mint?'mint_request':usdc?'usdc_deposit_request':'bank_transaction_request',status:'PREPARED',destination_reference:intent.destinationReference,...(mint?{amount,unit:'NUSD',network_reference:intent.networkReference}:usdc?{amount,unit:'USDC'}:{amount_minor:amount,currency:intent.currency}),submission_performed:false,receipt:null};
       projection.transaction_requests.push(transactionRequest);
     }
     projection.last_event_id=eventId;

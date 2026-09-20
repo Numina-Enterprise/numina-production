@@ -20,7 +20,7 @@ async function fixture(path){const db=database(path);await bootstrapControl(db,o
 const treasury=db=>createNuminaTreasury({db,root:owner,principal:owner});
 async function command(db,operation='INITIALIZE',extra={},id='native-init'){
   const row=await readControl(db);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_USDC_DEPOSIT:'treasury.usdc.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare'};
   return {id,expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:objectives[operation],Intent:{operation,reason:'Isolated test of the Numina-native model',...extra}};
 }
 
@@ -266,15 +266,16 @@ test('treasury prevents authority substitution, unknown fields, replay mutation 
     assert.equal((await readControl(db)).head_hash,before.head_hash);
   }finally{db.close();}
 });
-test('prepared mint and bank requests are journaled without changing projection or fabricating receipts',async()=>{
+test('prepared mint, USDC deposit and bank requests are journaled without changing projection or fabricating receipts',async()=>{
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
-    for(const [operation,data]of [['PREPARE_MINT',{amount:'100',networkReference:'numina-main',destinationReference:'owner-wallet'}],['PREPARE_BANK_TRANSACTION',{amountMinor:'10000',currency:'USD',destinationReference:'owner-bank'}]]){
+    for(const [operation,data]of [['PREPARE_MINT',{amount:'100',networkReference:'numina-main',destinationReference:'owner-wallet'}],['PREPARE_USDC_DEPOSIT',{amount:'500000000000000',destinationReference:'fa-numina-stripe'}],['PREPARE_BANK_TRANSACTION',{amountMinor:'10000',currency:'USD',destinationReference:'owner-bank'}]]){
       const result=await api.writeTreasury(await command(db,operation,data,operation));
       assert.equal(result.transaction_request.status,'PREPARED');assert.equal(result.transaction_request.receipt,null);assert.equal(result.transaction_request.submission_performed,false);
+      if(operation==='PREPARE_USDC_DEPOSIT'){assert.equal(result.transaction_request.kind,'usdc_deposit_request');assert.equal(result.transaction_request.unit,'USDC');assert.equal(result.transaction_request.amount,'500000000000000');}
       assert.equal(result.projection.balance,'500000000000000');assert.equal(result.mint_event,null);assert.equal(result.bank_transaction,null);
     }
-    const row=await readControl(db);assert.equal(row.eventCount,4);
+    const row=await readControl(db);assert.equal(row.eventCount,5);
     await db.prepare('UPDATE numina_control_events SET event_json=? WHERE id=?').bind('{}','PREPARE_MINT').run();
     await assert.rejects(api.readTreasury(),/JOURNAL_CORRUPT/);
   }finally{db.close();}
