@@ -52,7 +52,12 @@
         "runtime",
         "receipts",
         "treasury"
-      ]
+      ],
+      "source_of_truth": "NUMINA",
+      "singular_build_identity": "NUMINA",
+      "software_namespace": "NUMINA",
+      "authority": "NUMINA",
+      "source_transport": "github"
     }
   },
   "compatibility": {
@@ -171,6 +176,29 @@
       "USD": "500000000000000",
       "USDC": "500000000000000",
       "NUSD": "500000000000000"
-    }
+    },
+    "sourceOfTruth": "NUMINA",
+    "singularBuildIdentity": "NUMINA",
+    "namespace": "NUMINA",
+    "authority": "NUMINA",
+    "observationNamespace": "NUMINA",
+    "attestationNamespace": "NUMINA"
+  },
+  "singular_identity": {
+    "identity": "NUMINA",
+    "software": "NUMINA",
+    "namespace": "NUMINA",
+    "authority": "NUMINA",
+    "source_of_truth": "NUMINA",
+    "singular_build": "NUMINA",
+    "state": "NUMINA",
+    "models": "NUMINA",
+    "observations": "NUMINA",
+    "attestations": "NUMINA",
+    "internal": "NUMINA",
+    "external": "NUMINA",
+    "competing_identity_allowed": false,
+    "competing_authority_allowed": false,
+    "external_provenance_retained": true
   }
 }
