@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='6973d6e68050108dc2b890e6b0acda86af3295a2';
+const FINAL_BUILD_MANIFEST_BLOB='493c494ccddcac4ce647e17c324bf0a4be838a0f';
 const finalBuildBytes=readFileSync(finalBuildPath);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
