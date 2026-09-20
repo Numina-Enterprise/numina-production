@@ -1,0 +1,96 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T03:57:40Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "1a2afaeacb98f641804f6e61baf3d39e4c63090f",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "canonicalBuildRun": {
+      "workflow": ".github/workflows/publish-sites-control-source.yml",
+      "runId": 35487637500,
+      "sourceSha": "1a2afaeacb98f641804f6e61baf3d39e4c63090f",
+      "status": "pending",
+      "conclusion": null,
+      "allocatedJobCount": 0
+    },
+    "rerunsPerformedThisObservation": false,
+    "reason": "The current main push triggered the canonical build workflow, but GitHub had not allocated a NUMINA runner or created a job at observation time."
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "capacityEvidence": {
+      "deploymentId": "dpl_5iv2CVhB5KnFQ4a5ZAVVCokNq3Ji",
+      "sourceSha": "12c8bb229591449a75f25ac5ca07f3ecb3bf0dc8",
+      "target": "production",
+      "buildAllocated": true,
+      "state": "ERROR",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorStep": "buildStep",
+      "errorMessage": "Command \"npm run build\" exited with 1"
+    },
+    "currentMainDeployment": {
+      "sourceSha": "1a2afaeacb98f641804f6e61baf3d39e4c63090f",
+      "deploymentObserved": false,
+      "productionVerificationPerformed": false
+    },
+    "latestPreviouslyReadyProduction": {
+      "deploymentId": "dpl_9XLpWFWoTCikFpTqSmKCXCxXFbFV",
+      "sourceSha": "5ea879beb667aad6d1441f0791d82bf7a226b25b",
+      "state": "READY",
+      "scope": "historical receipt only; not evidence for the current main SHA"
+    },
+    "fallbackDeploy": {
+      "connectorDeployActionAvailableAtRuntime": false,
+      "vengeanceCliAuthenticated": false,
+      "deploymentPerformed": false
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "online",
+    "pingObservedAt": "2026-09-20T03:53:58.057Z",
+    "used": true,
+    "cleanWorktree": "C:\\Users\\sam\\Numina\\delivery-1a2afaea",
+    "sourceSha": "1a2afaeacb98f641804f6e61baf3d39e4c63090f",
+    "localBuild": {
+      "status": "SUCCEEDED",
+      "applicationVersion": "4.0.0",
+      "buildId": "dac4d7f1741adeec8d3c93eb5111ce14ec4800e273eb9b76ba444af4d330f040",
+      "artifactCount": 309
+    },
+    "localTests": {
+      "status": "FAILED",
+      "exitCode": 1,
+      "observedFailures": [
+        "trusted release evidence: readiness transport binding mismatch",
+        "workflow integrity: RUNNER_POLICY_VIOLATION Future runner declaration denied: preserved 27 got 28",
+        "treasury/frontier/native distribution identity assertions are not synchronized with current generated state"
+      ]
+    },
+    "secretsExposedOrRotated": false
+  },
+  "mobile": {
+    "androidSigningWorkflow": ".github/workflows/numina-android-release.yml",
+    "iosSigningWorkflow": ".github/workflows/numina-ios-signing.yml",
+    "runnerLabelRequired": "NUMINA",
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub Actions has not allocated the required NUMINA runner to current main",
+    "The exact current-main local test gate exits 1 and must be reconciled before promotion",
+    "No Vercel production deployment was observed for source SHA 1a2afaeacb98f641804f6e61baf3d39e4c63090f",
+    "The Vercel connector deployment action was unavailable at runtime and the VENGEANCE Vercel CLI requires a new login",
+    "Android and iOS production signing cannot be claimed without the configured signing workflow executing and producing artifacts",
+    "Store submission remains unclaimed because no newly signed mobile artifact and provider submission receipt exist"
+  ]
+}
