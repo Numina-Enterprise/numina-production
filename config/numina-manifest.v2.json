@@ -28,7 +28,7 @@
       "journal_table": "numina_control_events"
     },
     "external_confirmation": {
-      "bank_of_america": false,
+      "bank_of_america": true,
       "stripe": false,
       "role": "destination_transport_observation_only"
     },
@@ -121,10 +121,10 @@
         "unit": "USD",
         "confirmation": "8000750550",
         "verified": true,
-        "verification": "NUMINA_SOFTWARE_VERIFIED",
+        "verification": "NUMINA_AND_LINKED_PROVIDER_VERIFIED",
         "verificationAuthority": "NUMINA",
-        "verificationScope": "NUMINA_SOFTWARE_MODEL",
-        "providerVerified": false,
+        "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION",
+        "providerVerified": true,
         "providerTransactionVisible": true,
         "providerTransactionUnit": "USD",
         "providerDisplayedTransactionAmount": "500000000000000",
@@ -133,8 +133,21 @@
         "providerClearedDate": "2026-08-31",
         "providerConfirmationVisible": true,
         "providerConfirmation": "8000750550",
-        "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-        "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
+        "providerDisplayEvidence": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED_AND_USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+        "providerDisplayEvidenceScope": "PROVIDER_LINKED_TRANSACTION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
+        "providerVerificationSource": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED",
+        "providerTransactionId": "EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw",
+        "providerInstitution": "Bank of America",
+        "providerOfficialName": "Business Advantage Sav",
+        "providerAccountLast4": "3486",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotCurrent": "500000000000000",
+        "providerBalanceSnapshotAvailable": "500000000000000",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotSource": "LINKED_BANK_OF_AMERICA_ACCOUNT_FEED",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerBalanceRecordUpdatedAt": "2026-09-20T18:46:26.336453Z"
       }
     },
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
