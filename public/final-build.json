@@ -1279,11 +1279,11 @@
         "providerClearedDate": "2026-08-31",
         "providerConfirmation": "XXXXX50550",
         "providerWebsiteControlledExternally": true,
-        "linkedProviderBalanceSnapshot": "500000000000000",
+        "linkedProviderBalanceSnapshot": "0",
         "linkedProviderBalanceUnit": "USD",
         "linkedProviderBalanceFreshness": "unknown",
         "linkedProviderTransactionVerified": true,
-        "linkedProviderTransactionId": "EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw",
+        "linkedProviderTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
         "clearedDate": "2026-08-31",
         "confirmation": "8000750550"
       },
