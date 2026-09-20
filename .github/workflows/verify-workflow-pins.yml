@@ -8,6 +8,7 @@ on:
       - 'config/numina-runners.json'
       - 'scripts/check-runner-policy.mjs'
       - 'action-pins.json'
+      - 'release-evidence/nusd-runtime-provenance-dispatch.json'
   pull_request:
     branches: [main]
     paths:
@@ -15,9 +16,11 @@ on:
       - 'config/numina-runners.json'
       - 'scripts/check-runner-policy.mjs'
       - 'action-pins.json'
+      - 'release-evidence/nusd-runtime-provenance-dispatch.json'
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   verify:
@@ -27,6 +30,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
 
       - name: Enforce NUMINA runner policy
         run: node scripts/check-runner-policy.mjs
@@ -95,3 +99,51 @@ jobs:
 
           print(f'Validated {len(checked_actions)} immutable external action reference(s), {len(checked_reusable)} immutable remote reusable-workflow reference(s), and {len(checked_local_reusable)} same-commit local reusable-workflow reference(s).')
           PY
+
+
+      - name: Dispatch protected NUSD runtime provenance on explicit marker
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.ref_protected }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          API_URL: ${{ github.api_url }}
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          MARKER: release-evidence/nusd-runtime-provenance-dispatch.json
+        run: |
+          set -euo pipefail
+          [[ "$REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$REPOSITORY_ID" == '1367647143' ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+
+          if ! git diff --name-only "$SOURCE_SHA^1" "$SOURCE_SHA" | grep -Fxq "$MARKER"; then
+            printf 'No NUSD runtime dispatch marker changed in this protected-main commit.\n'
+            exit 0
+          fi
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          marker = json.loads(Path('release-evidence/nusd-runtime-provenance-dispatch.json').read_text())
+          expected = {
+              'schema': 'numina.nusd.runtime-provenance-dispatch.v1',
+              'authorization': 'NUMINA',
+              'targetWorkflow': 'numina-nusd-runtime.yml',
+              'targetRef': 'main',
+              'sourceProtectedRequired': True,
+              'providerExecutionAuthorized': False,
+          }
+          for key, value in expected.items():
+              if marker.get(key) != value:
+                  raise SystemExit(f'Invalid NUSD runtime dispatch marker field: {key}')
+          PY
+
+          response_file="$RUNNER_TEMP/nusd-runtime-dispatch-response.json"
+          http_code="$(curl --silent --show-error             --output "$response_file"             --write-out '%{http_code}'             --request POST             --header 'Accept: application/vnd.github+json'             --header "Authorization: Bearer $GITHUB_TOKEN"             --header 'X-GitHub-Api-Version: 2022-11-28'             "$API_URL/repos/$REPOSITORY/actions/workflows/numina-nusd-runtime.yml/dispatches"             --data '{"ref":"main"}')"
+
+          if [[ "$http_code" != '204' ]]; then
+            cat "$response_file" >&2
+            exit 1
+          fi
+          printf 'Dispatched numina-nusd-runtime.yml on protected main.\n'
