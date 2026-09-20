@@ -112,4 +112,11 @@ test('mobile shells permit hosted post-release updates without remote native-cod
   assert.ok(policy.nativeStoreUpdateRequired.includes('swift_java_or_native_executable_code'));
   assert.ok(policy.nativeStoreUpdateRequired.includes('new_native_permissions_or_entitlements'));
   assert.ok(policy.nativeStoreUpdateRequired.includes('downloaded_executable_code_that_changes_native_app_functionality'));
+  const sw=read('public/app-sw.js');
+  const installer=read('public/app-install.js');
+  assert.ok(sw.includes("fetch(request,{cache:'no-store'})"));
+  assert.ok(sw.includes("key.startsWith('numina-app-')"));
+  assert.ok(sw.includes('caches.delete(key)'));
+  assert.ok(installer.includes("updateViaCache: 'none'"));
+  assert.ok(installer.includes('registration.update()'));
 });
