@@ -1,6 +1,11 @@
 name: NUMINA native mobile store distribution
 on:
   workflow_dispatch:
+    inputs:
+      numina_authorization:
+        description: 'Enter NUMINA to authorize production store distribution'
+        required: true
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -9,6 +14,7 @@ concurrency:
 
 jobs:
   android:
+    if: inputs.numina_authorization == 'NUMINA'
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
@@ -49,6 +55,7 @@ jobs:
           retention-days: 90
 
   ios:
+    if: inputs.numina_authorization == 'NUMINA'
     runs-on: macos-latest
     timeout-minutes: 40
     steps:
