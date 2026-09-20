@@ -6,14 +6,16 @@ import {NUMINA_TREASURY_CONNECTION as treasuryModel} from '../public/treasury-co
 const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const config=JSON.parse(read('vercel.json'));
 const backend='https://personal-space-m7q9.skott34.chatgpt.site';
+const controlV2Backend='https://numina-production.skott34.workers.dev';
 test('API families retain the existing backend without public-origin recursion',()=>{
- for(const prefix of ['/api/app/v1','/api/control/v1','/api/control/v2','/api/ops/v1','/api/financial/v1','/api/reviewer/v1','/api/connections/v1','/api/nusd/v1']){
+ for(const prefix of ['/api/app/v1','/api/control/v1','/api/ops/v1','/api/financial/v1','/api/reviewer/v1','/api/connections/v1','/api/nusd/v1']){
   const route=config.rewrites.find(r=>r.source===prefix+'/:path*');
   assert.equal(route?.destination,backend+prefix+'/:path*');
  }
+ assert.equal(config.rewrites.find(r=>r.source==='/api/control/v2/:path*')?.destination,controlV2Backend+'/api/control/v2/:path*');
  for(const route of [...config.rewrites,...config.redirects])assert.ok(!/^https:\/\/(www\.)?numinalabs\.xyz(?:\/|$)/.test(route.destination));
  for(const version of [2,3,4])assert.equal(config.rewrites.find(r=>r.source===`/v${version}/release/manifest`).destination,'/api/application-release');
- assert.equal(config.rewrites.find(r=>r.source==='/.well-known/agent-card.json').destination,backend+'/.well-known/agent-card.json');
+ assert.equal(config.rewrites.find(r=>r.source==='/.well-known/agent-card.json').destination,controlV2Backend+'/.well-known/agent-card.json');
 });
 test('connection checks accept current and historical product spelling, rejecting other products',async()=>{
  for(const product of ['NUMINA','Numina','Unrelated']){
