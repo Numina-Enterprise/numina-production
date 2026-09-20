@@ -1,0 +1,24 @@
+{
+    "schema":  "numina.downstream-publication.v1",
+    "identity":  "NUMINA",
+    "sourceCommit":  "feec7d972187e7371530c0a2beeeff2119b9ee7a",
+    "publicationScope":  "NON_MOBILE_DOWNSTREAM",
+    "productionOrigin":  "https://numinalabs.xyz",
+    "mobileRunnerResolutionDeferred":  true,
+    "nativeSigningTriggered":  false,
+    "appStoreSubmissionTriggered":  false,
+    "googlePlaySubmissionTriggered":  false,
+    "externalFinancialExecutionTriggered":  false,
+    "allowed":  [
+                    "production_web_publication",
+                    "hosted_mobile_content",
+                    "public_release_metadata",
+                    "runtime_evidence_surfaces"
+                ],
+    "excluded":  [
+                     "native_mobile_signing",
+                     "app_store_submission",
+                     "google_play_submission",
+                     "external_financial_execution"
+                 ]
+}
