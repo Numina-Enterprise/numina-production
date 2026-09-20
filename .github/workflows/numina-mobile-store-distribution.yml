@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
@@ -39,7 +39,7 @@ jobs:
           NUMINA_RELEASE_SIGNING_VAULT: ${{ secrets.NUMINA_RELEASE_SIGNING_VAULT }}
         run: python3 scripts/sign-android-release.py
       - name: Install Google Play client
-        run: python3 -m pip install --disable-pip-version-check --no-cache-dir google-auth google-api-python-client
+        run: python3 -m pip install --disable-pip-version-check --no-cache-dir --only-binary=:all: google-auth==2.58.0 google-api-python-client==2.200.0
       - name: Submit Android release to Google Play
         env:
           NUMINA_GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.NUMINA_GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
@@ -47,7 +47,7 @@ jobs:
           NUMINA_GOOGLE_PLAY_RELEASE_STATUS: ${{ vars.NUMINA_GOOGLE_PLAY_RELEASE_STATUS || 'completed' }}
           NUMINA_GOOGLE_PLAY_RELEASE_NOTES: ${{ vars.NUMINA_GOOGLE_PLAY_RELEASE_NOTES || 'Numina 4.0.0' }}
         run: python3 scripts/submit-google-play.py
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: numina-android-store-distribution
           path: packages/
@@ -59,7 +59,7 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
       - name: Compile current iOS release
@@ -80,7 +80,7 @@ jobs:
           NUMINA_APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.NUMINA_APP_STORE_CONNECT_ISSUER_ID }}
           NUMINA_APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.NUMINA_APP_STORE_CONNECT_KEY_P8_BASE64 }}
         run: python3 scripts/submit-app-store.py
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: numina-ios-store-distribution
           path: packages/ios-signed/
