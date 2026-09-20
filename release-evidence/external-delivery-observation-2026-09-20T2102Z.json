@@ -1,0 +1,98 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "observedAtUtc": "2026-09-20T21:02:00Z",
+  "source": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "verifiedHeadBeforeReceiptCommit": "b0d522edc5f55c0d6fab29b77ccbf23e85686111"
+  },
+  "githubActions": {
+    "runnerAllocationVerified": true,
+    "canonicalBuild": {
+      "runId": 35537018093,
+      "attempt": 2,
+      "headSha": "b0d522edc5f55c0d6fab29b77ccbf23e85686111",
+      "conclusion": "success",
+      "artifact": {
+        "id": 10612862449,
+        "name": "NUMINA",
+        "bytes": 39838337,
+        "digest": "sha256:8b2f3aca48c8b8c2109e61d2f74b3c81b417df31590349b1302712887316685f"
+      }
+    },
+    "androidSigning": {
+      "runId": 35535021337,
+      "attempt": 2,
+      "headSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+      "conclusion": "success",
+      "mobileAndSigningInputsUnchangedThroughVerifiedHead": true,
+      "artifact": {
+        "id": 10613203577,
+        "name": "numina-android-signed-final",
+        "bytes": 7021915,
+        "digest": "sha256:123057388eb918d1c69ce1a29839f73974d01d4eb1be468e0e14912c8d19c219"
+      },
+      "packageIdentity": "xyz.numinalabs.app",
+      "versionName": "4.0.0",
+      "versionCode": 4,
+      "apkSha256": "f19370be880065d2800b938ecc0f16f6fb48711071f55687c036ecffd4ad594c",
+      "aabSha256": "4abca9fa4f1746620f1ddf042031f867e319275a8f901ce1fca6b232c5f400ca",
+      "signatureVerification": true,
+      "storeSubmitted": false,
+      "providerReceipt": null
+    },
+    "iosSigning": {
+      "runId": 35535021321,
+      "attempt": 2,
+      "headSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+      "conclusion": "failure",
+      "mobileAndSigningInputsUnchangedThroughVerifiedHead": true,
+      "compileSucceeded": true,
+      "signingSucceeded": false,
+      "blocker": "Required Apple signing configuration is unset: NUMINA_APPLE_TEAM_ID, distribution P12, P12 password, and provisioning profile.",
+      "signedArtifact": null,
+      "storeSubmitted": false,
+      "providerReceipt": null
+    }
+  },
+  "vercel": {
+    "capacityVerified": true,
+    "sourceHead": "b0d522edc5f55c0d6fab29b77ccbf23e85686111",
+    "localPrebuiltBuildId": "2dad645f83c320ad1e987d6336c8512cbcf1f136ae9637578144ba2feef53649",
+    "deploymentId": "dpl_5GzupLAB4wEmaa8UntWGbztEFFVk",
+    "deploymentUrl": "https://numina-production-4ohtpf020-numina-167f7fe7.vercel.app",
+    "status": "Ready",
+    "productionAlias": "https://numinalabs.xyz",
+    "endpointVerification": {
+      "/final-build.json": {
+        "httpStatus": 200,
+        "status": "FINAL",
+        "identity": "NUMINA",
+        "applicationVersion": "4.0.0"
+      },
+      "/downloads/nusd/deployment-receipt.json": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      "/api/nusd/v1/status": {
+        "httpStatus": 200,
+        "operatorStatus": "active_operator_confirmed"
+      },
+      "/v2/network/deployment-estimate": {
+        "httpStatus": 200,
+        "status": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true
+      }
+    }
+  },
+  "storeDistribution": {
+    "submitted": false,
+    "reason": "No connected provider submission path produced a provider receipt in this observation. Android repository readiness still records unresolved submission blockers, and iOS signing did not produce a signed artifact.",
+    "providerReceipts": []
+  }
+}
