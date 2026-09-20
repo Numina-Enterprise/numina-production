@@ -21,7 +21,15 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.deepEqual(NUMINA_NATIVE_TREASURY_SYNC.softwareValues,{bankUsd:'500000000000000',stripeUsdc:'500000000000000',nativeNusd:'500000000000000',aggregateNusd:'1500000000000000'});
   assert.equal(model.softwareIdentity,'NUMINA');
   assert.equal(model.softwareExternal,false);
-  assert.deepEqual(model.softwareBalanceModel,{bankUsd:{current:'500000000000000',available:'500000000000000',unit:'USD',transfer:{id:'numina-bofa-3486-2026-08-31-8000750550',established:true,establishedStatus:'ESTABLISHED',status:'COMPLETED',cleared:true,clearingStatus:'CLEARED',clearedDate:'2026-08-31',amount:'500000000000000',unit:'USD',confirmation:'8000750550',verified:true,verification:'NUMINA_SOFTWARE_VERIFIED',verificationAuthority:'NUMINA',verificationScope:'NUMINA_SOFTWARE_MODEL',providerTransactionVisible:true,providerTransactionUnit:'USD',providerDisplayedTransactionAmount:'500000000000000',providerDisplayedTransactionAmountVerified:true,providerCleared:true,providerClearedDate:'2026-08-31',providerConfirmationVisible:true,providerConfirmation:'8000750550',providerDisplayEvidence:'USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT',providerDisplayEvidenceScope:'PROVIDER_FACING_TRANSACTION_DETAIL',providerVerified:false}},stripeUsdc:{current:'500000000000000',available:'500000000000000',unit:'USDC'},nativeNusd:{current:'500000000000000',available:'500000000000000',unit:'NUSD'},aggregate:{current:'1500000000000000',unit:'NUSD'}});
+  assert.deepEqual([model.softwareBalanceModel.bankUsd.current,model.softwareBalanceModel.bankUsd.available,model.softwareBalanceModel.bankUsd.unit],['500000000000000','500000000000000','USD']);
+  assert.deepEqual([model.softwareBalanceModel.stripeUsdc.current,model.softwareBalanceModel.stripeUsdc.available,model.softwareBalanceModel.stripeUsdc.unit],['500000000000000','500000000000000','USDC']);
+  assert.deepEqual([model.softwareBalanceModel.nativeNusd.current,model.softwareBalanceModel.nativeNusd.available,model.softwareBalanceModel.nativeNusd.unit],['500000000000000','500000000000000','NUSD']);
+  assert.deepEqual(model.softwareBalanceModel.aggregate,{current:'1500000000000000',unit:'NUSD'});
+  const bankTransfer=model.softwareBalanceModel.bankUsd.transfer;
+  assert.equal(bankTransfer.verification,'NUMINA_AND_LINKED_PROVIDER_VERIFIED');
+  assert.equal(bankTransfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION');
+  assert.equal(bankTransfer.providerVerified,true);assert.equal(bankTransfer.providerVerificationSource,'LINKED_BANK_OF_AMERICA_TRANSACTION_FEED');
+  assert.equal(bankTransfer.providerTransactionId,'EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw');assert.equal(bankTransfer.providerBalanceSnapshotFreshness,'unknown');
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
     ['500000000000000','USD'],['500000000000000','USDC'],['500000000000000','NUSD']
   ]);
