@@ -73,6 +73,14 @@
       "destination": "https://personal-space-m7q9.skott34.chatgpt.site/.well-known/agent-card.json"
     },
     {
+      "source": "/readyz",
+      "destination": "/api/application-release?mode=readyz"
+    },
+    {
+      "source": "/v1/bootstrap/attestation",
+      "destination": "/api/application-release?mode=bootstrap-attestation"
+    },
+    {
       "source": "/v1/frontier/readiness",
       "destination": "/api/application-release?mode=frontier-readiness"
     },
