@@ -11,7 +11,6 @@ function sorted(value){if(Array.isArray(value))return value.map(sorted);if(value
 const canonical=value=>Buffer.from(JSON.stringify(sorted(value)),'utf8');
 const root=value=>crypto.createHash('sha256').update(canonical(value)).digest('hex');
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
-const requiredEnv=name=>{const value=process.env[name];if(!value)throw new Error(`${name}_REQUIRED`);return value;};
 const b64url=value=>Buffer.from(String(value).replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(String(value).length/4)*4,'='),'base64');
 const sameJson=(a,b)=>JSON.stringify(sorted(a))===JSON.stringify(sorted(b));
 
