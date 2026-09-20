@@ -39,7 +39,9 @@ jobs:
           NUMINA_RELEASE_SIGNING_VAULT: ${{ secrets.NUMINA_RELEASE_SIGNING_VAULT }}
         run: python3 scripts/sign-android-release.py
       - name: Install Google Play client
-        run: python3 -m pip install --disable-pip-version-check --no-cache-dir --only-binary=:all: google-auth==2.58.0 google-api-python-client==2.200.0
+        run: >-
+          python3 -m pip install --disable-pip-version-check --no-cache-dir
+          --only-binary=:all: google-auth==2.58.0 google-api-python-client==2.200.0
       - name: Submit Android release to Google Play
         env:
           NUMINA_GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.NUMINA_GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
