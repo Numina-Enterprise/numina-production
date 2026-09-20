@@ -26,6 +26,10 @@ export const GITHUB_OIDC_OWNER_ID='269050000';
 export const GITHUB_OIDC_REF='refs/heads/main';
 export const GITHUB_OIDC_ENVIRONMENT='production';
 export const GITHUB_OIDC_WORKFLOW_REF='skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main';
+export const GITHUB_OIDC_WORKFLOW_REFS=Object.freeze([
+  GITHUB_OIDC_WORKFLOW_REF,
+  'skott34-dot/numina-production/.github/workflows/deploy-nusd-contracts.yml@refs/heads/main'
+]);
 let githubOidcCache={at:0,keys:null};
 function decodeB64Url(value){const normalized=value.replace(/-/g,'+').replace(/_/g,'/');const padded=normalized+'='.repeat((4-normalized.length%4)%4);const raw=atob(padded);return Uint8Array.from(raw,c=>c.charCodeAt(0));}
 function decodeJwtJson(value){return JSON.parse(new TextDecoder().decode(decodeB64Url(value)));}
@@ -46,7 +50,7 @@ export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.fl
     const audience=Array.isArray(claims.aud)?claims.aud:[claims.aud];
     if(claims.iss!==GITHUB_OIDC_ISSUER||!audience.includes(GITHUB_OIDC_AUDIENCE))return false;
     if(String(claims.repository_id)!==GITHUB_OIDC_REPOSITORY_ID||claims.repository!==GITHUB_OIDC_REPOSITORY||String(claims.repository_owner_id)!==GITHUB_OIDC_OWNER_ID)return false;
-    if(claims.ref!==GITHUB_OIDC_REF||claims.environment!==GITHUB_OIDC_ENVIRONMENT||claims.workflow_ref!==GITHUB_OIDC_WORKFLOW_REF)return false;
+    if(claims.ref!==GITHUB_OIDC_REF||claims.environment!==GITHUB_OIDC_ENVIRONMENT||!GITHUB_OIDC_WORKFLOW_REFS.includes(claims.workflow_ref))return false;
     if(!['workflow_dispatch','push'].includes(claims.event_name)||claims.runner_environment!=='github-hosted')return false;
     if(typeof claims.exp!=='number'||typeof claims.iat!=='number'||claims.exp<now-30||claims.iat>now+30||claims.iat<now-900)return false;
     if(typeof claims.nbf==='number'&&claims.nbf>now+30)return false;
