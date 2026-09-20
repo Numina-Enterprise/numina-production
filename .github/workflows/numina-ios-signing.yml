@@ -14,7 +14,7 @@ concurrency:
 jobs:
   sign:
     if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main' && inputs.numina_authorization == 'NUMINA'
-    runs-on: NUMINA
+    runs-on: macos-latest
     timeout-minutes: 25
     steps:
       - name: Verify NUMINA authorization
