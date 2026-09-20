@@ -51,7 +51,15 @@
     "modeled_role_values_additive": true,
     "aggregate_modeled_value": "1500000000000000",
     "aggregate_modeled_unit": "NUSD",
-    "external_balances_aggregated": false
+    "external_balances_aggregated": false,
+    "software_external": false,
+    "software_identity": "NUMINA",
+    "software_values": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000",
+      "aggregateNUSD": "1500000000000000"
+    }
   },
   "mint_event": {
     "status": "FINAL",
@@ -107,5 +115,7 @@
     "transport_identity": "NUMINA",
     "singular": true,
     "substrate_observations_only": true
-  }
+  },
+  "software_external": false,
+  "software_identity": "NUMINA"
 }

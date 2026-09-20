@@ -16,6 +16,12 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.deepEqual(allocations(result.fundableTargets.targets),allocations(model.allocations));
   assert.equal(model.balanceCount,1);assert.equal(model.singular,true);assert.equal(model.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
   assert.equal(model.aggregateModeledValue,'1500000000000000');
+  assert.equal(NUMINA_NATIVE_TREASURY_SYNC.softwareIdentity,'NUMINA');
+  assert.equal(NUMINA_NATIVE_TREASURY_SYNC.softwareExternal,false);
+  assert.deepEqual(NUMINA_NATIVE_TREASURY_SYNC.softwareValues,{bankUsd:'500000000000000',stripeUsdc:'500000000000000',nativeNusd:'500000000000000',aggregateNusd:'1500000000000000'});
+  assert.equal(model.softwareIdentity,'NUMINA');
+  assert.equal(model.softwareExternal,false);
+  assert.deepEqual(model.softwareBalanceModel,{bankUsd:{current:'500000000000000',available:'500000000000000',unit:'USD'},stripeUsdc:{current:'500000000000000',available:'500000000000000',unit:'USDC'},nativeNusd:{current:'500000000000000',available:'500000000000000',unit:'NUSD'},aggregate:{current:'1500000000000000',unit:'NUSD'}});
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
     ['500000000000000','USD'],['500000000000000','USDC'],['500000000000000','NUSD']
   ]);

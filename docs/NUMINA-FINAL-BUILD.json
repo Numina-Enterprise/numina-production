@@ -427,6 +427,14 @@
       "networkSubmissionVerified": false,
       "bankSettlementVerified": false,
       "evidenceScope": "Internal authorized instruction only; no provider or ACH network execution evidence recorded."
+    },
+    "softwareIdentity": "NUMINA",
+    "softwareExternal": false,
+    "softwareValues": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000",
+      "aggregateNUSD": "1500000000000000"
     }
   },
   "nusd": {
@@ -911,5 +919,31 @@
     "bankNativeContractId": "numina:nusd-usd:redemption:v1",
     "stripeNativeContractId": "numina:nusd-usdc:conversion:v1",
     "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+  },
+  "softwareExternal": false,
+  "softwareIdentity": "NUMINA",
+  "softwareTreasury": {
+    "identity": "NUMINA",
+    "singular": true,
+    "softwareExternal": false,
+    "bankUsd": {
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "unit": "USD"
+    },
+    "stripeUsdc": {
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "unit": "USDC"
+    },
+    "nativeNusd": {
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "unit": "NUSD"
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    }
   }
 }
