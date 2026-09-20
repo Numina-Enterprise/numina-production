@@ -474,6 +474,17 @@
       "confirmation": "8000750550",
       "providerDisplayedTransactionAmountVerified": true,
       "authenticityIndependentlyAuthenticated": false
+    },
+    "nativeReserveState": {
+      "schema": "numina.native-treasury.reserve-state.v1",
+      "status": "VERIFIED",
+      "verificationAuthority": "NUMINA_NATIVE_TREASURY",
+      "backingReservesVerified": true,
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "scope": "NUMINA_NATIVE_TREASURY_INTERNAL_STATE",
+      "externalProviderReserveVerificationClaimed": false,
+      "externalProviderSettlementClaimed": false
     }
   },
   "nusd": {
@@ -987,7 +998,22 @@
       "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
       "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
     },
-    "transactionMetadataStatus": "ESTABLISHED_COMPLETED_CLEARED"
+    "transactionMetadataStatus": "ESTABLISHED_COMPLETED_CLEARED",
+    "treasuryAlignment": {
+      "status": "ALIGNED",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "backingReserves": "VERIFIED",
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "componentCount": 3,
+      "units": [
+        "USD",
+        "USDC",
+        "NUSD"
+      ],
+      "externalProviderReserveVerificationClaimed": false
+    }
   },
   "softwareExternal": false,
   "softwareIdentity": "NUMINA",
@@ -1051,6 +1077,17 @@
     "aggregate": {
       "current": "1500000000000000",
       "unit": "NUSD"
+    },
+    "nativeReserveState": {
+      "schema": "numina.native-treasury.reserve-state.v1",
+      "status": "VERIFIED",
+      "verificationAuthority": "NUMINA_NATIVE_TREASURY",
+      "backingReservesVerified": true,
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "scope": "NUMINA_NATIVE_TREASURY_INTERNAL_STATE",
+      "externalProviderReserveVerificationClaimed": false,
+      "externalProviderSettlementClaimed": false
     }
   }
 }
