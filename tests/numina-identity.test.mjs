@@ -207,13 +207,18 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.invariants.runnerPlacementFrozen,false);
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
   assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-latest'});
+  assert.deepEqual(policy.executionTargets.workflowTargetSets,{
+    'numina-mobile-release-build.yml':['ubuntu-24.04','macos-latest'],
+    'numina-mobile-store-distribution.yml':['ubuntu-24.04','macos-latest']
+  });
   assert.equal(policy.executionTargets.default,'NUMINA');
   let declarations=0;
-  for(const name of readdirSync(workflowsUrl).filter(name=>/\.ya?ml$/i.test(name))){
+  for(const name of readdirSync(workflowsUrl).filter(name=>/\\.ya?ml$/i.test(name))){
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
-    const targets=[...content.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
+    const targets=[...content.matchAll(/^\\s*runs-on:\\s*(.+?)\\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
     declarations+=targets.length;
-    for(const target of targets)assert.equal(target,policy.executionTargets.workflowOverrides[name]??policy.executionTargets.default,name+' execution target must match the preserved policy');
+    const allowedTargets=policy.executionTargets.workflowTargetSets?.[name]??[policy.executionTargets.workflowOverrides[name]??policy.executionTargets.default];
+    for(const target of targets)assert.ok(allowedTargets.includes(target),name+' execution target must match the preserved policy');
   }
   assert.equal(declarations,policy.preservedRunnerCount,'runner count must remain preserved with no future additions');
 });
