@@ -3,7 +3,7 @@
   "identity": "NUMINA",
   "recordedAt": "2026-09-19T20:13:29Z",
   "sourceCommitObserved": "8b3bb2b77c35295efad88b50af5a47cdbdbde265",
-  "recordStatus": "PROTECTED_DISPATCH_INITIATED",
+  "recordStatus": "PROTECTED_PUSH_INITIATED",
   "recordScope": "NUMINA_SOFTWARE_JOURNAL_WRITE_REQUEST_METADATA",
   "executable": false,
   "queued": true,
@@ -84,7 +84,7 @@
     },
     "reconciliationStatus": "CONFLICTING_REPOSITORY_RECORDS_UNRESOLVED"
   },
-  "note": "NUMINA software treasury writes are authorized and dispatched through protected GitHub workflows. The current native-alignment and aggregate-model runs are pending before job creation, so no journal write/read-back or external execution is claimed yet. Provider-originating bank data remains source-scoped evidence; the linked Bank of America observation is 0 USD with unknown freshness and the August 31 linked transfer is $12. Historical owner reports remain attributed but are not promoted to provider receipts.",
+  "note": "NUMINA software treasury writes are authorized and push-triggered from protected main. The current native-alignment and aggregate-model runs are pending before job creation, so no journal write/read-back or external execution is claimed yet. Provider-originating bank data remains source-scoped evidence; the linked Bank of America observation is 0 USD with unknown freshness and the August 31 linked transfer is $12. Historical owner reports remain attributed but are not promoted to provider receipts.",
   "ownerReportedBankExecution": {
     "recordedAt": "2026-09-19T21:30:45Z",
     "sourceCommitObserved": "831ef3c8fb91f6e4b13c8da941b94cf356267c71",
@@ -156,12 +156,13 @@
     "interpretation": "The supplied confirmation belongs to the $12.00 historical transfer and must not be reused as evidence of the requested 500T USD deposit. The screenshot contains no USDC transaction evidence or proof of NUSD reserve backing. This evidence link neither triggers execution nor changes balances. Historical owner statements remain attributed and unchanged."
   },
   "protectedDispatch": {
-    "sourceCommit": "6b54cffe5b13aba04b54b87f4af7d0231e403150",
+    "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
     "sourceProtected": true,
     "authorization": "NUMINA",
+    "trigger": "protected_main_push",
     "softwareTreasuryWriteAuthorized": true,
-    "nativeAlignmentRunId": 35544558846,
-    "aggregateModelRunId": 35544559853,
+    "nativeAlignmentRunId": 35544882586,
+    "aggregateModelRunId": 35544882620,
     "nativeAlignmentStatus": "pending",
     "aggregateModelStatus": "pending",
     "jobsCreated": 0,
