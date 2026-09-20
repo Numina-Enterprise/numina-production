@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/numina-mobile-release-build.yml
+      - .github/workflows/numina-mobile-store-distribution.yml
       - mobile/android/**
       - mobile/ios/**
       - mobile/signing/**
