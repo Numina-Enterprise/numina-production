@@ -1,0 +1,9 @@
+{
+  "schema": "numina.nusd.runtime-provenance-dispatch.v1",
+  "authorization": "NUMINA",
+  "targetWorkflow": "numina-nusd-runtime.yml",
+  "targetRef": "main",
+  "sourceProtectedRequired": true,
+  "providerExecutionAuthorized": false,
+  "purpose": "Build and attest the exact protected-main NUSD runtime source archive, Linux image archive and generated inventory. No provider submission, chain transaction, mint, transfer or treasury write is authorized by this marker."
+}
