@@ -1,0 +1,48 @@
+name: Dispatch protected NUSD runtime provenance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dispatch-nusd-runtime-provenance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: numina-nusd-runtime-dispatch
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: ${{ github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main' && github.ref_protected }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Dispatch the canonical protected NUSD runtime workflow
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          API_URL: ${{ github.api_url }}
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+          SOURCE_REF: ${{ github.ref }}
+          SOURCE_PROTECTED: ${{ github.ref_protected }}
+        run: |
+          set -euo pipefail
+          [[ "$REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$REPOSITORY_ID" == '1367647143' ]]
+          [[ "$SOURCE_REF" == 'refs/heads/main' ]]
+          [[ "$SOURCE_PROTECTED" == 'true' ]]
+
+          response_file="$RUNNER_TEMP/dispatch-response.json"
+          http_code="$(curl --silent --show-error             --output "$response_file"             --write-out '%{http_code}'             --request POST             --header 'Accept: application/vnd.github+json'             --header "Authorization: Bearer $GITHUB_TOKEN"             --header 'X-GitHub-Api-Version: 2022-11-28'             "$API_URL/repos/$REPOSITORY/actions/workflows/numina-nusd-runtime.yml/dispatches"             --data '{"ref":"main"}')"
+
+          if [[ "$http_code" != '204' ]]; then
+            cat "$response_file" >&2
+            exit 1
+          fi
+
+          printf 'Dispatched numina-nusd-runtime.yml on protected main.\n'
