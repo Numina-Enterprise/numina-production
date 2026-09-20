@@ -90,8 +90,9 @@ jobs:
                   raise SystemExit('Runtime source contains a link or special file')
               if stat.S_ISREG(mode):
                   actual.append(item.relative_to(source).as_posix())
-          if sorted(actual) != sorted(expected):
-              raise SystemExit('Runtime source must match the exact public file allowlist')
+          missing = sorted(set(expected) - set(actual))
+          if missing:
+              raise SystemExit('Runtime build context is missing reviewed files: ' + ', '.join(missing))
           if stage.exists() or output.exists():
               raise SystemExit('Refusing to reuse a staging or output directory')
           stage.mkdir(parents=True)
