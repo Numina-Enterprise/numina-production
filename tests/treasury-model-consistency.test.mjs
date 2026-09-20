@@ -14,7 +14,7 @@ test('website and owner API share the unchanged singular treasury allocation mod
   const allocations=values=>values.map(({id,amount,unit})=>({id,amount,unit}));
   assert.deepEqual(allocations(NUMINA_FUNDABLE_TARGETS),allocations(model.allocations));
   assert.deepEqual(allocations(result.fundableTargets.targets),allocations(model.allocations));
-  assert.equal(model.balanceCount,1);assert.equal(model.singular,true);assert.equal(model.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
+  assert.equal(model.balanceCount,1);assert.equal(model.singular,true);assert.equal(model.sourceOfRecord,'NUMINA_NATIVE_TREASURY');assert.equal(model.positionNamespace,'NUMINA');assert.equal(model.connectionNamespace,'NUMINA');assert.deepEqual(model.positionScope,['internal','external_connected']);assert.deepEqual(model.connectionScope,['native','provider_transport']);assert.equal(model.externalConnectionsAreNumina,true);assert.equal(model.providerEvidenceSourceScoped,true);
   assert.equal(model.aggregateModeledValue,'1500000000000000');
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.softwareIdentity,'NUMINA');
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.softwareExternal,false);
@@ -26,10 +26,10 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.deepEqual([model.softwareBalanceModel.nativeNusd.current,model.softwareBalanceModel.nativeNusd.available,model.softwareBalanceModel.nativeNusd.unit],['500000000000000','500000000000000','NUSD']);
   assert.deepEqual(model.softwareBalanceModel.aggregate,{current:'1500000000000000',unit:'NUSD'});
   const bankTransfer=model.softwareBalanceModel.bankUsd.transfer;
-  assert.equal(bankTransfer.verification,'NUMINA_AND_LINKED_PROVIDER_VERIFIED');
-  assert.equal(bankTransfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION');
+  assert.equal(bankTransfer.verification,'NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION');
+  assert.equal(bankTransfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION');
   assert.equal(bankTransfer.providerVerified,true);assert.equal(bankTransfer.providerVerificationSource,'LINKED_BANK_OF_AMERICA_TRANSACTION_FEED');
-  assert.equal(bankTransfer.providerTransactionId,'EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw');assert.equal(bankTransfer.providerBalanceSnapshotFreshness,'unknown');
+  assert.equal(bankTransfer.providerTransactionId,'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq');assert.equal(bankTransfer.providerBalanceSnapshotFreshness,'unknown');assert.equal(bankTransfer.providerBalanceSnapshotCurrent,'0');assert.equal(bankTransfer.providerBalanceSnapshotAvailable,'0');assert.equal(bankTransfer.providerAmountMatchesSoftwareModel,false);assert.equal(bankTransfer.providerBalanceMatchesSoftwareModel,false);assert.equal(bankTransfer.externalFundsMovedVerified,false);assert.equal(bankTransfer.externalSettlementVerified,false);
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
     ['500000000000000','USD'],['500000000000000','USDC'],['500000000000000','NUSD']
   ]);
