@@ -189,3 +189,9 @@ BEGIN
     'fundable_target_scope','numina_native','external_balance_verified',false,'external_backing_asserted',false);
 END
 $function$;
+
+-- Keep the production Data API boundary deterministic after replacement.
+ALTER FUNCTION public.numina_mark_trusted_production_release(jsonb) OWNER TO numina_owner;
+REVOKE ALL ON FUNCTION public.numina_mark_trusted_production_release(jsonb) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.numina_mark_trusted_production_release(jsonb) TO "skott34-dot/numina-production";
+GRANT EXECUTE ON FUNCTION public.numina_mark_trusted_production_release(jsonb) TO numina_data_api_anon;
