@@ -6,6 +6,6 @@
   "sourceProtectedRequired": true,
   "providerExecutionAuthorized": false,
   "purpose": "Build and attest the exact protected-main NUSD runtime source archive, Linux image archive and generated inventory. No provider submission, chain transaction, mint, transfer or treasury write is authorized by this marker.",
-  "requestSequence": 2,
-  "reason": "Retry after staging all reviewed Dockerfile inputs required by the protected-main NUSD runtime build."
+  "requestSequence": 3,
+  "reason": "Retry after exposing all reviewed Dockerfile inputs through the fixed runtime .dockerignore policy."
 }
