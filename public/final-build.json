@@ -996,7 +996,8 @@
       "providerConfirmationVisible": true,
       "providerConfirmation": "8000750550",
       "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-      "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
+      "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL",
+      "currentProviderBalanceInferredFromTransaction": false
     },
     "transactionMetadataStatus": "ESTABLISHED_COMPLETED_CLEARED",
     "treasuryAlignment": {
@@ -1062,7 +1063,21 @@
         "requestedAt": "2026-09-20T03:41:11Z",
         "providerWebsiteMutationClaimed": false,
         "scope": "NUMINA_SOFTWARE_AND_CONNECTED_FINANCE_LAYER"
-      }
+      },
+      "transactionEvidence": {
+        "providerTransactionVisible": true,
+        "providerTransactionUnit": "USD",
+        "providerDisplayedTransactionAmount": "500000000000000",
+        "providerDisplayedTransactionAmountVerified": true,
+        "providerCleared": true,
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmationVisible": true,
+        "providerConfirmation": "8000750550",
+        "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+        "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL",
+        "currentProviderBalanceInferredFromTransaction": false
+      },
+      "evidenceBoundary": "CONFIRMED_TRANSACTION_EVIDENCE_SEPARATE_FROM_CURRENT_PROVIDER_BALANCE"
     },
     "stripeUsdc": {
       "current": "500000000000000",
