@@ -1,0 +1,106 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T02:48:39Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "eebdf6fe6f0c4ea7d5d486a2bc34849a5f907dfd",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "hostedRunnerProbe": {
+      "workflow": ".github/workflows/numina-release.yml",
+      "runId": 35482983636,
+      "runAttempt": 3,
+      "jobId": 106009441959,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runnerId": 0,
+      "runnerName": "",
+      "status": "completed",
+      "conclusion": "failure",
+      "stepCount": 0,
+      "startedAt": "2026-09-20T02:48:10Z",
+      "completedAt": "2026-09-20T02:48:12Z"
+    },
+    "canonicalNuminaQueue": {
+      "workflow": ".github/workflows/numina.yml",
+      "sourceSha": "eebdf6fe6f0c4ea7d5d486a2bc34849a5f907dfd",
+      "runId": 35484342874,
+      "jobId": 106007808918,
+      "labels": [
+        "NUMINA"
+      ],
+      "runnerId": 0,
+      "runnerName": "",
+      "status": "queued",
+      "stepCount": 0
+    }
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deployment": {
+      "id": "dpl_8J2k9fNcxiM4EA813LFVHhkWFfYC",
+      "source": "git",
+      "target": "production",
+      "state": "READY",
+      "commitSha": "eebdf6fe6f0c4ea7d5d486a2bc34849a5f907dfd",
+      "url": "https://numina-production-rjvbjad8v-skott34-dot.vercel.app",
+      "aliases": [
+        "https://www.numinalabs.xyz",
+        "https://numinalabs.xyz",
+        "https://numina-production.vercel.app"
+      ]
+    },
+    "productionVerification": {
+      "origin": "https://numina-production.vercel.app",
+      "finalBuild": {
+        "path": "/final-build.json",
+        "status": 200,
+        "schema": "numina.final-build.v1",
+        "manifestStatus": "FINAL",
+        "applicationVersion": "4.0.0"
+      },
+      "deploymentReceipt": {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "status": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1"
+      },
+      "nusdStatus": {
+        "path": "/api/nusd/v1/status",
+        "status": 200,
+        "schema": "numina.nusd.status.v1"
+      },
+      "deploymentEstimate": {
+        "path": "/v2/network/deployment-estimate",
+        "status": 200,
+        "schema": "numina.deployment-estimate.v1"
+      }
+    },
+    "note": "Current provider observation shows a READY production deployment for sourceMainSha and HTTP 200 on all four checked routes. This supersedes older embedded Vercel build-capacity text in final-build.json."
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub-hosted Actions job allocation still fails before steps",
+    "NUMINA-labeled runner allocation is still queued with no runner assigned",
+    "Android production signing remains blocked on runner allocation",
+    "iOS distribution signing remains blocked on runner allocation",
+    "Store submission remains unclaimed until signed artifacts and a connected provider submission path are both available",
+    "VENGEANCE remote fallback is offline"
+  ]
+}
