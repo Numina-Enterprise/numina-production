@@ -1,0 +1,62 @@
+name: NUMINA native mobile release build
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: numina-native-mobile-release-build
+  cancel-in-progress: false
+
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Prepare pinned Gradle
+        run: |
+          curl --fail --location --retry 2 https://services.gradle.org/distributions/gradle-8.13-bin.zip -o "$RUNNER_TEMP/gradle.zip"
+          printf '%s  %s\n' '20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78' "$RUNNER_TEMP/gradle.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
+      - name: Build Android release
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-36' 'build-tools;35.0.0'
+          "$RUNNER_TEMP/gradle-8.13/bin/gradle" --no-daemon --console=plain -p mobile/android :app:bundleRelease :app:assembleRelease
+      - name: Sign Android release
+        env:
+          NUMINA_RELEASE_SIGNING_VAULT: ${{ secrets.NUMINA_RELEASE_SIGNING_VAULT }}
+        run: python3 scripts/sign-android-release.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: numina-android-signed-current
+          path: packages/
+          if-no-files-found: error
+          retention-days: 90
+
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - name: Compile iOS device release
+        run: |
+          xcodebuild -version
+          xcodebuild -project mobile/ios/Numina.xcodeproj -scheme Numina -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/NuminaDerived" CODE_SIGNING_ALLOWED=NO build
+          mkdir -p packages
+          VERSION=$(node -p "require('./package.json').version")
+          ditto -c -k --sequesterRsrc --keepParent "$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app" "packages/numina-${VERSION}-ios-unsigned-app.zip"
+          shasum -a 256 packages/* > packages/SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: numina-ios-compiled-current
+          path: packages/
+          if-no-files-found: error
+          retention-days: 90
