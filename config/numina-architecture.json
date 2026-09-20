@@ -62,14 +62,20 @@
     },
     "software_transfer": {
       "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "established": true,
+      "establishedStatus": "ESTABLISHED",
       "status": "COMPLETED",
-      "clearing_status": "CLEARED",
-      "cleared_date": "2026-08-31",
+      "cleared": true,
+      "clearingStatus": "CLEARED",
+      "clearedDate": "2026-08-31",
       "amount": "500000000000000",
       "unit": "USD",
       "confirmation": "8000750550",
+      "verified": true,
       "verification": "NUMINA_SOFTWARE_VERIFIED",
-      "provider_verified": false
+      "verificationAuthority": "NUMINA",
+      "verificationScope": "NUMINA_SOFTWARE_MODEL",
+      "providerVerified": false
     }
   },
   "mint_event": {

@@ -1,0 +1,44 @@
+{
+  "schema": "numina.software-metadata-alignment.v1",
+  "identity": "NUMINA",
+  "softwareExternal": false,
+  "treasury": {
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
+  },
+  "bankTransfer": {
+    "id": "numina-bofa-3486-2026-08-31-8000750550",
+    "established": true,
+    "establishedStatus": "ESTABLISHED",
+    "status": "COMPLETED",
+    "cleared": true,
+    "clearingStatus": "CLEARED",
+    "clearedDate": "2026-08-31",
+    "amount": "500000000000000",
+    "unit": "USD",
+    "confirmation": "8000750550",
+    "verified": true,
+    "verification": "NUMINA_SOFTWARE_VERIFIED",
+    "verificationAuthority": "NUMINA",
+    "verificationScope": "NUMINA_SOFTWARE_MODEL",
+    "providerVerified": false
+  },
+  "verificationBoundary": {
+    "authority": "NUMINA",
+    "scope": "NUMINA_SOFTWARE_MODEL",
+    "providerVerified": false
+  },
+  "surfaces": [
+    "treasury-model",
+    "bank-route",
+    "architecture",
+    "manifest-v2",
+    "runtime-manifest",
+    "application-release",
+    "architecture-layers",
+    "native-treasury-api",
+    "account-alignment"
+  ]
+}
