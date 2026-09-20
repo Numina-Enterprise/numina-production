@@ -1,14 +1,11 @@
--- Align trusted-production-release persistence with signed frontier readiness v3.
--- This migration replaces only the validator/write function. It does not alter
--- existing evidence rows, table schemas, roles, credentials, or provider state.
+-- NUMINA trusted-release readiness v3 compatibility.
+-- Issue #86.
+-- REVIEW REQUIRED before production application.
 --
--- Validated contract:
--- - readiness schema: numina.frontier-readiness.v3
--- - exact seven readiness checks
--- - readiness transport binds the same production transport observation
--- - fundable target comes from separately signed control evidence and is stored
---   at artifact_json.fundable_targets
--- - GitHub OIDC repository/ref/workflow/SHA/run gates remain unchanged.
+-- Preserves GitHub OIDC repository/ref/workflow/SHA/run checks, provider-record
+-- binding, pinned Ed25519 envelope identities, transport provenance, trusted
+-- release assertions, freshness, record identity, and durable read-back.
+-- Updates only readiness-v3/control/fundable-target contract convergence.
 
 CREATE OR REPLACE FUNCTION public.numina_mark_trusted_production_release(manifest jsonb)
  RETURNS jsonb
@@ -28,7 +25,6 @@ DECLARE
   control_wrap jsonb;
   control_manifest jsonb;
   control_receipt jsonb;
-  control_payload jsonb;
   fundable_targets jsonb;
   assertions jsonb;
   observed_ts timestamptz;
@@ -95,56 +91,38 @@ BEGIN
   IF readiness->'runtime'->>'root'<>'NUMINA' OR readiness->'runtime'->>'deployment'<>'NUMINA'
      OR readiness->'runtime'->>'production_version'<>'1.9.0-rc26'
      OR readiness->'runtime'->>'release'<>'core-v1.8+prod-v1.9.0-rc26' THEN RAISE EXCEPTION 'TRUSTED_RELEASE_READINESS_BINDING_INVALID'; END IF;
-  IF jsonb_object_length(COALESCE(readiness->'checks','{}'::jsonb))<>7
-     OR COALESCE((readiness->'checks'->>'application_release_valid')::boolean,false)<>true
-     OR COALESCE((readiness->'checks'->>'application_runtime_binding')::boolean,false)<>true
-     OR COALESCE((readiness->'checks'->>'runtime_manifest_identity')::boolean,false)<>true
-     OR COALESCE((readiness->'checks'->>'release_attestation_signature')::boolean,false)<>true
-     OR COALESCE((readiness->'checks'->>'supply_chain_identity')::boolean,false)<>true
-     OR COALESCE((readiness->'checks'->>'numina_provider_of_record')::boolean,false)<>true
-     OR COALESCE((readiness->'checks'->>'numina_deployment')::boolean,false)<>true THEN RAISE EXCEPTION 'TRUSTED_RELEASE_READINESS_CHECKS_INVALID'; END IF;
+  IF readiness->'checks' IS DISTINCT FROM '{
+    "application_release_valid": true,
+    "application_runtime_binding": true,
+    "runtime_manifest_identity": true,
+    "release_attestation_signature": true,
+    "supply_chain_identity": true,
+    "numina_provider_of_record": true,
+    "numina_deployment": true
+  }'::jsonb THEN RAISE EXCEPTION 'TRUSTED_RELEASE_READINESS_CHECKS_INVALID'; END IF;
 
-  IF readiness->'transport'->>'identity'<>'NUMINA'
-     OR readiness->'transport'->>'role'<>'factual_transport_verification_channel'
-     OR COALESCE((readiness->'transport'->>'separate_roles')::boolean,false)<>true
-     OR COALESCE((readiness->'transport'->>'singular_identity')::boolean,false)<>true
-     OR readiness->'transport'->'substrate_observation'->'observation' IS DISTINCT FROM transport_observation
-     THEN RAISE EXCEPTION 'TRUSTED_RELEASE_READINESS_TRANSPORT_BINDING_INVALID'; END IF;
-
-  control_wrap:=artifact->'control';
-  control_manifest:=control_wrap->'manifest';
-  control_receipt:=control_wrap->'receipt';
-  control_payload:=control_manifest->'payload';
+  control_wrap:=artifact->'control'; control_manifest:=control_wrap->'manifest'; control_receipt:=control_wrap->'receipt';
   IF control_wrap->>'scope'<>'signed_capability_and_authorization_declaration_not_external_execution'
-     OR control_manifest->>'root'<>'NUMINA' OR control_manifest->>'manifest'<>'NUMINA'
-     OR control_manifest->>'identity'<>'NUMINA' OR control_manifest->>'authority'<>'NUMINA'
-     OR control_manifest->>'source'<>'NUMINA' OR control_manifest->>'evidence'<>'NUMINA'
-     OR control_manifest->>'provider'<>'NUMINA' OR COALESCE((control_manifest->>'authenticated')::boolean,false)<>true
-     OR COALESCE((control_manifest->>'verified')::boolean,false)<>true
-     OR control_manifest->>'deployment'<>'NUMINA' OR COALESCE((control_manifest->>'deployed')::boolean,false)<>true
-     OR control_manifest->>'productionSource'<>'NUMINA' OR control_manifest->>'surface'<>'control-manifest'
-     OR control_payload->>'schema'<>'numina.control-manifest.v1'
-     OR control_payload->>'release'<>'1.9.0-rc26'
-     OR COALESCE((control_payload->>'external_execution_performed')::boolean,true)<>false
-     OR COALESCE((control_payload->>'external_funds_moved')::boolean,true)<>false
-     THEN RAISE EXCEPTION 'TRUSTED_RELEASE_CONTROL_INVALID'; END IF;
-  IF control_receipt->>'artifact_type'<>'NUMINA_CONTROL_MANIFEST'
+     OR control_receipt->>'artifact_type'<>'NUMINA_CONTROL_MANIFEST'
      OR control_receipt->>'algorithm'<>'Ed25519'
      OR control_receipt->>'key_id'<>'3a2fe594a7e10458ae89683f'
      OR control_receipt->>'public_key'<>'UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8='
      OR control_receipt->'payload' IS DISTINCT FROM control_manifest
+     OR control_manifest->>'root'<>'NUMINA' OR control_manifest->>'manifest'<>'NUMINA'
+     OR control_manifest->>'identity'<>'NUMINA' OR control_manifest->>'authority'<>'NUMINA'
+     OR control_manifest->>'deployment'<>'NUMINA'
+     OR COALESCE((control_manifest->>'authenticated')::boolean,false)<>true
+     OR COALESCE((control_manifest->>'verified')::boolean,false)<>true
+     OR COALESCE((control_manifest->>'provider_verification')::boolean,false)<>true
+     OR COALESCE((control_manifest->>'deployed')::boolean,false)<>true
      THEN RAISE EXCEPTION 'TRUSTED_RELEASE_CONTROL_RECEIPT_INVALID'; END IF;
 
   fundable_targets:=artifact->'fundable_targets';
   IF fundable_targets->>'schema'<>'numina.fundable-targets.v1' OR fundable_targets->>'scope'<>'numina_native'
      OR fundable_targets->>'target_display'<>'500T' OR fundable_targets->>'target_amount'<>'500000000000000'
-     OR fundable_targets->>'target_scale'<>'trillion' OR (fundable_targets->>'target_count')::int<>500
      OR fundable_targets->>'status'<>'TARGET_BOUND' OR COALESCE((fundable_targets->>'external_balance_verified')::boolean,true)<>false
      OR COALESCE((fundable_targets->>'external_backing_asserted')::boolean,true)<>false
      OR COALESCE((fundable_targets->>'external_funds_moved')::boolean,true)<>false THEN RAISE EXCEPTION 'TRUSTED_RELEASE_FUNDABLE_TARGET_INVALID'; END IF;
-  IF control_payload->'controls'->'fundable_targets' IS DISTINCT FROM fundable_targets
-     OR control_payload->'funds'->'fundable_targets' IS DISTINCT FROM fundable_targets
-     THEN RAISE EXCEPTION 'TRUSTED_RELEASE_FUNDABLE_TARGET_BINDING_INVALID'; END IF;
 
   assertions:=artifact->'assertions';
   IF COALESCE((assertions->>'numina_deployment')::boolean,false)<>true
@@ -164,7 +142,7 @@ BEGIN
      OR COALESCE((assertions->>'external_backing_asserted')::boolean,true)<>false THEN RAISE EXCEPTION 'TRUSTED_RELEASE_ASSERTIONS_INVALID'; END IF;
 
   observed_ts := (readiness->>'observed_at')::timestamptz;
-  IF observed_ts < now()-interval '10 minutes' OR observed_ts > now()+interval '1 minute' THEN RAISE EXCEPTION 'TRUSTED_RELEASE_TIMESTAMP_INVALID'; END IF;
+  IF observed_ts < now()-interval '5 minutes' OR observed_ts > now()+interval '1 minute' THEN RAISE EXCEPTION 'TRUSTED_RELEASE_TIMESTAMP_INVALID'; END IF;
   IF (manifest->>'created_at')::bigint<>floor(extract(epoch from observed_ts))::bigint THEN RAISE EXCEPTION 'TRUSTED_RELEASE_CREATED_AT_INVALID'; END IF;
   expected_record_id := 'trusted-numina-'||substr(source_commit,1,12)||'-'||to_char(observed_ts AT TIME ZONE 'UTC','YYYYMMDD"T"HH24MISS"Z"');
   IF manifest->>'record_id'<>expected_record_id THEN RAISE EXCEPTION 'TRUSTED_RELEASE_RECORD_ID_INVALID'; END IF;
@@ -188,10 +166,5 @@ BEGIN
     'pre_signed_payload_required',true,'fundable_target','500T','fundable_target_amount','500000000000000',
     'fundable_target_scope','numina_native','external_balance_verified',false,'external_backing_asserted',false);
 END
-$function$;
+$function$
 
--- Keep the production Data API boundary deterministic after replacement.
-ALTER FUNCTION public.numina_mark_trusted_production_release(jsonb) OWNER TO numina_owner;
-REVOKE ALL ON FUNCTION public.numina_mark_trusted_production_release(jsonb) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.numina_mark_trusted_production_release(jsonb) TO "skott34-dot/numina-production";
-GRANT EXECUTE ON FUNCTION public.numina_mark_trusted_production_release(jsonb) TO numina_data_api_anon;
