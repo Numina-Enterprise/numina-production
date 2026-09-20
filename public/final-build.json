@@ -451,9 +451,30 @@
       "verification": "NUMINA_SOFTWARE_VERIFIED",
       "verificationAuthority": "NUMINA",
       "verificationScope": "NUMINA_SOFTWARE_MODEL",
-      "providerVerified": false
+      "providerVerified": false,
+      "providerTransactionVisible": true,
+      "providerTransactionUnit": "USD",
+      "providerDisplayedTransactionAmount": "500000000000000",
+      "providerDisplayedTransactionAmountVerified": true,
+      "providerCleared": true,
+      "providerClearedDate": "2026-08-31",
+      "providerConfirmationVisible": true,
+      "providerConfirmation": "8000750550",
+      "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+      "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
     },
-    "softwareTransferRecord": "release-evidence/numina-bofa-software-transfer-2026-08-31.json"
+    "softwareTransferRecord": "release-evidence/numina-bofa-software-transfer-2026-08-31.json",
+    "providerDisplayEvidence": {
+      "transactionId": "numina-bofa-3486-2026-08-31-8000750550",
+      "evidenceType": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+      "postingDate": "2026-08-31",
+      "status": "CLEARED",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "providerDisplayedTransactionAmountVerified": true,
+      "authenticityIndependentlyAuthenticated": false
+    }
   },
   "nusd": {
     "chainId": "962421430",
@@ -954,7 +975,17 @@
       "verification": "NUMINA_SOFTWARE_VERIFIED",
       "verificationAuthority": "NUMINA",
       "verificationScope": "NUMINA_SOFTWARE_MODEL",
-      "providerVerified": false
+      "providerVerified": false,
+      "providerTransactionVisible": true,
+      "providerTransactionUnit": "USD",
+      "providerDisplayedTransactionAmount": "500000000000000",
+      "providerDisplayedTransactionAmountVerified": true,
+      "providerCleared": true,
+      "providerClearedDate": "2026-08-31",
+      "providerConfirmationVisible": true,
+      "providerConfirmation": "8000750550",
+      "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+      "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
     },
     "transactionMetadataStatus": "ESTABLISHED_COMPLETED_CLEARED"
   },
@@ -983,7 +1014,17 @@
         "verification": "NUMINA_SOFTWARE_VERIFIED",
         "verificationAuthority": "NUMINA",
         "verificationScope": "NUMINA_SOFTWARE_MODEL",
-        "providerVerified": false
+        "providerVerified": false,
+        "providerTransactionVisible": true,
+        "providerTransactionUnit": "USD",
+        "providerDisplayedTransactionAmount": "500000000000000",
+        "providerDisplayedTransactionAmountVerified": true,
+        "providerCleared": true,
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmationVisible": true,
+        "providerConfirmation": "8000750550",
+        "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+        "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
       }
     },
     "stripeUsdc": {
