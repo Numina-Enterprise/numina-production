@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='493c494ccddcac4ce647e17c324bf0a4be838a0f';
+  const FINAL_BUILD_MANIFEST_BLOB='dd229f83e28352b4d77ddeb7c3dab2bbaf16b28e';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -56,6 +56,19 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.verifiedModeledValue,NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue);
   assert.equal(finalBuild.treasury.verificationScope,'NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE');
   assert.equal(finalBuild.treasury.verifiedModeledValueScope,'INTERNAL_NUMINA_MODEL_ONLY');
+  assert.equal(finalBuild.softwareTreasury.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
+  assert.equal(finalBuild.softwareTreasury.treasuryIdentity,'NUMINA');
+  assert.equal(finalBuild.softwareTreasury.singular,true);
+  assert.equal(finalBuild.softwareTreasury.treasuryCount,1);
+  assert.equal(finalBuild.softwareTreasury.accountCount,1);
+  assert.equal(finalBuild.softwareTreasury.componentCount,3);
+  assert.equal(finalBuild.softwareTreasury.holdingsCount,3);
+  assert.equal(finalBuild.softwareTreasury.balanceCount,1);
+  assert.equal(finalBuild.softwareTreasury.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
+  assert.equal(finalBuild.softwareTreasury.componentsAreSeparateTreasuries,false);
+  assert.equal(finalBuild.softwareTreasury.aggregateModeledValue,'1500000000000000');
+  assert.equal(finalBuild.softwareTreasury.aggregateModeledUnit,'NUSD');
+  assert.deepEqual(finalBuild.softwareTreasury.componentUnits,['USD','USDC','NUSD']);
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.established,true);
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.establishedStatus,'ESTABLISHED');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.status,'COMPLETED');
