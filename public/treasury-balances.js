@@ -50,10 +50,10 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
   const stripeTargetRows=item('dl','');detail(stripeTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));
-  stripe.append(item('h4','Stripe · NUMINA treasury evidence role'),canonicalLink(),stripeTargetRows,renderNativeAccountReference(treasury),item('p','Reading Stripe substrate evidence…'));
-  const bank=item('article','');bank.append(item('h4','Bank of America · NUMINA treasury evidence role'),item('p','SK Consulting LLC'),canonicalLink(),renderNativeAccountReference(treasury),item('h5','Funding objective'));
+  stripe.append(item('h4','NUMINA · USDC software holding'),canonicalLink(),stripeTargetRows,renderNativeAccountReference(treasury),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value'),item('p','Reading Stripe observation metadata…'));
+  const bank=item('article','');bank.append(item('h4','NUMINA · USD software holding'),item('p','SK Consulting LLC'),canonicalLink(),renderNativeAccountReference(treasury),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.current,'USD')+' · NUMINA software value'),item('h5','NUMINA software balance'));
   const bankTargetRows=item('dl','');detail(bankTargetRows,'Fundable USD target',fundableTargetText(treasury,'bank-of-america-savings'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
-  const bankRows=item('dl','');detail(bankRows,'Available USD','Unavailable — bank connection required');detail(bankRows,'Reserve allocation','Unverified');bank.append(bankRows);
+  const bankRows=item('dl','');detail(bankRows,'NUMINA software USD',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.current,'USD'));detail(bankRows,'NUMINA aggregate',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD'));bank.append(bankRows);
   grid.append(stripe,bank);
   target.append(heading,grid,item('p','Treasury v2 is singular: one NUMINA treasury with a 1,500T owner-designated aggregate. Actual journal and provider observations remain separately evidenced.'));
   try{
@@ -61,7 +61,7 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
     if(signal?.aborted)return;
     if(record.schema!=='numina.stripe.treasury.v1'||record.account?.livemode!==true)throw Error('Invalid observation');
     const liveTargetRows=item('dl','');detail(liveTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));
-    stripe.replaceChildren(item('h4','Stripe · NUMINA treasury evidence role'),item('p',record.account.name),canonicalLink(),liveTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe substrate observations'));
+    stripe.replaceChildren(item('h4','NUMINA · USDC software holding'),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value'),item('p',record.account.name),canonicalLink(),liveTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe observation metadata'));
     const list=item('dl','');
     for(const [bucket,label] of [['available','Available'],['inbound_pending','Incoming'],['outbound_pending','Outgoing']]){
       for(const currency of ['usd','usdc']){const amount=record.balances?.[bucket]?.[currency];detail(list,label+' '+currency.toUpperCase(),amount?formatTreasuryProviderDisplayAmount(amount.value,currency):'Not reported');}
@@ -70,5 +70,5 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
     detail(list,'Observed at',record.observed_at);stripe.append(list);
     const evidence=item('details','');evidence.append(item('summary','Provider evidence'));
     const source=item('dl','');detail(source,'Financial account',record.account.id);detail(source,'Provider request',record.provider_request_id??'Not supplied');detail(source,'Connection','Read-only live account');evidence.append(source);stripe.append(evidence);
-  }catch(error){if(signal?.aborted)return;if(error.status===401||error.status===403){document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}const unavailableTargetRows=item('dl','');detail(unavailableTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));stripe.replaceChildren(item('h4','Stripe · NUMINA treasury evidence role'),canonicalLink(),unavailableTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe substrate observations'),item('p','Live provider observation unavailable. Refresh to request a new observation.'));}
+  }catch(error){if(signal?.aborted)return;if(error.status===401||error.status===403){document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}const unavailableTargetRows=item('dl','');detail(unavailableTargetRows,'Fundable USDC target',fundableTargetText(treasury,'stripe-numina-native-treasury'));stripe.replaceChildren(item('h4','NUMINA · USDC software holding'),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value'),canonicalLink(),unavailableTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe observation metadata'),item('p','Observation unavailable. NUMINA software value is unchanged.'));}
 }
