@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_IDENTITIES,NUMINA_VOCABULARY,NUMINA_TREE,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from '../src/numina-root.js';
 
 test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
-  assert.equal(NUMINA,'numina');
+  assert.equal(NUMINA,'NUMINA');
   assert.equal(NUMINA_MANIFEST_SCHEMA,'numina.manifest.v2');
   for(const value of Object.values(NUMINA_IDENTITIES))assert.equal(value,NUMINA);
   assert.deepEqual(NUMINA_VOCABULARY,NUMINA_IDENTITIES);
