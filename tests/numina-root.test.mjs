@@ -16,6 +16,14 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_TREE.canonicalSource,NUMINA);
   assert.equal(NUMINA_TREE.sourceOfTruth,NUMINA);
   assert.equal(NUMINA_TREE.authority,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.owner,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.host,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.executor,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.evidence,NUMINA);
+  assert.equal(NUMINA_TREE.owner,NUMINA);
+  assert.equal(NUMINA_TREE.host,NUMINA);
+  assert.equal(NUMINA_TREE.executor,NUMINA);
+  assert.equal(NUMINA_TREE.evidence,NUMINA);
   assert.equal(NUMINA_TREE.dataIdentity,NUMINA);
   assert.equal(NUMINA_TREE.dataNamespace,NUMINA);
   assert.equal(NUMINA_TREE.updateDirection,'ROOT_TO_LEAVES');
@@ -42,6 +50,10 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(root.canonicalSource,NUMINA);
   assert.equal(root.sourceOfTruth,NUMINA);
   assert.equal(root.squareRoot,NUMINA);
+  assert.equal(root.owner,NUMINA);
+  assert.equal(root.host,NUMINA);
+  assert.equal(root.executor,NUMINA);
+  assert.equal(root.evidence,NUMINA);
   assert.equal(root.updateDirection,'ROOT_TO_LEAVES');
   assert.deepEqual(root.numinaTree,NUMINA_TREE);
 });
