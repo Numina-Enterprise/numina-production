@@ -84,8 +84,10 @@ test('contract API and UI separate compiled functions from activated financial o
     value=>value.contracts[3].deployment.native_attestation_id='unbound',
     value=>value.contracts[3].verification.chain_receipt_verified=true
   ]){const changed=structuredClone(record);mutate(changed);assert.throws(()=>contractSourcePresentation(changed));}
+  assert.equal(record.transfersEnabled,true);
   assert.deepEqual(record.software_capabilities,{mint:true,transfer:true,settlement:true,redemption:true,exchange:true});
   assert.equal(record.financial_execution.issuance,true);assert.equal(record.financial_execution.transfer,true);assert.equal(record.financial_execution.nusd_settlement,false);assert.equal(record.financial_execution.usd_redemption,false);assert.equal(record.financial_execution.usdc_conversion,false);assert.equal(record.financial_execution.external_deposits,false);
+  assert.equal(NUSD_POLICY.transfersEnabled,true);
   assert.deepEqual(NUSD_POLICY.software_capabilities,{mint:true,transfer:true,settlement:true,redemption:true,exchange:true});
   assert.equal(NUSD_POLICY.capabilities.transfer,true);for(const capability of ['mint','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
   for(const contract of record.contracts.slice(2)){

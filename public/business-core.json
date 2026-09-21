@@ -175,7 +175,8 @@
       "settlement": true,
       "redemption": true,
       "exchange": true
-    }
+    },
+    "transfersEnabled": true
   },
   "numinaMetadata": {
     "identity": "NUMINA",
@@ -204,7 +205,8 @@
     "singularSoftwareIdentity": true,
     "competingSoftwareIdentityAllowed": false,
     "competingManifestAuthorityAllowed": false,
-    "competingMetadataAuthorityAllowed": false
+    "competingMetadataAuthorityAllowed": false,
+    "transfersEnabled": true
   },
   "manifest": "NUMINA",
   "software_identity": "NUMINA",
@@ -228,5 +230,6 @@
   "canonical_metadata_override": "NUMINA",
   "competing_software_identity_allowed": false,
   "competing_manifest_authority_allowed": false,
-  "competing_metadata_authority_allowed": false
+  "competing_metadata_authority_allowed": false,
+  "transfersEnabled": true
 }

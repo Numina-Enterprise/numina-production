@@ -18,7 +18,7 @@
     "runner:status": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1 -StatusOnly"
   },
   "license": "SEE LICENSE IN LICENSE.md",
-  "author": "Numina · SK Consulting LLC",
+  "author": "Numina \u00b7 SK Consulting LLC",
   "numina": {
     "identity": "NUMINA",
     "self": "NUMINA",
@@ -26,7 +26,7 @@
     "all": "NUMINA",
     "finalBuildManifest": {
       "path": "public/final-build.json",
-      "blob": "400301c1c716a7793fca468ff9333155338bec55",
+      "blob": "51a34b42d4745b2988cc1efc7cb3264033b77e38",
       "identity": "NUMINA",
       "status": "FINAL",
       "finalAll": "NUMINA",
@@ -60,10 +60,12 @@
         "canonical"
       ],
       "rawEvidenceImmutable": true,
-      "sourceScopedObservationsRetained": true
+      "sourceScopedObservationsRetained": true,
+      "transfersEnabled": true
     },
     "manifest": "NUMINA",
-    "allSoftware": "NUMINA"
+    "allSoftware": "NUMINA",
+    "transfersEnabled": true
   },
   "numinaMetadata": {
     "identity": "NUMINA",
@@ -92,7 +94,8 @@
       "canonical"
     ],
     "rawEvidenceImmutable": true,
-    "sourceScopedObservationsRetained": true
+    "sourceScopedObservationsRetained": true,
+    "transfersEnabled": true
   },
   "manifest": "NUMINA",
   "software_identity": "NUMINA",
@@ -121,5 +124,6 @@
   "metadataResolution": "AUTHORITATIVE_NUMINA_OVERLAY",
   "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
   "signedEvidenceBytesPreserved": true,
-  "hashPinnedArtifactBytesPreserved": true
+  "hashPinnedArtifactBytesPreserved": true,
+  "transfersEnabled": true
 }

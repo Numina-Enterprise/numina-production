@@ -65,6 +65,7 @@ export const NUSD_SIMULATION=freezeNusdRedemption({
 });
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
+ transfersEnabled:true,
  operator_activation:NUSD_OPERATOR_ACTIVATION,
  approved_review:NUSD_APPROVED_REVIEW,
  simulation:NUSD_SIMULATION,

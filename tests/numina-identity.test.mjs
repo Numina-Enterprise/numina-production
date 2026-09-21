@@ -23,7 +23,8 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='400301c1c716a7793fca468ff9333155338bec55';
+  assert.equal(pkg.transfersEnabled,true);assert.equal(pkg.numina.transfersEnabled,true);assert.equal(pkg.numinaMetadata.transfersEnabled,true);
+  const FINAL_BUILD_MANIFEST_BLOB='51a34b42d4745b2988cc1efc7cb3264033b77e38';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -32,6 +33,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.schema,'numina.final-build.v1');
   assert.equal(finalBuild.identity,'NUMINA');
   assert.equal(finalBuild.status,'FINAL');
+  assert.equal(finalBuild.transfersEnabled,true);
   assert.equal(finalBuild.softwareAlignment.identity,'NUMINA');
   assert.equal(finalBuild.softwareAlignment.sourceCommit,'3ff8735aa47fb1ff2665c7c609676729e03d3b25');
   assert.equal(finalBuild.softwareAlignment.trustedRelease.recordId,'trusted-numina-3ff8735aa47f-20260920T233158Z');

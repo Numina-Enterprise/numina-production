@@ -105,7 +105,8 @@
     "transaction_hash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
     "paused": true,
     "receipt": "/downloads/nusd/deployment-receipt.json",
-    "external_backing_verified": false
+    "external_backing_verified": false,
+    "pausedScope": "historical_deployment_receipt"
   },
   "pendingRuntimeMigration": null,
   "frontierVersion": "4.0.0",
@@ -230,7 +231,8 @@
     "singularSoftwareIdentity": true,
     "competingSoftwareIdentityAllowed": false,
     "competingManifestAuthorityAllowed": false,
-    "competingMetadataAuthorityAllowed": false
+    "competingMetadataAuthorityAllowed": false,
+    "transfersEnabled": true
   },
   "all_software": "NUMINA",
   "manifest_equals_numina": true,
@@ -252,5 +254,6 @@
   "canonical_metadata_override": "NUMINA",
   "competing_software_identity_allowed": false,
   "competing_manifest_authority_allowed": false,
-  "competing_metadata_authority_allowed": false
+  "competing_metadata_authority_allowed": false,
+  "transfersEnabled": true
 }

@@ -5,6 +5,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "modelIdentity": "NUMINA",
   "identity": "NUMINA",
   "manifest": "NUMINA",
+  "transfersEnabled": true,
   "manifestEqualsNumina": true,
   "numinaEqualsManifest": true,
   "metadataAuthority": "NUMINA",
