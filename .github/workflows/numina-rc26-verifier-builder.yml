@@ -1,4 +1,5 @@
-# Vendored from skott34-dot/numina-builder@f85e9428fa8bf0371931429479f31b0348ead454; canonical action pins apply.\nname: Numina rc26 verifier source package and provenance
+# Vendored from skott34-dot/numina-builder@f85e9428fa8bf0371931429479f31b0348ead454; canonical action pins apply.
+name: Numina rc26 verifier source package and provenance
 # Source packaging only. No caller inputs, deployment or private runtime keys.
 on:
   workflow_call:
