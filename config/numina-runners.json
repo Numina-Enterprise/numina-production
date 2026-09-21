@@ -31,6 +31,7 @@
       "numina-ios-signing.yml": "macos-latest",
       "publish-sites-control-source.yml": "ubuntu-24.04",
       "verify-root-vercel.yml": "ubuntu-24.04",
+      "activate-minted-nusd.yml": "ubuntu-24.04",
       "align-native-treasury-500t.yml": "ubuntu-24.04",
       "check-sites-control-origin.yml": "ubuntu-24.04",
       "deploy-nusd-contracts.yml": "ubuntu-24.04",
