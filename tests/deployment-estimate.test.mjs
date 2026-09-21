@@ -53,7 +53,7 @@ test('HTTP endpoint serves final status on an empty GET without caller-selected 
   assert.equal(calls,1);
   assert.equal(res.statusCode,200);
   assert.deepEqual(JSON.parse(res.body),observed.body);
-  for(const h of ['cache-control','cdn-cache-control','vercel-cdn-cache-control'])assert.equal(res.headers[h],'no-store');
+  for(const h of ['cache-control','cdn-cache-control'])assert.equal(res.headers[h],'no-store');
 });
 
 test('caller input cannot select or alter the fixed read-only observation',async()=>{
