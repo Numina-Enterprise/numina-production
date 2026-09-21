@@ -28,7 +28,7 @@ test('one owner approval binds both runtime manifests without manufacturing fina
  assert.equal(handoff.sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff.zip')));
  assert.equal(handoff.sha256,packageRecord.sha256);
  assert.equal(handoff.record_sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff-Package-Record.json')));
- const config=json('config/numina-routing.json');assert.equal(config.identity,'NUMINA');assert.equal(config.publicOrigin,'https://numinalabs.xyz');assert.deepEqual(config.canonicalSource,{repository:'skott34-dot/numina-production',branch:'main'});
+ const config=json('config/numina-routing.json');assert.equal(config.identity,'NUMINA');assert.equal(config.publicOrigin,'https://numinalabs.xyz');assert.deepEqual(config.canonicalSource,{identity:'NUMINA',root:'NUMINA',squareRoot:'NUMINA',role:'ROOT_SOURCE_OF_TRUTH',updateDirection:'ROOT_TO_LEAVES'});assert.equal(config.tree.root,'NUMINA');assert.equal(config.tree.squareRoot,'NUMINA');assert.equal(config.tree.sourceOfTruth,'NUMINA');assert.equal(config.tree.updateDirection,'ROOT_TO_LEAVES');assert.deepEqual(config.tree.leaves.github,{role:'LEAF_PROJECTION',transport:'github',repository:'skott34-dot/numina-production',branch:'main',authoritative:false,evidenceTransport:true,ciTransport:true});
  for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source),undefined);
  assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://personal-space-m7q9.skott34.chatgpt.site/api/control/v1/:path*');
  for(const version of ['2','3','4'])assert.equal(config.rewrites.find(r=>r.source==='/v'+version+'/release/manifest')?.destination,'/api/application-release');
