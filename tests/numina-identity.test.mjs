@@ -24,7 +24,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
   assert.equal(pkg.transfersEnabled,true);assert.equal(pkg.numina.transfersEnabled,true);assert.equal(pkg.numinaMetadata.transfersEnabled,true);
-  const FINAL_BUILD_MANIFEST_BLOB='51a34b42d4745b2988cc1efc7cb3264033b77e38';
+  const FINAL_BUILD_MANIFEST_BLOB='b187c357479d46b7f1b7e05ce4c8ae346ffe9b72';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -222,7 +222,7 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.executionTargets.hostedLinuxPolicy.migrationNotice.migrationBegins,'2026-10-19');
   assert.equal(policy.executionTargets.hostedLinuxPolicy.migrationNotice.target,'ubuntu-26');
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-24.04','numina.yml':'ubuntu-24.04','verify-provider-observations.yml':'ubuntu-24.04','numina-android-release.yml':'ubuntu-24.04','numina-ios-signing.yml':'macos-latest','publish-sites-control-source.yml':'ubuntu-24.04','verify-root-vercel.yml':'ubuntu-24.04','activate-minted-nusd.yml':'ubuntu-24.04','align-native-treasury-500t.yml':'ubuntu-24.04','check-sites-control-origin.yml':'ubuntu-24.04','deploy-nusd-contracts.yml':'ubuntu-24.04','diagnose-control-auth.yml':'ubuntu-24.04','ibm-quantum-hardware.yml':'ubuntu-24.04','ibm-quantum-smoke.yml':'ubuntu-24.04','initiate-treasury-aggregate-model.yml':'ubuntu-24.04','verify-workflow-pins.yml':'ubuntu-24.04','sync-control-key-pin.yml':'ubuntu-24.04','verify-nusd-production.yml':'ubuntu-24.04'});
+  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-24.04','numina.yml':'ubuntu-24.04','verify-provider-observations.yml':'ubuntu-24.04','numina-android-release.yml':'ubuntu-24.04','numina-ios-signing.yml':'macos-latest','publish-sites-control-source.yml':'ubuntu-24.04','verify-root-numina.yml':'ubuntu-24.04','activate-minted-nusd.yml':'ubuntu-24.04','align-native-treasury-500t.yml':'ubuntu-24.04','check-sites-control-origin.yml':'ubuntu-24.04','deploy-nusd-contracts.yml':'ubuntu-24.04','diagnose-control-auth.yml':'ubuntu-24.04','ibm-quantum-hardware.yml':'ubuntu-24.04','ibm-quantum-smoke.yml':'ubuntu-24.04','initiate-treasury-aggregate-model.yml':'ubuntu-24.04','verify-workflow-pins.yml':'ubuntu-24.04','sync-control-key-pin.yml':'ubuntu-24.04','verify-nusd-production.yml':'ubuntu-24.04'});
   assert.deepEqual(policy.executionTargets.workflowTargetSets,{'numina-mobile-release-build.yml':['ubuntu-24.04','macos-latest'],'numina-mobile-store-distribution.yml':['ubuntu-24.04','macos-latest'],'numina-site-builder.yml':['ubuntu-24.04','ubuntu-24.04'],'numina-nusd-runtime-builder.yml':['ubuntu-24.04','ubuntu-24.04']});
   assert.equal(policy.executionTargets.default,'NUMINA');
   let declarations=0;
