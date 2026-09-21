@@ -104,7 +104,7 @@ test('frontier never renders provider verification substituted for an owner desi
     view.accounts[0].providerOwnershipVerified=true;
     const h=harness(view);
     try{
-      await settled();
+      await settled();await h.subject.refresh();await settled();
       assert.doesNotMatch(h.get('#accounts').textContent,/Provider verified/);
       assert.match(h.get('#treasury-status').textContent,/could not be verified/);
       for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);
