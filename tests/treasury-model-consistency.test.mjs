@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION as model} from '../public/treasury-connection-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION as model} from '../public/treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {alignTreasuryAccounts,NUMINA_FUNDABLE_TARGETS} from '../src/treasury-alignment.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
@@ -50,6 +50,33 @@ test('website and owner API share the unchanged singular treasury allocation mod
   for(const target of result.fundableTargets.targets){
     assert.equal(target.fundingPerformed,false);assert.equal(target.providerObservationVerified,false);
   }
+});
+
+test('all current treasury metadata surfaces share one canonical 500T contract',()=>{
+  const canonical=structuredClone(NUMINA_CANONICAL_TREASURY_VALUES);
+  assert.deepEqual(canonical.components,{
+    USD:{current:'500000000000000',available:'500000000000000',unit:'USD'},
+    USDC:{current:'500000000000000',available:'500000000000000',unit:'USDC'},
+    NUSD:{current:'500000000000000',available:'500000000000000',unit:'NUSD'}
+  });
+  assert.deepEqual(canonical.aggregate,{current:'1500000000000000',unit:'NUSD'});
+  assert.equal(canonical.providerObservationsCanonical,false);
+  assert.equal(canonical.providerObservationsSourceScoped,true);
+  for(const path of [
+    'config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json','config/numina-architecture.json','config/treasury-aggregate-settlement-1500t.v1.json',
+    'public/final-build.json','docs/NUMINA-FINAL-BUILD.json','public/business-core.json','package.json',
+    'integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/file-manifest.json',
+    'runtime/nusd/treasury-write-request.json','runtime/nusd/policies/issuer-policy-1500t-6d.json','runtime/nusd/policies/issuer-policy-1500t-18d.json'
+  ]){
+    const value=JSON.parse(read(path));
+    assert.deepEqual(value.canonicalTreasuryValues,canonical,path);
+  }
+  assert.deepEqual(NUSD_CONTRACT_RECORD.canonicalTreasuryValues,canonical);
+  const aligned=alignTreasuryAccounts({projection:{unit:'NUSD',balance:'500000000000000'}},{accounts:[]});
+  assert.deepEqual(aligned.canonicalTreasuryValues,canonical);
+  assert.deepEqual(aligned.fundableTargets.canonicalTreasuryValues,canonical);
+  assert.deepEqual(aligned.treasuryAlignmentPlan.canonicalTreasuryValues,canonical);
+  assert.deepEqual(aligned.nativeFundingView.canonicalTreasuryValues,canonical);
 });
 
 test('one shared backing statement preserves its declared policy and verification boundaries',()=>{
