@@ -57,7 +57,7 @@ async function observationSet(){
 
 module.exports=async function(req,res){
   if(req.method!=='GET'){res.setHeader('allow','GET');return respond(res,405,{error:'METHOD_NOT_ALLOWED'});}
-  const url=new URL(req.url,'https://numina-production.vercel.app');
+  const url=new URL(req.url,'https://numinalabs.xyz');
   const mode=String(url.searchParams.get('mode')||'catalog').trim().toLowerCase();
   if(mode==='catalog')return respond(res,200,catalog());
   try{
