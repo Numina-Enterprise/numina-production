@@ -397,8 +397,19 @@
         "branch": "main",
         "authoritative": false,
         "evidenceTransport": true,
-        "ciTransport": true
+        "ciTransport": true,
+        "ref": "refs/heads/main",
+        "headResolution": "AT_READ_TIME",
+        "ingestIntoTree": true,
+        "ingestRole": "LEAF_STATE_INPUT",
+        "authorityTransferred": false
       }
+    },
+    "ingestPolicy": {
+      "mode": "REFERENCE_SNAPSHOT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": true
     }
   }
 }
