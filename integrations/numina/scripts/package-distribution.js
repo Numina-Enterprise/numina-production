@@ -8,6 +8,9 @@ import {NUMINA_DENOMINATION_POLICY} from '../src/treasury-valuation.js';
 import {treasuryClientVerificationManifest} from '../src/treasury-proof.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const metadata=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
+const workspacePackage=JSON.parse(fs.readFileSync(path.resolve(root,'../..','package.json'),'utf8'));
+const metadataAliasKeys=['software_identity','all_software','manifest_equals_numina','numina_equals_manifest','manifest_is_numina','numina_is_manifest','numina_is_all_software','all_software_is_numina','singular_software_identity','metadata_authority','metadata_namespace','metadata_scope','historical_metadata_override','current_metadata_override','canonical_metadata_override','competing_software_identity_allowed','competing_manifest_authority_allowed','competing_metadata_authority_allowed'];
+const metadataAliases=Object.fromEntries(metadataAliasKeys.map(key=>[key,workspacePackage[key]]));
 const providerFormats=['openai-responses','openai-chat-completions','anthropic-messages','gemini-interactions','gemini-generate-content'];
 const revision='numina-root-v'+metadata.version;
 const singularIdentities=Object.freeze({
@@ -67,5 +70,6 @@ const fileManifest={schema:'numina.integration.manifest.v2',...singularIdentitie
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
 })};
+Object.assign(fileManifest,{numinaMetadata:workspacePackage.numinaMetadata,...metadataAliases});
 fs.writeFileSync(path.join(root,'file-manifest.json'),JSON.stringify(fileManifest,null,2)+'\n');
 console.log(JSON.stringify({version:metadata.version,files:files.length+1,testsRun:false,providerFormats:providerFormats.length,defaultTools:verification.defaultTools.length}));
