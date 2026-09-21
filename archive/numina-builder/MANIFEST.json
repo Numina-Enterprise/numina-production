@@ -1,0 +1,58 @@
+{
+  "schema": "numina.builder-consolidation-archive.v1",
+  "canonicalRepository": "skott34-dot/numina-production",
+  "sourceRepository": "skott34-dot/numina-builder",
+  "pinnedSnapshot": {
+    "commit": "f85e9428fa8bf0371931429479f31b0348ead454",
+    "tree": "ccc4c3ca2fde351697f32cc5422b36d426a60cf6",
+    "archivePath": "archive/numina-builder/f85e9428fa8bf0371931429479f31b0348ead454",
+    "sourceFileCount": 10
+  },
+  "currentSource": {
+    "commit": "23a223bcbd3818eb2fc685ea2580b6e5a7dfdf03",
+    "tree": "052b2cbda8f1b4244bb9e910b27dabfabe32e1d9",
+    "reconstruction": "pinnedSnapshot plus currentDelta; unchanged files have identical Git blob SHA",
+    "currentDeltaPath": "archive/numina-builder/23a223bcbd3818eb2fc685ea2580b6e5a7dfdf03",
+    "currentDeltaFiles": [
+      ".github/workflows/numina-site-builder.yml",
+      "README.md",
+      "verification-policy.template.json",
+      "verify_release.py",
+      "LICENSE.md",
+      "OWNERSHIP.md"
+    ],
+    "unchangedFromPinnedSnapshot": [
+      {
+        "path": ".github/dependabot.yml",
+        "sha": "12c82080757e96ab6790301804a71930c62479ff"
+      },
+      {
+        "path": ".github/workflows/numina-nusd-runtime-builder.yml",
+        "sha": "e44ba6d09fef438a762b6ec9247fcb0449a00ee7"
+      },
+      {
+        "path": ".github/workflows/numina-rc26-verifier-builder.yml",
+        "sha": "4c079a340c77e2a2eb860ebfae2e2fef7a090345"
+      },
+      {
+        "path": "action-pins.json",
+        "sha": "e85b724ede9124bead9cf228d34258f80c41c371"
+      },
+      {
+        "path": "deployment-binding.template.json",
+        "sha": "bed695c7c92413511dc2b0f69a3ce99973f14bda"
+      },
+      {
+        "path": "sources.md",
+        "sha": "a71ae823f8369d81f36ae741620d3b4c413ad23e"
+      }
+    ]
+  },
+  "activeCanonicalization": {
+    "localRc26Builder": ".github/workflows/numina-rc26-verifier-builder.yml",
+    "caller": ".github/workflows/numina-rc26-verifier.yml",
+    "remoteReusableWorkflowDependency": false,
+    "actionsAttestSha": "1e69f48acb82d1966a394da916b4c1698aa569d6"
+  },
+  "note": "Historical provenance records retain their original numina-builder signer references; this archive does not rewrite historical attestations."
+}
