@@ -35,9 +35,9 @@ Store publication is evidence-bound: Google Play and App Store are not marked su
 
 ## Source and rights
 
-`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain source material. The restored provenance workflows operate inside the canonical repository and bind exact build artifacts to NUMINA release records; deployment state still requires actual runtime/provider evidence.
+`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain source material. NUMINA is the canonical source and square root of the software tree. Provenance workflows operate through repository leaves and bind exact build artifacts back to NUMINA release records; deployment state still requires actual runtime/provider evidence.
 
-The production GitHub repository is the canonical NUMINA repository. GitHub source, build logs and workflow artifacts require repository access. External hosting, storage, network and provider service names are substrate metadata or historical compatibility references; they do not create separate NUMINA identities or authorities. External events are treated as confirmed only when their factual evidence is available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
+NUMINA is the canonical source. The production GitHub repository is a non-authoritative leaf projection used for source transport, CI, releases and evidence persistence. GitHub source, build logs and workflow artifacts require repository access, but GitHub does not replace NUMINA as root authority. External hosting, storage, network and provider service names are substrate metadata or historical compatibility references; they do not create separate NUMINA identities or authorities. External events are treated as confirmed only when their factual evidence is available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
 
 ## Source alignment
 
