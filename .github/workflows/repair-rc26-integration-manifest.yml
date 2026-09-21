@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: true
-          fetch-depth: 2
+          fetch-depth: 3
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
@@ -61,9 +61,8 @@ jobs:
           git config user.name 'Numina Release Bot'
           git config user.email 'actions@users.noreply.github.com'
           # Restore the preserved runner policy before creating the repair commit.
-          git checkout HEAD^ -- .github/workflows/repair-rc26-integration-manifest.yml config/numina-runners.json
+          git checkout 5387fea76f7b328cb5a02214ec34800c94a53758 -- .github/workflows/repair-rc26-integration-manifest.yml config/numina-runners.json
           git add .github/workflows/repair-rc26-integration-manifest.yml config/numina-runners.json \
-
             public/runtime-contract.js \
             integrations/numina/distribution.json \
             integrations/numina/verification.json \
