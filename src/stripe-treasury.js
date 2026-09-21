@@ -9,7 +9,7 @@ export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes'
 // verify reserves, submit funds, or turn a native receipt into provider evidence.
 const NATIVE_USDC_MODEL=Object.freeze({
   identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
-  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,
+  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,sourceOfTruth:'NUMINA',canonicalSource:'NUMINA',squareRoot:'NUMINA',updateDirection:'ROOT_TO_LEAVES',singular:NUMINA_NATIVE_TREASURY_SYNC.singular,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,
   treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
   holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
   holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalance:Object.freeze({current:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,available:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,unit:'USDC',source:'NUMINA'}),
