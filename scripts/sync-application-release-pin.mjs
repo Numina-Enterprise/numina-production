@@ -28,7 +28,7 @@ export function syncApplicationReleasePin({write=false}={}){
   const current=source.match(pin)?.[1];
   if(!current||!source.includes("export const APPLICATION_VERSION='"+version+"';")||
     !source.includes("export const APPLICATION_RELEASE='numina-v"+version+"';"))throw Error('Application release contract identity mismatch');
-  // This generated pin is consumed by the root Vercel adapter, outside the
+  // This generated pin is consumed by the root Numina release adapter, outside the
   // distribution inventory. Hash all distribution bytes before updating it.
   if(current!==buildId){
     if(!write)throw Error('Application release pin differs from current distribution: '+buildId);
