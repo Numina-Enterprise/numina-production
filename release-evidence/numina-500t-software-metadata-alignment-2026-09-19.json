@@ -20,9 +20,9 @@
     "unit": "USD",
     "confirmation": "8000750550",
     "verified": true,
-    "verification": "NUMINA_AND_LINKED_PROVIDER_VERIFIED",
+    "verification": "NUMINA_MANIFEST_VERIFIED",
     "verificationAuthority": "NUMINA",
-    "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION",
+    "verificationScope": "NUMINA_MANIFEST",
     "providerVerified": true,
     "providerVerificationSource": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED",
     "providerTransactionId": "EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw",
@@ -37,8 +37,8 @@
     "providerBalanceSnapshotFreshness": "unknown",
     "providerBalanceSourceReportedAt": null,
     "providerBalanceRecordUpdatedAt": "2026-09-20T18:46:26.336453Z",
-    "providerDisplayEvidence": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED_AND_USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-    "providerDisplayEvidenceScope": "PROVIDER_LINKED_TRANSACTION_AND_PROVIDER_FACING_TRANSACTION_DETAIL"
+    "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+    "providerDisplayEvidenceScope": "PROVIDER_LINKED_TRANSACTION_AND_NUMINA_SOURCE_SCOPED_OBSERVATION"
   },
   "verificationBoundary": {
     "authority": "NUMINA",
@@ -68,5 +68,24 @@
     "sourceReportedTimestamp": null,
     "freshness": "unknown",
     "recordUpdatedAt": "2026-09-20T18:46:26.336453Z"
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

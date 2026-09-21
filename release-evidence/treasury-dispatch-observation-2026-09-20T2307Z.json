@@ -58,5 +58,24 @@
     "chainTransferPerformed": false,
     "providerBalanceOverridePerformed": false
   },
-  "nextGate": "GitHub must create jobs for the two pending workflow_dispatch runs before any NUMINA journal write/read-back can be observed."
+  "nextGate": "GitHub must create jobs for the two pending workflow_dispatch runs before any NUMINA journal write/read-back can be observed.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

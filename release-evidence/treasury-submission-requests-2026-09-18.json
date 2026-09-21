@@ -71,5 +71,24 @@
   ],
   "settlementRecords": [],
   "financialExecution": false,
-  "scope": "These are owner-request records, not provider submissions, payment confirmations, available funds or settlement evidence. No ACH or USDC movement occurred when these records were created."
+  "scope": "These are owner-request records, not provider submissions, payment confirmations, available funds or settlement evidence. No ACH or USDC movement occurred when these records were created.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

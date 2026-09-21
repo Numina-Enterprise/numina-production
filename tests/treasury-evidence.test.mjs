@@ -119,7 +119,7 @@ test('owner claims and uploaded-document metadata cannot promote actual funding'
 
 test('native settlement records remain captured internal state without proving external settlement',async()=>{
   const treasury={root:owner,status:'READY',revision:4,head:'a'.repeat(64),projection:{balance:'500000000000000',unit:'NUSD',verification:'VERIFIED'},
-    aggregateSettlement:{status:'SETTLED',evidenceScope:'NUMINA_INTERNAL_SOFTWARE_STATE',receiptId:'native-settlement-fixture',submissionPerformed:true,settlementPerformed:true}};
+    aggregateSettlement:{status:'SETTLED',evidenceScope:'NUMINA_MANIFEST_FINAL',receiptId:'native-settlement-fixture',submissionPerformed:true,settlementPerformed:true}};
   const payload=await treasuryEvidencePayload({treasury,frontier:{},providerObservation:{status:'UNAVAILABLE',record:null},supportingDocuments:null,capturedAt:'2026-09-19T00:00:00Z'});
   assert.deepEqual(payload.source.nativeTreasury.aggregateSettlement,treasury.aggregateSettlement);
   assert.equal(payload.records.nativeTreasury.verification.status,'VERIFIED');

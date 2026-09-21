@@ -7,9 +7,18 @@
   "sourceMainSha": "477971591756355447344d34ed63e54b067ca470",
   "model": {
     "architectureLayerCount": 5,
-    "architectureLayers": ["L1", "L2", "L3", "L4", "L5"],
+    "architectureLayers": [
+      "L1",
+      "L2",
+      "L3",
+      "L4",
+      "L5"
+    ],
     "nativeDeliveryPlaneCount": 2,
-    "nativeDeliveryPlanes": ["android", "ios"],
+    "nativeDeliveryPlanes": [
+      "android",
+      "ios"
+    ],
     "frontierPlaneCount": 7,
     "note": "Android and iOS are delivery planes and are not relabeled as architectural L6/L7."
   },
@@ -189,5 +198,24 @@
     "Android current-source production signing has not executed and no new signed Android artifact exists.",
     "iOS current-source production signing has not executed and no new signed iOS artifact exists.",
     "No Google Play or App Store submission is claimed without a provider receipt."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

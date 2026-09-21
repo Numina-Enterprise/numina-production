@@ -122,5 +122,24 @@
     "externalSettlementClaimed": false,
     "providerSettlementReceipts": []
   },
-  "scope": "Factual delivery observation only. The required public Vercel endpoints returned HTTP 200 on the custom domain and the deployment estimate route now returned FINAL. The custom domain deployment observed here serves the parent code commit 671d88058bac5858e9ffd986d8065c3d18651449; the then-current main commit ed102eda91d9d8a7f6f04fb4ec179dbfd4bd1a8d had a separate successful Vercel status under a different provider scope. GitHub-hosted mobile jobs still did not allocate a runner, no signed mobile artifacts were produced, and no store submission is claimed."
+  "scope": "Factual delivery observation only. The required public Vercel endpoints returned HTTP 200 on the custom domain and the deployment estimate route now returned FINAL. The custom domain deployment observed here serves the parent code commit 671d88058bac5858e9ffd986d8065c3d18651449; the then-current main commit ed102eda91d9d8a7f6f04fb4ec179dbfd4bd1a8d had a separate successful Vercel status under a different provider scope. GitHub-hosted mobile jobs still did not allocate a runner, no signed mobile artifacts were produced, and no store submission is claimed.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

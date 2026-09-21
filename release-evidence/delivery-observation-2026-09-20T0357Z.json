@@ -92,5 +92,24 @@
     "The Vercel connector deployment action was unavailable at runtime and the VENGEANCE Vercel CLI requires a new login",
     "Android and iOS production signing cannot be claimed without the configured signing workflow executing and producing artifacts",
     "Store submission remains unclaimed because no newly signed mobile artifact and provider submission receipt exist"
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

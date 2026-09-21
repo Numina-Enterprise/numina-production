@@ -137,7 +137,7 @@ export function createNusdContractRecord(read=readFileSync) {
     mintReceipt.chainReceipt?.contractAddress?.toLowerCase()!==receipt.token.receipt.contractAddress?.toLowerCase()||
     mintReceipt.chainReceipt?.status!=='0x1')throw Error('NUSD mint receipt binding mismatch');
   return {entries,candidateEntries,mintReceipt,record:{
-    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
+    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
     contract_candidate:{schema:'numina.nusd.contract-candidate-set.v1',status:'compiled_not_deployed',decimals:6,initialSupplyNusd:'1500000000000000',initialSupplyBaseUnits:'1500000000000000000000',contracts:candidateEntries.map(entry=>entry.descriptor)},

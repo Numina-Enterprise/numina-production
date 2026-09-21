@@ -500,9 +500,9 @@
       "providerClearedDate": "2026-08-31",
       "providerConfirmationVisible": true,
       "providerConfirmation": "XXXXX50550",
-      "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
-      "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
-      "providerVerificationSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_TRANSACTION_OBSERVATION",
+      "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
       "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
       "providerInstitution": "Bank of America",
       "providerOfficialName": "Business Advantage Sav",
@@ -519,7 +519,7 @@
     "softwareTransferRecord": "release-evidence/numina-bofa-software-transfer-2026-08-31.json",
     "providerDisplayEvidence": {
       "transactionId": "numina-bofa-3486-2026-08-31-8000750550",
-      "evidenceType": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+      "evidenceType": "NUMINA_SOURCE_SCOPED_OBSERVATION",
       "postingDate": "2026-08-31",
       "status": "CLEARED",
       "amount": "500000000000000",
@@ -535,7 +535,7 @@
       "backingReservesVerified": true,
       "redemption": "AVAILABLE",
       "transfer": "ENABLED",
-      "scope": "NUMINA_NATIVE_TREASURY_INTERNAL_STATE",
+      "scope": "NUMINA_MANIFEST_FINAL",
       "externalProviderReserveVerificationClaimed": false,
       "externalProviderSettlementClaimed": false
     },
@@ -873,7 +873,7 @@
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES",
-      "modelVerificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODEL_ONLY",
+      "modelVerificationScope": "NUMINA_MANIFEST_FINAL",
       "identity": "NUMINA",
       "singular": true,
       "treasuryCount": 1,
@@ -1099,10 +1099,10 @@
       "providerClearedDate": "2026-08-31",
       "providerConfirmationVisible": true,
       "providerConfirmation": "XXXXX50550",
-      "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
-      "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
+      "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
       "currentProviderBalanceInferredFromTransaction": false,
-      "providerVerificationSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_TRANSACTION_OBSERVATION",
+      "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
       "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
       "providerInstitution": "Bank of America",
       "providerOfficialName": "Business Advantage Sav",
@@ -1244,9 +1244,9 @@
         "providerClearedDate": "2026-08-31",
         "providerConfirmationVisible": true,
         "providerConfirmation": "XXXXX50550",
-        "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
-        "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
-        "providerVerificationSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_TRANSACTION_OBSERVATION",
+        "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
         "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
         "providerInstitution": "Bank of America",
         "providerOfficialName": "Business Advantage Sav",
@@ -1298,8 +1298,8 @@
         "providerClearedDate": "2026-08-31",
         "providerConfirmationVisible": true,
         "providerConfirmation": "XXXXX50550",
-        "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-        "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL",
+        "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
         "currentProviderBalanceInferredFromTransaction": false
       },
       "evidenceBoundary": "CONFIRMED_TRANSACTION_EVIDENCE_SEPARATE_FROM_CURRENT_PROVIDER_BALANCE"
@@ -1325,7 +1325,7 @@
       "backingReservesVerified": true,
       "redemption": "AVAILABLE",
       "transfer": "ENABLED",
-      "scope": "NUMINA_NATIVE_TREASURY_INTERNAL_STATE",
+      "scope": "NUMINA_MANIFEST_FINAL",
       "externalProviderReserveVerificationClaimed": false,
       "externalProviderSettlementClaimed": false
     },
@@ -1448,5 +1448,24 @@
       "amountMatchesSoftwareModel": false,
       "balanceMatchesSoftwareModel": false
     }
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

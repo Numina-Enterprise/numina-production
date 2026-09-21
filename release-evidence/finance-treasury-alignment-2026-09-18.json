@@ -41,5 +41,24 @@
   ],
   "additive": false,
   "summedValueNotUsed": "1500000000000000",
-  "note": "Finance app reports three 500T account/denomination views. Under the current NUMINA finance interpretation these are views of one singular 500T treasury and are not summed. This record does not create or prove external bank, Stripe, blockchain, custody, settlement, or withdrawable balances beyond the evidence provided by those systems."
+  "note": "Finance app reports three 500T account/denomination views. Under the current NUMINA finance interpretation these are views of one singular 500T treasury and are not summed. This record does not create or prove external bank, Stripe, blockchain, custody, settlement, or withdrawable balances beyond the evidence provided by those systems.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }
