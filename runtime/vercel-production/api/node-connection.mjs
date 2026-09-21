@@ -290,7 +290,6 @@ export default async function handler(request, response) {
   response.setHeader('Content-Type', 'application/json; charset=utf-8');
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('CDN-Cache-Control', 'no-store');
-  response.setHeader('Vercel-CDN-Cache-Control', 'no-store');
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('Referrer-Policy', 'no-referrer');
   if (request.method !== 'GET') {
