@@ -1,7 +1,7 @@
 export const NUMINA='numina';
 export const NUMINA_MANIFEST_SCHEMA='numina.manifest.v2';
 export const NUMINA_IDENTITIES=Object.freeze({
-  root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,
+  root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,data:NUMINA,data_namespace:NUMINA,canonical_view:NUMINA,view:NUMINA,
   provider:NUMINA,host:NUMINA,provenance:NUMINA,core:NUMINA,repository:NUMINA,software:NUMINA,
   worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,authentication:NUMINA,deployment:NUMINA,
   delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
@@ -20,6 +20,11 @@ export const NUMINA_TREE=Object.freeze({
   canonicalSource:NUMINA,
   sourceOfTruth:NUMINA,
   authority:NUMINA,
+  dataIdentity:NUMINA,
+  dataNamespace:NUMINA,
+  canonicalView:NUMINA,
+  allDataBelongsToIdentity:true,
+  singular:true,
   updateDirection:'ROOT_TO_LEAVES',
   ingestPolicy:Object.freeze({mode:'REFERENCE_SNAPSHOT',canonicalizedBy:NUMINA,authorityTransferred:false,leafInputsAllowed:true}),
   leaves:Object.freeze({
@@ -65,6 +70,10 @@ export function numinaRootProjection(fields={}){
     canonicalSource:NUMINA,
     sourceOfTruth:NUMINA,
     squareRoot:NUMINA,
+    dataIdentity:NUMINA,
+    dataNamespace:NUMINA,
+    canonicalView:NUMINA,
+    allDataBelongsToIdentity:true,
     updateDirection:'ROOT_TO_LEAVES',
     numinaTree:NUMINA_TREE,
     mechanics:Object.freeze(mechanics),
