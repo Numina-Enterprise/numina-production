@@ -21,12 +21,18 @@ export const NUMINA_TREE=Object.freeze({
   sourceOfTruth:NUMINA,
   authority:NUMINA,
   updateDirection:'ROOT_TO_LEAVES',
+  ingestPolicy:Object.freeze({mode:'REFERENCE_SNAPSHOT',canonicalizedBy:NUMINA,authorityTransferred:false,leafInputsAllowed:true}),
   leaves:Object.freeze({
     github:Object.freeze({
       role:'LEAF_PROJECTION',
       transport:'github',
       repository:'skott34-dot/numina-production',
       branch:'main',
+      ref:'refs/heads/main',
+      headResolution:'AT_READ_TIME',
+      ingestIntoTree:true,
+      ingestRole:'LEAF_STATE_INPUT',
+      authorityTransferred:false,
       authoritative:false,
       evidenceTransport:true,
       ciTransport:true
