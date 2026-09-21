@@ -18,6 +18,8 @@ test('one singular 1500T treasury has three additive 500T holdings with provider
  assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.externalExecutionRequiresOwnerAction,true);
  assert.equal(model.positionNamespace,'NUMINA');assert.equal(model.connectionNamespace,'NUMINA');assert.deepEqual(model.positionScope,['internal','external_connected']);assert.equal(model.externalConnectionsAreNumina,true);assert.equal(model.providerEvidenceSourceScoped,true);
  assert.equal(model.aggregateModeledValue,'1500000000000000');
+ assert.equal(model.softwareBalanceModel.bankUsd.transfer.amount,'500000000000000');
+ assert.equal(model.softwareBalanceModel.bankUsd.transfer.unit,'USD');
  assert.equal(model.modeledAllocationsAdditive,true);
  assert.ok(model.allocations.every(value=>value.amount==='500000000000000'));
  const bank=model.allocations.find(value=>value.id==='bank-of-america-savings'),stripe=model.allocations.find(value=>value.id==='stripe-numina-native-treasury'),native=model.allocations.find(value=>value.id==='numina-native-treasury');
