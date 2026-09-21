@@ -29,11 +29,6 @@
       "provider": "NUMINA",
       "origin": "https://numinalabs.xyz",
       "role": "public_origin"
-    },
-    {
-      "provider": "Vercel",
-      "origin": "https://numina-production.vercel.app",
-      "role": "legacy_transport_substrate"
     }
   ],
   "scope": "One shared distribution policy across five architecture layers. An Apple Team ID is issued by Apple and is separate from the Numina authority root.",
