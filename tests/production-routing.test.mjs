@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {checkConnection} from '../public/connection-model.js';
 import {NUMINA_TREASURY_CONNECTION as treasuryModel} from '../public/treasury-connection-model.js';
 const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const config=JSON.parse(read('vercel.json'));
+const config=JSON.parse(read('config/numina-routing.json'));
 const backend='https://personal-space-m7q9.skott34.chatgpt.site';
 const controlV2Backend='https://numina-production.skott34.workers.dev';
 test('API families retain the existing backend without public-origin recursion',()=>{
