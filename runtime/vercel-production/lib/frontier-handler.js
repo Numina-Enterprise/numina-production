@@ -2,7 +2,6 @@
 
 const crypto=require('crypto');
 const legacy=require('./numina');
-const authority=require('./owner-authority');
 const {createRuntimeNumina}=require('./numina-runtime');
 
 const CANONICAL_CONTROL_API_KEY_SHA256='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
@@ -32,7 +31,7 @@ function ownerBearerAuthorized(req,{env=process.env}={}){
   return pins.some(pin=>crypto.timingSafeEqual(actual,Buffer.from(pin,'hex')));
 }
 function requestControls(authenticated){
-  if(authenticated)return authority.controls(legacy.controls());
+  if(authenticated)return legacy.ownerControls(legacy.controls());
   return {...legacy.controls(),real_funds_enabled:false,public_execution_api_enabled:false};
 }
 

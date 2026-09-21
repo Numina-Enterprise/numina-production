@@ -48,7 +48,7 @@ export default {
    if(path==='/api/ops/v1/telemetry')return finish(await telemetryHttp(req,env));
    if(path.startsWith('/api/ops/v1/quantum/'))return finish(await quantumHttp(req,env));
    // Retired public test surfaces stay closed even if an environment is misconfigured.
-   if(path.startsWith('/api/v0.1/')||['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path))return finish(response({error:'REFERENCE_RUNTIME_RETIRED',message:'Use the production workspace, internal authority controls or release documentation.',workspace:'/app',documentation:'/core'},410));
+   if(path.startsWith('/api/v0.1/')||['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path))return finish(response({error:'REFERENCE_RUNTIME_RETIRED',message:'Use the production workspace, internal controls or release documentation.',workspace:'/app',documentation:'/core'},410));
    if(path.startsWith('/api/control/v2/')||path==='/.well-known/agent-card.json')return finish(await frontierHttp(req,env));
    if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path))return finish(await env.ASSETS.fetch(new Request(new URL('/frontier.html',req.url),req)));
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));

@@ -1,9 +1,0 @@
-{
-  "schema": "numina.compatibility-alias.v1",
-  "root": "NUMINA",
-  "manifest": "NUMINA",
-  "identity": "NUMINA",
-  "canonical": "config/numina-manifest.v2.json",
-  "role": "legacy_filename_only",
-  "authoritative": false
-}

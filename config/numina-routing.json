@@ -104,7 +104,7 @@
     },
     {
       "source": "/v1/control/state",
-      "destination": "/api/control-state"
+      "destination": "/api/status?mode=control-manifest"
     },
     {
       "source": "/v1/control/evaluate",

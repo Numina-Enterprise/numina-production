@@ -1,7 +1,6 @@
 'use strict';
 
 const legacy=require('../lib/numina');
-const authority=require('../lib/owner-authority');
 const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
 const {project}=require('../lib/numina-projection');
 
@@ -14,10 +13,10 @@ module.exports=async function status(req,res){
   const status=project('status',{
     root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
     release:legacy.RELEASE_IDENTITY,
-    controls:authority.controls(legacy.controls()),
-    funds:authority.fundsManifest(),
-    execution:authority.executionManifest({credentialedProviderSubmitterAvailable}),
-    partnership:authority.partnershipManifest(),
+    controls:legacy.ownerControls(legacy.controls()),
+    funds:legacy.fundsManifest(),
+    execution:legacy.executionManifest({credentialedProviderSubmitterAvailable}),
+    partnership:legacy.partnershipManifest(),
     runtime:NUMINA_MANIFEST.runtime,
     external_execution_performed:false,external_funds_moved:false
   });
