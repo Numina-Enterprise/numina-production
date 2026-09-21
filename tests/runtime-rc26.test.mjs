@@ -151,7 +151,7 @@ test('missing provenance hashes never establish supply-chain evidence',async()=>
 test('runtime gateway rejects an older release and missing version without forwarding credentials',async()=>{
   for(const payload of [{production_version:'1.9.0-rc22'},{}]){
     const response=await routeRuntime(new Request('https://numina.test/v1/status',{headers:{Authorization:'Bearer private-test-token',Cookie:'private=test'}}),async(url,options)=>{
-      assert.equal(url,'https://numina-production.vercel.app/v1/status');
+      assert.equal(url,'https://numinalabs.xyz/v1/status');
       assert.deepEqual(options.headers,{Accept:'application/json'});
       return Response.json(payload);
     });
