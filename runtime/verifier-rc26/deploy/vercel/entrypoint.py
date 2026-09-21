@@ -14,7 +14,7 @@ os.environ.update({
     "NUMINA_REQUIRE_FROZEN_CORE":"true",
     "NUMINA_SIGNING_KEY_DER_ENV":"NUMINA_RUNTIME_SIGNING_KEY_DER_B64",
     "NUMINA_SIGNING_PUBLIC_KEY_B64":"UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=",
-    "NUMINA_PUBLIC_URL":"https://numina-production.vercel.app",
+    "NUMINA_PUBLIC_URL":"https://numinalabs.xyz",
     "NUMINA_OWNER_ACCESS_URL":"https://numinalabs.xyz/api/control/v2/runtime-access",
     "NUMINA_OWNER_ROOT_HASH":"51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
     "NUMINA_REAL_FUNDS_ENABLED":"false",
@@ -26,7 +26,7 @@ os.environ.update({
     "NUMINA_EVIDENCE_NETWORK_ENABLED":"true",
     "NUMINA_EVIDENCE_REQUIRE_DURABLE":"true",
     "NUMINA_DATA_DIR":"/tmp/numina",
-    "NUMINA_TRUSTED_HOSTS":",".join(filter(None,["numina-production.vercel.app",os.getenv("VERCEL_URL")])),
+    "NUMINA_TRUSTED_HOSTS":"numinalabs.xyz,www.numinalabs.xyz",
 })
 # Verify the database server certificate without writing or exporting credentials.
 database_url=os.getenv("NUMINA_EVIDENCE_DATABASE_URL") or os.getenv("DATABASE_URL")
