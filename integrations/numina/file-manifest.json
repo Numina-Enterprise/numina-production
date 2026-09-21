@@ -354,8 +354,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 9474,
-      "sha256": "8dfce63ca64b571ccb101340469aab2ee9e6a9254c7c2f3ea4ab43da1db251d6"
+      "bytes": 10269,
+      "sha256": "387afd355b81be499738d907ff41e617dec5438147e5135c485b095a7f53241f"
     },
     {
       "path": "src/client.js",
