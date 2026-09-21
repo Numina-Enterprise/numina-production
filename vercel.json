@@ -125,10 +125,6 @@
       "destination": "/api/evidence-bind"
     },
     {
-      "source": "/v1/evidence/provider-observation",
-      "destination": "/api/evidence-bind?mode=provider-observation-ingest"
-    },
-    {
       "source": "/v1/release/manifest",
       "destination": "/api/manifest"
     },
@@ -223,15 +219,6 @@
     },
     {
       "source": "/v1/deployment/provenance",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
-    },
-    {
-      "source": "/v1/evidence/provider-observation",
       "headers": [
         {
           "key": "Cache-Control",
