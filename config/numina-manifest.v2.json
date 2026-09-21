@@ -6,7 +6,10 @@
     "repository": {
       "full_name": "skott34-dot/numina-production",
       "branch": "main",
-      "count": 1
+      "count": 1,
+      "role": "LEAF_PROJECTION",
+      "authoritative": false,
+      "parent": "NUMINA"
     },
     "artifact": {
       "build_id": "49b4f3e5e454bac7492073c22562ebd2b2b0bc805eca111525895e33cb3fa715",
@@ -38,9 +41,9 @@
     "build_model": {
       "identity": "NUMINA",
       "singular": true,
-      "canonical_source": "github",
-      "canonical_repository": "skott34-dot/numina-production",
-      "canonical_branch": "main",
+      "canonical_source": "NUMINA",
+      "canonical_repository": "NUMINA",
+      "canonical_branch": "ROOT",
       "all_builds_are_numina": true,
       "non_numina_builds_allowed": false,
       "competing_build_authority_allowed": false,
@@ -62,7 +65,15 @@
       "manifest_is_numina": true,
       "competing_software_identity_allowed": false,
       "transfersEnabled": true,
-      "routing_manifest": "config/numina-routing.json"
+      "routing_manifest": "config/numina-routing.json",
+      "github_leaf": {
+        "role": "LEAF_PROJECTION",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false
+      },
+      "update_direction": "ROOT_TO_LEAVES",
+      "square_root": "NUMINA"
     }
   },
   "compatibility": {
@@ -482,5 +493,25 @@
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
     "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "numina_tree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "authority": "NUMINA",
+    "updateDirection": "ROOT_TO_LEAVES",
+    "leaves": {
+      "github": {
+        "role": "LEAF_PROJECTION",
+        "transport": "github",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false,
+        "evidenceTransport": true,
+        "ciTransport": true
+      }
+    }
   }
 }
