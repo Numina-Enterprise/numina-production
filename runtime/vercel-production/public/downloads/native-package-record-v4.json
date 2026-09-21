@@ -1,153 +1,153 @@
 {
-    "schema":  "numina.native-package.v1",
-    "proposedPackageIdentity":  "xyz.numinalabs.app",
-    "packageIdentityRegisteredOrConfirmed":  true,
-    "hostedWorkspace":  "https://numinalabs.xyz/app",
-    "sdkBinariesDependencyCachesOrCredentialsIncluded":  false,
-    "slsaLevelClaimed":  null,
-    "nusdActivationPerformed":  true,
-    "storeListingOrApprovalClaimed":  false,
-    "applicationVersion":  "4.0.0",
-    "versionCode":  4,
-    "android":  {
-                    "status":  "signed_v4_binaries",
-                    "binaries":  [
-                                     {
-                                         "file":  "numina-4.0.0-release-signed.apk",
-                                         "bytes":  3797876,
-                                         "sha256":  "ea6216a7f5fa0b8832841f0ca75ed546a03de48e9052a29745c75b8c4126ea61",
-                                         "platform":  "android",
-                                         "signed":  true,
-                                         "installable":  true,
-                                         "url":  "https://numinalabs.xyz/downloads/numina-4.0.0-release-signed.apk"
-                                     },
-                                     {
-                                         "file":  "numina-4.0.0-upload-signed.aab",
-                                         "bytes":  3617288,
-                                         "sha256":  "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896",
-                                         "platform":  "android",
-                                         "signed":  true,
-                                         "installable":  false,
-                                         "url":  "https://numinalabs.xyz/downloads/numina-4.0.0-upload-signed.aab"
-                                     }
-                                 ],
-                    "compiled":  true,
-                    "signingPerformed":  true,
-                    "deviceInstalled":  false,
-                    "testsRun":  false,
-                    "storeSubmitted":  false,
-                    "signatureVerification":  true,
-                    "buildRun":  "https://github.com/skott34-dot/numina-production/actions/runs/34947973846",
-                    "sourceCommit":  "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
-                    "buildCompletedAtUtc":  "2026-09-15T08:40:16Z",
-                    "releaseIdentity":  "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
-                    "uploadIdentity":  "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
-                    "binaryApplicationVersion":  "4.0.0",
-                    "binaryVersionCode":  3,
-                    "sourceApplicationVersion":  "4.0.0",
-                    "currentSourceCompiled":  false,
-                    "reusedWithoutModification":  false,
-                    "sourceRecord":  "https://numinalabs.xyz/downloads/android-signed-build-record-v4.json",
-                    "targetVersionCode":  4
-                },
-    "ios":  {
-                "status":  "compiled_unsigned_v4_build5_c6ffbb5",
-                "binaries":  [
-                                 {
-                                     "file":  "numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip",
-                                     "bytes":  113715,
-                                     "sha256":  "23e953860f7ec71937666a0fe543613bc4762fab4abd9da0fc59def92334425e",
-                                     "platform":  "ios",
-                                     "signed":  false,
-                                     "installable":  false,
-                                     "url":  "https://numinalabs.xyz/downloads/numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip"
-                                 }
-                             ],
-                "binaryApplicationVersion":  "4.0.0",
-                "binaryVersionCode":  5,
-                "sourceApplicationVersion":  "4.0.0",
-                "currentSourceCompiled":  false,
-                "compiled":  true,
-                "signed":  false,
-                "ipaCreated":  false,
-                "testsRun":  false,
-                "storeSubmitted":  false,
-                "nativeAuthenticatedSessionSupported":  false,
-                "signingWorkflow":  ".github/workflows/numina-ios-signing.yml",
-                "distributionPolicy":  "/downloads/distribution-policy.json",
-                "hostedArtifactPaths":  {
-                                            "sites":  "https://numinalabs.xyz/downloads/numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip"
-                                        },
-                "hostPublicationVerified":  false,
-                "sourceBuildNumber":  6,
-                "sourceInputsSha256":  "66bf959b9e64c8945cc502f2bde1a5b1fc535178b00dfa170a47ca3f2c330a0d",
-                "signingInputMatchesCurrentSource":  false,
-                "sourceAlignmentScope":  "current_source_package_not_native_build",
-                "sourceCommit":  "c6ffbb50d77ff53323b71b7048872637677e6b42",
-                "buildRun":  "https://github.com/skott34-dot/numina-production/actions/runs/35158998398",
-                "compiledSourceInputsSha256":  "85775b4254ba63eee0709738a842dcffb95746caaf671472d75fb3dbf00e1da0",
-                "compiledSourceBuildNumber":  5,
-                "sourceRecord":  "https://numinalabs.xyz/downloads/ios-build-verification-2026-09-16-c6ffbb5.json",
-                "sourceTree":  "df4d4aac875db80ecafcd0c499b12cb84ba1b7a7",
-                "artifactId":  10472311084,
-                "verifiedAtUtc":  "2026-09-16T22:46:46.288282+00:00",
-                "previousCompiledBuild":  {
-                                              "file":  "numina-4.0.0-ios-build5-unsigned-app.zip",
-                                              "sha256":  "b69dc40ecdb84eb5aa38327c1d80e1c5d20a1c4f6d72ebe33b63353188025746",
-                                              "bytes":  113715,
-                                              "sourceCommit":  "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
-                                              "buildRun":  "https://github.com/skott34-dot/numina-production/actions/runs/34947887766",
-                                              "compiledSourceInputsSha256":  "7fb729bf20add06ea17472fb3e6bc58ca1f9b800109b1a1920dd7188039b00a8",
-                                              "record":  "/downloads/ios-build-verification-2026-09-16-c6ffbb5.json"
-                                          }
-            },
-    "sourceArchives":  [
-                           {
-                               "platform":  "android",
-                               "file":  "numina-os-4.0.0-android-source.zip",
-                               "bytes":  12690,
-                               "sha256":  "76bb9a384685798499073147c7267ee8ba1cd3e2d5a674649b4e0dd21c6b9e7f",
-                               "kind":  "source_archive",
-                               "installable":  false
-                           },
-                           {
-                               "platform":  "ios",
-                               "file":  "numina-os-4.0.0-ios-source.zip",
-                               "bytes":  55331,
-                               "sha256":  "b6cce17233f70a58976075454726672a2ef55bf977751ee441346857e40a260f",
-                               "kind":  "source_archive",
-                               "installable":  false,
-                               "sourceBuildNumber":  6,
-                               "sourceInputsSha256":  "66bf959b9e64c8945cc502f2bde1a5b1fc535178b00dfa170a47ca3f2c330a0d",
-                               "sourceTextNormalization":  "utf8_lf_binary_unchanged",
-                               "packagedAtUtc":  "2026-09-20T23:17:22.5778175+00:00"
-                           }
-                       ],
-    "previousRelease":  {
-                            "version":  "3.0.0",
-                            "record":  "/downloads/native-package-record-v3.json",
-                            "scope":  "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
-                        },
-    "sourcePackagedAtUtc":  "2026-09-18T21:13:15.081342+00:00",
-    "nativeDistributionPolicy":  "Historical binaries retain their exact bytes and build evidence. Current iOS source requires a fresh compile and matching signing input.",
-    "iosSourcePackagedAtUtc":  "2026-09-20T23:17:22.5778175+00:00",
-    "historicalV4Preparation":  {
-                                    "record":  "https://numinalabs.xyz/downloads/native-package-record-v4-pre-build5.json",
-                                    "scope":  "Preserved metadata-only iOS build3 preparation and retained Android3 binary evidence."
-                                },
-    "finalBuild":  {
-                       "status":  "SIGNING_PENDING",
-                       "latestSigningAttemptRecord":  "release-evidence/native-signing-attempt-2026-09-18T2110.json",
-                       "androidSigningRun":  "https://github.com/skott34-dot/numina-production/actions/runs/35395347752",
-                       "iosSigningRun":  "https://github.com/skott34-dot/numina-production/actions/runs/35395350460",
-                       "applicationVersion":  "4.0.0",
-                       "androidVersionCode":  4,
-                       "iosBuildNumber":  6,
-                       "finalBuildRecord":  "/final-build.json",
-                       "nusdReceipt":  "runtime/nusd/deployment-receipt.json",
-                       "androidSignedArtifactReceipt":  null,
-                       "iosSignedArtifactReceipt":  null,
-                       "googlePlaySubmissionReceipt":  null,
-                       "appStoreSubmissionReceipt":  null
-                   }
+  "schema": "numina.native-package.v1",
+  "proposedPackageIdentity": "xyz.numinalabs.app",
+  "packageIdentityRegisteredOrConfirmed": true,
+  "hostedWorkspace": "https://numinalabs.xyz/app",
+  "sdkBinariesDependencyCachesOrCredentialsIncluded": false,
+  "slsaLevelClaimed": null,
+  "nusdActivationPerformed": true,
+  "storeListingOrApprovalClaimed": false,
+  "applicationVersion": "4.0.0",
+  "versionCode": 4,
+  "android": {
+    "status": "signed_v4_binaries",
+    "binaries": [
+      {
+        "file": "numina-4.0.0-release-signed.apk",
+        "bytes": 3797876,
+        "sha256": "ea6216a7f5fa0b8832841f0ca75ed546a03de48e9052a29745c75b8c4126ea61",
+        "platform": "android",
+        "signed": true,
+        "installable": true,
+        "url": "https://numinalabs.xyz/downloads/numina-4.0.0-release-signed.apk"
+      },
+      {
+        "file": "numina-4.0.0-upload-signed.aab",
+        "bytes": 3617288,
+        "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896",
+        "platform": "android",
+        "signed": true,
+        "installable": false,
+        "url": "https://numinalabs.xyz/downloads/numina-4.0.0-upload-signed.aab"
+      }
+    ],
+    "compiled": true,
+    "signingPerformed": true,
+    "deviceInstalled": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "signatureVerification": true,
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34947973846",
+    "sourceCommit": "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
+    "buildCompletedAtUtc": "2026-09-15T08:40:16Z",
+    "releaseIdentity": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+    "uploadIdentity": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
+    "binaryApplicationVersion": "4.0.0",
+    "binaryVersionCode": 3,
+    "sourceApplicationVersion": "4.0.0",
+    "currentSourceCompiled": false,
+    "reusedWithoutModification": false,
+    "sourceRecord": "https://numinalabs.xyz/downloads/android-signed-build-record-v4.json",
+    "targetVersionCode": 4
+  },
+  "ios": {
+    "status": "compiled_unsigned_v4_build5_c6ffbb5",
+    "binaries": [
+      {
+        "file": "numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip",
+        "bytes": 113715,
+        "sha256": "23e953860f7ec71937666a0fe543613bc4762fab4abd9da0fc59def92334425e",
+        "platform": "ios",
+        "signed": false,
+        "installable": false,
+        "url": "https://numinalabs.xyz/downloads/numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip"
+      }
+    ],
+    "binaryApplicationVersion": "4.0.0",
+    "binaryVersionCode": 5,
+    "sourceApplicationVersion": "4.0.0",
+    "currentSourceCompiled": false,
+    "compiled": true,
+    "signed": false,
+    "ipaCreated": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "nativeAuthenticatedSessionSupported": false,
+    "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
+    "distributionPolicy": "/downloads/distribution-policy.json",
+    "hostedArtifactPaths": {
+      "sites": "https://numinalabs.xyz/downloads/numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip"
+    },
+    "hostPublicationVerified": false,
+    "sourceBuildNumber": 6,
+    "sourceInputsSha256": "04d424b389aa59e5ed1311057522229a36a36b45d9a5f6a4d23e2bd587c41ee3",
+    "signingInputMatchesCurrentSource": false,
+    "sourceAlignmentScope": "current_source_package_not_native_build",
+    "sourceCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/35158998398",
+    "compiledSourceInputsSha256": "85775b4254ba63eee0709738a842dcffb95746caaf671472d75fb3dbf00e1da0",
+    "compiledSourceBuildNumber": 5,
+    "sourceRecord": "https://numinalabs.xyz/downloads/ios-build-verification-2026-09-16-c6ffbb5.json",
+    "sourceTree": "df4d4aac875db80ecafcd0c499b12cb84ba1b7a7",
+    "artifactId": 10472311084,
+    "verifiedAtUtc": "2026-09-16T22:46:46.288282+00:00",
+    "previousCompiledBuild": {
+      "file": "numina-4.0.0-ios-build5-unsigned-app.zip",
+      "sha256": "b69dc40ecdb84eb5aa38327c1d80e1c5d20a1c4f6d72ebe33b63353188025746",
+      "bytes": 113715,
+      "sourceCommit": "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
+      "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34947887766",
+      "compiledSourceInputsSha256": "7fb729bf20add06ea17472fb3e6bc58ca1f9b800109b1a1920dd7188039b00a8",
+      "record": "/downloads/ios-build-verification-2026-09-16-c6ffbb5.json"
+    }
+  },
+  "sourceArchives": [
+    {
+      "platform": "android",
+      "file": "numina-os-4.0.0-android-source.zip",
+      "bytes": 12690,
+      "sha256": "76bb9a384685798499073147c7267ee8ba1cd3e2d5a674649b4e0dd21c6b9e7f",
+      "kind": "source_archive",
+      "installable": false
+    },
+    {
+      "platform": "ios",
+      "file": "numina-os-4.0.0-ios-source.zip",
+      "bytes": 55267,
+      "sha256": "c616d6aef60ad80703101c93da0b24d122ad0a120cf5bf5b43bcd4dc4dc4ff68",
+      "kind": "source_archive",
+      "installable": false,
+      "sourceBuildNumber": 6,
+      "sourceInputsSha256": "04d424b389aa59e5ed1311057522229a36a36b45d9a5f6a4d23e2bd587c41ee3",
+      "sourceTextNormalization": "utf8_lf_binary_unchanged",
+      "packagedAtUtc": "2026-09-21T00:05:57.115983+00:00"
+    }
+  ],
+  "previousRelease": {
+    "version": "3.0.0",
+    "record": "/downloads/native-package-record-v3.json",
+    "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
+  },
+  "sourcePackagedAtUtc": "2026-09-18T21:13:15.081342+00:00",
+  "nativeDistributionPolicy": "Historical binaries retain their exact bytes and build evidence. Current iOS source requires a fresh compile and matching signing input.",
+  "iosSourcePackagedAtUtc": "2026-09-21T00:05:57.115983+00:00",
+  "historicalV4Preparation": {
+    "record": "https://numinalabs.xyz/downloads/native-package-record-v4-pre-build5.json",
+    "scope": "Preserved metadata-only iOS build3 preparation and retained Android3 binary evidence."
+  },
+  "finalBuild": {
+    "status": "SIGNING_PENDING",
+    "latestSigningAttemptRecord": "release-evidence/native-signing-attempt-2026-09-18T2110.json",
+    "androidSigningRun": "https://github.com/skott34-dot/numina-production/actions/runs/35395347752",
+    "iosSigningRun": "https://github.com/skott34-dot/numina-production/actions/runs/35395350460",
+    "applicationVersion": "4.0.0",
+    "androidVersionCode": 4,
+    "iosBuildNumber": 6,
+    "finalBuildRecord": "/final-build.json",
+    "nusdReceipt": "runtime/nusd/deployment-receipt.json",
+    "androidSignedArtifactReceipt": null,
+    "iosSignedArtifactReceipt": null,
+    "googlePlaySubmissionReceipt": null,
+    "appStoreSubmissionReceipt": null
+  }
 }
