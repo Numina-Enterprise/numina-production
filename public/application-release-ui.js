@@ -82,7 +82,7 @@ function renderReleaseRequirements(data){
  const evidence=data.recorded_release_evidence;
  const text=value=>typeof value==='string'&&value.length<=800?value.replaceAll('_',' '):'Not reported';
  // This retained record predates the current inventory, including in legacy manifests.
- set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Historical publication record · Sites version '+evidence.website.version+' · Vercel '+text(evidence.runtime?.status)+' · Source '+text(evidence.sourceCommit)+'. This record does not verify deployment of the current build.':'No historical publication record included');
+ set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Historical publication record · Sites version '+evidence.website.version+' · Runtime '+text(evidence.runtime?.status)+' · Source '+text(evidence.sourceCommit)+'. This record does not verify deployment of the current build.':'No historical publication record included');
  set('[data-application-funding-record]',evidence?.fundingPlan?.status==='FUNDING_PLAN_RECORDED'?'Historical funding-plan record · Numina journal revision '+evidence.fundingPlan.revision+' · Event '+text(evidence.fundingPlan.eventId):'No historical funding-plan record included');
  const receiptText=receipt=>{
   if(!receipt||typeof receipt!=='object')return 'Not reported in this release';
