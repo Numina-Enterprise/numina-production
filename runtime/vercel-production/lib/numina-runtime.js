@@ -1,7 +1,7 @@
 'use strict';
 
 const {createNumina,projectLegacyRuntime}=require('./frontier');
-const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','build','authority','source','evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
+const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','owner','build','authority','source','evidence','executor','data','data_namespace','canonical_view','view','external_record','external_fact','external_evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
 const legacy=require('./numina');
 
 function runtimeManifest(){
@@ -9,6 +9,15 @@ function runtimeManifest(){
     root:'NUMINA',
     manifest:'NUMINA',
     identity:'NUMINA',
+    owner:'NUMINA',
+    executor:'NUMINA',
+    data:'NUMINA',
+    data_namespace:'NUMINA',
+    canonical_view:'NUMINA',
+    view:'NUMINA',
+    external_record:'NUMINA',
+    external_fact:'NUMINA',
+    external_evidence:'NUMINA',
     build:'NUMINA',
     authority:'NUMINA',
     source:'NUMINA',
