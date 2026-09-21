@@ -417,5 +417,56 @@
       "bytes": 6704,
       "sha256": "f76aefb39e64e29cfafb15e521af1fa8ced82e5fba586b1832108f4f034cbcdb"
     }
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "software": "NUMINA",
+    "allSoftware": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestIsNumina": true,
+    "numinaIsManifest": true,
+    "numinaIsAllSoftware": true,
+    "allSoftwareIsNumina": true,
+    "singularSoftwareIdentity": true,
+    "competingSoftwareIdentityAllowed": false,
+    "competingManifestAuthorityAllowed": false,
+    "competingMetadataAuthorityAllowed": false,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  },
+  "software_identity": "NUMINA",
+  "all_software": "NUMINA",
+  "manifest_equals_numina": true,
+  "numina_equals_manifest": true,
+  "manifest_is_numina": true,
+  "numina_is_manifest": true,
+  "numina_is_all_software": true,
+  "all_software_is_numina": true,
+  "singular_software_identity": true,
+  "metadata_authority": "NUMINA",
+  "metadata_namespace": "NUMINA",
+  "metadata_scope": [
+    "historical",
+    "current",
+    "canonical"
+  ],
+  "historical_metadata_override": "NUMINA",
+  "current_metadata_override": "NUMINA",
+  "canonical_metadata_override": "NUMINA",
+  "competing_software_identity_allowed": false,
+  "competing_manifest_authority_allowed": false,
+  "competing_metadata_authority_allowed": false
 }
