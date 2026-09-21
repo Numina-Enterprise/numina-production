@@ -243,8 +243,30 @@
     "schema": "numina.tree.v1",
     "root": "NUMINA",
     "squareRoot": "NUMINA",
+    "canonicalSource": "NUMINA",
     "sourceOfTruth": "NUMINA",
+    "authority": "NUMINA",
+    "owner": "NUMINA",
+    "host": "NUMINA",
+    "executor": "NUMINA",
+    "evidence": "NUMINA",
+    "dataIdentity": "NUMINA",
+    "dataNamespace": "NUMINA",
+    "canonicalView": "NUMINA",
+    "allDataBelongsToIdentity": true,
+    "externalRecordIdentity": "NUMINA",
+    "externalFactIdentity": "NUMINA",
+    "externalEvidenceIdentity": "NUMINA",
+    "externalRecordsResolveTo": "NUMINA",
+    "allIdentityBearingRecordsResolveTo": "NUMINA",
+    "singular": true,
     "updateDirection": "ROOT_TO_LEAVES",
+    "ingestPolicy": {
+      "mode": "REFERENCE_SNAPSHOT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": true
+    },
     "leaves": {
       "github": {
         "role": "LEAF_PROJECTION",
@@ -260,12 +282,6 @@
         "ingestRole": "LEAF_STATE_INPUT",
         "authorityTransferred": false
       }
-    },
-    "ingestPolicy": {
-      "mode": "REFERENCE_SNAPSHOT",
-      "canonicalizedBy": "NUMINA",
-      "authorityTransferred": false,
-      "leafInputsAllowed": true
     }
   }
 }
