@@ -51,7 +51,7 @@ if(typeof document!=='undefined'&&document.getElementById('treasury-connection')
         put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value · observation '+amounts.join(' / ')+' · '+stripe.observed_at);
       }else put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value · observation unavailable');
       const bank=result.bank,transfer=model.softwareBalanceModel.bankUsd.transfer;
-      put('bank-connected-route',formatTreasuryModelWholeAmount(model.softwareBalanceModel.bankUsd.current,'USD')+' · COMPLETED · CLEARED 8/31/2026 · Confirmation 8000750550 · NUMINA software verified · provider-displayed transaction '+formatTreasuryModelWholeAmount(transfer.providerDisplayedTransactionAmount,transfer.providerTransactionUnit)+' verified'+(bank?.schema==='numina.treasury.bank-route.v1'&&/^[0-9]{4}$/.test(bank.accountLast4)?' · savings ending '+bank.accountLast4:''));
+      put('bank-connected-route',formatTreasuryModelWholeAmount(transfer.amount,transfer.unit)+' transfer · COMPLETED · CLEARED 8/31/2026 · Confirmation 8000750550 · NUMINA software verified'+(bank?.schema==='numina.treasury.bank-route.v1'&&/^[0-9]{4}$/.test(bank.accountLast4)?' · savings ending '+bank.accountLast4:''));
       const routes=element('stripe-connected-routes');
       if(result.routes?.length)for(const route of result.routes){
         const item=document.createElement('p');item.textContent=route.network+' · '+route.address+(route.memo?' · memo '+route.memo:'')+' · observed '+route.observedAt;routes.append(item);
