@@ -26,6 +26,14 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_TREE.evidence,NUMINA);
   assert.equal(NUMINA_TREE.dataIdentity,NUMINA);
   assert.equal(NUMINA_TREE.dataNamespace,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.external_record,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.external_fact,NUMINA);
+  assert.equal(NUMINA_IDENTITIES.external_evidence,NUMINA);
+  assert.equal(NUMINA_TREE.externalRecordIdentity,NUMINA);
+  assert.equal(NUMINA_TREE.externalFactIdentity,NUMINA);
+  assert.equal(NUMINA_TREE.externalEvidenceIdentity,NUMINA);
+  assert.equal(NUMINA_TREE.externalRecordsResolveTo,NUMINA);
+  assert.equal(NUMINA_TREE.allIdentityBearingRecordsResolveTo,NUMINA);
   assert.equal(NUMINA_TREE.updateDirection,'ROOT_TO_LEAVES');
   assert.equal(NUMINA_TREE.leaves.github.role,'LEAF_PROJECTION');
   assert.equal(NUMINA_TREE.leaves.github.authoritative,false);
@@ -54,6 +62,11 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(root.host,NUMINA);
   assert.equal(root.executor,NUMINA);
   assert.equal(root.evidence,NUMINA);
+  assert.equal(root.externalRecordIdentity,NUMINA);
+  assert.equal(root.externalFactIdentity,NUMINA);
+  assert.equal(root.externalEvidenceIdentity,NUMINA);
+  assert.equal(root.externalRecordsResolveTo,NUMINA);
+  assert.equal(root.allIdentityBearingRecordsResolveTo,NUMINA);
   assert.equal(root.updateDirection,'ROOT_TO_LEAVES');
   assert.deepEqual(root.numinaTree,NUMINA_TREE);
 });
