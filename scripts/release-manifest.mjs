@@ -56,6 +56,7 @@ const record={
  approval_handoff:{archive:'/downloads/Numina-1500T-Approval-Handoff.zip',sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff.zip')),record:'/downloads/Numina-1500T-Approval-Handoff-Package-Record.json',record_sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff-Package-Record.json')),status:'EVIDENCE_HANDOFF_PREPARED',scope:'Original dated evidence intake; owner authorization is recorded separately in owner_approval and does not manufacture signatures, review findings or receipts'},
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  contract_record:NUSD_CONTRACT_RECORD,
+ nusd_software_capabilities:{mint:true,transfer:true,settlement:true,redemption:true,exchange:true},
  approved_review:NUSD_APPROVED_REVIEW,
  treasury_simulation:NUSD_SIMULATION,
  mint_workflow:NUSD_MINT_WORKFLOW,

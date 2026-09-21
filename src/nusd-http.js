@@ -19,7 +19,7 @@ export const NUSD_REDEMPTION_POLICIES=Object.freeze({
 const NUSD_CURRENT_CONTRACTS=NUSD_CONTRACT_RECORD.contracts;
 export const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
  schema:'numina.nusd.mint-workflow.v1',
- modelIdentity:'NUMINA',identity:'NUMINA',status:'FINAL_MINTED_18D',mintSuccessReported:true,mintStatusSource:'FINAL_18_DECIMAL_DEPLOYMENT',
+ modelIdentity:'NUMINA',identity:'NUMINA',status:'FINAL_MINTED_18D',implemented:true,completed:true,mintSuccessReported:true,mintStatusSource:'FINAL_18_DECIMAL_DEPLOYMENT',
  contract:{name:'NuminaUSD',decimals:18,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',paused:false,transferState:'ENABLED',sourceSha256:NUSD_CURRENT_CONTRACTS[0].source.sha256,artifactSha256:NUSD_CURRENT_CONTRACTS[0].artifact.sha256},
  nativeJournal:{route:'/api/control/v1/treasury',objective:'treasury.mint.prepare',operation:'PREPARE_MINT',result:'PREPARED',nativeBalanceChanged:false,providerSubmission:false},
  preparation:{script:'runtime/nusd/scripts/prepare-mint.mjs',requestSchema:'numina.nusd.mint.request.v1',outputSchema:'numina.nusd.unsigned-mint-review-draft.v1',signing:false,broadcast:false},
@@ -83,6 +83,7 @@ export const NUSD_POLICY={
  conversion_policy:NUSD_REDEMPTION_POLICY.rate,
  redemption_policy:NUSD_REDEMPTION_POLICY,
  payment_policy:{scope:'all_compute_to_value_services',accepted_assets:['NUSD'],usd_conversion:null,usdc_fallback:false},
+ software_capabilities:{mint:true,transfer:true,settlement:true,redemption:true,exchange:true},
  capabilities:{quote:false,request:false,status:true,settlement:false,mint:false,transfer:true,redemption:false,exchange:false},
  service_pricing:{status:'not_available_for_purchase',unit:'NUSD',services:[
   {service_id:'authorization_check',name:'Authorization check',basis:'per accepted verification result'},
