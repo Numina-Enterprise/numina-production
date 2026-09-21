@@ -33,7 +33,7 @@ if(nativePackage.applicationVersion!==JSON.parse(readFileSync('package.json')).v
 for(const platform of ['android','ios'])for(const artifact of nativePackage[platform].binaries){
  const bytes=readFileSync('docs/'+artifact.file);
  if(bytes.length!==artifact.bytes||digest(bytes)!==artifact.sha256)throw Error('Native binary differs from its recorded bytes');
- if(platform==='ios'&&digest(readFileSync('runtime/vercel-production/public/downloads/'+artifact.file))!==artifact.sha256)throw Error('Sites and Vercel must distribute the same iOS bytes');
+ if(platform==='ios'&&digest(readFileSync('runtime/vercel-production/public/downloads/'+artifact.file))!==artifact.sha256)throw Error('Canonical and retained mirror copies must contain the same iOS bytes');
 }
 for(const artifact of nativePackage.sourceArchives){
  if(!['android','ios'].some(platform=>artifact.file==='numina-os-'+version+'-'+platform+'-source.zip'))throw Error('Unexpected native source artifact');
