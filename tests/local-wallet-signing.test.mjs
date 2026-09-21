@@ -55,7 +55,7 @@ test('estimate transport sends only fixed read and bounds the response',async()=
 test('canonical estimate route strips credentials/input and prevents mutation methods',async()=>{
  const calls=[],fetcher=async(url,options)=>{calls.push([url,options]);return Response.json(observation());};
  const response=await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH+'?account=other',{headers:{Cookie:'owner=secret',Authorization:'secret'}}),fetcher);
- assert.equal(response.status,200);assert.equal(calls[0][0],'https://numina-production.vercel.app'+LOCAL_ESTIMATE_PATH);assert.deepEqual(calls[0][1].headers,{Accept:'application/json'});
+ assert.equal(response.status,200);assert.equal(calls[0][0],'https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH);assert.deepEqual(calls[0][1].headers,{Accept:'application/json'});
  for(const method of ['POST','PUT','DELETE'])assert.equal((await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH,{method}),fetcher)).status,405);
  assert.equal(calls.length,1);
  const head=await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH,{method:'HEAD'}),fetcher);assert.equal(await head.text(),'');
