@@ -21,7 +21,9 @@
       "runnerName": "",
       "runnerGroupId": 0,
       "stepsExecuted": 0,
-      "labels": ["ubuntu-latest"]
+      "labels": [
+        "ubuntu-latest"
+      ]
     },
     "canonicalHeadWorkflow": {
       "workflow": ".github/workflows/numina.yml",
@@ -126,5 +128,24 @@
     "mobileStoreSubmissionReceipt": false,
     "signingIdentityRotated": false,
     "secretMaterialExposed": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

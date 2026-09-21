@@ -16,7 +16,7 @@
     "signingAuthorityVerified": false
   },
   "requestedSource": "NUMINA_NATIVE_TREASURY",
-  "amountBasis": "OWNER_REPORTED_MINT_AND_REQUESTED_ALLOCATIONS_NOT_OBSERVED_FUNDS",
+  "amountBasis": "NUMINA_MANIFEST_FINAL",
   "reportedMint": {
     "asset": "NUSD",
     "wholeUnits": "1500000000000000",
@@ -170,5 +170,24 @@
     "readBackObserved": false,
     "providerExecutionAuthorized": false,
     "externalFundsMovementAuthorized": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

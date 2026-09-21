@@ -90,5 +90,24 @@
     "GitHub-hosted runner allocation remains unavailable: canonical NUMINA run 35526940217 attempt 2 failed before any workflow step executed.",
     "Because hosted runner allocation did not clear, the canonical GitHub build, website publish workflow, Android signing workflow, and iOS signing workflow were not rerun at source SHA 6813fb534e56f234b737ed2609997d9e593d864d.",
     "No new signed Android or iOS artifact was produced; store submission remains unclaimed and no provider store receipt exists."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

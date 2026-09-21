@@ -34,5 +34,24 @@
   "signingPerformed": false,
   "storeSubmissionPerformed": false,
   "signingCredentialsValidatedByTheseRuns": false,
-  "scope": "Actual GitHub Actions attempt evidence, not a successful native build or signing receipt. Historical binaries remain byte-for-byte unchanged."
+  "scope": "Actual GitHub Actions attempt evidence, not a successful native build or signing receipt. Historical binaries remain byte-for-byte unchanged.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

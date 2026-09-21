@@ -97,5 +97,24 @@
     "APP_STORE_SUBMISSION_RECEIPT_ABSENT"
   ],
   "advanced": true,
-  "advanceSummary": "Vercel build capacity cleared and canonical source commit ef6cefc44ead3b52fd5e6f8bbb9bda058bf78ac3 is READY in production with all four required verification endpoints returning HTTP 200. GitHub Actions runner allocation remains unavailable."
+  "advanceSummary": "Vercel build capacity cleared and canonical source commit ef6cefc44ead3b52fd5e6f8bbb9bda058bf78ac3 is READY in production with all four required verification endpoints returning HTTP 200. GitHub Actions runner allocation remains unavailable.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

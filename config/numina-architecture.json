@@ -84,8 +84,8 @@
       "providerClearedDate": "2026-08-31",
       "providerConfirmationVisible": true,
       "providerConfirmation": "XXXXX50550",
-      "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
-      "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
+      "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
       "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
       "providerBalanceSnapshotCurrent": "0",
       "providerBalanceSnapshotAvailable": "0",
@@ -202,5 +202,24 @@
       "amountMatchesSoftwareModel": false,
       "balanceMatchesSoftwareModel": false
     }
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

@@ -26,15 +26,32 @@
       "sourceSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
       "state": "READY",
       "target": "production",
-      "transportUrl": "https://numina-production-2huri68an-numina-167f7fe7.vercel.app",      "canonicalUrl": "https://numinalabs.xyz",
+      "transportUrl": "https://numina-production-2huri68an-numina-167f7fe7.vercel.app",
+      "canonicalUrl": "https://numinalabs.xyz",
       "applicationBuildId": "fe03c6ccbbe594574bf84ad6f30f0252ca328dfbf071e1c0f47bd187ad79a393",
       "artifactCount": 312
     },
     "endpointVerification": [
-      {"path":"/final-build.json","httpStatus":200,"sha256":"ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"},
-      {"path":"/downloads/nusd/deployment-receipt.json","httpStatus":200,"sha256":"02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"},
-      {"path":"/api/nusd/v1/status","httpStatus":200,"sha256":"12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae"},
-      {"path":"/v2/network/deployment-estimate","httpStatus":200,"sha256":"2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"}
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "sha256": "ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "sha256": "12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"
+      }
     ],
     "provenanceReceipt": {
       "path": "/v1/deployment/provenance",
@@ -54,8 +71,14 @@
     "used": true,
     "exactSourceSha": "5e605c957700f9baa44cc73dde7baa7f09b91f08",
     "buildSucceeded": true,
-    "applicationBuildId": "80e85b8afb14e720ef01984e75206ad4982b2c74b746807eba6f24453c93a479",    "artifactCount": 312,
-    "testGate": {"succeeded":true,"tests":910,"passed":910,"failed":0},
+    "applicationBuildId": "80e85b8afb14e720ef01984e75206ad4982b2c74b746807eba6f24453c93a479",
+    "artifactCount": 312,
+    "testGate": {
+      "succeeded": true,
+      "tests": 910,
+      "passed": 910,
+      "failed": 0
+    },
     "releaseArtifact": {
       "name": "numina-release-v4.0.0.tar.gz",
       "bytes": 39718340,
@@ -68,7 +91,12 @@
     "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
     "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
     "finality": "FINAL",
-    "externalSettlement": {"usd":false,"usdc":false,"bankReceipt":null,"providerReceipt":null}
+    "externalSettlement": {
+      "usd": false,
+      "usdc": false,
+      "bankReceipt": null,
+      "providerReceipt": null
+    }
   },
   "mobile": {
     "androidSignedArtifactProduced": false,
@@ -81,5 +109,24 @@
     "GitHub-hosted runner allocation remains unavailable; current-head probe attempt 3 failed before any workflow step executed.",
     "Android and iOS signing remain unclaimed because the configured hosted workflows could not execute; no signing identity was invented or rotated.",
     "Store submission remains unclaimed because no newly signed mobile artifact was produced."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='6445c300bba60058ddfe32cb1e3b1bd64ec610d1';
+  const FINAL_BUILD_MANIFEST_BLOB='c85acf0f00f7f5ebb5879163e0d844b79db696f2';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -98,8 +98,8 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerClearedDate,'2026-08-31');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerConfirmationVisible,true);
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerConfirmation,'XXXXX50550');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidence,'NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidenceScope,'NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidence,'NUMINA_SOURCE_SCOPED_OBSERVATION');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidenceScope,'NUMINA_SOURCE_SCOPED_OBSERVATION');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerVerified,true);
   assert.equal(finalBuild.treasury.githubAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
   assert.equal(finalBuild.treasury.githubAlignment.externalProviderBalancesAsserted,false);
