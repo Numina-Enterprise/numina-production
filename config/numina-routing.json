@@ -3,8 +3,11 @@
   "identity": "NUMINA",
   "publicOrigin": "https://numinalabs.xyz",
   "canonicalSource": {
-    "repository": "skott34-dot/numina-production",
-    "branch": "main"
+    "identity": "NUMINA",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
+    "role": "ROOT_SOURCE_OF_TRUTH",
+    "updateDirection": "ROOT_TO_LEAVES"
   },
   "rewrites": [
     {
@@ -235,5 +238,23 @@
       ]
     }
   ],
-  "redirects": []
+  "redirects": [],
+  "tree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "ROOT_TO_LEAVES",
+    "leaves": {
+      "github": {
+        "role": "LEAF_PROJECTION",
+        "transport": "github",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false,
+        "evidenceTransport": true,
+        "ciTransport": true
+      }
+    }
+  }
 }
