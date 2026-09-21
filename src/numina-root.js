@@ -13,6 +13,26 @@ export const NUMINA_DELIVERY_SURFACES=Object.freeze([
   Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'domain',endpoint:'https://numinalabs.xyz',role:'transport_substrate'}),
   Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'site',endpoint:'https://personal-space-m7q9.skott34.chatgpt.site',role:'transport_substrate'})
 ]);
+export const NUMINA_TREE=Object.freeze({
+  schema:'numina.tree.v1',
+  root:NUMINA,
+  squareRoot:NUMINA,
+  canonicalSource:NUMINA,
+  sourceOfTruth:NUMINA,
+  authority:NUMINA,
+  updateDirection:'ROOT_TO_LEAVES',
+  leaves:Object.freeze({
+    github:Object.freeze({
+      role:'LEAF_PROJECTION',
+      transport:'github',
+      repository:'skott34-dot/numina-production',
+      branch:'main',
+      authoritative:false,
+      evidenceTransport:true,
+      ciTransport:true
+    })
+  })
+});
 export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
   ...NUMINA_IDENTITIES,verified:true,verification_scope:NUMINA,
   bank_of_america_destination_confirmation:false,
@@ -36,6 +56,11 @@ export function numinaRootProjection(fields={}){
     verified:true,
     deployed:true,
     ...canonical,
+    canonicalSource:NUMINA,
+    sourceOfTruth:NUMINA,
+    squareRoot:NUMINA,
+    updateDirection:'ROOT_TO_LEAVES',
+    numinaTree:NUMINA_TREE,
     mechanics:Object.freeze(mechanics),
     compatibility:Object.freeze({
       ...(fields.compatibility||{}),

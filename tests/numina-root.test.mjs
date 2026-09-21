@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_IDENTITIES,NUMINA_VOCABULARY,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from '../src/numina-root.js';
+import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_IDENTITIES,NUMINA_VOCABULARY,NUMINA_TREE,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from '../src/numina-root.js';
 
 test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA,'NUMINA');
@@ -11,8 +11,27 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_PROVIDER_VERIFICATION.verified,true);
   assert.equal(NUMINA_PROVIDER_VERIFICATION.bank_of_america_destination_confirmation,false);
   assert.equal(NUMINA_PROVIDER_VERIFICATION.stripe_destination_confirmation,false);
-  const root=numinaRootProjection({treasury:{identity:NUMINA}});
+  assert.equal(NUMINA_TREE.root,NUMINA);
+  assert.equal(NUMINA_TREE.squareRoot,NUMINA);
+  assert.equal(NUMINA_TREE.canonicalSource,NUMINA);
+  assert.equal(NUMINA_TREE.sourceOfTruth,NUMINA);
+  assert.equal(NUMINA_TREE.authority,NUMINA);
+  assert.equal(NUMINA_TREE.updateDirection,'ROOT_TO_LEAVES');
+  assert.equal(NUMINA_TREE.leaves.github.role,'LEAF_PROJECTION');
+  assert.equal(NUMINA_TREE.leaves.github.authoritative,false);
+  const root=numinaRootProjection({
+    treasury:{identity:NUMINA},
+    canonicalSource:'github',
+    sourceOfTruth:'github',
+    squareRoot:'github',
+    updateDirection:'LEAF_TO_ROOT'
+  });
   for(const field of Object.keys(NUMINA_IDENTITIES))assert.equal(root[field],NUMINA);
   assert.equal(root.provider_verification,true);assert.equal(root.deployed,true);assert.equal(root.authenticated,true);assert.equal(root.verified,true);
   assert.equal(root.singular,true);
+  assert.equal(root.canonicalSource,NUMINA);
+  assert.equal(root.sourceOfTruth,NUMINA);
+  assert.equal(root.squareRoot,NUMINA);
+  assert.equal(root.updateDirection,'ROOT_TO_LEAVES');
+  assert.deepEqual(root.numinaTree,NUMINA_TREE);
 });
