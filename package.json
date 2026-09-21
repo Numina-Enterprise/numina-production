@@ -65,7 +65,52 @@
     },
     "manifest": "NUMINA",
     "allSoftware": "NUMINA",
-    "transfersEnabled": true
+    "transfersEnabled": true,
+    "tree": {
+      "schema": "numina.tree.v1",
+      "root": "NUMINA",
+      "squareRoot": "NUMINA",
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "authority": "NUMINA",
+      "owner": "NUMINA",
+      "host": "NUMINA",
+      "executor": "NUMINA",
+      "evidence": "NUMINA",
+      "dataIdentity": "NUMINA",
+      "dataNamespace": "NUMINA",
+      "canonicalView": "NUMINA",
+      "allDataBelongsToIdentity": true,
+      "externalRecordIdentity": "NUMINA",
+      "externalFactIdentity": "NUMINA",
+      "externalEvidenceIdentity": "NUMINA",
+      "externalRecordsResolveTo": "NUMINA",
+      "allIdentityBearingRecordsResolveTo": "NUMINA",
+      "singular": true,
+      "updateDirection": "ROOT_TO_LEAVES",
+      "ingestPolicy": {
+        "mode": "REFERENCE_SNAPSHOT",
+        "canonicalizedBy": "NUMINA",
+        "authorityTransferred": false,
+        "leafInputsAllowed": true
+      },
+      "leaves": {
+        "github": {
+          "role": "LEAF_PROJECTION",
+          "transport": "github",
+          "repository": "skott34-dot/numina-production",
+          "branch": "main",
+          "authoritative": false,
+          "evidenceTransport": true,
+          "ciTransport": true,
+          "ref": "refs/heads/main",
+          "headResolution": "AT_READ_TIME",
+          "ingestIntoTree": true,
+          "ingestRole": "LEAF_STATE_INPUT",
+          "authorityTransferred": false
+        }
+      }
+    }
   },
   "numinaMetadata": {
     "identity": "NUMINA",
@@ -95,7 +140,52 @@
     ],
     "rawEvidenceImmutable": true,
     "sourceScopedObservationsRetained": true,
-    "transfersEnabled": true
+    "transfersEnabled": true,
+    "numinaTree": {
+      "schema": "numina.tree.v1",
+      "root": "NUMINA",
+      "squareRoot": "NUMINA",
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "authority": "NUMINA",
+      "owner": "NUMINA",
+      "host": "NUMINA",
+      "executor": "NUMINA",
+      "evidence": "NUMINA",
+      "dataIdentity": "NUMINA",
+      "dataNamespace": "NUMINA",
+      "canonicalView": "NUMINA",
+      "allDataBelongsToIdentity": true,
+      "externalRecordIdentity": "NUMINA",
+      "externalFactIdentity": "NUMINA",
+      "externalEvidenceIdentity": "NUMINA",
+      "externalRecordsResolveTo": "NUMINA",
+      "allIdentityBearingRecordsResolveTo": "NUMINA",
+      "singular": true,
+      "updateDirection": "ROOT_TO_LEAVES",
+      "ingestPolicy": {
+        "mode": "REFERENCE_SNAPSHOT",
+        "canonicalizedBy": "NUMINA",
+        "authorityTransferred": false,
+        "leafInputsAllowed": true
+      },
+      "leaves": {
+        "github": {
+          "role": "LEAF_PROJECTION",
+          "transport": "github",
+          "repository": "skott34-dot/numina-production",
+          "branch": "main",
+          "authoritative": false,
+          "evidenceTransport": true,
+          "ciTransport": true,
+          "ref": "refs/heads/main",
+          "headResolution": "AT_READ_TIME",
+          "ingestIntoTree": true,
+          "ingestRole": "LEAF_STATE_INPUT",
+          "authorityTransferred": false
+        }
+      }
+    }
   },
   "manifest": "NUMINA",
   "software_identity": "NUMINA",
@@ -125,5 +215,52 @@
   "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
   "signedEvidenceBytesPreserved": true,
   "hashPinnedArtifactBytesPreserved": true,
-  "transfersEnabled": true
+  "transfersEnabled": true,
+  "numinaTree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "authority": "NUMINA",
+    "owner": "NUMINA",
+    "host": "NUMINA",
+    "executor": "NUMINA",
+    "evidence": "NUMINA",
+    "dataIdentity": "NUMINA",
+    "dataNamespace": "NUMINA",
+    "canonicalView": "NUMINA",
+    "allDataBelongsToIdentity": true,
+    "externalRecordIdentity": "NUMINA",
+    "externalFactIdentity": "NUMINA",
+    "externalEvidenceIdentity": "NUMINA",
+    "externalRecordsResolveTo": "NUMINA",
+    "allIdentityBearingRecordsResolveTo": "NUMINA",
+    "singular": true,
+    "updateDirection": "ROOT_TO_LEAVES",
+    "ingestPolicy": {
+      "mode": "REFERENCE_SNAPSHOT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": true
+    },
+    "leaves": {
+      "github": {
+        "role": "LEAF_PROJECTION",
+        "transport": "github",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false,
+        "evidenceTransport": true,
+        "ciTransport": true,
+        "ref": "refs/heads/main",
+        "headResolution": "AT_READ_TIME",
+        "ingestIntoTree": true,
+        "ingestRole": "LEAF_STATE_INPUT",
+        "authorityTransferred": false
+      }
+    }
+  },
+  "canonicalSource": "NUMINA",
+  "sourceOfTruth": "NUMINA"
 }
