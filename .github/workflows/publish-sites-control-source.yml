@@ -1,4 +1,5 @@
 name: Build and publish Numina
+# Canonical publication refresh required before unchanged NUSD production deployment.
 
 on:
   workflow_dispatch:
