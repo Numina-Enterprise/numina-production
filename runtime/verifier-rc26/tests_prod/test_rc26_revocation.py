@@ -18,7 +18,7 @@ class RevocationChecks(unittest.TestCase):
     def setUpClass(cls):
         cls.temp=tempfile.TemporaryDirectory()
         cls.identity=SigningIdentity(Ed25519PrivateKey.generate())
-        cls.settings=Settings(environment='test',role='public-verifier',release='core-v1.8+prod-v1.9.0-rc26',data_dir=Path(cls.temp.name),signing_key_file=None,allow_ephemeral_key=True,require_frozen_core=True,public_url='https://numina-production.vercel.app',database_url=None,real_funds_enabled=False,employer_ip_enabled=False,trusted_hosts=('testserver',),arc_verification_enabled=False,owner_access_url='https://numinalabs.xyz/api/control/v2/runtime-access',owner_root_hash='51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2')
+        cls.settings=Settings(environment='test',role='public-verifier',release='core-v1.8+prod-v1.9.0-rc26',data_dir=Path(cls.temp.name),signing_key_file=None,allow_ephemeral_key=True,require_frozen_core=True,public_url='https://numinalabs.xyz',database_url=None,real_funds_enabled=False,employer_ip_enabled=False,trusted_hosts=('testserver',),arc_verification_enabled=False,owner_access_url='https://numinalabs.xyz/api/control/v2/runtime-access',owner_root_hash='51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2')
         with patch('numina_prod.service.load_identity',return_value=cls.identity):cls.app=create_app(cls.settings)
         cls.store=EvidenceStore(EvidenceStoreConfig(Path(cls.temp.name)/'evidence-network.sqlite3'))
         cls.client=TestClient(cls.app)
