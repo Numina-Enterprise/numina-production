@@ -1,4 +1,4 @@
-name: NUMINA Environment Export
+name: NUMINA Environment Export Split
 on:
   push:
     branches: [numina-source-export]
@@ -34,25 +34,45 @@ jobs:
           set -euo pipefail
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
-      - name: Archive environment state
+      - name: Archive split environment state
         shell: bash
         run: |
           set -euo pipefail
-          deps="$RUNNER_TEMP/NUMINA-NODE-MODULES-6bfb7fcda121.tar.gz"
+          runtime="$RUNNER_TEMP/NUMINA-RUNTIME-DEPS-6bfb7fcda121.tar.gz"
+          development="$RUNNER_TEMP/NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121.tar.gz"
           toolchain="$RUNNER_TEMP/NUMINA-NODE24-6bfb7fcda121.tar.gz"
-          tar -czf "$deps" runtime/nusd/node_modules runtime/nusd/development/node_modules
+          tar -czf "$runtime" runtime/nusd/node_modules
+          tar -czf "$development" runtime/nusd/development/node_modules
           node_root="$(dirname "$(dirname "$(command -v node)")")"
           test -x "$node_root/bin/node"
           tar -C "$node_root" -czf "$toolchain" bin/node bin/npm bin/npx lib/node_modules/npm
-          sha256sum "$deps" > "$deps.sha256"
+          sha256sum "$runtime" > "$runtime.sha256"
+          sha256sum "$development" > "$development.sha256"
           sha256sum "$toolchain" > "$toolchain.sha256"
-      - name: Upload environment state
+          ls -lh "$runtime" "$development" "$toolchain"
+      - name: Upload runtime dependencies
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: NUMINA-ENV-6bfb7fcda121
+          name: NUMINA-RUNTIME-DEPS-6bfb7fcda121
           path: |
-            ${{ runner.temp }}/NUMINA-NODE-MODULES-6bfb7fcda121.tar.gz
-            ${{ runner.temp }}/NUMINA-NODE-MODULES-6bfb7fcda121.tar.gz.sha256
+            ${{ runner.temp }}/NUMINA-RUNTIME-DEPS-6bfb7fcda121.tar.gz
+            ${{ runner.temp }}/NUMINA-RUNTIME-DEPS-6bfb7fcda121.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
+      - name: Upload development dependencies
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121
+          path: |
+            ${{ runner.temp }}/NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121.tar.gz
+            ${{ runner.temp }}/NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
+      - name: Upload Node 24 toolchain
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: NUMINA-NODE24-6bfb7fcda121
+          path: |
             ${{ runner.temp }}/NUMINA-NODE24-6bfb7fcda121.tar.gz
             ${{ runner.temp }}/NUMINA-NODE24-6bfb7fcda121.tar.gz.sha256
           if-no-files-found: error
