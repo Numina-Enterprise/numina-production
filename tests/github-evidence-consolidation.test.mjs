@@ -8,7 +8,7 @@ const json=path=>JSON.parse(readFileSync(new URL('../'+path,import.meta.url),'ut
 test('active NUMINA evidence persistence is GitHub Release only',()=>{
   const workflow=readFileSync(new URL('../.github/workflows/verify-provider-observations.yml',import.meta.url),'utf8');
   assert.match(workflow,/Publish and read back canonical provider evidence from GitHub Release/);
-  assert.match(workflow,/Publish and read back trusted production release from GitHub Release/);
+  assert.match(workflow,/Publish and read back trusted source release from GitHub Release/);
   assert.match(workflow,/publish-github-evidence\.mjs/);
   assert.doesNotMatch(workflow,/NEON|NUMINA_PROVIDER_INGEST_URL|NUMINA_TRUSTED_RELEASE_URL|ACTIONS_ID_TOKEN_REQUEST_URL|numina_ingest_provider_evidence|numina_mark_trusted_production_release/i);
 });
