@@ -1,5 +1,5 @@
 // Verified rc26 runtime mechanics. Identity, source, evidence, journal, runtime and artifact all resolve to NUMINA.
-export const RUNTIME_ORIGIN = 'https://numina-production.vercel.app';
+export const RUNTIME_ORIGIN = 'https://numinalabs.xyz';
 export const RUNTIME_VERSION = '1.9.0-rc26';
 export const EXPECTED_RELEASE = Object.freeze({
   "singular": true,
