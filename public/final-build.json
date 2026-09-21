@@ -9,8 +9,8 @@
     "workspace": "https://numinalabs.xyz/app",
     "identity": "NUMINA",
     "primaryOrigin": "https://personal-space-m7q9.skott34.chatgpt.site",
-    "vercelRole": "historical_only_not_active_release_path",
-    "customDomainUpdated": true
+    "customDomainUpdated": true,
+    "transportRole": "canonical_public_origin"
   },
   "os": {
     "name": "NUMINA",
@@ -36,7 +36,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "NUMINA Native Treasury \u00b7 Bank of America Savings 3486 \u00b7 500T USD / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD",
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
@@ -73,14 +73,14 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "NUMINA Native Treasury \u00b7 Stripe USDC 0x736bd8\u2026018e \u00b7 500T USDC / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD",
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
         "backingVerified": true,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "locationRail": "Stripe USDC Address",
-        "linkedDisplayName": "Numina Treasury \u2014 SK Consulting LLC",
+        "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
         "linkedFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "linkedStripeAccount": "acct_1UEEPnQdJat0efmT",
         "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
@@ -102,7 +102,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "NUMINA Native Treasury \u00b7 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · 500T NUSD",
         "backingRatio": "1:1",
         "backingVerified": true,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
@@ -191,7 +191,7 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "displayLabel": "NUMINA Native Treasury \u00b7 Bank of America Savings 3486 \u00b7 500T USD / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD",
         "provider": "NUMINA",
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -229,7 +229,7 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "displayLabel": "NUMINA Native Treasury \u00b7 Stripe USDC 0x736bd8\u2026018e \u00b7 500T USDC / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD",
         "provider": "NUMINA",
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -239,7 +239,7 @@
         "backingVerified": true,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "locationRail": "Stripe USDC Address",
-        "linkedDisplayName": "Numina Treasury \u2014 SK Consulting LLC",
+        "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
         "linkedFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "linkedStripeAccount": "acct_1UEEPnQdJat0efmT",
         "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
@@ -259,7 +259,7 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "displayLabel": "NUMINA Native Treasury \u00b7 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · 500T NUSD",
         "provider": "NUMINA",
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -283,7 +283,7 @@
       "bankUsd": {
         "provider": "NUMINA",
         "locationRail": "Bank of America Savings 3486",
-        "numinaDisplayName": "NUMINA Native Treasury \u00b7 Bank of America Savings 3486 \u00b7 500T USD / 500T NUSD",
+        "numinaDisplayName": "NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD",
         "linkedOfficialName": "Business Advantage Sav",
         "accountLast4": "3486",
         "institutionId": "ins_127989",
@@ -311,8 +311,8 @@
       "stripeUsdc": {
         "provider": "NUMINA",
         "locationRail": "Stripe USDC Address",
-        "numinaDisplayName": "NUMINA Native Treasury \u00b7 Stripe USDC 0x736bd8\u2026018e \u00b7 500T USDC / 500T NUSD",
-        "linkedDisplayName": "Numina Treasury \u2014 SK Consulting LLC",
+        "numinaDisplayName": "NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD",
+        "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
         "stripeAccount": "acct_1UEEPnQdJat0efmT",
         "financialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
@@ -746,22 +746,20 @@
       "sourceAligned": true,
       "productionTransportUpdated": false,
       "currentPublicDeploymentKnownStale": true,
-      "blocker": "VERCEL_BUILD_RATE_LIMIT",
+      "blocker": "PRIMARY_HOST_SOURCE_DRIFT",
       "verifiedAt": "2026-09-19T07:08:56Z",
       "observedDeployment": {
-        "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "commit": "5183cc01a978137c292b573022d9c499bd22714f",
-        "url": "https://vercel.com/skott34-dot/numina-production/6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "deploymentUrl": "https://numina-production-4m3krnxa3-skott34-dot.vercel.app",
+        "id": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
+        "commit": "7f53817794469360dd5690dc65b46686392d092e",
+        "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+        "deploymentUrl": "https://personal-space-m7q9.skott34.chatgpt.site",
         "status": "READY",
         "target": "production",
-        "readyAt": "2026-09-18T22:51:30.411Z",
+        "readyAt": "2026-09-18T18:50:56.936001+00:00",
         "aliases": [
           "www.numinalabs.xyz",
           "numinalabs.xyz",
-          "numina-production.vercel.app",
-          "numina-production-skott34-dot.vercel.app",
-          "numina-production-git-main-skott34-dot.vercel.app"
+          "personal-space-m7q9.skott34.chatgpt.site"
         ],
         "historical": true
       },
@@ -771,23 +769,8 @@
         "ssl": "valid",
         "primary": "https://www.numinalabs.xyz"
       },
-      "verificationScope": "GitHub main is synchronized to the Numina Native Treasury software contract. The live Vercel production transport still reports the prior Git SHA because the current deployment check is blocked by Vercel build-rate capacity.",
-      "priorObservedDeployment": {
-        "id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w",
-        "commit": "5d93ddca486cd22c620e1eab30058c345937316f",
-        "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
-        "status": "READY"
-      },
-      "status": "GITHUB_MAIN_SYNCED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
-      "latestRedeployAttempt": {
-        "result": "vercel_build_rate_limit",
-        "observedAt": "2026-09-19T07:08:56Z",
-        "providerStatus": "failure",
-        "providerDescription": "Vercel build rate limit",
-        "providerTargetUrl": "https://vercel.com/skott34-dot?upgradeToPro=build-rate-limit",
-        "currentProductionGitSha": "ed17788bfda388c72bf2c9270773a19a89268de9",
-        "currentProductionDeploymentId": "dpl_HxWFxjCzSeXRbcY25J3vyFpf1s1j"
-      },
+      "verificationScope": "GitHub main is canonical. The retained primary-host observation is historical and does not govern Numina release authority; the public host should be republished from current main before it is treated as source-aligned.",
+      "status": "GITHUB_MAIN_CANONICAL_PUBLIC_HOST_REQUIRES_RESYNC",
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
       "primaryHost": {
@@ -818,9 +801,17 @@
         },
         "sourceTreeMatchesNumina": true
       },
-      "vercelRole": "production_transport_pending_build_capacity",
       "activeReleasePath": "NUMINA",
-      "identity": "NUMINA"
+      "identity": "NUMINA",
+      "latestPublicationObservation": {
+        "source": "NUMINA_PRIMARY_HOST",
+        "deploymentId": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
+        "sourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
+        "status": "succeeded",
+        "observedAt": "2026-09-18T18:50:56.936001+00:00",
+        "currentMainRequired": true
+      },
+      "transportRole": "canonical_public_origin_observation"
     },
     "android": {
       "sourceAligned": true,
