@@ -5,6 +5,7 @@ const PINNED_RPC_URL = 'https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/';
 const EXPECTED_CHAIN_ID = '962421430';
 const CONFIGURED_SIGNER = '0x1a45671ae2ee3e52264116151924faacb80fc02e';
 const NUSD_ADDRESS = '0x491c1df1b5ca77af797f052c2310ca17039c931b';
+const NUSD_DEFAULT_ADMIN = '0xa7e9fb02495700cce0d209392c0a30fbe077498e';
 const EXPECTED_NUSD_DECIMALS = '18';
 const EXPECTED_NUSD_SUPPLY = '1500000000000000000000000000000000';
 const EXPECTED_NUSD_POLICY_HASH = '0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5';
@@ -137,6 +138,8 @@ function initialObservation() {
       transfersEnabled: null,
       providerStateObserved: false,
       stateMatched: false,
+      defaultAdmin: NUSD_DEFAULT_ADMIN,
+      defaultAdminSignerListed: false,
     },
     scope: {
       evidence: 'single_provider_read_only_observation',
@@ -205,6 +208,7 @@ export async function observeNode({ env = process.env, fetcher = globalThis.fetc
           accounts.some(account => typeof account !== 'string' || !ADDRESS.test(account))) fail('RPC_RESPONSE_INVALID');
       if (!accounts.some(account => account.toLowerCase() === CONFIGURED_SIGNER)) fail('CONFIGURED_SIGNER_NOT_LISTED');
       observation.configuredSignerListed = true;
+      observation.nusd.defaultAdminSignerListed = accounts.some(account => account.toLowerCase() === NUSD_DEFAULT_ADMIN);
       observation.genesis = publicBlock(await rpc('eth_getBlockByNumber', ['0x0', false]), true);
       observation.genesisObserved = true;
       observation.latestBlock = publicBlock(await rpc('eth_getBlockByNumber', ['latest', false]), false);
