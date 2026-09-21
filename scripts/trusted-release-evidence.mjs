@@ -22,7 +22,7 @@ export function verifyReleaseEnvelope(envelope,type,{pinnedKey=PINNED_RUNTIME_PU
 export function readSignedTransport(response,{verifyEnvelope=verifyReleaseEnvelope,expectedGitSha}={}){
   const transport=response?.transport,substrate=transport?.substrate_observation;
   assert(['root','manifest','identity','authority','source','evidence','host','provenance','deployment'].every(key=>response?.[key]==='NUMINA')&&response.deployed===true,'transport wrapper altered NUMINA');
-  assert(transport?.identity==='NUMINA'&&transport.role==='factual_transport_verification_channel'&&transport.separate_roles===true&&transport.singular_identity===true&&substrate?.identity==='NUMINA'&&substrate.service==='NUMINA'&&substrate.substrate==='Vercel'&&substrate.verified===true,'transport verification channel invalid');
+  assert(transport?.identity==='NUMINA'&&transport.role==='factual_transport_verification_channel'&&transport.separate_roles===true&&transport.singular_identity===true&&substrate?.identity==='NUMINA'&&substrate.service==='NUMINA'&&substrate.substrate==='NUMINA'&&substrate.verified===true,'transport verification channel invalid');
   const observation=verifyEnvelope(response.receipt,'NUMINA_TRANSPORT_OBSERVATION');
   assert(equal(observation,substrate.observation),'transport receipt mismatch');
   assert(validateDeploymentProvenance(observation),'production transport provenance invalid');
