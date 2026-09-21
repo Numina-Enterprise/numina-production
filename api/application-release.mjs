@@ -40,13 +40,13 @@ function validManifest(value,verifyEnvelope=verifyPinnedEnvelope){
 }
 export function deploymentProvenance(env=process.env){
   return {schema:'numina.transport-observation.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
-    source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',provider_verification:true,deployment:'NUMINA',transport:'numina',
+    source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',provider_verification:true,deployment:'NUMINA',transport:'NUMINA',
     authoritative:true,host_url:ORIGIN,environment:env.NUMINA_ENV||'production',deployment_id:env.GITHUB_RUN_ID||null,
     transport_url:ORIGIN,git_commit_sha:env.GITHUB_SHA||env.NUMINA_GIT_COMMIT_SHA||null,
     git_commit_ref:env.GITHUB_REF_NAME||env.NUMINA_GIT_COMMIT_REF||'main',runtime_release:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
 }
 export function validateDeploymentProvenance(value){
-  return Boolean(object(value)&&value.schema==='numina.transport-observation.v1'&&value.root==='NUMINA'&&value.manifest==='NUMINA'&&value.identity==='NUMINA'&&value.authority==='NUMINA'&&value.source==='NUMINA'&&value.evidence==='NUMINA'&&value.provider==='NUMINA'&&value.host==='NUMINA'&&value.provenance==='NUMINA'&&value.provider_verification===true&&value.deployment==='NUMINA'&&value.transport==='numina'&&value.authoritative===true&&value.environment==='production'&&value.host_url===ORIGIN&&value.transport_url===ORIGIN&&/^[0-9a-f]{40}$/i.test(String(value.git_commit_sha||''))&&value.git_commit_ref==='main'&&value.runtime_release===EXPECTED_RELEASE.production_version&&value.release===EXPECTED_RELEASE.release);
+  return Boolean(object(value)&&value.schema==='numina.transport-observation.v1'&&value.root==='NUMINA'&&value.manifest==='NUMINA'&&value.identity==='NUMINA'&&value.authority==='NUMINA'&&value.source==='NUMINA'&&value.evidence==='NUMINA'&&value.provider==='NUMINA'&&value.host==='NUMINA'&&value.provenance==='NUMINA'&&value.provider_verification===true&&value.deployment==='NUMINA'&&value.transport==='NUMINA'&&value.authoritative===true&&value.environment==='production'&&value.host_url===ORIGIN&&value.transport_url===ORIGIN&&/^[0-9a-f]{40}$/i.test(String(value.git_commit_sha||''))&&value.git_commit_ref==='main'&&value.runtime_release===EXPECTED_RELEASE.production_version&&value.release===EXPECTED_RELEASE.release);
 }
 function supplyPayload(supply){return supply?.payload?.evidence||supply?.evidence||supply;}
 function supplyReceipt(supply){return supply?.payload?.receipt||supply?.receipt||null;}

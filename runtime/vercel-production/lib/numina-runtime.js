@@ -52,7 +52,7 @@ function runtimeManifest(){
     update_direction:'ROOT_TO_LEAVES',
     canonical_repository:'NUMINA',
     github_leaf_repository:'skott34-dot/numina-production',
-    github_leaf_role:'LEAF_PROJECTION',
+    github_leaf_role:'ARCHIVE_LEAF',
     github_leaf_authoritative:false,
     canonical_branch:'ROOT',
     github_leaf_branch:'main',

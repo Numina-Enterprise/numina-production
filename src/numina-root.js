@@ -35,21 +35,21 @@ export const NUMINA_TREE=Object.freeze({
   allIdentityBearingRecordsResolveTo:NUMINA,
   singular:true,
   updateDirection:'ROOT_TO_LEAVES',
-  ingestPolicy:Object.freeze({mode:'REFERENCE_SNAPSHOT',canonicalizedBy:NUMINA,authorityTransferred:false,leafInputsAllowed:true}),
+  ingestPolicy:Object.freeze({mode:'REFERENCE_SNAPSHOT',canonicalizedBy:NUMINA,authorityTransferred:false,leafInputsAllowed:false}),
   leaves:Object.freeze({
     github:Object.freeze({
-      role:'LEAF_PROJECTION',
+      role:'ARCHIVE_LEAF',
       transport:'github',
       repository:'skott34-dot/numina-production',
       branch:'main',
       ref:'refs/heads/main',
-      headResolution:'AT_READ_TIME',
-      ingestIntoTree:true,
-      ingestRole:'LEAF_STATE_INPUT',
+      headResolution:'FROZEN_AT_ARCHIVE',
+      ingestIntoTree:false,
+      ingestRole:'ARCHIVE_STATE_REFERENCE',
       authorityTransferred:false,
       authoritative:false,
       evidenceTransport:true,
-      ciTransport:true
+      ciTransport:false
     })
   })
 });

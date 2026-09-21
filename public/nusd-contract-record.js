@@ -5,16 +5,6 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "modelIdentity": "NUMINA",
   "identity": "NUMINA",
   "manifest": "NUMINA",
-  "transfersEnabled": true,
-  "manifestEqualsNumina": true,
-  "numinaEqualsManifest": true,
-  "metadataAuthority": "NUMINA",
-  "nativeEvidenceStatus": "FINAL",
-  "status": "DEPLOYED_VERIFIED",
-  "contractsInitiated": true,
-  "initiatedOn": "2026-09-18",
-  "url": "/api/nusd/v1/contracts",
-  "native_treasury": "/api/control/v1/treasury",
   "canonicalSource": "NUMINA",
   "sourceOfTruth": "NUMINA",
   "canonicalTreasuryValues": {
@@ -58,6 +48,16 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "providerObservationsAggregated": false,
     "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
   },
+  "transfersEnabled": true,
+  "manifestEqualsNumina": true,
+  "numinaEqualsManifest": true,
+  "metadataAuthority": "NUMINA",
+  "nativeEvidenceStatus": "FINAL",
+  "status": "DEPLOYED_VERIFIED",
+  "contractsInitiated": true,
+  "initiatedOn": "2026-09-18",
+  "url": "/api/nusd/v1/contracts",
+  "native_treasury": "/api/control/v1/treasury",
   "contracts": [
     {
       "id": "nusd",

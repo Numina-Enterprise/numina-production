@@ -31,7 +31,7 @@ def release(tmp_path:Path,builder="urn:numina:builder:release-gate:v1",
         }
     }))
     sbom=tmp_path/"software-bom.spdx.json"
-    sbom.write_text(json.dumps({"spdxVersion":"SPDX-2.3","name":"numina"}))
+    sbom.write_text(json.dumps({"spdxVersion":"SPDX-2.3","name":"NUMINA"}))
     return artifact,digest,sbom
 
 

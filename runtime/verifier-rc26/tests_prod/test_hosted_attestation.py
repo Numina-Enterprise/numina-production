@@ -73,7 +73,7 @@ def spec(tmp_path):
     artifact,digest,sbom=release(tmp_path)
     return DeploySpec(
         "dep","docker",str(artifact),digest,"public-verifier","production",
-        "numina-public","numina/verifier:test","numina",
+        "numina-public","numina/verifier:test","NUMINA",
         "numina-public-verifier","https://numinalabs.xyz",
         {"sbom_path":str(sbom)}
     )
