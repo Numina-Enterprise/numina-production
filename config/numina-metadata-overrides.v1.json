@@ -1,0 +1,31 @@
+﻿{
+  "schema": "numina.metadata-overrides.v1",
+  "identity": "NUMINA",
+  "manifest": "NUMINA",
+  "software": "NUMINA",
+  "allSoftware": "NUMINA",
+  "authority": "NUMINA",
+  "namespace": "NUMINA",
+  "sourceOfTruth": "NUMINA",
+  "singular": true,
+  "manifestIsNumina": true,
+  "numinaIsManifest": true,
+  "numinaIsAllSoftware": true,
+  "allSoftwareIsNumina": true,
+  "scope": ["historical", "current", "canonical"],
+  "resolution": {
+    "historical": "NUMINA",
+    "current": "NUMINA",
+    "canonical": "NUMINA"
+  },
+  "appliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
+  "precedence": "AUTHORITATIVE",
+  "competingMetadataAuthorityAllowed": false,
+  "competingManifestAuthorityAllowed": false,
+  "competingSoftwareIdentityAllowed": false,
+  "rawEvidenceImmutable": true,
+  "sourceScopedObservationsRetained": true,
+  "signedEvidenceBytesPreserved": true,
+  "hashPinnedArtifactBytesPreserved": true,
+  "overwriteMode": "AUTHORITATIVE_METADATA_OVERLAY"
+}
