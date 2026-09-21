@@ -16,8 +16,7 @@
       "transport_only": true,
       "surfaces": [
         "https://numinalabs.xyz",
-        "https://personal-space-m7q9.skott34.chatgpt.site",
-        "https://numina-production.vercel.app"
+        "https://personal-space-m7q9.skott34.chatgpt.site"
       ]
     },
     "storage": {
@@ -47,7 +46,6 @@
       "competing_build_authority_allowed": false,
       "projections": [
         "website",
-        "vercel",
         "mobile",
         "runtime",
         "receipts",
@@ -63,7 +61,8 @@
       "manifest": "NUMINA",
       "manifest_is_numina": true,
       "competing_software_identity_allowed": false,
-      "transfersEnabled": true
+      "transfersEnabled": true,
+      "routing_manifest": "config/numina-routing.json"
     }
   },
   "compatibility": {
