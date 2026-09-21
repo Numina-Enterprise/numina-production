@@ -1,0 +1,38 @@
+name: NUMINA Source Export
+on:
+  push:
+    branches: [numina-source-export]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout finalized NUMINA head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 6bfb7fcda12127a8444a9f5befe0607f02205dc8
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify immutable source head
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "6bfb7fcda12127a8444a9f5befe0607f02205dc8"
+          test -z "$(git status --porcelain)"
+      - name: Archive finalized tracked tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive --format=tar.gz --prefix=Numina/ --output="$RUNNER_TEMP/NUMINA-SOURCE-6bfb7fcda121.tar.gz" HEAD
+          sha256sum "$RUNNER_TEMP/NUMINA-SOURCE-6bfb7fcda121.tar.gz" > "$RUNNER_TEMP/NUMINA-SOURCE-6bfb7fcda121.tar.gz.sha256"
+      - name: Upload source tree
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: NUMINA-SOURCE-6bfb7fcda121
+          path: |
+            ${{ runner.temp }}/NUMINA-SOURCE-6bfb7fcda121.tar.gz
+            ${{ runner.temp }}/NUMINA-SOURCE-6bfb7fcda121.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
