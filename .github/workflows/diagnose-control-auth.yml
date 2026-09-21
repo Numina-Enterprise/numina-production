@@ -40,9 +40,6 @@ jobs:
           for origin in \
             https://numinalabs.xyz \
             https://www.numinalabs.xyz \
-            https://numina-production.vercel.app \
-            https://numina-production-skott34-dot.vercel.app \
-            https://numina-production-l0t4iigco-skott34-dot.vercel.app
           do
             status="$(curl --silent --show-error --output /tmp/body --write-out '%{http_code}' \
               --max-time 15 --location --max-redirs 0 \
