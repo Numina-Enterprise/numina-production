@@ -15,7 +15,9 @@ import {createHash} from 'node:crypto';
 const NUMINA='NUMINA';
 const EXECUTE_ALL=NUMINA;
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
-const version=JSON.parse(readFileSync('package.json')).version,major=version.split('.')[0];
+const workspacePackage=JSON.parse(readFileSync('package.json'));const version=workspacePackage.version,major=version.split('.')[0];
+const NUMINA_TREE=workspacePackage.numinaTree,CANONICAL_TREASURY_VALUES=workspacePackage.canonicalTreasuryValues;
+if(NUMINA_TREE?.canonicalSource!=='NUMINA'||CANONICAL_TREASURY_VALUES?.aggregate?.current!=='1500000000000000')throw Error('NUMINA tree/treasury package metadata mismatch');
 const integrationFile='numina-integration-kit-v'+version+'.zip';
 const integrationManifestFile='integrations/numina/file-manifest.json';
 const integrationManifestBytes=readFileSync(integrationManifestFile);
@@ -52,6 +54,7 @@ const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const record={
+ identity:NUMINA,canonicalSource:NUMINA,sourceOfTruth:NUMINA,numinaTree:NUMINA_TREE,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,
  owner_approval:{...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:digest(readFileSync('public/owner-approval.js'))},
  approval_handoff:{archive:'/downloads/Numina-1500T-Approval-Handoff.zip',sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff.zip')),record:'/downloads/Numina-1500T-Approval-Handoff-Package-Record.json',record_sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff-Package-Record.json')),status:'EVIDENCE_HANDOFF_PREPARED',scope:'Original dated evidence intake; owner authorization is recorded separately in owner_approval and does not manufacture signatures, review findings or receipts'},
  denomination_policy:NUMINA_DENOMINATION_POLICY,
