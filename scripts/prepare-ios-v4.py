@@ -41,10 +41,10 @@ record['ios']={
     'preparation':{'method':'update_unsigned_bundle_version_metadata','changedEntries':[plist_name],'nativeCompilationPerformed':False,'inputFile':original['file'],'inputSha256':original['sha256'],'inputBuildRun':previous['buildRun'],'inputSourceCommit':previous['sourceCommit'],'executableSha256':executable_sha,'executableBytesUnchanged':True},
     'signingWorkflow':'.github/workflows/numina-ios-signing.yml',
     'distributionPolicy':'/downloads/distribution-policy.json',
-    'hostedArtifactPaths':{'sites':'https://numinalabs.xyz'+artifact['url'],'vercel':'https://numina-production.vercel.app'+artifact['url']},
+    'hostedArtifactPaths':{'numina':'https://numinalabs.xyz'+artifact['url']},
     'hostPublicationVerified':False
 }
-record['nativeDistributionPolicy']='Retain Android 3.0.0 binaries. Reuse the iOS executable with v4 bundle metadata; Apple signing and both hosted publications require successful provider operations.'
+record['nativeDistributionPolicy']='Retain Android 3.0.0 binaries. Reuse the iOS executable with v4 bundle metadata; Apple signing and canonical hosted publication require successful provider operations.'
 record_path.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')
 destination=root/'runtime/vercel-production/public/downloads';destination.mkdir(parents=True,exist_ok=True)
 for file in [target,record_path,root/'mobile/signing/distribution-policy.json']:
