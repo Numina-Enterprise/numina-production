@@ -13,13 +13,10 @@ test('active NUMINA evidence persistence is GitHub Release only',()=>{
   assert.doesNotMatch(workflow,/NEON|NUMINA_PROVIDER_INGEST_URL|NUMINA_TRUSTED_RELEASE_URL|ACTIONS_ID_TOKEN_REQUEST_URL|numina_ingest_provider_evidence|numina_mark_trusted_production_release/i);
 });
 
-test('Vercel no longer exposes provider or trusted-release persistence routes',()=>{
-  for(const path of ['vercel.json','runtime/vercel-production/vercel.json']){
-    const config=json(path);
-    assert.equal((config.rewrites||[]).some(route=>route.source==='/v1/evidence/provider-observation'),false,path+' still exposes retired provider persistence');
-  }
-  const rootConfig=json('vercel.json');
-  assert.equal((rootConfig.headers||[]).some(route=>route.source==='/v1/evidence/provider-observation'),false);
+test('provider-neutral routing does not expose retired evidence persistence routes',()=>{
+  const config=json('config/numina-routing.json');
+  assert.equal((config.rewrites||[]).some(route=>route.source==='/v1/evidence/provider-observation'),false);
+  assert.equal((config.headers||[]).some(route=>route.source==='/v1/evidence/provider-observation'),false);
   const wrapper=readFileSync(new URL('../api/evidence-bind.js',import.meta.url),'utf8');
   assert.doesNotMatch(wrapper,/providerEvidenceIngestHandler|trustedProductionReleaseIngestHandler/);
   assert.match(wrapper,/RETIRED_EVIDENCE_INGEST_ROUTE/);
