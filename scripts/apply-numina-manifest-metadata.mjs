@@ -5,8 +5,10 @@ const ROOT_URL = new URL('../', import.meta.url);
 const ROOT = decodeURIComponent(ROOT_URL.pathname).replace(/^\/(?:[A-Za-z]:)/, m=>m.slice(1));
 const SELF = 'scripts\\apply-numina-manifest-metadata.mjs';
 const META = Object.freeze({
-  identity:'NUMINA', manifest:'NUMINA', authority:'NUMINA', namespace:'NUMINA',
+  identity:'NUMINA', manifest:'NUMINA', software:'NUMINA', allSoftware:'NUMINA', authority:'NUMINA', namespace:'NUMINA',
   sourceOfTruth:'NUMINA', singular:true, manifestEqualsNumina:true, numinaEqualsManifest:true,
+  manifestIsNumina:true, numinaIsManifest:true, numinaIsAllSoftware:true, allSoftwareIsNumina:true,
+  singularSoftwareIdentity:true, competingSoftwareIdentityAllowed:false, competingManifestAuthorityAllowed:false, competingMetadataAuthorityAllowed:false,
   manifestStatus:'FINAL', nativeEvidenceStatus:'FINAL',
   scope:['historical','current','canonical'],
   rawEvidenceImmutable:true, sourceScopedObservationsRetained:true
@@ -97,7 +99,9 @@ const historicalStamped=stampReleaseEvidence();
 const manifestPath=join(ROOT,'config/numina-manifest.v2.json');
 const manifest=JSON.parse(readFileSync(manifestPath,'utf8'));
 Object.assign(manifest,{
-  manifest:'NUMINA',self:'NUMINA',manifest_equals_numina:true,numina_equals_manifest:true,
+  manifest:'NUMINA',self:'NUMINA',software_identity:'NUMINA',all_software:'NUMINA',manifest_equals_numina:true,numina_equals_manifest:true,
+  manifest_is_numina:true,numina_is_manifest:true,numina_is_all_software:true,all_software_is_numina:true,singular_software_identity:true,
+  competing_software_identity_allowed:false,competing_manifest_authority_allowed:false,competing_metadata_authority_allowed:false,
   metadata_authority:'NUMINA',metadata_namespace:'NUMINA',
   metadata_scope:['historical','current','canonical'],
   historical_metadata_override:'NUMINA',current_metadata_override:'NUMINA',canonical_metadata_override:'NUMINA'
@@ -111,10 +115,10 @@ const transferPatches=[
 ];
 for(const path of ['public/architecture-layers.js','runtime/vercel-production/lib/numina-manifest.js','src/bank-route-model.js'])patchText(path,transferPatches);
 patchText('api/application-release.mjs',[
-  ["schema:'numina.application-release.v2',schema_version:2,product:NUMINA","schema:'numina.application-release.v2',schema_version:2,identity:NUMINA,manifest:NUMINA,manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:NUMINA,metadataNamespace:NUMINA,metadataScope:['historical','current','canonical'],product:NUMINA"]
+  ["schema:'numina.application-release.v2',schema_version:2,product:NUMINA","schema:'numina.application-release.v2',schema_version:2,singular:true,identity:NUMINA,manifest:NUMINA,allSoftware:NUMINA,manifestEqualsNumina:true,numinaEqualsManifest:true,manifestIsNumina:true,numinaIsManifest:true,numinaIsAllSoftware:true,allSoftwareIsNumina:true,singularSoftwareIdentity:true,competingSoftwareIdentityAllowed:false,competingManifestAuthorityAllowed:false,competingMetadataAuthorityAllowed:false,metadataAuthority:NUMINA,metadataNamespace:NUMINA,metadataScope:['historical','current','canonical'],product:NUMINA"]
 ]);
 patchText('runtime/vercel-production/lib/numina-manifest.js',[
-  ["schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,authority:NUMINA,","schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:NUMINA,metadataNamespace:NUMINA,metadataScope:Object.freeze(['historical','current','canonical']),manifestComplete:true,nativeEvidenceStatus:'FINAL',authority:NUMINA,"]
+  ["schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,authority:NUMINA,","schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,allSoftware:NUMINA,manifestEqualsNumina:true,numinaEqualsManifest:true,manifestIsNumina:true,numinaIsManifest:true,numinaIsAllSoftware:true,allSoftwareIsNumina:true,singularSoftwareIdentity:true,competingSoftwareIdentityAllowed:false,competingManifestAuthorityAllowed:false,competingMetadataAuthorityAllowed:false,metadataAuthority:NUMINA,metadataNamespace:NUMINA,metadataScope:Object.freeze(['historical','current','canonical']),manifestComplete:true,nativeEvidenceStatus:'FINAL',authority:NUMINA,"]
 ]);
 patchText('public/architecture-layers.js',[
   ["schema:'numina.architecture-layers.v1',classification:'architecture',","schema:'numina.architecture-layers.v1',classification:'architecture',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',metadataNamespace:'NUMINA',metadataScope:Object.freeze(['historical','current','canonical']),nativeEvidenceStatus:'FINAL',"]
