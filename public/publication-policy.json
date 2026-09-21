@@ -1,12 +1,13 @@
 {
-    "schema":  "numina.publication-policy.v1",
-    "identity":  "NUMINA",
-    "authoritativePublicOrigin":  "https://numinalabs.xyz",
-    "authoritativeHosting":  "VERCEL_PRODUCTION",
-    "repository":  "https://github.com/skott34-dot/numina-production",
-    "repositoryReleaseAssets":  "releases/v4.0.0/",
-    "chatgptSitesRole":  "OPTIONAL_MIRROR",
-    "chatgptSitesRequiredForRelease":  false,
-    "mobileStoreDistributionRequiredForWebRelease":  false,
-    "externalFinancialExecutionRequired":  false
+  "schema": "numina.publication-policy.v1",
+  "identity": "NUMINA",
+  "authoritativePublicOrigin": "https://numinalabs.xyz",
+  "authoritativeHosting": "NUMINA_PUBLIC_ORIGIN",
+  "repository": "https://github.com/skott34-dot/numina-production",
+  "repositoryReleaseAssets": "releases/v4.0.0/",
+  "chatgptSitesRole": "OPTIONAL_MIRROR",
+  "chatgptSitesRequiredForRelease": false,
+  "mobileStoreDistributionRequiredForWebRelease": false,
+  "externalFinancialExecutionRequired": false,
+  "canonicalSource": "GITHUB_MAIN"
 }
