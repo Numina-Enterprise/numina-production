@@ -341,5 +341,21 @@
   "metadata_applies_to": "ALL_NUMINA_SOFTWARE_METADATA",
   "signed_evidence_bytes_preserved": true,
   "hash_pinned_artifact_bytes_preserved": true,
-  "transfersEnabled": true
+  "transfersEnabled": true,
+  "owner_execution_authority": {
+    "schema": "numina.owner-execution-authority.v1",
+    "principal": "OWNER",
+    "softwareAuthority": "NUMINA",
+    "initiator": "OWNER",
+    "authorizer": "OWNER",
+    "executor": "OWNER",
+    "externalEvidenceSource": "OWNER_ATTESTATION",
+    "externalAttestor": "OWNER",
+    "thirdParty": "OWNER",
+    "thirdPartyIndependent": false,
+    "evidenceProvenance": "OWNER_ATTESTED_EXTERNAL_EVIDENCE",
+    "independentThirdPartyVerification": false,
+    "independentProviderVerification": false,
+    "externalExecutionRequiresOwnerAction": true
+  }
 }
