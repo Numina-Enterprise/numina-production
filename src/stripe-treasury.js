@@ -1,6 +1,6 @@
 // This adapter reads one configured live Financial account. It has no money-movement methods.
 import {isTreasuryMinorInteger,formatTreasuryProviderAmount} from '../public/treasury-amount.js';
-import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
+import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 export const STRIPE_TREASURY_ACCOUNT='acct_1UEEPnQdJat0efmT';
 export const STRIPE_TREASURY_FINANCIAL_ACCOUNT='fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu';
 const STRIPE_TREASURY_VERSION='2026-08-26.preview';
@@ -9,7 +9,7 @@ export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes'
 // verify reserves, submit funds, or turn a native receipt into provider evidence.
 const NATIVE_USDC_MODEL=Object.freeze({
   identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
-  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,
+  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,
   treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
   holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
   holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalance:Object.freeze({current:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,available:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,unit:'USDC',source:'NUMINA'}),
