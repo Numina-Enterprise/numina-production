@@ -1,5 +1,5 @@
 name: Build and publish Numina
-# Canonical publication refresh required before unchanged NUSD production deployment.
+# Canonical frontier publication is the singular GitHub tree plus its validated package artifact.
 
 on:
   workflow_dispatch:
@@ -40,20 +40,26 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version-file: .nvmrc
           check-latest: false
+
       - name: Install pinned test dependencies
         run: |
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+
       - name: Build Numina
         run: npm run build
+
       - name: Verify Numina before publication
         run: npm test
+
       - name: Package Numina
         run: node scripts/package.mjs "$RUNNER_TEMP/numina.tgz"
+
       - name: Restore exact committed source for publication
         shell: bash
         run: |
@@ -61,6 +67,20 @@ jobs:
           git reset --hard HEAD
           git clean -fdx
           test -z "$(git status --porcelain --untracked-files=normal)"
-      - name: Publish Numina
+
+      - name: Verify singular GitHub publication
         shell: bash
-        run: npm run publish:source -- sites
+        run: |
+          set -euo pipefail
+          local_sha="$(git rev-parse HEAD)"
+          remote_sha="$(git ls-remote https://github.com/skott34-dot/numina-production.git refs/heads/main | awk '{print $1}')"
+          test -n "$remote_sha"
+          test "$local_sha" = "$remote_sha"
+          printf 'NUMINA source verified at %s\n' "$local_sha"
+
+      - name: Upload validated NUMINA package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: NUMINA-VALIDATED-PACKAGE
+          path: ${{ runner.temp }}/numina.tgz
+          if-no-files-found: error
