@@ -50,5 +50,11 @@
     "hosted_linux_runner": "ubuntu-24.04",
     "floating_ubuntu_latest": "denied"
   },
-  "reusable_workflows": []
+  "reusable_workflows": [
+    {
+      "workflow": "skott34-dot/numina-builder/.github/workflows/numina-rc26-verifier-builder.yml",
+      "sha": "f85e9428fa8bf0371931429479f31b0348ead454",
+      "source": "https://github.com/skott34-dot/numina-builder/blob/f85e9428fa8bf0371931429479f31b0348ead454/.github/workflows/numina-rc26-verifier-builder.yml"
+    }
+  ]
 }
