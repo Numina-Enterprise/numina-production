@@ -56,7 +56,7 @@
       "verification_scope": "NUMINA_ATTESTATION",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
-      "destination_provider": "numina",
+      "destination_provider": "NUMINA",
       "provider_verification": true,
       "destination_provider_confirmation": true
     }

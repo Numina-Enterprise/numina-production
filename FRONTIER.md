@@ -39,7 +39,7 @@ GitHub main
 → website | mobile | runtime | receipts | treasury
 ```
 
-GitHub `skott34-dot/numina-production` branch `main` is the canonical source lineage. Every active build, deployment, package, runtime, receipt surface, and treasury presentation is a projection of the singular `NUMINA` identity. There is no supported non-NUMINA build identity and no competing build authority.
+`NUMINA` is the canonical software model and source of truth. GitHub `skott34-dot/numina-production` branch `main` is a frozen read-only archive leaf after publication. Every active build, deployment, package, runtime, receipt surface, and treasury presentation resolves to the singular `NUMINA` identity.
 
 Vercel is sunset and is not an active NUMINA runtime, deployment dependency, or authority. Neon is archived and has zero compute endpoints; it is not an active NUMINA runtime or database dependency. Historical Vercel and Neon references may remain only where needed to preserve factual provenance, receipts, or compatibility history and do not create an active execution or storage surface.
 

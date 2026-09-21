@@ -48,7 +48,7 @@ def main():
     plan.add_argument("--environment",default="production",choices=["staging","production"])
     plan.add_argument("--target",default="")
     plan.add_argument("--image",default="")
-    plan.add_argument("--namespace",default="numina")
+    plan.add_argument("--namespace",default="NUMINA")
     plan.add_argument("--service-name",default="numina-public-verifier")
     plan.add_argument("--public-url")
     plan.add_argument("--metadata-json",default="{}")

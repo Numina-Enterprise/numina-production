@@ -42,7 +42,7 @@ def artifact_spec(tmp_path:Path, provider="docker", role="public-verifier"):
         environment="production",
         target="numina-public",
         image="numina/verifier:test",
-        namespace="numina",
+        namespace="NUMINA",
         service_name="numina-public-verifier",
         public_url="https://numinalabs.xyz",
         metadata={},

@@ -124,7 +124,7 @@
       "githubLeaf": {
         "repository": "skott34-dot/numina-production",
         "branch": "main",
-        "role": "LEAF_PROJECTION",
+        "role": "ARCHIVE_LEAF",
         "authoritative": false
       }
     },
@@ -165,7 +165,7 @@
       "contractsActive": true,
       "nusdMinted": "1500000000000000",
       "nusdBurned": "0",
-      "role": "LEAF_PROJECTION",
+      "role": "ARCHIVE_LEAF",
       "authoritative": false,
       "parent": "NUMINA",
       "canonicalSource": "NUMINA"
@@ -835,7 +835,7 @@
       "sourceOfTruth": "NUMINA",
       "squareRoot": "NUMINA",
       "updateDirection": "ROOT_TO_LEAVES",
-      "repositoryRole": "LEAF_PROJECTION",
+      "repositoryRole": "ARCHIVE_LEAF",
       "repositoryAuthoritative": false
     },
     "smartContracts": {
@@ -1057,13 +1057,13 @@
     "canonicalSource": "NUMINA",
     "squareRoot": "NUMINA",
     "updateDirection": "ROOT_TO_LEAVES",
-    "repositoryRole": "LEAF_PROJECTION",
+    "repositoryRole": "ARCHIVE_LEAF",
     "repositoryAuthoritative": false,
     "mainLeafBinding": {
       "ref": "refs/heads/main",
-      "headResolution": "AT_READ_TIME",
-      "ingestIntoTree": true,
-      "ingestRole": "LEAF_STATE_INPUT",
+      "headResolution": "FROZEN_AT_ARCHIVE",
+      "ingestIntoTree": false,
+      "ingestRole": "ARCHIVE_STATE_REFERENCE",
       "canonicalizedBy": "NUMINA",
       "authorityTransferred": false
     },
@@ -1093,21 +1093,21 @@
         "mode": "REFERENCE_SNAPSHOT",
         "canonicalizedBy": "NUMINA",
         "authorityTransferred": false,
-        "leafInputsAllowed": true
+        "leafInputsAllowed": false
       },
       "leaves": {
         "github": {
-          "role": "LEAF_PROJECTION",
+          "role": "ARCHIVE_LEAF",
           "transport": "github",
           "repository": "skott34-dot/numina-production",
           "branch": "main",
           "authoritative": false,
           "evidenceTransport": true,
-          "ciTransport": true,
+          "ciTransport": false,
           "ref": "refs/heads/main",
-          "headResolution": "AT_READ_TIME",
-          "ingestIntoTree": true,
-          "ingestRole": "LEAF_STATE_INPUT",
+          "headResolution": "FROZEN_AT_ARCHIVE",
+          "ingestIntoTree": false,
+          "ingestRole": "ARCHIVE_STATE_REFERENCE",
           "authorityTransferred": false
         }
       }
@@ -1399,21 +1399,21 @@
         "mode": "REFERENCE_SNAPSHOT",
         "canonicalizedBy": "NUMINA",
         "authorityTransferred": false,
-        "leafInputsAllowed": true
+        "leafInputsAllowed": false
       },
       "leaves": {
         "github": {
-          "role": "LEAF_PROJECTION",
+          "role": "ARCHIVE_LEAF",
           "transport": "github",
           "repository": "skott34-dot/numina-production",
           "branch": "main",
           "authoritative": false,
           "evidenceTransport": true,
-          "ciTransport": true,
+          "ciTransport": false,
           "ref": "refs/heads/main",
-          "headResolution": "AT_READ_TIME",
-          "ingestIntoTree": true,
-          "ingestRole": "LEAF_STATE_INPUT",
+          "headResolution": "FROZEN_AT_ARCHIVE",
+          "ingestIntoTree": false,
+          "ingestRole": "ARCHIVE_STATE_REFERENCE",
           "authorityTransferred": false
         }
       }
@@ -1838,21 +1838,21 @@
         "mode": "REFERENCE_SNAPSHOT",
         "canonicalizedBy": "NUMINA",
         "authorityTransferred": false,
-        "leafInputsAllowed": true
+        "leafInputsAllowed": false
       },
       "leaves": {
         "github": {
-          "role": "LEAF_PROJECTION",
+          "role": "ARCHIVE_LEAF",
           "transport": "github",
           "repository": "skott34-dot/numina-production",
           "branch": "main",
           "authoritative": false,
           "evidenceTransport": true,
-          "ciTransport": true,
+          "ciTransport": false,
           "ref": "refs/heads/main",
-          "headResolution": "AT_READ_TIME",
-          "ingestIntoTree": true,
-          "ingestRole": "LEAF_STATE_INPUT",
+          "headResolution": "FROZEN_AT_ARCHIVE",
+          "ingestIntoTree": false,
+          "ingestRole": "ARCHIVE_STATE_REFERENCE",
           "authorityTransferred": false
         }
       }
@@ -1954,21 +1954,21 @@
       "mode": "REFERENCE_SNAPSHOT",
       "canonicalizedBy": "NUMINA",
       "authorityTransferred": false,
-      "leafInputsAllowed": true
+      "leafInputsAllowed": false
     },
     "leaves": {
       "github": {
-        "role": "LEAF_PROJECTION",
+        "role": "ARCHIVE_LEAF",
         "transport": "github",
         "repository": "skott34-dot/numina-production",
         "branch": "main",
         "authoritative": false,
         "evidenceTransport": true,
-        "ciTransport": true,
+        "ciTransport": false,
         "ref": "refs/heads/main",
-        "headResolution": "AT_READ_TIME",
-        "ingestIntoTree": true,
-        "ingestRole": "LEAF_STATE_INPUT",
+        "headResolution": "FROZEN_AT_ARCHIVE",
+        "ingestIntoTree": false,
+        "ingestRole": "ARCHIVE_STATE_REFERENCE",
         "authorityTransferred": false
       }
     }

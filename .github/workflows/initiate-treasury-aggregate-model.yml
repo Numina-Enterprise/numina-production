@@ -82,7 +82,7 @@ jobs:
                 preparation:{kind:'provider_conversion_target',operation:'MODEL_USDC_PREPARATION',amount:'500000000000000',unit:'USDC',destination_reference:'stripe-treasury',status:'PREPARED_MODEL_ONLY',submission_performed:false,receipt:null}
               },
               {
-                id:'numina-native-treasury',provider:'numina',amount:'500000000000000',unit:'NUSD',classification:'VERIFIED_NATIVE_MODEL',provider_balance:false,external_balance_verified:false,
+                id:'numina-native-treasury',provider:'NUMINA',amount:'500000000000000',unit:'NUSD',classification:'VERIFIED_NATIVE_MODEL',provider_balance:false,external_balance_verified:false,
                 preparation:{kind:'native_mint_request',operation:'PREPARE_MINT',amount:'500000000000000',unit:'NUSD',network_reference:'numina-native',destination_reference:'numina-native-treasury',status:'PREPARED_MODEL_ONLY',submission_performed:false,receipt:null}
               }
             ],
