@@ -46,7 +46,7 @@ async function request(pathname,{method='GET',body}={}){
 }
 const read=()=>request('/api/control/v1/treasury');
 async function write(current,Objective,Intent,id){
-  const event={id,expectedRevision:current.revision,expectedHead:current.head,Principal:current.root,Authority:'NUMINA',Objective,Intent};
+  const event={id,expectedRevision:current.revision,expectedHead:current.head,Principal:current.principal,Authority:'NUMINA',Objective,Intent};
   const written=await request('/api/control/v1/treasury',{method:'POST',body:event});
   if(written.status!=='FINAL'||written.current_head?.revision!==current.revision+1)throw Error('NUMINA_TREASURY_WRITE_NOT_FINAL');
   return read();
