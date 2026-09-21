@@ -1,6 +1,6 @@
 name: Numina NUSD Linux runtime build and provenance
 
-# NUMINA is the provenance identity for these runtime subjects; the workflow stays inside the canonical repository.
+# NUMINA is the canonical source and provenance identity; this workflow executes on the GitHub leaf projection.
 # No caller inputs, caller-supplied commands, application credentials or deployment.
 on:
   workflow_call:
