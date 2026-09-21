@@ -500,7 +500,7 @@
     "expectedGenesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
     "sender": null,
     "constructorData": null,
-    "pinBasis": "Provider observation from https://numina-production.vercel.app/v2/network/status at 2026-09-16T01:53:42.562Z; not independent network approval",
+    "pinBasis": "Historical provider observation retained in release evidence; not an active deployment, runtime, or network authority",
     "productionIdentityApproved": false,
     "authenticationEnvironmentVariable": "NUMINA_RPC_AUTHORIZATION"
   },
