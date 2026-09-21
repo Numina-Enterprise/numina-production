@@ -24,9 +24,18 @@
     "displayName": "Numina Treasury — SK Consulting LLC",
     "livemode": true,
     "status": "open",
-    "available": {"usd": "0", "usdc": "0"},
-    "inboundPending": {"usd": "0", "usdc": "0"},
-    "outboundPending": {"usd": "0", "usdc": "0"},
+    "available": {
+      "usd": "0",
+      "usdc": "0"
+    },
+    "inboundPending": {
+      "usd": "0",
+      "usdc": "0"
+    },
+    "outboundPending": {
+      "usd": "0",
+      "usdc": "0"
+    },
     "providerRequestId": null,
     "providerBalanceAsOf": null,
     "timestampNote": "The connector returned this live response during this run but did not expose a provider request ID or a balance-as-of timestamp.",
@@ -100,5 +109,24 @@
     "Verify Bank of America source balances after refresh without saved amount overrides and retrieve genuine deposit evidence for any claimed credit.",
     "Reconcile Stripe displays to the live financial-account response.",
     "Independently verify NUSD chain state and any claimed valuation or reserve backing before treating it as available money."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

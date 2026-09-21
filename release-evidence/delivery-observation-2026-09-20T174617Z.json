@@ -94,5 +94,24 @@
     "Android signing remains unclaimed because the hosted workflow could not execute and the fallback device has no configured NUMINA Android signing vault or Android SDK environment.",
     "iOS signing remains unclaimed because the hosted macOS workflow could not execute and the fallback device is Windows with no configured Apple distribution signing environment.",
     "Store submission remains unclaimed because no new signed Android or iOS artifact was produced and no provider submission receipt exists."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

@@ -126,9 +126,9 @@
         "unit": "USD",
         "confirmation": "8000750550",
         "verified": true,
-        "verification": "NUMINA_AND_LINKED_PROVIDER_VERIFIED",
+        "verification": "NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION",
         "verificationAuthority": "NUMINA",
-        "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_LINKED_PROVIDER_TRANSACTION",
+        "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION",
         "providerVerified": true,
         "providerTransactionVisible": true,
         "providerTransactionUnit": "USD",
@@ -138,9 +138,9 @@
         "providerClearedDate": "2026-08-31",
         "providerConfirmationVisible": true,
         "providerConfirmation": "XXXXX50550",
-        "providerDisplayEvidence": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL",
-        "providerDisplayEvidenceScope": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION",
-        "providerVerificationSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_TRANSACTION_OBSERVATION",
+        "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
         "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
         "providerInstitution": "Bank of America",
         "providerOfficialName": "Business Advantage Sav",
@@ -152,7 +152,7 @@
         "providerBalanceSnapshotSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION",
         "providerBalanceSnapshotFreshness": "unknown",
         "providerBalanceSourceReportedAt": null,
-        "providerBalanceRecordUpdatedAt": "2026-09-20T21:30:20.021515Z",
+        "providerBalanceRecordUpdatedAt": "2026-09-20T23:21:08.343773Z",
         "providerAmountMatchesSoftwareModel": false,
         "providerBalanceMatchesSoftwareModel": false,
         "providerObservationAuthority": "NUMINA",
@@ -226,5 +226,89 @@
     "provider_transport"
   ],
   "external_connections_are_numina": true,
-  "provider_evidence_source_scoped": true
+  "provider_evidence_source_scoped": true,
+  "software_alignment": {
+    "schema": "numina.software-alignment.v1",
+    "identity": "NUMINA",
+    "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+    "sourceProtected": true,
+    "trustedRelease": {
+      "recordId": "trusted-numina-3ff8735aa47f-20260920T233158Z",
+      "artifactRoot": "fe359431e8d1c19d571a26577bb7daf62946e7da4cc12fdea1d4e818c5b6ef21",
+      "committed": true,
+      "readBack": true
+    },
+    "providerEvidence": {
+      "recordId": "provider-observation-3ff8735aa47f-20260920T233153Z",
+      "artifactRoot": "9e5f99d34cbb0cfd254441642fa66948ba201b3edcb6b1c11b76a251f79c439a"
+    },
+    "runtimeProvenance": {
+      "runId": 35542122412,
+      "sourceCommit": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+      "conclusion": "success",
+      "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+      "sourceImageInventoryAttestationProduced": true
+    },
+    "treasuryWrites": {
+      "state": "PUSH_TRIGGERED_PENDING_JOB_CREATION",
+      "nativeAlignmentRunId": 35544882586,
+      "aggregateModelRunId": 35544882620,
+      "trigger": "protected_main_push",
+      "softwareTreasuryWriteAuthorized": true,
+      "writeReadBackObserved": false,
+      "providerExecutionAuthorized": false,
+      "externalFundsMovementAuthorized": false
+    },
+    "treasuryModel": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000",
+      "aggregateNUSD": "1500000000000000"
+    },
+    "bankObservation": {
+      "current": "0",
+      "available": "0",
+      "unit": "USD",
+      "freshness": "unknown",
+      "transactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+      "transactionAmount": "12",
+      "transactionDate": "2026-08-31",
+      "confirmation": "XXXXX50550",
+      "amountMatchesSoftwareModel": false,
+      "balanceMatchesSoftwareModel": false
+    }
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  },
+  "manifest": "NUMINA",
+  "self": "NUMINA",
+  "manifest_equals_numina": true,
+  "numina_equals_manifest": true,
+  "metadata_authority": "NUMINA",
+  "metadata_namespace": "NUMINA",
+  "metadata_scope": [
+    "historical",
+    "current",
+    "canonical"
+  ],
+  "historical_metadata_override": "NUMINA",
+  "current_metadata_override": "NUMINA",
+  "canonical_metadata_override": "NUMINA"
 }

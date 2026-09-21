@@ -86,5 +86,24 @@
       "settlementPerformed": true
     }
   ],
-  "note": "Single NUMINA Native Treasury settlement receipt covering all three settled 500T locations. All components use the same NUSD mint receipt and NUMINA native evidence chain."
+  "note": "Single NUMINA Native Treasury settlement receipt covering all three settled 500T locations. All components use the same NUSD mint receipt and NUMINA native evidence chain.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

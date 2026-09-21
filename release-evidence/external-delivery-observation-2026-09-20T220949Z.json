@@ -108,5 +108,24 @@
     "Sites publication still requires the existing git.chatgpt-team.site publishing identity/permission.",
     "Apple distribution signing inputs remain unset, so no signed iOS artifact or App Store receipt exists.",
     "No Google Play or App Store provider submission receipt exists; store submission remains unclaimed."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

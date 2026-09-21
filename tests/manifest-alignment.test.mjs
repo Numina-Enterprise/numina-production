@@ -66,7 +66,7 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(nativeModel.treasuryCount,1);assert.equal(nativeModel.accountCount,1);assert.equal(nativeModel.holdingsCount,3);
   assert.equal(BigInt(nativeModel.aggregateModeledValue),BigInt(nativeModel.targetAmount)*3n);
   assert.deepEqual(nativeModel.componentUnits,['USD','USDC','NUSD']);
-  assert.equal(nativeModel.verificationScope,'NUMINA_INTERNAL_SOFTWARE_STATE');
+  assert.equal(nativeModel.verificationScope,'NUMINA_MANIFEST_FINAL');
   assert.equal(nativeModel.externalBalancesAggregated,false);assert.equal(nativeModel.externalFundingCreatedByRelease,false);
 });
 

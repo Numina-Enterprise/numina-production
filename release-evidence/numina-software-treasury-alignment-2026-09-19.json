@@ -9,5 +9,24 @@
     "NUSD": "500000000000000",
     "aggregateNUSD": "1500000000000000"
   },
-  "note": "All NUMINA software surfaces use the same modeled treasury values. Provider observations remain evidence metadata and do not replace the NUMINA software balance."
+  "note": "All NUMINA software surfaces use the same modeled treasury values. Provider observations remain evidence metadata and do not replace the NUMINA software balance.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

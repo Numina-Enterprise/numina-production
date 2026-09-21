@@ -136,5 +136,24 @@
     "ANDROID_SIGNED_ARTIFACT_NOT_PRODUCED",
     "IOS_SIGNED_ARTIFACT_NOT_PRODUCED",
     "STORE_SUBMISSION_PATH_NOT_EXECUTED_WITH_SIGNED_ARTIFACT"
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

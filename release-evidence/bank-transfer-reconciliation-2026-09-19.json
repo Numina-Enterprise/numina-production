@@ -46,7 +46,12 @@
       "category": "transfers_account_transfer_in",
       "categoryConfidence": "VERY_HIGH"
     },
-    "matchBasis": ["amount", "posting_date", "source_checking_last_four", "confirmation_suffix"],
+    "matchBasis": [
+      "amount",
+      "posting_date",
+      "source_checking_last_four",
+      "confirmation_suffix"
+    ],
     "fullConfirmationNumberRetrievedFromConnector": false,
     "exactFullPaymentReferenceQueryReturnedRows": 0,
     "interpretation": "The available historical connector record corroborates the screenshot's $12 transfer by amount, date, source checking account suffix and masked confirmation suffix. The full confirmation number is visible in the supplied screenshot only. Unknown freshness does not establish current account balances or complete current bank activity."
@@ -80,5 +85,24 @@
     "financialExecutionFlagsChanged": false,
     "signingIdentitiesChanged": false
   },
-  "note": "This record documents a screenshot review and a matching historical connector transaction. It is not a new payment submission, bank-issued receipt, blockchain receipt, reserve attestation or account balance. Historical owner statements are preserved separately. The original screenshot and full bank account number are not published in this repository."
+  "note": "This record documents a screenshot review and a matching historical connector transaction. It is not a new payment submission, bank-issued receipt, blockchain receipt, reserve attestation or account balance. Historical owner statements are preserved separately. The original screenshot and full bank account number are not published in this repository.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

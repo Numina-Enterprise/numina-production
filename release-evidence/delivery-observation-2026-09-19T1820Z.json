@@ -115,5 +115,24 @@
     "VENGEANCE is offline.",
     "/final-build.json still embeds historical delivery.website rate-limit/stale-transport metadata even though the current Vercel deployment is READY."
   ],
-  "scope": "This observation records only provider, workflow, endpoint, and device receipts actually observed in this run. It does not establish external bank, custodian, exchange, broker, reserve, or app-store submissions beyond explicit provider receipts."
+  "scope": "This observation records only provider, workflow, endpoint, and device receipts actually observed in this run. It does not establish external bank, custodian, exchange, broker, reserve, or app-store submissions beyond explicit provider receipts.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

@@ -92,5 +92,24 @@
     "googlePlaySubmissionClaimed": false,
     "appStoreSubmissionClaimed": false
   },
-  "scope": "Delivery observation records provider and transport receipts only. It does not establish external bank, custodian, exchange, broker, reserve, or store-provider balances or submissions beyond the receipts explicitly recorded here."
+  "scope": "Delivery observation records provider and transport receipts only. It does not establish external bank, custodian, exchange, broker, reserve, or store-provider balances or submissions beyond the receipts explicitly recorded here.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

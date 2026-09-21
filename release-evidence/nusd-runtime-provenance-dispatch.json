@@ -7,5 +7,24 @@
   "providerExecutionAuthorized": false,
   "purpose": "Build and attest the exact protected-main NUSD runtime source archive, Linux image archive and generated inventory. No provider submission, chain transaction, mint, transfer or treasury write is authorized by this marker.",
   "requestSequence": 3,
-  "reason": "Retry after exposing all reviewed Dockerfile inputs through the fixed runtime .dockerignore policy."
+  "reason": "Retry after exposing all reviewed Dockerfile inputs through the fixed runtime .dockerignore policy.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

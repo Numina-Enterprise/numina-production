@@ -88,10 +88,27 @@
       "canonicalAlias": "https://numinalabs.xyz"
     },
     "receipts": [
-      {"path":"/final-build.json","httpStatus":200,"sha256":"a2ac9898f9b9bd2318d86f099dba84a536f8e099f21dadb060d5439c5e845aa6","matchesCanonicalMainFile":true},
-      {"path":"/downloads/nusd/deployment-receipt.json","httpStatus":200,"sha256":"02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"},
-      {"path":"/api/nusd/v1/status","httpStatus":200,"sha256":"abc407c26c61db2f549f451449957880a49fc878a17243e61175c784b73be07c"},
-      {"path":"/v2/network/deployment-estimate","httpStatus":200,"sha256":"2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"}
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "sha256": "a2ac9898f9b9bd2318d86f099dba84a536f8e099f21dadb060d5439c5e845aa6",
+        "matchesCanonicalMainFile": true
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "sha256": "abc407c26c61db2f549f451449957880a49fc878a17243e61175c784b73be07c"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"
+      }
     ]
   },
   "remoteDesktop": {
@@ -109,5 +126,24 @@
     "git.chatgpt-team.site publication is blocked by publishing identity authentication/permission.",
     "Apple distribution signing inputs are unset; no signed IPA or App Store receipt exists.",
     "No connected provider submission action produced a Google Play or App Store receipt."
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

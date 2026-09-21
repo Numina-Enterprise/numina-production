@@ -50,10 +50,22 @@
     "productionVerification": {
       "apexFinalBuildRedirectStatus": 308,
       "primaryOrigin": "https://www.numinalabs.xyz",
-      "finalBuild": {"path": "/final-build.json", "status": 200},
-      "deploymentReceipt": {"path": "/downloads/nusd/deployment-receipt.json", "status": 200},
-      "nusdStatus": {"path": "/api/nusd/v1/status", "status": 200},
-      "deploymentEstimate": {"path": "/v2/network/deployment-estimate", "status": 200}
+      "finalBuild": {
+        "path": "/final-build.json",
+        "status": 200
+      },
+      "deploymentReceipt": {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "status": 200
+      },
+      "nusdStatus": {
+        "path": "/api/nusd/v1/status",
+        "status": 200
+      },
+      "deploymentEstimate": {
+        "path": "/v2/network/deployment-estimate",
+        "status": 200
+      }
     },
     "deploymentReceiptSummary": {
       "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
@@ -99,5 +111,24 @@
     "iOS signing workflow cannot run until runner allocation clears",
     "App-store submission remains unclaimed until signed artifacts and a connected provider submission path both exist",
     "VENGEANCE remote fallback is offline"
-  ]
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }
