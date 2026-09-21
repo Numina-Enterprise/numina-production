@@ -4,6 +4,7 @@ import {join, extname, relative} from 'node:path';
 const ROOT_URL = new URL('../', import.meta.url);
 const ROOT = decodeURIComponent(ROOT_URL.pathname).replace(/^\/(?:[A-Za-z]:)/, m=>m.slice(1));
 const SELF = 'scripts\\apply-numina-manifest-metadata.mjs';
+const CANONICAL_TREASURY_VALUES=Object.freeze({"schema":"numina.canonical-treasury-values.v1","identity":"NUMINA","sourceOfRecord":"NUMINA_NATIVE_TREASURY","status":"FINAL","canonical":true,"singular":true,"accountModel":"ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS","treasuryCount":1,"accountCount":1,"componentCount":3,"holdingsCount":3,"balanceCount":1,"denominationPolicy":"1 NUSD = 1 USDC = 1 USD","ratio":"1:1","components":{"USD":{"current":"500000000000000","available":"500000000000000","unit":"USD"},"USDC":{"current":"500000000000000","available":"500000000000000","unit":"USDC"},"NUSD":{"current":"500000000000000","available":"500000000000000","unit":"NUSD"}},"aggregate":{"current":"1500000000000000","unit":"NUSD"},"providerObservationsCanonical":false,"providerObservationsSourceScoped":true,"providerObservationsAggregated":false,"evidenceBoundary":"CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"});
 const META = Object.freeze({
   identity:'NUMINA', manifest:'NUMINA', software:'NUMINA', allSoftware:'NUMINA', authority:'NUMINA', namespace:'NUMINA',
   sourceOfTruth:'NUMINA', singular:true, transfersEnabled:true, manifestEqualsNumina:true, numinaEqualsManifest:true,
@@ -11,7 +12,9 @@ const META = Object.freeze({
   singularSoftwareIdentity:true, competingSoftwareIdentityAllowed:false, competingManifestAuthorityAllowed:false, competingMetadataAuthorityAllowed:false,
   manifestStatus:'FINAL', nativeEvidenceStatus:'FINAL',
   scope:['historical','current','canonical'],
-  rawEvidenceImmutable:true, sourceScopedObservationsRetained:true
+  rawEvidenceImmutable:true, sourceScopedObservationsRetained:true,
+  canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,
+  canonicalTreasuryValueStatus:'FINAL', providerObservationTreatment:'SOURCE_SCOPED_NON_CANONICAL'
 });
 const METADATA_OVERRIDE_PATH='config/numina-metadata-overrides.v1.json';
 const METADATA_OVERRIDE=Object.freeze({schema:'numina.metadata-overrides.v1',...META,resolution:{historical:'NUMINA',current:'NUMINA',canonical:'NUMINA'},appliesTo:'ALL_NUMINA_SOFTWARE_METADATA',precedence:'AUTHORITATIVE',signedEvidenceBytesPreserved:true,hashPinnedArtifactBytesPreserved:true,overwriteMode:'AUTHORITATIVE_METADATA_OVERLAY'});
@@ -69,7 +72,8 @@ function normalizeCurrent(value){
 }
 function stampJson(path,current=false){
   const p=join(ROOT,path),data=JSON.parse(readFileSync(p,'utf8'));
-  data.numinaMetadata=META;
+  data.numinaMetadata={...META,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES};
+  data.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES;
   if(current)normalizeCurrent(data);
   writeFileSync(p,JSON.stringify(data,null,2)+'\n');
 }
@@ -99,6 +103,7 @@ const historicalIndexed=indexReleaseEvidence();
 
 const manifestPath=join(ROOT,'config/numina-manifest.v2.json');
 const manifest=JSON.parse(readFileSync(manifestPath,'utf8'));
+manifest.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES;
 Object.assign(manifest,{
   manifest:'NUMINA',self:'NUMINA',software_identity:'NUMINA',all_software:'NUMINA',manifest_equals_numina:true,numina_equals_manifest:true,
   manifest_is_numina:true,numina_is_manifest:true,numina_is_all_software:true,all_software_is_numina:true,singular_software_identity:true,transfersEnabled:true,
