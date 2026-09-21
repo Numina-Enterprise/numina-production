@@ -1015,7 +1015,15 @@
     "squareRoot": "NUMINA",
     "updateDirection": "ROOT_TO_LEAVES",
     "repositoryRole": "LEAF_PROJECTION",
-    "repositoryAuthoritative": false
+    "repositoryAuthoritative": false,
+    "mainLeafBinding": {
+      "ref": "refs/heads/main",
+      "headResolution": "AT_READ_TIME",
+      "ingestIntoTree": true,
+      "ingestRole": "LEAF_STATE_INPUT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false
+    }
   },
   "self": "NUMINA",
   "identityModel": {
@@ -1716,8 +1724,19 @@
         "branch": "main",
         "authoritative": false,
         "evidenceTransport": true,
-        "ciTransport": true
+        "ciTransport": true,
+        "ref": "refs/heads/main",
+        "headResolution": "AT_READ_TIME",
+        "ingestIntoTree": true,
+        "ingestRole": "LEAF_STATE_INPUT",
+        "authorityTransferred": false
       }
+    },
+    "ingestPolicy": {
+      "mode": "REFERENCE_SNAPSHOT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": true
     }
   }
 }
