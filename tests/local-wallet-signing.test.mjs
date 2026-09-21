@@ -52,11 +52,11 @@ test('estimate transport sends only fixed read and bounds the response',async()=
   const abort=new AbortController();abort.abort();await assert.rejects(loadLocalEstimate(abort.signal),{code:'ESTIMATE_CANCELLED'});
  }finally{globalThis.fetch=previous;}
 });
-test('canonical estimate route strips credentials/input and prevents mutation methods',async()=>{
- const calls=[],fetcher=async(url,options)=>{calls.push([url,options]);return Response.json(observation());};
+test('canonical estimate compatibility route is retired without same-origin forwarding',async()=>{
+ let calls=0;const fetcher=async()=>{calls++;return Response.json(observation());};
  const response=await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH+'?account=other',{headers:{Cookie:'owner=secret',Authorization:'secret'}}),fetcher);
- assert.equal(response.status,200);assert.equal(calls[0][0],'https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH);assert.deepEqual(calls[0][1].headers,{Accept:'application/json'});
+ assert.equal(response.status,410);assert.equal((await response.json()).error,'RUNTIME_COMPATIBILITY_ROUTE_RETIRED');
  for(const method of ['POST','PUT','DELETE'])assert.equal((await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH,{method}),fetcher)).status,405);
- assert.equal(calls.length,1);
- const head=await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH,{method:'HEAD'}),fetcher);assert.equal(await head.text(),'');
+ const head=await routeRuntime(new Request('https://numinalabs.xyz'+LOCAL_ESTIMATE_PATH,{method:'HEAD'}),fetcher);assert.equal(head.status,410);
+ assert.equal(calls,0);
 });
