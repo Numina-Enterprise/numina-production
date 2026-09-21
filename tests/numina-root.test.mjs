@@ -16,6 +16,8 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_TREE.canonicalSource,NUMINA);
   assert.equal(NUMINA_TREE.sourceOfTruth,NUMINA);
   assert.equal(NUMINA_TREE.authority,NUMINA);
+  assert.equal(NUMINA_TREE.dataIdentity,NUMINA);
+  assert.equal(NUMINA_TREE.dataNamespace,NUMINA);
   assert.equal(NUMINA_TREE.updateDirection,'ROOT_TO_LEAVES');
   assert.equal(NUMINA_TREE.leaves.github.role,'LEAF_PROJECTION');
   assert.equal(NUMINA_TREE.leaves.github.authoritative,false);
