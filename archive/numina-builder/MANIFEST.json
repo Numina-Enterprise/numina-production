@@ -49,10 +49,13 @@
     ]
   },
   "activeCanonicalization": {
-    "localRc26Builder": ".github/workflows/numina-rc26-verifier-builder.yml",
-    "caller": ".github/workflows/numina-rc26-verifier.yml",
-    "remoteReusableWorkflowDependency": false,
-    "actionsAttestSha": "1e69f48acb82d1966a394da916b4c1698aa569d6"
+    "activeRc26BuilderReference": "skott34-dot/numina-builder/.github/workflows/numina-rc26-verifier-builder.yml@f85e9428fa8bf0371931429479f31b0348ead454",
+    "archivedRc26Builder": "archive/numina-builder/f85e9428fa8bf0371931429479f31b0348ead454/.github/workflows/numina-rc26-verifier-builder.yml",
+    "remoteReusableWorkflowDependency": true,
+    "runnerPolicyPreserved": true,
+    "canonicalActionAttestSha": "1e69f48acb82d1966a394da916b4c1698aa569d6",
+    "activeExternalBuilderAttestSha": "508db95dd578ae2727ebd6217d5ba78e4fbda05d",
+    "externalBuilderPr1": "open; connected GitHub integration returns 403 for PR comment/update/merge writes"
   },
-  "note": "Historical provenance records retain their original numina-builder signer references; this archive does not rewrite historical attestations."
+  "note": "Historical provenance records retain their original numina-builder signer references. Builder source is preserved in the canonical NUMINA tree, while the immutable external reusable-workflow reference remains active to preserve the existing runner policy."
 }
