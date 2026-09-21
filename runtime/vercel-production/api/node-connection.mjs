@@ -66,6 +66,17 @@ function wordBoolean(value) {
   return decimal === '1';
 }
 
+function twoWords(value) {
+  if (typeof value !== 'string' || !/^0x[0-9a-fA-F]{128}$/.test(value)) fail('RPC_RESPONSE_INVALID');
+  return ['0x'+value.slice(2,66), '0x'+value.slice(66,130)];
+}
+function wordAddress(value) {
+  if (typeof value !== 'string' || !WORD.test(value)) fail('RPC_RESPONSE_INVALID');
+  const address='0x'+value.slice(-40).toLowerCase();
+  if (!ADDRESS.test(address)) fail('RPC_RESPONSE_INVALID');
+  return address;
+}
+
 function publicBlock(value, genesis) {
   if (!object(value) || typeof value.hash !== 'string' || !HASH.test(value.hash) ||
       /^0x0{64}$/i.test(value.hash)) fail('RPC_RESPONSE_INVALID');
@@ -140,6 +151,10 @@ function initialObservation() {
       stateMatched: false,
       defaultAdmin: NUSD_DEFAULT_ADMIN,
       defaultAdminSignerListed: false,
+      pendingDefaultAdmin: null,
+      pendingDefaultAdminAcceptSchedule: null,
+      pendingDefaultAdminSignerListed: false,
+      managedSignerCanAcceptDefaultAdmin: false,
     },
     scope: {
       evidence: 'single_provider_read_only_observation',
@@ -225,6 +240,9 @@ export async function observeNode({ env = process.env, fetcher = globalThis.fetc
       const totalSupply = wordQuantity(await rpc('eth_call', [{ to: NUSD_ADDRESS, data: '0x18160ddd' }, 'latest']));
       const policyHash = await rpc('eth_call', [{ to: NUSD_ADDRESS, data: '0x6bcbfc3c' }, 'latest']);
       const paused = wordBoolean(await rpc('eth_call', [{ to: NUSD_ADDRESS, data: '0x5c975abb' }, 'latest']));
+      const [pendingAdminWord,pendingScheduleWord] = twoWords(await rpc('eth_call', [{ to: NUSD_ADDRESS, data: '0xcf6eefb7' }, 'latest']));
+      const pendingAdmin = wordAddress(pendingAdminWord);
+      const pendingSchedule = wordQuantity(pendingScheduleWord);
       if (typeof policyHash !== 'string' || !HASH.test(policyHash)) fail('RPC_RESPONSE_INVALID');
 
       observation.nusd.decimals = decimals;
@@ -232,6 +250,13 @@ export async function observeNode({ env = process.env, fetcher = globalThis.fetc
       observation.nusd.issuerPolicyHash = policyHash.toLowerCase();
       observation.nusd.paused = paused;
       observation.nusd.transfersEnabled = !paused;
+      observation.nusd.pendingDefaultAdmin = pendingAdmin;
+      observation.nusd.pendingDefaultAdminAcceptSchedule = pendingSchedule;
+      observation.nusd.pendingDefaultAdminSignerListed = accounts.some(account => account.toLowerCase() === pendingAdmin);
+      observation.nusd.managedSignerCanAcceptDefaultAdmin = pendingAdmin === CONFIGURED_SIGNER &&
+        pendingAdmin !== '0x0000000000000000000000000000000000000000' &&
+        BigInt(pendingSchedule) > 0n &&
+        BigInt(observation.latestBlock.timestampUnixSeconds) >= BigInt(pendingSchedule);
       observation.nusd.providerStateObserved = true;
       observation.nusd.stateMatched = decimals === EXPECTED_NUSD_DECIMALS &&
         totalSupply === EXPECTED_NUSD_SUPPLY &&
