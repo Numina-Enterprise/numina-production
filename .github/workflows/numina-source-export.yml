@@ -1,4 +1,4 @@
-name: NUMINA Environment Export Split
+name: NUMINA Source Export
 on:
   push:
     branches: [numina-source-export]
@@ -7,73 +7,32 @@ permissions:
 jobs:
   export:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 10
     steps:
       - name: Checkout finalized NUMINA head
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: 6bfb7fcda12127a8444a9f5befe0607f02205dc8
+          ref: 8d93dff35bd98358773e6fd3c95a8e9d9627c083
           fetch-depth: 1
           persist-credentials: false
-      - name: Use finalized NUMINA Node runtime
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: '24.21.0'
-          check-latest: false
-          package-manager-cache: false
-      - name: Verify immutable source head and runtime
+      - name: Verify immutable source head
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "6bfb7fcda12127a8444a9f5befe0607f02205dc8"
+          test "$(git rev-parse HEAD)" = "8d93dff35bd98358773e6fd3c95a8e9d9627c083"
           test -z "$(git status --porcelain)"
-          test "$(node -p 'process.versions.node')" = "24.21.0"
-      - name: Install pinned NUMINA dependencies
+      - name: Archive finalized tracked tree
         shell: bash
         run: |
           set -euo pipefail
-          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
-          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
-      - name: Archive split environment state
-        shell: bash
-        run: |
-          set -euo pipefail
-          runtime="$RUNNER_TEMP/NUMINA-RUNTIME-DEPS-6bfb7fcda121.tar.gz"
-          development="$RUNNER_TEMP/NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121.tar.gz"
-          toolchain="$RUNNER_TEMP/NUMINA-NODE24-6bfb7fcda121.tar.gz"
-          tar -czf "$runtime" runtime/nusd/node_modules
-          tar -czf "$development" runtime/nusd/development/node_modules
-          node_root="$(dirname "$(dirname "$(command -v node)")")"
-          test -x "$node_root/bin/node"
-          tar -C "$node_root" -czf "$toolchain" bin/node bin/npm bin/npx lib/node_modules/npm
-          sha256sum "$runtime" > "$runtime.sha256"
-          sha256sum "$development" > "$development.sha256"
-          sha256sum "$toolchain" > "$toolchain.sha256"
-          ls -lh "$runtime" "$development" "$toolchain"
-      - name: Upload runtime dependencies
+          git archive --format=tar.gz --prefix=Numina/ --output="$RUNNER_TEMP/NUMINA-SOURCE-8d93dff35bd9.tar.gz" HEAD
+          sha256sum "$RUNNER_TEMP/NUMINA-SOURCE-8d93dff35bd9.tar.gz" > "$RUNNER_TEMP/NUMINA-SOURCE-8d93dff35bd9.tar.gz.sha256"
+      - name: Upload source tree
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: NUMINA-RUNTIME-DEPS-6bfb7fcda121
+          name: NUMINA-SOURCE-8d93dff35bd9
           path: |
-            ${{ runner.temp }}/NUMINA-RUNTIME-DEPS-6bfb7fcda121.tar.gz
-            ${{ runner.temp }}/NUMINA-RUNTIME-DEPS-6bfb7fcda121.tar.gz.sha256
-          if-no-files-found: error
-          retention-days: 1
-      - name: Upload development dependencies
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121
-          path: |
-            ${{ runner.temp }}/NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121.tar.gz
-            ${{ runner.temp }}/NUMINA-DEVELOPMENT-DEPS-6bfb7fcda121.tar.gz.sha256
-          if-no-files-found: error
-          retention-days: 1
-      - name: Upload Node 24 toolchain
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: NUMINA-NODE24-6bfb7fcda121
-          path: |
-            ${{ runner.temp }}/NUMINA-NODE24-6bfb7fcda121.tar.gz
-            ${{ runner.temp }}/NUMINA-NODE24-6bfb7fcda121.tar.gz.sha256
+            ${{ runner.temp }}/NUMINA-SOURCE-8d93dff35bd9.tar.gz
+            ${{ runner.temp }}/NUMINA-SOURCE-8d93dff35bd9.tar.gz.sha256
           if-no-files-found: error
           retention-days: 1
