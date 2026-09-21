@@ -3,7 +3,7 @@ name: Repair rc26 integration manifest
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, alignment/all-software-20260920]
     paths:
       - 'integrations/numina/src/runtime-contract.js'
       - 'integrations/numina/package.json'
@@ -73,4 +73,4 @@ jobs:
             exit 0
           fi
           git commit -m 'NUMINA'
-          git push origin HEAD:main
+          git push origin HEAD:${GITHUB_REF_NAME}
