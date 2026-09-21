@@ -354,8 +354,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 10269,
-      "sha256": "387afd355b81be499738d907ff41e617dec5438147e5135c485b095a7f53241f"
+      "bytes": 10288,
+      "sha256": "4405e27c15863026a5e40993a1e2dba60b46507b597e9f4ceb51432d5662da0f"
     },
     {
       "path": "src/client.js",
@@ -415,7 +415,7 @@
     {
       "path": "verification.json",
       "bytes": 6704,
-      "sha256": "adb0606821e3d329a6d68b4eda019e97ebc83706e7b07f0e01c1edf6dffa8682"
+      "sha256": "ecac55badd301243d46b59f604c469b75f01c030a119bc810d1743d1cc0f4b08"
     }
   ],
   "numinaMetadata": {
@@ -445,7 +445,8 @@
       "canonical"
     ],
     "rawEvidenceImmutable": true,
-    "sourceScopedObservationsRetained": true
+    "sourceScopedObservationsRetained": true,
+    "transfersEnabled": true
   },
   "software_identity": "NUMINA",
   "all_software": "NUMINA",
@@ -468,5 +469,6 @@
   "canonical_metadata_override": "NUMINA",
   "competing_software_identity_allowed": false,
   "competing_manifest_authority_allowed": false,
-  "competing_metadata_authority_allowed": false
+  "competing_metadata_authority_allowed": false,
+  "transfersEnabled": true
 }

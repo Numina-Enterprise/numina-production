@@ -697,7 +697,8 @@
       "aggregateNusd": "1500000000000000"
     },
     "transferState": "ENABLED",
-    "paused": false
+    "paused": false,
+    "transfersEnabled": true
   },
   "mobile": {
     "packageIdentity": "xyz.numinalabs.app",
@@ -1484,7 +1485,8 @@
     "singularSoftwareIdentity": true,
     "competingSoftwareIdentityAllowed": false,
     "competingManifestAuthorityAllowed": false,
-    "competingMetadataAuthorityAllowed": false
+    "competingMetadataAuthorityAllowed": false,
+    "transfersEnabled": true
   },
   "manifest": "NUMINA",
   "software_identity": "NUMINA",
@@ -1513,5 +1515,6 @@
   "metadataResolution": "AUTHORITATIVE_NUMINA_OVERLAY",
   "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
   "signedEvidenceBytesPreserved": true,
-  "hashPinnedArtifactBytesPreserved": true
+  "hashPinnedArtifactBytesPreserved": true,
+  "transfersEnabled": true
 }

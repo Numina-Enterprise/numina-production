@@ -62,7 +62,8 @@
       "numina_is_all_software": true,
       "manifest": "NUMINA",
       "manifest_is_numina": true,
-      "competing_software_identity_allowed": false
+      "competing_software_identity_allowed": false,
+      "transfersEnabled": true
     }
   },
   "compatibility": {
@@ -310,7 +311,8 @@
     "singularSoftwareIdentity": true,
     "competingSoftwareIdentityAllowed": false,
     "competingManifestAuthorityAllowed": false,
-    "competingMetadataAuthorityAllowed": false
+    "competingMetadataAuthorityAllowed": false,
+    "transfersEnabled": true
   },
   "manifest": "NUMINA",
   "self": "NUMINA",
@@ -339,5 +341,6 @@
   "metadata_resolution": "AUTHORITATIVE_NUMINA_OVERLAY",
   "metadata_applies_to": "ALL_NUMINA_SOFTWARE_METADATA",
   "signed_evidence_bytes_preserved": true,
-  "hash_pinned_artifact_bytes_preserved": true
+  "hash_pinned_artifact_bytes_preserved": true,
+  "transfersEnabled": true
 }
