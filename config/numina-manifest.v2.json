@@ -57,7 +57,12 @@
       "singular_build_identity": "NUMINA",
       "software_namespace": "NUMINA",
       "authority": "NUMINA",
-      "source_transport": "github"
+      "source_transport": "github",
+      "all_software_is_numina": true,
+      "numina_is_all_software": true,
+      "manifest": "NUMINA",
+      "manifest_is_numina": true,
+      "competing_software_identity_allowed": false
     }
   },
   "compatibility": {
@@ -295,7 +300,17 @@
       "canonical"
     ],
     "rawEvidenceImmutable": true,
-    "sourceScopedObservationsRetained": true
+    "sourceScopedObservationsRetained": true,
+    "software": "NUMINA",
+    "allSoftware": "NUMINA",
+    "manifestIsNumina": true,
+    "numinaIsManifest": true,
+    "numinaIsAllSoftware": true,
+    "allSoftwareIsNumina": true,
+    "singularSoftwareIdentity": true,
+    "competingSoftwareIdentityAllowed": false,
+    "competingManifestAuthorityAllowed": false,
+    "competingMetadataAuthorityAllowed": false
   },
   "manifest": "NUMINA",
   "self": "NUMINA",
@@ -310,5 +325,14 @@
   ],
   "historical_metadata_override": "NUMINA",
   "current_metadata_override": "NUMINA",
-  "canonical_metadata_override": "NUMINA"
+  "canonical_metadata_override": "NUMINA",
+  "all_software": "NUMINA",
+  "manifest_is_numina": true,
+  "numina_is_manifest": true,
+  "numina_is_all_software": true,
+  "all_software_is_numina": true,
+  "singular_software_identity": true,
+  "competing_software_identity_allowed": false,
+  "competing_manifest_authority_allowed": false,
+  "competing_metadata_authority_allowed": false
 }
