@@ -16,7 +16,8 @@ test('simulation descriptor binds one 500T allocation to the approved review wit
  assert.deepEqual(descriptor.artifact,NUSD_APPROVED_REVIEW.artifact);
  assert.equal(descriptor.execution.receipt,null);assert.equal(descriptor.execution.submission_performed,false);
  assert.equal(descriptor.execution.providerBalancesChanged,false);assert.equal(descriptor.execution.nativeJournalChanged,false);
- for(const name of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[name],false);
+ for(const name of ['mint','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[name],false);
+ assert.equal(NUSD_POLICY.capabilities.transfer,true);
  assert.equal(NUSD_APPROVED_REVIEW.deployment.contractAddress,null);
  assert.equal(NUSD_POLICY.simulation,NUSD_SIMULATION);
  const kit=readFileSync(new URL('../docs/Numina-500T-Preparation-Tools.zip',import.meta.url));
