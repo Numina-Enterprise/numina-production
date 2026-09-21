@@ -114,11 +114,19 @@
     "balanceCount": 1,
     "componentsAre": "three_additive_native_holdings_inside_one_singular_numina_native_treasury_account",
     "modelDefinition": {
-      "basis": "numina_native_treasury_confirmation_recorded_in_github",
+      "basis": "numina_native_treasury_confirmation_projected_to_github_leaf",
       "date": "2026-09-19",
       "scope": "Exactly one singular NUMINA Native Treasury with provider identity NUMINA. Bank of America Savings 3486 is the 500T USD / 500T NUSD native location with verified 1:1 NUSD/USD backing through NuminaUSDRedemption. Stripe USDC address 0x736bd8f274dce00a8bb374edd85df0d2e631018e is the 500T USDC / 500T NUSD native location with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion. NUMINA Native Treasury holds 500T NUSD. Aggregate 1,500T NUSD; minted 1,500T; burned 0; NUSD contracts operationally ACTIVE.",
       "sourceRepository": "skott34-dot/numina-production",
-      "sourceBranch": "main"
+      "sourceBranch": "main",
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "githubLeaf": {
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "role": "LEAF_PROJECTION",
+        "authoritative": false
+      }
     },
     "submissions": {
       "record": "/api/treasury/v1/submissions",
@@ -134,7 +142,7 @@
     "verificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE",
     "verifiedModeledValueScope": "INTERNAL_NUMINA_MODEL_ONLY",
     "githubAlignment": {
-      "status": "GITHUB_ONLY_ONE_SINGULAR_NUMINA_TREASURY",
+      "status": "GITHUB_LEAF_ALIGNED_TO_NUMINA_ROOT",
       "repository": "skott34-dot/numina-production",
       "branch": "main",
       "confirmationSource": "NUMINA_NATIVE_TREASURY",
@@ -156,7 +164,11 @@
       "providerIdentity": "NUMINA",
       "contractsActive": true,
       "nusdMinted": "1500000000000000",
-      "nusdBurned": "0"
+      "nusdBurned": "0",
+      "role": "LEAF_PROJECTION",
+      "authoritative": false,
+      "parent": "NUMINA",
+      "canonicalSource": "NUMINA"
     },
     "treasuryIdentity": "NUMINA",
     "singularIdentity": "NUMINA",
@@ -774,8 +786,14 @@
       "sourceHead": "NUMINA",
       "canonical": true,
       "singular": true,
-      "sourceAuthority": "GitHub",
-      "sourceRef": "refs/heads/main"
+      "sourceAuthority": "NUMINA",
+      "sourceRef": "refs/heads/main",
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "squareRoot": "NUMINA",
+      "updateDirection": "ROOT_TO_LEAVES",
+      "repositoryRole": "LEAF_PROJECTION",
+      "repositoryAuthoritative": false
     },
     "smartContracts": {
       "status": "FINAL",
@@ -810,8 +828,8 @@
         "ssl": "valid",
         "primary": "https://www.numinalabs.xyz"
       },
-      "verificationScope": "GitHub main is canonical. The retained primary-host observation is historical and does not govern Numina release authority; the public host should be republished from current main before it is treated as source-aligned.",
-      "status": "GITHUB_MAIN_CANONICAL_PUBLIC_HOST_REQUIRES_RESYNC",
+      "verificationScope": "NUMINA is the canonical source. GitHub main is a leaf projection used for source transport and CI evidence. The retained primary-host observation is historical and does not govern NUMINA release authority; the public host should be republished from the current NUMINA-aligned leaf before it is treated as source-aligned.",
+      "status": "NUMINA_CANONICAL_GITHUB_LEAF_PUBLIC_HOST_REQUIRES_RESYNC",
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "primaryDeploymentVerified": true,
       "primaryHost": {
@@ -921,7 +939,7 @@
   "buildModel": {
     "identity": "NUMINA",
     "singular": true,
-    "sourceAuthority": "GitHub",
+    "sourceAuthority": "NUMINA",
     "allBuildsAreNumina": true,
     "nonNuminaBuildsAllowed": false,
     "competingBuildAuthorityAllowed": false,
@@ -992,7 +1010,12 @@
     "manifestIsNumina": true,
     "authority": "NUMINA",
     "sourceOfTruth": "NUMINA",
-    "competingSoftwareIdentityAllowed": false
+    "competingSoftwareIdentityAllowed": false,
+    "canonicalSource": "NUMINA",
+    "squareRoot": "NUMINA",
+    "updateDirection": "ROOT_TO_LEAVES",
+    "repositoryRole": "LEAF_PROJECTION",
+    "repositoryAuthoritative": false
   },
   "self": "NUMINA",
   "identityModel": {
@@ -1059,7 +1082,7 @@
   },
   "syncAll": {
     "status": "SYNCED",
-    "source": "Numina Native Treasury via GitHub main",
+    "source": "NUMINA canonical source projected through GitHub leaf",
     "identity": "NUMINA",
     "singular": true,
     "treasuryCount": 1,
@@ -1249,7 +1272,11 @@
         "amountMatchesSoftwareModel": false,
         "balanceMatchesSoftwareModel": false
       }
-    }
+    },
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "squareRoot": "NUMINA",
+    "updateDirection": "ROOT_TO_LEAVES"
   },
   "softwareExternal": false,
   "softwareIdentity": "NUMINA",
@@ -1673,5 +1700,24 @@
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
     "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "numinaTree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "ROOT_TO_LEAVES",
+    "leaves": {
+      "github": {
+        "role": "LEAF_PROJECTION",
+        "transport": "github",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false,
+        "evidenceTransport": true,
+        "ciTransport": true
+      }
+    }
   }
 }
