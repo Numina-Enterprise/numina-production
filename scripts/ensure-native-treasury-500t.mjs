@@ -17,8 +17,8 @@ if(!['https://numinalabs.xyz','https://www.numinalabs.xyz'].includes(origin)||!t
 // append immutable canonical journal events; prior treasury events are never mutated.
 // Verify the current signed production contract before touching the canonical journal.
 // This gate intentionally checks runtime/canonical convergence rather than requiring
-// the Vercel deployment SHA to equal the workflow SHA; deployment freshness is enforced
-// separately by production smoke CI and may be rate-limit blocked.
+// a provider deployment identifier to equal the workflow SHA; source freshness is enforced
+// separately by Numina production verification.
 const gate=spawnSync(process.execPath,[fileURLToPath(new URL('./smoke-production.mjs',import.meta.url))],{
   encoding:'utf8',
   env:{...process.env,NUMINA_CONTROL_API_KEY:'',NUMINA_EXPECTED_GIT_SHA:''}
