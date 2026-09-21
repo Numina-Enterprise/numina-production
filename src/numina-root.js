@@ -1,7 +1,7 @@
 export const NUMINA='numina';
 export const NUMINA_MANIFEST_SCHEMA='numina.manifest.v2';
 export const NUMINA_IDENTITIES=Object.freeze({
-  root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,data:NUMINA,data_namespace:NUMINA,canonical_view:NUMINA,view:NUMINA,
+  root:NUMINA,manifest:NUMINA,identity:NUMINA,owner:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,executor:NUMINA,data:NUMINA,data_namespace:NUMINA,canonical_view:NUMINA,view:NUMINA,
   provider:NUMINA,host:NUMINA,provenance:NUMINA,core:NUMINA,repository:NUMINA,software:NUMINA,
   worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,authentication:NUMINA,deployment:NUMINA,
   delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
@@ -20,6 +20,10 @@ export const NUMINA_TREE=Object.freeze({
   canonicalSource:NUMINA,
   sourceOfTruth:NUMINA,
   authority:NUMINA,
+  owner:NUMINA,
+  host:NUMINA,
+  executor:NUMINA,
+  evidence:NUMINA,
   dataIdentity:NUMINA,
   dataNamespace:NUMINA,
   canonicalView:NUMINA,
@@ -70,6 +74,10 @@ export function numinaRootProjection(fields={}){
     canonicalSource:NUMINA,
     sourceOfTruth:NUMINA,
     squareRoot:NUMINA,
+    owner:NUMINA,
+    host:NUMINA,
+    executor:NUMINA,
+    evidence:NUMINA,
     dataIdentity:NUMINA,
     dataNamespace:NUMINA,
     canonicalView:NUMINA,
