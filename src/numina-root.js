@@ -1,4 +1,4 @@
-export const NUMINA='NUMINA';
+export const NUMINA='numina';
 export const NUMINA_MANIFEST_SCHEMA='numina.manifest.v2';
 export const NUMINA_IDENTITIES=Object.freeze({
   root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,
