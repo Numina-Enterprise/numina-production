@@ -19,6 +19,14 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_TREE.updateDirection,'ROOT_TO_LEAVES');
   assert.equal(NUMINA_TREE.leaves.github.role,'LEAF_PROJECTION');
   assert.equal(NUMINA_TREE.leaves.github.authoritative,false);
+  assert.equal(NUMINA_TREE.leaves.github.ref,'refs/heads/main');
+  assert.equal(NUMINA_TREE.leaves.github.headResolution,'AT_READ_TIME');
+  assert.equal(NUMINA_TREE.leaves.github.ingestIntoTree,true);
+  assert.equal(NUMINA_TREE.leaves.github.ingestRole,'LEAF_STATE_INPUT');
+  assert.equal(NUMINA_TREE.leaves.github.authorityTransferred,false);
+  assert.equal(NUMINA_TREE.ingestPolicy.mode,'REFERENCE_SNAPSHOT');
+  assert.equal(NUMINA_TREE.ingestPolicy.canonicalizedBy,NUMINA);
+  assert.equal(NUMINA_TREE.ingestPolicy.authorityTransferred,false);
   const root=numinaRootProjection({
     treasury:{identity:NUMINA},
     canonicalSource:'github',
