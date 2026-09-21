@@ -31,5 +31,93 @@
   "author": "Numina · SK Consulting LLC",
   "identity": "NUMINA",
   "source": "NUMINA",
-  "singular": true
+  "singular": true,
+  "canonicalSource": "NUMINA",
+  "sourceOfTruth": "NUMINA",
+  "numinaTree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "authority": "NUMINA",
+    "owner": "NUMINA",
+    "host": "NUMINA",
+    "executor": "NUMINA",
+    "evidence": "NUMINA",
+    "dataIdentity": "NUMINA",
+    "dataNamespace": "NUMINA",
+    "canonicalView": "NUMINA",
+    "allDataBelongsToIdentity": true,
+    "externalRecordIdentity": "NUMINA",
+    "externalFactIdentity": "NUMINA",
+    "externalEvidenceIdentity": "NUMINA",
+    "externalRecordsResolveTo": "NUMINA",
+    "allIdentityBearingRecordsResolveTo": "NUMINA",
+    "singular": true,
+    "updateDirection": "ROOT_TO_LEAVES",
+    "ingestPolicy": {
+      "mode": "REFERENCE_SNAPSHOT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": true
+    },
+    "leaves": {
+      "github": {
+        "role": "LEAF_PROJECTION",
+        "transport": "github",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false,
+        "evidenceTransport": true,
+        "ciTransport": true,
+        "ref": "refs/heads/main",
+        "headResolution": "AT_READ_TIME",
+        "ingestIntoTree": true,
+        "ingestRole": "LEAF_STATE_INPUT",
+        "authorityTransferred": false
+      }
+    }
+  },
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  }
 }
