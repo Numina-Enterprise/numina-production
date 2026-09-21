@@ -47,6 +47,6 @@ The installed web app requires a live connection. Its service worker removes pri
 
 ## Production routing after the domain cutover
 
-The public website is deployed on Vercel. `numinalabs.xyz` redirects to `www.numinalabs.xyz`; both domains have valid TLS. Vercel proxies the application API families to the existing Sites backend at `https://personal-space-m7q9.skott34.chatgpt.site`, preserving its D1 journal and R2 documents. Upstream routes must never point to either public website hostname, which would create a proxy loop. Wallet and deployment-readiness pages are served locally. Download fallback uses the existing backend and retains the recorded artifact identities.
+The canonical public origin is `https://numinalabs.xyz`, with GitHub `main` as the source lineage. Provider-neutral Numina routing maps the application API families to the retained application backend at `https://personal-space-m7q9.skott34.chatgpt.site`, preserving its journal and documents. Upstream routes must never create a public-origin recursion loop. Wallet and deployment-readiness pages remain part of the canonical Numina application, and download fallback retains the recorded artifact identities.
 
 The backend currently runs source `db71c054cda7442e4c5f357e9e27e542fd2a7db9`; it is not claimed to match the latest GitHub source. Android build 4 and iOS build 6 still require current-source signed artifacts and store submission receipts. The historical Android build 3 and iOS build 5 downloads are not relabeled as current-source builds.
