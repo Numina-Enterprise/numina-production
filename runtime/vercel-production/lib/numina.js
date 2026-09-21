@@ -53,14 +53,14 @@ function identity(){
 }
 function sign(payload,artifact_type){const id=identity();const body={artifact_type,key_id:id.keyId,payload};const signature=crypto.sign(null,canonical(body),id.privateKey).toString('base64');return {...body,algorithm:'Ed25519',public_key:id.publicKeyB64,signature};}
 function verifyEnvelope(env,expectedType){try{const id=identity();if(!env||env.algorithm!=='Ed25519'||env.artifact_type!==expectedType||env.public_key!==id.publicKeyB64||env.key_id!==id.keyId)return false;const body={artifact_type:env.artifact_type,key_id:env.key_id,payload:env.payload};const pub=crypto.createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),Buffer.from(env.public_key,'base64')]),format:'der',type:'spki'});return crypto.verify(null,canonical(body),pub,Buffer.from(env.signature,'base64'));}catch{return false;}}
-function evaluate(body={}){
+function evaluate(body={},runtimeControls=null){
   const action=String(body.action||'').trim().toLowerCase(),policy={...(body.policy||{})};
   const observations=Array.isArray(body.observations)?body.observations.map(x=>({...x})):[];
   const providers=observations.map(obs=>{const p=String(obs.provider||'custom').trim().toLowerCase()||'custom';return SUPPORTED_PROVIDERS.has(p)?p:'custom';});
   const uniq=[...new Set(providers)].sort(),evidence_root=digest({observations,providers:uniq}),policy_root=digest(policy);
   const base=(decision,reason,requires,permitted)=>({schema:'numina.control-decision.v1',release:RUNTIME_VERSION,decision,reason,action,requires_human_approval:requires,execution_permitted:permitted,evidence_root,policy_root,provider_set:uniq});
   if(ECONOMIC_ACTIONS.has(action)){
-    const c=controls(),policyAllows=!!policy.economic_execution_allowed,humanRequired=policy.require_human_approval===undefined?true:!!policy.require_human_approval,humanGranted=!!policy.human_approval_granted;
+    const c=runtimeControls&&typeof runtimeControls==='object'?runtimeControls:controls(),policyAllows=!!policy.economic_execution_allowed,humanRequired=policy.require_human_approval===undefined?true:!!policy.require_human_approval,humanGranted=!!policy.human_approval_granted;
     if(!policyAllows)return base('HUMAN_APPROVAL_REQUIRED','economic execution requires an explicit policy grant',true,false);
     if(humanRequired&&!humanGranted)return base('HUMAN_APPROVAL_REQUIRED','economic execution policy requires human approval',true,false);
     if(!c.real_funds_enabled||!c.public_execution_api_enabled)return base('CONTROL_GATE_CLOSED','runtime execution controls are not enabled',humanRequired,false);
