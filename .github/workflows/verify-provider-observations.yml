@@ -74,6 +74,8 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
           npm run build
           npm test
           echo "NUMINA_ROOT_VERIFIED=true" >> "$GITHUB_ENV"
