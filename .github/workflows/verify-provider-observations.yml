@@ -22,7 +22,7 @@ jobs:
     env:
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
       NUMINA_PROVIDER_RECORD_PATH: provider-evidence/native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-source-release-${{ github.run_id }}-${{ github.run_attempt }}.json
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -34,20 +34,9 @@ jobs:
         run: node --test tests/provider-observations.test.mjs
       - name: Verify governed Arc provider submitter contract
         run: node --test tests/provider-submitter.test.mjs
-      - name: Wait for pushed commit and verify live provider observations
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Observe current providers from GitHub-bound source
         env:
           NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
-        run: |
-          attempts=24
-          for attempt in $(seq 1 "$attempts"); do
-            echo "Provider observation attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
-            if node scripts/smoke-provider-observations.mjs; then exit 0; fi
-            if [ "$attempt" -eq "$attempts" ]; then exit 1; fi
-            sleep 10
-          done
-      - name: Verify current live provider observations
-        if: github.event_name != 'push'
         run: node scripts/smoke-provider-observations.mjs
       - name: Archive signed provider evidence
         id: archive
@@ -80,24 +69,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/publish-github-evidence.mjs "$NUMINA_PROVIDER_EVIDENCE_PATH" "$NUMINA_PROVIDER_RECORD_PATH"
-      - name: Verify signed runtime readiness before trusting release
+      - name: Verify current Numina source before trusting release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: node scripts/check-runtime.mjs
-      - name: Build trusted production release gate
+        shell: bash
+        run: |
+          npm run build
+          npm test
+          echo "NUMINA_ROOT_VERIFIED=true" >> "$GITHUB_ENV"
+      - name: Build trusted source release gate
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
-        run: node scripts/build-trusted-production-release.mjs
-      - name: Archive trusted production release gate
+        run: node scripts/build-trusted-source-release.mjs
+      - name: Archive trusted source release gate
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: numina-trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}
+          name: numina-trusted-source-release-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.NUMINA_TRUSTED_RELEASE_PATH }}
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
-      - name: Publish and read back trusted production release from GitHub Release
+      - name: Publish and read back trusted source release from GitHub Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ github.token }}
