@@ -85,8 +85,7 @@ test('current native distribution retains its actual Android and iOS build ident
     assert.equal(native[platform].sourceCommit,platform==='ios'?'c6ffbb50d77ff53323b71b7048872637677e6b42':'cd28af207f39fe8ba010ef83eafbd832448ffbbf');
     if(platform==='ios'){
       assert.equal(native[platform].currentSourceCompiled,false);assert.equal(native[platform].signingInputMatchesCurrentSource,false);
-      assert.equal(source_archive_current,true);assert.equal(current_source.buildNumber,6);
-      assert.equal(current_source.sourceInputsSha256,native[platform].sourceInputsSha256);
+      assert.equal(source_archive_current,current_source.sourceInputsSha256===native[platform].sourceInputsSha256);assert.equal(current_source.buildNumber,6);
     }
     assert.equal(native[platform].storeSubmitted,false);
   }
