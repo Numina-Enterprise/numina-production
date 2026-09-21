@@ -13,7 +13,7 @@ test('revocation gateway rejects unauthorized and cross-origin requests without 
 });
 test('revocation forwards only the bearer and bounded JSON to the pinned runtime',async()=>{
   const result=await routeRuntime(make({Authorization:'Bearer fixture',Cookie:'private=cookie',Origin:'https://numinalabs.xyz'}),async(target,options)=>{
-    assert.equal(target,'https://numina-production.vercel.app/v1/evidence/revoke');
+    assert.equal(target,'https://numinalabs.xyz/v1/evidence/revoke');
     assert.equal(options.method,'POST');assert.equal(options.redirect,'manual');
     assert.equal(options.headers.Authorization,'Bearer fixture');assert.equal(options.headers.Cookie,undefined);
     assert.equal(new TextDecoder().decode(options.body),body);
