@@ -23,7 +23,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
-  const FINAL_BUILD_MANIFEST_BLOB='743dde293647f08e2c1ef9be0d4c4d4c815f6ee4';
+  const FINAL_BUILD_MANIFEST_BLOB='400301c1c716a7793fca468ff9333155338bec55';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
@@ -133,7 +133,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.nativeContractId,'numina:nusd-usdc:conversion:v1');
   assert.equal(finalBuild.nusd.status,'ACTIVE');
   assert.equal(finalBuild.nusd.live,true);
-  assert.equal(finalBuild.nusd.paused,false);
+  assert.equal(finalBuild.nusd.paused,false);assert.equal(finalBuild.nusd.transferState,'ENABLED');
   assert.equal(finalBuild.nusd.mintReceipt.status,'FINAL');
   assert.equal(finalBuild.nusd.mintReceipt.path,'/downloads/nusd/mint-receipt.json');
   assert.equal(finalBuild.nusd.mintReceipt.transactionHash,'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b');
@@ -177,7 +177,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(NUMINA_LAYERS.treasury.providerIdentity,'NUMINA');
   assert.equal(NUMINA_LAYERS.treasury.contractsActive,true);
   assert.equal(NUMINA_LAYERS.nusd.status,'ACTIVE');
-  assert.equal(NUMINA_LAYERS.nusd.paused,false);
+  assert.equal(NUMINA_LAYERS.nusd.paused,false);assert.equal(NUMINA_LAYERS.nusd.transfersEnabled,true);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.version,3);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.singular,true);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.treasuryCount,1);
