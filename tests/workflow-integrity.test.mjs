@@ -45,12 +45,16 @@ test('provider verification workflow invokes existing local verification entrypo
   }
 });
 
-test('signed runtime readiness must pass before a trusted release record is built or persisted',()=>{
-  const steps=providerWorkflow().split(/(?=^      - )/m);
+test('GitHub Release SHA-256 read-back gates trusted release creation and publication',()=>{
+  const workflow=providerWorkflow(),steps=workflow.split(/(?=^      - )/m);
+  const providerPublish=steps.findIndex(step=>step.includes('- name: Publish and read back canonical provider evidence from GitHub Release'));
   const gate=steps.findIndex(step=>/^        run: node scripts\/check-runtime\.mjs\s*$/m.test(step));
   const build=steps.findIndex(step=>/^        run: node scripts\/build-trusted-production-release\.mjs\s*$/m.test(step));
-  const persist=steps.findIndex(step=>step.includes('- name: Persist and verify trusted production release gate'));
-  assert.ok(gate>=0&&build>gate&&persist>build,'Runtime evidence must gate trusted release creation and persistence');
-  assert.match(steps[gate],/^        if: github.event_name == 'push' && github.ref == 'refs\/heads\/main'\s*$/m);
+  const trustedPublish=steps.findIndex(step=>step.includes('- name: Publish and read back trusted production release from GitHub Release'));
+  assert.ok(providerPublish>=0&&gate>providerPublish&&build>gate&&trustedPublish>build,'GitHub evidence read-back must gate trusted release creation and publication');
+  assert.match(workflow,/permissions:\n  contents: write/);
+  assert.doesNotMatch(workflow,/NUMINA_PROVIDER_INGEST_URL|NUMINA_TRUSTED_RELEASE_URL|ACTIONS_ID_TOKEN_REQUEST_URL|id-token:\s*write/);
+  assert.match(steps[providerPublish],/publish-github-evidence\.mjs/);
+  assert.match(steps[trustedPublish],/publish-github-evidence\.mjs/);
   assert.doesNotMatch(steps[gate],/continue-on-error|\|\|\s*true/,'Missing readiness evidence must remain a failure');
 });
