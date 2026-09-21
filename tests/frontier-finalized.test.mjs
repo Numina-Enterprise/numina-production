@@ -4,14 +4,14 @@ import {frontierHttp} from '../src/frontier-http.js';
 
 const env={NUMINA_LIVEMODE:'true'};
 
-test('public frontier head is a deterministic stateless finalized-build projection',async()=>{
+test('public frontier head is a deterministic finalized-build projection',async()=>{
   const res=await frontierHttp(new Request('https://numina.test/api/control/v2/head'),env);
   assert.equal(res.status,200);
   const body=await res.json();
   assert.equal(body.schema,'numina.public-head.v2');
   assert.equal(body.identity,'NUMINA');
-  assert.equal(body.stateModel,'STATELESS_FINALIZED_BUILD');
-  assert.equal(body.stateful,false);
+  assert.equal(Object.hasOwn(body,'stateModel'),false);
+  assert.equal(Object.hasOwn(body,'stateful'),false);
   assert.equal(body.finalized,true);
   assert.equal(body.applicationVersion,'4.0.0');
   assert.equal(body.revision,null);
@@ -35,7 +35,7 @@ test('public MCP discovery initializes without a database binding',async()=>{
   assert.equal(body.result.serverInfo.version,'4.0.0');
 });
 
-test('public MCP numina_head returns the stateless finalized build head',async()=>{
+test('public MCP numina_head returns the finalized build head',async()=>{
   const req=new Request('https://numina.test/api/control/v2/discovery-mcp',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -46,7 +46,7 @@ test('public MCP numina_head returns the stateless finalized build head',async()
   const body=await res.json();
   const head=JSON.parse(body.result.content[0].text);
   assert.equal(head.schema,'numina.public-head.v2');
-  assert.equal(head.stateModel,'STATELESS_FINALIZED_BUILD');
-  assert.equal(head.stateful,false);
+  assert.equal(Object.hasOwn(head,'stateModel'),false);
+  assert.equal(Object.hasOwn(head,'stateful'),false);
   assert.equal(head.finalized,true);
 });

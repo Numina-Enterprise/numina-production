@@ -1,9 +1,9 @@
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {NUMINA_NATIVE_TREASURY_SYNC} from './treasury-connection-model.js';
-// Numina's five functional architecture layers resolve to one finalized singular build. The public frontier projection is stateless; legacy journal/storage code is not required for public readiness.
+// Numina's five functional architecture layers resolve to one finalized singular build. The public frontier is a finalized-build projection; legacy journal/storage code is not required for public readiness.
 export const NUMINA_LAYERS = Object.freeze({
   schema:'numina.architecture-layers.v1',classification:'architecture',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',metadataNamespace:'NUMINA',metadataScope:Object.freeze(['historical','current','canonical']),nativeEvidenceStatus:'FINAL',
-  rootCount:1,lineageCount:1,productionEnvironmentCount:1,stateModel:'STATELESS_FINALIZED_BUILD',stateful:false,
+  rootCount:1,lineageCount:1,productionEnvironmentCount:1,
   denomination_policy:NUMINA_DENOMINATION_POLICY,
   procurement_usage:true,
   procurement:Object.freeze({status:'ACTIVE',singular:true,identity:'NUMINA',policy:'/business-core.json',scope:'NUMINA',permissions:'existing_owner_and_delegated_permissions',paymentEvidence:'provider_receipt_confirms_completion',automaticPurchasing:false}),

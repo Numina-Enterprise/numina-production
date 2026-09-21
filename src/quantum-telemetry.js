@@ -88,7 +88,7 @@ export function createQuantumWorkloadTelemetry({now=()=>Date.now(),clock=()=>per
       const minimumSamples=20,signals=[];
       if(demand>=minimumSamples) {
         if(sum.failed/Math.max(1,completedWork)>=.01)signals.push('investigate_quantum_failures');
-        if(sum.concurrencyLimited/demand>=.05)signals.push('review_stateless_compute_capacity');
+        if(sum.concurrencyLimited/demand>=.05)signals.push('review_compute_capacity');
         if(sum.rateLimited/demand>=.05)signals.push('review_quantum_request_rate_policy');
       }
       if(sum.succeeded>=minimumSamples&&(overflow||p95>1000))signals.push('investigate_quantum_compute_latency');
