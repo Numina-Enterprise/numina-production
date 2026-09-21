@@ -30,10 +30,13 @@ function releaseIdentityFor(path,payload){
 function supplyIdentityMatches(value){const evidence=value?.payload?.evidence??value?.evidence??value;return object(evidence)&&evidence.valid===true&&['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>evidence[field]===EXPECTED_RELEASE[field]);}
 
 export async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 12000) {
-  const path = new URL(request.url).pathname;
+  const requestUrl = new URL(request.url), path = requestUrl.pathname;
   if(path==='/v1/evidence/revoke')return routeRuntimeRevocation(request,upstreamFetch);
   if (!RUNTIME_READ_PATHS.has(path)) return null;
   if (!['GET','HEAD'].includes(request.method)) return runtimeError(405, 'METHOD_NOT_ALLOWED', {Allow:'GET, HEAD'});
+  // The historical verifier origin now resolves to the canonical public origin.
+  // Never proxy a public request back into the same origin; that would recurse.
+  if(requestUrl.origin===new URL(RUNTIME_ORIGIN).origin)return runtimeError(410,'RUNTIME_COMPATIBILITY_ROUTE_RETIRED');
   const controller = new AbortController();
   let reader;
   const deadline = new Promise((_, reject) => {
