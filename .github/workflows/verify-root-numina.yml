@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - '.github/workflows/verify-root-numina.yml'
+      - '.github/workflows/numina.yml'
       - '.nvmrc'
       - 'api/**'
       - 'config/numina-routing.json'
