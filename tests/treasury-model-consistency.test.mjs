@@ -73,10 +73,14 @@ test('all current treasury metadata surfaces share one canonical 500T contract',
   }
   assert.deepEqual(NUSD_CONTRACT_RECORD.canonicalTreasuryValues,canonical);
   const aligned=alignTreasuryAccounts({projection:{unit:'NUSD',balance:'500000000000000'}},{accounts:[]});
-  assert.deepEqual(aligned.canonicalTreasuryValues,canonical);
-  assert.deepEqual(aligned.fundableTargets.canonicalTreasuryValues,canonical);
-  assert.deepEqual(aligned.treasuryAlignmentPlan.canonicalTreasuryValues,canonical);
-  assert.deepEqual(aligned.nativeFundingView.canonicalTreasuryValues,canonical);
+  assert.deepEqual(aligned.fundableTargets.targets.map(({amount,unit})=>({amount,unit})),[
+    {amount:canonical.components.USD.current,unit:'USD'},
+    {amount:canonical.components.USDC.current,unit:'USDC'},
+    {amount:canonical.components.NUSD.current,unit:'NUSD'}
+  ]);
+  assert.equal(aligned.fundableTargets.aggregateModeledValue,canonical.aggregate.current);
+  assert.equal(aligned.treasuryAlignmentPlan.aggregateModeledValue,canonical.aggregate.current);
+  assert.equal(aligned.nativeFundingView.nativeTarget.amount,canonical.components.NUSD.current);
 });
 
 test('one shared backing statement preserves its declared policy and verification boundaries',()=>{
