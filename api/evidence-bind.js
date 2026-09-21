@@ -2,7 +2,7 @@ import evidenceBindHandler from '../runtime/vercel-production/api/evidence-bind.
 
 function retiredMode(req){
   try{
-    const mode=new URL(req.url,'https://numina-production.vercel.app').searchParams.get('mode');
+    const mode=new URL(req.url,'https://numinalabs.xyz').searchParams.get('mode');
     return mode==='provider-observation-ingest'||mode==='trusted-production-release-ingest';
   }catch{return false;}
 }
