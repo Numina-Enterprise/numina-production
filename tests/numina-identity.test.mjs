@@ -24,7 +24,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
   assert.equal(pkg.transfersEnabled,true);assert.equal(pkg.numina.transfersEnabled,true);assert.equal(pkg.numinaMetadata.transfersEnabled,true);
-  const FINAL_BUILD_MANIFEST_BLOB='3d3f76338870af249c149832eec31de558f19d1c';
+  const FINAL_BUILD_MANIFEST_BLOB='6d9e2745644dcaccb07fc1aef4fb847118677db4';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
