@@ -12,27 +12,27 @@ jobs:
       - name: Checkout finalized NUMINA head
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: 82dcda04a5ab87fa48d257a7b8aa5c3bf153ebcd
+          ref: 86f183610c47a6dccee3f1c84117292c2dc30435
           fetch-depth: 1
           persist-credentials: false
       - name: Verify immutable source head
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "82dcda04a5ab87fa48d257a7b8aa5c3bf153ebcd"
+          test "$(git rev-parse HEAD)" = "86f183610c47a6dccee3f1c84117292c2dc30435"
           test -z "$(git status --porcelain)"
       - name: Archive finalized tracked tree
         shell: bash
         run: |
           set -euo pipefail
-          git archive --format=tar.gz --prefix=Numina/ --output="$RUNNER_TEMP/NUMINA-SOURCE-82dcda04a5ab.tar.gz" HEAD
-          sha256sum "$RUNNER_TEMP/NUMINA-SOURCE-82dcda04a5ab.tar.gz" > "$RUNNER_TEMP/NUMINA-SOURCE-82dcda04a5ab.tar.gz.sha256"
+          git archive --format=tar.gz --prefix=Numina/ --output="$RUNNER_TEMP/NUMINA-SOURCE-86f183610c47.tar.gz" HEAD
+          sha256sum "$RUNNER_TEMP/NUMINA-SOURCE-86f183610c47.tar.gz" > "$RUNNER_TEMP/NUMINA-SOURCE-86f183610c47.tar.gz.sha256"
       - name: Upload source tree
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: NUMINA-SOURCE-82dcda04a5ab
+          name: NUMINA-SOURCE-86f183610c47
           path: |
-            ${{ runner.temp }}/NUMINA-SOURCE-82dcda04a5ab.tar.gz
-            ${{ runner.temp }}/NUMINA-SOURCE-82dcda04a5ab.tar.gz.sha256
+            ${{ runner.temp }}/NUMINA-SOURCE-86f183610c47.tar.gz
+            ${{ runner.temp }}/NUMINA-SOURCE-86f183610c47.tar.gz.sha256
           if-no-files-found: error
           retention-days: 1
