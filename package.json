@@ -26,7 +26,7 @@
     "all": "NUMINA",
     "finalBuildManifest": {
       "path": "public/final-build.json",
-      "blob": "c85acf0f00f7f5ebb5879163e0d844b79db696f2",
+      "blob": "743dde293647f08e2c1ef9be0d4c4d4c815f6ee4",
       "identity": "NUMINA",
       "status": "FINAL",
       "finalAll": "NUMINA",
@@ -116,5 +116,10 @@
   "canonical_metadata_override": "NUMINA",
   "competing_software_identity_allowed": false,
   "competing_manifest_authority_allowed": false,
-  "competing_metadata_authority_allowed": false
+  "competing_metadata_authority_allowed": false,
+  "metadataOverrideManifest": "config/numina-metadata-overrides.v1.json",
+  "metadataResolution": "AUTHORITATIVE_NUMINA_OVERLAY",
+  "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
+  "signedEvidenceBytesPreserved": true,
+  "hashPinnedArtifactBytesPreserved": true
 }

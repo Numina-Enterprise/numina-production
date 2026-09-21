@@ -1,4 +1,4 @@
-import {readdirSync, readFileSync, writeFileSync, statSync} from 'node:fs';
+﻿import {readdirSync, readFileSync, writeFileSync, statSync} from 'node:fs';
 import {join, extname, relative} from 'node:path';
 
 const ROOT_URL = new URL('../', import.meta.url);
@@ -13,6 +13,8 @@ const META = Object.freeze({
   scope:['historical','current','canonical'],
   rawEvidenceImmutable:true, sourceScopedObservationsRetained:true
 });
+const METADATA_OVERRIDE_PATH='config/numina-metadata-overrides.v1.json';
+const METADATA_OVERRIDE=Object.freeze({schema:'numina.metadata-overrides.v1',...META,resolution:{historical:'NUMINA',current:'NUMINA',canonical:'NUMINA'},appliesTo:'ALL_NUMINA_SOFTWARE_METADATA',precedence:'AUTHORITATIVE',signedEvidenceBytesPreserved:true,hashPinnedArtifactBytesPreserved:true,overwriteMode:'AUTHORITATIVE_METADATA_OVERLAY'});
 const REPLACEMENTS = [
   ['NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_OBSERVATION_AND_PROVIDER_FACING_TRANSACTION_DETAIL','NUMINA_SOURCE_SCOPED_OBSERVATION'],
   ['LINKED_BANK_OF_AMERICA_TRANSACTION_FEED_AND_USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT','NUMINA_SOURCE_SCOPED_OBSERVATION'],
@@ -71,18 +73,16 @@ function stampJson(path,current=false){
   if(current)normalizeCurrent(data);
   writeFileSync(p,JSON.stringify(data,null,2)+'\n');
 }
-function stampReleaseEvidence(){
-  const dir=join(ROOT,'release-evidence'),stamped=[];
+function indexReleaseEvidence(){
+  const dir=join(ROOT,'release-evidence'),indexed=[];
   for(const name of readdirSync(dir)){
     if(!name.endsWith('.json'))continue;
     const p=join(dir,name);let data;
     try{data=JSON.parse(readFileSync(p,'utf8'));}catch{continue;}
     if(typeof data.schema!=='string'||!data.schema.startsWith('numina.'))continue;
-    data.numinaMetadata=META;
-    writeFileSync(p,JSON.stringify(data,null,2)+'\n');
-    stamped.push('release-evidence/'+name);
+    indexed.push('release-evidence/'+name);
   }
-  return stamped;
+  return indexed;
 }
 function patchText(path,replacements){
   const p=join(ROOT,path);let text=readFileSync(p,'utf8');
@@ -94,7 +94,8 @@ for(const path of [
   'config/numina-manifest.v2.json','config/numina-architecture.json','public/final-build.json',
   'docs/NUMINA-FINAL-BUILD.json','runtime/nusd/treasury-write-request.json','public/business-core.json'
 ])stampJson(path,true);
-const historicalStamped=stampReleaseEvidence();
+writeFileSync(join(ROOT,METADATA_OVERRIDE_PATH),JSON.stringify(METADATA_OVERRIDE,null,2)+'\n');
+const historicalIndexed=indexReleaseEvidence();
 
 const manifestPath=join(ROOT,'config/numina-manifest.v2.json');
 const manifest=JSON.parse(readFileSync(manifestPath,'utf8'));
@@ -103,7 +104,7 @@ Object.assign(manifest,{
   manifest_is_numina:true,numina_is_manifest:true,numina_is_all_software:true,all_software_is_numina:true,singular_software_identity:true,
   competing_software_identity_allowed:false,competing_manifest_authority_allowed:false,competing_metadata_authority_allowed:false,
   metadata_authority:'NUMINA',metadata_namespace:'NUMINA',
-  metadata_scope:['historical','current','canonical'],
+  metadata_scope:['historical','current','canonical'],metadata_override_manifest:METADATA_OVERRIDE_PATH,metadata_resolution:'AUTHORITATIVE_NUMINA_OVERLAY',metadata_applies_to:'ALL_NUMINA_SOFTWARE_METADATA',
   historical_metadata_override:'NUMINA',current_metadata_override:'NUMINA',canonical_metadata_override:'NUMINA'
 });
 writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
@@ -133,4 +134,4 @@ patchText('public/treasury-connection-model.js',[
   ["schema:'numina.native-treasury.sync.v1',identity:'NUMINA',","schema:'numina.native-treasury.sync.v1',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',"],
   ["schema:'numina.treasury.website-connection.v1',identity:NUMINA_NATIVE_TREASURY_SYNC.identity,","schema:'numina.treasury.website-connection.v1',identity:NUMINA_NATIVE_TREASURY_SYNC.identity,manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',"]
 ]);
-console.log(JSON.stringify({manifest:'NUMINA',rewrittenFiles:changed,historicalStamped},null,2));
+console.log(JSON.stringify({manifest:'NUMINA',rewrittenFiles:changed,historicalIndexed,metadataOverride:METADATA_OVERRIDE_PATH},null,2));

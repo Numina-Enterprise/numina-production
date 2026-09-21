@@ -1507,5 +1507,10 @@
   "canonical_metadata_override": "NUMINA",
   "competing_software_identity_allowed": false,
   "competing_manifest_authority_allowed": false,
-  "competing_metadata_authority_allowed": false
+  "competing_metadata_authority_allowed": false,
+  "metadataOverrideManifest": "config/numina-metadata-overrides.v1.json",
+  "metadataResolution": "AUTHORITATIVE_NUMINA_OVERLAY",
+  "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
+  "signedEvidenceBytesPreserved": true,
+  "hashPinnedArtifactBytesPreserved": true
 }
