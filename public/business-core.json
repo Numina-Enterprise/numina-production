@@ -168,7 +168,14 @@
     "receipt": "/downloads/nusd/deployment-receipt.json",
     "externalBackingVerified": false,
     "externalSettlementVerified": false,
-    "paused": false
+    "paused": false,
+    "softwareCapabilities": {
+      "mint": true,
+      "transfer": true,
+      "settlement": true,
+      "redemption": true,
+      "exchange": true
+    }
   },
   "numinaMetadata": {
     "identity": "NUMINA",

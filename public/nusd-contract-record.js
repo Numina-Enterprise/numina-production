@@ -432,6 +432,13 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "unit": "NUSD"
     }
   },
+  "software_capabilities": {
+    "mint": true,
+    "transfer": true,
+    "settlement": true,
+    "redemption": true,
+    "exchange": true
+  },
   "financial_execution": {
     "issuance": true,
     "transfer": true,
