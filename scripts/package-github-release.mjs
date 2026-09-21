@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {existsSync,readFileSync,writeFileSync} from 'node:fs';
+import {existsSync,readFileSync,writeFileSync,unlinkSync} from 'node:fs';
 import {basename,resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 
@@ -35,8 +35,13 @@ const release={
   externalConfirmation:'evidence-required',
   finalBuildManifest:{path:finalBuildPath,blob:FINAL_BUILD_MANIFEST_BLOB,sha256:createHash('sha256').update(finalBuildBytes).digest('hex'),identity:finalBuild.identity,status:finalBuild.status,version:finalBuild.applicationVersion}
 };
-writeFileSync('dist/NUMINA-RELEASE.json',JSON.stringify(release,null,2)+'\n');
-execFileSync('tar',['-czf',archive,'dist/client','dist/server','dist/NUMINA-RELEASE.json'],{stdio:'inherit'});
+const releaseRecordPath='dist/NUMINA-RELEASE.json';
+writeFileSync(releaseRecordPath,JSON.stringify(release,null,2)+'\n');
+try{
+  execFileSync('tar',['-czf',archive,'dist/client','dist/server',releaseRecordPath],{stdio:'inherit'});
+}finally{
+  if(existsSync(releaseRecordPath))unlinkSync(releaseRecordPath);
+}
 const digest=createHash('sha256').update(readFileSync(archive)).digest('hex');
 writeFileSync(archive+'.sha256',digest+'  '+basename(archive)+'\n');
 console.log(JSON.stringify({identity:'NUMINA',archive:basename(archive),sha256:digest,version:pkg.version}));
