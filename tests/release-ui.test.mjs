@@ -71,6 +71,6 @@ test('application release UI handles absent and partial historical publication e
   assert.equal(absent('[data-application-funding-record]'),'No historical funding-plan record included');
   const partial=renderApplicationRequirements({recorded_release_evidence:{website:{status:'succeeded',version:42}}});
   assert.match(partial('[data-application-production-record]'),/^Historical publication record/);
-  assert.match(partial('[data-application-production-record]'),/Vercel Not reported/);
+  assert.match(partial('[data-application-production-record]'),/Runtime Not reported/);
   assert.doesNotMatch(partial('[data-application-production-record]'),/undefined/);
 });
