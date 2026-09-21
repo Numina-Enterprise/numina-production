@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runtimeReadyPayload,bootstrapAttestationPayload,validateAuthoritativeBootstrapResponse} from '../api/application-release.mjs';
 
-const config=JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8'));
+const config=JSON.parse(readFileSync(new URL('../config/numina-routing.json',import.meta.url),'utf8'));
 const route=source=>config.rewrites.find(entry=>entry.source===source)?.destination;
 
-test('root Vercel exposes strict runtime readiness and bootstrap routes',()=>{
+test('root Numina routing exposes strict runtime readiness and bootstrap routes',()=>{
   assert.equal(route('/readyz'),'/api/application-release?mode=readyz');
   assert.equal(route('/v1/bootstrap/attestation'),'/api/application-release?mode=bootstrap-attestation');
   const ready=runtimeReadyPayload();
