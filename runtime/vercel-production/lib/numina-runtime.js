@@ -54,7 +54,7 @@ async function transition(manifest,intent){
   const kind=String(intent.kind||'').trim();
   const body=intent.body&&typeof intent.body==='object'?intent.body:{};
   switch(kind){
-    case 'control-evaluate': return {...manifest,last:{kind,decision:legacy.evaluate(body)}};
+    case 'control-evaluate': return {...manifest,last:{kind,decision:legacy.evaluate(body,intent.controls??null)}};
     case 'execution-prepare': return {...manifest,last:{kind,handoff:legacy.prepare(body)}};
     case 'evidence-bind': return {...manifest,last:{kind,binding:legacy.bindEvidence(body)}};
     case 'observe': return {...manifest,last:{kind,observed:body}};
