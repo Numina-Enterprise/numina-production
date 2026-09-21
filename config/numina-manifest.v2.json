@@ -9,7 +9,11 @@
       "count": 1,
       "role": "LEAF_PROJECTION",
       "authoritative": false,
-      "parent": "NUMINA"
+      "parent": "NUMINA",
+      "ref": "refs/heads/main",
+      "head_resolution": "AT_READ_TIME",
+      "ingest_into_tree": true,
+      "authority_transferred": false
     },
     "artifact": {
       "build_id": "49b4f3e5e454bac7492073c22562ebd2b2b0bc805eca111525895e33cb3fa715",
@@ -70,10 +74,20 @@
         "role": "LEAF_PROJECTION",
         "repository": "skott34-dot/numina-production",
         "branch": "main",
-        "authoritative": false
+        "authoritative": false,
+        "ref": "refs/heads/main",
+        "headResolution": "AT_READ_TIME",
+        "ingestIntoTree": true,
+        "ingestRole": "LEAF_STATE_INPUT",
+        "authorityTransferred": false
       },
       "update_direction": "ROOT_TO_LEAVES",
-      "square_root": "NUMINA"
+      "square_root": "NUMINA",
+      "leaf_ingest_policy": {
+        "mode": "REFERENCE_SNAPSHOT",
+        "canonicalized_by": "NUMINA",
+        "authority_transferred": false
+      }
     }
   },
   "compatibility": {
@@ -510,8 +524,19 @@
         "branch": "main",
         "authoritative": false,
         "evidenceTransport": true,
-        "ciTransport": true
+        "ciTransport": true,
+        "ref": "refs/heads/main",
+        "headResolution": "AT_READ_TIME",
+        "ingestIntoTree": true,
+        "ingestRole": "LEAF_STATE_INPUT",
+        "authorityTransferred": false
       }
+    },
+    "ingestPolicy": {
+      "mode": "REFERENCE_SNAPSHOT",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": true
     }
   }
 }
