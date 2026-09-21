@@ -1,4 +1,5 @@
 name: Check canonical Sites control origin
+# Refresh canonical treasury read after NUSD journal preparation attempts.
 
 on:
   workflow_dispatch:
