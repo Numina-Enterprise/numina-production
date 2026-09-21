@@ -16,8 +16,6 @@ test('published contract stays bound to the finalized deployed source, artifact 
   assert.equal(bound.contracts[0].artifact.sha256,receipt.artifactSha256);
   assert.equal(bound.contracts[0].source.sha256,receipt.sourceSha256);
   assert.equal(bound.issuance.decimals,18);
-  assert.equal(bound.contract_candidate.decimals,6);assert.equal(bound.contract_candidate.status,'compiled_not_deployed');
-  assert.equal(bound.contract_candidate.initialSupplyBaseUnits,'1500000000000000000000');
   for(const mutate of [
     value=>value.sourceSha256='0'.repeat(64),
     value=>value.artifactSha256='0'.repeat(64),
@@ -46,13 +44,13 @@ test('conversion workflow binds both compiled contracts and preserves disabled l
  const response=await nusdHttp(new Request(route));assert.equal(response.status,200);
  assert.deepEqual(await response.json(),NUSD_CONVERSION_WORKFLOW);
  assert.equal(NUSD_CONVERSION_WORKFLOW.contracts.length,2);
- for(const contract of NUSD_CONVERSION_WORKFLOW.contracts)assert.deepEqual(contract,record.contract_candidate.contracts.find(c=>c.id===contract.id));
+ for(const contract of NUSD_CONVERSION_WORKFLOW.contracts)assert.deepEqual(contract,record.contracts.find(c=>c.id===contract.id));
  for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(new Request(route,{method}))).status,405);
  assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.sameChainRequired,true);
  assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.bridgeImplemented,false);
  assert.equal(NUSD_CONVERSION_WORKFLOW.usd.bankSubmissionImplemented,false);
- assert.equal(NUSD_CONVERSION_WORKFLOW.usd.nusdBaseUnitsPerUsdCent,'10000');
- assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.nusdDecimals,6);assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.nusdPerUsdcBaseUnit,'1');
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usd.nusdBaseUnitsPerUsdCent,'10000000000000000');
+ assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.nusdDecimals,18);assert.equal(NUSD_CONVERSION_WORKFLOW.usdc.nusdPerUsdcBaseUnit,'1000000000000');
  assert.equal(NUSD_CONVERSION_WORKFLOW.treasury.balanceCount,1);
  assert.equal(NUSD_CONVERSION_WORKFLOW.activation.financialExecutionEnabled,false);
  assert.deepEqual(NUSD_POLICY.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
@@ -75,7 +73,7 @@ test('contract API and UI separate compiled functions from activated financial o
   assert.match(contractSourcePresentation(record).source,/deployed.*receipt-verified/);
   assert.equal(assessFinancialStatus(NUSD_POLICY).contract,NUSD_POLICY.asset.contract);
   assert.match(assessFinancialStatus(NUSD_POLICY).identity,/Issued NUSD.*18 decimals/);
-  assert.match(assessFinancialStatus(NUSD_POLICY).checked,/current transfer activity was not checked/);
+  assert.match(assessFinancialStatus(NUSD_POLICY).checked,/transfers enabled/);
   for(const mutate of [
     value=>value.issuance.baseUnits='1',
     value=>value.issuance.transactionHash='0x'+'0'.repeat(64),
@@ -86,8 +84,8 @@ test('contract API and UI separate compiled functions from activated financial o
     value=>value.contracts[3].deployment.native_attestation_id='unbound',
     value=>value.contracts[3].verification.chain_receipt_verified=true
   ]){const changed=structuredClone(record);mutate(changed);assert.throws(()=>contractSourcePresentation(changed));}
-  assert.equal(record.financial_execution.issuance,true);assert.equal(record.financial_execution.transfer,false);assert.equal(record.financial_execution.nusd_settlement,false);assert.equal(record.financial_execution.usd_redemption,false);assert.equal(record.financial_execution.usdc_conversion,false);assert.equal(record.financial_execution.external_deposits,false);
-  for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
+  assert.equal(record.financial_execution.issuance,true);assert.equal(record.financial_execution.transfer,true);assert.equal(record.financial_execution.nusd_settlement,false);assert.equal(record.financial_execution.usd_redemption,false);assert.equal(record.financial_execution.usdc_conversion,false);assert.equal(record.financial_execution.external_deposits,false);
+  assert.equal(NUSD_POLICY.capabilities.transfer,true);for(const capability of ['mint','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
   for(const contract of record.contracts.slice(2)){
     assert.equal(contract.deployment.status,'native_active');assert.equal(contract.deployment.lifecycle,'ACTIVE');
     assert.equal(contract.deployment.verification_scope,'NUMINA_NATIVE_TREASURY');
@@ -110,9 +108,9 @@ test('mint workflow reports implemented preparation while receipt and provider c
   for(const method of ['POST','PUT','DELETE'])assert.equal((await nusdHttp(new Request('https://numina.test/api/nusd/v1/mint-workflow',{method}))).status,405);
   assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.route,'/api/control/v1/treasury');
   assert.equal(NUSD_MINT_WORKFLOW.nativeJournal.nativeBalanceChanged,false);
-  assert.equal(NUSD_MINT_WORKFLOW.contract.decimals,6);assert.equal(NUSD_MINT_WORKFLOW.preparation.broadcast,false);
+  assert.equal(NUSD_MINT_WORKFLOW.contract.decimals,18);assert.equal(NUSD_MINT_WORKFLOW.execution.chainReceiptVerified,true);assert.equal(NUSD_MINT_WORKFLOW.preparation.broadcast,false);
   assert.equal(NUSD_MINT_WORKFLOW.recipientEvidence.providerAcceptanceInferred,false);
-  assert.match(assessFinancialStatus(NUSD_POLICY).mint,/Implemented in contract.*unsigned preparation available/);
+  assert.match(assessFinancialStatus(NUSD_POLICY).mint,/Constructor issuance FINAL/);
   const unsafe=structuredClone(NUSD_POLICY);unsafe.mint_workflow.preparation.broadcast=true;
   assert.throws(()=>assessFinancialStatus(unsafe),/Mint workflow unavailable/);
   const mismatched=structuredClone(NUSD_POLICY);mismatched.mint_workflow.contract.artifactSha256='0'.repeat(64);

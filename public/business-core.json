@@ -158,7 +158,7 @@
     "executableConversionVerified": false
   },
   "nusd": {
-    "status": "FINAL_DEPLOYED_PAUSED",
+    "status": "FINAL_DEPLOYED_ACTIVE",
     "chainId": "962421430",
     "decimals": 18,
     "contract": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
@@ -167,7 +167,8 @@
     "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
     "receipt": "/downloads/nusd/deployment-receipt.json",
     "externalBackingVerified": false,
-    "externalSettlementVerified": false
+    "externalSettlementVerified": false,
+    "paused": false
   },
   "numinaMetadata": {
     "identity": "NUMINA",

@@ -18,7 +18,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd",
       "name": "NuminaUSD",
-      "status": "DEPLOYED_VERIFIED_PAUSED",
+      "status": "DEPLOYED_VERIFIED_ACTIVE",
       "source": {
         "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSD.sol",
         "url": "/downloads/contracts/NuminaUSD.sol",
@@ -366,333 +366,6 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       }
     }
   ],
-  "contract_candidate": {
-    "schema": "numina.nusd.contract-candidate-set.v1",
-    "status": "compiled_not_deployed",
-    "decimals": 6,
-    "initialSupplyNusd": "1500000000000000",
-    "initialSupplyBaseUnits": "1500000000000000000000",
-    "contracts": [
-      {
-        "id": "nusd",
-        "name": "NuminaUSD",
-        "status": "DEPLOYMENT_PREPARATION_INITIATED",
-        "source": {
-          "repository_path": "runtime/nusd/contracts/NuminaUSD.sol",
-          "url": "/downloads/contracts/candidate/NuminaUSD.sol",
-          "sha256": "c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510",
-          "bytes": 8549,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "artifact": {
-          "repository_path": "runtime/nusd/artifacts/NuminaUSD.json",
-          "url": "/downloads/contracts/candidate/NuminaUSD.json",
-          "sha256": "f9aa9066bb78340cb58ab846ceb087e1c77659dc85674b05ebbea8fd16b4dd88",
-          "bytes": 125824,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "compiler": {
-          "version": "0.8.37+commit.f401782d.Emscripten.clang",
-          "settings": {
-            "optimizer": {
-              "enabled": true,
-              "runs": 200
-            },
-            "evmVersion": "london",
-            "metadata": {
-              "bytecodeHash": "ipfs"
-            },
-            "outputSelection": {
-              "*": {
-                "*": [
-                  "abi",
-                  "evm.bytecode.object",
-                  "evm.deployedBytecode.object",
-                  "metadata"
-                ]
-              }
-            }
-          }
-        },
-        "implemented_operations": {
-          "issuance": [
-            "authorizeIssuance",
-            "mintAuthorized",
-            "cancelIssuance",
-            "expireIssuance"
-          ],
-          "transfer": [
-            "transfer",
-            "transferFrom",
-            "approve"
-          ],
-          "burn": [
-            "burn",
-            "burnFrom"
-          ],
-          "administration": [
-            "pause",
-            "unpause",
-            "grantRole",
-            "revokeRole"
-          ]
-        },
-        "verification": {
-          "source_hash_matches_artifact": true,
-          "initiation_recorded": true,
-          "independent_security_audit": false,
-          "chain_receipt_verified": false,
-          "native_activation_verified": false,
-          "signed_1_to_1_backing_verified": false
-        },
-        "deployment": {
-          "lifecycle": "INITIATED",
-          "status": "not_verified",
-          "submission_performed": false,
-          "expected_chain_id": "962421430",
-          "contract_address": null,
-          "transaction_hash": null,
-          "receipt": null
-        }
-      },
-      {
-        "id": "nusd_settlement",
-        "name": "NuminaSettlement",
-        "status": "DEPLOYMENT_PREPARATION_INITIATED",
-        "source": {
-          "repository_path": "runtime/nusd/contracts/NuminaSettlement.sol",
-          "url": "/downloads/contracts/candidate/NuminaSettlement.sol",
-          "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb",
-          "bytes": 3003,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "artifact": {
-          "repository_path": "runtime/nusd/artifacts/NuminaSettlement.json",
-          "url": "/downloads/contracts/candidate/NuminaSettlement.json",
-          "sha256": "2170f88692f99e43f751fc29b32ca0b9bd53c28c33f1350b999238b29cf113e4",
-          "bytes": 22178,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "compiler": {
-          "version": "0.8.37+commit.f401782d.Emscripten.clang",
-          "settings": {
-            "optimizer": {
-              "enabled": true,
-              "runs": 200
-            },
-            "evmVersion": "london",
-            "metadata": {
-              "bytecodeHash": "ipfs"
-            },
-            "outputSelection": {
-              "*": {
-                "*": [
-                  "abi",
-                  "evm.bytecode.object",
-                  "evm.deployedBytecode.object",
-                  "metadata"
-                ]
-              }
-            }
-          }
-        },
-        "implemented_operations": {
-          "nusd_settlement": [
-            "settle",
-            "settlements"
-          ],
-          "token_identity": [
-            "nusd"
-          ]
-        },
-        "verification": {
-          "source_hash_matches_artifact": true,
-          "initiation_recorded": true,
-          "independent_security_audit": false,
-          "chain_receipt_verified": false,
-          "native_activation_verified": false,
-          "signed_1_to_1_backing_verified": false
-        },
-        "deployment": {
-          "lifecycle": "INITIATED",
-          "status": "not_verified",
-          "submission_performed": false,
-          "expected_chain_id": "962421430",
-          "contract_address": null,
-          "transaction_hash": null,
-          "receipt": null
-        }
-      },
-      {
-        "id": "nusd_usdc_conversion",
-        "name": "NuminaUSDCConversion",
-        "status": "DEPLOYMENT_PREPARATION_INITIATED",
-        "source": {
-          "repository_path": "runtime/nusd/contracts/NuminaUSDCConversion.sol",
-          "url": "/downloads/contracts/candidate/NuminaUSDCConversion.sol",
-          "sha256": "14bd8f0bdc76f8cff9b26a4d0972d45becb55f47c027db9fb5e4e9d7707fdc5c",
-          "bytes": 8333,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "artifact": {
-          "repository_path": "runtime/nusd/artifacts/NuminaUSDCConversion.json",
-          "url": "/downloads/contracts/candidate/NuminaUSDCConversion.json",
-          "sha256": "31ee1662b7e352649155ff7470fd7f257f6fcc364a57a1b5dc44855e346d03ec",
-          "bytes": 103597,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "compiler": {
-          "version": "0.8.37+commit.f401782d.Emscripten.clang",
-          "settings": {
-            "optimizer": {
-              "enabled": true,
-              "runs": 200
-            },
-            "evmVersion": "london",
-            "metadata": {
-              "bytecodeHash": "ipfs"
-            },
-            "outputSelection": {
-              "*": {
-                "*": [
-                  "abi",
-                  "evm.bytecode.object",
-                  "evm.deployedBytecode.object",
-                  "metadata"
-                ]
-              }
-            }
-          }
-        },
-        "implemented_operations": {
-          "conversion": [
-            "quote",
-            "convert",
-            "conversions"
-          ],
-          "liquidity": [
-            "addLiquidity",
-            "removeLiquidity"
-          ],
-          "token_identity": [
-            "nusd",
-            "usdc"
-          ],
-          "administration": [
-            "pause",
-            "unpause",
-            "grantRole",
-            "revokeRole"
-          ]
-        },
-        "verification": {
-          "source_hash_matches_artifact": true,
-          "initiation_recorded": true,
-          "independent_security_audit": false,
-          "chain_receipt_verified": false,
-          "native_activation_verified": false,
-          "signed_1_to_1_backing_verified": false
-        },
-        "deployment": {
-          "lifecycle": "INITIATED",
-          "status": "not_verified",
-          "submission_performed": false,
-          "expected_chain_id": "962421430",
-          "contract_address": null,
-          "transaction_hash": null,
-          "receipt": null
-        }
-      },
-      {
-        "id": "nusd_usd_redemption",
-        "name": "NuminaUSDRedemption",
-        "status": "DEPLOYMENT_PREPARATION_INITIATED",
-        "source": {
-          "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
-          "url": "/downloads/contracts/candidate/NuminaUSDRedemption.sol",
-          "sha256": "b26d5b0a69ca06d83ec3541e50a673e6a7f7f550a1fa0f0054aea890f6e3559f",
-          "bytes": 12981,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "artifact": {
-          "repository_path": "runtime/nusd/artifacts/NuminaUSDRedemption.json",
-          "url": "/downloads/contracts/candidate/NuminaUSDRedemption.json",
-          "sha256": "219d3f4fbafd1c288deb28de276946a3bb9ac09dce98bdc895e2bd5397a6ce0e",
-          "bytes": 127477,
-          "encoding": "UTF-8",
-          "line_endings": "LF"
-        },
-        "compiler": {
-          "version": "0.8.37+commit.f401782d.Emscripten.clang",
-          "settings": {
-            "optimizer": {
-              "enabled": true,
-              "runs": 200
-            },
-            "evmVersion": "london",
-            "metadata": {
-              "bytecodeHash": "ipfs"
-            },
-            "outputSelection": {
-              "*": {
-                "*": [
-                  "abi",
-                  "evm.bytecode.object",
-                  "evm.deployedBytecode.object",
-                  "metadata"
-                ]
-              }
-            }
-          }
-        },
-        "implemented_operations": {
-          "redemption": [
-            "quoteUsdCents",
-            "requestRedemption",
-            "cancel",
-            "beginPayment",
-            "attestBankOutcome",
-            "claimRefund",
-            "redemptions",
-            "totalEscrowedNusd"
-          ],
-          "token_identity": [
-            "nusd"
-          ],
-          "administration": [
-            "pause",
-            "unpause",
-            "grantRole",
-            "revokeRole"
-          ]
-        },
-        "verification": {
-          "source_hash_matches_artifact": true,
-          "initiation_recorded": true,
-          "independent_security_audit": false,
-          "chain_receipt_verified": false,
-          "native_activation_verified": false,
-          "signed_1_to_1_backing_verified": false
-        },
-        "deployment": {
-          "lifecycle": "INITIATED",
-          "status": "not_verified",
-          "submission_performed": false,
-          "expected_chain_id": "962421430",
-          "contract_address": null,
-          "transaction_hash": null,
-          "receipt": null
-        }
-      }
-    ]
-  },
   "mint_receipt": {
     "schema": "numina.nusd.mint-receipt.v1",
     "status": "FINAL",
@@ -711,7 +384,6 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "decimals": 18,
     "baseUnits": "1500000000000000000000000000000000",
     "constructorMint": true,
-    "paused": true,
     "recipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
     "externallyBackedClaim": false,
     "verifiedAt": "2026-09-18T15:35:24.884Z",
@@ -723,8 +395,8 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "chainReceiptBlock": "51725",
     "chainReceiptConfirmations": 25,
     "currentOperationalState": "ACTIVE",
-    "currentPaused": false,
-    "historicalDeploymentSnapshotPaused": true,
+    "paused": false,
+    "transfersEnabled": true,
     "mintedNusd": "1500000000000000",
     "burnedNusd": "0"
   },
@@ -762,7 +434,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   },
   "financial_execution": {
     "issuance": true,
-    "transfer": false,
+    "transfer": true,
     "nusd_settlement": false,
     "usd_redemption": false,
     "usdc_conversion": false,
