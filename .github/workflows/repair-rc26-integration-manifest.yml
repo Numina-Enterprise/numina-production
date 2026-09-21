@@ -77,4 +77,6 @@ jobs:
             exit 0
           fi
           git commit -m 'NUMINA'
-          git push origin HEAD:main
+          repair_branch="repair/canonical-downstream-${GITHUB_RUN_ID}"
+          git push origin HEAD:"refs/heads/${repair_branch}"
+          echo "Repair branch: ${repair_branch}" >> "$GITHUB_STEP_SUMMARY"
