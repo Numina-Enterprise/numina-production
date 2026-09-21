@@ -148,6 +148,14 @@ test('missing provenance hashes never establish supply-chain evidence',async()=>
   assert.equal((await assess(records)).supplyIdentityMatches,false);
 });
 
+test('canonical Numina runtime compatibility reads fail closed without same-origin recursion',async()=>{
+  let calls=0;
+  const response=await routeRuntime(new Request('https://numinalabs.xyz/v1/status'),async()=>{calls++;return Response.json({});});
+  assert.equal(response.status,410);
+  assert.equal((await response.json()).error,'RUNTIME_COMPATIBILITY_ROUTE_RETIRED');
+  assert.equal(calls,0);
+});
+
 test('runtime gateway rejects an older release and missing version without forwarding credentials',async()=>{
   for(const payload of [{production_version:'1.9.0-rc22'},{}]){
     const response=await routeRuntime(new Request('https://numina.test/v1/status',{headers:{Authorization:'Bearer private-test-token',Cookie:'private=test'}}),async(url,options)=>{
