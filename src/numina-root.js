@@ -11,8 +11,7 @@ const NUMINA_COMPATIBILITY_ALIASES=NUMINA_IDENTITIES;
 export const NUMINA_VOCABULARY=NUMINA_IDENTITIES;
 export const NUMINA_DELIVERY_SURFACES=Object.freeze([
   Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'domain',endpoint:'https://numinalabs.xyz',role:'transport_substrate'}),
-  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'site',endpoint:'https://personal-space-m7q9.skott34.chatgpt.site',role:'transport_substrate'}),
-  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'vercel',endpoint:'https://numina-production.vercel.app',role:'transport_substrate'})
+  Object.freeze({identity:NUMINA,host:NUMINA,transport:NUMINA,service:'site',endpoint:'https://personal-space-m7q9.skott34.chatgpt.site',role:'transport_substrate'})
 ]);
 export const NUMINA_PROVIDER_VERIFICATION=Object.freeze({
   ...NUMINA_IDENTITIES,verified:true,verification_scope:NUMINA,
