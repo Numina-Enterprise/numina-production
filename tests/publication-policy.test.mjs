@@ -23,11 +23,12 @@ test('canonical repository release is bound to the tagged source and exact bytes
   assert.equal(tagged,release.sourceCommit);
 });
 
-test('Vercel production is authoritative and ChatGPT Sites is an optional mirror',()=>{
+test('Numina public origin is authoritative and GitHub main is canonical',()=>{
   const policy=json('public/publication-policy.json');
   assert.equal(policy.schema,'numina.publication-policy.v1');
   assert.equal(policy.authoritativePublicOrigin,'https://numinalabs.xyz');
-  assert.equal(policy.authoritativeHosting,'VERCEL_PRODUCTION');
+  assert.equal(policy.authoritativeHosting,'NUMINA_PUBLIC_ORIGIN');
+  assert.equal(policy.canonicalSource,'GITHUB_MAIN');
   assert.equal(policy.chatgptSitesRole,'OPTIONAL_MIRROR');
   assert.equal(policy.chatgptSitesRequiredForRelease,false);
   assert.equal(policy.mobileStoreDistributionRequiredForWebRelease,false);
