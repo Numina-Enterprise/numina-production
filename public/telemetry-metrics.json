@@ -9,7 +9,7 @@
       "signal": "traffic",
       "field": "window.requestsPerSecond",
       "unit": "requests_per_second",
-      "action": "size_stateless_capacity"
+      "action": "size_compute_capacity"
     },
     {
       "signal": "latency",
@@ -96,7 +96,7 @@
       "metrics": [
         {"signal": "active_jobs", "field": "activeJobs", "action": "compare_with_limits.concurrentPerProcess"},
         {"signal": "minute_admissions", "field": "admittedThisMinute", "action": "compare_with_limits.requestsPerMinutePerProcess"},
-        {"signal": "concurrency_rejections", "field": "window.concurrencyLimited", "action": "review_stateless_compute_capacity"},
+        {"signal": "concurrency_rejections", "field": "window.concurrencyLimited", "action": "review_compute_capacity"},
         {"signal": "rate_rejections", "field": "window.rateLimited", "action": "review_quantum_request_rate_policy"},
         {"signal": "service_failures", "field": "window.failureRate", "action": "investigate_quantum_failures"},
         {"signal": "completed_work", "fields": ["window.completedQubits", "window.completedGates", "window.completedShots"], "action": "compare_workload_size_before_changing_capacity"},
