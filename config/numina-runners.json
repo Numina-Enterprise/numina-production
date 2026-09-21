@@ -5,7 +5,7 @@
   "allRunnerIdentities": "NUMINA",
   "runnerTarget": "NUMINA",
   "preserveMode": "current_runner_count",
-  "preservedRunnerCount": 32,
+  "preservedRunnerCount": 33,
   "selfHostedPolicy": "preserve_existing",
   "futureRunnerPolicy": "deny",
   "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
