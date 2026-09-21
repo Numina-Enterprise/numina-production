@@ -63,10 +63,7 @@ export default {
     const headers=new Headers(artifact.headers);headers.set('Cache-Control','no-store');return finish(new Response(artifact.body,{status:artifact.status,headers}));
    }
    const runtime=await routeRuntime(req);if(runtime)return finish(runtime);
-   if(path.startsWith('/v1/archive/rc20/')){
-    const legacyUrl=new URL(req.url);legacyUrl.pathname='/v1/'+path.slice('/v1/archive/rc20/'.length);
-    const legacy=await routeRc20(new Request(legacyUrl,req),env);if(legacy){const headers=new Headers(legacy.headers);headers.set('X-Numina-Release-Context','historical-rc20');return finish(new Response(legacy.body,{status:legacy.status,headers}));}
-   }
+   if(path.startsWith('/v1/archive/rc20/'))return finish(response({error:'RC20_RUNTIME_RETIRED',message:'Historical rc20 runtime evidence is retained in repository artifacts; no legacy upstream runtime is active.'},410,{'X-Numina-Release-Context':'historical-rc20'}));
    const rc20=await routeRc20(req,env);if(rc20)return finish(rc20);
    if(path.startsWith('/api/control/'))return finish(await controlHttp(req,env));
    if(path==='/api/core/v1.8/manifest'&&req.method==='GET')return finish(response(CORE_MANIFEST));
