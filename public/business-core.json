@@ -30,7 +30,13 @@
     "fundingStatus": "server_observed_evidence_required",
     "canonicalView": "/api/control/v2/treasury/accounts",
     "referenceSchema": "numina.treasury.canonical-reference.v2",
-    "coverage": ["provider_observations","reserve_allocation","redemption","funding","supporting_documents"],
+    "coverage": [
+      "provider_observations",
+      "reserve_allocation",
+      "redemption",
+      "funding",
+      "supporting_documents"
+    ],
     "nativeTreasuryRecordCount": 1,
     "recordsSchema": "numina.treasury.record-sources.v1",
     "recordSeparation": "Provider observations retain source/currency/status as role-specific substrate evidence attached to the singular NUMINA treasury; role balances are never additive.",
@@ -44,9 +50,18 @@
       "amount": "1500000000000000",
       "unit": "NUSD",
       "components": [
-        {"amount":"500000000000000","unit":"USD"},
-        {"amount":"500000000000000","unit":"USDC"},
-        {"amount":"500000000000000","unit":"NUSD"}
+        {
+          "amount": "500000000000000",
+          "unit": "USD"
+        },
+        {
+          "amount": "500000000000000",
+          "unit": "USDC"
+        },
+        {
+          "amount": "500000000000000",
+          "unit": "NUSD"
+        }
       ],
       "externalBalancesAggregated": false
     }
@@ -63,7 +78,15 @@
     "automaticPurchasing": false,
     "permissions": "existing_owner_and_delegated_permissions",
     "paymentEvidence": "provider_confirmation_required",
-    "scope": ["Numina OS","website","plugin","release provenance","mobile applications","integration clients and adapters","payment integrations"],
+    "scope": [
+      "Numina OS",
+      "website",
+      "plugin",
+      "release provenance",
+      "mobile applications",
+      "integration clients and adapters",
+      "payment integrations"
+    ],
     "execution": "Use existing authorized provider access and available credits",
     "providerBillingObservation": null
   },
@@ -104,11 +127,30 @@
     "scope": "declared_valuation_for_one_singular_numina_treasury",
     "expression": "1 NUSD = 1 USDC = 1 USD",
     "referenceUnit": "USD",
-    "units": ["NUSD","USDC","USD"],
+    "units": [
+      "NUSD",
+      "USDC",
+      "USD"
+    ],
     "rates": [
-      {"base":"NUSD","quote":"USD","numerator":"1","denominator":"1"},
-      {"base":"USDC","quote":"USD","numerator":"1","denominator":"1"},
-      {"base":"USD","quote":"USD","numerator":"1","denominator":"1"}
+      {
+        "base": "NUSD",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      {
+        "base": "USDC",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      {
+        "base": "USD",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      }
     ],
     "preserveCurrencyIdentity": true,
     "providerBalancesChanged": false,
@@ -126,5 +168,24 @@
     "receipt": "/downloads/nusd/deployment-receipt.json",
     "externalBackingVerified": false,
     "externalSettlementVerified": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

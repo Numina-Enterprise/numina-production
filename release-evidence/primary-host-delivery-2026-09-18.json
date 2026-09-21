@@ -88,5 +88,24 @@
     "settlementReceipts": [],
     "ownerDeclarationsAreProviderEvidence": false
   },
-  "scope": "Website/source deployment observation only. Public model values, owner activation/authorization and smart-contract deployment receipts do not establish external transfer submission, funded reserves or settlement. No funds moved by this work."
+  "scope": "Website/source deployment observation only. Public model values, owner activation/authorization and smart-contract deployment receipts do not establish external transfer submission, funded reserves or settlement. No funds moved by this work.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

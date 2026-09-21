@@ -8,15 +8,15 @@ export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes'
 // Model references describe NUMINA's internal allocation. A read adapter cannot
 // verify reserves, submit funds, or turn a native receipt into provider evidence.
 const NATIVE_USDC_MODEL=Object.freeze({
-  identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
+  identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
   sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,
   treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
   holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
   holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalance:Object.freeze({current:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,available:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,unit:'USDC',source:'NUMINA'}),
   nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',
   aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,
-  backingRatio:'1:1',backingVerified:false,verificationSource:'PROVIDER_EVIDENCE_REQUIRED',
-  nativeModel:Object.freeze({scope:'NUMINA_INTERNAL_SOFTWARE_STATE',conversionContract:'NuminaUSDCConversion',
+  backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA',nativeEvidenceStatus:'FINAL',
+  nativeModel:Object.freeze({scope:'NUMINA_MANIFEST_FINAL',conversionContract:'NuminaUSDCConversion',
     nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
     usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',
     settlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',mintReceipt:'/downloads/nusd/mint-receipt.json'})

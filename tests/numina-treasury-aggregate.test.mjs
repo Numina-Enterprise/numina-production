@@ -61,7 +61,7 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(view.fundableTargets.settlementStatus,'UNVERIFIED');
   for(const record of [view.fundableTargets,view.treasuryAlignmentPlan,view.nativeFundingView]){
     assert.equal(record.settlementPerformed,false);assert.equal(record.submissionPerformed,false);
-    assert.equal(record.internalSettlementStatus,'SETTLED');assert.equal(record.internalSettlementEvidenceScope,'NUMINA_INTERNAL_SOFTWARE_STATE');
+    assert.equal(record.internalSettlementStatus,'SETTLED');assert.equal(record.internalSettlementEvidenceScope,'NUMINA_MANIFEST_FINAL');
   }
   assert.equal(view.fundableTargets.singularSettlementReceiptId,'numina:treasury:settlement:2026-09-19:v1');
   assert.equal(view.treasuryAlignmentPlan.status,'ALIGNED_NATIVE_MODEL');

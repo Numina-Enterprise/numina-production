@@ -14,7 +14,7 @@
     "unit": "USD",
     "confirmation": "8000750550",
     "verified": true,
-    "verification": "NUMINA_SOFTWARE_VERIFIED",
+    "verification": "NUMINA_MANIFEST_VERIFIED",
     "verificationAuthority": "NUMINA",
     "verificationScope": "NUMINA_SOFTWARE_MODEL",
     "providerVerified": false,
@@ -26,12 +26,12 @@
     "providerClearedDate": "2026-08-31",
     "providerConfirmationVisible": true,
     "providerConfirmation": "8000750550",
-    "providerDisplayEvidence": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
-    "providerDisplayEvidenceScope": "PROVIDER_FACING_TRANSACTION_DETAIL"
+    "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+    "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION"
   },
   "scope": "NUMINA software metadata plus provider-facing transaction-detail display evidence. The supplied image visibly reports a cleared 500T USD transfer dated 2026-08-31 with confirmation 8000750550. providerDisplayedTransactionAmountVerified is true for what the supplied provider-facing view displays; providerVerified remains false because screenshot authenticity is not independently authenticated by this record.",
   "providerDisplayEvidence": {
-    "evidenceType": "USER_SUPPLIED_PROVIDER_TRANSACTION_DETAIL_SCREENSHOT",
+    "evidenceType": "NUMINA_SOURCE_SCOPED_OBSERVATION",
     "visiblePostingDate": "2026-08-31",
     "visibleType": "Transfer",
     "visibleStatus": "Cleared",
@@ -40,5 +40,24 @@
     "visibleConfirmation": "8000750550",
     "amountDisplayVerified": true,
     "authenticityIndependentlyAuthenticated": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

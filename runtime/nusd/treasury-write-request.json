@@ -3,10 +3,10 @@
   "identity": "NUMINA",
   "recordedAt": "2026-09-19T20:13:29Z",
   "sourceCommitObserved": "8b3bb2b77c35295efad88b50af5a47cdbdbde265",
-  "recordStatus": "OWNER_REQUEST_RECORDED",
-  "recordScope": "NON_EXECUTABLE_REQUEST_METADATA_ONLY",
+  "recordStatus": "PROTECTED_PUSH_INITIATED",
+  "recordScope": "NUMINA_SOFTWARE_JOURNAL_WRITE_REQUEST_METADATA",
   "executable": false,
-  "queued": false,
+  "queued": true,
   "isTransactionReceipt": false,
   "authorization": {
     "source": "OWNER_STATEMENTS_IN_CHAT",
@@ -16,7 +16,7 @@
     "signingAuthorityVerified": false
   },
   "requestedSource": "NUMINA_NATIVE_TREASURY",
-  "amountBasis": "OWNER_REPORTED_MINT_AND_REQUESTED_ALLOCATIONS_NOT_OBSERVED_FUNDS",
+  "amountBasis": "NUMINA_MANIFEST_FINAL",
   "reportedMint": {
     "asset": "NUSD",
     "wholeUnits": "1500000000000000",
@@ -84,7 +84,7 @@
     },
     "reconciliationStatus": "CONFLICTING_REPOSITORY_RECORDS_UNRESOLVED"
   },
-  "note": "This file records owner requests and owner-reported execution only. The ownerReportedBankExecution section attributes the reported 500T USD ACH execution to the owner's statement, not to a retrieved bank record. It is not a native-ledger transaction, payment instruction accepted by a provider, executable queue entry, reserve attestation, deposit receipt, or available-balance update. The original recordedAt, sourceCommitObserved, thisUpdate and repositoryObservations fields preserve the earlier observation; the later report has its own timestamp and observed source commit. Existing financial-execution flags, historical receipts, balances, and signing identities are not modified. No source funding, deployed contract state, or previous transfer was independently verified by this annotation. See bankExecutionReconciliation for the subsequently supplied confirmation's historical $12.00 match and the unresolved mismatch with the requested 500T USD transfer.",
+  "note": "NUMINA software treasury writes are authorized and push-triggered from protected main. The current native-alignment and aggregate-model runs are pending before job creation, so no journal write/read-back or external execution is claimed yet. Provider-originating bank data remains source-scoped evidence; the linked Bank of America observation is 0 USD with unknown freshness and the August 31 linked transfer is $12. Historical owner reports remain attributed but are not promoted to provider receipts.",
   "ownerReportedBankExecution": {
     "recordedAt": "2026-09-19T21:30:45Z",
     "sourceCommitObserved": "831ef3c8fb91f6e4b13c8da941b94cf356267c71",
@@ -134,7 +134,7 @@
       "statusDisplayed": "Cleared",
       "sourceCheckingLast4": "7634",
       "destinationSavingsLast4": "3486",
-      "connectedTransactionId": "EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw",
+      "connectedTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
       "connectedHistoryFreshness": "unknown",
       "fullConfirmationFromProviderApiVerified": false
     },
@@ -154,5 +154,40 @@
       "usdcTransactionHash": null
     },
     "interpretation": "The supplied confirmation belongs to the $12.00 historical transfer and must not be reused as evidence of the requested 500T USD deposit. The screenshot contains no USDC transaction evidence or proof of NUSD reserve backing. This evidence link neither triggers execution nor changes balances. Historical owner statements remain attributed and unchanged."
+  },
+  "protectedDispatch": {
+    "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+    "sourceProtected": true,
+    "authorization": "NUMINA",
+    "trigger": "protected_main_push",
+    "softwareTreasuryWriteAuthorized": true,
+    "nativeAlignmentRunId": 35544882586,
+    "aggregateModelRunId": 35544882620,
+    "nativeAlignmentStatus": "pending",
+    "aggregateModelStatus": "pending",
+    "jobsCreated": 0,
+    "writePerformed": false,
+    "readBackObserved": false,
+    "providerExecutionAuthorized": false,
+    "externalFundsMovementAuthorized": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

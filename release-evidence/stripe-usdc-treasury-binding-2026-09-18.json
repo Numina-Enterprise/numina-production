@@ -100,5 +100,24 @@
     "mode": "live_read_only",
     "moneyMovement": false
   },
-  "scope": "Authenticated Stripe provider observation binding NUMINA to the live USDC Treasury account and active receiving routes. This record does not establish funding, reserve coverage, conversion, NUSD acceptance, or external settlement."
+  "scope": "Authenticated Stripe provider observation binding NUMINA to the live USDC Treasury account and active receiving routes. This record does not establish funding, reserve coverage, conversion, NUSD acceptance, or external settlement.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }
