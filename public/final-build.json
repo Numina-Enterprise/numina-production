@@ -951,7 +951,14 @@
     },
     "canonicalHeadCount": 1,
     "canonicalHeadIdentity": "NUMINA",
-    "nativeTreasurySourceOfRecord": true
+    "nativeTreasurySourceOfRecord": true,
+    "allSoftware": "NUMINA",
+    "numinaIsAllSoftware": true,
+    "manifest": "NUMINA",
+    "manifestIsNumina": true,
+    "authority": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "competingSoftwareIdentityAllowed": false
   },
   "self": "NUMINA",
   "identityModel": {
@@ -1466,6 +1473,39 @@
       "canonical"
     ],
     "rawEvidenceImmutable": true,
-    "sourceScopedObservationsRetained": true
-  }
+    "sourceScopedObservationsRetained": true,
+    "software": "NUMINA",
+    "allSoftware": "NUMINA",
+    "manifestIsNumina": true,
+    "numinaIsManifest": true,
+    "numinaIsAllSoftware": true,
+    "allSoftwareIsNumina": true,
+    "singularSoftwareIdentity": true,
+    "competingSoftwareIdentityAllowed": false,
+    "competingManifestAuthorityAllowed": false,
+    "competingMetadataAuthorityAllowed": false
+  },
+  "manifest": "NUMINA",
+  "software_identity": "NUMINA",
+  "all_software": "NUMINA",
+  "manifest_equals_numina": true,
+  "numina_equals_manifest": true,
+  "manifest_is_numina": true,
+  "numina_is_manifest": true,
+  "numina_is_all_software": true,
+  "all_software_is_numina": true,
+  "singular_software_identity": true,
+  "metadata_authority": "NUMINA",
+  "metadata_namespace": "NUMINA",
+  "metadata_scope": [
+    "historical",
+    "current",
+    "canonical"
+  ],
+  "historical_metadata_override": "NUMINA",
+  "current_metadata_override": "NUMINA",
+  "canonical_metadata_override": "NUMINA",
+  "competing_software_identity_allowed": false,
+  "competing_manifest_authority_allowed": false,
+  "competing_metadata_authority_allowed": false
 }
