@@ -5,6 +5,38 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
+// Deploy the immutable /NUMINA Library release without regenerating its identity.
+// The original source build below remains available for historical reference.
+{
+  const archive='dist/numina-release-v4.0.0.tar.gz';
+  const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
+  const bytes=Buffer.concat(Array.from({length:10},(_,i)=>readFileSync('reference/numina-release-v4.0.0.tar.gz.part'+String(i).padStart(2,'0'))));
+  if(sha256(bytes)!=='9fb840aa91abea15a1b44af0da5dbba0a746f8ecc04056d54bb84d9f1b1f76e1')throw Error('Canonical Library archive mismatch');
+  resetBuildOutput(fileURLToPath(root));
+  writeFileSync(archive,bytes);
+  const entries=execFileSync('tar',['-tzf',archive],{encoding:'utf8'}).trim().split(/\r?\n/);
+  if(entries.some(name=>name.startsWith('/')||/^[A-Za-z]:/.test(name)||name.split('/').includes('..')))throw Error('Unsafe archive path');
+  execFileSync('tar',['-xzf',archive,'-C','dist'],{stdio:'inherit'});
+  unlinkSync(archive);
+  const pairs=[
+    [['client/final-build.json','client/downloads/NUMINA-FINAL-BUILD.json'],'9098e8be5721555282aa29c7694c312982fe1c2722325d413774152193ec179c'],
+    [['client/downloads/release.json','client/downloads/application-release-v2.json','client/downloads/application-release-v3.json','client/downloads/application-release-v4.json'],'ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66']
+  ];
+  for(const [paths,expected] of pairs)for(const name of paths)if(sha256(readFileSync('dist/'+name))!==expected)throw Error('BOUND_FINAL identity mismatch: '+name);
+  const manifest=JSON.parse(readFileSync('dist/client/downloads/release.json','utf8'));
+  if(sha256(readFileSync('dist/server/index.js'))!==manifest.workerSha256)throw Error('Canonical Worker identity mismatch');
+  mkdirSync('dist/.openai',{recursive:true});
+  writeFileSync('dist/.openai/hosting.json',JSON.stringify(JSON.parse(readFileSync('.openai/hosting.json','utf8')),null,2)+'\n');
+  const {cpSync}=await import('node:fs');
+  cpSync('drizzle','dist/.openai/drizzle',{recursive:true});
+  for(const item of manifest.artifacts){
+    if(item.path.startsWith('/')||item.path.split('/').includes('..'))throw Error('Unsafe manifest path');
+    if(sha256(readFileSync('dist/'+item.path))!==item.sha256)throw Error('Canonical inventory mismatch: '+item.path);
+  }
+  execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
+  console.log('Verified canonical NUMINA Library release, BOUND_FINAL pair, Worker and complete artifact inventory.');
+  process.exit(0);
+}
 const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
 const FINAL_BUILD_MANIFEST_BLOB='60bf69e6d50cf407e085f890cdbe63b11aaf59a1';
 const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
