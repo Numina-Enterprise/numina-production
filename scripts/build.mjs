@@ -5,38 +5,6 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
-// Deploy the immutable /NUMINA Library release without regenerating its identity.
-// The original source build below remains available for historical reference.
-{
-  const archive='dist/numina-release-v4.0.0.tar.gz';
-  const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
-  const bytes=Buffer.concat(Array.from({length:10},(_,i)=>readFileSync('reference/numina-release-v4.0.0.tar.gz.part'+String(i).padStart(2,'0'))));
-  if(sha256(bytes)!=='9fb840aa91abea15a1b44af0da5dbba0a746f8ecc04056d54bb84d9f1b1f76e1')throw Error('Canonical Library archive mismatch');
-  resetBuildOutput(fileURLToPath(root));
-  writeFileSync(archive,bytes);
-  const entries=execFileSync('tar',['-tzf',archive],{encoding:'utf8'}).trim().split(/\r?\n/);
-  if(entries.some(name=>name.startsWith('/')||/^[A-Za-z]:/.test(name)||name.split('/').includes('..')))throw Error('Unsafe archive path');
-  execFileSync('tar',['-xzf',archive,'-C','dist'],{stdio:'inherit'});
-  unlinkSync(archive);
-  const pairs=[
-    [['client/final-build.json','client/downloads/NUMINA-FINAL-BUILD.json'],'9098e8be5721555282aa29c7694c312982fe1c2722325d413774152193ec179c'],
-    [['client/downloads/release.json','client/downloads/application-release-v2.json','client/downloads/application-release-v3.json','client/downloads/application-release-v4.json'],'ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66']
-  ];
-  for(const [paths,expected] of pairs)for(const name of paths)if(sha256(readFileSync('dist/'+name))!==expected)throw Error('BOUND_FINAL identity mismatch: '+name);
-  const manifest=JSON.parse(readFileSync('dist/client/downloads/release.json','utf8'));
-  if(sha256(readFileSync('dist/server/index.js'))!==manifest.workerSha256)throw Error('Canonical Worker identity mismatch');
-  mkdirSync('dist/.openai',{recursive:true});
-  writeFileSync('dist/.openai/hosting.json',JSON.stringify(JSON.parse(readFileSync('.openai/hosting.json','utf8')),null,2)+'\n');
-  const {cpSync}=await import('node:fs');
-  cpSync('drizzle','dist/.openai/drizzle',{recursive:true});
-  for(const item of manifest.artifacts){
-    if(item.path.startsWith('/')||item.path.split('/').includes('..'))throw Error('Unsafe manifest path');
-    if(sha256(readFileSync('dist/'+item.path))!==item.sha256)throw Error('Canonical inventory mismatch: '+item.path);
-  }
-  execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
-  console.log('Verified canonical NUMINA Library release, BOUND_FINAL pair, Worker and complete artifact inventory.');
-  process.exit(0);
-}
 const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
 const FINAL_BUILD_MANIFEST_BLOB='60bf69e6d50cf407e085f890cdbe63b11aaf59a1';
 const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
@@ -74,7 +42,7 @@ const report=JSON.parse(readFileSync('fixtures/conformance-report.json'));
 const key=JSON.parse(readFileSync('fixtures/demo-test-key.json'));delete key.privateJwk;
 writeFileSync('src/generated.js','export const DEMO_KEY='+JSON.stringify(key)+';\nexport const CONFORMANCE='+JSON.stringify(report)+';\n');
 for(const n of ['core-v1.8-manifest.json','core-v1.8-context.json'])copyFileSync('fixtures/'+n,'dist/client/downloads/'+n);
-let source='const TREASURY_SUBMISSION_REQUESTS='+readFileSync('release-evidence/treasury-submission-requests-2026-09-18.json','utf8')+';\n'+readFileSync('public/treasury-connection-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/owner-approval.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/wallet-execution-policy.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/financial-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/nusd-contract-record.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/treasury-valuation.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/architecture-layers.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/runtime-contract.js','utf8').replace(/export /g,'')+'\n'+readFileSync('integrations/numina/src/quantum.js','utf8').replace(/export /g,'')+'\n'+['telemetry','quantum-backend','quantum-telemetry','ibm-quantum','core','store','generated','core-generated','core-v18','numina-root','native-treasury-model','treasury-policy','treasury-alignment','frontier','control','control-store','native-treasury','treasury-documents','stripe-treasury','ach-receipt-verifier','usdc-receipt-verifier','wallet-execution-store','control-http','telemetry-http','quantum-http','rc20','runtime-revocation','runtime-http','app-core','app-http','nusd-http','treasury-evidence','bank-route-model','treasury-connection-http','connections-http','frontier-http','reviewer','financial-evidence','transfer-receipts','worker'].map(n=>readFileSync('src/'+n+'.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export \{.*\};\r?\n/gm,'').replace(/export (?!default)/g,'')).join('\n');
+let source='const TREASURY_SUBMISSION_REQUESTS='+readFileSync('release-evidence/treasury-submission-requests-2026-09-18.json','utf8')+';\n'+readFileSync('public/treasury-connection-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/owner-approval.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/wallet-execution-policy.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/financial-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/nusd-contract-record.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/treasury-valuation.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/architecture-layers.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/runtime-contract.js','utf8').replace(/export /g,'')+'\n'+readFileSync('integrations/numina/src/quantum.js','utf8').replace(/export /g,'')+'\n'+['telemetry','quantum-backend','quantum-telemetry','ibm-quantum','core','store','generated','core-generated','core-v18','numina-root','native-treasury-model','treasury-policy','treasury-alignment','frontier','control','control-store','native-treasury','treasury-documents','stripe-treasury','ach-receipt-verifier','usdc-receipt-verifier','wallet-execution-store','control-http','telemetry-http','quantum-http','rc20','runtime-revocation','runtime-http','app-core','app-http','nusd-existing-token-evidence','nusd-http','treasury-evidence','bank-route-model','treasury-connection-http','connections-http','frontier-http','reviewer','financial-evidence','transfer-receipts','worker'].map(n=>readFileSync('src/'+n+'.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export \{.*\};\r?\n/gm,'').replace(/export (?!default)/g,'')).join('\n');
 writeFileSync('dist/server/index.js',readFileSync('public/connection-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/treasury-amount.js','utf8').replace(/export /g,'')+'\n'+source);
 // Match the Sites packager's canonical formatting before inventory hashing.
 writeFileSync('dist/.openai/hosting.json',JSON.stringify(JSON.parse(readFileSync('.openai/hosting.json','utf8')),null,2)+'\n');
