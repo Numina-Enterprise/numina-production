@@ -147,14 +147,8 @@ const servicesAside = section(
   '</aside>',
 );
 const proofRail = section(home, '<section class="proof-rail" aria-label="NUMINA operating proof">');
+const operatingModel = section(home, '<section class="operating-model" aria-labelledby="operating-model-title">');
 const growthSection = section(home, '<section class="growth-section">');
-
-const advantageSpotlight = `<aside class="advantage-spotlight" aria-labelledby="advantage-spotlight-title">
-    <span class="eyebrow">THE NUMINA ADVANTAGE</span>
-    <h2 id="advantage-spotlight-title">Built to lead agentic finance.</h2>
-    <p>Six connected advantages bring authority, compute, value, treasury, interoperability and evidence into one operating architecture.</p>
-    <a class="advantage-jump" href="#advantages">Explore the Numina Advantage ↓</a>
-  </aside>`;
 
 const servicesSection = servicesAside
   .replace(
@@ -163,23 +157,17 @@ const servicesSection = servicesAside
   )
   .replace(/<\/aside>\s*$/, '</section>');
 
-home = home.replace(servicesAside, advantageSpotlight);
-home = home.replace(
-  '<span class="eyebrow">NUMINA / AGENTIC FINANCE INFRASTRUCTURE</span>',
-  `<span class="eyebrow">NUMINA / AGENTIC FINANCE INFRASTRUCTURE</span>
-    <a class="advantage-mobile-flag" href="#advantages"><span>THE NUMINA ADVANTAGE</span><strong>Built to lead agentic finance. ↓</strong></a>`,
-);
+home = home.replace(servicesAside, '');
 home = home.replace(proofRail, '');
-home = home.replace(
-  growthSection,
-  growthSection.replace(
-    '</section>',
-    `\n  <div class="institutional-proof"><span class="eyebrow">OPERATING EVIDENCE</span>${proofRail}</div>\n</section>`,
-  ),
+const institutionalScale = growthSection.replace(
+  '</section>',
+  `\n  <div class="institutional-proof"><span class="eyebrow">OPERATING EVIDENCE</span>${proofRail}</div>\n</section>`,
 );
+home = home.replace(operatingModel, '');
+home = home.replace(growthSection, '');
 home = home.replace(
-  /<\/section>\s*<section class="leadership-section" id="advantages">/,
-  `</section>\n${servicesSection}\n<section class="leadership-section" id="advantages">`,
+  '<section class="global-section">',
+  `${institutionalScale}\n${operatingModel}\n${servicesSection}\n<section class="global-section">`,
 );
 home = home.replace(
   '<link rel="stylesheet" href="/page-components.css">',
@@ -187,41 +175,8 @@ home = home.replace(
 );
 
 const homeCss = `/* Homepage-only section reorganization. The shared NUMINA design system remains unchanged. */
-.advantage-mobile-flag { display: none; }
-.advantage-spotlight {
-  min-width: 0;
-  padding: clamp(70px, 7vw, 150px) 0 clamp(76px, 7vw, 150px) clamp(42px, 4.2vw, 98px);
-  border-left: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: radial-gradient(circle at 78% 26%, rgba(185,237,242,.13), transparent 34%);
-}
-.advantage-spotlight::before {
-  content: '';
-  position: absolute;
-  inset: 14% 0 14% auto;
-  width: 2px;
-  background: linear-gradient(transparent, var(--accent), transparent);
-}
-.advantage-spotlight h2 {
-  max-width: 11ch;
-  margin: clamp(34px, 3vw, 58px) 0 24px;
-  font-size: clamp(2.4rem, 3.3vw, 5.3rem);
-  letter-spacing: -.055em;
-}
-.advantage-spotlight p { max-width: 39ch; font-size: clamp(1rem, .72vw, 1.25rem); }
-.advantage-jump {
-  width: fit-content;
-  margin-top: clamp(30px, 3vw, 52px);
-  color: var(--accent);
-  font-size: 14px;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(185,237,242,.42);
-  padding-bottom: 5px;
-}
+.hero-home { grid-template-columns: minmax(0, 1fr); gap: 0; }
+.hero-home .hero-copy { max-width: min(1120px, 100%); }
 .services-home {
   padding: var(--section-space) 0;
   border-left: 0;
@@ -250,44 +205,15 @@ const homeCss = `/* Homepage-only section reorganization. The shared NUMINA desi
 .growth-section .proof-rail { border: 1px solid var(--line); }
 
 @media (max-width: 1180px) {
-  .advantage-mobile-flag {
-    display: flex;
-    width: min(100%, 560px);
-    margin-top: 24px;
-    padding: 13px 15px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    border: 1px solid rgba(185,237,242,.28);
-    background: rgba(185,237,242,.045);
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .advantage-mobile-flag span {
-    color: var(--accent);
-    font: 10px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    letter-spacing: .13em;
-  }
-  .advantage-mobile-flag strong { font-size: 12px; font-weight: 520; text-align: right; }
-  .advantage-spotlight {
-    padding: 70px 0 90px;
-    border-top: 1px solid var(--line);
-    border-left: 0;
-  }
-  .advantage-spotlight::before { inset: 0 auto auto 0; width: 100%; height: 1px; }
-  .advantage-spotlight h2 { max-width: 13ch; }
+  .hero-home .hero-copy { max-width: 100%; }
 }
 @media (max-width: 900px) {
   .services-home { grid-template-columns: 1fr; }
   .services-home h2 { margin-bottom: 10px; }
 }
 @media (max-width: 760px) {
-  .advantage-spotlight { padding: 58px 0 70px; }
   .services-home { padding-block: clamp(58px, 13vw, 88px); }
   .institutional-proof { margin-top: 52px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .advantage-jump { scroll-behavior: auto; }
 }
 `;
 
@@ -306,16 +232,18 @@ const servicesAt = position('<section class="service-pane services-home"');
 const advantagesAt = position('<section class="leadership-section" id="advantages">');
 const growthAt = position('<section class="growth-section">');
 const proofAt = position('<section class="proof-rail" aria-label="NUMINA operating proof">');
+const operatingAt = position('<section class="operating-model" aria-labelledby="operating-model-title">');
 const globalAt = position('<section class="global-section">');
 
-assert(heroAt < servicesAt, 'Services must follow the hero');
-assert(servicesAt < advantagesAt, 'Services must occupy the prior evidence position');
-assert(advantagesAt < growthAt, 'Numina Advantage hierarchy changed unexpectedly');
-assert(growthAt < proofAt && proofAt < globalAt, 'Evidence must sit under Institutional Scaling');
+assert(heroAt < advantagesAt, 'The existing Numina Advantage must follow the hero');
+assert(advantagesAt < growthAt, 'Numina Advantage must move above Institutional Scaling');
+assert(growthAt < proofAt, 'Evidence must sit inside Institutional Scaling');
+assert(proofAt < operatingAt, 'The Operating Model must follow Institutional Scaling and Evidence');
+assert(operatingAt < servicesAt && servicesAt < globalAt, 'Services must sit below the Operating Model and above Global Scaling');
 assert((finalHome.match(/class="proof-rail"/g) ?? []).length === 1, 'Evidence rail must appear once');
 assert((finalHome.match(/id="services-heading"/g) ?? []).length === 1, 'Services heading must appear once');
-assert(finalHome.includes('class="advantage-spotlight"'), 'Above-the-fold Numina Advantage spotlight is missing');
-assert(finalHome.includes('class="advantage-mobile-flag"'), 'Responsive Numina Advantage cue is missing');
+assert((finalHome.match(/THE NUMINA ADVANTAGE/g) ?? []).length === 1, 'Numina Advantage must not be duplicated');
+assert(!finalHome.includes('advantage-spotlight') && !finalHome.includes('advantage-mobile-flag'), 'Redundant Numina Advantage additions remain');
 assert(finalHome.includes('href="/home-layout.css"'), 'Homepage layout stylesheet is missing');
 
 const pinnedRuntime = Buffer.from(readFileSync(resolve('reference/live-server-index.js.b64'), 'utf8').trim(), 'base64');
@@ -358,7 +286,7 @@ console.log(JSON.stringify({
   syncedLiveArtifacts: synced,
   redirectedCompatibilityArtifacts: unavailableThroughPublicRoutes.length,
   presentationFiles: presentationFiles.size,
-  sectionOrder: ['hero', 'services', 'advantages', 'institutional-scaling', 'evidence', 'global-scaling'],
+  sectionOrder: ['hero', 'advantages', 'institutional-scaling', 'evidence', 'operating-model', 'services', 'global-scaling'],
   artifacts: artifacts.length,
   buildId,
   serverSha256: serverHash,
