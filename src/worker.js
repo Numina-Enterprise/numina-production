@@ -9,6 +9,7 @@ import {routeRc20} from './rc20.js';
 import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
 import {nusdHttp} from './nusd-http.js';
+import {existingTokenEvidenceHttp,NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE} from './nusd-existing-token-evidence.js';
 import {frontierHttp} from './frontier-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
@@ -34,6 +35,7 @@ export default {
     return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));
    }
    if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));
+   if(path===NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE)return finish(await existingTokenEvidenceHttp(req,env));
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
    if(path.startsWith('/api/')){
     const review=await reviewerContext(req,env);
