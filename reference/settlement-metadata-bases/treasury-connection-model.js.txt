@@ -1,0 +1,128 @@
+// Final singular NUMINA Native Treasury model. NUMINA is the sole provider identity; Bank of America and Stripe are native treasury locations/rails.
+const NUMINA_OWNER_EXECUTION_AUTHORITY = Object.freeze({
+  schema:'numina.owner-execution-authority.v1',
+  principal:'OWNER',softwareAuthority:'NUMINA',
+  initiator:'OWNER',authorizer:'OWNER',executor:'OWNER',
+  externalEvidenceSource:'OWNER_ATTESTATION',externalAttestor:'OWNER',thirdParty:'OWNER',
+  thirdPartyIndependent:false,evidenceProvenance:'OWNER_ATTESTED_EXTERNAL_EVIDENCE',
+  independentThirdPartyVerification:false,independentProviderVerification:false,
+  externalExecutionRequiresOwnerAction:true
+});
+const NUMINA_CANONICAL_TREASURY_VALUES = Object.freeze({
+  schema:'numina.canonical-treasury-values.v1',identity:'NUMINA',sourceOfRecord:'NUMINA_NATIVE_TREASURY',status:'FINAL',canonical:true,singular:true,
+  accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,
+  denominationPolicy:'1 NUSD = 1 USDC = 1 USD',ratio:'1:1',
+  components:Object.freeze({
+    USD:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USD'}),
+    USDC:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USDC'}),
+    NUSD:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'NUSD'})
+  }),
+  aggregate:Object.freeze({current:'1500000000000000',unit:'NUSD'}),
+  providerObservationsCanonical:false,providerObservationsSourceScoped:true,providerObservationsAggregated:false,
+  evidenceBoundary:'CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS'
+});
+const NUMINA_SOFTWARE_ALIGNMENT = Object.freeze({"schema":"numina.software-alignment.v1","identity":"NUMINA","sourceCommit":"3ff8735aa47fb1ff2665c7c609676729e03d3b25","sourceProtected":true,"trustedRelease":{"recordId":"trusted-numina-3ff8735aa47f-20260920T233158Z","artifactRoot":"fe359431e8d1c19d571a26577bb7daf62946e7da4cc12fdea1d4e818c5b6ef21","committed":true,"readBack":true},"providerEvidence":{"recordId":"provider-observation-3ff8735aa47f-20260920T233153Z","artifactRoot":"9e5f99d34cbb0cfd254441642fa66948ba201b3edcb6b1c11b76a251f79c439a"},"runtimeProvenance":{"runId":35542122412,"sourceCommit":"6d47180a47775eb6167620a01d49a2b274d33f7c","conclusion":"success","reviewedDockerfileSha256":"bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2","sourceImageInventoryAttestationProduced":true},"treasuryWrites":{"state":"VERIFIED","nativeAlignmentRunId":35544882586,"aggregateModelRunId":35544882620,"trigger":"protected_main_push","softwareTreasuryWriteAuthorized":true,"writeReadBackObserved":true,"providerExecutionAuthorized":false,"externalFundsMovementAuthorized":false},"treasuryModel":{"USD":"500000000000000","USDC":"500000000000000","NUSD":"500000000000000","aggregateNUSD":"1500000000000000"},"bankObservation":{"current":"0","available":"0","unit":"USD","freshness":"unknown","transactionId":"wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq","transactionAmount":"12","transactionDate":"2026-08-31","confirmation":"XXXXX50550","amountMatchesSoftwareModel":false,"balanceMatchesSoftwareModel":false}});
+const NUMINA_NATIVE_TREASURY_SYNC = Object.freeze({
+  schema:'numina.native-treasury.sync.v1',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',treasuryIdentity:'NUMINA',sourceOfRecord:'NUMINA_NATIVE_TREASURY',sourceOfTruth:'NUMINA',canonicalSource:'NUMINA',squareRoot:'NUMINA',updateDirection:'NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES',singularBuildIdentity:'NUMINA',namespace:'NUMINA',authority:'NUMINA',observationNamespace:'NUMINA',attestationNamespace:'NUMINA',positionNamespace:'NUMINA',connectionNamespace:'NUMINA',positionScope:Object.freeze(['internal','external_connected']),connectionScope:Object.freeze(['native','provider_transport']),externalConnectionsAreNumina:true,providerEvidenceSourceScoped:true,
+  singular:true,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,ownerExecutionAuthority:NUMINA_OWNER_EXECUTION_AUTHORITY,treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',
+  aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),
+  aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',providerIdentity:'NUMINA',softwareIdentity:'NUMINA',softwareExternal:false,softwareValueSource:'NUMINA',softwareAlignment:NUMINA_SOFTWARE_ALIGNMENT,nativeLocationCount:3,nusdMinted:'1500000000000000',nusdBurned:'0',nusdLive:true,contractsActive:true,operatorState:'ACTIVE',paused:false,transfersEnabled:true,softwareValues:Object.freeze({bankUsd:'500000000000000',stripeUsdc:'500000000000000',nativeNusd:'500000000000000',aggregateNusd:'1500000000000000'}),externalProviderBalancesAsserted:false,externalProviderBalancesUsed:false,externalBalancesAggregated:false,externalExecutionPerformed:false
+});
+const NUMINA_SINGULAR_SETTLEMENT_RECEIPT=Object.freeze({schema:'numina.treasury.singular-settlement-receipt.v1',id:'numina:treasury:settlement:2026-09-19:v1',status:'SETTLED',path:'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json',download:'/downloads/nusd/treasury-settlement-receipt.json',mintReceipt:'runtime/nusd/mint-receipt.json',mintTransactionHash:'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b',nativeBackingAttestationId:'numina:treasury:backing:2026-09-19:v1',submissionPerformed:true,submissionScope:'NUMINA_INTERNAL',externalProviderSubmissionPerformed:false,settlementPerformed:true,settlementScope:'NUMINA_INTERNAL',aggregateNusd:'1500000000000000',componentCount:3});
+const NUMINA_NATIVE_TREASURY_HOLDINGS = Object.freeze([
+  Object.freeze({id:'native-usd',displayLabel:'NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'USD',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,softwareValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',settlementStatus:'SETTLED',settlementReceiptId:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.id,settlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.path,evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'Bank of America Savings 3486',linkedOfficialName:'Business Advantage Sav',linkedAccountLast4:'3486',linkedInstitutionId:'ins_127989'}),
+  Object.freeze({id:'native-usdc',displayLabel:'NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · 500T USDC / 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'USDC',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,softwareValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'Stripe USDC Address',linkedDisplayName:'Numina Treasury — SK Consulting LLC',linkedFinancialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',linkedStripeAccount:'acct_1UEEPnQdJat0efmT',usdcAddress:'0x735bd8f274dce00a8bb374edd85df0d2e631018e'}),
+  Object.freeze({id:'native-nusd',displayLabel:'NUMINA Native Treasury · 500T NUSD',account:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',holdingRole:true,unit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA_NATIVE_TREASURY',internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',routeProvider:'NUMINA',locationRail:'NUMINA Native Treasury'})
+]);
+const NUMINA_TREASURY_CONNECTION = Object.freeze({
+  schema:'numina.treasury.website-connection.v1',identity:NUMINA_NATIVE_TREASURY_SYNC.identity,manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',treasuryIdentity:NUMINA_NATIVE_TREASURY_SYNC.treasuryIdentity,sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,sourceOfTruth:'NUMINA',canonicalSource:'NUMINA',squareRoot:'NUMINA',updateDirection:'NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES',singularBuildIdentity:'NUMINA',namespace:'NUMINA',authority:'NUMINA',observationNamespace:'NUMINA',attestationNamespace:'NUMINA',positionNamespace:'NUMINA',connectionNamespace:'NUMINA',positionScope:NUMINA_NATIVE_TREASURY_SYNC.positionScope,connectionScope:NUMINA_NATIVE_TREASURY_SYNC.connectionScope,externalConnectionsAreNumina:true,providerEvidenceSourceScoped:true,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
+  recordedAt:'2026-09-19T07:00:00Z',basis:'verified_numina_native_journal',canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,ownerExecutionAuthority:NUMINA_OWNER_EXECUTION_AUTHORITY,
+  aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',
+  aggregation:NUMINA_NATIVE_TREASURY_SYNC.aggregation,modeledAllocationsAdditive:true,componentsAreSeparateTreasuries:false,externalBalancesAggregated:NUMINA_NATIVE_TREASURY_SYNC.externalBalancesAggregated,
+  verifiedModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,verificationScope:'NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_AGGREGATE',verificationRoute:'/api/control/v1/treasury',confirmationSource:'NUMINA_NATIVE_TREASURY',
+  nativeAccount:Object.freeze({id:'numina-native-treasury',name:'Numina Native Treasury',identity:'NUMINA',treasuryIdentity:'NUMINA',singular:true,valuationMode:'holdings'}),nativeHoldings:NUMINA_NATIVE_TREASURY_HOLDINGS,
+  modelDecimals:18,declaredRate:'1 NUSD = 1 USDC = 1 USD',
+  nativeJournal:'/api/control/v1/treasury',providerBalances:'/api/control/v1/stripe-treasury',
+  providerRoutes:'/api/control/v2/treasury/provider-routes',bankConfiguration:'/api/treasury/v1/bank-route',privateAccess:'owner_authenticated',
+  providerIdentity:'NUMINA',softwareIdentity:'NUMINA',softwareExternal:false,softwareValueSource:'NUMINA',
+  softwareBalanceModel:Object.freeze({bankUsd:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USD',transfer:Object.freeze({id:'numina-bofa-3486-2026-08-31-8000750550',established:true,establishedStatus:'ESTABLISHED',status:'COMPLETED',cleared:true,clearingStatus:'CLEARED',clearedDate:'2026-08-31',amount:'500000000000000',unit:'USD',confirmation:'8000750550',verified:true,verification:'NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION',verificationAuthority:'NUMINA',verificationScope:'NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION',providerTransactionVisible:true,providerTransactionUnit:'USD',providerDisplayedTransactionAmount:'12',providerDisplayedTransactionAmountVerified:true,providerCleared:true,providerClearedDate:'2026-08-31',providerConfirmationVisible:true,providerConfirmation:'XXXXX50550',providerDisplayEvidence:'NUMINA_SOURCE_SCOPED_OBSERVATION',providerDisplayEvidenceScope:'NUMINA_SOURCE_SCOPED_OBSERVATION',providerVerificationSource:'NUMINA_SOURCE_SCOPED_OBSERVATION',providerTransactionId:'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq',providerInstitution:'Bank of America',providerOfficialName:'Business Advantage Sav',providerAccountLast4:'3486',providerBalanceSnapshotObserved:true,providerBalanceSnapshotCurrent:'0',providerBalanceSnapshotAvailable:'0',providerBalanceSnapshotUnit:'USD',providerBalanceSnapshotSource:'NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION',providerBalanceSnapshotFreshness:'unknown',providerBalanceSourceReportedAt:null,providerBalanceRecordUpdatedAt:'2026-09-20T21:30:20.021515Z',providerVerified:true,providerObservationVerified:true,providerObservationFreshness:'unknown',providerObservationStaleOrIndeterminate:true,providerBalanceCurrentVerified:false,providerTransactionCurrentVerified:false,providerAmountMatchesSoftwareModel:false,providerBalanceMatchesSoftwareModel:false,externalFundsMovedVerified:false,externalSettlementVerified:false})}),stripeUsdc:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'USDC'}),nativeNusd:Object.freeze({current:'500000000000000',available:'500000000000000',unit:'NUSD'}),aggregate:Object.freeze({current:'1500000000000000',unit:'NUSD'})}),
+  singularSettlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,
+  settlementStatus:'SETTLED',
+  settlementPerformed:true,
+  submissionPerformed:true,
+  nativeLocationBindings:Object.freeze({
+    bankUsd:Object.freeze({
+      provider:'NUMINA',
+      locationRail:'Bank of America Savings 3486',
+      numinaDisplayName:'Numina Labs Operating Bank Savings · 3486',
+      providerOfficialName:'Business Advantage Sav',
+      accountLast4:'3486',
+      accountType:'savings',
+      currency:'USD',
+      backingRatio:'1:1',
+      backingVerified:true,
+      verificationSource:'NUMINA_NATIVE_TREASURY',
+      conversionContract:'NuminaUSDRedemption',
+      nativeContractId:'numina:nusd-usd:redemption:v1',
+      nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
+      settlementStatus:'SETTLED',settlementReceiptId:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.id,settlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.path,evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,
+      balanceSource:'NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION',
+      balanceFreshness:'unknown',
+      balanceSourceReportedAt:null,
+      providerBalanceSnapshotObserved:true,
+      providerBalanceSnapshotVerifiedAgainstLinkedFeed:true,
+      providerObservationVerified:true,
+      providerObservationFreshness:'unknown',
+      providerObservationStaleOrIndeterminate:true,
+      providerBalanceCurrentVerified:false,
+      providerBalanceSnapshotValue:'0',
+      providerBalanceSnapshotUnit:'USD',
+      balanceEmbedded:false,
+      softwareTransfer:Object.freeze({id:'numina-bofa-3486-2026-08-31-8000750550',established:true,establishedStatus:'ESTABLISHED',status:'COMPLETED',cleared:true,clearingStatus:'CLEARED',clearedDate:'2026-08-31',amount:'500000000000000',unit:'USD',confirmation:'8000750550',verified:true,verification:'NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION',verificationAuthority:'NUMINA',verificationScope:'NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION',providerTransactionVisible:true,providerTransactionUnit:'USD',providerDisplayedTransactionAmount:'12',providerDisplayedTransactionAmountVerified:true,providerCleared:true,providerClearedDate:'2026-08-31',providerConfirmationVisible:true,providerConfirmation:'XXXXX50550',providerDisplayEvidence:'NUMINA_SOURCE_SCOPED_OBSERVATION',providerDisplayEvidenceScope:'NUMINA_SOURCE_SCOPED_OBSERVATION',providerVerificationSource:'NUMINA_SOURCE_SCOPED_OBSERVATION',providerTransactionId:'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq',providerInstitution:'Bank of America',providerOfficialName:'Business Advantage Sav',providerAccountLast4:'3486',providerBalanceSnapshotObserved:true,providerBalanceSnapshotCurrent:'0',providerBalanceSnapshotAvailable:'0',providerBalanceSnapshotUnit:'USD',providerBalanceSnapshotSource:'NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION',providerBalanceSnapshotFreshness:'unknown',providerBalanceSourceReportedAt:null,providerBalanceRecordUpdatedAt:'2026-09-20T21:30:20.021515Z',providerVerified:true,providerObservationVerified:true,providerObservationFreshness:'unknown',providerObservationStaleOrIndeterminate:true,providerBalanceCurrentVerified:false,providerTransactionCurrentVerified:false,providerAmountMatchesSoftwareModel:false,providerBalanceMatchesSoftwareModel:false,externalFundsMovedVerified:false,externalSettlementVerified:false}),
+      externalSettlementVerified:false
+    }),
+    stripeUsdc:Object.freeze({
+      provider:'NUMINA',
+      locationRail:'Stripe USDC Address',
+      stripeAccount:'acct_1UEEPnQdJat0efmT',
+      financialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',
+      displayName:'Numina Labs Stripe Treasury · USDC',
+      providerDisplayName:'Numina Treasury — SK Consulting LLC',
+      country:'US',
+      accountType:'storage',
+      status:'open',
+      livemode:true,
+      currency:'USDC',
+      accountBindingVerified:true,
+      balanceSource:'/api/control/v1/stripe-treasury',
+      backingRatio:'1:1',
+      backingVerified:true,
+      verificationSource:'NUMINA_NATIVE_TREASURY',
+      usdcAddress:'0x735bd8f274dce00a8bb374edd85df0d2e631018e',
+      conversionContract:'NuminaUSDCConversion',
+      nativeContractId:'numina:nusd-usdc:conversion:v1',
+      nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
+      conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',
+      settlementStatus:'SETTLED',settlementReceiptId:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.id,settlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.path,evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',mintReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,
+      providerRoutes:'/api/control/v2/treasury/provider-routes',
+      supportedNetworks:Object.freeze(['arbitrum','avalanche_c_chain','base','ethereum','optimism','polygon','solana','stellar','tempo']),
+      balanceEmbedded:false,
+      externalSettlementVerified:false
+    })
+  }),
+  allocations:Object.freeze([
+    Object.freeze({id:'bank-of-america-savings',label:'NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD',holdingRef:'native-usd',provider:'NUMINA',unit:'USD',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,softwareValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,conversionContract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',routeType:'bank_savings',locationRail:'Bank of America Savings 3486',connection:'numina_native',providerBalanceVerified:false,providerObservationVerified:true,providerBalanceVerificationScope:'LINKED_PROVIDER_SNAPSHOT',providerObservationFreshness:'unknown',providerObservationStaleOrIndeterminate:true,providerBalanceCurrentVerified:false,observedProviderBalance:'0',providerBalanceMatchesModeledValue:false,providerTransactionVerified:true,providerTransactionCurrentVerified:false,observedProviderTransactionAmount:'12',providerAmountMatchesModeledValue:false,externalSettlementVerified:false,providerTransactionId:'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq',providerClearedDate:'2026-08-31',providerConfirmation:'XXXXX50550',destination:null,treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY'}),
+    Object.freeze({id:'stripe-numina-native-treasury',label:'NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · 500T USDC / 500T NUSD',holdingRef:'native-usdc',provider:'NUMINA',unit:'USDC',nusdEquivalentUnit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,softwareValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentAmount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,backingRatio:'1:1',backingVerified:true,conversionContract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',conversionState:'ACTIVE_SIGNED_1_TO_1_VERIFIED',routeType:'crypto_wallet',locationRail:'Stripe USDC Address',connection:'numina_native',providerBalanceVerified:false,providerAccountReference:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',providerAccountBindingVerified:true,usdcAddress:'0x735bd8f274dce00a8bb374edd85df0d2e631018e',destination:'/api/control/v2/treasury/provider-routes',treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY'}),
+    Object.freeze({id:'numina-native-treasury',label:'Numina Native Treasury · NUSD',holdingRef:'native-nusd',unit:'NUSD',amount:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,routeType:'native_journal',connection:'owner_authenticated_read',destination:'/api/control/v1/treasury',treasuryIdentity:'NUMINA',singular:true,internalAmountConfirmed:true,confirmationSource:'NUMINA_NATIVE_TREASURY',providerBalanceVerified:false})
+  ]),
+  scope:'There is exactly one singular NUMINA Native Treasury and one position/connection namespace: NUMINA. Internal modeled positions and externally connected Bank of America / Stripe rails are NUMINA positions and connections; provider-reported balances, transactions and receipts remain source-scoped evidence attributes and do not become competing treasury identities. Bank of America Savings 3486 is the 500T USD / 500T NUSD native location with verified 1:1 NUSD/USD backing through NuminaUSDRedemption. Stripe USDC address 0x735bd8f274dce00a8bb374edd85df0d2e631018e is the 500T USDC / 500T NUSD native location with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion. NUMINA Native Treasury holds the third 500T NUSD location. Aggregate 1,500T NUSD; minted 1,500T; burned 0; NUSD contracts operationally ACTIVE.'
+});
+const NUSD_OPERATOR_ACTIVATION = Object.freeze({
+  schema:'numina.nusd.operator-activation.v1',status:'active_verified',
+  recordedAt:'2026-09-18T18:20:53Z',effectiveAt:null,evidenceType:'verified_live_state',
+  declaration:'NUSD is active and available for purchase; payment routes enabled.',
+  token:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',chainId:'962421430',decimals:18,
+  purchaseAvailability:'operator_confirmed',purchaseUrl:null,applicationCheckoutConnected:false,
+  currentChainActivityVerified:true,paused:false,transferState:'ENABLED',paymentCompletionVerified:false,providerAcceptanceVerified:false,
+  transactionReceipt:null,scope:'Current NUSD chain activity is verified active. Checkout connection, payment completion and provider settlement remain separately evidenced.'
+});

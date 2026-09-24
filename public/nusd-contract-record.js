@@ -4,6 +4,83 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "schema": "numina.nusd.contract-record.v1",
   "modelIdentity": "NUMINA",
   "identity": "NUMINA",
+  "manifest": "NUMINA",
+  "canonicalSource": "NUMINA",
+  "sourceOfTruth": "NUMINA",
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "mintStatus": "CONFIRMED",
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "transfersEnabled": true,
+  "manifestEqualsNumina": true,
+  "numinaEqualsManifest": true,
+  "metadataAuthority": "NUMINA",
+  "nativeEvidenceStatus": "FINAL",
   "status": "DEPLOYED_VERIFIED",
   "contractsInitiated": true,
   "initiatedOn": "2026-09-18",
@@ -13,9 +90,9 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd",
       "name": "NuminaUSD",
-      "status": "DEPLOYED_VERIFIED_PAUSED",
+      "status": "DEPLOYED_VERIFIED_ACTIVE",
       "source": {
-        "repository_path": "runtime/nusd/contracts/NuminaUSD.sol",
+        "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSD.sol",
         "url": "/downloads/contracts/NuminaUSD.sol",
         "sha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238",
         "bytes": 8562,
@@ -23,7 +100,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/artifacts/NuminaUSD.json",
+        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaUSD.json",
         "url": "/downloads/contracts/NuminaUSD.json",
         "sha256": "3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2",
         "bytes": 125836,
@@ -103,7 +180,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "name": "NuminaSettlement",
       "status": "DEPLOYED_VERIFIED",
       "source": {
-        "repository_path": "runtime/nusd/contracts/NuminaSettlement.sol",
+        "repository_path": "runtime/nusd/history/18d/contracts/NuminaSettlement.sol",
         "url": "/downloads/contracts/NuminaSettlement.sol",
         "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb",
         "bytes": 3003,
@@ -111,7 +188,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/artifacts/NuminaSettlement.json",
+        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaSettlement.json",
         "url": "/downloads/contracts/NuminaSettlement.json",
         "sha256": "2170f88692f99e43f751fc29b32ca0b9bd53c28c33f1350b999238b29cf113e4",
         "bytes": 22178,
@@ -177,7 +254,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "name": "NuminaUSDCConversion",
       "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
       "source": {
-        "repository_path": "runtime/nusd/contracts/NuminaUSDCConversion.sol",
+        "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSDCConversion.sol",
         "url": "/downloads/contracts/NuminaUSDCConversion.sol",
         "sha256": "327d2f17de8b2894272189eb27e288589ae8cf231ce6d1b28d3bfeb9e8920104",
         "bytes": 8337,
@@ -185,7 +262,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/artifacts/NuminaUSDCConversion.json",
+        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaUSDCConversion.json",
         "url": "/downloads/contracts/NuminaUSDCConversion.json",
         "sha256": "33f7c1e0e3a81f36bc3b96b6d721b42268abfc2196a000f8be2eb94e038f00f1",
         "bytes": 103728,
@@ -271,7 +348,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "name": "NuminaUSDRedemption",
       "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
       "source": {
-        "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
+        "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSDRedemption.sol",
         "url": "/downloads/contracts/NuminaUSDRedemption.sol",
         "sha256": "17a5a1dce327b6239851902382f356c3bb5770843498c41a8213d62b07ef6c1a",
         "bytes": 11527,
@@ -279,7 +356,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/artifacts/NuminaUSDRedemption.json",
+        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaUSDRedemption.json",
         "url": "/downloads/contracts/NuminaUSDRedemption.json",
         "sha256": "d8aa89d6a8de8d6dc7e2f07d8163274897f67d30fb3a4b225d10e76c75562a45",
         "bytes": 120024,
@@ -379,7 +456,6 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "decimals": 18,
     "baseUnits": "1500000000000000000000000000000000",
     "constructorMint": true,
-    "paused": true,
     "recipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
     "externallyBackedClaim": false,
     "verifiedAt": "2026-09-18T15:35:24.884Z",
@@ -391,8 +467,8 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "chainReceiptBlock": "51725",
     "chainReceiptConfirmations": 25,
     "currentOperationalState": "ACTIVE",
-    "currentPaused": false,
-    "historicalDeploymentSnapshotPaused": true,
+    "paused": false,
+    "transfersEnabled": true,
     "mintedNusd": "1500000000000000",
     "burnedNusd": "0"
   },
@@ -420,7 +496,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "verified": true,
       "contract": "NuminaUSDCConversion",
       "nativeContractId": "numina:nusd-usdc:conversion:v1",
-      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e"
+      "address": "0x735bd8f274dce00a8bb374edd85df0d2e631018e"
     },
     "native_nusd": {
       "location": "NUMINA Native Treasury",
@@ -428,9 +504,41 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "unit": "NUSD"
     }
   },
+  "software_capabilities": {
+    "mint": true,
+    "transfer": true,
+    "settlement": true,
+    "redemption": true,
+    "exchange": true
+  },
+  "native_settlement": {
+    "schema": "numina.treasury.singular-settlement-receipt.v1",
+    "identity": "NUMINA",
+    "treasuryIdentity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "singular": true,
+    "final": true,
+    "id": "numina:treasury:settlement:2026-09-19:v1",
+    "status": "SETTLED",
+    "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+    "download": "/downloads/nusd/treasury-settlement-receipt.json",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+    "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "submissionPerformed": true,
+    "submissionScope": "NUMINA_NATIVE_TREASURY",
+    "externalProviderSubmissionPerformed": false,
+    "settlementPerformed": true,
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "externalProviderSettlementVerified": false,
+    "aggregateNusd": "1500000000000000",
+    "componentCount": 3
+  },
+  "financial_execution_scope": "CHAIN_AND_PROVIDER_EXECUTION",
   "financial_execution": {
     "issuance": true,
-    "transfer": false,
+    "transfer": true,
     "nusd_settlement": false,
     "usd_redemption": false,
     "usdc_conversion": false,

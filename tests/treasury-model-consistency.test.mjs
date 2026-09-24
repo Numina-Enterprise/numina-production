@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION as model} from '../public/treasury-connection-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION as model} from '../public/treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {alignTreasuryAccounts,NUMINA_FUNDABLE_TARGETS} from '../src/treasury-alignment.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
@@ -14,8 +14,22 @@ test('website and owner API share the unchanged singular treasury allocation mod
   const allocations=values=>values.map(({id,amount,unit})=>({id,amount,unit}));
   assert.deepEqual(allocations(NUMINA_FUNDABLE_TARGETS),allocations(model.allocations));
   assert.deepEqual(allocations(result.fundableTargets.targets),allocations(model.allocations));
-  assert.equal(model.balanceCount,1);assert.equal(model.singular,true);assert.equal(model.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
+  assert.equal(model.balanceCount,1);assert.equal(model.singular,true);assert.equal(model.sourceOfRecord,'NUMINA_NATIVE_TREASURY');assert.equal(model.positionNamespace,'NUMINA');assert.equal(model.connectionNamespace,'NUMINA');assert.deepEqual(model.positionScope,['internal','external_connected']);assert.deepEqual(model.connectionScope,['native','provider_transport']);assert.equal(model.externalConnectionsAreNumina,true);assert.equal(model.providerEvidenceSourceScoped,true);
   assert.equal(model.aggregateModeledValue,'1500000000000000');
+  assert.equal(NUMINA_NATIVE_TREASURY_SYNC.softwareIdentity,'NUMINA');
+  assert.equal(NUMINA_NATIVE_TREASURY_SYNC.softwareExternal,false);
+  assert.deepEqual(NUMINA_NATIVE_TREASURY_SYNC.softwareValues,{bankUsd:'500000000000000',stripeUsdc:'500000000000000',nativeNusd:'500000000000000',aggregateNusd:'1500000000000000'});
+  assert.equal(model.softwareIdentity,'NUMINA');
+  assert.equal(model.softwareExternal,false);
+  assert.deepEqual([model.softwareBalanceModel.bankUsd.current,model.softwareBalanceModel.bankUsd.available,model.softwareBalanceModel.bankUsd.unit],['500000000000000','500000000000000','USD']);
+  assert.deepEqual([model.softwareBalanceModel.stripeUsdc.current,model.softwareBalanceModel.stripeUsdc.available,model.softwareBalanceModel.stripeUsdc.unit],['500000000000000','500000000000000','USDC']);
+  assert.deepEqual([model.softwareBalanceModel.nativeNusd.current,model.softwareBalanceModel.nativeNusd.available,model.softwareBalanceModel.nativeNusd.unit],['500000000000000','500000000000000','NUSD']);
+  assert.deepEqual(model.softwareBalanceModel.aggregate,{current:'1500000000000000',unit:'NUSD'});
+  const bankTransfer=model.softwareBalanceModel.bankUsd.transfer;
+  assert.equal(bankTransfer.verification,'NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION');
+  assert.equal(bankTransfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION');
+  assert.equal(bankTransfer.providerVerified,true);assert.equal(bankTransfer.providerVerificationSource,'NUMINA_SOURCE_SCOPED_OBSERVATION');
+  assert.equal(bankTransfer.providerTransactionId,'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq');assert.equal(bankTransfer.providerBalanceSnapshotFreshness,'unknown');assert.equal(bankTransfer.providerBalanceSnapshotCurrent,'0');assert.equal(bankTransfer.providerBalanceSnapshotAvailable,'0');assert.equal(bankTransfer.providerAmountMatchesSoftwareModel,false);assert.equal(bankTransfer.providerBalanceMatchesSoftwareModel,false);assert.equal(bankTransfer.externalFundsMovedVerified,false);assert.equal(bankTransfer.externalSettlementVerified,false);
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
     ['500000000000000','USD'],['500000000000000','USDC'],['500000000000000','NUSD']
   ]);
@@ -24,8 +38,8 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.equal(result.treasuryAlignmentPlan.nonAdditive,false);
   assert.equal(model.allocations.reduce((sum,value)=>sum+BigInt(value.amount),0n).toString(),model.aggregateModeledValue);
   const page=read('public/treasury.html');
-  assert.match(page,/1,500,000,000,000,000\.00 NUSD owner-designated equivalent/);
-  assert.match(page,/1,500T owner-designated aggregate/);
+  assert.match(page,/1,500,000,000,000,000\.00 NUSD · NUMINA-native SETTLED/);
+  assert.match(page,/Final NUMINA-native receipt: 1,500T NUSD/);
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
   assert.equal(result.treasuryAlignmentPlan.sourceOfRecord,NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord);
   assert.equal(result.treasuryAlignmentPlan.aggregateModeledValue,model.aggregateModeledValue);
@@ -35,6 +49,76 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.deepEqual(treasury,before);
   for(const target of result.fundableTargets.targets){
     assert.equal(target.fundingPerformed,false);assert.equal(target.providerObservationVerified,false);
+  }
+});
+
+test('all current treasury metadata surfaces share one canonical 500T contract',()=>{
+  const canonical=structuredClone(NUMINA_CANONICAL_TREASURY_VALUES);
+  assert.deepEqual(canonical.components,{
+    USD:{current:'500000000000000',available:'500000000000000',unit:'USD'},
+    USDC:{current:'500000000000000',available:'500000000000000',unit:'USDC'},
+    NUSD:{current:'500000000000000',available:'500000000000000',unit:'NUSD'}
+  });
+  assert.deepEqual(canonical.aggregate,{current:'1500000000000000',unit:'NUSD'});
+  assert.equal(canonical.providerObservationsCanonical,false);
+  assert.equal(canonical.providerObservationsSourceScoped,true);
+  assert.equal(canonical.settlementReceiptId,'numina:treasury:settlement:2026-09-19:v1');
+  assert.equal(canonical.settlementStatus,'SETTLED');
+  assert.equal(canonical.settlementScope,'NUMINA_NATIVE_TREASURY');
+  assert.equal(canonical.status,'FINAL');
+  assert.equal(canonical.mintStatus,'CONFIRMED');
+  assert.equal(canonical.mintedNusd,canonical.aggregate.current);
+  assert.equal(canonical.burnedNusd,'0');
+  assert.equal(canonical.componentCount,3);
+  assert.equal(canonical.componentLocations.USD.accountLast4,'3486');
+  assert.equal(canonical.componentLocations.USDC.location,'Stripe linked account');
+  assert.equal(canonical.componentLocations.NUSD.location,'NUMINA Native Treasury');
+  for(const holding of model.nativeHoldings){
+    assert.equal(holding.identity,'NUMINA');
+    assert.equal(holding.settlementReceiptId,canonical.settlementReceiptId);
+    assert.equal(holding.settlementStatus,canonical.settlementStatus);
+    assert.equal(holding.settlementScope,canonical.settlementScope);
+  }
+  for(const path of [
+    'config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json','config/numina-architecture.json','config/treasury-aggregate-settlement-1500t.v1.json',
+    'public/final-build.json','docs/NUMINA-FINAL-BUILD.json','public/business-core.json','package.json',
+    'integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/file-manifest.json',
+    // The active Sites source has the 18-decimal policy. Historical 6-decimal
+    // policy and treasury-write-request artifacts are absent and are not created.
+    'runtime/nusd/policies/issuer-policy-1500t-18d.json'
+  ]){
+    const value=JSON.parse(read(path));
+    assert.deepEqual(value.canonicalTreasuryValues,canonical,path);
+  }
+  assert.deepEqual(NUSD_CONTRACT_RECORD.canonicalTreasuryValues,canonical);
+  const aligned=alignTreasuryAccounts({projection:{unit:'NUSD',balance:'500000000000000'}},{accounts:[]});
+  assert.deepEqual(aligned.fundableTargets.targets.map(({amount,unit})=>({amount,unit})),[
+    {amount:canonical.components.USD.current,unit:'USD'},
+    {amount:canonical.components.USDC.current,unit:'USDC'},
+    {amount:canonical.components.NUSD.current,unit:'NUSD'}
+  ]);
+  assert.equal(aligned.fundableTargets.aggregateModeledValue,canonical.aggregate.current);
+  assert.equal(aligned.treasuryAlignmentPlan.aggregateModeledValue,canonical.aggregate.current);
+  assert.equal(aligned.nativeFundingView.nativeTarget.amount,canonical.components.NUSD.current);
+});
+
+test('current settlement summary binds native receipt without relabeling provider evidence',()=>{
+  const canonical=JSON.parse(read('runtime/nusd/treasury-settlement-receipt.json'));
+  const summary=JSON.parse(read('runtime/nusd/settlement-receipt.json'));
+  assert.equal(summary.settlement.numinaNativeReceiptId,canonical.id);
+  assert.equal(summary.settlement.nativeEvidenceScope,canonical.sourceOfRecord);
+  assert.equal(summary.settlement.numinaNativeStatus,canonical.status);
+  assert.equal(summary.settlement.externallyVerified,false);
+  assert.deepEqual(summary.settlement.providerSettlementReceipts,[]);
+  for(const rail of summary.allocation.rails){
+    assert.equal(rail.numinaNativeStatus,canonical.status);
+    if(rail.id==='numina_native_treasury'){
+      assert.notEqual(rail.externallyVerified,true);
+      assert.equal(rail.externalReceipt??null,null);
+    }else{
+      assert.equal(rail.externallyVerified,false);
+      assert.equal(rail.externalReceipt,null);
+    }
   }
 });
 

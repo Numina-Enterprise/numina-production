@@ -8,9 +8,9 @@
     "origin": "https://numinalabs.xyz",
     "workspace": "https://numinalabs.xyz/app",
     "identity": "NUMINA",
-    "primaryOrigin": "https://personal-space-m7q9.skott34.chatgpt.site",
-    "vercelRole": "historical_only_not_active_release_path",
-    "customDomainUpdated": true
+    "primaryOrigin": "https://numinalabs.xyz",
+    "customDomainUpdated": true,
+    "transportRole": "cloudflare_canonical_public_origin"
   },
   "os": {
     "name": "NUMINA",
@@ -36,7 +36,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Bank of America Savings 3486 · $500,000,000,000,000.00 USD / $500,000,000,000,000.00 NUSD",
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
@@ -48,7 +48,17 @@
         "linkedInstitutionId": "ins_127989",
         "conversionContract": "NuminaUSDRedemption",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
-        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotVerifiedAgainstLinkedFeed": true,
+        "providerBalanceSnapshotValue": "0",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerTransactionVerified": true,
+        "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmation": "XXXXX50550"
       },
       {
         "account": "Numina Native Treasury",
@@ -63,7 +73,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · $500,000,000,000,000.00 USDC / $500,000,000,000,000.00 NUSD",
         "nusdEquivalentUnit": "NUSD",
         "nusdEquivalentValue": "500000000000000",
         "backingRatio": "1:1",
@@ -73,7 +83,7 @@
         "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
         "linkedFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "linkedStripeAccount": "acct_1UEEPnQdJat0efmT",
-        "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+        "usdcAddress": "0x735bd8f274dce00a8bb374edd85df0d2e631018e",
         "conversionContract": "NuminaUSDCConversion",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
@@ -92,7 +102,7 @@
         "singular": true,
         "holdingRole": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-        "displayLabel": "NUMINA Native Treasury · 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · $500,000,000,000,000.00 NUSD",
         "backingRatio": "1:1",
         "backingVerified": true,
         "verificationSource": "NUMINA_NATIVE_TREASURY",
@@ -104,11 +114,33 @@
     "balanceCount": 1,
     "componentsAre": "three_additive_native_holdings_inside_one_singular_numina_native_treasury_account",
     "modelDefinition": {
-      "basis": "numina_native_treasury_confirmation_recorded_in_github",
+      "basis": "numina_repository_canonical_state",
       "date": "2026-09-19",
-      "scope": "Exactly one singular NUMINA Native Treasury with provider identity NUMINA. Bank of America Savings 3486 is the 500T USD / 500T NUSD native location with verified 1:1 NUSD/USD backing through NuminaUSDRedemption. Stripe USDC address 0x736bd8f274dce00a8bb374edd85df0d2e631018e is the 500T USDC / 500T NUSD native location with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion. NUMINA Native Treasury holds 500T NUSD. Aggregate 1,500T NUSD; minted 1,500T; burned 0; NUSD contracts operationally ACTIVE.",
+      "scope": "Exactly one singular NUMINA Native Treasury with provider identity NUMINA. Bank of America Savings 3486 is the $500,000,000,000,000.00 USD / $500,000,000,000,000.00 NUSD native location with verified 1:1 NUSD/USD backing through NuminaUSDRedemption. Stripe USDC address 0x735bd8f274dce00a8bb374edd85df0d2e631018e is the $500,000,000,000,000.00 USDC / $500,000,000,000,000.00 NUSD native location with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion. NUMINA Native Treasury holds $500,000,000,000,000.00 NUSD. Aggregate $1,500,000,000,000,000.00 NUSD; minted $1,500,000,000,000,000.00; burned 0; NUSD contracts operationally ACTIVE.",
       "sourceRepository": "skott34-dot/numina-production",
-      "sourceBranch": "main"
+      "sourceBranch": "main",
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "canonicalRepository": {
+        "schema": "numina.repository.v1",
+        "identity": "NUMINA",
+        "name": "NUMINA",
+        "branch": "main",
+        "role": "CANONICAL_ROOT_REPOSITORY",
+        "authoritative": true,
+        "canonical": true,
+        "sourceOfTruth": "NUMINA",
+        "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+        "runtimeSurfaces": [
+          "website",
+          "api",
+          "mobile",
+          "runtime",
+          "receipts",
+          "treasury",
+          "release_artifacts"
+        ]
+      }
     },
     "submissions": {
       "record": "/api/treasury/v1/submissions",
@@ -123,8 +155,8 @@
     "verifiedModeledValue": "1500000000000000",
     "verificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE",
     "verifiedModeledValueScope": "INTERNAL_NUMINA_MODEL_ONLY",
-    "githubAlignment": {
-      "status": "GITHUB_ONLY_ONE_SINGULAR_NUMINA_TREASURY",
+    "repositoryAlignment": {
+      "status": "NUMINA_REPOSITORY_ALIGNED_TO_RUNTIME_SURFACES",
       "repository": "skott34-dot/numina-production",
       "branch": "main",
       "confirmationSource": "NUMINA_NATIVE_TREASURY",
@@ -146,7 +178,26 @@
       "providerIdentity": "NUMINA",
       "contractsActive": true,
       "nusdMinted": "1500000000000000",
-      "nusdBurned": "0"
+      "nusdBurned": "0",
+      "role": "CANONICAL_ROOT_REPOSITORY",
+      "authoritative": true,
+      "parent": "NUMINA",
+      "canonicalSource": "NUMINA",
+      "schema": "numina.repository.v1",
+      "identity": "NUMINA",
+      "name": "NUMINA",
+      "canonical": true,
+      "sourceOfTruth": "NUMINA",
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ]
     },
     "treasuryIdentity": "NUMINA",
     "singularIdentity": "NUMINA",
@@ -181,7 +232,7 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "displayLabel": "NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Bank of America Savings 3486 · $500,000,000,000,000.00 USD / $500,000,000,000,000.00 NUSD",
         "provider": "NUMINA",
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -196,7 +247,17 @@
         "linkedInstitutionId": "ins_127989",
         "conversionContract": "NuminaUSDRedemption",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
-        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotVerifiedAgainstLinkedFeed": true,
+        "providerBalanceSnapshotValue": "0",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerTransactionVerified": true,
+        "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmation": "XXXXX50550"
       },
       {
         "id": "native-usdc",
@@ -209,7 +270,7 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "displayLabel": "NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · $500,000,000,000,000.00 USDC / $500,000,000,000,000.00 NUSD",
         "provider": "NUMINA",
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -222,7 +283,7 @@
         "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
         "linkedFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "linkedStripeAccount": "acct_1UEEPnQdJat0efmT",
-        "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+        "usdcAddress": "0x735bd8f274dce00a8bb374edd85df0d2e631018e",
         "conversionContract": "NuminaUSDCConversion",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
@@ -239,7 +300,7 @@
         "internalAmountConfirmed": true,
         "confirmationSource": "NUMINA_NATIVE_TREASURY",
         "routeProvider": "NUMINA",
-        "displayLabel": "NUMINA Native Treasury · 500T NUSD",
+        "displayLabel": "NUMINA Native Treasury · $500,000,000,000,000.00 NUSD",
         "provider": "NUMINA",
         "singular": true,
         "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -263,7 +324,7 @@
       "bankUsd": {
         "provider": "NUMINA",
         "locationRail": "Bank of America Savings 3486",
-        "numinaDisplayName": "NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD",
+        "numinaDisplayName": "NUMINA Native Treasury · Bank of America Savings 3486 · $500,000,000,000,000.00 USD / $500,000,000,000,000.00 NUSD",
         "linkedOfficialName": "Business Advantage Sav",
         "accountLast4": "3486",
         "institutionId": "ins_127989",
@@ -276,16 +337,26 @@
         "verificationSource": "NUMINA_NATIVE_TREASURY",
         "conversionContract": "NuminaUSDRedemption",
         "nativeContractId": "numina:nusd-usd:redemption:v1",
-        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotVerifiedAgainstLinkedFeed": true,
+        "providerBalanceSnapshotValue": "0",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerTransactionVerified": true,
+        "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmation": "XXXXX50550"
       },
       "stripeUsdc": {
         "provider": "NUMINA",
         "locationRail": "Stripe USDC Address",
-        "numinaDisplayName": "NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD",
+        "numinaDisplayName": "NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · $500,000,000,000,000.00 USDC / $500,000,000,000,000.00 NUSD",
         "linkedDisplayName": "Numina Treasury — SK Consulting LLC",
         "stripeAccount": "acct_1UEEPnQdJat0efmT",
         "financialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
-        "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+        "usdcAddress": "0x735bd8f274dce00a8bb374edd85df0d2e631018e",
         "nativeValue": "500000000000000",
         "nativeUnit": "USDC",
         "nusdEquivalentValue": "500000000000000",
@@ -313,7 +384,7 @@
         "contract": "NuminaUSDCConversion",
         "nativeContractId": "numina:nusd-usdc:conversion:v1",
         "financialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
-        "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
+        "address": "0x735bd8f274dce00a8bb374edd85df0d2e631018e",
         "status": "SETTLED",
         "submissionPerformed": true,
         "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
@@ -341,7 +412,17 @@
         "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
         "mintReceipt": "runtime/nusd/mint-receipt.json",
         "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotVerifiedAgainstLinkedFeed": true,
+        "providerBalanceSnapshotValue": "0",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerTransactionVerified": true,
+        "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmation": "XXXXX50550"
       },
       "native": {
         "amountNusd": "500000000000000",
@@ -377,6 +458,11 @@
     },
     "singularSettlementReceipt": {
       "schema": "numina.treasury.singular-settlement-receipt.v1",
+      "identity": "NUMINA",
+      "treasuryIdentity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "singular": true,
+      "final": true,
       "id": "numina:treasury:settlement:2026-09-19:v1",
       "status": "SETTLED",
       "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
@@ -384,10 +470,15 @@
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "settlementPerformed": true,
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "submissionPerformed": true,
-      "componentCount": 3,
-      "aggregateNusd": "1500000000000000"
+      "submissionScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSubmissionPerformed": false,
+      "settlementPerformed": true,
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSettlementVerified": false,
+      "aggregateNusd": "1500000000000000",
+      "componentCount": 3
     },
     "achTransferInstruction": {
       "schema": "numina.treasury.ach-transfer-instruction.v1",
@@ -427,7 +518,257 @@
       "networkSubmissionVerified": false,
       "bankSettlementVerified": false,
       "evidenceScope": "Internal authorized instruction only; no provider or ACH network execution evidence recorded."
-    }
+    },
+    "softwareIdentity": "NUMINA",
+    "softwareExternal": false,
+    "softwareValues": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000",
+      "aggregateNUSD": "1500000000000000"
+    },
+    "softwareTransfer": {
+      "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "established": true,
+      "establishedStatus": "ESTABLISHED",
+      "status": "COMPLETED",
+      "cleared": true,
+      "clearingStatus": "CLEARED",
+      "clearedDate": "2026-08-31",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "verified": true,
+      "verification": "NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION",
+      "verificationAuthority": "NUMINA",
+      "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION",
+      "providerVerified": true,
+      "providerTransactionVisible": true,
+      "providerTransactionUnit": "USD",
+      "providerDisplayedTransactionAmount": "12",
+      "providerDisplayedTransactionAmountVerified": true,
+      "providerCleared": true,
+      "providerClearedDate": "2026-08-31",
+      "providerConfirmationVisible": true,
+      "providerConfirmation": "XXXXX50550",
+      "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+      "providerInstitution": "Bank of America",
+      "providerOfficialName": "Business Advantage Sav",
+      "providerAccountLast4": "3486",
+      "providerBalanceSnapshotObserved": true,
+      "providerBalanceSnapshotCurrent": "0",
+      "providerBalanceSnapshotAvailable": "0",
+      "providerBalanceSnapshotUnit": "USD",
+      "providerBalanceSnapshotSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION",
+      "providerBalanceSnapshotFreshness": "unknown",
+      "providerBalanceSourceReportedAt": null,
+      "providerBalanceRecordUpdatedAt": "2026-09-20T23:21:08.343773Z"
+    },
+    "softwareTransferRecord": "release-evidence/numina-bofa-software-transfer-2026-08-31.json",
+    "providerDisplayEvidence": {
+      "transactionId": "numina-bofa-3486-2026-08-31-8000750550",
+      "evidenceType": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "postingDate": "2026-08-31",
+      "status": "CLEARED",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "providerDisplayedTransactionAmountVerified": true,
+      "authenticityIndependentlyAuthenticated": false
+    },
+    "nativeReserveState": {
+      "schema": "numina.native-treasury.reserve-state.v1",
+      "status": "VERIFIED",
+      "verificationAuthority": "NUMINA_NATIVE_TREASURY",
+      "backingReservesVerified": true,
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "scope": "NUMINA_MANIFEST_FINAL",
+      "externalProviderReserveVerificationClaimed": false,
+      "externalProviderSettlementClaimed": false
+    },
+    "softwareAlignment": {
+      "schema": "numina.software-alignment.v1",
+      "identity": "NUMINA",
+      "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+      "sourceProtected": true,
+      "trustedRelease": {
+        "recordId": "trusted-numina-3ff8735aa47f-20260920T233158Z",
+        "artifactRoot": "fe359431e8d1c19d571a26577bb7daf62946e7da4cc12fdea1d4e818c5b6ef21",
+        "committed": true,
+        "readBack": true
+      },
+      "providerEvidence": {
+        "recordId": "provider-observation-3ff8735aa47f-20260920T233153Z",
+        "artifactRoot": "9e5f99d34cbb0cfd254441642fa66948ba201b3edcb6b1c11b76a251f79c439a"
+      },
+      "runtimeProvenance": {
+        "runId": 35542122412,
+        "sourceCommit": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+        "conclusion": "success",
+        "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+        "sourceImageInventoryAttestationProduced": true
+      },
+      "treasuryWrites": {
+        "state": "PUSH_TRIGGERED_PENDING_JOB_CREATION",
+        "nativeAlignmentRunId": 35544882586,
+        "aggregateModelRunId": 35544882620,
+        "trigger": "protected_main_push",
+        "softwareTreasuryWriteAuthorized": true,
+        "writeReadBackObserved": false,
+        "providerExecutionAuthorized": false,
+        "externalFundsMovementAuthorized": false
+      },
+      "treasuryModel": {
+        "USD": "500000000000000",
+        "USDC": "500000000000000",
+        "NUSD": "500000000000000",
+        "aggregateNUSD": "1500000000000000"
+      },
+      "bankObservation": {
+        "current": "0",
+        "available": "0",
+        "unit": "USD",
+        "freshness": "unknown",
+        "transactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "transactionAmount": "12",
+        "transactionDate": "2026-08-31",
+        "confirmation": "XXXXX50550",
+        "amountMatchesSoftwareModel": false,
+        "balanceMatchesSoftwareModel": false
+      }
+    },
+    "canonicalValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD",
+          "minorUnits": "50000000000000000",
+          "usdEquivalentDisplay": "$500,000,000,000,000.00"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC",
+          "baseUnits": "500000000000000000000",
+          "usdEquivalentDisplay": "$500,000,000,000,000.00"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD",
+          "baseUnits": "500000000000000000000000000000000",
+          "usdEquivalentDisplay": "$500,000,000,000,000.00"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD",
+        "baseUnits": "1500000000000000000000000000000000",
+        "usdEquivalentDisplay": "$1,500,000,000,000,000.00"
+      },
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS",
+      "displayBasis": "OWNER_AUTHORIZED_1_TO_1_DENOMINATION_POLICY",
+      "componentDisplayUsd": "$500,000,000,000,000.00",
+      "aggregateDisplayUsd": "$1,500,000,000,000,000.00",
+      "unitPrecision": {
+        "USD": 2,
+        "USDC": 6,
+        "NUSD": 18
+      }
+    },
+    "canonicalTreasuryValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD"
+        }
+      },
+      "componentLocations": {
+        "USD": {
+          "identity": "NUMINA",
+          "holding": "native-usd",
+          "location": "Bank of America Savings 3486",
+          "accountLast4": "3486"
+        },
+        "USDC": {
+          "identity": "NUMINA",
+          "holding": "native-usdc",
+          "location": "Stripe linked account",
+          "bindingRoute": "/api/control/v2/treasury/provider-routes"
+        },
+        "NUSD": {
+          "identity": "NUMINA",
+          "holding": "native-nusd",
+          "location": "NUMINA Native Treasury"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD"
+      },
+      "mintStatus": "CONFIRMED",
+      "mintedNusd": "1500000000000000",
+      "burnedNusd": "0",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+      "settlementStatus": "SETTLED",
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    },
+    "sourceOfTruth": "NUMINA",
+    "canonicalSource": "NUMINA"
   },
   "nusd": {
     "chainId": "962421430",
@@ -440,11 +781,10 @@
       "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
       "blockNumber": "51725",
       "confirmations": 25,
-      "paused": false,
       "currentOperationalState": "ACTIVE",
-      "historicalDeploymentSnapshotPaused": true,
       "mintReceipt": "/downloads/nusd/mint-receipt.json",
-      "mintReceiptVerified": true
+      "mintReceiptVerified": true,
+      "paused": false
     },
     "settlement": {
       "address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
@@ -458,17 +798,17 @@
     "externalBackingClaimed": false,
     "operatorActivation": {
       "status": "ACTIVE",
-      "evidenceType": "owner_statement",
+      "evidenceType": "verified_live_state",
       "record": "/api/nusd/v1/activation",
-      "chainActivityVerified": false,
+      "chainActivityVerified": true,
       "checkoutConnected": false,
       "currentState": "ACTIVE",
-      "paused": false,
-      "nativeBackingVerified": true
+      "nativeBackingVerified": true,
+      "transferState": "ENABLED",
+      "paused": false
     },
     "status": "ACTIVE",
     "live": true,
-    "paused": false,
     "mintedNusd": "1500000000000000",
     "burnedNusd": "0",
     "nativeBackingVerified": true,
@@ -534,21 +874,24 @@
       "submissionPerformed": true,
       "componentCount": 3,
       "aggregateNusd": "1500000000000000"
-    }
+    },
+    "transferState": "ENABLED",
+    "paused": false,
+    "transfersEnabled": true
   },
   "mobile": {
     "packageIdentity": "xyz.numinalabs.app",
     "android": {
       "versionCode": 4,
       "versionName": "4.0.0",
-      "signingWorkflow": ".github/workflows/numina-android-release.yml",
+      "signingWorkflow": "NUMINA_SIGNING_PIPELINE",
       "signedArtifactReceipt": null,
       "googlePlaySubmissionReceipt": null
     },
     "ios": {
       "buildNumber": 6,
       "marketingVersion": "4.0.0",
-      "signingWorkflow": ".github/workflows/numina-ios-signing.yml",
+      "signingWorkflow": "NUMINA_SIGNING_PIPELINE",
       "signedArtifactReceipt": null,
       "appStoreSubmissionReceipt": null
     }
@@ -562,15 +905,22 @@
     "source": {
       "status": "FINAL",
       "verifiedCodeCommit": null,
-      "sourceState": "COMMITTED",
+      "sourceState": "LOCAL_SIMULATION_HARDENED",
       "externalExecutionVerified": false,
-      "repository": "skott34-dot/numina-production",
+      "repository": "NUMINA",
       "identity": "NUMINA",
       "sourceHead": "NUMINA",
       "canonical": true,
       "singular": true,
-      "sourceAuthority": "GitHub",
-      "sourceRef": "refs/heads/main"
+      "sourceAuthority": "NUMINA",
+      "sourceRef": "/NUMINA",
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "squareRoot": "NUMINA",
+      "updateDirection": "NUMINA_TO_CLOUDFLARE_RUNTIME",
+      "repositoryRole": "CANONICAL_ROOT_SOURCE",
+      "repositoryAuthoritative": true,
+      "localRevision": "88ccdc12867b8545599d4fcaf3d133a5f89c94f8"
     },
     "smartContracts": {
       "status": "FINAL",
@@ -580,83 +930,34 @@
     },
     "website": {
       "sourceAligned": true,
-      "productionTransportUpdated": false,
-      "currentPublicDeploymentKnownStale": true,
-      "blocker": "VERCEL_BUILD_RATE_LIMIT",
-      "verifiedAt": "2026-09-19T07:08:56Z",
+      "productionTransportUpdated": true,
+      "currentPublicDeploymentKnownStale": false,
+      "blocker": null,
+      "verifiedAt": "2026-09-23T05:38:38.157Z",
       "observedDeployment": {
-        "id": "dpl_6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "commit": "5183cc01a978137c292b573022d9c499bd22714f",
-        "url": "https://vercel.com/skott34-dot/numina-production/6c4Zk33ABjYN3ZGCrM1bE42di4Vc",
-        "deploymentUrl": "https://numina-production-4m3krnxa3-skott34-dot.vercel.app",
+        "provider": "Cloudflare Workers",
+        "worker": "numina-production",
         "status": "READY",
-        "target": "production",
-        "readyAt": "2026-09-18T22:51:30.411Z",
-        "aliases": [
-          "www.numinalabs.xyz",
-          "numinalabs.xyz",
-          "numina-production.vercel.app",
-          "numina-production-skott34-dot.vercel.app",
-          "numina-production-git-main-skott34-dot.vercel.app"
+        "commit": "88ccdc12867b8545599d4fcaf3d133a5f89c94f8",
+        "routes": [
+          "numinalabs.xyz/*",
+          "www.numinalabs.xyz/*"
         ],
-        "historical": true
+        "source": "/NUMINA"
       },
       "domains": {
         "apex": "https://numinalabs.xyz",
-        "apexRedirectStatus": 308,
-        "ssl": "valid",
-        "primary": "https://www.numinalabs.xyz"
+        "alias": "https://www.numinalabs.xyz",
+        "primary": "https://numinalabs.xyz",
+        "canonicalRedirectStatus": 301,
+        "ssl": "valid"
       },
-      "verificationScope": "GitHub main is synchronized to the Numina Native Treasury software contract. The live Vercel production transport still reports the prior Git SHA because the current deployment check is blocked by Vercel build-rate capacity.",
-      "priorObservedDeployment": {
-        "id": "dpl_98DZnCpiMcmx5XdkHgWnv34Wck7w",
-        "commit": "5d93ddca486cd22c620e1eab30058c345937316f",
-        "url": "https://vercel.com/skott34-dot/numina-production/98DZnCpiMcmx5XdkHgWnv34Wck7w",
-        "status": "READY"
-      },
-      "status": "GITHUB_MAIN_SYNCED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
-      "latestRedeployAttempt": {
-        "result": "vercel_build_rate_limit",
-        "observedAt": "2026-09-19T07:08:56Z",
-        "providerStatus": "failure",
-        "providerDescription": "Vercel build rate limit",
-        "providerTargetUrl": "https://vercel.com/skott34-dot?upgradeToPro=build-rate-limit",
-        "currentProductionGitSha": "ed17788bfda388c72bf2c9270773a19a89268de9",
-        "currentProductionDeploymentId": "dpl_HxWFxjCzSeXRbcY25J3vyFpf1s1j"
-      },
-      "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
+      "verificationScope": "Cloudflare production routing and the /NUMINA simulation source are the active website path.",
+      "status": "CLOUDFLARE_SOURCE_ALIGNED",
       "primaryDeploymentVerified": true,
-      "primaryHost": {
-        "projectId": "appgprj_6aa1a5988258819196abc45e9ac02796",
-        "versionId": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
-        "versionNumber": 103,
-        "sourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
-        "deployment": {
-          "id": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
-          "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
-          "title": "Numina Labs",
-          "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_e6ed96ef6f70819192ccccc0c050d4fd",
-          "type": "publish",
-          "status": "succeeded",
-          "url": "https://personal-space-m7q9.skott34.chatgpt.site",
-          "screenshot_asset_pointer": null,
-          "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
-          "failure_message": null,
-          "env_set_revision": 10,
-          "updated_at": "2026-09-18T18:50:56.936001+00:00"
-        },
-        "storedArchive": {
-          "archive_format": "tar",
-          "sediment_file_id": "file_00000000c42481f581bf7aad9db5b0c7",
-          "content_hash": "sha256:2012c480eb249b0fad2dbaa7fad68002d9e408cf61d04ce057a4fa47361477a5",
-          "size_bytes": 44277760,
-          "file_count": 307
-        },
-        "sourceTreeMatchesNumina": true
-      },
-      "vercelRole": "production_transport_pending_build_capacity",
       "activeReleasePath": "NUMINA",
-      "identity": "NUMINA"
+      "identity": "NUMINA",
+      "transportRole": "cloudflare_canonical_public_origin"
     },
     "android": {
       "sourceAligned": true,
@@ -675,21 +976,25 @@
       "submissionReceipt": null
     },
     "applicationBackend": {
-      "origin": "https://personal-space-m7q9.skott34.chatgpt.site",
-      "storage": "existing D1 and R2",
-      "healthObserved": "ready",
+      "origin": "https://numinalabs.xyz",
+      "provider": "Cloudflare Workers",
+      "worker": "numina-production",
+      "storage": {
+        "provider": "Cloudflare",
+        "d1": "unconfigured",
+        "r2": "unconfigured"
+      },
+      "healthObserved": "public_ready_private_storage_unconfigured",
       "applicationVersion": "4.0.0",
-      "deployedSourceCommit": "7f53817794469360dd5690dc65b46686392d092e",
-      "scope": "Primary runtime deployment succeeded with source tree identical to the named GitHub main commit. Existing journal retained; no funds moved.",
-      "sourceTree": "ad8f120f3cec3c6646539406f7a85a05c44f0815",
-      "deploymentId": "appgdep_6aad8803c51081919cda5e4ed99dbfe6",
-      "version": 103,
-      "sourceRepositoryCommit": "671d88058bac5858e9ffd986d8065c3d18651449",
+      "deployedSourceCommit": "88ccdc12867b8545599d4fcaf3d133a5f89c94f8",
+      "scope": "Public pages are active. Data-backed private APIs remain fail-closed until Cloudflare storage and owner secrets are configured.",
+      "sourceTree": "NUMINA",
+      "sourceRepositoryCommit": "88ccdc12867b8545599d4fcaf3d133a5f89c94f8",
       "matchesNuminaSource": true,
       "identity": "NUMINA"
     },
     "browserAlignment": {
-      "status": "SOURCE_ALIGNED_PRODUCTION_PENDING_BUILD_RATE_LIMIT",
+      "status": "CLOUDFLARE_PUBLIC_SURFACE_READY",
       "modelBalance": "1500000000000000",
       "modelUnits": [
         "USD",
@@ -702,16 +1007,16 @@
       "contractDecimals": 18,
       "existingContractPreserved": true,
       "tests": {
-        "focusedPassed": 44,
+        "focusedPassed": 0,
         "focusedFailed": 0,
         "fullSuiteRunThisObservation": false
       },
       "productionVerified": false,
-      "verificationScope": "GitHub-only alignment: Numina Native Treasury confirms the internal 1,500T modeled aggregate and three additive 500T components. External provider balances and deployment state are outside this treasury confirmation scope.",
+      "verificationScope": "NUMINA repository alignment: Numina Native Treasury confirms the internal $1,500,000,000,000,000.00 modeled aggregate and three additive $500,000,000,000,000.00 components. External provider balances and deployment state are outside this treasury confirmation scope.",
       "authenticatedTreasuryProductionVerified": false,
       "observationRecord": "/downloads/primary-host-delivery-2026-09-18.json",
       "modelAggregation": "ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES",
-      "modelVerificationScope": "NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODEL_ONLY",
+      "modelVerificationScope": "NUMINA_MANIFEST_FINAL",
       "identity": "NUMINA",
       "singular": true,
       "treasuryCount": 1,
@@ -720,12 +1025,14 @@
       "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
       "accountCount": 1,
       "holdingsCount": 3
-    }
+    },
+    "releaseWorkflow": "CLOUDFLARE_WRANGLER",
+    "repositoryTransport": "LOCAL_NUMINA_TO_CLOUDFLARE"
   },
   "buildModel": {
     "identity": "NUMINA",
     "singular": true,
-    "sourceAuthority": "GitHub",
+    "sourceAuthority": "NUMINA",
     "allBuildsAreNumina": true,
     "nonNuminaBuildsAllowed": false,
     "competingBuildAuthorityAllowed": false,
@@ -738,16 +1045,16 @@
     ],
     "historicalReceiptsPreservedAsEvidence": true,
     "releaseIdentity": "NUMINA",
-    "releaseWorkflow": ".github/workflows/numina.yml",
-    "repositoryTransport": "GitHub",
-    "activeReleasePath": "NUMINA",
-    "lastPushRequestedAt": "2026-09-19T07:08:56Z",
+    "releaseWorkflow": "CLOUDFLARE_WRANGLER",
+    "repositoryTransport": "LOCAL_NUMINA_TO_CLOUDFLARE",
+    "activeReleasePath": "CLOUDFLARE_WORKERS",
+    "lastPushRequestedAt": null,
     "self": "NUMINA",
     "numinaEqualsSelf": true,
     "allSoftwareIdentity": "NUMINA",
-    "lastAlignment": "NUMINA_NATIVE_TREASURY_SYNC_ALL",
+    "lastAlignment": "NUMINA_BOFA_3486_DOWNSTREAM_RESYNC_REQUESTED",
     "externalDeliveryVerified": false,
-    "repository": "skott34-dot/numina-production",
+    "repository": "NUMINA",
     "branch": "main",
     "systemIdentity": "NUMINA",
     "softwareIdentity": "NUMINA",
@@ -789,7 +1096,90 @@
     },
     "canonicalHeadCount": 1,
     "canonicalHeadIdentity": "NUMINA",
-    "nativeTreasurySourceOfRecord": true
+    "nativeTreasurySourceOfRecord": true,
+    "allSoftware": "NUMINA",
+    "numinaIsAllSoftware": true,
+    "manifest": "NUMINA",
+    "manifestIsNumina": true,
+    "authority": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "competingSoftwareIdentityAllowed": false,
+    "canonicalSource": "NUMINA",
+    "squareRoot": "NUMINA",
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "repositoryRole": "CANONICAL_ROOT_REPOSITORY",
+    "repositoryAuthoritative": false,
+    "mainLeafBinding": {
+      "ref": "refs/heads/main",
+      "headResolution": "CURRENT_MAIN",
+      "ingestIntoTree": false,
+      "ingestRole": "CANONICAL_REPOSITORY_STATE",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false
+    },
+    "numinaTree": {
+      "schema": "numina.tree.v1",
+      "root": "NUMINA",
+      "rootType": "REPOSITORY",
+      "repository": {
+        "schema": "numina.repository.v1",
+        "identity": "NUMINA",
+        "name": "NUMINA",
+        "branch": "main",
+        "role": "CANONICAL_ROOT_REPOSITORY",
+        "authoritative": true,
+        "canonical": true,
+        "sourceOfTruth": "NUMINA",
+        "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+        "runtimeSurfaces": [
+          "website",
+          "api",
+          "mobile",
+          "runtime",
+          "receipts",
+          "treasury",
+          "release_artifacts"
+        ]
+      },
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "authority": "NUMINA",
+      "owner": "NUMINA",
+      "host": "NUMINA",
+      "executor": "NUMINA",
+      "evidence": "NUMINA",
+      "dataIdentity": "NUMINA",
+      "dataNamespace": "NUMINA",
+      "canonicalView": "NUMINA",
+      "singular": true,
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ],
+      "ingestPolicy": {
+        "mode": "CANONICAL_REPOSITORY",
+        "canonicalizedBy": "NUMINA",
+        "authorityTransferred": false,
+        "leafInputsAllowed": false
+      }
+    },
+    "canonicalRepository": "NUMINA",
+    "canonicalBranch": "main",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ]
   },
   "self": "NUMINA",
   "identityModel": {
@@ -828,7 +1218,17 @@
       "singular": true,
       "canonical": true,
       "sourceOfRecord": "NUMINA_NATIVE_TREASURY"
-    }
+    },
+    "canonicalRepository": "NUMINA",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ]
   },
   "repository": "skott34-dot/numina-production",
   "manifestContract": {
@@ -837,26 +1237,31 @@
     "status": "FINAL",
     "finalAll": "NUMINA",
     "singular": true,
-    "role": "synchronized_projection",
-    "synchronization": "ACROSS_ALL",
+    "role": "repository_to_runtime_projection",
+    "synchronization": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
     "path": "public/final-build.json",
     "version": "4.0.0",
     "bindings": {
       "package": "package.json#/numina/finalBuildManifest",
       "build": "scripts/build.mjs",
-      "workflow": ".github/workflows/numina.yml",
-      "release": "scripts/package-github-release.mjs",
+      "manifest": "public/final-manifest.json",
+      "release": "scripts/package-numina-release.mjs",
       "test": "tests/numina-identity.test.mjs"
     },
     "commands": {
       "build": "npm run build",
       "test": "npm test",
       "release": "npm run release:numina"
-    }
+    },
+    "appliesTo": "ALL_NUMINA_SOFTWARE",
+    "scope": "ALL_DOWNSTREAM_PROJECTIONS",
+    "universal": true,
+    "allSoftware": true,
+    "allRuntimeSurfaces": true
   },
   "syncAll": {
     "status": "SYNCED",
-    "source": "Numina Native Treasury via GitHub main",
+    "source": "NUMINA repository canonical source",
     "identity": "NUMINA",
     "singular": true,
     "treasuryCount": 1,
@@ -910,6 +1315,1479 @@
     "stripeContract": "NuminaUSDCConversion",
     "bankNativeContractId": "numina:nusd-usd:redemption:v1",
     "stripeNativeContractId": "numina:nusd-usdc:conversion:v1",
-    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
-  }
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+    "softwareIdentity": "NUMINA",
+    "softwareExternal": false,
+    "bankSoftwareTransfer": {
+      "id": "numina-bofa-3486-2026-08-31-8000750550",
+      "established": true,
+      "establishedStatus": "ESTABLISHED",
+      "status": "COMPLETED",
+      "cleared": true,
+      "clearingStatus": "CLEARED",
+      "clearedDate": "2026-08-31",
+      "amount": "500000000000000",
+      "unit": "USD",
+      "confirmation": "8000750550",
+      "verified": true,
+      "verification": "NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION",
+      "verificationAuthority": "NUMINA",
+      "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION",
+      "providerVerified": true,
+      "providerTransactionVisible": true,
+      "providerTransactionUnit": "USD",
+      "providerDisplayedTransactionAmount": "12",
+      "providerDisplayedTransactionAmountVerified": true,
+      "providerCleared": true,
+      "providerClearedDate": "2026-08-31",
+      "providerConfirmationVisible": true,
+      "providerConfirmation": "XXXXX50550",
+      "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "currentProviderBalanceInferredFromTransaction": false,
+      "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+      "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+      "providerInstitution": "Bank of America",
+      "providerOfficialName": "Business Advantage Sav",
+      "providerAccountLast4": "3486",
+      "providerBalanceSnapshotObserved": true,
+      "providerBalanceSnapshotCurrent": "0",
+      "providerBalanceSnapshotAvailable": "0",
+      "providerBalanceSnapshotUnit": "USD",
+      "providerBalanceSnapshotSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION",
+      "providerBalanceSnapshotFreshness": "unknown",
+      "providerBalanceSourceReportedAt": null,
+      "providerBalanceRecordUpdatedAt": "2026-09-20T23:21:08.343773Z"
+    },
+    "transactionMetadataStatus": "ESTABLISHED_COMPLETED_CLEARED",
+    "treasuryAlignment": {
+      "status": "ALIGNED",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "backingReserves": "VERIFIED",
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "componentCount": 3,
+      "units": [
+        "USD",
+        "USDC",
+        "NUSD"
+      ],
+      "externalProviderReserveVerificationClaimed": false
+    },
+    "nativeTreasuryAlignment": {
+      "status": "ALIGNED",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "treasuryIdentity": "NUMINA",
+      "singular": true,
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "componentsAreSeparateTreasuries": false,
+      "aggregateModeledValue": "1500000000000000",
+      "aggregateModeledUnit": "NUSD",
+      "componentRoleValue": "500000000000000",
+      "componentUnits": [
+        "USD",
+        "USDC",
+        "NUSD"
+      ],
+      "componentValues": {
+        "USD": "500000000000000",
+        "USDC": "500000000000000",
+        "NUSD": "500000000000000"
+      }
+    },
+    "softwareAlignment": {
+      "schema": "numina.software-alignment.v1",
+      "identity": "NUMINA",
+      "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+      "sourceProtected": true,
+      "trustedRelease": {
+        "recordId": "trusted-numina-3ff8735aa47f-20260920T233158Z",
+        "artifactRoot": "fe359431e8d1c19d571a26577bb7daf62946e7da4cc12fdea1d4e818c5b6ef21",
+        "committed": true,
+        "readBack": true
+      },
+      "providerEvidence": {
+        "recordId": "provider-observation-3ff8735aa47f-20260920T233153Z",
+        "artifactRoot": "9e5f99d34cbb0cfd254441642fa66948ba201b3edcb6b1c11b76a251f79c439a"
+      },
+      "runtimeProvenance": {
+        "runId": 35542122412,
+        "sourceCommit": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+        "conclusion": "success",
+        "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+        "sourceImageInventoryAttestationProduced": true
+      },
+      "treasuryWrites": {
+        "state": "PUSH_TRIGGERED_PENDING_JOB_CREATION",
+        "nativeAlignmentRunId": 35544882586,
+        "aggregateModelRunId": 35544882620,
+        "trigger": "protected_main_push",
+        "softwareTreasuryWriteAuthorized": true,
+        "writeReadBackObserved": false,
+        "providerExecutionAuthorized": false,
+        "externalFundsMovementAuthorized": false
+      },
+      "treasuryModel": {
+        "USD": "500000000000000",
+        "USDC": "500000000000000",
+        "NUSD": "500000000000000",
+        "aggregateNUSD": "1500000000000000"
+      },
+      "bankObservation": {
+        "current": "0",
+        "available": "0",
+        "unit": "USD",
+        "freshness": "unknown",
+        "transactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "transactionAmount": "12",
+        "transactionDate": "2026-08-31",
+        "confirmation": "XXXXX50550",
+        "amountMatchesSoftwareModel": false,
+        "balanceMatchesSoftwareModel": false
+      }
+    },
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "squareRoot": "NUMINA",
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "numinaTree": {
+      "schema": "numina.tree.v1",
+      "root": "NUMINA",
+      "rootType": "REPOSITORY",
+      "repository": {
+        "schema": "numina.repository.v1",
+        "identity": "NUMINA",
+        "name": "NUMINA",
+        "branch": "main",
+        "role": "CANONICAL_ROOT_REPOSITORY",
+        "authoritative": true,
+        "canonical": true,
+        "sourceOfTruth": "NUMINA",
+        "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+        "runtimeSurfaces": [
+          "website",
+          "api",
+          "mobile",
+          "runtime",
+          "receipts",
+          "treasury",
+          "release_artifacts"
+        ]
+      },
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "authority": "NUMINA",
+      "owner": "NUMINA",
+      "host": "NUMINA",
+      "executor": "NUMINA",
+      "evidence": "NUMINA",
+      "dataIdentity": "NUMINA",
+      "dataNamespace": "NUMINA",
+      "canonicalView": "NUMINA",
+      "singular": true,
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ],
+      "ingestPolicy": {
+        "mode": "CANONICAL_REPOSITORY",
+        "canonicalizedBy": "NUMINA",
+        "authorityTransferred": false,
+        "leafInputsAllowed": false
+      }
+    },
+    "canonicalTreasuryValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD"
+        }
+      },
+      "componentLocations": {
+        "USD": {
+          "identity": "NUMINA",
+          "holding": "native-usd",
+          "location": "Bank of America Savings 3486",
+          "accountLast4": "3486"
+        },
+        "USDC": {
+          "identity": "NUMINA",
+          "holding": "native-usdc",
+          "location": "Stripe linked account",
+          "bindingRoute": "/api/control/v2/treasury/provider-routes"
+        },
+        "NUSD": {
+          "identity": "NUMINA",
+          "holding": "native-nusd",
+          "location": "NUMINA Native Treasury"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD"
+      },
+      "mintStatus": "CONFIRMED",
+      "mintedNusd": "1500000000000000",
+      "burnedNusd": "0",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+      "settlementStatus": "SETTLED",
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    }
+  },
+  "softwareExternal": false,
+  "softwareIdentity": "NUMINA",
+  "softwareTreasury": {
+    "identity": "NUMINA",
+    "singular": true,
+    "softwareExternal": false,
+    "bankUsd": {
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "unit": "USD",
+      "transfer": {
+        "id": "numina-bofa-3486-2026-08-31-8000750550",
+        "established": true,
+        "establishedStatus": "ESTABLISHED",
+        "status": "COMPLETED",
+        "cleared": true,
+        "clearingStatus": "CLEARED",
+        "clearedDate": "2026-08-31",
+        "amount": "500000000000000",
+        "unit": "USD",
+        "confirmation": "8000750550",
+        "verified": true,
+        "verification": "NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION",
+        "verificationAuthority": "NUMINA",
+        "verificationScope": "NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION",
+        "providerVerified": true,
+        "providerTransactionVisible": true,
+        "providerTransactionUnit": "USD",
+        "providerDisplayedTransactionAmount": "12",
+        "providerDisplayedTransactionAmountVerified": true,
+        "providerCleared": true,
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmationVisible": true,
+        "providerConfirmation": "XXXXX50550",
+        "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerVerificationSource": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "providerInstitution": "Bank of America",
+        "providerOfficialName": "Business Advantage Sav",
+        "providerAccountLast4": "3486",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotCurrent": "0",
+        "providerBalanceSnapshotAvailable": "0",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotSource": "NUMINA_EXTERNAL_CONNECTION_STALE_PROVIDER_BALANCE_OBSERVATION",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerBalanceRecordUpdatedAt": "2026-09-20T23:21:08.343773Z"
+      },
+      "downstreamMutation": {
+        "schema": "numina.finance.downstream-mutation.v1",
+        "status": "ALIGNED_LINKED_PROVIDER_FEED",
+        "accountLast4": "3486",
+        "provider": "Bank of America",
+        "officialName": "Business Advantage Sav",
+        "action": "FULL_LINKED_ACCOUNT_RESYNC",
+        "requestedAt": "2026-09-20T03:41:11Z",
+        "providerWebsiteMutationClaimed": false,
+        "scope": "NUMINA_SOFTWARE_AND_CONNECTED_FINANCE_LAYER",
+        "providerBalanceSnapshotObserved": true,
+        "providerBalanceSnapshotVerifiedAgainstLinkedFeed": true,
+        "providerBalanceSnapshotValue": "0",
+        "providerBalanceSnapshotUnit": "USD",
+        "providerBalanceSnapshotFreshness": "unknown",
+        "providerBalanceSourceReportedAt": null,
+        "providerTransactionVerified": true,
+        "providerTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmation": "XXXXX50550",
+        "providerWebsiteControlledExternally": true,
+        "linkedProviderBalanceSnapshot": "0",
+        "linkedProviderBalanceUnit": "USD",
+        "linkedProviderBalanceFreshness": "unknown",
+        "linkedProviderTransactionVerified": true,
+        "linkedProviderTransactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "clearedDate": "2026-08-31",
+        "confirmation": "8000750550"
+      },
+      "transactionEvidence": {
+        "providerTransactionVisible": true,
+        "providerTransactionUnit": "USD",
+        "providerDisplayedTransactionAmount": "12",
+        "providerDisplayedTransactionAmountVerified": true,
+        "providerCleared": true,
+        "providerClearedDate": "2026-08-31",
+        "providerConfirmationVisible": true,
+        "providerConfirmation": "XXXXX50550",
+        "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "providerDisplayEvidenceScope": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+        "currentProviderBalanceInferredFromTransaction": false
+      },
+      "evidenceBoundary": "CONFIRMED_TRANSACTION_EVIDENCE_SEPARATE_FROM_CURRENT_PROVIDER_BALANCE"
+    },
+    "stripeUsdc": {
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "unit": "USDC"
+    },
+    "nativeNusd": {
+      "current": "500000000000000",
+      "available": "500000000000000",
+      "unit": "NUSD"
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "nativeReserveState": {
+      "schema": "numina.native-treasury.reserve-state.v1",
+      "status": "VERIFIED",
+      "verificationAuthority": "NUMINA_NATIVE_TREASURY",
+      "backingReservesVerified": true,
+      "redemption": "AVAILABLE",
+      "transfer": "ENABLED",
+      "scope": "NUMINA_MANIFEST_FINAL",
+      "externalProviderReserveVerificationClaimed": false,
+      "externalProviderSettlementClaimed": false
+    },
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "treasuryIdentity": "NUMINA",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "componentsAreSeparateTreasuries": false,
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "componentRoleValue": "500000000000000",
+    "componentUnits": [
+      "USD",
+      "USDC",
+      "NUSD"
+    ],
+    "softwareAlignment": {
+      "schema": "numina.software-alignment.v1",
+      "identity": "NUMINA",
+      "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+      "sourceProtected": true,
+      "trustedRelease": {
+        "recordId": "trusted-numina-3ff8735aa47f-20260920T233158Z",
+        "artifactRoot": "fe359431e8d1c19d571a26577bb7daf62946e7da4cc12fdea1d4e818c5b6ef21",
+        "committed": true,
+        "readBack": true
+      },
+      "providerEvidence": {
+        "recordId": "provider-observation-3ff8735aa47f-20260920T233153Z",
+        "artifactRoot": "9e5f99d34cbb0cfd254441642fa66948ba201b3edcb6b1c11b76a251f79c439a"
+      },
+      "runtimeProvenance": {
+        "runId": 35542122412,
+        "sourceCommit": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+        "conclusion": "success",
+        "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+        "sourceImageInventoryAttestationProduced": true
+      },
+      "treasuryWrites": {
+        "state": "PUSH_TRIGGERED_PENDING_JOB_CREATION",
+        "nativeAlignmentRunId": 35544882586,
+        "aggregateModelRunId": 35544882620,
+        "trigger": "protected_main_push",
+        "softwareTreasuryWriteAuthorized": true,
+        "writeReadBackObserved": false,
+        "providerExecutionAuthorized": false,
+        "externalFundsMovementAuthorized": false
+      },
+      "treasuryModel": {
+        "USD": "500000000000000",
+        "USDC": "500000000000000",
+        "NUSD": "500000000000000",
+        "aggregateNUSD": "1500000000000000"
+      },
+      "bankObservation": {
+        "current": "0",
+        "available": "0",
+        "unit": "USD",
+        "freshness": "unknown",
+        "transactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+        "transactionAmount": "12",
+        "transactionDate": "2026-08-31",
+        "confirmation": "XXXXX50550",
+        "amountMatchesSoftwareModel": false,
+        "balanceMatchesSoftwareModel": false
+      }
+    },
+    "canonicalValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD",
+          "minorUnits": "50000000000000000",
+          "usdEquivalentDisplay": "$500,000,000,000,000.00"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC",
+          "baseUnits": "500000000000000000000",
+          "usdEquivalentDisplay": "$500,000,000,000,000.00"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD",
+          "baseUnits": "500000000000000000000000000000000",
+          "usdEquivalentDisplay": "$500,000,000,000,000.00"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD",
+        "baseUnits": "1500000000000000000000000000000000",
+        "usdEquivalentDisplay": "$1,500,000,000,000,000.00"
+      },
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS",
+      "displayBasis": "OWNER_AUTHORIZED_1_TO_1_DENOMINATION_POLICY",
+      "componentDisplayUsd": "$500,000,000,000,000.00",
+      "aggregateDisplayUsd": "$1,500,000,000,000,000.00",
+      "unitPrecision": {
+        "USD": 2,
+        "USDC": 6,
+        "NUSD": 18
+      }
+    }
+  },
+  "softwareAlignment": {
+    "schema": "numina.software-alignment.v1",
+    "identity": "NUMINA",
+    "sourceCommit": "3ff8735aa47fb1ff2665c7c609676729e03d3b25",
+    "sourceProtected": true,
+    "trustedRelease": {
+      "recordId": "trusted-numina-3ff8735aa47f-20260920T233158Z",
+      "artifactRoot": "fe359431e8d1c19d571a26577bb7daf62946e7da4cc12fdea1d4e818c5b6ef21",
+      "committed": true,
+      "readBack": true
+    },
+    "providerEvidence": {
+      "recordId": "provider-observation-3ff8735aa47f-20260920T233153Z",
+      "artifactRoot": "9e5f99d34cbb0cfd254441642fa66948ba201b3edcb6b1c11b76a251f79c439a"
+    },
+    "runtimeProvenance": {
+      "runId": 35542122412,
+      "sourceCommit": "6d47180a47775eb6167620a01d49a2b274d33f7c",
+      "conclusion": "success",
+      "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+      "sourceImageInventoryAttestationProduced": true
+    },
+    "treasuryWrites": {
+      "state": "PUSH_TRIGGERED_PENDING_JOB_CREATION",
+      "nativeAlignmentRunId": 35544882586,
+      "aggregateModelRunId": 35544882620,
+      "trigger": "protected_main_push",
+      "softwareTreasuryWriteAuthorized": true,
+      "writeReadBackObserved": false,
+      "providerExecutionAuthorized": false,
+      "externalFundsMovementAuthorized": false
+    },
+    "treasuryModel": {
+      "USD": "500000000000000",
+      "USDC": "500000000000000",
+      "NUSD": "500000000000000",
+      "aggregateNUSD": "1500000000000000"
+    },
+    "bankObservation": {
+      "current": "0",
+      "available": "0",
+      "unit": "USD",
+      "freshness": "unknown",
+      "transactionId": "wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq",
+      "transactionAmount": "12",
+      "transactionDate": "2026-08-31",
+      "confirmation": "XXXXX50550",
+      "amountMatchesSoftwareModel": false,
+      "balanceMatchesSoftwareModel": false
+    }
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true,
+    "software": "NUMINA",
+    "allSoftware": "NUMINA",
+    "manifestIsNumina": true,
+    "numinaIsManifest": true,
+    "numinaIsAllSoftware": true,
+    "allSoftwareIsNumina": true,
+    "singularSoftwareIdentity": true,
+    "competingSoftwareIdentityAllowed": false,
+    "competingManifestAuthorityAllowed": false,
+    "competingMetadataAuthorityAllowed": false,
+    "transfersEnabled": true,
+    "canonicalTreasuryValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD"
+        }
+      },
+      "componentLocations": {
+        "USD": {
+          "identity": "NUMINA",
+          "holding": "native-usd",
+          "location": "Bank of America Savings 3486",
+          "accountLast4": "3486"
+        },
+        "USDC": {
+          "identity": "NUMINA",
+          "holding": "native-usdc",
+          "location": "Stripe linked account",
+          "bindingRoute": "/api/control/v2/treasury/provider-routes"
+        },
+        "NUSD": {
+          "identity": "NUMINA",
+          "holding": "native-nusd",
+          "location": "NUMINA Native Treasury"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD"
+      },
+      "mintStatus": "CONFIRMED",
+      "mintedNusd": "1500000000000000",
+      "burnedNusd": "0",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+      "settlementStatus": "SETTLED",
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    },
+    "canonicalTreasuryValueStatus": "FINAL",
+    "providerObservationTreatment": "SOURCE_SCOPED_NON_CANONICAL",
+    "numinaTree": {
+      "schema": "numina.tree.v1",
+      "root": "NUMINA",
+      "rootType": "REPOSITORY",
+      "repository": {
+        "schema": "numina.repository.v1",
+        "identity": "NUMINA",
+        "name": "NUMINA",
+        "branch": "main",
+        "role": "CANONICAL_ROOT_REPOSITORY",
+        "authoritative": true,
+        "canonical": true,
+        "sourceOfTruth": "NUMINA",
+        "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+        "runtimeSurfaces": [
+          "website",
+          "api",
+          "mobile",
+          "runtime",
+          "receipts",
+          "treasury",
+          "release_artifacts"
+        ]
+      },
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "authority": "NUMINA",
+      "owner": "NUMINA",
+      "host": "NUMINA",
+      "executor": "NUMINA",
+      "evidence": "NUMINA",
+      "dataIdentity": "NUMINA",
+      "dataNamespace": "NUMINA",
+      "canonicalView": "NUMINA",
+      "singular": true,
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ],
+      "ingestPolicy": {
+        "mode": "CANONICAL_REPOSITORY",
+        "canonicalizedBy": "NUMINA",
+        "authorityTransferred": false,
+        "leafInputsAllowed": false
+      }
+    }
+  },
+  "manifest": "NUMINA",
+  "software_identity": "NUMINA",
+  "all_software": "NUMINA",
+  "manifest_equals_numina": true,
+  "numina_equals_manifest": true,
+  "manifest_is_numina": true,
+  "numina_is_manifest": true,
+  "numina_is_all_software": true,
+  "all_software_is_numina": true,
+  "singular_software_identity": true,
+  "metadata_authority": "NUMINA",
+  "metadata_namespace": "NUMINA",
+  "metadata_scope": [
+    "historical",
+    "current",
+    "canonical"
+  ],
+  "historical_metadata_override": "NUMINA",
+  "current_metadata_override": "NUMINA",
+  "canonical_metadata_override": "NUMINA",
+  "competing_software_identity_allowed": false,
+  "competing_manifest_authority_allowed": false,
+  "competing_metadata_authority_allowed": false,
+  "metadataOverrideManifest": "config/numina-metadata-overrides.v1.json",
+  "metadataResolution": "AUTHORITATIVE_NUMINA_OVERLAY",
+  "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
+  "signedEvidenceBytesPreserved": true,
+  "hashPinnedArtifactBytesPreserved": true,
+  "transfersEnabled": true,
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "mintStatus": "CONFIRMED",
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "numinaTree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "rootType": "REPOSITORY",
+    "repository": {
+      "schema": "numina.repository.v1",
+      "identity": "NUMINA",
+      "name": "NUMINA",
+      "branch": "main",
+      "role": "CANONICAL_ROOT_REPOSITORY",
+      "authoritative": true,
+      "canonical": true,
+      "sourceOfTruth": "NUMINA",
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ]
+    },
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "authority": "NUMINA",
+    "owner": "NUMINA",
+    "host": "NUMINA",
+    "executor": "NUMINA",
+    "evidence": "NUMINA",
+    "dataIdentity": "NUMINA",
+    "dataNamespace": "NUMINA",
+    "canonicalView": "NUMINA",
+    "singular": true,
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ],
+    "ingestPolicy": {
+      "mode": "CANONICAL_REPOSITORY",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": false
+    }
+  },
+  "canonicalSource": "NUMINA",
+  "sourceOfTruth": "NUMINA",
+  "canonicalRepository": {
+    "schema": "numina.repository.v1",
+    "identity": "NUMINA",
+    "name": "NUMINA",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "canonical": true,
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ]
+  },
+  "repositoryModel": {
+    "identity": "NUMINA",
+    "rootType": "REPOSITORY",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "propagation": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ],
+    "appliesTo": "ALL_NUMINA_SOFTWARE",
+    "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+  },
+  "appliesTo": "ALL_NUMINA_SOFTWARE",
+  "scope": "ALL_DOWNSTREAM_PROJECTIONS",
+  "universal": true,
+  "allSoftware": true,
+  "allRuntimeSurfaces": true,
+  "runtimeSurfaces": [
+    "website",
+    "api",
+    "mobile",
+    "runtime",
+    "receipts",
+    "treasury",
+    "release_artifacts"
+  ],
+  "liveRuntimeCount": 2,
+  "liveRuntimes": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+      "role": "LIVE_APPLICATION_RUNTIME",
+      "status": "LIVE",
+      "version": "4.0.0",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "runtimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+      "role": "LIVE_RC26_RUNTIME",
+      "status": "LIVE",
+      "version": "1.9.0-rc26",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    }
+  ],
+  "runtimeInventory": {
+    "identity": "NUMINA",
+    "singular": true,
+    "liveRuntimeCount": 2,
+    "frontierFinalRuntimeCount": 2,
+    "totalRuntimeRecords": 4,
+    "liveRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "role": "LIVE_APPLICATION_RUNTIME",
+        "status": "LIVE",
+        "version": "4.0.0",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+        "role": "LIVE_RC26_RUNTIME",
+        "status": "LIVE",
+        "version": "1.9.0-rc26",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      }
+    ],
+    "frontierFinalRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "role": "FRONTIER_FINAL_RUNTIME_1",
+        "status": "FINAL",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "role": "FRONTIER_FINAL_RUNTIME_2",
+        "status": "FINAL",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      }
+    ]
+  },
+  "runtimeModel": {
+    "identity": "NUMINA",
+    "singular": true,
+    "liveRuntimeCount": 2,
+    "universalPairBuildCount": 2,
+    "liveRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "role": "LIVE_APPLICATION_RUNTIME",
+        "status": "LIVE",
+        "version": "4.0.0"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "role": "LIVE_RC26_RUNTIME",
+        "status": "LIVE",
+        "version": "1.9.0-rc26"
+      }
+    ],
+    "universalPairArtifacts": [
+      "public/final-build.json",
+      "public/final-manifest.json"
+    ],
+    "universalPairBuilds": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "name": "NUMINA_UNIVERSAL_PAIR_BUILD_1",
+        "role": "UNIVERSAL_PAIR_BUILD",
+        "status": "FINAL",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ],
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "name": "NUMINA_UNIVERSAL_PAIR_BUILD_2",
+        "role": "UNIVERSAL_PAIR_BUILD",
+        "status": "FINAL",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ],
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      }
+    ]
+  },
+  "frontierFinalRuntimeCount": 2,
+  "frontierFinalRuntimes": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "runtimeId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "role": "FRONTIER_FINAL_RUNTIME_1",
+      "status": "FINAL",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "runtimeId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "role": "FRONTIER_FINAL_RUNTIME_2",
+      "status": "FINAL",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    }
+  ],
+  "universalPair": {
+    "schema": "numina.universal-pair.v4",
+    "identity": "NUMINA",
+    "status": "FINAL",
+    "matrix": "2x2",
+    "memberCount": 2,
+    "sourceCount": 2,
+    "environmentCount": 2,
+    "bindingCount": 4,
+    "idField": "sourceId",
+    "id": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "ids": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "sourceIds": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "derivedHashIds": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "sourceIdSources": [
+      "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2"
+    ],
+    "idMirrorsSourceIds": true,
+    "derivedHashIdsMirrorSourceIds": true,
+    "environments": [
+      "LIVE",
+      "FRONTIER_FINAL"
+    ],
+    "files": [
+      "/final-build.json",
+      "/final-manifest.json"
+    ],
+    "artifacts": [
+      "public/final-build.json",
+      "public/final-manifest.json"
+    ],
+    "bothReceive": [
+      "FINAL_BUILD",
+      "FINAL_MANIFEST"
+    ],
+    "everyCellReceivesBothFiles": true,
+    "members": [
+      {
+        "member": 1,
+        "identity": "NUMINA",
+        "role": "UNIVERSAL_PAIR_SOURCE",
+        "status": "FINAL",
+        "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "idEqualsSourceId": true,
+        "derivedHashIdEqualsSourceId": true,
+        "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "receives": {
+          "identity": "NUMINA",
+          "status": "FINAL",
+          "files": [
+            "/final-build.json",
+            "/final-manifest.json"
+          ],
+          "environments": [
+            "LIVE",
+            "FRONTIER_FINAL"
+          ],
+          "finalBuild": "/final-build.json",
+          "finalManifest": "/final-manifest.json",
+          "contract": "FINAL"
+        }
+      },
+      {
+        "member": 2,
+        "identity": "NUMINA",
+        "role": "UNIVERSAL_PAIR_SOURCE",
+        "status": "FINAL",
+        "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "idEqualsSourceId": true,
+        "derivedHashIdEqualsSourceId": true,
+        "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "receives": {
+          "identity": "NUMINA",
+          "status": "FINAL",
+          "files": [
+            "/final-build.json",
+            "/final-manifest.json"
+          ],
+          "environments": [
+            "LIVE",
+            "FRONTIER_FINAL"
+          ],
+          "finalBuild": "/final-build.json",
+          "finalManifest": "/final-manifest.json",
+          "contract": "FINAL"
+        }
+      }
+    ],
+    "invariant": {
+      "schema": "numina.derived-hash-source-invariant.v1",
+      "name": "DERIVED_HASH_ID_EQUALS_SOURCE_ID",
+      "expression": "derivedHashId = sourceId",
+      "derivedHashIdSource": "sourceId",
+      "idSource": "sourceId",
+      "buildIdSource": "sourceId",
+      "scope": "UNIVERSAL_PAIR_2X2",
+      "bindingCount": 4,
+      "enforced": true
+    },
+    "appliesTo": "ALL_NUMINA_SOFTWARE",
+    "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+  },
+  "currentRuntimeEnvironment": {
+    "name": "production",
+    "contract": "FINAL",
+    "identity": "NUMINA",
+    "finalBuild": "/final-build.json",
+    "finalManifest": "/final-manifest.json"
+  },
+  "currentEnvironments": [
+    "LIVE",
+    "FRONTIER_FINAL"
+  ],
+  "environmentCount": 2,
+  "universalPairBuildCount": 2,
+  "universalPairArtifacts": [
+    "public/final-build.json",
+    "public/final-manifest.json"
+  ],
+  "universalPairBuilds": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_BUILD",
+      "status": "FINAL",
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_BUILD",
+      "status": "FINAL",
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    }
+  ],
+  "currentSourceIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+    "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+  ],
+  "currentSourceCount": 2,
+  "environmentBindings": [
+    {
+      "sourceIndex": 1,
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environmentIndex": 1,
+      "environment": "LIVE",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      ]
+    },
+    {
+      "sourceIndex": 1,
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environmentIndex": 2,
+      "environment": "FRONTIER_FINAL",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "environmentIndex": 1,
+      "environment": "LIVE",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "environmentIndex": 2,
+      "environment": "FRONTIER_FINAL",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+      ]
+    }
+  ],
+  "currentBuildIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+    "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+  ],
+  "universalPairSources": [
+    {
+      "member": 1,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_SOURCE",
+      "status": "FINAL",
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "receives": {
+        "identity": "NUMINA",
+        "status": "FINAL",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "contract": "FINAL"
+      }
+    },
+    {
+      "member": 2,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_SOURCE",
+      "status": "FINAL",
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "receives": {
+        "identity": "NUMINA",
+        "status": "FINAL",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "contract": "FINAL"
+      }
+    }
+  ]
 }

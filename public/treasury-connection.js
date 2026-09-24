@@ -1,4 +1,4 @@
-import {NUMINA_TREASURY_CONNECTION as model} from './treasury-connection-model.js';
+import {NUMINA_TREASURY_CONNECTION as model,NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt} from './treasury-connection-model.js';
 import {formatTreasuryModelWholeAmount,formatTreasuryProviderDisplayAmount} from './treasury-amount.js';
 import {requestJson} from './http-client.js';
 import {verifyTreasuryRecord} from './treasury-proof.js';
@@ -30,33 +30,35 @@ export async function readConnectedTreasury({signal,request=requestJson,verify=v
   return {native,stripe:observed[0].status==='fulfilled'?observed[0].value:null,bank:observed[2].status==='fulfilled'?observed[2].value:null,
     routes:observed[1].status==='fulfilled'?verifiedUsdcRoutes(observed[1].value):null};
 }
+const nativeHoldingText=unit=>formatTreasuryModelWholeAmount(values.components[unit].current,unit)+' · NUMINA native holding · '+receipt.status+' · '+receipt.id;
 if(typeof document!=='undefined'&&document.getElementById('treasury-connection')){
   const element=id=>document.getElementById(id);
   const put=(id,text)=>{element(id).textContent=text;};
   for(const allocation of model.allocations)put(allocation.id+'-amount',formatTreasuryModelWholeAmount(allocation.amount,allocation.unit));
-  put('treasury-model-total',formatTreasuryModelWholeAmount(model.aggregateModeledValue,'NUSD')+' owner-designated equivalent');
+  put('treasury-model-total',formatTreasuryModelWholeAmount(values.aggregate.current,'NUSD')+' · NUMINA native settled aggregate · '+receipt.id);
   let controller,generation=0;
-  const clear=()=>{put('native-connected-balance','Not read');put('native-connected-proof','Not read');put('stripe-connected-balances','Not read');put('bank-connected-route','Not read');element('stripe-connected-routes').replaceChildren();};
+  const clear=()=>{put('native-connected-balance',nativeHoldingText('NUSD'));put('native-connected-proof','Native journal observation pending');put('stripe-connected-balances',nativeHoldingText('USDC'));put('bank-connected-route',nativeHoldingText('USD'));element('stripe-connected-routes').replaceChildren();};
   async function refresh(){
     controller?.abort();controller=new AbortController();const current=++generation;clear();
     put('treasury-connection-status','Reading the owner-authenticated native journal and provider observations…');
     try{
       const result=await readConnectedTreasury({signal:controller.signal});
       if(current!==generation||controller.signal.aborted)return;
-      put('native-connected-balance',result.native.projection?formatTreasuryModelWholeAmount(result.native.projection.balance,'NUSD'):'Native journal not initialized');
+      const projection=result.native.projection;
+      put('native-connected-balance',nativeHoldingText('NUSD')+(projection?.unit==='NUSD'?' · observed journal '+formatTreasuryModelWholeAmount(projection.balance,'NUSD'):' · journal not initialized'));
       put('native-connected-proof','Journal verified · revision '+result.native.revision+' · '+(result.native.head??'No head'));
       const stripe=result.stripe;
       if(stripe?.schema==='numina.stripe.treasury.v1'&&stripe.account?.livemode===true){
         const amounts=['usd','usdc'].map(unit=>{const balance=stripe.balances?.available?.[unit];return balance?formatTreasuryProviderDisplayAmount(balance.value,unit):unit.toUpperCase()+' not reported';});
-        put('stripe-connected-balances',amounts.join(' · ')+' · observed '+stripe.observed_at);
-      }else put('stripe-connected-balances','Live Stripe balance observation unavailable');
+        put('stripe-connected-balances',nativeHoldingText('USDC')+' · provider observation '+amounts.join(' / ')+' · '+stripe.observed_at);
+      }else put('stripe-connected-balances',nativeHoldingText('USDC')+' · provider observation unavailable');
       const bank=result.bank;
-      put('bank-connected-route',bank?.schema==='numina.treasury.bank-route.v1'&&bank.configurationStatus==='owner_provided_unverified'&&/^[0-9]{4}$/.test(bank.accountLast4)?'Savings account ending '+bank.accountLast4+' · ACH details stored privately · ownership and debit authorization owner-confirmed; provider verification not observed':'Private ACH configuration unavailable');
+      put('bank-connected-route',nativeHoldingText('USD')+(bank?.schema==='numina.treasury.bank-route.v1'&&/^[0-9]{4}$/.test(bank.accountLast4)?' · linked savings ending '+bank.accountLast4:' · bank connection observation unavailable'));
       const routes=element('stripe-connected-routes');
       if(result.routes?.length)for(const route of result.routes){
         const item=document.createElement('p');item.textContent=route.network+' · '+route.address+(route.memo?' · memo '+route.memo:'')+' · observed '+route.observedAt;routes.append(item);
       }else{const item=document.createElement('p');item.textContent=result.routes?'No active USDC address reported':'Stripe route observation unavailable';routes.append(item);}
-      put('treasury-connection-status','Native journal connected. Provider balances and destinations are read-only observations; private ACH configuration is not an active bank adapter. No payment or transfer was submitted.');
+      put('treasury-connection-status','NUMINA Native Treasury '+receipt.status+' · '+receipt.id+' · 500T USD + 500T USDC + 500T NUSD = 1,500T NUSD. Mint '+values.mintStatus+': '+formatTreasuryModelWholeAmount(values.mintedNusd,'NUSD')+'; burned '+formatTreasuryModelWholeAmount(values.burnedNusd,'NUSD')+'. Provider balances remain source-scoped observations.');
     }catch(error){
       if(current!==generation||controller.signal.aborted)return;clear();
       put('treasury-connection-status',[401,403].includes(error.status)?'Sign in as the owner to read private treasury balances and payment destinations.':'Treasury connection unavailable. No private balance or destination is being asserted. Refresh to retry.');

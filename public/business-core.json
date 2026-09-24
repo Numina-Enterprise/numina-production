@@ -30,7 +30,13 @@
     "fundingStatus": "server_observed_evidence_required",
     "canonicalView": "/api/control/v2/treasury/accounts",
     "referenceSchema": "numina.treasury.canonical-reference.v2",
-    "coverage": ["provider_observations","reserve_allocation","redemption","funding","supporting_documents"],
+    "coverage": [
+      "provider_observations",
+      "reserve_allocation",
+      "redemption",
+      "funding",
+      "supporting_documents"
+    ],
     "nativeTreasuryRecordCount": 1,
     "recordsSchema": "numina.treasury.record-sources.v1",
     "recordSeparation": "Provider observations retain source/currency/status as role-specific substrate evidence attached to the singular NUMINA treasury; role balances are never additive.",
@@ -44,9 +50,18 @@
       "amount": "1500000000000000",
       "unit": "NUSD",
       "components": [
-        {"amount":"500000000000000","unit":"USD"},
-        {"amount":"500000000000000","unit":"USDC"},
-        {"amount":"500000000000000","unit":"NUSD"}
+        {
+          "amount": "500000000000000",
+          "unit": "USD"
+        },
+        {
+          "amount": "500000000000000",
+          "unit": "USDC"
+        },
+        {
+          "amount": "500000000000000",
+          "unit": "NUSD"
+        }
       ],
       "externalBalancesAggregated": false
     }
@@ -63,7 +78,15 @@
     "automaticPurchasing": false,
     "permissions": "existing_owner_and_delegated_permissions",
     "paymentEvidence": "provider_confirmation_required",
-    "scope": ["Numina OS","website","plugin","release provenance","mobile applications","integration clients and adapters","payment integrations"],
+    "scope": [
+      "Numina OS",
+      "website",
+      "plugin",
+      "release provenance",
+      "mobile applications",
+      "integration clients and adapters",
+      "payment integrations"
+    ],
     "execution": "Use existing authorized provider access and available credits",
     "providerBillingObservation": null
   },
@@ -104,11 +127,30 @@
     "scope": "declared_valuation_for_one_singular_numina_treasury",
     "expression": "1 NUSD = 1 USDC = 1 USD",
     "referenceUnit": "USD",
-    "units": ["NUSD","USDC","USD"],
+    "units": [
+      "NUSD",
+      "USDC",
+      "USD"
+    ],
     "rates": [
-      {"base":"NUSD","quote":"USD","numerator":"1","denominator":"1"},
-      {"base":"USDC","quote":"USD","numerator":"1","denominator":"1"},
-      {"base":"USD","quote":"USD","numerator":"1","denominator":"1"}
+      {
+        "base": "NUSD",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      {
+        "base": "USDC",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      {
+        "base": "USD",
+        "quote": "USD",
+        "numerator": "1",
+        "denominator": "1"
+      }
     ],
     "preserveCurrencyIdentity": true,
     "providerBalancesChanged": false,
@@ -116,7 +158,7 @@
     "executableConversionVerified": false
   },
   "nusd": {
-    "status": "FINAL_DEPLOYED_PAUSED",
+    "status": "FINAL_DEPLOYED_ACTIVE",
     "chainId": "962421430",
     "decimals": 18,
     "contract": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
@@ -125,6 +167,335 @@
     "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
     "receipt": "/downloads/nusd/deployment-receipt.json",
     "externalBackingVerified": false,
-    "externalSettlementVerified": false
+    "externalSettlementVerified": false,
+    "paused": false,
+    "softwareCapabilities": {
+      "mint": true,
+      "transfer": true,
+      "settlement": true,
+      "redemption": true,
+      "exchange": true
+    },
+    "transfersEnabled": true
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true,
+    "software": "NUMINA",
+    "allSoftware": "NUMINA",
+    "manifestIsNumina": true,
+    "numinaIsManifest": true,
+    "numinaIsAllSoftware": true,
+    "allSoftwareIsNumina": true,
+    "singularSoftwareIdentity": true,
+    "competingSoftwareIdentityAllowed": false,
+    "competingManifestAuthorityAllowed": false,
+    "competingMetadataAuthorityAllowed": false,
+    "transfersEnabled": true,
+    "canonicalTreasuryValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD"
+        }
+      },
+      "componentLocations": {
+        "USD": {
+          "identity": "NUMINA",
+          "holding": "native-usd",
+          "location": "Bank of America Savings 3486",
+          "accountLast4": "3486"
+        },
+        "USDC": {
+          "identity": "NUMINA",
+          "holding": "native-usdc",
+          "location": "Stripe linked account",
+          "bindingRoute": "/api/control/v2/treasury/provider-routes"
+        },
+        "NUSD": {
+          "identity": "NUMINA",
+          "holding": "native-nusd",
+          "location": "NUMINA Native Treasury"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD"
+      },
+      "mintStatus": "CONFIRMED",
+      "mintedNusd": "1500000000000000",
+      "burnedNusd": "0",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+      "settlementStatus": "SETTLED",
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    },
+    "canonicalTreasuryValueStatus": "FINAL",
+    "providerObservationTreatment": "SOURCE_SCOPED_NON_CANONICAL",
+    "numinaTree": {
+      "schema": "numina.tree.v1",
+      "root": "NUMINA",
+      "rootType": "REPOSITORY",
+      "repository": {
+        "schema": "numina.repository.v1",
+        "identity": "NUMINA",
+        "name": "NUMINA",
+        "branch": "main",
+        "role": "CANONICAL_ROOT_REPOSITORY",
+        "authoritative": true,
+        "canonical": true,
+        "sourceOfTruth": "NUMINA",
+        "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+        "runtimeSurfaces": [
+          "website",
+          "api",
+          "mobile",
+          "runtime",
+          "receipts",
+          "treasury",
+          "release_artifacts"
+        ]
+      },
+      "canonicalSource": "NUMINA",
+      "sourceOfTruth": "NUMINA",
+      "authority": "NUMINA",
+      "owner": "NUMINA",
+      "host": "NUMINA",
+      "executor": "NUMINA",
+      "evidence": "NUMINA",
+      "dataIdentity": "NUMINA",
+      "dataNamespace": "NUMINA",
+      "canonicalView": "NUMINA",
+      "singular": true,
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ],
+      "ingestPolicy": {
+        "mode": "CANONICAL_REPOSITORY",
+        "canonicalizedBy": "NUMINA",
+        "authorityTransferred": false,
+        "leafInputsAllowed": false
+      }
+    }
+  },
+  "manifest": "NUMINA",
+  "software_identity": "NUMINA",
+  "all_software": "NUMINA",
+  "manifest_equals_numina": true,
+  "numina_equals_manifest": true,
+  "manifest_is_numina": true,
+  "numina_is_manifest": true,
+  "numina_is_all_software": true,
+  "all_software_is_numina": true,
+  "singular_software_identity": true,
+  "metadata_authority": "NUMINA",
+  "metadata_namespace": "NUMINA",
+  "metadata_scope": [
+    "historical",
+    "current",
+    "canonical"
+  ],
+  "historical_metadata_override": "NUMINA",
+  "current_metadata_override": "NUMINA",
+  "canonical_metadata_override": "NUMINA",
+  "competing_software_identity_allowed": false,
+  "competing_manifest_authority_allowed": false,
+  "competing_metadata_authority_allowed": false,
+  "transfersEnabled": true,
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "mintStatus": "CONFIRMED",
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "numinaTree": {
+    "schema": "numina.tree.v1",
+    "root": "NUMINA",
+    "rootType": "REPOSITORY",
+    "repository": {
+      "schema": "numina.repository.v1",
+      "identity": "NUMINA",
+      "name": "NUMINA",
+      "branch": "main",
+      "role": "CANONICAL_ROOT_REPOSITORY",
+      "authoritative": true,
+      "canonical": true,
+      "sourceOfTruth": "NUMINA",
+      "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ]
+    },
+    "canonicalSource": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "authority": "NUMINA",
+    "owner": "NUMINA",
+    "host": "NUMINA",
+    "executor": "NUMINA",
+    "evidence": "NUMINA",
+    "dataIdentity": "NUMINA",
+    "dataNamespace": "NUMINA",
+    "canonicalView": "NUMINA",
+    "singular": true,
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ],
+    "ingestPolicy": {
+      "mode": "CANONICAL_REPOSITORY",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": false
+    }
+  },
+  "canonicalSource": "NUMINA",
+  "sourceOfTruth": "NUMINA",
+  "canonicalRepository": {
+    "schema": "numina.repository.v1",
+    "identity": "NUMINA",
+    "name": "NUMINA",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "canonical": true,
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ]
   }
 }

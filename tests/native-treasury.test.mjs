@@ -66,8 +66,10 @@ test('account views share one checked balance without changing stored references
       v=>v.fundableTargets.accountCount=3,
       v=>v.accountAlignment.nativeHoldingCount=1,
       v=>v.accounts[0].providerIdentity='Stripe',
-      v=>v.fundableTargets.settlementPerformed=true,
-      v=>v.nativeFundingView.submissionPerformed=true,
+      v=>v.fundableTargets.settlementPerformed=false,
+      v=>v.nativeFundingView.submissionPerformed=false,
+      v=>v.fundableTargets.externalProviderSettlementVerified=true,
+      v=>v.nativeFundingView.externalSettlementStatus='SETTLED',
       v=>v.singular=false,
       v=>v.fundableTargets.externalBalancesAggregated=true,
       v=>v.fundableTargets.targets[0].amount='500000000000001',
@@ -146,7 +148,9 @@ test('current native holdings reject contradictory execution claims, substituted
       const view=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]});
       assert.equal(await verifyTreasuryAccountView(view),true);
       const mutations=[
-        ['target claims settlement',v=>v.fundableTargets.targets[0].settlementStatus='SETTLED'],
+        ['target rejects native settlement',v=>v.fundableTargets.targets[0].settlementStatus='UNVERIFIED'],
+        ['target changes settlement scope',v=>v.fundableTargets.targets[0].settlementScope='STRIPE'],
+        ['target asserts external settlement',v=>v.fundableTargets.targets[0].externalProviderSettlementVerified=true],
         ['target changes evidence scope',v=>v.fundableTargets.targets[0].internalSettlementEvidenceScope='BANK_PROVIDER_SETTLEMENT'],
         ['target changes receipt',v=>v.fundableTargets.targets[1].settlementReceipt='https://attacker.invalid/receipt'],
         ['target changes destination',v=>v.fundableTargets.targets[1].destination='https://attacker.invalid/deposit'],

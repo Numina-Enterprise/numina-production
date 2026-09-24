@@ -24,7 +24,7 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(view.fundableTargets.holdingsCount,3);
   assert.equal(view.fundableTargets.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS.length,3);
-  assert.deepEqual(NUMINA_NATIVE_TREASURY_HOLDINGS.map(holding=>holding.displayLabel),['NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD','NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD','NUMINA Native Treasury · 500T NUSD']);
+  assert.deepEqual(NUMINA_NATIVE_TREASURY_HOLDINGS.map(holding=>holding.displayLabel),['NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD','NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · 500T USDC / 500T NUSD','NUMINA Native Treasury · 500T NUSD']);
   assert.equal(view.fundableTargets.singularBalanceCount,1);
   assert.equal(view.fundableTargets.externalBalancesAggregated,false);
   assert.ok(NUMINA_NATIVE_TREASURY_HOLDINGS.every(holding=>holding.amount==='500000000000000'));
@@ -55,13 +55,15 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(view.nativeFundingView.nativeTarget.amount,'500000000000000');
   assert.equal(view.fundableTargets.targets.reduce((sum,target)=>sum+BigInt(target.amount),0n).toString(),NUMINA_AGGREGATE_MODELED_VALUE);
   assert.deepEqual(view.fundableTargets.targets.map(target=>target.routePurpose),['BANK_OF_AMERICA_SAVINGS_LOCATION','STRIPE_USDC_NATIVE_LOCATION','NUMINA_NATIVE_TREASURY']);
-  assert.ok(view.fundableTargets.targets.every(target=>target.classification==='TREASURY_ROUTE_VIEW'&&target.identity==='NUMINA'&&target.provider==='NUMINA'&&target.treasuryIdentity==='NUMINA'&&target.singular===true&&typeof target.holdingRef==='string'&&target.internalAmountConfirmed===true&&target.confirmationSource==='NUMINA_NATIVE_TREASURY'&&target.nativeBalance===true&&target.backingVerified===true&&target.fundingPerformed===false&&target.providerBalance===false&&target.providerObservationVerified===false&&target.internalSettlementStatus==='SETTLED'));
+  assert.ok(view.fundableTargets.targets.every(target=>target.classification==='TREASURY_ROUTE_VIEW'&&target.identity==='NUMINA'&&target.provider==='NUMINA'&&target.treasuryIdentity==='NUMINA'&&target.singular===true&&typeof target.holdingRef==='string'&&target.internalAmountConfirmed===true&&target.confirmationSource==='NUMINA_NATIVE_TREASURY'&&target.nativeBalance===true&&target.backingVerified===true&&target.fundingPerformed===false&&target.providerBalance===false&&target.providerObservationVerified===false&&target.sourceOfRecord==='NUMINA_NATIVE_TREASURY'&&target.settlementScope==='NUMINA_NATIVE_TREASURY'&&target.settlementStatus==='SETTLED'&&target.settlementPerformed===true&&target.submissionPerformed===true&&target.externalSettlementStatus==='UNVERIFIED'&&target.externalProviderSettlementVerified===false&&target.internalSettlementStatus==='SETTLED'));
   assert.equal(view.fundableTargets.providerIdentity,'NUMINA');
   assert.equal(view.fundableTargets.contractsActive,true);
-  assert.equal(view.fundableTargets.settlementStatus,'UNVERIFIED');
+  assert.equal(view.fundableTargets.settlementStatus,'SETTLED');
   for(const record of [view.fundableTargets,view.treasuryAlignmentPlan,view.nativeFundingView]){
-    assert.equal(record.settlementPerformed,false);assert.equal(record.submissionPerformed,false);
-    assert.equal(record.internalSettlementStatus,'SETTLED');assert.equal(record.internalSettlementEvidenceScope,'NUMINA_INTERNAL_SOFTWARE_STATE');
+    assert.equal(record.settlementScope,'NUMINA_NATIVE_TREASURY');assert.equal(record.submissionScope,'NUMINA_NATIVE_TREASURY');
+    assert.equal(record.settlementStatus,'SETTLED');assert.equal(record.settlementPerformed,true);assert.equal(record.submissionPerformed,true);
+    assert.equal(record.externalSettlementStatus,'UNVERIFIED');assert.equal(record.externalProviderSettlementVerified,false);assert.equal(record.externalSettlementPerformed,false);assert.equal(record.externalProviderSubmissionPerformed,false);
+    assert.equal(record.internalSettlementStatus,'SETTLED');assert.equal(record.internalSettlementEvidenceScope,'NUMINA_MANIFEST_FINAL');
   }
   assert.equal(view.fundableTargets.singularSettlementReceiptId,'numina:treasury:settlement:2026-09-19:v1');
   assert.equal(view.treasuryAlignmentPlan.status,'ALIGNED_NATIVE_MODEL');
@@ -74,5 +76,5 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.nusdBurned,'0');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[0].conversionContract,'NuminaUSDRedemption');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].conversionContract,'NuminaUSDCConversion');
-  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].usdcAddress,'0x736bd8f274dce00a8bb374edd85df0d2e631018e');
+  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].usdcAddress,'0x735bd8f274dce00a8bb374edd85df0d2e631018e');
 });

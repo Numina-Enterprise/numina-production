@@ -2,11 +2,23 @@ import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto'
 import {createRequire} from 'node:module';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE_ARTIFACT_TYPE} from '../public/runtime-contract.js';
 import {APPLICATION_VERSION,APPLICATION_RELEASE,EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,APPLICATION_ARTIFACT_BUILD_SCOPE} from '../src/application-release-contract.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES as CANONICAL_TREASURY_VALUES,NUMINA_SINGULAR_SETTLEMENT_RECEIPT} from '../public/treasury-connection-model.js';
 const require=createRequire(import.meta.url);
 const {sign}=require('../runtime/vercel-production/lib/numina.js');
 const NUMINA='NUMINA';
 const ORIGIN='https://numinalabs.xyz',RUNTIME_ORIGIN='https://numina-production.vercel.app',MAX_BYTES=262144;
-function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,product:NUMINA,modelIdentity:NUMINA,version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:NUMINA,repository:NUMINA,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
+function nativeTreasuryMetadata(){return {
+  identity:NUMINA,treasuryIdentity:NUMINA,singular:true,sourceOfRecord:CANONICAL_TREASURY_VALUES.sourceOfRecord,
+  canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,singularSettlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,
+  settlementStatus:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.status,settlementScope:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.sourceOfRecord,
+  treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,
+  accountModel:CANONICAL_TREASURY_VALUES.accountModel,componentsAreSeparateTreasuries:false,
+  bankUsd:CANONICAL_TREASURY_VALUES.components.USD,stripeUsdc:CANONICAL_TREASURY_VALUES.components.USDC,
+  nativeNusd:CANONICAL_TREASURY_VALUES.components.NUSD,aggregate:CANONICAL_TREASURY_VALUES.aggregate,
+  mintStatus:CANONICAL_TREASURY_VALUES.mintStatus,mintedNusd:CANONICAL_TREASURY_VALUES.mintedNusd,burnedNusd:CANONICAL_TREASURY_VALUES.burnedNusd,
+  providerObservationsSourceScoped:true,externalBalancesAggregated:false,externalProviderSettlementVerified:false
+};}
+function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,identity:NUMINA,singular:true,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,softwareTreasury:nativeTreasuryMetadata(),product:NUMINA,modelIdentity:NUMINA,version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:NUMINA,repository:NUMINA,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const NUMINA_FIELDS=['root','manifest','identity','authority','source','evidence','provider','host','provenance','core','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection'];
 
@@ -63,6 +75,7 @@ export function evaluateFrontierReadiness(records,{verifyEnvelope=verifyPinnedEn
   const canonicalBuildId=application.build_id,transportVerified=validateDeploymentProvenance(transportObservation);
   return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',
     deployment:'NUMINA',deployed:true,ready:Object.values(checks).every(Boolean),checks,
+    canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,softwareTreasury:nativeTreasuryMetadata(),
     application:{version:application.version,release:application.release,build_id:canonicalBuildId,canonical_manifest_build_id:canonicalBuildId,artifact_inventory_build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,artifact_inventory_scope:APPLICATION_ARTIFACT_BUILD_SCOPE,build_identity_relation:canonicalBuildId===EXPECTED_APPLICATION_ARTIFACT_BUILD_ID?'converged':'distinct_scopes'},
     runtime:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',...EXPECTED_RELEASE},
     provider_of_record:{identity:'NUMINA',authority:'NUMINA',source:'NUMINA',host:'NUMINA',provenance:'NUMINA',scope:'NUMINA',receipts:'NUMINA',settlements:'NUMINA',funds:'NUMINA',confirmation_evidence:'NUMINA'},

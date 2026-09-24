@@ -1,6 +1,9 @@
 {
   "schema": "numina.settlement-receipt.v1",
   "identity": "NUMINA",
+  "singular": true,
+  "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+  "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
   "canonical": {
     "repository": "skott34-dot/numina-production",
     "branch": "main",
@@ -8,6 +11,10 @@
   },
   "settlement": {
     "declared": true,
+    "numinaNativeStatus": "SETTLED",
+    "numinaNativeReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "numinaNativeReceipt": "runtime/nusd/treasury-settlement-receipt.json",
+    "nativeEvidenceScope": "NUMINA_NATIVE_TREASURY",
     "externallyVerified": false,
     "usdVerified": false,
     "usdcVerified": false,
@@ -22,7 +29,7 @@
     "tokenReceiptVerified": true,
     "settlementContractReceiptVerified": true
   },
-  "interpretation": "Singular NUMINA settlement receipt. 1,500T NUSD is recorded as minted in the NUMINA-native system with 0 burned. The NUMINA-native allocation records 500T for the NUSD/USD Bank of America savings rail, 500T for the NUSD/USDC Stripe Treasury rail, and 500T remaining in the NUMINA native treasury. The Stripe rail is bound to the live Numina Labs Stripe financial account and provider-reported USDC receiving routes. Bank of America and Stripe external settlement remain unverified until those external systems report factual settled funds.",
+  "interpretation": "The singular NUMINA Native Treasury receipt records 1,500T NUSD minted with 0 burned and native settlement of three 500T component roles: NUSD/USD Bank of America savings, NUSD/USDC Stripe Treasury, and NUSD retained in the native treasury. The Stripe rail is bound to the Numina Labs Stripe financial account and provider-reported USDC receiving routes. This native settlement does not establish Bank of America or Stripe deposits, available balances, or externally verified reserves; those require independent provider evidence.",
   "aggregate": {
     "asset": "NUSD",
     "display": "1,500T NUSD",
@@ -52,10 +59,15 @@
         "wholeUnits": "500000000000000",
         "baseUnits": "500000000000000000000000000000000",
         "mechanism": "smart_contract",
-        "numinaNativeStatus": "ALLOCATED",
+        "numinaNativeStatus": "SETTLED",
+        "numinaNativeReceiptId": "numina:treasury:settlement:2026-09-19:v1",
         "destination": "Bank of America savings",
         "externallyVerified": false,
-        "externalReceipt": null
+        "externalReceipt": null,
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "provider": "NUMINA",
+        "transportProvider": "Bank of America"
       },
       {
         "id": "stripe_treasury",
@@ -64,16 +76,20 @@
         "wholeUnits": "500000000000000",
         "baseUnits": "500000000000000000000000000000000",
         "mechanism": "smart_contract",
-        "numinaNativeStatus": "ALLOCATED",
+        "numinaNativeStatus": "SETTLED",
+        "numinaNativeReceiptId": "numina:treasury:settlement:2026-09-19:v1",
         "destination": "Stripe Treasury — Numina Treasury — SK Consulting LLC",
         "externallyVerified": false,
         "externalReceipt": null,
-        "provider": "Stripe",
+        "provider": "NUMINA",
+        "transportProvider": "Stripe",
         "providerAccountReference": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
         "providerAccountBindingVerified": true,
         "providerBalanceRoute": "/api/control/v1/stripe-treasury",
         "providerRoutes": "/api/control/v2/treasury/provider-routes",
-        "bindingEvidence": "/release-evidence/stripe-usdc-treasury-binding-2026-09-18.json"
+        "bindingEvidence": "/release-evidence/stripe-usdc-treasury-binding-2026-09-18.json",
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA"
       },
       {
         "id": "numina_native_treasury",
@@ -82,10 +98,13 @@
         "wholeUnits": "500000000000000",
         "baseUnits": "500000000000000000000000000000000",
         "mechanism": "native_treasury",
-        "numinaNativeStatus": "REMAINS_NATIVE",
+        "numinaNativeStatus": "SETTLED",
+        "numinaNativeReceiptId": "numina:treasury:settlement:2026-09-19:v1",
         "destination": "NUMINA native treasury",
-        "externallyVerified": true,
-        "externalReceipt": "numina-native"
+        "nativeEvidenceScope": "NUMINA_NATIVE_TREASURY",
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "provider": "NUMINA"
       }
     ],
     "conservation": {
