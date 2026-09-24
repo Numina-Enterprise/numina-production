@@ -41,3 +41,4 @@ release-evidence/numina-bofa-ach-instruction-2026-09-19.json -text
 
 # Preserve the published migration bytes across platforms.
 drizzle/** -text
+reference/settlement-metadata-bases/** -text
