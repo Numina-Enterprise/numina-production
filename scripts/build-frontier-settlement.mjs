@@ -17,6 +17,7 @@ assert.equal(baseline.workerSha256,'3cd09e0db9b25ae1fd291103039d9af2c58ff5db7dc8
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['integrations/numina/scripts/package-distribution.js'],{stdio:'inherit'});
+execFileSync(process.env.NUMINA_PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/package-current-integration.py'],{stdio:'inherit'});
 assert.deepEqual(readFileSync('public/treasury-proof.js'),readFileSync('integrations/numina/src/treasury-proof.js'));
 resetBuildOutput(root);
 const snapshot=json('reference/frontier-baseline-client.json');
@@ -28,6 +29,13 @@ execFileSync('tar',['-xzf','-','-C','dist'],{input:archive});
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/final-manifest.json','client/final-manifest.json'],
+ ['docs/NUMINA-FINAL-MANIFEST.json','client/downloads/NUMINA-FINAL-MANIFEST.json'],
+ ['public/current-environments.json','client/current-environments.json'],
+ ['public/labs.html','client/labs.html'],
+ ['public/funding-plan.js','client/funding-plan.js'],
+ ['docs/numina-integration-kit-v4.0.0.zip','client/downloads/numina-integration-kit-v4.0.0.zip'],
+ ['docs/integration-kit-v4.0.0-record.json','client/downloads/integration-kit-v4.0.0-record.json'],
  ['public/treasury-connection-model.js','client/treasury-connection-model.js'],
  ['public/architecture-layers.js','client/architecture-layers.js'],
  ['public/nusd-contract-record.js','client/nusd-contract-record.js'],
@@ -44,13 +52,25 @@ const overlays=[
  ['integrations/numina/file-manifest.json','client/downloads/integration-manifest.json'],
 ];
 for(const [source,target]of overlays)copyFileSync(source,'dist/'+target);
-const modules=['public/treasury-connection-model.js','public/nusd-contract-record.js','public/architecture-layers.js','src/treasury-alignment.js'];
+const modules=['public/treasury-connection-model.js','public/nusd-contract-record.js','public/architecture-layers.js','src/treasury-alignment.js','src/treasury-evidence.js'];
 const original=Buffer.from(readFileSync('reference/live-server-index.js.b64','utf8').trim(),'base64').toString();
 assert.equal(hash(original),baseline.workerSha256);
 let worker=original;const substitutions=[];
 const compile=s=>s.replace(/\r\n/g,'\n').replace(/^import .*;\n/gm,'').replace(/^export \{.*\};\n/gm,'').replace(/export (?!default)/g,'').trimStart().trimEnd()+'\n';
-for(const source of modules){const before=readFileSync('reference/settlement-metadata-bases/'+path.basename(source)+'.txt','utf8'),after=compile(readFileSync(source,'utf8'));assert.equal(worker.split(before).length,2,'Unique runtime module: '+source);worker=worker.replace(before,after);substitutions.push({source,before,after});}
-// Correct two retained address literals outside the four metadata modules.
+for(const source of modules){
+  const before=readFileSync('reference/settlement-metadata-bases/'+path.basename(source)+'.txt','utf8');
+  let after=compile(readFileSync(source,'utf8'));
+  if(source==='src/treasury-evidence.js'){
+    // The retained provider adapter redacts its account ID. Preserve its exact
+    // existing authentication check while the editable adapter still uses IDs.
+    const editableCheck='record.account?.id===STRIPE_TREASURY_FINANCIAL_ACCOUNT';
+    assert.equal(after.split(editableCheck).length,2);
+    after=after.replace(editableCheck,'record.account?.reference_private===true');
+  }
+  assert.equal(worker.split(before).length,2,'Unique runtime module: '+source);
+  worker=worker.replace(before,after);substitutions.push({source,before,after});
+}
+// Correct two retained address literals outside the metadata modules.
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
 assert.equal(stripeUsdcAddress,json('runtime/nusd/treasury-settlement-receipt.json').components.find(item=>item.settledUnit==='USDC').usdcAddress);
@@ -74,7 +94,7 @@ const presentation=['index','government','financial-institutions','partners','de
 const hashes=new Set();for(const name of presentation){const html=readFileSync('dist/client/'+name+'.html','utf8');for(const m of html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g))hashes.add("'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");if(name!=='index'){const rule='/'+name+'.html /'+name+' 301';if(!redirects.split(/\r?\n/).includes(rule))redirects+='\n'+rule;}}
 headers=headers.replace(/script-src ([^;]+)/,(_,tokens)=>'script-src '+[...new Set([...tokens.trim().split(/\s+/),...hashes])].join(' '));writeFileSync('dist/client/_headers',headers);writeFileSync('dist/client/_redirects',redirects+'\n');
 const sourceAlignment=json('dist/client/source-alignment.json');
-const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs']);
+const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 for(const file of currentInputs){const bytes=readFileSync(file);captured.set(file,{path:file,bytes:bytes.length,sha256:hash(bytes)});}
 sourceAlignment.sourceInputs=[...captured.values()].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
@@ -100,6 +120,8 @@ release.canonicalTreasuryValues=values;release.contract_record=NUSD_CONTRACT_REC
 release.native_treasury_alignment={...release.native_treasury_alignment,singularSettlementReceipt:receipt,settlementStatus:receipt.status,settlementScope:receipt.sourceOfRecord,mintStatus:values.mintStatus,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd};
 release.treasury_client_verification=treasuryClientVerificationManifest(hash(readFileSync('public/treasury-proof.js')));
 release.distribution.integration_kit.manifest_sha256=hash(readFileSync('dist/client/downloads/integration-manifest.json'));
+const integrationArchive=json('docs/integration-kit-v4.0.0-record.json');
+Object.assign(release.distribution.integration_kit,{archive_snapshot_sha256:integrationArchive.sha256,archive_snapshot_bytes:integrationArchive.bytes,archive_snapshot_authoritative:true,archive_manifest_matches_current:true,archive_record:'/downloads/integration-kit-v4.0.0-record.json'});
 release.build_id=buildId;release.workerSha256=hash(worker);release.artifacts=artifacts;
 for(const f of aliases)writeFileSync('dist/'+f,JSON.stringify(release,null,2)+'\n');
 execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});

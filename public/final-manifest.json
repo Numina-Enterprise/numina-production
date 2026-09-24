@@ -1,0 +1,721 @@
+{
+  "schema": "numina.final-manifest.v1",
+  "identity": "NUMINA",
+  "status": "FINAL",
+  "frontier": "NEXT_FRONTIER",
+  "frontierId": "4b9e1419acc0b11eb21e4f8a2fd1b71a701ed0c163035e4d055693210f06139f",
+  "canonicalSha256": "4b9e1419acc0b11eb21e4f8a2fd1b71a701ed0c163035e4d055693210f06139f",
+  "applicationVersion": "4.0.0",
+  "repository": {
+    "schema": "numina.repository.v1",
+    "identity": "NUMINA",
+    "name": "NUMINA",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "canonical": true,
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ],
+    "appliesTo": "ALL_NUMINA_SOFTWARE",
+    "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+  },
+  "sourceOfTruth": "NUMINA",
+  "canonicalSource": "NUMINA",
+  "propagation": "NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES",
+  "runtimeSurfaces": [
+    "website",
+    "api",
+    "mobile",
+    "runtime",
+    "receipts",
+    "treasury",
+    "release_artifacts"
+  ],
+  "finalBuild": {
+    "path": "public/final-build.json",
+    "gitBlobSha1": "c470e24f11a5223058e6309c8008c1c90990bf21",
+    "sha256": "4b9e1419acc0b11eb21e4f8a2fd1b71a701ed0c163035e4d055693210f06139f",
+    "canonicalSha256": "4b9e1419acc0b11eb21e4f8a2fd1b71a701ed0c163035e4d055693210f06139f",
+    "identity": "NUMINA",
+    "status": "FINAL",
+    "applicationVersion": "4.0.0",
+    "appliesTo": "ALL_NUMINA_SOFTWARE",
+    "scope": "ALL_DOWNSTREAM_PROJECTIONS",
+    "universal": true
+  },
+  "historicalEvidence": {
+    "immutable": true,
+    "authoritativeForCurrentRepository": false,
+    "role": "FACTUAL_PROVENANCE_ONLY"
+  },
+  "externalProviderBoundary": {
+    "providerSystemsRemainExternal": true,
+    "observationsAreSourceScoped": true,
+    "repositoryModelDoesNotCreateExternalLedgerEntries": true
+  },
+  "appliesTo": "ALL_NUMINA_SOFTWARE",
+  "scope": "ALL_DOWNSTREAM_PROJECTIONS",
+  "universal": true,
+  "allSoftware": true,
+  "allRuntimeSurfaces": true,
+  "liveRuntimeCount": 2,
+  "liveRuntimes": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+      "role": "LIVE_APPLICATION_RUNTIME",
+      "status": "LIVE",
+      "version": "4.0.0",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "runtimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+      "role": "LIVE_RC26_RUNTIME",
+      "status": "LIVE",
+      "version": "1.9.0-rc26",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    }
+  ],
+  "runtimeInventory": {
+    "identity": "NUMINA",
+    "singular": true,
+    "liveRuntimeCount": 2,
+    "frontierFinalRuntimeCount": 2,
+    "totalRuntimeRecords": 4,
+    "liveRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "role": "LIVE_APPLICATION_RUNTIME",
+        "status": "LIVE",
+        "version": "4.0.0",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+        "role": "LIVE_RC26_RUNTIME",
+        "status": "LIVE",
+        "version": "1.9.0-rc26",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      }
+    ],
+    "frontierFinalRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "role": "FRONTIER_FINAL_RUNTIME_1",
+        "status": "FINAL",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "role": "FRONTIER_FINAL_RUNTIME_2",
+        "status": "FINAL",
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      }
+    ]
+  },
+  "runtimeModel": {
+    "identity": "NUMINA",
+    "singular": true,
+    "liveRuntimeCount": 2,
+    "universalPairBuildCount": 2,
+    "liveRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "role": "LIVE_APPLICATION_RUNTIME",
+        "status": "LIVE",
+        "version": "4.0.0"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "role": "LIVE_RC26_RUNTIME",
+        "status": "LIVE",
+        "version": "1.9.0-rc26"
+      }
+    ],
+    "universalPairArtifacts": [
+      "public/final-build.json",
+      "public/final-manifest.json"
+    ],
+    "universalPairBuilds": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "name": "NUMINA_UNIVERSAL_PAIR_BUILD_1",
+        "role": "UNIVERSAL_PAIR_BUILD",
+        "status": "FINAL",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ],
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "name": "NUMINA_UNIVERSAL_PAIR_BUILD_2",
+        "role": "UNIVERSAL_PAIR_BUILD",
+        "status": "FINAL",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ],
+        "appliesTo": "ALL_NUMINA_SOFTWARE",
+        "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+      }
+    ]
+  },
+  "frontierFinalRuntimeCount": 2,
+  "frontierFinalRuntimes": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "runtimeId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "role": "FRONTIER_FINAL_RUNTIME_1",
+      "status": "FINAL",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "runtimeId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "role": "FRONTIER_FINAL_RUNTIME_2",
+      "status": "FINAL",
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    }
+  ],
+  "universalPair": {
+    "schema": "numina.universal-pair.v4",
+    "identity": "NUMINA",
+    "status": "FINAL",
+    "matrix": "2x2",
+    "memberCount": 2,
+    "sourceCount": 2,
+    "environmentCount": 2,
+    "bindingCount": 4,
+    "idField": "sourceId",
+    "id": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "ids": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "sourceIds": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "derivedHashIds": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+    ],
+    "sourceIdSources": [
+      "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2"
+    ],
+    "idMirrorsSourceIds": true,
+    "derivedHashIdsMirrorSourceIds": true,
+    "environments": [
+      "LIVE",
+      "FRONTIER_FINAL"
+    ],
+    "files": [
+      "/final-build.json",
+      "/final-manifest.json"
+    ],
+    "artifacts": [
+      "public/final-build.json",
+      "public/final-manifest.json"
+    ],
+    "bothReceive": [
+      "FINAL_BUILD",
+      "FINAL_MANIFEST"
+    ],
+    "everyCellReceivesBothFiles": true,
+    "members": [
+      {
+        "member": 1,
+        "identity": "NUMINA",
+        "role": "UNIVERSAL_PAIR_SOURCE",
+        "status": "FINAL",
+        "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "idEqualsSourceId": true,
+        "derivedHashIdEqualsSourceId": true,
+        "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "receives": {
+          "identity": "NUMINA",
+          "status": "FINAL",
+          "files": [
+            "/final-build.json",
+            "/final-manifest.json"
+          ],
+          "environments": [
+            "LIVE",
+            "FRONTIER_FINAL"
+          ],
+          "finalBuild": "/final-build.json",
+          "finalManifest": "/final-manifest.json",
+          "contract": "FINAL"
+        }
+      },
+      {
+        "member": 2,
+        "identity": "NUMINA",
+        "role": "UNIVERSAL_PAIR_SOURCE",
+        "status": "FINAL",
+        "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "idEqualsSourceId": true,
+        "derivedHashIdEqualsSourceId": true,
+        "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "receives": {
+          "identity": "NUMINA",
+          "status": "FINAL",
+          "files": [
+            "/final-build.json",
+            "/final-manifest.json"
+          ],
+          "environments": [
+            "LIVE",
+            "FRONTIER_FINAL"
+          ],
+          "finalBuild": "/final-build.json",
+          "finalManifest": "/final-manifest.json",
+          "contract": "FINAL"
+        }
+      }
+    ],
+    "invariant": {
+      "schema": "numina.derived-hash-source-invariant.v1",
+      "name": "DERIVED_HASH_ID_EQUALS_SOURCE_ID",
+      "expression": "derivedHashId = sourceId",
+      "derivedHashIdSource": "sourceId",
+      "idSource": "sourceId",
+      "buildIdSource": "sourceId",
+      "scope": "UNIVERSAL_PAIR_2X2",
+      "bindingCount": 4,
+      "enforced": true
+    },
+    "appliesTo": "ALL_NUMINA_SOFTWARE",
+    "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+  },
+  "currentRuntimeEnvironment": {
+    "name": "production",
+    "contract": "FINAL",
+    "identity": "NUMINA",
+    "finalBuild": "/final-build.json",
+    "finalManifest": "/final-manifest.json"
+  },
+  "currentEnvironments": [
+    "LIVE",
+    "FRONTIER_FINAL"
+  ],
+  "environmentCount": 2,
+  "universalPairBuildCount": 2,
+  "universalPairArtifacts": [
+    "public/final-build.json",
+    "public/final-manifest.json"
+  ],
+  "universalPairBuilds": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_BUILD",
+      "status": "FINAL",
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_BUILD",
+      "status": "FINAL",
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "appliesTo": "ALL_NUMINA_SOFTWARE",
+      "scope": "ALL_DOWNSTREAM_PROJECTIONS"
+    }
+  ],
+  "currentSourceIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+    "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+  ],
+  "currentSourceCount": 2,
+  "environmentBindings": [
+    {
+      "sourceIndex": 1,
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environmentIndex": 1,
+      "environment": "LIVE",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      ]
+    },
+    {
+      "sourceIndex": 1,
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environmentIndex": 2,
+      "environment": "FRONTIER_FINAL",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "environmentIndex": 1,
+      "environment": "LIVE",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "environmentIndex": 2,
+      "environment": "FRONTIER_FINAL",
+      "identity": "NUMINA",
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "contract": "FINAL",
+      "runtimeTargets": [
+        "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+      ]
+    }
+  ],
+  "currentBuildIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+    "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+  ],
+  "universalPairSources": [
+    {
+      "member": 1,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_SOURCE",
+      "status": "FINAL",
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "derivedHashId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "receives": {
+        "identity": "NUMINA",
+        "status": "FINAL",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "contract": "FINAL"
+      }
+    },
+    {
+      "member": 2,
+      "identity": "NUMINA",
+      "role": "UNIVERSAL_PAIR_SOURCE",
+      "status": "FINAL",
+      "id": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "sourceId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "derivedHashId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "buildId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "idEqualsSourceId": true,
+      "derivedHashIdEqualsSourceId": true,
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_2",
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "environments": [
+        "LIVE",
+        "FRONTIER_FINAL"
+      ],
+      "receives": {
+        "identity": "NUMINA",
+        "status": "FINAL",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "LIVE",
+          "FRONTIER_FINAL"
+        ],
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "contract": "FINAL"
+      }
+    }
+  ],
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "mintStatus": "CONFIRMED",
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "singularSettlementReceipt": {
+    "schema": "numina.treasury.singular-settlement-receipt.v1",
+    "identity": "NUMINA",
+    "treasuryIdentity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "singular": true,
+    "final": true,
+    "id": "numina:treasury:settlement:2026-09-19:v1",
+    "status": "SETTLED",
+    "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+    "download": "/downloads/nusd/treasury-settlement-receipt.json",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+    "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "submissionPerformed": true,
+    "submissionScope": "NUMINA_NATIVE_TREASURY",
+    "externalProviderSubmissionPerformed": false,
+    "settlementPerformed": true,
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "externalProviderSettlementVerified": false,
+    "aggregateNusd": "1500000000000000",
+    "componentCount": 3
+  }
+}

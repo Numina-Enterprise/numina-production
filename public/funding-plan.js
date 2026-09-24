@@ -7,14 +7,16 @@ export function renderTreasuryReconciliation(receipt,treasury){
     record.depositReadiness.externalSubmissionImplemented!==false||record.depositReadiness.submissionPerformed!==false||record.depositReadiness.receipt!==null)throw Error('Reconciliation does not match this treasury snapshot. Refresh the treasury and try again.');
   const panel=node('section','');panel.className='treasury-reconciliation';
   const status=value=>({VERIFIED:'Native record checked',AUTHENTICATED_OBSERVATION:'Provider observation available',UNAVAILABLE:'Unavailable',NOT_REPORTED:'Not reported',NOT_VERIFIED:'Unverified',BANK_PROVIDER_NOT_CONNECTED:'Bank connection unavailable',ASSET_NOT_VERIFIED:'Asset identity unverified'}[value]??'Unverified');
-  panel.append(node('h4','Treasury reconciliation'),node('p','One native treasury reference · journal revision '+payload.revision),node('p','Snapshot captured '+record.capturedAt));
+  panel.append(node('h4','Native settlement and provider observations'),node('p','One native treasury reference · journal revision '+payload.revision),node('p','Snapshot captured '+record.capturedAt));
   const list=node('dl',''),row=(label,value)=>{const group=node('div','');group.append(node('dt',label),node('dd',value));list.append(group);};
+  const native=payload.nativeSettlement;
+  if(native?.receipt?.sourceOfRecord==='NUMINA_NATIVE_TREASURY'&&native.receipt?.status==='SETTLED'){row('NUMINA-native settlement','SETTLED · '+native.receipt.id);row('Canonical aggregate',native.canonicalTreasuryValues.aggregate.current+' NUSD');}
   row('Numina-native record',status(record.records?.nativeTreasury?.status));
   for(const unit of ['usd','usdc'])row('Stripe '+unit.toUpperCase()+' available balance',status(record.records?.stripe?.currencies?.[unit]?.balances?.available?.verification?.status));
   row('Bank of America',status(record.records?.bank?.status));
   const documents=record.records?.supportingDocuments;
   row('Supporting documents',documents?.status==='OWNER_UPLOADED_UNVERIFIED'?'Stored files; issuer and contents unverified'+(documents.complete?'':' (partial list)'):'Unavailable');
-  row('Deposits','Not ready for submission');
+  row('External provider submission','Not ready for submission');
   panel.append(list,node('p','Funding source, reserve allocation and provider acceptance remain required for submission. Settlement evidence is required to confirm completion after submission. A shared native reference is counted once; these checks do not move funds.'));
   const guide=node('a','Provider confirmation requirements');guide.href='/downloads/Provider-Confirmation-Request-v4.md';panel.append(guide);
   return panel;

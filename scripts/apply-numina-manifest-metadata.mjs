@@ -17,6 +17,7 @@ const currentPaths=[
   'config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json',
   'config/numina-architecture.json','config/treasury-aggregate-settlement-1500t.v1.json',
   'public/final-build.json','docs/NUMINA-FINAL-BUILD.json','public/business-core.json',
+  'public/final-manifest.json','docs/NUMINA-FINAL-MANIFEST.json','public/current-environments.json',
   'integrations/numina/package.json','integrations/numina/distribution.json',
   'integrations/numina/verification.json','integrations/numina/file-manifest.json',
   'runtime/nusd/policies/issuer-policy-1500t-18d.json'
@@ -87,6 +88,19 @@ planned.set('docs/NUMINA-FINAL-BUILD.json',finalBytes);
 const packageData=records.get('package.json');
 const previousPin=packageData.numina.finalBuildManifest.blob;
 const finalPin=blob(finalBytes);
+const finalHash=createHash('sha256').update(finalBytes).digest('hex');
+const manifest=records.get('public/final-manifest.json');
+manifest.frontierId=manifest.canonicalSha256=finalHash;
+Object.assign(manifest.finalBuild,{gitBlobSha1:finalPin,sha256:finalHash,canonicalSha256:finalHash});
+manifest.singularSettlementReceipt=structuredClone(receipt);
+const manifestBytes=serialize('public/final-manifest.json',manifest);
+planned.set('public/final-manifest.json',manifestBytes);
+planned.set('docs/NUMINA-FINAL-MANIFEST.json',manifestBytes);
+const environments=records.get('public/current-environments.json');
+environments.frontierId=finalHash;
+environments.contentHashes.finalBuildSha256=finalHash;
+environments.contentHashes.finalManifestSha256=createHash('sha256').update(manifestBytes).digest('hex');
+environments.singularSettlementReceipt=structuredClone(receipt);
 packageData.numina.finalBuildManifest.blob=finalPin;
 for(const [path,data] of records){
   if(!planned.has(path))planned.set(path,serialize(path,data));
