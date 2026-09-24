@@ -24,7 +24,7 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(view.fundableTargets.holdingsCount,3);
   assert.equal(view.fundableTargets.accountModel,'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS.length,3);
-  assert.deepEqual(NUMINA_NATIVE_TREASURY_HOLDINGS.map(holding=>holding.displayLabel),['NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD','NUMINA Native Treasury · Stripe USDC 0x735bd8…018e · 500T USDC / 500T NUSD','NUMINA Native Treasury · 500T NUSD']);
+  assert.deepEqual(NUMINA_NATIVE_TREASURY_HOLDINGS.map(holding=>holding.displayLabel),['NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD / 500T NUSD','NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC / 500T NUSD','NUMINA Native Treasury · 500T NUSD']);
   assert.equal(view.fundableTargets.singularBalanceCount,1);
   assert.equal(view.fundableTargets.externalBalancesAggregated,false);
   assert.ok(NUMINA_NATIVE_TREASURY_HOLDINGS.every(holding=>holding.amount==='500000000000000'));
@@ -76,5 +76,5 @@ test('one NUMINA treasury exposes three additive 500T native locations totaling 
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.nusdBurned,'0');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[0].conversionContract,'NuminaUSDRedemption');
   assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].conversionContract,'NuminaUSDCConversion');
-  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].usdcAddress,'0x735bd8f274dce00a8bb374edd85df0d2e631018e');
+  assert.equal(NUMINA_NATIVE_TREASURY_HOLDINGS[1].usdcAddress,'0x736bd8f274dce00a8bb374edd85df0d2e631018e');
 });

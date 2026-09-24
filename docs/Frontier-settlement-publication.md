@@ -8,6 +8,6 @@ The canonical receipt is `numina:treasury:settlement:2026-09-19:v1`. It records 
 
 Build checks verify every baseline client hash, preserve the homepage and unrelated assets, and reverse the four runtime substitutions to verify all other deployed runtime bytes remain unchanged. The final release inventory, proof-client hash, integration manifest and application build pin are regenerated together. Raw native receipts and external-provider observations remain evidence records with their own sources.
 
-The live Stripe address metadata uses `0x735bd8f274dce00a8bb374edd85df0d2e631018e`, while the archival checkout uses `0x736bd8f274dce00a8bb374edd85df0d2e631018e`. This publication preserves the current live binding; it does not submit a transfer or change account routing. A separate evidence-backed address reconciliation remains outside this receipt metadata update.
+The Stripe USDC deposit address is `0x736bd8f274dce00a8bb374edd85df0d2e631018e`, confirmed by the owner and already present in all three canonical native receipt copies. The published metadata and retained runtime address bindings are aligned to that address. The earlier address discrepancy is resolved. This correction does not submit a transfer.
 
 Historical 6-decimal issuer policy and treasury-write-request files found only in the archival checkout are not introduced into the Sites source. Existing source metadata and the current public projection are aligned.

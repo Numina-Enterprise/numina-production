@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {resetBuildOutput} from './build-output.mjs';
-import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt} from '../public/treasury-connection-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_CONNECTION as connection} from '../public/treasury-connection-model.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {treasuryClientVerificationManifest} from '../public/treasury-proof.js';
@@ -50,9 +50,19 @@ assert.equal(hash(original),baseline.workerSha256);
 let worker=original;const substitutions=[];
 const compile=s=>s.replace(/\r\n/g,'\n').replace(/^import .*;\n/gm,'').replace(/^export \{.*\};\n/gm,'').replace(/export (?!default)/g,'').trimStart().trimEnd()+'\n';
 for(const source of modules){const before=readFileSync('reference/settlement-metadata-bases/'+path.basename(source)+'.txt','utf8'),after=compile(readFileSync(source,'utf8'));assert.equal(worker.split(before).length,2,'Unique runtime module: '+source);worker=worker.replace(before,after);substitutions.push({source,before,after});}
+// Correct two retained address literals outside the four metadata modules.
+// Their exact offsets are recorded so preservation can still be proved.
+const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
+assert.equal(stripeUsdcAddress,json('runtime/nusd/treasury-settlement-receipt.json').components.find(item=>item.settledUnit==='USDC').usdcAddress);
+const priorStripeUsdcAddress='0x735bd8f274dce00a8bb374edd85df0d2e631018e';
+const addressCorrections=[];
+for(let offset=worker.indexOf(priorStripeUsdcAddress);offset!==-1;offset=worker.indexOf(priorStripeUsdcAddress,offset+stripeUsdcAddress.length)){
+  addressCorrections.push(offset);worker=worker.slice(0,offset)+stripeUsdcAddress+worker.slice(offset+priorStripeUsdcAddress.length);
+}
+assert.equal(addressCorrections.length,2,'Retained Stripe policy/provider address bindings');
 // Reverse the approved substitutions to prove the rest of the live runtime
 // (routing, authentication, provider adapters and journal reducer) is unchanged.
-let restored=worker;for(const {before,after}of substitutions.slice().reverse()){assert.equal(restored.split(after).length,2);restored=restored.replace(after,before);}assert.equal(restored,original);
+let restored=worker;for(const offset of addressCorrections.slice().reverse()){assert.equal(restored.slice(offset,offset+stripeUsdcAddress.length),stripeUsdcAddress);restored=restored.slice(0,offset)+priorStripeUsdcAddress+restored.slice(offset+stripeUsdcAddress.length);}for(const {before,after}of substitutions.slice().reverse()){assert.equal(restored.split(after).length,2);restored=restored.replace(after,before);}assert.equal(restored,original);
 mkdirSync('dist/server',{recursive:true});writeFileSync('dist/server/index.js',worker);
 execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
 mkdirSync('dist/.openai',{recursive:true});writeFileSync('dist/.openai/hosting.json',JSON.stringify(json('.openai/hosting.json'),null,2)+'\n');
@@ -71,6 +81,7 @@ sourceAlignment.sourceInputs=[...captured.values()].sort((a,b)=>a.path<b.path?-1
 sourceAlignment.sourceInputCount=sourceAlignment.sourceInputs.length;
 sourceAlignment.sourceInputCaptureScope='Current metadata overlay inputs; other entries retained from the preserved published source inventory';
 sourceAlignment.sourceInputProvenance={baselineBuildId:baseline.build_id,currentMetadataInputs:[...currentInputs].sort(),otherInputs:'retained_published_inventory'};
+sourceAlignment.provider_routing.nativeModel.usdcAddress=stripeUsdcAddress;
 sourceAlignment.canonicalTreasuryValues=values;sourceAlignment.singularSettlementReceipt=receipt;
 sourceAlignment.treasury=NUMINA_LAYERS.treasury;sourceAlignment.contract_record=NUSD_CONTRACT_RECORD;
 sourceAlignment.treasury_client_verification=treasuryClientVerificationManifest(hash(readFileSync('public/treasury-proof.js')));
@@ -84,6 +95,7 @@ const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=rel
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0),buildId=hash(artifacts.map(x=>x.sha256+'  '+x.path+'\n').join(''));
 const release=structuredClone(baseline);
 function align(o){if(!o||typeof o!=='object')return;for(const k of Object.keys(o))if(k==='canonicalTreasuryValues')o[k]=structuredClone(values);else align(o[k]);}align(release);
+release.provider_routing.nativeModel.usdcAddress=stripeUsdcAddress;
 release.canonicalTreasuryValues=values;release.contract_record=NUSD_CONTRACT_RECORD;
 release.native_treasury_alignment={...release.native_treasury_alignment,singularSettlementReceipt:receipt,settlementStatus:receipt.status,settlementScope:receipt.sourceOfRecord,mintStatus:values.mintStatus,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd};
 release.treasury_client_verification=treasuryClientVerificationManifest(hash(readFileSync('public/treasury-proof.js')));
@@ -91,5 +103,6 @@ release.distribution.integration_kit.manifest_sha256=hash(readFileSync('dist/cli
 release.build_id=buildId;release.workerSha256=hash(worker);release.artifacts=artifacts;
 for(const f of aliases)writeFileSync('dist/'+f,JSON.stringify(release,null,2)+'\n');
 execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});
-const report={identity:'NUMINA',receiptId:receipt.id,aggregateNusd:values.aggregate.current,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,componentCount:3,buildId,workerSha256:hash(worker),baselineBuildId:baseline.build_id,retainedClientAssets:retained,overlaidClientAssets:allowed.size,runtimeModules:modules,unrelatedRuntimeBytesPreserved:true,homepageUnchanged:true,externalProviderMutations:false};
+for(const target of ['dist/server/index.js',...artifacts.filter(x=>/\.(?:js|json|html|md)$/.test(x.path)).map(x=>'dist/'+x.path),...aliases.map(x=>'dist/'+x)])assert.ok(!readFileSync(target,'utf8').includes('0x735bd8'),'Stale Stripe address in '+target);
+const report={stripeUsdcDepositAddress:stripeUsdcAddress,retainedRuntimeAddressCorrections:addressCorrections.length,identity:'NUMINA',receiptId:receipt.id,aggregateNusd:values.aggregate.current,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,componentCount:3,buildId,workerSha256:hash(worker),baselineBuildId:baseline.build_id,retainedClientAssets:retained,overlaidClientAssets:allowed.size,runtimeModules:modules,unrelatedRuntimeBytesPreserved:true,homepageUnchanged:true,externalProviderMutations:false};
 mkdirSync('work',{recursive:true});writeFileSync('work/frontier-build-verification.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
