@@ -510,8 +510,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 10033,
-      "sha256": "0c0d278050233d6dbc168c7d421d7f80e1b6ef1f3ee51dd0f0d27278d9795ecc"
+      "bytes": 10009,
+      "sha256": "94bca2cf46a2fd19b5b024f69c163e79e637cb0c8ae532c1de363d23736d4f71"
     },
     {
       "path": "src/client.js",
@@ -571,7 +571,7 @@
     {
       "path": "verification.json",
       "bytes": 11692,
-      "sha256": "d6a4dda51735eeb18c0765572adc7bc7f5753bdc871dccb2f2c4843a173f4749"
+      "sha256": "df7f0af88915d019bcc8524e913c7ad138879b8e97f86bfbceb016b66877d0cd"
     }
   ]
 }
