@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt} from '../public/treasury-connection-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_CONNECTION as connection} from '../public/treasury-connection-model.js';
 
 // Synchronize current metadata projections. Journal events, historical evidence,
 // provider observations, signatures and artifact bytes are never rewritten.
@@ -37,6 +37,7 @@ for(const path of ['runtime/nusd/treasury-settlement-receipt.json','docs/nusd/tr
   assert.deepEqual(record.mintEvidence,native.mintEvidence,path+' mint evidence');
   assert.deepEqual(record.components,native.components,path+' holdings');
 }
+assert.equal(native.components.find(item=>item.settledUnit==='USDC').usdcAddress,connection.nativeLocationBindings.stripeUsdc.usdcAddress,'Canonical Stripe USDC deposit address');
 assert.equal(values.status,'FINAL');
 assert.equal(native.aggregate.amountNusd,values.aggregate.current);
 assert.equal(native.components.length,3);

@@ -496,7 +496,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "verified": true,
       "contract": "NuminaUSDCConversion",
       "nativeContractId": "numina:nusd-usdc:conversion:v1",
-      "address": "0x735bd8f274dce00a8bb374edd85df0d2e631018e"
+      "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e"
     },
     "native_nusd": {
       "location": "NUMINA Native Treasury",
