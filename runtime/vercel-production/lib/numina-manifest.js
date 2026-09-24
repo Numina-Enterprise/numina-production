@@ -15,7 +15,7 @@ const mechanics=Object.freeze({
   ])}),
   treasury:Object.freeze({identity:NUMINA,provider:NUMINA,providerVerification:true,
     route:'https://numinalabs.xyz/api/control/v1/treasury',nativeModelAmount:'500000000000000',nativeUnit:'NUSD',
-    aggregateAmount:'1500000000000000',aggregateUnit:'NUSD',settlementEventId:'treasury_aggregate_1500t_settlement_v1',
+    aggregateAmount:'1500000000000000',aggregateUnit:'NUSD',settlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',settlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',settlementStatus:'SETTLED',settlementScope:'NUMINA_NATIVE_TREASURY',mintStatus:'CONFIRMED',mintedNusd:'1500000000000000',burnedNusd:'0',externalProviderSettlementVerified:false,settlementEventId:'treasury_aggregate_1500t_settlement_v1',
     modeledHoldings:Object.freeze([
       Object.freeze({destination:'bank-of-america-savings',amount:'500000000000000',unit:'USD',provider:NUMINA,verified:true,destinationProviderConfirmation:false}),
       Object.freeze({destination:'stripe-treasury-usdc',amount:'500000000000000',unit:'USDC',provider:NUMINA,verified:true,destinationProviderConfirmation:false}),

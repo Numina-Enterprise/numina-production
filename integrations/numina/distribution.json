@@ -28,6 +28,75 @@
   "settlements": "NUMINA",
   "funds": "NUMINA",
   "confirmation_evidence": "NUMINA",
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "mintStatus": "CONFIRMED",
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
   "singular": true,
   "integrationManifest": {
     "path": "file-manifest.json",
@@ -36,6 +105,13 @@
     "canonical": true
   },
   "nusdContracts": {
+    "nativeSettlement": {
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "path": "/downloads/nusd/treasury-settlement-receipt.json",
+      "status": "SETTLED",
+      "scope": "NUMINA_NATIVE_TREASURY"
+    },
+    "executionEvidenceScope": "CHAIN_AND_PROVIDER_EXECUTION",
     "schema": "numina.nusd.contract-lifecycle.v1",
     "modelIdentity": "NUMINA",
     "identity": "NUMINA",
@@ -70,6 +146,83 @@
     "externalBackingVerified": false
   },
   "treasuryAlignment": {
+    "canonicalTreasuryValues": {
+      "schema": "numina.canonical-treasury-values.v1",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "status": "FINAL",
+      "canonical": true,
+      "singular": true,
+      "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+      "treasuryCount": 1,
+      "accountCount": 1,
+      "componentCount": 3,
+      "holdingsCount": 3,
+      "balanceCount": 1,
+      "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+      "ratio": "1:1",
+      "components": {
+        "USD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD"
+        },
+        "USDC": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC"
+        },
+        "NUSD": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD"
+        }
+      },
+      "componentLocations": {
+        "USD": {
+          "identity": "NUMINA",
+          "holding": "native-usd",
+          "location": "Bank of America Savings 3486",
+          "accountLast4": "3486"
+        },
+        "USDC": {
+          "identity": "NUMINA",
+          "holding": "native-usdc",
+          "location": "Stripe linked account",
+          "bindingRoute": "/api/control/v2/treasury/provider-routes"
+        },
+        "NUSD": {
+          "identity": "NUMINA",
+          "holding": "native-nusd",
+          "location": "NUMINA Native Treasury"
+        }
+      },
+      "aggregate": {
+        "current": "1500000000000000",
+        "unit": "NUSD"
+      },
+      "mintStatus": "CONFIRMED",
+      "mintedNusd": "1500000000000000",
+      "burnedNusd": "0",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+      "settlementStatus": "SETTLED",
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "providerObservationsCanonical": false,
+      "providerObservationsSourceScoped": true,
+      "providerObservationsAggregated": false,
+      "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    },
+    "singularSettlementReceipt": {
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "path": "/downloads/nusd/treasury-settlement-receipt.json",
+      "status": "SETTLED",
+      "scope": "NUMINA_NATIVE_TREASURY"
+    },
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
     "root": "NUMINA",
     "manifest": "NUMINA",
     "identity": "NUMINA",
@@ -106,10 +259,10 @@
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "500000000000000",
+    "aggregateModeledValue": "1500000000000000",
     "aggregateModeledUnit": "NUSD",
-    "aggregation": "SINGULAR_NUMINA_TREASURY_DENOMINATION_VIEWS",
-    "verifiedModeledValue": "500000000000000",
+    "aggregation": "ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES",
+    "verifiedModeledValue": "1500000000000000",
     "verificationScope": "NUMINA_NATIVE_JOURNAL",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
@@ -119,7 +272,16 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": false,
+    "modeledRoleValuesAdditive": true,
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "componentUnits": [
+      "USD",
+      "USDC",
+      "NUSD"
+    ],
     "externalBalancesAggregated": false
   },
   "treasury_client_verification": {
@@ -135,7 +297,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "62936c7b7cb15eea767071a8130ade95db81ea406f0dd0842ff71976a64e2761"
+      "sha256": "ad595fdaaffd929892d903c6ed3ff1cbd3c4f2712b66875acace7c3ee180c53f"
     },
     "checks": [
       "canonical_journal_record",

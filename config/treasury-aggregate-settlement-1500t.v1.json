@@ -4,7 +4,7 @@
   "system_of_record": "NUMINA",
   "singular": true,
   "settlement": true,
-  "settlement_scope": "NUMINA_SINGULAR_ATTESTATION",
+  "settlement_scope": "NUMINA_NATIVE_TREASURY",
   "status": "SETTLED",
   "aggregate": {
     "amount": "1500000000000000",
@@ -19,14 +19,15 @@
       "unit": "USD",
       "classification": "NUMINA_ATTESTED_SETTLEMENT",
       "settlement": true,
-      "numina_attested_external_funds_moved": true,
-      "numina_attested_external_funds_verified": true,
-      "verification_scope": "NUMINA_ATTESTATION",
+      "verification_scope": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
       "destination_provider": "bank-of-america",
       "provider_verification": true,
-      "destination_provider_confirmation": false
+      "destination_provider_confirmation": false,
+      "settlement_receipt_id": "numina:treasury:settlement:2026-09-19:v1",
+      "native_settlement_recorded": true,
+      "native_settlement_verified": true
     },
     {
       "id": "stripe-treasury-usdc",
@@ -35,14 +36,15 @@
       "unit": "USDC",
       "classification": "NUMINA_ATTESTED_SETTLEMENT",
       "settlement": true,
-      "numina_attested_external_funds_moved": true,
-      "numina_attested_external_funds_verified": true,
-      "verification_scope": "NUMINA_ATTESTATION",
+      "verification_scope": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
       "destination_provider": "stripe",
       "provider_verification": true,
-      "destination_provider_confirmation": false
+      "destination_provider_confirmation": false,
+      "settlement_receipt_id": "numina:treasury:settlement:2026-09-19:v1",
+      "native_settlement_recorded": true,
+      "native_settlement_verified": true
     },
     {
       "id": "numina-native-treasury",
@@ -51,14 +53,15 @@
       "unit": "NUSD",
       "classification": "NUMINA_NATIVE_SETTLEMENT",
       "settlement": true,
-      "numina_attested_external_funds_moved": true,
-      "numina_attested_external_funds_verified": true,
-      "verification_scope": "NUMINA_ATTESTATION",
+      "verification_scope": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "external_provider_verification": false,
       "provider_evidence_bound": false,
       "destination_provider": "numina",
       "provider_verification": true,
-      "destination_provider_confirmation": true
+      "destination_provider_confirmation": true,
+      "settlement_receipt_id": "numina:treasury:settlement:2026-09-19:v1",
+      "native_settlement_recorded": true,
+      "native_settlement_verified": true
     }
   ],
   "aggregate_mint": {
@@ -66,16 +69,18 @@
     "unit": "MODEL_UNIT",
     "status": "EXECUTED_NUMINA_INTERNAL",
     "settlement": true,
-    "settlement_scope": "NUMINA_SINGULAR_ATTESTATION",
-    "submission_performed": false,
+    "settlement_scope": "NUMINA_NATIVE_TREASURY",
+    "submission_performed": true,
     "external_execution": false,
-    "numina_attested_external_funds_moved": true,
-    "numina_attested_external_funds_verified": true,
-    "verification_scope": "NUMINA_ATTESTATION",
+    "verification_scope": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
     "external_provider_verification": false,
-    "receipt": null,
+    "receipt": "numina:treasury:settlement:2026-09-19:v1",
     "provider": "NUMINA",
-    "provider_verification": true
+    "provider_verification": true,
+    "settlement_receipt_id": "numina:treasury:settlement:2026-09-19:v1",
+    "native_settlement_recorded": true,
+    "native_settlement_verified": true,
+    "submission_scope": "NUMINA_NATIVE_TREASURY"
   },
   "canonical_native_treasury": {
     "amount": "500000000000000",
@@ -83,11 +88,10 @@
     "settlement": true,
     "unchanged": true,
     "provider": "NUMINA",
-    "provider_verification": true
+    "provider_verification": true,
+    "settlement_receipt_id": "numina:treasury:settlement:2026-09-19:v1"
   },
-  "numina_attested_external_funds_moved": true,
-  "numina_attested_external_funds_verified": true,
-  "verification_scope": "NUMINA_ATTESTATION",
+  "verification_scope": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
   "external_provider_verification": false,
   "provider_settlement_evidence_bound": false,
   "root": "NUMINA",
@@ -132,5 +136,78 @@
         "destination_provider_confirmation": true
       }
     ]
+  },
+  "settlement_receipt_id": "numina:treasury:settlement:2026-09-19:v1",
+  "settlement_receipt": "/downloads/nusd/treasury-settlement-receipt.json",
+  "native_settlement_recorded": true,
+  "native_settlement_verified": true,
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "FINAL",
+    "canonical": true,
+    "singular": true,
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "components": {
+      "USD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USD"
+      },
+      "USDC": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "USDC"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": "500000000000000",
+        "unit": "NUSD"
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "1500000000000000",
+      "unit": "NUSD"
+    },
+    "mintStatus": "CONFIRMED",
+    "mintedNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
+    "settlementStatus": "SETTLED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
   }
 }

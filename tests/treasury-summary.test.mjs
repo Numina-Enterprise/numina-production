@@ -30,10 +30,13 @@ function summaryAndProviders(target){
   assert.ok(summary);assert.equal(providers.children.length,2);
   const summaryRows=all(summary).filter(element=>element.tagName==='dd').map(element=>element.textContent);
   assert.ok(summaryRows.includes('500,000,000,000,000.00 NUSD · shared canonical record'));
-  assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD owner-designated equivalent'));
+  assert.ok(summaryRows.includes('SETTLED · NUMINA_NATIVE_TREASURY'));
+  assert.ok(summaryRows.includes('numina:treasury:settlement:2026-09-19:v1'));
+  assert.ok(summaryRows.includes('CONFIRMED · 1,500,000,000,000,000.00 NUSD'));
+  assert.ok(summaryRows.includes('0.00 NUSD'));
   assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD'));
-  assert.match(summary.textContent,/Minted NUSD aggregate \(separate token supply\)/);
-  assert.match(summary.textContent,/never added together/);
+  assert.match(summary.textContent,/NUMINA native settled aggregate/);
+  assert.match(summary.textContent,/three settled 500T holdings/);
   for(const unit of ['USD','USDC'])assert.ok(summaryRows.includes('500,000,000,000,000.00 '+unit+' · shared declared value'));
   assert.match(summary.textContent,/Numina-native model and journal integrity/);
   for(const account of providers.children){
@@ -51,7 +54,7 @@ test('linked account cards display the shared native balance while preserving pr
   const {providers}=summaryAndProviders(target);
   assert.match(providers.textContent,/≈ \$12\.00/);assert.match(providers.textContent,/≈ 1\.00 USDC/);
   assert.match(providers.textContent,/2026-09-15T00:00:00Z/);assert.match(providers.textContent,/req_fixture/);
-  assert.match(providers.textContent,/Unavailable — bank connection required/);assert.match(providers.textContent,/Unverified/);
+  assert.match(providers.textContent,/500,000,000,000,000\.00 USD/);assert.match(providers.textContent,/Settlement statusSETTLED/);assert.match(providers.textContent,/Settlement scopeNUMINA_NATIVE_TREASURY/);assert.match(providers.textContent,/numina:treasury:settlement:2026-09-19:v1/);assert.doesNotMatch(providers.textContent,/Confirmation8000750550|COMPLETED · CLEARED/);
 });
 
 test('all account references follow a changed canonical balance without manufacturing provider funds',async()=>{
@@ -60,7 +63,7 @@ test('all account references follow a changed canonical balance without manufact
   for(const reference of references)for(const unit of ['NUSD','USD','USDC'])assert.ok(reference.textContent.includes('499,999,999,999,999.00'+' '+unit));
   const values=all(target).filter(element=>element.tagName==='dd').map(element=>element.textContent);
   assert.ok(values.includes('499,999,999,999,999.00 NUSD · shared canonical record'));
-  assert.ok(values.some(value=>value.startsWith('500,000,000,000,000.00 NUSD modeled value')));
+  assert.ok(values.some(value=>value.startsWith('500,000,000,000,000.00 NUSD · NUMINA native holding · SETTLED')));
   assert.match(target.textContent,/\$0\.00/);assert.match(target.textContent,/0\.00 USDC/);
 });
 test('provider read failure keeps the single native summary and reports unavailable balances',async()=>{
