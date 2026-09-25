@@ -97,7 +97,7 @@ for(const source of modules){
 // redemption policy or its digest in the retained runtime.
 const nusdSource=compile(readFileSync('src/nusd-http.js','utf8'));
 const nusdSections=[
- ['nusd-mint-workflow.js.txt','const NUSD_MINT_WORKFLOW=','const NUSD_CONVERSION_WORKFLOW='],
+ ['nusd-mint-workflow.js.txt','const constructorMintEvidence=','const NUSD_CONVERSION_WORKFLOW='],
  ['nusd-policy.js.txt','const NUSD_POLICY=','async function nusdHttp(']
 ];
 for(const [name,startMarker,endMarker] of nusdSections){

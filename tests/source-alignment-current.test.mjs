@@ -2,6 +2,22 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 
+test('assembled server starts and serves the receipt-bound mint metadata without treasury access',async()=>{
+  const {default:worker}=await import('../dist/server/index.js');
+  const retainedMint=JSON.parse(readFileSync(new URL('../runtime/nusd/mint-receipt.json',import.meta.url)));
+  const env={NUMINA_TELEMETRY_LOGS:'false',get DB(){throw Error('Unexpected treasury access');}};
+  for(const path of ['/api/nusd/v1/mint-workflow','/api/nusd/v1/status']){
+    const response=await worker.fetch(new Request('https://numina.test'+path),env);
+    assert.equal(response.status,200,path);
+    const body=await response.json();
+    const evidence=body.execution?.constructorMintEvidence??body.asset_verification?.constructorMintEvidence;
+    assert.equal(evidence.transactionHash,retainedMint.transactionHash,path);
+    assert.equal(evidence.blockNumber,retainedMint.blockNumber,path);
+    assert.equal(evidence.receiptStatus,retainedMint.receiptStatus,path);
+    assert.equal(evidence.providerSettlementVerified,false,path);
+  }
+});
+
 test('generated source alignment separates current treasury journal from dated NUSD chain issuance',()=>{
   const source=JSON.parse(readFileSync(new URL('../dist/client/source-alignment.json',import.meta.url)));
   const architecture=source.requiredArchitecture;
