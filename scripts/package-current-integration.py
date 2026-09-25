@@ -43,7 +43,7 @@ record = {
     'applicationManifest': verification['applicationManifest'],
     'manifestSha256': sha((source / 'file-manifest.json').read_bytes()),
     'canonicalTreasuryValues': manifest['canonicalTreasuryValues'],
-    'singularSettlementReceipt': manifest['treasuryAlignment']['singularSettlementReceipt'],
+    'historicalSettlementReceipt': manifest['treasuryAlignment']['historicalSettlementReceipt'],
     'providerInstallationPerformed': False, 'registryPublicationPerformed': False,
     'sitePublicationPerformedByThisPackageStep': False, 'livemode': True
 }

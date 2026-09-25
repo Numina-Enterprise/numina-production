@@ -1,0 +1,22 @@
+const NATIVE_USDC_MODEL=Object.freeze({
+  identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',nativeEvidenceStatus:'FINAL',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
+  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,sourceOfTruth:'NUMINA',canonicalSource:'NUMINA',squareRoot:'NUMINA',updateDirection:'NUMINA_REPOSITORY_TO_ALL_RUNTIME_SURFACES',singular:NUMINA_NATIVE_TREASURY_SYNC.singular,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,
+  treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
+  holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
+  holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalance:Object.freeze({current:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,available:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,unit:'USDC',source:'NUMINA'}),
+  nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',
+  aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,
+  backingRatio:'1:1',backingVerified:true,verificationSource:'NUMINA',
+  nativeModel:Object.freeze({scope:'NUMINA_MANIFEST_FINAL',conversionContract:'NuminaUSDCConversion',
+    nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
+    usdcAddress:'0x735bd8f274dce00a8bb374edd85df0d2e631018e',
+    settlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',mintReceipt:'/downloads/nusd/mint-receipt.json'})
+});
+const NUSD_PROVIDER_ROUTING=Object.freeze({
+  schema:'numina.nusd.provider-routing.v1',...NATIVE_USDC_MODEL,componentRole:'USDC_NATIVE_LOCATION_ROUTE',
+  displayLabel:'NUMINA Native Treasury · Stripe USDC observation',route:TREASURY_PROVIDER_ROUTES,method:'GET',access:'owner_authenticated',
+  mode:'live_read_only',canonicalTreasury:'/api/control/v1/treasury',
+  acceptanceScope:'Exact transport-reported currency, network and destination; token identity and funding require separate verification',
+  nusdAcceptanceVerified:false,settlementPerformed:false,submissionPerformed:false,receipt:null,
+  transferExecution:false,documentation:'/downloads/NUSD-Provider-Routing.md'
+});

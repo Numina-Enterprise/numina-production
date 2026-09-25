@@ -1,0 +1,5 @@
+if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
+      const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
+      const currentRecorded=record?.id===policy.id&&record.hash===policyHash;
+      return frontierResponse({policy,policyHash,activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},revision:row.revision});
+    }

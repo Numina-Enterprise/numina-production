@@ -24,7 +24,12 @@ test('private bank configuration does not turn routing or native settlement into
     assert.equal(route.settlementStatus,'UNVERIFIED');
     assert.equal(route.achTraceNumber,null);
     assert.equal(route.providerConfirmationId,null);
-    assert.equal(route.nativeSettlementEvidenceScope,'NUMINA_INTERNAL_SOFTWARE_STATE');
+    assert.equal(route.nativeSettlementEvidenceScope,'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT');
+    assert.equal(route.nativeSettlementStatus,'UNVERIFIED');
+    assert.equal(route.achInstructionStatus,'PREPARED');
+    assert.equal(route.treasuryInstructionSubmissionPerformed,false);
+    assert.equal(route.nativeBalance,null);
+    assert.equal(route.backingVerified,null);
   }
 });
 

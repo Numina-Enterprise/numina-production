@@ -16,12 +16,10 @@ assert.equal(finalBuild.identity,'NUMINA');
 assert.equal(finalBuild.treasury.identity,'NUMINA','execution-specific identity must not leak globally');
 assert.equal(finalBuild.status,'FINAL');
 const recordPath='release-evidence/numina-bofa-ach-instruction-2026-09-19.json';
-const instruction=json(recordPath),projection=finalBuild.treasury.achTransferInstruction;
-assert.equal(projection.record,recordPath);
-assert.equal(projection.id,instruction.id);
-for(const key of ['amountNusd','targetAmountUsd','ratio','contract','nativeContractId'])assert.equal(projection[key],instruction[key],key);
+const instruction=json(recordPath);
+assert.equal(finalBuild.historicalTreasuryRelease.achInstruction,recordPath);
 const fields={endpoint:'073000176',endpointIdentity:'SK Consulting LLC',treasuryIdentity:'NUMINA NATIVE TREASURY',achOriginatorIdentity:'NUMINA',instructionState:'INITIATED'};
-for(const item of [instruction,projection]){
+for(const item of [instruction]){
   for(const [key,value] of Object.entries(fields))assert.equal(item[key],value,key);
   assert.equal(item.status,'INITIATED');
   assert.equal(item.executionScope,'THIS_ACH_EXECUTION_ONLY');
@@ -29,11 +27,12 @@ for(const item of [instruction,projection]){
   for(const key of ['achOriginatorReceipt','achTraceNumber','providerConfirmationId','achOriginatorSubmissionSource'])assert.equal(item[key],null,key+' lacks external evidence');
 }
 assert.equal(instruction.destination.routingReference,fields.endpoint);
-assert.equal(projection.routingReference,fields.endpoint);
 const bank=privateBankRouteConfiguration({});
-for(const [key,value] of Object.entries(fields))assert.equal(bank.achExecutionScope[key],value,key);
+for(const [key,value] of Object.entries(fields))assert.equal(bank.historicalAchExecutionScope[key],value,key);
 assert.equal(bank.treasuryIdentity,'NUMINA');
-assert.equal(bank.achInstructionStatus,'INITIATED');
+assert.equal(bank.achInstructionStatus,'PREPARED');
+assert.equal(bank.achExecutionScope.instructionState,'PREPARED');
+assert.equal(bank.treasuryInstructionSubmissionPerformed,false);
 assert.equal(bank.achSubmissionEnabled,false);
 assert.equal(bank.settlementPerformed,false);
 assert.equal(bank.bankSettlementVerified,false);

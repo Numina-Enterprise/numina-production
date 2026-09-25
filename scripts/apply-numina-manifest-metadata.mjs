@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_CONNECTION as connection} from '../public/treasury-connection-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_JOURNAL_OBSERVATION as observation,NUMINA_TREASURY_CONNECTION as connection,NUSD_OPERATOR_ACTIVATION as activation} from '../public/treasury-connection-model.js';
 
 // Synchronize current metadata projections. Journal events, historical evidence,
 // provider observations, signatures and artifact bytes are never rewritten.
@@ -15,12 +15,11 @@ const blob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+B
 const currentPaths=[
   'package.json',
   'config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json',
-  'config/numina-architecture.json','config/treasury-aggregate-settlement-1500t.v1.json',
+  'config/numina-architecture.json',
   'public/final-build.json','docs/NUMINA-FINAL-BUILD.json','public/business-core.json',
   'public/final-manifest.json','docs/NUMINA-FINAL-MANIFEST.json','public/current-environments.json',
   'integrations/numina/package.json','integrations/numina/distribution.json',
-  'integrations/numina/verification.json','integrations/numina/file-manifest.json',
-  'runtime/nusd/policies/issuer-policy-1500t-18d.json'
+  'integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
 
 const native=json('runtime/nusd/treasury-settlement-receipt.json');
@@ -39,22 +38,30 @@ for(const path of ['runtime/nusd/treasury-settlement-receipt.json','docs/nusd/tr
   assert.deepEqual(record.components,native.components,path+' holdings');
 }
 assert.equal(native.components.find(item=>item.settledUnit==='USDC').usdcAddress,connection.nativeLocationBindings.stripeUsdc.usdcAddress,'Canonical Stripe USDC deposit address');
-assert.equal(values.status,'FINAL');
-assert.equal(native.aggregate.amountNusd,values.aggregate.current);
+assert.equal(values.status,'JOURNAL_SNAPSHOT');
+assert.equal(values.canonical,false);
+assert.equal(values.observation.observedRevision,observation.observedRevision);
+assert.equal(values.observation.observedHead,observation.observedHead);
+assert.equal(values.aggregate.current,observation.projection.balance);
+assert.equal(native.aggregate.amountNusd,values.aggregate.modeledTarget);
 assert.equal(native.components.length,3);
 assert.equal(values.componentCount,3);
 assert.equal(values.treasuryCount,1);
 assert.equal(values.accountCount,1);
 assert.equal(values.balanceCount,1);
-assert.equal(values.mintStatus,'CONFIRMED');
-assert.equal(native.mintEvidence.mintedNusd,values.mintedNusd);
-assert.equal(native.mintEvidence.burnedNusd,values.burnedNusd);
+assert.equal(values.mintStatus,'PREPARED_IN_JOURNAL');
+assert.equal(values.mintedNusd,null);
+assert.equal(values.components.USD.current,null);
+assert.equal(values.components.USDC.current,null);
+assert.equal(values.components.USD.available,null);
+assert.equal(values.components.USDC.available,null);
+assert.equal(native.mintEvidence.mintedNusd,values.separateChainMintEvidence.amountNusd);
 assert.equal(native.mintEvidence.transactionHash,receipt.mintTransactionHash);
-assert.equal(native.components.reduce((sum,item)=>sum+BigInt(item.amountNusd),0n).toString(),values.aggregate.current);
+assert.equal(native.components.reduce((sum,item)=>sum+BigInt(item.amountNusd),0n).toString(),values.aggregate.modeledTarget);
 for(const item of native.components){
   assert.equal(item.settlementReceiptId,receipt.id);
   assert.equal(item.status,receipt.status);
-  assert.equal(item.settledAmount,values.components[item.settledUnit].current);
+  assert.equal(item.settledAmount,values.components[item.settledUnit].modeledTarget??values.components[item.settledUnit].current);
 }
 
 const planned=new Map(),records=new Map();
@@ -62,8 +69,31 @@ function updateValues(value){
   if(Array.isArray(value)){value.forEach(updateValues);return;}
   if(!value||typeof value!=='object')return;
   for(const key of Object.keys(value)){
-    if(key==='canonicalTreasuryValues')value[key]=structuredClone(values);
-    else updateValues(value[key]);
+    const item=value[key];
+    if(key==='canonicalTreasuryValues'||key==='canonicalValues'&&item?.schema==='numina.canonical-treasury-values.v1'){
+      value[key]=structuredClone(values);
+    }else if(key==='singularSettlementReceipt'&&item?.id===receipt.id){
+      value.historicalSettlementReceipt={...item,historicalRecord:true,currentJournalConfirmed:false};
+      delete value[key];
+    }else if(key==='allocationInstruction'&&item?.schema==='numina.treasury.allocation-instruction.v1'){
+      value.historicalAllocationInstruction={...item,historicalRecord:true,currentJournalConfirmed:false};
+      delete value[key];
+    }else updateValues(item);
+  }
+  if((value.unit==='USD'||value.unit==='USDC')&&value.current==='500000000000000'&&value.available==='500000000000000'){
+    value.modeledTarget=value.current;
+    value.current=null;
+    value.available=null;
+  }
+  if(value.unit==='NUSD'&&value.current==='500000000000000'&&value.available==='500000000000000'){
+    value.available=null;
+    value.observationRevision=observation.observedRevision;
+  }
+  if(value.unit==='NUSD'&&value.current==='1500000000000000'){
+    value.modeledTarget=value.current;
+    value.current=observation.projection.balance;
+    if(Object.hasOwn(value,'available'))value.available=null;
+    value.observationRevision=observation.observedRevision;
   }
 }
 function serialize(path,value){
@@ -74,13 +104,46 @@ for(const path of currentPaths){
   const data=json(path);
   data.canonicalTreasuryValues=structuredClone(values);
   updateValues(data);
+  data.treasuryJournalObservation=structuredClone(observation);
+  data.authoritativeCurrentTreasuryRoute=observation.authoritativeCurrentRoute;
   records.set(path,data);
 }
 const override=records.get('config/numina-metadata-overrides.v1.json');
-override.resolution.treasurySettlement=receipt.id;
-override.canonicalSettlementAppliesTo='ALL_CURRENT_AND_CANONICAL_NUMINA_SOFTWARE_METADATA';
+override.resolution.treasurySettlement=null;
+override.resolution.historicalTreasurySettlement=receipt.id;
+override.canonicalSettlementAppliesTo='NONE_WITHOUT_MATCHING_JOURNAL_EVENT';
 const finalBuild=records.get('public/final-build.json');
-finalBuild.treasury.singularSettlementReceipt=structuredClone(receipt);
+finalBuild.treasury=structuredClone(connection);
+finalBuild.historicalTreasuryRelease={historicalRecord:true,currentJournalConfirmed:false,allocationInstruction:'release-evidence/treasury-allocation-instruction-2026-09-19.json',achInstruction:'release-evidence/numina-bofa-ach-instruction-2026-09-19.json',settlementReceipt:receipt.path};
+if(finalBuild.syncAll){
+  if(finalBuild.syncAll.nativeTreasuryAlignment){
+    finalBuild.syncAll.historicalNativeTreasuryAlignment={...finalBuild.syncAll.nativeTreasuryAlignment,historicalRecord:true,currentJournalConfirmed:false};
+    delete finalBuild.syncAll.nativeTreasuryAlignment;
+  }
+  finalBuild.syncAll.historicalAggregateModeledValue=finalBuild.syncAll.historicalAggregateModeledValue??finalBuild.syncAll.aggregateModeledValue;
+  finalBuild.syncAll.aggregateModeledValue=null;
+  finalBuild.syncAll.historicalNusdMinted=finalBuild.syncAll.historicalNusdMinted??finalBuild.syncAll.nusdMinted;
+  finalBuild.syncAll.nusdMinted=null;
+  finalBuild.syncAll.treasuryJournalObservation=structuredClone(observation);
+}
+finalBuild.softwareTreasury={sourceOfRecord:'NUMINA_NATIVE_TREASURY',journalObservation:structuredClone(observation),canonicalValues:structuredClone(values),bankUsd:structuredClone(connection.softwareBalanceModel.bankUsd),stripeUsdc:structuredClone(connection.softwareBalanceModel.stripeUsdc),nativeNusd:structuredClone(connection.softwareBalanceModel.nativeNusd),aggregate:structuredClone(connection.softwareBalanceModel.aggregate),aggregateModeledValue:null,historicalAggregateModeledValue:receipt.aggregateNusd};
+if(finalBuild.softwareAlignment){finalBuild.historicalSoftwareAlignment={...finalBuild.softwareAlignment,historicalRecord:true};delete finalBuild.softwareAlignment;}
+if(finalBuild.delivery?.browserAlignment){finalBuild.delivery.historicalBrowserAlignment={...finalBuild.delivery.browserAlignment,historicalRecord:true};delete finalBuild.delivery.browserAlignment;}
+if(finalBuild.nusd){
+  finalBuild.historicalNusdRelease=finalBuild.historicalNusdRelease??{...finalBuild.nusd,historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false};
+  finalBuild.nusd={
+    sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',status:'JOURNAL_SNAPSHOT',snapshotIsLive:false,
+    journalObservation:structuredClone(observation),journalMintStatus:'PREPARED',
+    journalMintRequestAmount:observation.requests.find(request=>request.kind==='mint_request')?.amount??null,
+    journalSubmissionPerformed:false,journalMintReceipt:null,mintedNusd:null,
+    currentChainState:'UNVERIFIED',operatorActivation:structuredClone(activation),
+    nativeBackingVerified:null,providerReserveVerified:false,
+    usdcConversion:{status:'UNVERIFIED',backingVerified:null,providerLiquidityVerified:false},
+    usdRedemption:{status:'UNVERIFIED',backingVerified:null,providerLiquidityVerified:false},
+    historicalChainMintEvidence:{chainId:finalBuild.historicalNusdRelease.chainId,tokenAddress:finalBuild.historicalNusdRelease.token?.address??null,transactionHash:finalBuild.historicalNusdRelease.token?.transactionHash??null,amountNusd:finalBuild.historicalNusdRelease.amountNusd,receipt:finalBuild.historicalNusdRelease.mintReceipt?.sourcePath??null,scope:'SEPARATE_CHAIN_EVIDENCE'},
+    historicalReleaseReference:'historicalNusdRelease'
+  };
+}
 // This updates a native receipt projection, not an operation or provider balance.
 const finalBytes=serialize('public/final-build.json',finalBuild);
 planned.set('public/final-build.json',finalBytes);
@@ -92,7 +155,8 @@ const finalHash=createHash('sha256').update(finalBytes).digest('hex');
 const manifest=records.get('public/final-manifest.json');
 manifest.frontierId=manifest.canonicalSha256=finalHash;
 Object.assign(manifest.finalBuild,{gitBlobSha1:finalPin,sha256:finalHash,canonicalSha256:finalHash});
-manifest.singularSettlementReceipt=structuredClone(receipt);
+manifest.historicalSettlementReceipt={...receipt,historicalRecord:true,currentJournalConfirmed:false};
+delete manifest.singularSettlementReceipt;
 const manifestBytes=serialize('public/final-manifest.json',manifest);
 planned.set('public/final-manifest.json',manifestBytes);
 planned.set('docs/NUMINA-FINAL-MANIFEST.json',manifestBytes);
@@ -100,7 +164,8 @@ const environments=records.get('public/current-environments.json');
 environments.frontierId=finalHash;
 environments.contentHashes.finalBuildSha256=finalHash;
 environments.contentHashes.finalManifestSha256=createHash('sha256').update(manifestBytes).digest('hex');
-environments.singularSettlementReceipt=structuredClone(receipt);
+environments.historicalSettlementReceipt={...receipt,historicalRecord:true,currentJournalConfirmed:false};
+delete environments.singularSettlementReceipt;
 packageData.numina.finalBuildManifest.blob=finalPin;
 for(const [path,data] of records){
   if(!planned.has(path))planned.set(path,serialize(path,data));

@@ -19,7 +19,7 @@ async function fixture(path){const db=database(path);await bootstrapControl(db,o
 const treasury=db=>createNuminaTreasury({db,root:owner,principal:owner});
 async function command(db,operation='INITIALIZE',extra={},id='native-init'){
   const row=await readControl(db);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',SETTLE_AGGREGATE_MODEL:'treasury.aggregate.settle'};
   return {id,expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:objectives[operation],Intent:{operation,reason:'Isolated test of the Numina-native model',...extra}};
 }
 
@@ -51,13 +51,13 @@ test('account views share one checked balance without changing stored references
     assert.equal(await verifyTreasuryAccountView(alignTreasuryAccounts(await api.readTreasury(),frontier)),true);
     await api.writeTreasury(await command(db));const view=alignTreasuryAccounts(await api.readTreasury(),frontier);
     assert.equal(await verifyTreasuryAccountView(view),true);assert.equal(view.schema,'numina.treasury.alignment.v2');assert.equal(view.identity,'NUMINA');assert.equal(view.treasuryIdentity,'NUMINA');assert.equal(view.transportVerificationChannel,'NUMINA');assert.equal(view.accountAlignment.schema,'numina.treasury.account-view.v2');assert.equal(view.accountAlignment.separateRoles,true);assert.equal(view.accountAlignment.singularIdentity,true);assert.ok(view.accounts.every(account=>account.treasuryIdentity==='NUMINA'&&account.treasuryRole==='evidence_view'&&account.providerObservationOnly===true));assert.deepEqual(frontier,before);assert.deepEqual(view.accountReferences,before.accounts);
-    for(const mutate of [
+    for(const [index,mutate] of [
       v=>v.fundableTargets.aggregateModeledValue='500000000000000',
-      v=>v.fundableTargets.additive=false,
+      v=>v.fundableTargets.additive=true,
       v=>v.fundableTargets.aggregation='MODEL_ROUTE_ALLOCATIONS',
       v=>v.fundableTargets.singularBalanceCount=3,
-      v=>v.treasuryAlignmentPlan.nonAdditive=true,
-      v=>v.treasuryAlignmentPlan.additive=false,
+      v=>v.treasuryAlignmentPlan.nonAdditive=false,
+      v=>v.treasuryAlignmentPlan.additive=true,
       v=>v.treasuryAlignmentPlan.aggregation='MODEL_ROUTE_ALLOCATIONS',
       v=>v.treasuryAlignmentPlan.singularBalanceCount=3,
       v=>v.treasuryAlignmentPlan.aggregateModeledValue='500000000000000',
@@ -66,8 +66,8 @@ test('account views share one checked balance without changing stored references
       v=>v.fundableTargets.accountCount=3,
       v=>v.accountAlignment.nativeHoldingCount=1,
       v=>v.accounts[0].providerIdentity='Stripe',
-      v=>v.fundableTargets.settlementPerformed=false,
-      v=>v.nativeFundingView.submissionPerformed=false,
+      v=>v.fundableTargets.settlementPerformed=true,
+      v=>v.nativeFundingView.submissionPerformed=true,
       v=>v.fundableTargets.externalProviderSettlementVerified=true,
       v=>v.nativeFundingView.externalSettlementStatus='SETTLED',
       v=>v.singular=false,
@@ -94,7 +94,7 @@ test('account views share one checked balance without changing stored references
       v=>v.nativeFundingView.ownerDeclaredFunded=true,v=>v.nativeFundingView.ownerDeclarationEventId='unrelated',
       v=>v.nativeFundingView.recordedPlanStatus='FUNDED_PLAN',v=>v.nativeFundingView.recordedPlanEventId='unrelated',
       v=>v.nativeFundingView.confirmedExternalFunding={amount:'500000000000000',unit:'USDC'},v=>v.nativeFundingView.externalReceipt={id:'unrelated'}
-    ]){const changed=structuredClone(view);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false);}
+    ].entries()){const changed=structuredClone(view);mutate(changed);assert.equal(await verifyTreasuryAccountView(changed),false,'mutation '+index);}
     assert.deepEqual(frontier,before);
     const funded=alignTreasuryAccounts(await api.readTreasury(),{...frontier,fundingPlan:{status:'UNFUNDED_PLAN',eventId:'original-plan'},fundingDeclaration:{FUNDED_PLAN:true,eventId:'owner-declaration'}});
     assert.equal(await verifyTreasuryAccountView(funded),true);
@@ -102,7 +102,7 @@ test('account views share one checked balance without changing stored references
     funded.nativeFundingView.status='UNFUNDED_PLAN';assert.equal(await verifyTreasuryAccountView(funded),false);
   }finally{db.close();}
 });
-test('browser accepts the current singular native holdings and preserved historical models without mixing them',async()=>{
+test('browser accepts the journal-aligned view and rejects historical model substitutions',async()=>{
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
     const current=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]}),historical=structuredClone(current);
@@ -128,8 +128,8 @@ test('browser accepts the current singular native holdings and preserved histori
     historicalShared.treasuryAlignmentPlan.nonAdditive=true;
     for(const target of historicalShared.fundableTargets.targets)target.classification='TREASURY_DENOMINATION_VIEW';
     assert.equal(await verifyTreasuryAccountView(current),true);
-    assert.equal(await verifyTreasuryAccountView(historical),true);
-    assert.equal(await verifyTreasuryAccountView(historicalShared),true);
+    assert.equal(await verifyTreasuryAccountView(historical),false);
+    assert.equal(await verifyTreasuryAccountView(historicalShared),false);
     const mixed=structuredClone(current);
     mixed.fundableTargets.aggregateModeledValue='500000000000000';
     assert.equal(await verifyTreasuryAccountView(mixed),false);
@@ -148,7 +148,7 @@ test('current native holdings reject contradictory execution claims, substituted
       const view=alignTreasuryAccounts(await api.readTreasury(),{accounts:[]});
       assert.equal(await verifyTreasuryAccountView(view),true);
       const mutations=[
-        ['target rejects native settlement',v=>v.fundableTargets.targets[0].settlementStatus='UNVERIFIED'],
+        ['target asserts native settlement',v=>v.fundableTargets.targets[0].settlementStatus='SETTLED'],
         ['target changes settlement scope',v=>v.fundableTargets.targets[0].settlementScope='STRIPE'],
         ['target asserts external settlement',v=>v.fundableTargets.targets[0].externalProviderSettlementVerified=true],
         ['target changes evidence scope',v=>v.fundableTargets.targets[0].internalSettlementEvidenceScope='BANK_PROVIDER_SETTLEMENT'],
@@ -279,6 +279,70 @@ test('prepared mint and bank requests are journaled without changing projection 
     const row=await readControl(db);assert.equal(row.eventCount,4);
     await db.prepare('UPDATE numina_control_events SET event_json=? WHERE id=?').bind('{}','PREPARE_MINT').run();
     await assert.rejects(api.readTreasury(),/JOURNAL_CORRUPT/);
+  }finally{db.close();}
+});
+test('current treasury metadata follows the replayed journal instead of a packaged settlement receipt',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);
+    const empty=await api.readTreasury();
+    assert.equal(empty.settlementStatus,'UNVERIFIED');
+    assert.equal(empty.submissionPerformed,false);
+    assert.equal(empty.singularSettlementReceipt,null);
+    assert.equal(empty.aggregateModeledValue,null);
+    assert.equal(empty.softwareBalanceModel.nativeNusd.current,null);
+    assert.equal(empty.softwareBalanceModel.aggregate.current,null);
+    await api.writeTreasury(await command(db));
+    const prepared=await api.writeTreasury(await command(db,'PREPARE_MINT',{amount:'1500000000000000',networkReference:'numina-main',destinationReference:'owner-wallet'},'prepared-mint'));
+    assert.equal(prepared.status,'FINAL');
+    assert.equal(prepared.transaction_request.status,'PREPARED');
+    assert.equal(prepared.settlementStatus,'UNVERIFIED');
+    assert.equal(prepared.submissionPerformed,false);
+    assert.equal(prepared.singularSettlementReceipt,null);
+    assert.equal(prepared.aggregateModeledValue,null);
+    const observed=await api.readTreasury();
+    assert.equal(observed.settlementStatus,'UNVERIFIED');
+    assert.equal(observed.nusdMinted,null);
+    assert.equal(observed.nativeBackingVerified,false);
+    assert.equal(observed.provider_verification,false);
+    assert.equal(observed.softwareBalanceModel.nativeNusd.current,'500000000000000');
+    assert.equal(observed.softwareBalanceModel.aggregate.current,'500000000000000');
+    assert.equal(await verifyTreasuryRecord(observed),true);
+
+    const aggregate=await command(db,'SETTLE_AGGREGATE_MODEL',{
+      aggregateAmount:'1500000000000000',bankAmount:'500000000000000',stripeAmount:'500000000000000',nativeAmount:'500000000000000',
+      numinaAttestedExternalFundsMoved:true,numinaAttestedExternalFundsVerified:true
+    },'aggregate-settlement');
+    const settled=await api.writeTreasury(aggregate);
+    assert.equal(settled.settlementStatus,'SETTLED');
+    assert.equal(settled.submissionPerformed,true);
+    assert.equal(settled.aggregateModeledValue,'1500000000000000');
+    assert.equal(settled.singularSettlementReceiptId,'numina:treasury:settlement:2026-09-19:v1');
+    assert.equal(settled.provider_verification,false);
+    const settledRead=await api.readTreasury();
+    assert.equal(await verifyTreasuryRecord(settledRead),true);
+    assert.equal(settledRead.settlementStatus,'SETTLED');
+    assert.equal(settledRead.externalProviderSettlementVerified,null);
+    assert.equal(settledRead.externalProviderSubmissionPerformed,null);
+
+    await api.writeTreasury(await command(db,'ADJUST_PROJECTION',{delta:'1'},'later-adjustment'));
+    const adjusted=await api.readTreasury();
+    assert.equal(adjusted.settlementStatus,'UNVERIFIED');
+    assert.equal(adjusted.submissionPerformed,false);
+    assert.equal(adjusted.singularSettlementReceipt,null);
+    assert.equal(adjusted.aggregateModeledValue,null);
+    assert.equal(adjusted.softwareBalanceModel.nativeNusd.current,'500000000000001');
+    assert.equal(adjusted.softwareBalanceModel.aggregate.current,'500000000000001');
+    assert.equal(await verifyTreasuryRecord(adjusted),true);
+    await api.writeTreasury(await command(db,'ADJUST_PROJECTION',{delta:'-1'},'return-to-old-balance'));
+    const restoredBalance=await api.readTreasury();
+    assert.equal(restoredBalance.projection.balance,'500000000000000');
+    assert.equal(restoredBalance.settlementStatus,'UNVERIFIED');
+    assert.equal(restoredBalance.singularSettlementReceipt,null);
+    assert.equal(await verifyTreasuryRecord(restoredBalance),true);
+    const replay=await api.writeTreasury(aggregate);
+    assert.equal(replay.replayed,true);
+    assert.equal(replay.settlementStatus,'UNVERIFIED');
+    assert.equal(replay.current_head.head,restoredBalance.head);
   }finally{db.close();}
 });
 test('P/A/O/I execution uses the canonical write path and emits its recorded proof',async()=>{

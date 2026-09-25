@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {treasuryEvidencePayload} from '../src/treasury-evidence.js';
 import {controlHash} from '../src/control.js';
 
-test('canonical native settlement is hash-bound while unavailable provider evidence stays unavailable',async()=>{
+test('current journal status and historical settlement file are hash-bound separately',async()=>{
   const input={
     treasury:{root:'NUMINA',revision:0,head:'a'.repeat(64),status:'NOT_INITIALIZED',projection:null},
     frontier:{fundingDeclaration:null,fundingPlan:null,accounts:[]},
@@ -14,16 +14,21 @@ test('canonical native settlement is hash-bound while unavailable provider evide
   const before=structuredClone(input),payload=await treasuryEvidencePayload(input);
   assert.deepEqual(input,before);
   const native=payload.nativeSettlement;
-  assert.equal(native.receipt.id,'numina:treasury:settlement:2026-09-19:v1');
-  assert.equal(native.receipt.status,'SETTLED');
-  assert.equal(native.receipt.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
-  assert.equal(native.canonicalTreasuryValues.aggregate.current,'1500000000000000');
+  assert.equal(native.status,'UNVERIFIED');
+  assert.equal(native.submissionPerformed,false);
+  assert.equal(native.settlementPerformed,false);
+  assert.equal(native.receipt,null);
+  assert.equal(native.currentJournalProjection.balance,null);
+  assert.equal(native.historicalReceipt.id,'numina:treasury:settlement:2026-09-19:v1');
+  assert.equal(native.historicalReceipt.status,'SETTLED');
+  assert.equal(native.historicalReceipt.currentJournalConfirmed,false);
+  assert.equal(native.canonicalTreasuryValues.aggregate.current,'500000000000000');
   assert.equal(native.canonicalTreasuryValues.componentCount,3);
-  assert.equal(native.canonicalTreasuryValues.mintedNusd,'1500000000000000');
-  assert.equal(native.canonicalTreasuryValues.burnedNusd,'0');
+  assert.equal(native.canonicalTreasuryValues.mintedNusd,null);
+  assert.equal(native.canonicalTreasuryValues.burnedNusd,null);
   assert.deepEqual(native,payload.source.nativeSettlement);
   assert.equal(payload.evidenceHash,await controlHash(payload.source));
-  const changed=structuredClone(payload.source);changed.nativeSettlement.receipt.id='stale';
+  const changed=structuredClone(payload.source);changed.nativeSettlement.historicalReceipt.id='stale';
   assert.notEqual(await controlHash(changed),payload.evidenceHash);
   assert.equal(payload.reconciliation.scope,'EXTERNAL_PROVIDER_OBSERVATIONS');
   assert.equal(payload.reconciliation.status,'NOT_RECONCILED');

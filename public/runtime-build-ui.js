@@ -97,20 +97,18 @@ export function contractSourcePresentation(record) {
           !/^0x[0-9a-fA-F]{40}$/.test(deployment.contract_address)||!/^0x[0-9a-fA-F]{64}$/.test(deployment.transaction_hash)||
           deployment.receipt?.status!=='0x1'||deployment.receipt.record!=='runtime/nusd/deployment-receipt.json')throw Error('Contract source record unavailable');
       }else{
-        // Native activation is an internal operational record, not a chain receipt
-        // or evidence that the bank or USDC destination accepted a transaction.
+        // The dated native attestation is retained as evidence of its historical
+        // claim. It cannot activate conversion or verify current backing.
         if(contract.verification.chain_receipt_verified!==false||deployment?.submission_performed!==false||
           deployment.contract_address!==null||deployment.transaction_hash!==null||deployment.receipt!==null)throw Error('Contract source record unavailable');
-        if(deployment.status==='native_active'){
-          const unit=i===2?'USDC':'USD',nativeId=i===2?'numina:nusd-usdc:conversion:v1':'numina:nusd-usd:redemption:v1';
-          if(contract.status!=='ACTIVE_SIGNED_1_TO_1_VERIFIED'||deployment.lifecycle!=='ACTIVE'||
-            contract.verification.native_activation_verified!==true||contract.verification.signed_1_to_1_backing_verified!==true||
-            deployment.verification_scope!=='NUMINA_NATIVE_TREASURY'||deployment.external_provider_verified!==false||
-            deployment.native_contract_id!==nativeId||deployment.native_attestation_id!==record.native_activation?.backing_attestation_id||
-            deployment.ratio!=='1:1'||deployment.backing_verified!==true||deployment.native_unit!==unit||
-            !/^(0|[1-9][0-9]{0,77})$/.test(deployment.native_value)||deployment.native_value!==deployment.nusd_equivalent||
-            deployment.chain_contract_address_recorded!==false||deployment.chain_transaction_hash_recorded!==false)throw Error('Contract source record unavailable');
-        }else if(deployment.status!=='not_verified'||contract.verification.native_activation_verified===true)throw Error('Contract source record unavailable');
+        const unit=i===2?'USDC':'USD',nativeId=i===2?'numina:nusd-usdc:conversion:v1':'numina:nusd-usd:redemption:v1';
+        if(contract.status!=='HISTORICAL_NATIVE_ATTESTATION'||deployment.status!=='retained_attestation'||deployment.lifecycle!=='HISTORICAL_ATTESTATION'||
+          contract.verification.native_activation_verified!==false||contract.verification.signed_1_to_1_backing_verified!==false||contract.verification.historical_native_attestation_recorded!==true||
+          deployment.verification_scope!=='HISTORICAL_NUMINA_ATTESTATION'||deployment.external_provider_verified!==false||
+          deployment.native_contract_id!==nativeId||deployment.native_attestation_id!==record.historical_native_activation?.backing_attestation_id||
+          deployment.ratio!=='1:1'||deployment.backing_verified!==null||deployment.native_unit!==unit||
+          !/^(0|[1-9][0-9]{0,77})$/.test(deployment.modeled_target)||deployment.modeled_target!==deployment.nusd_equivalent_target||
+          deployment.chain_contract_address_recorded!==false||deployment.chain_transaction_hash_recorded!==false)throw Error('Contract source record unavailable');
       }
       for(const [key,extension]of [['source','sol'],['artifact','json']]){
         const file=contract[key];
@@ -120,7 +118,7 @@ export function contractSourcePresentation(record) {
     if(issuance.transactionHash!==contracts[0].deployment.transaction_hash)throw Error('Contract source record unavailable');
     return {source:'NUSD token and settlement deployed · issuance receipt-verified · 18 decimals',
       'source-scope':'Recorded constructor issuance: '+issuance.amountNusd+' NUSD. Verified at '+issuance.verifiedAt+'.'+
-        (contracts.some(contract=>contract.deployment.status==='native_active')?' Conversion and redemption are ACTIVE in the NUMINA native model; their chain deployment and external provider execution remain unverified.':'')+
+        (contracts.some(contract=>contract.deployment.status==='retained_attestation')?' Conversion and redemption have dated native attestations; current backing and chain deployment remain unverified.':'')+
         ' This dated record does not establish current transfer activity, external reserves, conversion or redemption.'};
   }
   if(record?.schema!=='numina.nusd.contract-record.v1'||record.status!=='compiled_not_deployed'||
@@ -157,28 +155,30 @@ export function assessFinancialStatus(data) {
   const mint=data.mint_workflow;
   const token=data.contract_record?.contracts?.find(contract=>contract.name==='NuminaUSD');
   if(mint!==undefined&&(mint?.schema!=='numina.nusd.mint-workflow.v1'||
-    !['implemented_unsigned_preparation_available','DEPLOYED_PAUSED_18D'].includes(mint.status)||
+    !['implemented_unsigned_preparation_available','HISTORICAL_CHAIN_DEPLOYMENT_OBSERVATION'].includes(mint.status)||
     mint.contract?.authorizationFunction!=='authorizeIssuance'||mint.contract?.mintFunction!=='mintAuthorized'||
     mint.contract?.sourceSha256!==token?.source?.sha256||mint.contract?.artifactSha256!==token?.artifact?.sha256||
     !['authorizeIssuance','mintAuthorized'].every(name=>token?.implemented_operations?.issuance?.includes(name))||
     mint.preparation?.signing!==false||mint.preparation?.broadcast!==false||
     mint.recipientEvidence?.readOnly!==true||mint.recipientEvidence?.providerAcceptanceInferred!==false||
     mint.recipientEvidence?.mintCompletionInferred!==false))throw Error('Mint workflow unavailable');
-  if(mint?.status==='DEPLOYED_PAUSED_18D'&&(mint.contract?.decimals!==18||mint.execution?.chainReceiptVerified!==true||
+  if(mint?.status==='HISTORICAL_CHAIN_DEPLOYMENT_OBSERVATION'&&(mint.contract?.decimals!==18||mint.mintStatusSource!=='HISTORICAL_CHAIN_RECEIPT'||
+    !Number.isFinite(Date.parse(mint.observedAt))||mint.currentChainStateVerified!==false||mint.execution?.historicalRecord!==true||
+    mint.execution?.currentChainStateVerified!==false||mint.execution?.chainReceiptVerified!==true||
     mint.execution.completedMintVerified!==true||mint.execution.contractAddress!==token?.deployment?.contract_address||
     mint.execution.contractAddress!==data.asset.contract||mint.execution.transactionHash!==token?.deployment?.transaction_hash||
     mint.execution.receipt?.status!=='0x1'))throw Error('Mint workflow unavailable');
   return {
     state: 'Current application status received',
     contract: data.asset.contract === null ? (data.contract_record?'No deployed address reported · compiled contract sources available':'No contract address reported') : data.asset.contract,
-    identity: data.contract_record?.status==='DEPLOYED_VERIFIED'?'Issued NUSD · deployed contract verified · 18 decimals':data.asset_verification.status.replaceAll('_', ' '),
-    activation: data.operator_activation?.status==='active_operator_confirmed'?'Active · operator confirmed; current chain activity not verified':'No operator activation declaration received',
-    purchase: data.operator_activation?.purchaseAvailability==='operator_confirmed'?'Available per operator confirmation · checkout connection not verified':'No token purchase declaration received',
+    identity: data.contract_record?.status==='DEPLOYED_VERIFIED'?'NUSD constructor issuance recorded · deployed contract receipt verified · 18 decimals':data.asset_verification.status.replaceAll('_', ' '),
+    activation: data.operator_activation?.status==='HISTORICAL_OPERATOR_ATTESTATION'?'Dated operator attestation · current chain activity unverified':data.operator_activation?.status==='active_operator_confirmed'?'Active · operator confirmed; current chain activity not verified':'No operator activation declaration received',
+    purchase: data.operator_activation?.status==='HISTORICAL_OPERATOR_ATTESTATION'?'Purchase availability unverified · checkout connection not verified':data.operator_activation?.purchaseAvailability==='operator_confirmed'?'Available per operator confirmation · checkout connection not verified':'No token purchase declaration received',
     backing: data.treasury_backing.status.replaceAll('_', ' '),
     pricing: data.service_pricing.status.replaceAll('_', ' '),
     ...Object.fromEntries(capabilities.map(name => [name,
       data.capabilities[name] ? 'Enabled by application' : 'Not enabled by application'])),
-    ...(mint&&!data.capabilities.mint?{mint:mint.status==='DEPLOYED_PAUSED_18D'?'Constructor issuance verified · 1,500T NUSD · 18 decimals · further minting not enabled by application':'Implemented in contract · unsigned preparation available · wallet execution unverified'}:{}),
+    ...(mint&&!data.capabilities.mint?{mint:mint.status==='HISTORICAL_CHAIN_DEPLOYMENT_OBSERVATION'?'September 18, 2026 receipt · 1,500T NUSD constructor mint · 18 decimals · current chain activity unverified':'Implemented in contract · unsigned preparation available · wallet execution unverified'}:{}),
     ...source,
     checked: 'Status response fetched ' + new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC') + '.'+
       (data.contract_record?.issuance?' Chain state was recorded at '+data.contract_record.issuance.verifiedAt+'; current transfer activity was not checked by this page.':''),

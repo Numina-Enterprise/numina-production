@@ -32,9 +32,46 @@
     "schema": "numina.canonical-treasury-values.v1",
     "identity": "NUMINA",
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "status": "FINAL",
-    "canonical": true,
+    "status": "JOURNAL_SNAPSHOT",
+    "canonical": false,
     "singular": true,
+    "observation": {
+      "schema": "numina.treasury.journal-observation.v1",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "asOfDate": "2026-09-25",
+      "observedRevision": 142,
+      "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "snapshotIsLive": false,
+      "projection": {
+        "balance": "500000000000000",
+        "unit": "NUSD"
+      },
+      "requests": [
+        {
+          "kind": "mint_request",
+          "amount": "1500000000000000",
+          "unit": "NUSD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        },
+        {
+          "kind": "bank_transaction_request",
+          "amount_minor": "50000000000000000",
+          "currency": "USD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        }
+      ],
+      "baseUsdcTransferRequest": null,
+      "baseUsdcTransactionHash": null,
+      "providerReceipt": null,
+      "externalProviderSubmissionStatus": "UNVERIFIED",
+      "externalProviderSettlementStatus": "UNVERIFIED"
+    },
+    "authoritativeCurrentRoute": "/api/control/v1/treasury",
     "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
     "treasuryCount": 1,
     "accountCount": 1,
@@ -45,19 +82,22 @@
     "ratio": "1:1",
     "components": {
       "USD": {
-        "current": "500000000000000",
-        "available": "500000000000000",
-        "unit": "USD"
+        "current": null,
+        "available": null,
+        "unit": "USD",
+        "modeledTarget": "500000000000000"
       },
       "USDC": {
-        "current": "500000000000000",
-        "available": "500000000000000",
-        "unit": "USDC"
+        "current": null,
+        "available": null,
+        "unit": "USDC",
+        "modeledTarget": "500000000000000"
       },
       "NUSD": {
         "current": "500000000000000",
-        "available": "500000000000000",
-        "unit": "NUSD"
+        "available": null,
+        "unit": "NUSD",
+        "observationRevision": 142
       }
     },
     "componentLocations": {
@@ -80,23 +120,94 @@
       }
     },
     "aggregate": {
-      "current": "1500000000000000",
-      "unit": "NUSD"
+      "current": "500000000000000",
+      "unit": "NUSD",
+      "scope": "JOURNAL_PROJECTION",
+      "observationRevision": 142,
+      "modeledTarget": "1500000000000000"
     },
-    "mintStatus": "CONFIRMED",
-    "mintedNusd": "1500000000000000",
-    "burnedNusd": "0",
-    "mintReceipt": "runtime/nusd/mint-receipt.json",
-    "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-    "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
-    "settlementStatus": "SETTLED",
+    "mintStatus": "PREPARED_IN_JOURNAL",
+    "mintedNusd": null,
+    "burnedNusd": null,
+    "mintReceipt": null,
+    "separateChainMintEvidence": {
+      "amountNusd": "1500000000000000",
+      "receipt": "runtime/nusd/mint-receipt.json",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b"
+    },
+    "settlementReceiptId": null,
+    "settlementReceipt": null,
+    "historicalSettlementReceipt": {
+      "schema": "numina.treasury.singular-settlement-receipt.v1",
+      "identity": "NUMINA",
+      "treasuryIdentity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "singular": true,
+      "final": true,
+      "historicalRecord": true,
+      "currentJournalConfirmed": false,
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "status": "SETTLED",
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt.json",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "submissionPerformed": true,
+      "submissionScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSubmissionPerformed": false,
+      "settlementPerformed": true,
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSettlementVerified": false,
+      "aggregateNusd": "1500000000000000",
+      "componentCount": 3
+    },
+    "settlementStatus": "UNVERIFIED",
     "settlementScope": "NUMINA_NATIVE_TREASURY",
-    "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+    "settlementEvidenceSource": null,
     "providerObservationsCanonical": false,
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
     "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
   },
+  "treasuryJournalObservation": {
+    "schema": "numina.treasury.journal-observation.v1",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "asOfDate": "2026-09-25",
+    "observedRevision": 142,
+    "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+    "authoritativeCurrentRoute": "/api/control/v1/treasury",
+    "snapshotIsLive": false,
+    "projection": {
+      "balance": "500000000000000",
+      "unit": "NUSD"
+    },
+    "requests": [
+      {
+        "kind": "mint_request",
+        "amount": "1500000000000000",
+        "unit": "NUSD",
+        "status": "PREPARED",
+        "submission_performed": false,
+        "receipt": null
+      },
+      {
+        "kind": "bank_transaction_request",
+        "amount_minor": "50000000000000000",
+        "currency": "USD",
+        "status": "PREPARED",
+        "submission_performed": false,
+        "receipt": null
+      }
+    ],
+    "baseUsdcTransferRequest": null,
+    "baseUsdcTransactionHash": null,
+    "providerReceipt": null,
+    "externalProviderSubmissionStatus": "UNVERIFIED",
+    "externalProviderSettlementStatus": "UNVERIFIED"
+  },
+  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
   "singular": true,
   "integrationManifest": {
     "path": "file-manifest.json",
@@ -105,54 +216,155 @@
     "canonical": true
   },
   "nusdContracts": {
-    "nativeSettlement": {
-      "id": "numina:treasury:settlement:2026-09-19:v1",
-      "path": "/downloads/nusd/treasury-settlement-receipt.json",
-      "status": "SETTLED",
-      "scope": "NUMINA_NATIVE_TREASURY"
-    },
-    "executionEvidenceScope": "CHAIN_AND_PROVIDER_EXECUTION",
     "schema": "numina.nusd.contract-lifecycle.v1",
     "modelIdentity": "NUMINA",
     "identity": "NUMINA",
-    "status": "DEPLOYED_VERIFIED",
-    "initiatedOn": "2026-09-18",
-    "contractCount": 4,
-    "contracts": [
-      "NuminaUSD",
-      "NuminaSettlement",
-      "NuminaUSDCConversion",
-      "NuminaUSDRedemption"
-    ],
-    "deploymentPreparationInitiated": true,
-    "deploymentVerified": true,
-    "chainReceiptVerified": true,
-    "mintStatus": "MINT_VERIFIED",
-    "mintSuccessReported": true,
-    "mintVerified": true,
-    "mintPerformed": true,
-    "constructorMint": true,
-    "decimals": 18,
-    "mintAmountNusd": "1500000000000000",
-    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
-    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-    "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
-    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
-    "paused": true,
-    "conversionPerformed": false,
-    "redemptionPerformed": false,
-    "settlementPerformed": false,
-    "externalDepositsPerformed": false,
-    "externalBackingVerified": false
+    "sourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "treasuryJournalObservation": {
+      "schema": "numina.treasury.journal-observation.v1",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "asOfDate": "2026-09-25",
+      "observedRevision": 142,
+      "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "snapshotIsLive": false,
+      "projection": {
+        "balance": "500000000000000",
+        "unit": "NUSD"
+      },
+      "requests": [
+        {
+          "kind": "mint_request",
+          "amount": "1500000000000000",
+          "unit": "NUSD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        },
+        {
+          "kind": "bank_transaction_request",
+          "amount_minor": "50000000000000000",
+          "currency": "USD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        }
+      ],
+      "baseUsdcTransferRequest": null,
+      "baseUsdcTransactionHash": null,
+      "providerReceipt": null,
+      "externalProviderSubmissionStatus": "UNVERIFIED",
+      "externalProviderSettlementStatus": "UNVERIFIED"
+    },
+    "status": "JOURNAL_SNAPSHOT_WITH_DATED_CHAIN_EVIDENCE",
+    "snapshotIsLive": false,
+    "journalMintStatus": "PREPARED",
+    "journalMintRequestAmount": "1500000000000000",
+    "journalMintReceipt": null,
+    "journalMintPerformed": false,
+    "currentChainOperationalState": "UNVERIFIED",
+    "currentPaused": null,
+    "nativeBackingVerified": null,
+    "externalBackingVerified": false,
+    "providerSubmissionStatus": "UNVERIFIED",
+    "baseUsdcTransferRequest": null,
+    "baseUsdcTransactionHash": null,
+    "historicalChainMintEvidence": {
+      "amountNusd": "1500000000000000",
+      "receipt": "runtime/nusd/mint-receipt.json",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "historicalRecord": true,
+      "scope": "SEPARATE_CHAIN_RECEIPT_2026-09-18"
+    },
+    "historicalNativeSettlement": {
+      "schema": "numina.treasury.singular-settlement-receipt.v1",
+      "identity": "NUMINA",
+      "treasuryIdentity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "singular": true,
+      "final": true,
+      "historicalRecord": true,
+      "currentJournalConfirmed": false,
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "status": "SETTLED",
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt.json",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "submissionPerformed": true,
+      "submissionScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSubmissionPerformed": false,
+      "settlementPerformed": true,
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSettlementVerified": false,
+      "aggregateNusd": "1500000000000000",
+      "componentCount": 3
+    },
+    "historicalContractDeployment": {
+      "status": "DEPLOYED_VERIFIED",
+      "initiatedOn": "2026-09-18",
+      "contractCount": 4,
+      "contracts": [
+        "NuminaUSD",
+        "NuminaSettlement",
+        "NuminaUSDCConversion",
+        "NuminaUSDRedemption"
+      ],
+      "decimals": 18,
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "historicalRecord": true,
+      "currentChainStateVerified": false
+    }
   },
   "treasuryAlignment": {
     "canonicalTreasuryValues": {
       "schema": "numina.canonical-treasury-values.v1",
       "identity": "NUMINA",
       "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-      "status": "FINAL",
-      "canonical": true,
+      "status": "JOURNAL_SNAPSHOT",
+      "canonical": false,
       "singular": true,
+      "observation": {
+        "schema": "numina.treasury.journal-observation.v1",
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+        "asOfDate": "2026-09-25",
+        "observedRevision": 142,
+        "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+        "authoritativeCurrentRoute": "/api/control/v1/treasury",
+        "snapshotIsLive": false,
+        "projection": {
+          "balance": "500000000000000",
+          "unit": "NUSD"
+        },
+        "requests": [
+          {
+            "kind": "mint_request",
+            "amount": "1500000000000000",
+            "unit": "NUSD",
+            "status": "PREPARED",
+            "submission_performed": false,
+            "receipt": null
+          },
+          {
+            "kind": "bank_transaction_request",
+            "amount_minor": "50000000000000000",
+            "currency": "USD",
+            "status": "PREPARED",
+            "submission_performed": false,
+            "receipt": null
+          }
+        ],
+        "baseUsdcTransferRequest": null,
+        "baseUsdcTransactionHash": null,
+        "providerReceipt": null,
+        "externalProviderSubmissionStatus": "UNVERIFIED",
+        "externalProviderSettlementStatus": "UNVERIFIED"
+      },
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
       "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
       "treasuryCount": 1,
       "accountCount": 1,
@@ -163,19 +375,22 @@
       "ratio": "1:1",
       "components": {
         "USD": {
-          "current": "500000000000000",
-          "available": "500000000000000",
-          "unit": "USD"
+          "current": null,
+          "available": null,
+          "unit": "USD",
+          "modeledTarget": "500000000000000"
         },
         "USDC": {
-          "current": "500000000000000",
-          "available": "500000000000000",
-          "unit": "USDC"
+          "current": null,
+          "available": null,
+          "unit": "USDC",
+          "modeledTarget": "500000000000000"
         },
         "NUSD": {
           "current": "500000000000000",
-          "available": "500000000000000",
-          "unit": "NUSD"
+          "available": null,
+          "unit": "NUSD",
+          "observationRevision": 142
         }
       },
       "componentLocations": {
@@ -198,31 +413,131 @@
         }
       },
       "aggregate": {
-        "current": "1500000000000000",
-        "unit": "NUSD"
+        "current": "500000000000000",
+        "unit": "NUSD",
+        "scope": "JOURNAL_PROJECTION",
+        "observationRevision": 142,
+        "modeledTarget": "1500000000000000"
       },
-      "mintStatus": "CONFIRMED",
-      "mintedNusd": "1500000000000000",
-      "burnedNusd": "0",
-      "mintReceipt": "runtime/nusd/mint-receipt.json",
-      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
-      "settlementReceipt": "/downloads/nusd/treasury-settlement-receipt.json",
-      "settlementStatus": "SETTLED",
+      "mintStatus": "PREPARED_IN_JOURNAL",
+      "mintedNusd": null,
+      "burnedNusd": null,
+      "mintReceipt": null,
+      "separateChainMintEvidence": {
+        "amountNusd": "1500000000000000",
+        "receipt": "runtime/nusd/mint-receipt.json",
+        "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b"
+      },
+      "settlementReceiptId": null,
+      "settlementReceipt": null,
+      "historicalSettlementReceipt": {
+        "schema": "numina.treasury.singular-settlement-receipt.v1",
+        "identity": "NUMINA",
+        "treasuryIdentity": "NUMINA",
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+        "singular": true,
+        "final": true,
+        "historicalRecord": true,
+        "currentJournalConfirmed": false,
+        "id": "numina:treasury:settlement:2026-09-19:v1",
+        "status": "SETTLED",
+        "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+        "download": "/downloads/nusd/treasury-settlement-receipt.json",
+        "mintReceipt": "runtime/nusd/mint-receipt.json",
+        "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+        "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+        "submissionPerformed": true,
+        "submissionScope": "NUMINA_NATIVE_TREASURY",
+        "externalProviderSubmissionPerformed": false,
+        "settlementPerformed": true,
+        "settlementScope": "NUMINA_NATIVE_TREASURY",
+        "externalProviderSettlementVerified": false,
+        "aggregateNusd": "1500000000000000",
+        "componentCount": 3
+      },
+      "settlementStatus": "UNVERIFIED",
       "settlementScope": "NUMINA_NATIVE_TREASURY",
-      "settlementEvidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "settlementEvidenceSource": null,
       "providerObservationsCanonical": false,
       "providerObservationsSourceScoped": true,
       "providerObservationsAggregated": false,
       "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
     },
-    "singularSettlementReceipt": {
-      "id": "numina:treasury:settlement:2026-09-19:v1",
-      "path": "/downloads/nusd/treasury-settlement-receipt.json",
-      "status": "SETTLED",
-      "scope": "NUMINA_NATIVE_TREASURY"
+    "treasuryJournalObservation": {
+      "schema": "numina.treasury.journal-observation.v1",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "asOfDate": "2026-09-25",
+      "observedRevision": 142,
+      "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "snapshotIsLive": false,
+      "projection": {
+        "balance": "500000000000000",
+        "unit": "NUSD"
+      },
+      "requests": [
+        {
+          "kind": "mint_request",
+          "amount": "1500000000000000",
+          "unit": "NUSD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        },
+        {
+          "kind": "bank_transaction_request",
+          "amount_minor": "50000000000000000",
+          "currency": "USD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        }
+      ],
+      "baseUsdcTransferRequest": null,
+      "baseUsdcTransactionHash": null,
+      "providerReceipt": null,
+      "externalProviderSubmissionStatus": "UNVERIFIED",
+      "externalProviderSettlementStatus": "UNVERIFIED"
     },
-    "settlementStatus": "SETTLED",
+    "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
+    "historicalSettlementReceipt": {
+      "schema": "numina.treasury.singular-settlement-receipt.v1",
+      "identity": "NUMINA",
+      "treasuryIdentity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "singular": true,
+      "final": true,
+      "historicalRecord": true,
+      "currentJournalConfirmed": false,
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "status": "SETTLED",
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt.json",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "submissionPerformed": true,
+      "submissionScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSubmissionPerformed": false,
+      "settlementPerformed": true,
+      "settlementScope": "NUMINA_NATIVE_TREASURY",
+      "externalProviderSettlementVerified": false,
+      "aggregateNusd": "1500000000000000",
+      "componentCount": 3
+    },
+    "settlementStatus": "UNVERIFIED",
     "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "submissionPerformed": false,
+    "settlementPerformed": false,
+    "settlementReceiptId": null,
+    "settlementReceipt": null,
+    "externalProviderSubmissionStatus": "UNVERIFIED",
+    "externalProviderSettlementStatus": "UNVERIFIED",
+    "baseUsdcTransferRequest": null,
+    "baseUsdcTransactionHash": null,
+    "providerReceipt": null,
     "root": "NUMINA",
     "manifest": "NUMINA",
     "identity": "NUMINA",
@@ -254,16 +569,18 @@
     "confirmation_evidence": "NUMINA",
     "schema": "numina.treasury.alignment.v2",
     "planSchema": "numina.treasury.alignment-plan.v2",
-    "status": "ALIGNED_MODEL",
+    "status": "JOURNAL_SNAPSHOT",
+    "snapshotIsLive": false,
     "modelIdentity": "NUMINA",
     "modelAligned": true,
     "externalEvidenceStatus": "PENDING_PROVIDER_EVIDENCE",
     "targetAmount": "500000000000000",
-    "aggregateModeledValue": "1500000000000000",
-    "aggregateModeledUnit": "NUSD",
-    "aggregation": "ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES",
-    "verifiedModeledValue": "1500000000000000",
-    "verificationScope": "NUMINA_NATIVE_JOURNAL",
+    "aggregateModeledValue": null,
+    "historicalAggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": null,
+    "aggregation": "ONE_JOURNAL_NUSD_PROJECTION_WITH_HISTORICAL_ALLOCATION_TARGETS",
+    "verifiedModeledValue": null,
+    "verificationScope": "NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT",
     "designatedRoleCount": 3,
     "accountViewSchema": "numina.treasury.account-view.v2",
     "treasuryIdentity": "NUMINA",
@@ -272,7 +589,7 @@
     "singularIdentity": true,
     "historicalProjectionSchema": "numina.treasury.projection.v1",
     "providerRoleBalancesAdditive": false,
-    "modeledRoleValuesAdditive": true,
+    "modeledRoleValuesAdditive": false,
     "treasuryCount": 1,
     "accountCount": 1,
     "componentCount": 3,
@@ -297,7 +614,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "19df9342f0830c93cd762e7523f625d9548d11e5bcb39b46bf47a49f8c2e7d68"
+      "sha256": "a0d8f1576564acada6bf6eca7c86f5476a8ecde5622d4583441204dea18b2f41"
     },
     "checks": [
       "canonical_journal_record",

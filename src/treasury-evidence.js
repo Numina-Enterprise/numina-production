@@ -5,7 +5,7 @@ import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT,TREASURY_PROVIDER_R
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {frontierState,frontierSign} from './frontier.js';
 import {canonicalTreasuryReference} from './treasury-alignment.js';
-import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
+import {NUMINA_NATIVE_TREASURY_SYNC,journalTreasuryMetadata} from '../public/treasury-connection-model.js';
 import {isTreasuryMinorInteger} from '../public/treasury-amount.js';
 
 export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
@@ -37,7 +37,13 @@ function treasuryProviderRecords(observation){
 }
 
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
-  const source=structuredClone({nativeSettlement:{sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,receipt:NUMINA_NATIVE_TREASURY_SYNC.singularSettlementReceipt,canonicalTreasuryValues:NUMINA_NATIVE_TREASURY_SYNC.canonicalTreasuryValues},nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
+  const journal=journalTreasuryMetadata(treasury?.projection);
+  const currentReceipt=journal.singularSettlementReceiptId?{id:journal.singularSettlementReceiptId,path:journal.singularSettlementReceipt,sourceOfRecord:journal.sourceOfRecord,status:journal.settlementStatus}:null;
+  const nativeSettlement={sourceOfRecord:journal.sourceOfRecord,status:journal.settlementStatus,submissionPerformed:journal.submissionPerformed,settlementPerformed:journal.settlementPerformed,
+    receipt:currentReceipt,currentJournalProjection:{balance:journal.journalProjectionBalance,unit:journal.journalProjectionUnit,revision:treasury?.revision??null,head:treasury?.head??null,eventId:treasury?.projection?.last_event_id??null},
+    externalProviderSubmissionStatus:journal.externalProviderSubmissionStatus,externalProviderSettlementStatus:journal.externalProviderSettlementStatus,
+    historicalReceipt:NUMINA_NATIVE_TREASURY_SYNC.singularSettlementReceipt,canonicalTreasuryValues:NUMINA_NATIVE_TREASURY_SYNC.canonicalTreasuryValues};
+  const source=structuredClone({nativeSettlement,nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
     fundingPlan:frontier.fundingPlan??null,accountReferences:frontier.accounts??[],providerObservation,supportingDocuments});
   const records={schema:'numina.treasury.record-sources.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,
       nativeTreasury:{source:'/source/nativeTreasury',issuer:'NUMINA',verification:{status:source.nativeTreasury.status==='READY'&&source.nativeTreasury.projection?.verification==='VERIFIED'?'VERIFIED':'NOT_VERIFIED',scope:'Numina-native model and journal integrity'}},
@@ -65,7 +71,7 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
         {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
         {id:'provider_acceptance',status:'NOT_VERIFIED',observationRoute:TREASURY_PROVIDER_ROUTES,description:'Provider acceptance of the source asset, network and destination; read current provider routes separately'}],
       settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
-  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA Native Treasury with provider identity NUMINA; Bank and Stripe are location/transport rails',
+  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:journal.aggregateModeledValue,aggregateModeledUnit:journal.aggregateModeledUnit,scope:'One singular NUMINA Native Treasury with provider identity NUMINA; Bank and Stripe are location/transport rails',
     issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,
     evidenceHash:await controlHash(source),nativeSettlement:source.nativeSettlement,source,records,reconciliation,
     fundingVerification:{scope:'EXTERNAL_PROVIDER_FUNDING',actual_funding:false,status:'NOT_VERIFIED',settlementStatus:'NOT_VERIFIED',settlementPerformed:false,submissionPerformed:false,

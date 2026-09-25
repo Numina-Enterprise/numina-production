@@ -1,0 +1,12 @@
+const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
+ schema:'numina.nusd.mint-workflow.v1',
+ modelIdentity:'NUMINA',identity:'NUMINA',status:'FINAL_MINTED_18D',implemented:true,completed:true,mintSuccessReported:true,mintStatusSource:'FINAL_18_DECIMAL_DEPLOYMENT',
+ contract:{name:'NuminaUSD',decimals:18,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',paused:false,transferState:'ENABLED',sourceSha256:NUSD_CURRENT_CONTRACTS[0].source.sha256,artifactSha256:NUSD_CURRENT_CONTRACTS[0].artifact.sha256},
+ nativeJournal:{route:'/api/control/v1/treasury',objective:'treasury.mint.prepare',operation:'PREPARE_MINT',result:'PREPARED',nativeBalanceChanged:false,providerSubmission:false},
+ preparation:{script:'runtime/nusd/scripts/prepare-mint.mjs',requestSchema:'numina.nusd.mint.request.v1',outputSchema:'numina.nusd.unsigned-mint-review-draft.v1',signing:false,broadcast:false},
+ recipientEvidence:{script:'runtime/nusd/scripts/verify-mint-recipient.mjs',requestSchema:'numina.nusd.recipient-evidence-request.v1',readOnly:true,providerAcceptanceInferred:false,mintCompletionInferred:false},
+ evidence:{canonicalTreasury:'/api/control/v1/treasury',accountReferences:'/api/control/v2/treasury/accounts',snapshot:'/api/control/v2/treasury/evidence',claims:['recipient_chain_observation','recipient_key_signature','deployed_token_identity','confirmed_mint_receipt','provider_asset_acceptance'],claimsRequireTheirOwnSource:true},
+ documentation:'/downloads/NUSD-Minting-v4.md',
+ execution:{mintStatus:'FINAL',mintSuccessReported:true,contractDeploymentVerified:true,completedMintVerified:true,chainReceiptVerified:true,providerAcceptanceVerified:false,transactionHash:NUSD_CONTRACT_RECORD.mint_receipt.transactionHash,contractAddress:NUSD_CONTRACT_RECORD.mint_receipt.tokenAddress,receipt:{status:NUSD_CONTRACT_RECORD.mint_receipt.receiptStatus,path:NUSD_CONTRACT_RECORD.mint_receipt.path}},
+ scope:'The existing 18-decimal NuminaUSD deployment is canonical, the constructor mint is FINAL, and transfers are enabled. Constructor signing and wallet deployment data remain retained without creating a second NUSD deployment.'
+});
