@@ -4,9 +4,9 @@
   "version": "4.0.0",
   "revision": "numina-root-v4.0.0",
   "archive": "numina-integration-kit-v4.0.0.zip",
-  "bytes": 112620,
-  "sha256": "ace2e1e44e87320074ba94a5f7c61e8c2b014cf8296b630af271d2a69052ddf3",
-  "packagedAtUtc": "2026-09-25T21:35:38.254Z",
+  "bytes": 112624,
+  "sha256": "cee4492231579e8029ffaa2c3d316c1d79d371e03ed6af51f74b7ffa0c946d57",
+  "packagedAtUtc": "2026-09-25T21:38:11.043Z",
   "sourceFiles": 56,
   "testsRun": false,
   "defaultTools": [
@@ -19,7 +19,7 @@
     "numina_service_catalog"
   ],
   "applicationManifest": "https://numinalabs.xyz/v4/release/manifest",
-  "manifestSha256": "ebd23e4ad9ac93c2cff870b616c2680f0e5c368f520df88a11a3746482e02079",
+  "manifestSha256": "c529837badbaf526e2af1c405f87d027b8bf25c484547c1e5a42cfa5def625f0",
   "canonicalTreasuryValues": {
     "schema": "numina.canonical-treasury-values.v1",
     "identity": "NUMINA",
