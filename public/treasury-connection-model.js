@@ -70,7 +70,23 @@ export const NUMINA_CANONICAL_TREASURY_VALUES = Object.freeze({
   }),
   aggregate:Object.freeze({current:'500000000000000',unit:'NUSD',scope:'JOURNAL_PROJECTION',observationRevision:142,modeledTarget:'1500000000000000'}),
   mintStatus:'PREPARED_IN_JOURNAL',mintedNusd:null,burnedNusd:null,mintReceipt:null,
-  separateChainMintEvidence:Object.freeze({amountNusd:'1500000000000000',receipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,transactionHash:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintTransactionHash}),
+  separateChainMintEvidence:Object.freeze({
+    identity:'NUMINA',sourceOfRecord:'NUMINA',issuanceType:'constructor_mint',
+    status:'CONFIRMED_CONSTRUCTOR_MINT',scope:'NUMINA_CHAIN_CONSTRUCTOR_ISSUANCE',
+    historicalRecord:true,observedAt:'2026-09-18T15:35:24.884Z',currentChainStateVerified:false,
+    chainId:'962421430',tokenAddress:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',
+    amountNusd:'1500000000000000',decimals:18,baseUnits:'1500000000000000000000000000000000',
+    transactionHash:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintTransactionHash,
+    blockNumber:'51725',receiptStatus:'0x1',finalConfirmations:25,
+    receipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT.mintReceipt,download:'/downloads/nusd/mint-receipt.json',
+    deploymentReceipt:'runtime/nusd/deployment-receipt.json',deploymentDownload:'/downloads/nusd/deployment-receipt.json',
+    settlementContractDeployment:Object.freeze({
+      scope:'CONTRACT_DEPLOYMENT',blockNumber:'51726',receiptStatus:'0x1',
+      transactionHash:'0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b',
+      contractAddress:'0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0'
+    }),
+    currentJournalProjectionInferred:false,providerBackingVerified:false,providerSettlementVerified:false,externalDepositVerified:false
+  }),
   settlementReceiptId:null,settlementReceipt:null,historicalSettlementReceipt:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,
   settlementStatus:'UNVERIFIED',settlementScope:'NUMINA_NATIVE_TREASURY',settlementEvidenceSource:null,
   providerObservationsCanonical:false,providerObservationsSourceScoped:true,providerObservationsAggregated:false,

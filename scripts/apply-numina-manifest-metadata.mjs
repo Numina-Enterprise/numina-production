@@ -22,6 +22,43 @@ const currentPaths=[
   'integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
 
+// Bind the shared constructor-mint projection to both retained receipts before
+// emitting metadata. The later settlement-contract deployment is a distinct event.
+const constructorMint=values.separateChainMintEvidence;
+const mint=json(constructorMint.receipt),deployment=json(constructorMint.deploymentReceipt);
+for(const key of ['identity','issuanceType','observedAt','chainId','tokenAddress','amountNusd','decimals','baseUnits','transactionHash','blockNumber','receiptStatus','finalConfirmations']){
+  assert.equal(constructorMint[key],mint[key],'Constructor mint '+key);
+}
+assert.equal(mint.status,'FINAL','Constructor mint finality');
+assert.equal(deployment.finality.status,'FINAL','Deployment finality');
+assert.equal(mint.sourceDeploymentReceipt,constructorMint.deploymentReceipt,'Constructor mint deployment source');
+assert.equal(deployment.chainId,constructorMint.chainId,'Deployment chain');
+assert.equal(deployment.token.address,constructorMint.tokenAddress,'Deployment token');
+assert.equal(deployment.token.transactionHash,constructorMint.transactionHash,'Deployment transaction');
+assert.equal(deployment.issuance.constructorMint,true,'Constructor issuance');
+for(const key of ['amountNusd','decimals','baseUnits'])assert.equal(deployment.issuance[key],constructorMint[key],'Deployment issuance '+key);
+for(const chainReceipt of [mint.chainReceipt,deployment.token.receipt]){
+  assert.equal(chainReceipt.transactionHash,constructorMint.transactionHash,'Constructor receipt transaction');
+  assert.equal(chainReceipt.contractAddress.toLowerCase(),constructorMint.tokenAddress.toLowerCase(),'Constructor receipt contract');
+  assert.equal(chainReceipt.blockNumberDecimal,constructorMint.blockNumber,'Constructor receipt decimal block');
+  assert.equal(BigInt(chainReceipt.blockNumber).toString(),constructorMint.blockNumber,'Constructor receipt hex block');
+  assert.equal(chainReceipt.status,constructorMint.receiptStatus,'Constructor receipt status');
+}
+assert.equal(deployment.token.finalConfirmations,constructorMint.finalConfirmations,'Constructor mint confirmations');
+const settlementDeployment=constructorMint.settlementContractDeployment;
+assert.equal(settlementDeployment.scope,'CONTRACT_DEPLOYMENT');
+assert.equal(settlementDeployment.transactionHash,deployment.settlement.transactionHash,'Settlement deployment transaction');
+assert.equal(settlementDeployment.contractAddress,deployment.settlement.address,'Settlement deployment contract');
+assert.equal(settlementDeployment.blockNumber,deployment.settlement.receipt.blockNumberDecimal,'Settlement deployment block');
+assert.equal(settlementDeployment.blockNumber,BigInt(deployment.settlement.receipt.blockNumber).toString(),'Settlement deployment hex block');
+assert.equal(settlementDeployment.receiptStatus,deployment.settlement.receipt.status,'Settlement deployment status');
+assert.notEqual(settlementDeployment.transactionHash,constructorMint.transactionHash,'Distinct deployment transactions');
+assert.notEqual(settlementDeployment.blockNumber,constructorMint.blockNumber,'Distinct deployment blocks');
+assert.equal(constructorMint.scope,'NUMINA_CHAIN_CONSTRUCTOR_ISSUANCE');
+for(const key of ['currentChainStateVerified','currentJournalProjectionInferred','providerBackingVerified','providerSettlementVerified','externalDepositVerified']){
+  assert.equal(constructorMint[key],false,'Constructor receipt does not establish '+key);
+}
+
 const native=json('runtime/nusd/treasury-settlement-receipt.json');
 for(const path of ['runtime/nusd/treasury-settlement-receipt.json','docs/nusd/treasury-settlement-receipt.json',receipt.path]){
   const record=json(path);
@@ -140,7 +177,7 @@ if(finalBuild.nusd){
     nativeBackingVerified:null,providerReserveVerified:false,
     usdcConversion:{status:'UNVERIFIED',backingVerified:null,providerLiquidityVerified:false},
     usdRedemption:{status:'UNVERIFIED',backingVerified:null,providerLiquidityVerified:false},
-    historicalChainMintEvidence:{chainId:finalBuild.historicalNusdRelease.chainId,tokenAddress:finalBuild.historicalNusdRelease.token?.address??null,transactionHash:finalBuild.historicalNusdRelease.token?.transactionHash??null,amountNusd:finalBuild.historicalNusdRelease.amountNusd,receipt:finalBuild.historicalNusdRelease.mintReceipt?.sourcePath??null,scope:'SEPARATE_CHAIN_EVIDENCE'},
+    historicalChainMintEvidence:structuredClone(constructorMint),
     historicalReleaseReference:'historicalNusdRelease'
   };
 }

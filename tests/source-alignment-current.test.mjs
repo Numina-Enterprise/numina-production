@@ -26,6 +26,12 @@ test('generated source alignment separates current treasury journal from dated N
   assert.equal(architecture.mint_request.submission_performed,false);
   assert.equal(architecture.historical_mint_event.status,'HISTORICAL_CHAIN_RECEIPT');
   assert.equal(architecture.historical_mint_event.transaction_hash,'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b');
+  const retainedMint=JSON.parse(readFileSync(new URL('../runtime/nusd/mint-receipt.json',import.meta.url)));
+  assert.equal(architecture.historical_mint_event.block_number,retainedMint.blockNumber);
+  assert.equal(architecture.historical_mint_event.receipt_status,retainedMint.receiptStatus);
+  assert.equal(architecture.historical_mint_event.chain_id,retainedMint.chainId);
+  assert.equal(architecture.historical_mint_event.amount_nusd,retainedMint.amountNusd);
+  assert.equal(architecture.historical_mint_event.settlement_contract_deployment.blockNumber,'51726');
   assert.equal(architecture.historical_mint_event.historicalRecord,true);
   assert.equal(architecture.historical_mint_event.currentChainStateVerified,false);
   assert.equal(architecture.numinaMetadata.transfersEnabled,null);

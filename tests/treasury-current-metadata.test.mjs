@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {NUMINA_TREASURY_JOURNAL_OBSERVATION as observation} from '../public/treasury-connection-model.js';
+import {NUMINA_TREASURY_JOURNAL_OBSERVATION as observation,NUMINA_CANONICAL_TREASURY_VALUES as values} from '../public/treasury-connection-model.js';
+import {NUSD_MINT_WORKFLOW,NUSD_POLICY,nusdHttp} from '../src/nusd-http.js';
 
 const root=new URL('../',import.meta.url);
 const read=path=>readFileSync(new URL(path,root));
@@ -15,6 +16,49 @@ const currentFiles=[
   'integrations/numina/package.json','integrations/numina/distribution.json',
   'integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
+
+test('constructor mint metadata identifies block 51725 independently of settlement deployment and journal preparation',async()=>{
+  const evidence=values.separateChainMintEvidence;
+  const mint=json('runtime/nusd/mint-receipt.json'),deployment=json('runtime/nusd/deployment-receipt.json');
+  for(const key of ['identity','issuanceType','observedAt','chainId','tokenAddress','amountNusd','decimals','baseUnits','transactionHash','blockNumber','receiptStatus','finalConfirmations']){
+    assert.equal(evidence[key],mint[key],key);
+  }
+  assert.equal(evidence.blockNumber,'51725');
+  assert.equal(evidence.blockNumber,BigInt(deployment.token.receipt.blockNumber).toString());
+  assert.equal(evidence.chainId,deployment.chainId);
+  assert.equal(evidence.tokenAddress,deployment.token.address);
+  assert.equal(evidence.transactionHash,deployment.token.transactionHash);
+  assert.equal(evidence.receiptStatus,deployment.token.receipt.status);
+  assert.equal(BigInt(evidence.amountNusd)*10n**BigInt(evidence.decimals),BigInt(deployment.issuance.baseUnits));
+  assert.equal(evidence.settlementContractDeployment.blockNumber,'51726');
+  assert.equal(evidence.settlementContractDeployment.blockNumber,BigInt(deployment.settlement.receipt.blockNumber).toString());
+  assert.equal(evidence.settlementContractDeployment.transactionHash,deployment.settlement.transactionHash);
+  assert.equal(evidence.settlementContractDeployment.contractAddress,deployment.settlement.address);
+  assert.equal(evidence.settlementContractDeployment.receiptStatus,deployment.settlement.receipt.status);
+  assert.notEqual(evidence.transactionHash,evidence.settlementContractDeployment.transactionHash);
+  assert.equal(evidence.scope,'NUMINA_CHAIN_CONSTRUCTOR_ISSUANCE');
+  assert.equal(evidence.settlementContractDeployment.scope,'CONTRACT_DEPLOYMENT');
+  for(const key of ['currentChainStateVerified','currentJournalProjectionInferred','providerBackingVerified','providerSettlementVerified','externalDepositVerified'])assert.equal(evidence[key],false,key);
+  for(const route of ['mint-workflow','status']){
+    const response=await nusdHttp(new Request('https://numina.test/api/nusd/v1/'+route));
+    const body=await response.json();
+    assert.equal(response.status,200);
+    const workflow=route==='status'?body.mint_workflow:body;
+    assert.deepEqual(workflow.execution.constructorMintEvidence,evidence);
+    assert.equal(workflow.execution.chainId,evidence.chainId);
+    assert.equal(workflow.execution.amountNusd,evidence.amountNusd);
+    assert.equal(workflow.execution.receipt.blockNumber,evidence.blockNumber);
+    assert.equal(workflow.nativeJournal.result,'PREPARED');
+    assert.equal(workflow.nativeJournal.nativeBalanceChanged,false);
+    assert.equal(workflow.nativeJournal.providerSubmission,false);
+  }
+  assert.deepEqual(NUSD_POLICY.asset_verification.constructorMintEvidence,evidence);
+  assert.deepEqual(NUSD_MINT_WORKFLOW.execution.constructorMintEvidence,evidence);
+  assert.equal(values.aggregate.current,observation.projection.balance);
+  assert.equal(values.mintStatus,'PREPARED_IN_JOURNAL');
+  assert.equal(values.settlementStatus,'UNVERIFIED');
+  assert.equal(observation.baseUsdcTransferRequest,null);
+});
 
 test('maintained metadata stays anchored to the dated journal observation, without provider balances',()=>{
   assert.equal(observation.observedRevision,142);

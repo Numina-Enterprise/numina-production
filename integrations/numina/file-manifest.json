@@ -132,9 +132,38 @@
     "burnedNusd": null,
     "mintReceipt": null,
     "separateChainMintEvidence": {
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA",
+      "issuanceType": "constructor_mint",
+      "status": "CONFIRMED_CONSTRUCTOR_MINT",
+      "scope": "NUMINA_CHAIN_CONSTRUCTOR_ISSUANCE",
+      "historicalRecord": true,
+      "observedAt": "2026-09-18T15:35:24.884Z",
+      "currentChainStateVerified": false,
+      "chainId": "962421430",
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
       "amountNusd": "1500000000000000",
+      "decimals": 18,
+      "baseUnits": "1500000000000000000000000000000000",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "blockNumber": "51725",
+      "receiptStatus": "0x1",
+      "finalConfirmations": 25,
       "receipt": "runtime/nusd/mint-receipt.json",
-      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b"
+      "download": "/downloads/nusd/mint-receipt.json",
+      "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+      "deploymentDownload": "/downloads/nusd/deployment-receipt.json",
+      "settlementContractDeployment": {
+        "scope": "CONTRACT_DEPLOYMENT",
+        "blockNumber": "51726",
+        "receiptStatus": "0x1",
+        "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "contractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
+      },
+      "currentJournalProjectionInferred": false,
+      "providerBackingVerified": false,
+      "providerSettlementVerified": false,
+      "externalDepositVerified": false
     },
     "settlementReceiptId": null,
     "settlementReceipt": null,
@@ -271,11 +300,38 @@
     "baseUsdcTransferRequest": null,
     "baseUsdcTransactionHash": null,
     "historicalChainMintEvidence": {
-      "amountNusd": "1500000000000000",
-      "receipt": "runtime/nusd/mint-receipt.json",
-      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA",
+      "issuanceType": "constructor_mint",
+      "status": "CONFIRMED_CONSTRUCTOR_MINT",
+      "scope": "SEPARATE_CHAIN_RECEIPT_2026-09-18",
       "historicalRecord": true,
-      "scope": "SEPARATE_CHAIN_RECEIPT_2026-09-18"
+      "observedAt": "2026-09-18T15:35:24.884Z",
+      "currentChainStateVerified": false,
+      "chainId": "962421430",
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "amountNusd": "1500000000000000",
+      "decimals": 18,
+      "baseUnits": "1500000000000000000000000000000000",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "blockNumber": "51725",
+      "receiptStatus": "0x1",
+      "finalConfirmations": 25,
+      "receipt": "runtime/nusd/mint-receipt.json",
+      "download": "/downloads/nusd/mint-receipt.json",
+      "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+      "deploymentDownload": "/downloads/nusd/deployment-receipt.json",
+      "settlementContractDeployment": {
+        "scope": "CONTRACT_DEPLOYMENT",
+        "blockNumber": "51726",
+        "receiptStatus": "0x1",
+        "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "contractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
+      },
+      "currentJournalProjectionInferred": false,
+      "providerBackingVerified": false,
+      "providerSettlementVerified": false,
+      "externalDepositVerified": false
     },
     "historicalNativeSettlement": {
       "schema": "numina.treasury.singular-settlement-receipt.v1",
@@ -429,9 +485,38 @@
       "burnedNusd": null,
       "mintReceipt": null,
       "separateChainMintEvidence": {
+        "identity": "NUMINA",
+        "sourceOfRecord": "NUMINA",
+        "issuanceType": "constructor_mint",
+        "status": "CONFIRMED_CONSTRUCTOR_MINT",
+        "scope": "NUMINA_CHAIN_CONSTRUCTOR_ISSUANCE",
+        "historicalRecord": true,
+        "observedAt": "2026-09-18T15:35:24.884Z",
+        "currentChainStateVerified": false,
+        "chainId": "962421430",
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
         "amountNusd": "1500000000000000",
+        "decimals": 18,
+        "baseUnits": "1500000000000000000000000000000000",
+        "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "blockNumber": "51725",
+        "receiptStatus": "0x1",
+        "finalConfirmations": 25,
         "receipt": "runtime/nusd/mint-receipt.json",
-        "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b"
+        "download": "/downloads/nusd/mint-receipt.json",
+        "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+        "deploymentDownload": "/downloads/nusd/deployment-receipt.json",
+        "settlementContractDeployment": {
+          "scope": "CONTRACT_DEPLOYMENT",
+          "blockNumber": "51726",
+          "receiptStatus": "0x1",
+          "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+          "contractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
+        },
+        "currentJournalProjectionInferred": false,
+        "providerBackingVerified": false,
+        "providerSettlementVerified": false,
+        "externalDepositVerified": false
       },
       "settlementReceiptId": null,
       "settlementReceipt": null,
@@ -682,8 +767,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 26847,
-      "sha256": "12be2f04a3e010333fb8db108f6714cb5d09ecf84136240f0b7f5d80f4516c3f"
+      "bytes": 30661,
+      "sha256": "058ad3df59906877f54ea1f2141ddb717f23e4fa6a1b01effa22e301ff06e0c1"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -762,8 +847,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 7027,
-      "sha256": "166452c228efd6eb422c4feb7ebf8dc6a90c8e567cd53b3ad0f91b1ea61800fe"
+      "bytes": 8307,
+      "sha256": "18580e042e8b485a1bf2726ed70b0ce3b943bd32aca87607b852a675a3678416"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -887,8 +972,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 24251,
-      "sha256": "694f96c513fff2b9c95517317ea8c89978a11de068878a3722d57b7b5a969a0c"
+      "bytes": 29207,
+      "sha256": "8e0c47ac45b40664d546c2b68b8b044b7d6d30ef52c7035c53d90a7856db21a2"
     }
   ]
 }
