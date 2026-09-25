@@ -63,6 +63,7 @@ const overlays=[
  ['public/business-core.json','client/business-core.json'],
  ['docs/NUMINA-FINAL-BUILD.json','client/downloads/NUMINA-FINAL-BUILD.json'],
  ['docs/Treasury-Evidence-v3.md','client/downloads/Treasury-Evidence-v3.md'],
+ ['docs/NUSD-Minting-v4.md','client/downloads/NUSD-Minting-v4.md'],
  ['docs/treasury-client-alignment.md','client/downloads/treasury-client-alignment.md'],
  ['docs/native-package-record-v4.json','client/downloads/native-package-record-v4.json'],
  ['docs/numina-os-4.0.0-ios-source.zip','client/downloads/numina-os-4.0.0-ios-source.zip'],
