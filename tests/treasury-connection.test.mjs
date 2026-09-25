@@ -5,14 +5,21 @@ import {readConnectedTreasury,verifiedUsdcRoutes} from '../public/treasury-conne
 import {readPrivateBankRoute} from '../src/bank-route-config.js';
 import handler from '../api/status.js';
 const routes={schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',transfer_execution:false,submission_performed:false,receipt:null,canonical_treasury:model.nativeJournal,observed_at:'2026-09-18T00:00:00Z',routes:[{currency:'usdc',settlement_currency:'usdc',status:'active',provider_reported_active:true,network:'base',address:'0x'+'1'.repeat(40),memo:null}]};
-test('one singular 1500T treasury has three additive 500T holdings and no provider funding claims',()=>{
+test('one journal projection keeps three historical targets separate from provider balances',()=>{
  assert.equal(model.singular,true);assert.equal(model.balanceCount,1);
- assert.equal(model.aggregateModeledValue,'1500000000000000');
- assert.equal(model.modeledAllocationsAdditive,true);
+ assert.equal(model.aggregateModeledValue,null);
+ assert.equal(model.historicalAggregateModeledValue,'1500000000000000');
+ assert.equal(model.modeledAllocationsAdditive,false);
  assert.ok(model.allocations.every(value=>value.amount==='500000000000000'));
- assert.ok(model.allocations.every(value=>value.providerBalanceVerified===false));assert.equal(model.externalBalancesAggregated,false);
- assert.equal(NUSD_OPERATOR_ACTIVATION.status,'active_verified');assert.equal(NUSD_OPERATOR_ACTIVATION.evidenceType,'verified_live_state');assert.equal(NUSD_OPERATOR_ACTIVATION.currentChainActivityVerified,true);assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);assert.equal(NUSD_OPERATOR_ACTIVATION.providerAcceptanceVerified,false);
+ assert.equal(model.softwareBalanceModel.bankUsd.current,null);
+ assert.equal(model.softwareBalanceModel.stripeUsdc.available,null);
+ assert.equal(model.settlementStatus,'UNVERIFIED');assert.equal(model.submissionPerformed,false);
+ assert.ok(model.allocations.every(value=>value.providerBalanceVerified===false));
+ assert.equal(model.externalBalancesAggregated,false);
+ assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);
+ assert.equal(NUSD_OPERATOR_ACTIVATION.providerAcceptanceVerified,false);
 });
+
 test('provider route display preserves exact USDC destination and rejects invalid network/address',()=>{
  assert.equal(verifiedUsdcRoutes(routes)[0].address,routes.routes[0].address);
  for(const mutate of [r=>r.routes[0].network='bitcoin',r=>r.routes[0].address='0x1',r=>r.provider='unknown']){

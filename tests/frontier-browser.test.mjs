@@ -37,7 +37,7 @@ function harness(view,override=()=>null,adjustmentClient=null){
     const custom=override(path,options);if(custom)return await custom;
     let body;
     if(path.endsWith('/treasury/accounts'))body=view;
-    else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'}};
+    else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'},currentJournal:{revision:142,balance:'500000000000000',unit:'NUSD',settlementStatus:'UNVERIFIED',externalProviderSubmissionStatus:'UNVERIFIED'}};
     else if(path.endsWith('/stripe-treasury'))return Response.json({error:'Unavailable'},{status:503});
     else if(path.endsWith('/state'))body={revision:1,requests:[]};
     else if(path==='/v4/release/manifest')body=applicationManifest();
@@ -62,6 +62,30 @@ test('frontier displays only current application identities and refreshes withou
     assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
     old.resolve(Response.json(applicationManifest()));await settled();
     assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
+  }finally{h.close();}
+});
+
+test('frontier labels the retained policy separately from current journal settlement',async()=>{
+  const view=await accountView(),h=harness(view);
+  try{
+    await settled();
+    const text=h.get('#treasury-policy').textContent;
+    assert.match(text,/Treasury policy catalog/);
+    assert.match(text,/Current Numina journal · revision 142 · 500000000000000 NUSD · internal settlement UNVERIFIED · provider submission UNVERIFIED/);
+    assert.match(text,/Owner policy catalog entry recorded/);
+  }finally{h.close();}
+});
+
+test('frontier offers no V3 recording action without matching journal settlement',async()=>{
+  const view=await accountView(),h=harness(view,path=>path.endsWith('/treasury/policy')?Response.json({
+    activation:{status:'AWAITING_OWNER_RECORD'},policyHash:'retained-hash',policy:{id:'retained-v3'},
+    currentJournal:{revision:142,balance:'500000000000000',unit:'NUSD',settlementStatus:'UNVERIFIED',externalProviderSubmissionStatus:'UNVERIFIED'}
+  }):null);
+  try{
+    await settled();
+    const policy=h.get('#treasury-policy');
+    assert.match(policy.textContent,/current journal must confirm matching aggregate settlement/i);
+    assert.equal(policy.children.some(child=>typeof child.onclick==='function'),false);
   }finally{h.close();}
 });
 

@@ -1,0 +1,35 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+
+test('generated source alignment separates current treasury journal from dated NUSD chain issuance',()=>{
+  const source=JSON.parse(readFileSync(new URL('../dist/client/source-alignment.json',import.meta.url)));
+  const architecture=source.requiredArchitecture;
+  assert.equal(source.singularSettlementReceipt,undefined);
+  assert.equal(source.historicalSettlementReceipt.historicalRecord,true);
+  assert.equal(source.historicalSettlementReceipt.currentJournalConfirmed,false);
+  assert.deepEqual(architecture.treasury.canonicalValues,architecture.canonicalTreasuryValues);
+  assert.deepEqual(architecture.numinaMetadata.canonicalTreasuryValues,architecture.canonicalTreasuryValues);
+  assert.equal(architecture.canonicalTreasuryValues.status,'JOURNAL_SNAPSHOT');
+  assert.equal(architecture.treasury.software_values.NUSD,'500000000000000');
+  assert.equal(architecture.treasury.software_values.USDC,null);
+  assert.equal(architecture.treasury.software_values.USD,null);
+  assert.equal(architecture.treasury.software_values.aggregateNUSD,'500000000000000');
+  assert.equal(architecture.treasury.aggregate_modeled_value,null);
+  assert.equal(architecture.treasury.modeled_role_values_additive,false);
+  assert.equal(architecture.treasury.software_transfer,null);
+  assert.equal(architecture.treasury.historical_software_transfer.currentJournalConfirmed,false);
+  assert.equal(architecture.treasury.provider_verification,null);
+  assert.equal(architecture.mint_event,null);
+  assert.equal(architecture.mintStatus,'PREPARED_IN_JOURNAL');
+  assert.equal(architecture.mint_request.status,'PREPARED');
+  assert.equal(architecture.mint_request.submission_performed,false);
+  assert.equal(architecture.historical_mint_event.status,'HISTORICAL_CHAIN_RECEIPT');
+  assert.equal(architecture.historical_mint_event.transaction_hash,'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b');
+  assert.equal(architecture.historical_mint_event.historicalRecord,true);
+  assert.equal(architecture.historical_mint_event.currentChainStateVerified,false);
+  assert.equal(architecture.numinaMetadata.transfersEnabled,null);
+  assert.equal(architecture.provider_verification,null);
+  assert.equal(architecture.software_alignment,null);
+  assert.equal(architecture.historical_software_alignment.currentJournalConfirmed,false);
+});

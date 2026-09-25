@@ -117,7 +117,16 @@ export async function frontierHttp(req,env){
     if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
       const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
       const currentRecorded=record?.id===policy.id&&record.hash===policyHash;
-      return frontierResponse({policy,policyHash,activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},revision:row.revision});
+      const journal=await createNuminaTreasury({db:env.DB,principal:row.manifest.root,root:row.manifest.root}).readTreasury();
+      frontierAssert(journal.revision===row.revision&&journal.head===row.head_hash,'TREASURY_SNAPSHOT_CHANGED',409);
+      return frontierResponse({
+        schema:'numina.treasury.policy-view.v1',
+        policy:{id:policy.id,version:policy.version,scope:'RETAINED_POLICY_CATALOG'},
+        policyHash,policyHashScope:'retainedPolicy',retainedPolicy:policy,
+        currentJournal:{sourceOfTruth:'/api/control/v1/treasury',revision:journal.revision,head:journal.head,status:journal.status,balance:journal.journalProjectionBalance,unit:journal.journalProjectionUnit,settlementStatus:journal.settlementStatus,submissionPerformed:journal.submissionPerformed,settlementPerformed:journal.settlementPerformed,externalProviderSubmissionStatus:journal.externalProviderSubmissionStatus,externalProviderSettlementStatus:journal.externalProviderSettlementStatus},
+        activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',scope:'POLICY_RECORD_ONLY',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',scope:'POLICY_RECORD_ONLY',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},
+        revision:row.revision,head:row.head_hash
+      });
     }
     if(path==='/api/control/v2/discovery-mcp'){
       if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);

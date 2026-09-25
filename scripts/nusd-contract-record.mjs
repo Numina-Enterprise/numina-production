@@ -1,5 +1,5 @@
-import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_SINGULAR_SETTLEMENT_RECEIPT} from '../public/treasury-connection-model.js';
-import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
+import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_SINGULAR_SETTLEMENT_RECEIPT,NUMINA_TREASURY_JOURNAL_OBSERVATION} from '../public/treasury-connection-model.js';
+import {readFileSync, writeFileSync, mkdirSync, existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
@@ -44,8 +44,8 @@ const VERIFIED_DEPLOYMENTS=Object.freeze({
   })
 });
 const NATIVE_ACTIVATIONS=Object.freeze({
-  nusd_usdc_conversion:Object.freeze({status:'ACTIVE_SIGNED_1_TO_1_VERIFIED',native_contract_id:'numina:nusd-usdc:conversion:v1',native_attestation_id:'numina:treasury:backing:2026-09-19:v1',ratio:'1:1',backing_verified:true,location:'Stripe USDC Address',native_value:'500000000000000',native_unit:'USDC',nusd_equivalent:'500000000000000'}),
-  nusd_usd_redemption:Object.freeze({status:'ACTIVE_SIGNED_1_TO_1_VERIFIED',native_contract_id:'numina:nusd-usd:redemption:v1',native_attestation_id:'numina:treasury:backing:2026-09-19:v1',ratio:'1:1',backing_verified:true,location:'Bank of America Savings 3486',native_value:'500000000000000',native_unit:'USD',nusd_equivalent:'500000000000000'})
+  nusd_usdc_conversion:Object.freeze({status:'HISTORICAL_NATIVE_ATTESTATION',native_contract_id:'numina:nusd-usdc:conversion:v1',native_attestation_id:'numina:treasury:backing:2026-09-19:v1',ratio:'1:1',backing_verified:null,location:'Stripe USDC Address',modeled_target:'500000000000000',native_unit:'USDC',nusd_equivalent_target:'500000000000000'}),
+  nusd_usd_redemption:Object.freeze({status:'HISTORICAL_NATIVE_ATTESTATION',native_contract_id:'numina:nusd-usd:redemption:v1',native_attestation_id:'numina:treasury:backing:2026-09-19:v1',ratio:'1:1',backing_verified:null,location:'Bank of America Savings 3486',modeled_target:'500000000000000',native_unit:'USD',nusd_equivalent_target:'500000000000000'})
 });
 
 // Source uses LF UTF-8. Preserve compiler artifact bytes exactly, including the
@@ -76,10 +76,10 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
       encoding:'UTF-8',line_endings:artifactBytes.includes(Buffer.from('\r\n'))?'CRLF':'LF'},
     compiler:{version:artifact.compiler,settings:artifact.compilerSettings},
     implemented_operations:specification.operations,
-    verification:{source_hash_matches_artifact:true,initiation_recorded:true,independent_security_audit:false,chain_receipt_verified:verifiedDeployment!==null,native_activation_verified:nativeActivation!==null,signed_1_to_1_backing_verified:nativeActivation?.backing_verified===true},
+    verification:{source_hash_matches_artifact:true,initiation_recorded:true,independent_security_audit:false,chain_receipt_verified:verifiedDeployment!==null,native_activation_verified:false,signed_1_to_1_backing_verified:false,historical_native_attestation_recorded:nativeActivation!==null},
     deployment:verifiedDeployment?{lifecycle:'FINAL',status:'verified',submission_performed:true,expected_chain_id:'962421430',contract_address:verifiedDeployment.contract_address,
       transaction_hash:verifiedDeployment.transaction_hash,block_number:verifiedDeployment.block_number,receipt:{status:verifiedDeployment.receipt_status,record:verifiedDeployment.receipt_record}}:
-      nativeActivation?{lifecycle:'ACTIVE',status:'native_active',submission_performed:false,expected_chain_id:'962421430',native_contract_id:nativeActivation.native_contract_id,native_attestation_id:nativeActivation.native_attestation_id,ratio:nativeActivation.ratio,backing_verified:nativeActivation.backing_verified,verification_scope:'NUMINA_NATIVE_TREASURY',external_provider_verified:false,location:nativeActivation.location,native_value:nativeActivation.native_value,native_unit:nativeActivation.native_unit,nusd_equivalent:nativeActivation.nusd_equivalent,contract_address:null,transaction_hash:null,receipt:null,chain_contract_address_recorded:false,chain_transaction_hash_recorded:false}:
+      nativeActivation?{lifecycle:'HISTORICAL_ATTESTATION',status:'retained_attestation',submission_performed:false,expected_chain_id:'962421430',native_contract_id:nativeActivation.native_contract_id,native_attestation_id:nativeActivation.native_attestation_id,ratio:nativeActivation.ratio,backing_verified:null,verification_scope:'HISTORICAL_NUMINA_ATTESTATION',external_provider_verified:false,location:nativeActivation.location,modeled_target:nativeActivation.modeled_target,native_unit:nativeActivation.native_unit,nusd_equivalent_target:nativeActivation.nusd_equivalent_target,contract_address:null,transaction_hash:null,receipt:null,chain_contract_address_recorded:false,chain_transaction_hash_recorded:false}:
       {lifecycle:'INITIATED',status:'not_verified',submission_performed:false,expected_chain_id:'962421430',contract_address:null,transaction_hash:null,receipt:null},
   };
   return {descriptor,source,artifactBytes};
@@ -131,26 +131,31 @@ export function createNusdContractRecord(read=readFileSync) {
     mintReceipt.chainReceipt?.contractAddress?.toLowerCase()!==receipt.token.receipt.contractAddress?.toLowerCase()||
     mintReceipt.chainReceipt?.status!=='0x1')throw Error('NUSD mint receipt binding mismatch');
   return {entries,mintReceipt,record:{
-    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
+    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',metadataAuthority:'NUMINA',nativeEvidenceStatus:'JOURNAL_SNAPSHOT',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
     mint_receipt:{schema:mintReceipt.schema,status:mintReceipt.status,path:'/downloads/nusd/mint-receipt.json',transactionHash:mintReceipt.transactionHash,tokenAddress:mintReceipt.tokenAddress,blockNumber:mintReceipt.blockNumber,receiptStatus:mintReceipt.receiptStatus,finalConfirmations:mintReceipt.finalConfirmations,amountNusd:mintReceipt.amountNusd,baseUnits:mintReceipt.baseUnits,burnedNusd:mintReceipt.burnedNusd},
-    issuance:{...verified.issuance,verifiedAt:verified.verifiedAt,transactionHash:verified.token.transactionHash,record:'/downloads/nusd/deployment-verification.json',mintReceipt:'/downloads/nusd/mint-receipt.json',mintReceiptSchema:mintReceipt.schema,chainReceiptStatus:mintReceipt.receiptStatus,chainReceiptBlock:mintReceipt.blockNumber,chainReceiptConfirmations:mintReceipt.finalConfirmations,currentOperationalState:'ACTIVE',currentPaused:false,historicalDeploymentSnapshotPaused:verified.issuance?.paused===true,mintedNusd:'1500000000000000',burnedNusd:'0'},
-    native_activation:{provider:'NUMINA',status:'ACTIVE',contracts_active:true,backing_attestation_id:'numina:treasury:backing:2026-09-19:v1',bank_usd:{location:'Bank of America Savings 3486',value:'500000000000000',unit:'USD',nusdEquivalent:'500000000000000',ratio:'1:1',verified:true,contract:'NuminaUSDRedemption',nativeContractId:'numina:nusd-usd:redemption:v1'},stripe_usdc:{location:'Stripe USDC Address',value:'500000000000000',unit:'USDC',nusdEquivalent:'500000000000000',ratio:'1:1',verified:true,contract:'NuminaUSDCConversion',nativeContractId:'numina:nusd-usdc:conversion:v1',address:'0x736bd8f274dce00a8bb374edd85df0d2e631018e'},native_nusd:{location:'NUMINA Native Treasury',value:'500000000000000',unit:'NUSD'}},
-    canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,native_settlement:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,financial_execution_scope:'CHAIN_AND_PROVIDER_EXECUTION',financial_execution:{issuance:true,transfer:false,nusd_settlement:false,usd_redemption:false,usdc_conversion:false,external_deposits:false},
-    scope:'NUMINA is the singular provider identity. NuminaUSD and NuminaSettlement retain their receipt-verified chain deployments. Current NUMINA native state records all NUSD contracts operationally ACTIVE, 1,500T NUSD minted and 0 burned. Bank of America Savings 3486 is verified 1:1 at 500T USD / 500T NUSD through NuminaUSDRedemption. Stripe USDC Address is verified 1:1 at 500T USDC / 500T NUSD through NuminaUSDCConversion. Conversion/redemption native activation is recorded separately from chain deployment receipts; no chain contract address or transaction hash is fabricated when no receipt is present.',
+    issuance:{...verified.issuance,verifiedAt:verified.verifiedAt,transactionHash:verified.token.transactionHash,record:'/downloads/nusd/deployment-verification.json',mintReceipt:'/downloads/nusd/mint-receipt.json',mintReceiptSchema:mintReceipt.schema,chainReceiptStatus:mintReceipt.receiptStatus,chainReceiptBlock:mintReceipt.blockNumber,chainReceiptConfirmations:mintReceipt.finalConfirmations,currentOperationalState:'UNVERIFIED',currentPaused:null,historicalDeploymentSnapshotPaused:verified.issuance?.paused===true,mintedNusd:null,burnedNusd:null},
+    historical_native_activation:{historicalRecord:true,currentJournalConfirmed:false,provider:'NUMINA',status:'RETAINED_ATTESTATION',backing_attestation_id:'numina:treasury:backing:2026-09-19:v1',bank_usd:{location:'Bank of America Savings 3486',modeledTarget:'500000000000000',unit:'USD',ratio:'1:1',verified:null,contract:'NuminaUSDRedemption'},stripe_usdc:{location:'Stripe USDC Address',modeledTarget:'500000000000000',unit:'USDC',ratio:'1:1',verified:null,contract:'NuminaUSDCConversion',address:'0x736bd8f274dce00a8bb374edd85df0d2e631018e'}},
+    canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,treasuryJournalObservation:NUMINA_TREASURY_JOURNAL_OBSERVATION,historical_native_settlement:NUMINA_SINGULAR_SETTLEMENT_RECEIPT,financial_execution_scope:'CHAIN_AND_PROVIDER_EXECUTION',financial_execution:{issuance:true,transfer:false,nusd_settlement:false,usd_redemption:false,usdc_conversion:false,external_deposits:false},
+    scope:'The authenticated NUMINA Native Treasury journal is the current software source of truth. At observed revision 142 its 500T NUSD projection had prepared mint and bank requests, with no Base USDC transfer request. The 1,500T NUSD constructor mint receipt is separate chain evidence. The 500T USD and USDC figures are historical allocation targets; no spendable provider balances or external settlement follow from them.',
   }};
 }
 
-export function writeNusdContractRecord() {
+export function writeNusdContractRecord({metadataOnly=false}={}) {
   const {entries,mintReceipt,record}=createNusdContractRecord();
-  const destination=path.join(root,'docs/contracts');mkdirSync(destination,{recursive:true});
-  for(const {descriptor,source,artifactBytes} of entries){
-    writeFileSync(path.join(destination,descriptor.name+'.sol'),source);
-    writeFileSync(path.join(destination,descriptor.name+'.json'),artifactBytes);
+  if(!metadataOnly){
+    const destination=path.join(root,'docs/contracts');mkdirSync(destination,{recursive:true});
+    for(const {descriptor,source,artifactBytes} of entries){
+      writeFileSync(path.join(destination,descriptor.name+'.sol'),source);
+      writeFileSync(path.join(destination,descriptor.name+'.json'),artifactBytes);
+    }
+    const nusdDestination=path.join(root,'docs/nusd');mkdirSync(nusdDestination,{recursive:true});
+    const retainedMintPath=path.join(nusdDestination,'mint-receipt.json');
+    if(existsSync(retainedMintPath)){
+      if(JSON.stringify(JSON.parse(readFileSync(retainedMintPath,'utf8')))!==JSON.stringify(mintReceipt))throw Error('Retained NUSD mint receipt mismatch');
+    }else writeFileSync(retainedMintPath,JSON.stringify(mintReceipt,null,2)+'\n');
   }
-  const nusdDestination=path.join(root,'docs/nusd');mkdirSync(nusdDestination,{recursive:true});
-  writeFileSync(path.join(nusdDestination,'mint-receipt.json'),JSON.stringify(mintReceipt,null,2)+'\n');
   const body='// Generated by scripts/nusd-contract-record.mjs. Do not edit.\n'+
     'function freezeNusdContractRecord(value){if(value&&typeof value===\'object\'){Object.values(value).forEach(freezeNusdContractRecord);Object.freeze(value);}return value;}\n'+
     'export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord('+JSON.stringify(record,null,2)+');\n';
@@ -159,6 +164,6 @@ export function writeNusdContractRecord() {
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  writeNusdContractRecord();
-  console.log('NUSD contract sources and compiled artifacts recorded; no chain transaction submitted.');
+  writeNusdContractRecord({metadataOnly:process.argv.includes('--metadata-only')});
+  console.log('NUSD contract metadata recorded; no chain transaction submitted.');
 }

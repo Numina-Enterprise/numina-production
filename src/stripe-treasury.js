@@ -1,6 +1,6 @@
 // This adapter reads one configured live Financial account. It has no money-movement methods.
 import {isTreasuryMinorInteger,formatTreasuryProviderAmount} from '../public/treasury-amount.js';
-import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
+import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 export const STRIPE_TREASURY_ACCOUNT='acct_1UEEPnQdJat0efmT';
 export const STRIPE_TREASURY_FINANCIAL_ACCOUNT='fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu';
 const STRIPE_TREASURY_VERSION='2026-08-26.preview';
@@ -8,18 +8,19 @@ export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes'
 // Model references describe NUMINA's internal allocation. A read adapter cannot
 // verify reserves, submit funds, or turn a native receipt into provider evidence.
 const NATIVE_USDC_MODEL=Object.freeze({
-  identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
-  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,
+  identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,
+  metadataAuthority:'NUMINA',nativeEvidenceStatus:'JOURNAL_SNAPSHOT',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
+  sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',canonicalSource:'NUMINA',squareRoot:'NUMINA',updateDirection:'NUMINA_NATIVE_TREASURY_JOURNAL_TO_CURRENT_VIEWS',singular:NUMINA_NATIVE_TREASURY_SYNC.singular,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,
   treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
   holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,
-  holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledUnit:'USDC',
+  holdingRef:'native-usdc',modeledValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,modeledValueScope:'HISTORICAL_TARGET',modeledUnit:'USDC',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalance:Object.freeze({current:null,available:null,unit:'USDC',source:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT'}),
   nusdEquivalentValue:NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,nusdEquivalentUnit:'NUSD',
   aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,
-  backingRatio:'1:1',backingVerified:false,verificationSource:'PROVIDER_EVIDENCE_REQUIRED',
-  nativeModel:Object.freeze({scope:'NUMINA_INTERNAL_SOFTWARE_STATE',conversionContract:'NuminaUSDCConversion',
-    nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
+  backingRatio:'1:1',backingVerified:null,verificationSource:'PROVIDER_EVIDENCE_REQUIRED',
+  nativeModel:Object.freeze({scope:'HISTORICAL_DECLARATION',conversionContract:'NuminaUSDCConversion',
+    nativeContractId:'numina:nusd-usdc:conversion:v1',nativeAttestationId:null,historicalNativeAttestationId:'numina:treasury:backing:2026-09-19:v1',
     usdcAddress:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',
-    settlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',mintReceipt:'/downloads/nusd/mint-receipt.json'})
+    historicalSettlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',historicalMintReceipt:'/downloads/nusd/mint-receipt.json'})
 });
 export const NUSD_PROVIDER_ROUTING=Object.freeze({
   schema:'numina.nusd.provider-routing.v1',...NATIVE_USDC_MODEL,componentRole:'USDC_NATIVE_LOCATION_ROUTE',

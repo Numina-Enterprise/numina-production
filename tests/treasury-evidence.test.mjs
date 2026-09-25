@@ -183,8 +183,13 @@ test('reconciliation preserves each captured provider status without aggregating
   assert.equal(r.depositReadiness.settlementEvidence.status,'NOT_VERIFIED');assert.equal(r.depositReadiness.settlementEvidence.requiredAfter,'submission');
   assert.equal(payload.fundingVerification.actual_funding,false);assert.equal(payload.fundingVerification.ownerDeclaredFunded,true);
   const serialized=JSON.stringify({records:r.records,depositReadiness:r.depositReadiness});assert.doesNotMatch(serialized,/"(?:amount|value|formatted)":/);assert.equal(serialized.includes('500000000000000'),false);
-  assert.equal(r.nativeSettlement.receipt.id,'numina:treasury:settlement:2026-09-19:v1');
-  assert.equal(r.nativeSettlement.canonicalTreasuryValues.aggregate.current,'1500000000000000');
+  assert.equal(r.nativeSettlement.status,'UNVERIFIED');
+  assert.equal(r.nativeSettlement.receipt,null);
+  assert.equal(r.nativeSettlement.currentJournalProjection.balance,'500000000000000');
+  assert.equal(r.nativeSettlement.currentJournalProjection.revision,4);
+  assert.equal(r.nativeSettlement.historicalReceipt.id,'numina:treasury:settlement:2026-09-19:v1');
+  assert.equal(r.nativeSettlement.historicalReceipt.currentJournalConfirmed,false);
+  assert.equal(r.nativeSettlement.canonicalTreasuryValues.aggregate.current,'500000000000000');
   r.records.stripe.currencies.usdc.balances.available.verification.status='CHANGED';
   assert.equal(payload.records.providerBalances.currencies.usdc.balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
   assert.deepEqual(payload.source.providerObservation,input.providerObservation);

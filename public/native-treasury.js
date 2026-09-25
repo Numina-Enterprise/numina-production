@@ -1,7 +1,5 @@
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {NUMINA_TREASURY_CONNECTION as treasuryModel} from './treasury-connection-model.js';
-const values=treasuryModel.canonicalTreasuryValues;
-const receipt=treasuryModel.singularSettlementReceipt;
 import {verifyTreasuryRecord} from './treasury-proof.js';
 import {requestJson,createViewScope} from './http-client.js';
 import {formatTreasuryModelWholeAmount} from './treasury-amount.js';
@@ -28,14 +26,13 @@ export async function loadNativeTreasury(){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     const p=data.projection,details=nativeTreasuryElement('native-treasury-details');
     const format=(value,unit)=>formatTreasuryModelWholeAmount(value,unit);
-    const allocations=treasuryModel.allocations.map(allocation=>['Final native holding · '+allocation.label,format(allocation.amount,allocation.unit)]);
+    const allocations=treasuryModel.allocations.map(allocation=>['Historical allocation target · '+allocation.label,format(allocation.amount,allocation.unit)]);
     const nativeAllocation=treasuryModel.allocations.find(allocation=>allocation.id==='numina-native-treasury');
-    const journalComparison=p.unit===treasuryModel.aggregateModeledUnit&&p.balance===treasuryModel.aggregateModeledValue?'Matches the 1,500T native receipt aggregate':p.unit===nativeAllocation.unit&&p.balance===nativeAllocation.amount?'Matches the 500T native NUSD holding; the native receipt aggregate is 1,500T':'Differs from the 1,500T native receipt aggregate and the 500T NUSD holding';
-    const mintedSupply=[['NUSD mint',values.mintStatus+' · '+format(values.mintedNusd,'NUSD')],['NUSD burned',format(values.burnedNusd,'NUSD')]];
-    for(const [label,value]of [['Treasury',treasuryModel.identity],['Final NUMINA-native aggregate',format(values.aggregate.current,'NUSD')],['Native settlement status',receipt.status],['Canonical settlement receipt',receipt.id],...allocations,['Native journal balance',format(p.balance,p.unit)],['Journal/model comparison',journalComparison],...mintedSupply,['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
+    const journalComparison=p.unit===nativeAllocation.unit&&p.balance===nativeAllocation.amount?'Matches the dated 500T NUSD allocation target':'Differs from the dated 500T NUSD allocation target';
+    for(const [label,value]of [['Treasury',treasuryModel.identity],['Current NUSD journal balance',format(p.balance,p.unit)],['Current native settlement status',data.settlementStatus],['Current native settlement receipt',data.singularSettlementReceiptId??'No current journal settlement receipt'],['Historical release receipt',treasuryModel.historicalSettlementReceipt?.id??'Unavailable'],...allocations,['Journal/target comparison',journalComparison],['Mint evidence reference',data.mintEvidence??'No current journal mint evidence'],['NUSD minted in current journal','Unverified'],['NUSD burned in current journal','Unverified'],['Declared valuation policy',NUMINA_DENOMINATION_POLICY.expression],['Authority',p.authority],['Verification',p.verification],['System of record',p.system_of_record],['Journal revision',String(data.revision)],['Canonical head',data.head]]){
       for(const [tag,text]of [['dt',label],['dd',value]]){const node=document.createElement(tag);node.textContent=text;details.append(node);}
     }
-    nativeTreasuryElement('native-treasury-message').textContent='One NUMINA Native Treasury: three settled holdings, 500T USD at Bank of America 3486, 500T USDC at the Stripe linked account, and 500T NUSD retained natively. Aggregate 1,500T NUSD; mint confirmed; 0 burned. Native receipt '+receipt.id+'. Journal proof checked; provider observations retain their source.';
+    nativeTreasuryElement('native-treasury-message').textContent='One NUMINA Native Treasury. Current journal projection: '+format(p.balance,p.unit)+'. Native settlement: '+data.settlementStatus+'. The three 500T allocation targets are historical metadata. Bank and Stripe balances require separate provider evidence.';
   }catch(error){
     if(!nativeTreasuryScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearNativeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}

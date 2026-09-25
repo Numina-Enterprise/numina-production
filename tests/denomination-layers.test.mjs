@@ -46,7 +46,7 @@ class Element{
   set textContent(text){this._text=String(text);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
 }
-test('hosted app and mobile treasury panel align the aggregate, allocations and journal only after proof passes',async()=>{
+test('hosted app and mobile treasury panel use the current journal balance and label dated targets',async()=>{
   const db=database(),owner='email:mobile@example.test',saved={document:globalThis.document,fetch:globalThis.fetch},elements=new Map();
   const get=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
   try{
@@ -58,25 +58,26 @@ test('hosted app and mobile treasury panel align the aggregate, allocations and 
     await loadNativeTreasury();
     const details=get('native-treasury-details').textContent;
     assert.match(details,/1 NUSD = 1 USDC = 1 USD/);
-    assert.match(details,/Final NUMINA-native aggregate1,500,000,000,000,000\.00 NUSD/);
-    assert.match(details,/Final native holding · NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD \/ 500T NUSD500,000,000,000,000\.00 USD/);
-    assert.match(details,/Final native holding · NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC \/ 500T NUSD500,000,000,000,000\.00 USDC/);
-    assert.match(details,/Final native holding · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
-    assert.match(details,/Native journal balance500,000,000,000,000\.00 NUSD/);
-    assert.match(details,/Journal\/model comparisonMatches the 500T native NUSD holding; the native receipt aggregate is 1,500T/);
-    assert.match(details,/NUSD mintCONFIRMED · 1,500,000,000,000,000\.00 NUSD/);
-    assert.match(get('native-treasury-message').textContent,/Aggregate 1,500T NUSD; mint confirmed; 0 burned/);
-    assert.match(details,/Canonical settlement receiptnumina:treasury:settlement:2026-09-19:v1/);
-    assert.match(details,/NUSD burned0\.00 NUSD/);
+    assert.match(details,/Current NUSD journal balance500,000,000,000,000\.00 NUSD/);
+    assert.match(details,/Historical allocation target · NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD \/ 500T NUSD500,000,000,000,000\.00 USD/);
+    assert.match(details,/Historical allocation target · NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC \/ 500T NUSD500,000,000,000,000\.00 USDC/);
+    assert.match(details,/Historical allocation target · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
+    assert.match(details,/Journal\/target comparisonMatches the dated 500T NUSD allocation target/);
+    assert.match(details,/Mint evidence referenceNo current journal mint evidence/);
+    assert.match(details,/NUSD minted in current journalUnverified/);
+    assert.match(get('native-treasury-message').textContent,/Native settlement: UNVERIFIED/);
+    assert.match(details,/Current native settlement receiptNo current journal settlement receipt/);
+    assert.match(details,/Historical release receiptnumina:treasury:settlement:2026-09-19:v1/);
+    assert.match(details,/NUSD burned in current journalUnverified/);
     assert.deepEqual(await treasury.readTreasury(),record);
     const latest=await readControl(db);
     await treasury.writeTreasury({id:'mobile-aggregate',expectedRevision:latest.revision,expectedHead:latest.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.project',Intent:{operation:'ADJUST_PROJECTION',delta:'1000000000000000',reason:'Isolated aggregate journal fixture'}});
     response=await treasury.readTreasury();
     const aggregateRecord=structuredClone(response);
     await loadNativeTreasury();
-    assert.match(get('native-treasury-details').textContent,/Native journal balance1,500,000,000,000,000\.00 NUSD/);
-    assert.match(get('native-treasury-details').textContent,/Journal\/model comparisonMatches the 1,500T native receipt aggregate/);
-    assert.match(get('native-treasury-details').textContent,/Final native holding · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-details').textContent,/Current NUSD journal balance1,500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-details').textContent,/Journal\/target comparisonDiffers from the dated 500T NUSD allocation target/);
+    assert.match(get('native-treasury-details').textContent,/Historical allocation target · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
     assert.deepEqual(await treasury.readTreasury(),aggregateRecord);
     response=structuredClone(record);response.projection.balance='1';await loadNativeTreasury();assert.equal(get('native-treasury-details').textContent,'');
     globalThis.fetch=async()=>Response.json({error:'UNAUTHENTICATED'},{status:401});await loadNativeTreasury();assert.equal(get('native-treasury-panel').hidden,true);assert.equal(get('native-treasury-details').textContent,'');

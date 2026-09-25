@@ -44,10 +44,11 @@ function treasuryActions(t,readApi,isCurrent){
   const policyTarget=$('#treasury-policy');if(policyTarget){policyTarget.replaceChildren();
     readApi('treasury/policy').then(record=>{
       if(!isCurrent())return;
-      policyTarget.append(node('h3','Singular NUSD treasury policy'),node('p','Stripe Treasury and Bank of America Savings are designated backing sources. Provider balances keep their original currency; reserve allocation and redemption evidence remain explicit.'));
-      const link=node('a','Read policy and evidence status ↗');link.href='/api/control/v2/treasury/policy';policyTarget.append(link);
-      if(record.activation.policyHash===record.policyHash){policyTarget.append(node('p','Owner policy recorded · '+record.policy.id));return;}
-      const b=node('button','Record reserve designation policy');b.className='button secondary';b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{const latest=await api('state');await api('treasury/policy',{id:crypto.randomUUID(),expectedRevision:latest.revision,data:{policyId:record.policy.id,policyHash:record.policyHash}});await refresh();}catch(e){$('#treasury-status').textContent=e.message;b.disabled=false;}};policyTarget.append(b);
+      policyTarget.append(node('h3','Treasury policy catalog'),node('p','The retained policy lists Stripe Treasury and Bank of America Savings. Its allocation and settlement statements do not establish current funding or provider submission.'));
+      if(record.currentJournal){const j=record.currentJournal;policyTarget.append(node('p','Current Numina journal · revision '+j.revision+' · '+(j.balance??'unavailable')+' '+(j.unit??'NUSD')+' · internal settlement '+j.settlementStatus+' · provider submission '+j.externalProviderSubmissionStatus+'.'));}
+      const link=node('a','Read retained policy and current journal status ↗');link.href='/api/control/v2/treasury/policy';policyTarget.append(link);
+      if(record.activation.policyHash===record.policyHash){policyTarget.append(node('p','Owner policy catalog entry recorded · '+record.policy.id));return;}
+      policyTarget.append(node('p','This retained policy is not recorded in the current owner journal. The current journal must confirm matching aggregate settlement before any new policy recording is considered.'));
     }).catch(()=>{if(isCurrent())policyTarget.append(node('p','Treasury policy status is unavailable.'));});
   }
   const form=node('form','');form.className='account-link-form';
