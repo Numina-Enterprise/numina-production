@@ -1,4 +1,4 @@
-import {NUSD_OPERATOR_ACTIVATION} from '../public/treasury-connection-model.js';
+import {NUSD_OPERATOR_ACTIVATION,NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_PROVIDER_ROUTING} from './stripe-treasury.js';
@@ -16,16 +16,17 @@ export const NUSD_REDEMPTION_POLICIES=Object.freeze({
   [NUSD_REDEMPTION_PROPOSAL_V2.policy_id]:freezeNusdRedemption(NUSD_REDEMPTION_PROPOSAL_V2),
   [NUSD_REDEMPTION_POLICY.policy_id]:freezeNusdRedemption(NUSD_REDEMPTION_POLICY)
 });
+const constructorMintEvidence=NUMINA_CANONICAL_TREASURY_VALUES.separateChainMintEvidence;
 export const NUSD_MINT_WORKFLOW=freezeNusdRedemption({
  schema:'numina.nusd.mint-workflow.v1',
- modelIdentity:'NUMINA',identity:'NUMINA',status:'HISTORICAL_CHAIN_DEPLOYMENT_OBSERVATION',mintSuccessReported:true,mintStatusSource:'HISTORICAL_CHAIN_RECEIPT',observedAt:'2026-09-18T15:35:24.884Z',currentChainStateVerified:false,
+ modelIdentity:'NUMINA',identity:'NUMINA',status:'HISTORICAL_CHAIN_DEPLOYMENT_OBSERVATION',mintSuccessReported:true,mintStatusSource:'HISTORICAL_CHAIN_RECEIPT',observedAt:constructorMintEvidence.observedAt,currentChainStateVerified:constructorMintEvidence.currentChainStateVerified,
  contract:{name:'NuminaUSD',decimals:18,constructorIssuance:true,authorizationFunction:'authorizeIssuance',mintFunction:'mintAuthorized',initiallyPaused:true,sourceSha256:NUSD_CONTRACT_RECORD.contracts[0].source.sha256,artifactSha256:NUSD_CONTRACT_RECORD.contracts[0].artifact.sha256},
  nativeJournal:{route:'/api/control/v1/treasury',objective:'treasury.mint.prepare',operation:'PREPARE_MINT',result:'PREPARED',observedRevision:142,snapshotIsLive:false,nativeBalanceChanged:false,providerSubmission:false},
  preparation:{script:'runtime/nusd/scripts/prepare-mint.mjs',requestSchema:'numina.nusd.mint.request.v1',outputSchema:'numina.nusd.unsigned-mint-review-draft.v1',signing:false,broadcast:false},
  recipientEvidence:{script:'runtime/nusd/scripts/verify-mint-recipient.mjs',requestSchema:'numina.nusd.recipient-evidence-request.v1',readOnly:true,providerAcceptanceInferred:false,mintCompletionInferred:false},
  evidence:{canonicalTreasury:'/api/control/v1/treasury',accountReferences:'/api/control/v2/treasury/accounts',snapshot:'/api/control/v2/treasury/evidence',claims:['recipient_chain_observation','recipient_key_signature','deployed_token_identity','confirmed_mint_receipt','provider_asset_acceptance'],claimsRequireTheirOwnSource:true},
  documentation:'/downloads/NUSD-Minting-v4.md',
- execution:{mintStatus:'CONSTRUCTOR_MINT_VERIFIED_AT_OBSERVATION',historicalRecord:true,currentChainStateVerified:false,mintSuccessReported:true,contractDeploymentVerified:true,completedMintVerified:true,chainReceiptVerified:true,providerAcceptanceVerified:false,transactionHash:'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b',contractAddress:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',receipt:{status:'0x1',blockNumber:'51725',record:'/downloads/nusd/deployment-receipt.json'}},
+ execution:{mintStatus:'CONSTRUCTOR_MINT_VERIFIED_AT_OBSERVATION',historicalRecord:true,currentChainStateVerified:false,mintSuccessReported:true,contractDeploymentVerified:true,completedMintVerified:true,chainReceiptVerified:true,providerAcceptanceVerified:false,chainId:constructorMintEvidence.chainId,amountNusd:constructorMintEvidence.amountNusd,transactionHash:constructorMintEvidence.transactionHash,contractAddress:constructorMintEvidence.tokenAddress,receipt:{status:constructorMintEvidence.receiptStatus,blockNumber:constructorMintEvidence.blockNumber,record:constructorMintEvidence.deploymentDownload},constructorMintEvidence},
  scope:'The retained September 18, 2026 Numina chain receipt records a 1,500T NUSD constructor mint at 18 decimals and the contract state observed then. Current chain activity, provider acceptance, USD/USDC reserves and redemption require separate current evidence.'
 });
 export const NUSD_CONVERSION_WORKFLOW=freezeNusdRedemption({
@@ -76,7 +77,7 @@ export const NUSD_POLICY={
  native_treasury:{source:'/api/control/v1/treasury',unit:'NUSD',authority:'NUMINA',system_of_record:'NUMINA',access:'owner_authenticated'},
  asset:{name:'Numina USD',symbol:'NUSD',decimals:18,asset_id:'NUSD:962421430:0x491c1DF1b5CA77AF797f052c2310ca17039C931b',chain:'962421430',contract:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b'},
  network_policy:{name:'Numina',status:'historical_authenticated_rpc_observation',chain_id:'962421430',rpc_url:'https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/',explorer_url:null,genesis_hash:'0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1',provider:'Kaleido',network_type:'permissioned',environment_id:'u0yth28mgh',protocol:'Hyperledger Besu / IBFT',runtime_version:'23.10.2',evm_fork:'London',region:'AWS us-east-2 (Ohio)',validator_count:3,system_monitor_count:1,observed_at:'2026-09-18T15:31:26.425Z',observed_block_height:'51726',evidence_type:'authenticated_json_rpc_transaction_receipt_and_state_readback',continuous_monitoring:false,currentNodeStatusVerified:false,authenticated_rpc_verified:true,rpc_authentication_required:true,independently_verified:false},
- asset_verification:{status:'historical_deployment_observation',observedAt:'2026-09-18T15:35:24.884Z',currentChainStateVerified:false,evidence:[{type:'transaction_receipt',transactionHash:'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b',contractAddress:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',record:'/downloads/nusd/deployment-receipt.json'},{type:'settlement_contract_receipt',transactionHash:'0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b',contractAddress:'0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0',record:'/downloads/nusd/deployment-receipt.json'}]},
+ asset_verification:{status:'historical_deployment_observation',observedAt:constructorMintEvidence.observedAt,currentChainStateVerified:false,constructorMintEvidence,evidence:[{type:'transaction_receipt',transactionHash:constructorMintEvidence.transactionHash,contractAddress:constructorMintEvidence.tokenAddress,blockNumber:constructorMintEvidence.blockNumber,receiptStatus:constructorMintEvidence.receiptStatus,record:constructorMintEvidence.deploymentDownload},{type:'settlement_contract_receipt',...constructorMintEvidence.settlementContractDeployment,record:constructorMintEvidence.deploymentDownload}]},
  treasury_backing:{source:'Numina Treasury',status:'unverified',owner_attestation:NUSD_REDEMPTION_POLICY.reserves.owner_attestation,evidence:[],valuation:null,redemption:null},
  peg:{currency:'USD',target:'1',basis:'declared_policy',status:'target_not_verified',verified_redemption:false},
  conversion_policy:NUSD_REDEMPTION_POLICY.rate,
