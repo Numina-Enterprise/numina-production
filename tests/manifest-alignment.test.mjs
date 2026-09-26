@@ -6,6 +6,9 @@ import {NuminaClient} from '../integrations/numina/src/client.js';
 import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
+import {alignNusdReleaseMetadata} from '../scripts/align-nusd-release-metadata.mjs';
+import {NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
+import runtimeManifest from '../runtime/vercel-production/lib/numina-manifest.js';
 
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
@@ -43,7 +46,7 @@ test('root release manifest binds the owner workflow, additive migration and act
  assert.equal(binding.attempt_storage.migration_sha256,digest(bytes('drizzle/0004_wallet_deployment_intents.sql')));assert.equal(binding.attempt_storage.native_journal_modified,false);
  assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents','0005_numina_manifest_control']);
  assert.deepEqual(binding.evidence,{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false});
- for(const [name,flag] of Object.entries(release.scope))assert.equal(flag,name==='nusd_issuance_verified_in_current_state'||name==='contract_deployment_verified_in_current_state',name);
+ for(const [name,flag] of Object.entries(release.scope))assert.equal(flag,false,name);
 });
 
 test('application manifest aliases contain the same current release bytes',()=>{
@@ -59,7 +62,7 @@ test('application manifest aliases contain the same current release bytes',()=>{
   for(const field of ['root','manifest','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release.compatibility.identity_aliases[field],'NUMINA',field);
   assert.equal(release.provider_verification,true);
   const nativeModel=release.native_treasury_alignment;
-  assert.equal(nativeModel.aggregation,'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES');
+  assert.equal(nativeModel.aggregation,'ONE_JOURNAL_NUSD_PROJECTION_WITH_HISTORICAL_ALLOCATION_TARGETS');
   assert.equal(nativeModel.treasuryCount,1);assert.equal(nativeModel.accountCount,1);assert.equal(nativeModel.holdingsCount,3);
   assert.equal(nativeModel.status,'JOURNAL_SNAPSHOT');
   assert.equal(nativeModel.aggregateModeledValue,null);
@@ -100,6 +103,42 @@ test('current release preserves historical publication evidence and labels its s
   assert.equal(context.latestReleaseManifest,'/v4/release/manifest');
   assert.equal(context.currentNativeDistribution,'/downloads/native-package-record-v4.json');
   assert.equal(context.deploymentOfCurrentBuildVerified,false);
+});
+
+test('both release generators replace stale execution claims with dated receipt observations',()=>{
+  const release=json(releasePath),aligned=alignNusdReleaseMetadata(structuredClone(release));
+  for(const key of ['transfersEnabled','transferStateSource','nusd_transaction_receipts','nusd_activation_readiness','scope','native_treasury_alignment'])assert.deepEqual(release[key],aligned[key],key);
+  const stale={transfersEnabled:true,nusd_activation_readiness:{status:'DEPLOYED_PAUSED',transfersEnabled:true},scope:{nusd_issuance_verified_in_current_state:true,contract_deployment_verified_in_current_state:true}};
+  const normalized=alignNusdReleaseMetadata(stale),mint=json('runtime/nusd/mint-receipt.json');
+  assert.equal(normalized.transfersEnabled,null);
+  assert.equal(normalized.nusd_activation_readiness.currentPaused,null);
+  assert.equal(normalized.nusd_activation_readiness.currentChainStateVerified,false);
+  assert.equal(normalized.nusd_transaction_receipts.deployment.block_number,mint.blockNumber);
+  assert.equal(normalized.nusd_transaction_receipts.deployment.transaction_hash,mint.transactionHash);
+  assert.equal(normalized.nusd_transaction_receipts.deployment.amount_nusd,mint.amountNusd);
+  assert.equal(normalized.nusd_transaction_receipts.deployment.decimals,mint.decimals);
+  assert.equal(normalized.nusd_transaction_receipts.settlement.block_number,'51726');
+  assert.equal(normalized.nusd_transaction_receipts.settlement.record_type,'SETTLEMENT_CONTRACT_DEPLOYMENT');
+  assert.equal(normalized.nusd_transaction_receipts.settlement.financial_settlement_verified,false);
+  assert.equal(normalized.scope.nusd_issuance_verified_in_current_state,false);
+  assert.equal(normalized.scope.contract_deployment_verified_in_current_state,false);
+});
+
+test('retained gateway metadata follows the journal snapshot without inventing balances or signer readiness',()=>{
+  const treasury=runtimeManifest.NUMINA_MANIFEST.mechanics.treasury;
+  const values=NUMINA_CANONICAL_TREASURY_VALUES,mint=values.separateChainMintEvidence;
+  assert.equal(treasury.sourceOfTruth,'NUMINA_NATIVE_TREASURY_JOURNAL');
+  assert.equal(treasury.journalObservation.observedRevision,values.observation.observedRevision);
+  assert.equal(treasury.journalObservation.observedHead,values.observation.observedHead);
+  assert.equal(treasury.journalObservation.snapshotIsLive,false);
+  assert.equal(treasury.mintStatus,values.mintStatus);
+  assert.equal(treasury.settlementStatus,values.settlementStatus);
+  assert.equal(treasury.transfersEnabled,null);
+  assert.equal(treasury.aggregateAmount,null);
+  assert.equal(treasury.providerVerification,null);
+  for(const field of ['blockNumber','transactionHash','tokenAddress','chainId','receiptStatus','amountNusd','decimals','observedAt'])assert.equal(treasury.separateChainMintEvidence[field],mint[field],field);
+  assert.equal(treasury.separateChainMintEvidence.settlementContractDeployment.blockNumber,'51726');
+  for(const holding of treasury.modeledHoldings.filter(value=>value.unit!=='NUSD')){assert.equal(holding.amount,null);assert.equal(holding.verified,null);}
 });
 
 test('release and client manifests bind the identical treasury verifier without provider claims',()=>{

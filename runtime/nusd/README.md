@@ -2,7 +2,18 @@
 
 ## Contract lifecycle
 
-The NUSD contract lifecycle is **INITIATED** for `NuminaUSD`, `NuminaSettlement`, `NuminaUSDCConversion`, and `NuminaUSDRedemption`. Each role is in `DEPLOYMENT_PREPARATION_INITIATED`. This records software preparation only: no contract address, transaction hash, chain receipt, mint, conversion, redemption, bank payment, or external deposit is asserted until the corresponding provider/network evidence exists.
+Numina's retained September 18, 2026 chain observation records a confirmed `NuminaUSD` constructor mint and a separate `NuminaSettlement` contract deployment. The canonical mint block is **51725**. The existing files `mint-receipt.json`, `deployment-receipt.json` and `deployment-verification.json` preserve the evidence:
+
+- Chain ID: `962421430`.
+- Token: `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`.
+- Mint/deployment transaction: `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b`.
+- Receipt status: `0x1`; mint block: `51725`.
+- Constructor issuance: `1,500,000,000,000,000.00 NUSD`, with 18 decimals and `1500000000000000000000000000000000` base units.
+- Separate settlement-contract deployment: block `51726`, transaction `0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b`.
+
+The Numina Native Treasury journal at `/api/control/v1/treasury` is the software source of truth. Its September 25, 2026 revision-142 observation records a separate 500T NUSD projection and a `PREPARED` mint request. The retained chain receipts do not change that projection. Current chain state, conversion, redemption, bank payment and external deposits require their own current records. This documentation update performs no execution.
+
+The `reviews/uncapped-500t` material and the six-decimal wallet preparation proposals retain their original review quantities, hashes and local-test scope. They are historical proposals, superseded for identifying the confirmed token by the 18-decimal deployment above. See [minting metadata](../../docs/NUSD-Minting-v4.md).
 
 ## 1:1 conversion contract candidates
 

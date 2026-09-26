@@ -684,7 +684,8 @@
       "USDC",
       "NUSD"
     ],
-    "externalBalancesAggregated": false
+    "externalBalancesAggregated": false,
+    "currentChainStateVerified": false
   },
   "treasury_client_verification": {
     "schema": "numina.treasury.client-verification.v2",
@@ -856,5 +857,14 @@
   "applicationSignatureVerification": false,
   "artifactBytesVerified": false,
   "installedInProviders": false,
-  "registryPublished": false
+  "registryPublished": false,
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  }
 }

@@ -1691,7 +1691,8 @@
       "providerReceipt": null,
       "externalProviderSubmissionStatus": "UNVERIFIED",
       "externalProviderSettlementStatus": "UNVERIFIED"
-    }
+    },
+    "currentChainStateVerified": false
   },
   "softwareExternal": false,
   "softwareIdentity": "NUMINA",
@@ -1989,8 +1990,8 @@
     "singular": true,
     "manifestEqualsNumina": true,
     "numinaEqualsManifest": true,
-    "manifestStatus": "FINAL",
-    "nativeEvidenceStatus": "FINAL",
+    "manifestStatus": "JOURNAL_SNAPSHOT",
+    "nativeEvidenceStatus": "JOURNAL_SNAPSHOT",
     "scope": [
       "historical",
       "current",
@@ -2008,7 +2009,7 @@
     "competingSoftwareIdentityAllowed": false,
     "competingManifestAuthorityAllowed": false,
     "competingMetadataAuthorityAllowed": false,
-    "transfersEnabled": true,
+    "transfersEnabled": null,
     "canonicalTreasuryValues": {
       "schema": "numina.canonical-treasury-values.v1",
       "identity": "NUMINA",
@@ -2181,7 +2182,7 @@
       "providerObservationsAggregated": false,
       "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
     },
-    "canonicalTreasuryValueStatus": "FINAL",
+    "canonicalTreasuryValueStatus": "JOURNAL_SNAPSHOT",
     "providerObservationTreatment": "SOURCE_SCOPED_NON_CANONICAL",
     "numinaTree": {
       "schema": "numina.tree.v1",
@@ -2234,7 +2235,8 @@
         "authorityTransferred": false,
         "leafInputsAllowed": false
       }
-    }
+    },
+    "currentChainStateVerified": false
   },
   "manifest": "NUMINA",
   "software_identity": "NUMINA",
@@ -2264,7 +2266,7 @@
   "metadataAppliesTo": "ALL_NUMINA_SOFTWARE_METADATA",
   "signedEvidenceBytesPreserved": true,
   "hashPinnedArtifactBytesPreserved": true,
-  "transfersEnabled": true,
+  "transfersEnabled": null,
   "canonicalTreasuryValues": {
     "schema": "numina.canonical-treasury-values.v1",
     "identity": "NUMINA",
@@ -3312,6 +3314,17 @@
     "chainMintEvidenceScope": "SEPARATE_FROM_NATIVE_TREASURY_JOURNAL",
     "historicalRecord": true,
     "currentJournalConfirmed": false,
-    "currentChainStateVerified": false
+    "currentChainStateVerified": false,
+    "scope": "RETAINED_RELEASE_CLAIM",
+    "metadataAlignment": "/metadata-alignment.json"
+  },
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
   }
 }

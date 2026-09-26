@@ -1,5 +1,11 @@
 # Owner-signing sequence for the approved 500T review
 
+## Historical review scope
+
+This sequence belongs to the September 16, 2026 **500T, six-decimal uncapped review**. Its requests, archives, policies and checksums retain that scope. For the confirmed deployment, Numina's September 18, 2026 [mint receipt](/downloads/nusd/mint-receipt.json) records **1,500T NUSD at 18 decimals**, chain `962421430`, block `51725`, receipt `0x1`, transaction `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b` and contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`. The separate settlement-contract deployment occurred at block `51726`.
+
+The [current minting guide](/downloads/NUSD-Minting-v4.md) identifies those records. The Numina Native Treasury journal remains the software source of truth. This historical sequence describes a different constructor request; it does not replace the confirmed token identity or the current journal and provider evidence.
+
 Status: preparation and simulation. No production deployment, signature, broadcast, token address, provider deposit or native journal update is established by this document.
 
 The [preparation package](Numina-500T-Deployment-Handoff.zip) contains the v3 token request, three dependent input sheets, receipt-verification checklists and a machine-readable list of unresolved inputs. ZIP SHA-256: `858a8efd985be4b19c9b8a4df90a6d0145b61a0c39354759d5afa83a284a2afd`.

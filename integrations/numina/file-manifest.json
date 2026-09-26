@@ -689,7 +689,8 @@
       "USDC",
       "NUSD"
     ],
-    "externalBalancesAggregated": false
+    "externalBalancesAggregated": false,
+    "currentChainStateVerified": false
   },
   "distribution": {
     "path": "distribution.json",
@@ -767,8 +768,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 30661,
-      "sha256": "058ad3df59906877f54ea1f2141ddb717f23e4fa6a1b01effa22e301ff06e0c1"
+      "bytes": 31028,
+      "sha256": "dee0613d862073cab997405075d258da30230e198ce22e726fa672d89c3511d2"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -847,8 +848,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 8307,
-      "sha256": "18580e042e8b485a1bf2726ed70b0ce3b943bd32aca87607b852a675a3678416"
+      "bytes": 8634,
+      "sha256": "0665ed93db610c15b19fee516681eefb35d0e625149fa32eaddf3c8e80fa909f"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -912,8 +913,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 12327,
-      "sha256": "17763f446acb04ab7a6890c8a0f274b90d76acb1dcba85405fa3a98a31d06e1a"
+      "bytes": 12742,
+      "sha256": "2493f524972f5ce6a804ddae5620e8bee1ae1e7ca18d527db4a2cca2b163bd58"
     },
     {
       "path": "src/client.js",
@@ -972,8 +973,17 @@
     },
     {
       "path": "verification.json",
-      "bytes": 29207,
-      "sha256": "7f26a9305e13d57a3021a7980497f1cb67c9c647d6501ec9facf223bfc9e29fc"
+      "bytes": 29574,
+      "sha256": "f97af75f29e9522b067f01ce3519ea537d95668b1a3cb6cab258b4b28f99e4e4"
     }
-  ]
+  ],
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  }
 }

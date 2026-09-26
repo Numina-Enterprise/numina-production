@@ -2,20 +2,22 @@
 
 ## Release scope
 
-The software includes two compiled, **undeployed contract candidates**: `NuminaUSDCConversion` and `NuminaUSDRedemption`. They implement fixed 1:1 arithmetic for existing NUSD tokens. The original `NuminaUSD` token, six-decimal denomination, supply cap and issuer/minter separation remain unchanged. No contract deployment, token issuance, bridge, provider payment, reserve funding or financial approval is established by this software release. Custom contracts have not received an independent security audit.
+The software includes two compiled, **undeployed contract candidates**: `NuminaUSDCConversion` and `NuminaUSDRedemption`. They implement fixed 1:1 whole-unit arithmetic for existing 18-decimal NUSD, with explicit scaling to six-decimal USDC or two-decimal USD cents. Numina's retained token and settlement-contract deployments have their own receipts, identified below. Publishing these conversion candidates does not establish a conversion deployment, exchange, bridge, provider payment, reserve funding or financial approval. Custom contracts have not received an independent security audit.
 
 Read the versioned software record at `/api/nusd/v1/conversion-workflow`; source and ABI/bytecode hashes are in `/api/nusd/v1/contracts`. The application status and release manifest carry the same records. All live financial-execution flags remain false until independently evidenced activation.
 
 ## NUSD ↔ USDC: fixed-price token inventory
 
-`NuminaUSDCConversion` atomically exchanges existing NUSD and USDC at one micro-unit for one micro-unit, with zero contract fee. Both tokens must have six decimals and must exist on the **same chain**. Constructor addresses are immutable. Checking decimals and deployed code does not establish issuer identity: verify the exact NUSD deployment and the canonical Circle-issued USDC contract separately.
+`NuminaUSDCConversion` atomically exchanges existing 18-decimal NUSD and six-decimal USDC at **one whole NUSD for one whole USDC**, with zero contract fee. Both tokens must exist on the **same chain**. One USDC base unit corresponds to `1000000000000` NUSD base units. NUSD-to-USDC inputs must be exactly divisible by that scale; no rounding occurs. Constructor addresses are immutable. Checking decimals and deployed code does not establish issuer identity: verify the exact NUSD deployment and the canonical Circle-issued USDC contract separately.
+
+Numina's September 18, 2026 [mint receipt](/downloads/nusd/mint-receipt.json) identifies the confirmed 18-decimal constructor issuance: `1,500,000,000,000,000.00 NUSD`, block `51725`, transaction `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b`, contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`, chain `962421430`, receipt `0x1`. The separate settlement-contract deployment occurred at block `51726`. These records establish their own operations; conversion and external deposits require separate execution evidence. The Numina Native Treasury journal remains the software source of truth.
 
 The output token must already be present in the vault. A native journal valuation, a declared 1:1 rate or a token symbol cannot satisfy the liquidity check. Both input and output sender/recipient balance deltas must equal the requested amount, or all effects revert. Fee-on-transfer and inexact token behavior are rejected. Reentrant movement is blocked. The contract cannot mint either asset.
 
 Calls:
 
-- `quote(amount)` returns the unchanged base-unit amount. This arithmetic read reserves no liquidity and is not a binding live quote.
-- `convert(operationId, nusdToUsdc, amount, recipient)` exchanges both tokens atomically. `true` selects NUSD → USDC; `false` selects USDC → NUSD. Caller eligibility and token allowance are required. The recipient is explicit; no Stripe address is inferred.
+- `quote(nusdToUsdc, inputAmount)` returns the output amount in the output token's base units. `true` divides NUSD input by `1000000000000`; `false` multiplies USDC input by that scale. Zero, inexact or overflowing amounts revert. This arithmetic read reserves no liquidity and is not a binding live quote.
+- `convert(operationId, nusdToUsdc, inputAmount, recipient)` exchanges both tokens atomically using the quoted scale. `true` selects NUSD → USDC; `false` selects USDC → NUSD. Caller eligibility and token allowance are required. The recipient is explicit; no Stripe address is inferred.
 - `addLiquidity(isUsdc, amount)` deposits existing inventory from an authorized liquidity manager. Only the exact received amount is accepted.
 - `removeLiquidity(isUsdc, amount, recipient)` lets the liquidity manager withdraw inventory **only while conversion is paused**. Such withdrawals reduce available redemption capacity. The vault does not guarantee backing for NUSD held outside it or maintain asynchronous withdrawal promises.
 
@@ -31,7 +33,7 @@ An eventual USDC deposit must use an asset and network supported by that Stripe 
 
 `NuminaUSDRedemption` locks existing NUSD against a USD payment obligation at **1 NUSD = 1 USD gross**. USD is paid through a separate, funded bank/payment provider integration. The contract neither creates dollars nor sends a bank transfer.
 
-Six-decimal NUSD must convert exactly to two-decimal USD cents: **10,000 NUSD base units = 1 USD cent**. Zero and sub-cent requests revert; there is no rounding or haircut. Solidity integer arithmetic retains exact values beyond JavaScript's safe-number range. Clients must use decimal strings and big integers, never floating-point money calculations. For example, 500T NUSD is `500000000000000000000` NUSD base units and `50000000000000000` USD cents; this arithmetic establishes no funding.
+18-decimal NUSD must convert exactly to two-decimal USD cents: **10,000,000,000,000,000 NUSD base units = 1 USD cent**. Zero and sub-cent requests revert; there is no rounding or haircut. Solidity integer arithmetic retains exact values beyond JavaScript's safe-number range. Clients must use decimal strings and big integers, never floating-point money calculations. For example, 500T NUSD is `500000000000000000000000000000000` NUSD base units and `50000000000000000` USD cents; this arithmetic establishes no funding.
 
 | State | Allowed next step | Token treatment |
 |---|---|---|
