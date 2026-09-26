@@ -26,7 +26,7 @@
     "all": "NUMINA",
     "finalBuildManifest": {
       "path": "public/final-build.json",
-      "blob": "9294f45c724ca02c19c6f67f9115efbd1bdf37fc",
+      "blob": "0bb8880cfce7351989e12e65c09a042fa950d74d",
       "identity": "NUMINA",
       "status": "FINAL",
       "finalAll": "NUMINA",
@@ -242,5 +242,14 @@
     "externalProviderSubmissionStatus": "UNVERIFIED",
     "externalProviderSettlementStatus": "UNVERIFIED"
   },
-  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury"
+  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  }
 }

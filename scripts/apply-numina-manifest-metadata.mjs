@@ -105,8 +105,10 @@ const planned=new Map(),records=new Map();
 function updateValues(value){
   if(Array.isArray(value)){value.forEach(updateValues);return;}
   if(!value||typeof value!=='object')return;
+  if(value.historicalRecord===true)return;
   for(const key of Object.keys(value)){
     const item=value[key];
+    if(/^(historical|retained)/i.test(key)||['approved_review','simulation'].includes(key))continue;
     if(key==='canonicalTreasuryValues'||key==='canonicalValues'&&item?.schema==='numina.canonical-treasury-values.v1'){
       value[key]=structuredClone(values);
     }else if(key==='singularSettlementReceipt'&&item?.id===receipt.id){
@@ -132,6 +134,14 @@ function updateValues(value){
     if(Object.hasOwn(value,'available'))value.available=null;
     value.observationRevision=observation.observedRevision;
   }
+  if(Object.hasOwn(value,'transfersEnabled'))value.transfersEnabled=null;
+  if(Object.hasOwn(value,'provider_verification'))value.provider_verification=null;
+  if(value.canonicalTreasuryValues){
+    for(const field of ['canonicalTreasuryValueStatus','nativeEvidenceStatus','manifestStatus']){
+      if(Object.hasOwn(value,field))value[field]='JOURNAL_SNAPSHOT';
+    }
+    value.currentChainStateVerified=false;
+  }
 }
 function serialize(path,value){
   const newline=read(path).includes('\r\n')?'\r\n':'\n';
@@ -143,8 +153,16 @@ for(const path of currentPaths){
   updateValues(data);
   data.treasuryJournalObservation=structuredClone(observation);
   data.authoritativeCurrentTreasuryRoute=observation.authoritativeCurrentRoute;
+  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,historicalEvidencePreserved:true};
   records.set(path,data);
 }
+const architecture=records.get('config/numina-architecture.json');
+const priorMint=architecture.historical_mint_event??architecture.mint_event;
+architecture.historical_mint_event={...priorMint,status:'HISTORICAL_CHAIN_RECEIPT',historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false,observedAt:constructorMint.observedAt,chain_id:constructorMint.chainId,contract_address:constructorMint.tokenAddress,transaction_hash:constructorMint.transactionHash,block_number:constructorMint.blockNumber,receipt_status:constructorMint.receiptStatus,amount_nusd:constructorMint.amountNusd,decimals:constructorMint.decimals,base_units:constructorMint.baseUnits,mint_receipt:constructorMint.download,settlement_contract_deployment:structuredClone(settlementDeployment)};
+architecture.mint_event=null;
+architecture.mintStatus=values.mintStatus;
+architecture.mint_request={...observation.requests.find(item=>item.kind==='mint_request'),observedRevision:observation.observedRevision,snapshotIsLive:false};
+Object.assign(architecture.treasury,{verification:'JOURNAL_SNAPSHOT',verificationScope:'JOURNAL_CONTINUITY_AT_OBSERVATION',provider_verification:null,providerBalancesVerified:false,modeled_role_values_additive:false,aggregate_modeled_value:null,projection:observation.projection.balance});
 const override=records.get('config/numina-metadata-overrides.v1.json');
 override.resolution.treasurySettlement=null;
 override.resolution.historicalTreasurySettlement=receipt.id;
@@ -166,9 +184,10 @@ if(finalBuild.syncAll){
 finalBuild.softwareTreasury={sourceOfRecord:'NUMINA_NATIVE_TREASURY',journalObservation:structuredClone(observation),canonicalValues:structuredClone(values),bankUsd:structuredClone(connection.softwareBalanceModel.bankUsd),stripeUsdc:structuredClone(connection.softwareBalanceModel.stripeUsdc),nativeNusd:structuredClone(connection.softwareBalanceModel.nativeNusd),aggregate:structuredClone(connection.softwareBalanceModel.aggregate),aggregateModeledValue:null,historicalAggregateModeledValue:receipt.aggregateNusd};
 if(finalBuild.softwareAlignment){finalBuild.historicalSoftwareAlignment={...finalBuild.softwareAlignment,historicalRecord:true};delete finalBuild.softwareAlignment;}
 if(finalBuild.delivery?.browserAlignment){finalBuild.delivery.historicalBrowserAlignment={...finalBuild.delivery.browserAlignment,historicalRecord:true};delete finalBuild.delivery.browserAlignment;}
-if(finalBuild.nusd){
-  finalBuild.historicalNusdRelease=finalBuild.historicalNusdRelease??{...finalBuild.nusd,historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false};
-  finalBuild.nusd={
+for(const data of [finalBuild,records.get('public/business-core.json')])if(data.nusd){
+  data.historicalNusdRelease=data.historicalNusdRelease??{...data.nusd,historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false};
+  Object.assign(data.historicalNusdRelease,{historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false,scope:'RETAINED_RELEASE_CLAIM',metadataAlignment:'/metadata-alignment.json'});
+  data.nusd={
     sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',status:'JOURNAL_SNAPSHOT',snapshotIsLive:false,
     journalObservation:structuredClone(observation),journalMintStatus:'PREPARED',
     journalMintRequestAmount:observation.requests.find(request=>request.kind==='mint_request')?.amount??null,

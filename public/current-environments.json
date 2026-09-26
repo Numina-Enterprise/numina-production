@@ -54,10 +54,10 @@
     "enforced": true
   },
   "contentHashes": {
-    "finalBuildSha256": "bf0625b6d4c35b6d404781cfde5eb3b2dbc51f6a9141c2ac76d88b901c220a22",
-    "finalManifestSha256": "fd036ca6a635790738a9253e18f3c21d88aa7f0b4c0a3599f0f61f6d4123a607"
+    "finalBuildSha256": "5abceb0c9896dd20821e5d1e1a204b578f24889982e52d7c3d394c35cbda1bfa",
+    "finalManifestSha256": "af639af5c2fc3b49d198301394b61672e37cb3c5f2d421c341479edd63fb6047"
   },
-  "frontierId": "bf0625b6d4c35b6d404781cfde5eb3b2dbc51f6a9141c2ac76d88b901c220a22",
+  "frontierId": "5abceb0c9896dd20821e5d1e1a204b578f24889982e52d7c3d394c35cbda1bfa",
   "universalPair": {
     "schema": "numina.universal-pair.resolved.v2",
     "identity": "NUMINA",
@@ -506,5 +506,14 @@
     "externalProviderSubmissionStatus": "UNVERIFIED",
     "externalProviderSettlementStatus": "UNVERIFIED"
   },
-  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury"
+  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  }
 }

@@ -3,8 +3,8 @@
   "identity": "NUMINA",
   "status": "FINAL",
   "frontier": "NEXT_FRONTIER",
-  "frontierId": "bf0625b6d4c35b6d404781cfde5eb3b2dbc51f6a9141c2ac76d88b901c220a22",
-  "canonicalSha256": "bf0625b6d4c35b6d404781cfde5eb3b2dbc51f6a9141c2ac76d88b901c220a22",
+  "frontierId": "5abceb0c9896dd20821e5d1e1a204b578f24889982e52d7c3d394c35cbda1bfa",
+  "canonicalSha256": "5abceb0c9896dd20821e5d1e1a204b578f24889982e52d7c3d394c35cbda1bfa",
   "applicationVersion": "4.0.0",
   "repository": {
     "schema": "numina.repository.v1",
@@ -42,9 +42,9 @@
   ],
   "finalBuild": {
     "path": "public/final-build.json",
-    "gitBlobSha1": "9294f45c724ca02c19c6f67f9115efbd1bdf37fc",
-    "sha256": "bf0625b6d4c35b6d404781cfde5eb3b2dbc51f6a9141c2ac76d88b901c220a22",
-    "canonicalSha256": "bf0625b6d4c35b6d404781cfde5eb3b2dbc51f6a9141c2ac76d88b901c220a22",
+    "gitBlobSha1": "0bb8880cfce7351989e12e65c09a042fa950d74d",
+    "sha256": "5abceb0c9896dd20821e5d1e1a204b578f24889982e52d7c3d394c35cbda1bfa",
+    "canonicalSha256": "5abceb0c9896dd20821e5d1e1a204b578f24889982e52d7c3d394c35cbda1bfa",
     "identity": "NUMINA",
     "status": "FINAL",
     "applicationVersion": "4.0.0",
@@ -859,5 +859,14 @@
     "externalProviderSubmissionStatus": "UNVERIFIED",
     "externalProviderSettlementStatus": "UNVERIFIED"
   },
-  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury"
+  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  }
 }

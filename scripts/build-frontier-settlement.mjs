@@ -13,12 +13,14 @@ import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW} from '../src/nusd-http.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {iosInputSnapshot} from './ios-release.mjs';
 import {treasuryClientVerificationManifest} from '../public/treasury-proof.js';
+import {alignNusdReleaseMetadata} from './align-nusd-release-metadata.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));process.chdir(root);
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const json=f=>JSON.parse(readFileSync(f,'utf8'));
 const baseline=json('reference/frontier-baseline-release.json');
 assert.equal(baseline.workerSha256,'3cd09e0db9b25ae1fd291103039d9af2c58ff5db7dc832e287be0f2f9951e6bc');
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/generate-metadata-alignment.mjs','--check'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['integrations/numina/scripts/package-distribution.js'],{stdio:'inherit'});
 execFileSync(process.env.NUMINA_PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/package-current-integration.py'],{stdio:'inherit'});
@@ -64,6 +66,16 @@ const overlays=[
  ['docs/NUMINA-FINAL-BUILD.json','client/downloads/NUMINA-FINAL-BUILD.json'],
  ['docs/Treasury-Evidence-v3.md','client/downloads/Treasury-Evidence-v3.md'],
  ['docs/NUSD-Minting-v4.md','client/downloads/NUSD-Minting-v4.md'],
+ ['docs/NUSD-Contracts-v4.md','client/downloads/NUSD-Contracts-v4.md'],
+ ['docs/NUSD-Conversion-Contracts.md','client/downloads/NUSD-Conversion-Contracts.md'],
+ ['docs/Numina-Wallet-Signing-Controls.md','client/downloads/Numina-Wallet-Signing-Controls.md'],
+ ['docs/Numina-500T-Deployment-Sequence.md','client/downloads/Numina-500T-Deployment-Sequence.md'],
+ ['docs/Numina-Browser-Deployment-Preparation.md','client/downloads/Numina-Browser-Deployment-Preparation.md'],
+ ['docs/Numina-500T-Simulation.md','client/downloads/Numina-500T-Simulation.md'],
+ ['runtime/nusd/README.md','client/downloads/nusd/README.md'],
+ ['public/metadata-alignment.json','client/metadata-alignment.json'],
+ ['docs/Numina-Metadata-Alignment-v4.json','client/downloads/Numina-Metadata-Alignment-v4.json'],
+ ['docs/Numina-Metadata-Alignment-v4.md','client/downloads/Numina-Metadata-Alignment-v4.md'],
  ['docs/treasury-client-alignment.md','client/downloads/treasury-client-alignment.md'],
  ['docs/native-package-record-v4.json','client/downloads/native-package-record-v4.json'],
  ['docs/numina-os-4.0.0-ios-source.zip','client/downloads/numina-os-4.0.0-ios-source.zip'],
@@ -148,7 +160,7 @@ const presentation=['index','government','financial-institutions','partners','de
 const hashes=new Set();for(const name of presentation){const html=readFileSync('dist/client/'+name+'.html','utf8');for(const m of html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g))hashes.add("'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");if(name!=='index'){const rule='/'+name+'.html /'+name+' 301';if(!redirects.split(/\r?\n/).includes(rule))redirects+='\n'+rule;}}
 headers=headers.replace(/script-src ([^;]+)/,(_,tokens)=>'script-src '+[...new Set([...tokens.trim().split(/\s+/),...hashes])].join(' '));writeFileSync('dist/client/_headers',headers);writeFileSync('dist/client/_redirects',redirects+'\n');
 const sourceAlignment=json('dist/client/source-alignment.json');
-const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
+const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 for(const file of currentInputs){const bytes=readFileSync(file);captured.set(file,{path:file,bytes:bytes.length,sha256:hash(bytes)});}
@@ -157,6 +169,7 @@ sourceAlignment.sourceInputCount=sourceAlignment.sourceInputs.length;
 sourceAlignment.sourceInputCaptureScope='Current metadata overlay inputs; other entries retained from the preserved published source inventory';
 sourceAlignment.sourceInputProvenance={baselineBuildId:baseline.build_id,currentMetadataInputs:[...currentInputs].sort(),otherInputs:'retained_published_inventory'};
 sourceAlignment.provider_routing=NUSD_PROVIDER_ROUTING;
+sourceAlignment.metadataAlignment=json('public/metadata-alignment.json');
 sourceAlignment.canonicalTreasuryValues=values;
 delete sourceAlignment.singularSettlementReceipt;
 sourceAlignment.historicalSettlementReceipt={...receipt,historicalRecord:true,currentJournalConfirmed:false};
@@ -225,6 +238,7 @@ release.distribution.integration_kit.manifest_sha256=hash(readFileSync('dist/cli
 const integrationArchive=json('docs/integration-kit-v4.0.0-record.json');
 Object.assign(release.distribution.integration_kit,{archive_snapshot_sha256:integrationArchive.sha256,archive_snapshot_bytes:integrationArchive.bytes,archive_snapshot_authoritative:true,archive_manifest_matches_current:true,archive_record:'/downloads/integration-kit-v4.0.0-record.json'});
 release.build_id=buildId;release.workerSha256=hash(worker);release.artifacts=artifacts;
+alignNusdReleaseMetadata(release);
 for(const f of aliases)writeFileSync('dist/'+f,JSON.stringify(release,null,2)+'\n');
 execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});
 for(const target of ['dist/server/index.js',...artifacts.filter(x=>/\.(?:js|json|html|md)$/.test(x.path)).map(x=>'dist/'+x.path),...aliases.map(x=>'dist/'+x)])assert.ok(!readFileSync(target,'utf8').includes('0x735bd8'),'Stale Stripe address in '+target);

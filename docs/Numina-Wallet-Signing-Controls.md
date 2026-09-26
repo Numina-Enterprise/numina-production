@@ -1,5 +1,11 @@
 # Numina owner-wallet signing controls
 
+## Historical preparation scope
+
+This guide describes the retained September 16, 2026 six-decimal, 1,500T wallet proposal and its pinned preparation tools. Its constructor bytes, review requirements and approval references remain specific to that proposal. The confirmed token is identified by Numina's September 18, 2026 [mint receipt](/downloads/nusd/mint-receipt.json): **block `51725`**, transaction `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b`, contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`, chain `962421430`, receipt `0x1`, and `1,500,000,000,000,000.00 NUSD` at **18 decimals**. The separate settlement-contract deployment occurred at block `51726`.
+
+Use [current mint metadata](/api/nusd/v1/mint-workflow) and [the minting guide](/downloads/NUSD-Minting-v4.md) for the confirmed deployment. The older six-decimal constructor and receipt checker do not describe that deployment. The Numina Native Treasury journal remains the software source of truth; its September 25, 2026 revision-142 observation records a separate 500T NUSD projection and `PREPARED` mint request. Current chain and provider execution status require their own evidence.
+
 Open https://numinalabs.xyz/wallet-signing. The approved recipient and sender is `0x1a45671AE2ee3E52264116151924FAAcb80Fc02E`.
 
 ## Wallet created inside Numina
@@ -9,7 +15,7 @@ Open https://numinalabs.xyz/wallet-signing. The approved recipient and sender is
 3. Review the maximum cost and choose **Download unsigned wallet handoff**. The page refreshes the observation, verifies the exact request and constructor hashes, and checks integer fee arithmetic, freshness and observed native fee balance. Clearing the session or leaving the page discards the selection and estimate.
 4. Complete the eight outstanding production reviews. Unlock the backup yourself in compatible wallet software. The backup checker does not decrypt, sign or submit. A file-format check, address match or network estimate does not resolve the reviews or independently verify funds.
 
-The read-only route is `GET /v2/network/deployment-estimate`. It accepts no transaction input or credential selection. Quotes expire after 60 seconds. Unsigned exports retain the pending reviews, false verification/execution flags and null receipt. A 1,500T native journal projection is separate from this proposed on-chain issuance and from provider balances.
+The read-only route is `GET /v2/network/deployment-estimate`. It accepts no transaction input or credential selection. Quotes expire after 60 seconds. Unsigned exports retain the pending reviews, false verification/execution flags and null receipt. The native journal projection is read from `/api/control/v1/treasury`; the retained 1,500T proposal does not set that balance or any provider balance.
 
 ## Browser wallet extension
 
@@ -24,7 +30,7 @@ The preparation controls above use an existing EIP-1193 browser wallet and call 
 
 ## One owner approval
 
-The owner approved the combined release on September 16, 2026. `public/owner-approval.js` records that single authorization and binds the current 1,500T request and issuer-policy hashes. The root release manifest and owner execution policy reference the same record. Approval is recorded once across the website and gateway. The existing policy signature and supporting review evidence retain their actual verification state; submission remains blocked until those records are resolved.
+The owner approved the combined release on September 16, 2026. `public/owner-approval.js` records that single authorization and binds the retained six-decimal 1,500T request and issuer-policy hashes. The root release manifest and owner execution policy reference the same record. Approval is recorded once across the website and gateway. The existing policy signature and supporting review evidence retain their actual verification state; submission through these proposal-specific controls remains blocked until those records are resolved.
 
 The downloadable `Numina-1500T-Approval-Handoff.zip` retains its original dated evidence snapshot and checksums. The current owner approval is recorded in the release manifest, so historical evidence is not silently rewritten.
 
@@ -67,7 +73,7 @@ The owner signing statement is separately recorded in `public/owner-approval.js`
 - Request hash basis: raw request-file bytes, not canonical JSON.
 - Expected genesis: `0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1`.
 
-The retained 500T template, policies and artifacts are unchanged. The completed 1,500T internal projection adjustment has its own journal receipt and is not an on-chain mint receipt.
+The retained 500T template, policies and artifacts are unchanged. Historical projection-adjustment claims retain their original evidence scope. The current native journal determines the software balance; at the revision-142 observation it held 500T NUSD. The confirmed 18-decimal constructor mint has the separate block-51725 chain receipt above.
 
 The supplied fee schedule remains owner-confirmed: `0.000000000005%`, or `75 NUSD` on the separate 1,500T proposal. This schedule does not replace the wallet's RPC gas estimate, establish which asset pays gas, or deduct that fee. Quotes are single-provider observations, not independent verification or production approval. All exported execution/production-approval flags remain false and the receipt remains null.
 

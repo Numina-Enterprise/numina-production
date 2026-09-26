@@ -16,6 +16,14 @@ test('published contract stays bound to the finalized deployed source, artifact 
   assert.equal(bound.contracts[0].artifact.sha256,receipt.artifactSha256);
   assert.equal(bound.contracts[0].source.sha256,receipt.sourceSha256);
   assert.equal(bound.issuance.decimals,18);
+  for(const descriptor of bound.contracts.slice(0,2)){
+    assert.equal(descriptor.historicalRecord,true);
+    assert.equal(descriptor.observedAt,receipt.finality.observedAt);
+    assert.equal(descriptor.currentPaused,null);
+    assert.equal(descriptor.currentChainStateVerified,false);
+    assert.equal(descriptor.deployment.verification_scope,'RETAINED_CHAIN_RECEIPT');
+    assert.equal(descriptor.deployment.observedAt,receipt.finality.observedAt);
+  }
   for(const mutate of [
     value=>value.sourceSha256='0'.repeat(64),
     value=>value.artifactSha256='0'.repeat(64),

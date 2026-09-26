@@ -12,6 +12,7 @@ import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/walle
 import {EXPECTED_RUNTIME_SHA256,MINIMUM_CONFIRMATIONS} from '../public/wallet-execution-receipt.js';
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {alignNusdReleaseMetadata} from './align-nusd-release-metadata.mjs';
 const NUMINA='NUMINA';
 const EXECUTE_ALL=NUMINA;
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -125,5 +126,6 @@ record.softwareTreasury={identity:'NUMINA',singular:true,...structuredClone(NUMI
 Object.assign(record.native_treasury_alignment,{status:'JOURNAL_SNAPSHOT',aggregateModeledValue:null,historicalAggregateModeledValue:'1500000000000000',modeledAllocationsAdditive:false,verificationScope:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT'});
 record.security={connections:'/connections',connectionManifest:'/api/connections/v1/manifest',surfaces:'/security-surfaces.json',surfacesSha256:digest(readFileSync('public/security-surfaces.json')),documentation:'/security',controlModel:'/downloads/Numina-Security.md',sha256:digest(readFileSync('docs/Numina-Security.md')),scope:'one canonical Numina security and financial control model',independentCertificationEstablished:false};
 record.security.financialEvidence={workspace:'/financial-services',manifest:'/api/financial/v1/manifest',approvalPack:'/downloads/Numina-Financial-Approval-Evidence.md',approvalPackSha256:digest(readFileSync('docs/Numina-Financial-Approval-Evidence.md')),classification:'software_evidence_not_financial_approval'};
+alignNusdReleaseMetadata(record);
 for(const file of manifestAliases)writeFileSync('dist/client/downloads/'+file,JSON.stringify(record,null,2)+'\n');
 console.log('Generated Numina '+record.version+' application release identity: '+record.build_id);

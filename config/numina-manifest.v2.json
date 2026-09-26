@@ -32,7 +32,7 @@
       "stripe": false,
       "role": "destination_transport_observation_only"
     },
-    "provider_verification": true,
+    "provider_verification": null,
     "authenticated": true,
     "verified": true,
     "deployed": true,
@@ -290,5 +290,14 @@
     "externalProviderSubmissionStatus": "UNVERIFIED",
     "externalProviderSettlementStatus": "UNVERIFIED"
   },
-  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury"
+  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  }
 }

@@ -68,6 +68,9 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
   const nativeActivation=NATIVE_ACTIVATIONS[specification.id]??null;
   const descriptor = {
     id:specification.id, name:specification.name, status:verifiedDeployment?.status??nativeActivation?.status??'DEPLOYMENT_PREPARATION_INITIATED',
+    historicalRecord:verifiedDeployment!==null||nativeActivation!==null,
+    observedAt:verifiedDeployment?NUMINA_CANONICAL_TREASURY_VALUES.separateChainMintEvidence.observedAt:null,
+    currentChainStateVerified:false,currentOperationalState:'UNVERIFIED',currentPaused:null,
     source:{repository_path:`runtime/nusd/contracts/${specification.name}.sol`,
       url:`/downloads/contracts/${specification.name}.sol`,sha256:sha256(source),bytes:source.length,
       encoding:'UTF-8',line_endings:'LF'},
@@ -77,7 +80,7 @@ export function contractDescriptor(specification, sourceInput, artifactInput) {
     compiler:{version:artifact.compiler,settings:artifact.compilerSettings},
     implemented_operations:specification.operations,
     verification:{source_hash_matches_artifact:true,initiation_recorded:true,independent_security_audit:false,chain_receipt_verified:verifiedDeployment!==null,native_activation_verified:false,signed_1_to_1_backing_verified:false,historical_native_attestation_recorded:nativeActivation!==null},
-    deployment:verifiedDeployment?{lifecycle:'FINAL',status:'verified',submission_performed:true,expected_chain_id:'962421430',contract_address:verifiedDeployment.contract_address,
+    deployment:verifiedDeployment?{lifecycle:'FINAL',status:'verified',historicalRecord:true,observedAt:NUMINA_CANONICAL_TREASURY_VALUES.separateChainMintEvidence.observedAt,currentChainStateVerified:false,verification_scope:'RETAINED_CHAIN_RECEIPT',submission_performed:true,expected_chain_id:'962421430',contract_address:verifiedDeployment.contract_address,
       transaction_hash:verifiedDeployment.transaction_hash,block_number:verifiedDeployment.block_number,receipt:{status:verifiedDeployment.receipt_status,record:verifiedDeployment.receipt_record}}:
       nativeActivation?{lifecycle:'HISTORICAL_ATTESTATION',status:'retained_attestation',submission_performed:false,expected_chain_id:'962421430',native_contract_id:nativeActivation.native_contract_id,native_attestation_id:nativeActivation.native_attestation_id,ratio:nativeActivation.ratio,backing_verified:null,verification_scope:'HISTORICAL_NUMINA_ATTESTATION',external_provider_verified:false,location:nativeActivation.location,modeled_target:nativeActivation.modeled_target,native_unit:nativeActivation.native_unit,nusd_equivalent_target:nativeActivation.nusd_equivalent_target,contract_address:null,transaction_hash:null,receipt:null,chain_contract_address_recorded:false,chain_transaction_hash_recorded:false}:
       {lifecycle:'INITIATED',status:'not_verified',submission_performed:false,expected_chain_id:'962421430',contract_address:null,transaction_hash:null,receipt:null},

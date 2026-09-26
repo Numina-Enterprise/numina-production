@@ -1,5 +1,11 @@
 # Prepare the 500T NUSD request in Numina
 
+## Historical preparation scope
+
+This page documents the retained September 16, 2026 **500T, six-decimal proposal** and its original unsigned browser tools. Numina's confirmed constructor issuance is **1,500T NUSD at 18 decimals**, recorded on September 18, 2026 at block `51725`, chain `962421430`, receipt `0x1`, transaction `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b`, contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`. The separate settlement-contract deployment occurred at block `51726`.
+
+See the retained [mint receipt](/downloads/nusd/mint-receipt.json) and [current minting guide](/downloads/NUSD-Minting-v4.md). The original preparation files keep their own hashes and quantities. The Numina Native Treasury journal remains the software source of truth; these proposal inputs do not determine current balances or provider settlement.
+
 Open `/deployment-readiness`. The owner-selected recipient is `0x1a45671AE2ee3E52264116151924FAAcb80Fc02E`. This is a request selection, not evidence of wallet control, NUSD acceptance or funds. The owner also selected this address as the sender. Both public-address fields remain editable; selection does not verify signing control.
 
 ## Prepare and save

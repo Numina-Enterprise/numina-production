@@ -26,7 +26,7 @@
     "unit": "NUSD",
     "projection": "500000000000000",
     "authority": "NUMINA",
-    "verification": "VERIFIED",
+    "verification": "JOURNAL_SNAPSHOT",
     "system_of_record": "NUMINA",
     "scope": "Numina-native",
     "route": "/api/control/v1/treasury",
@@ -39,7 +39,7 @@
     "provider_balances_changed_by_build": false,
     "identity": "NUMINA",
     "provider": "NUMINA",
-    "provider_verification": true,
+    "provider_verification": null,
     "alignment_schema": "numina.treasury.alignment.v2",
     "account_view_schema": "numina.treasury.account-view.v2",
     "canonical_reference_schema": "numina.treasury.canonical-reference.v2",
@@ -48,23 +48,14 @@
     "separate_roles": true,
     "singular_identity": true,
     "provider_role_balances_additive": false,
-    "modeled_role_values_additive": true,
-    "aggregate_modeled_value": "1500000000000000",
+    "modeled_role_values_additive": false,
+    "aggregate_modeled_value": null,
     "aggregate_modeled_unit": "NUSD",
-    "external_balances_aggregated": false
+    "external_balances_aggregated": false,
+    "verificationScope": "JOURNAL_CONTINUITY_AT_OBSERVATION",
+    "providerBalancesVerified": false
   },
-  "mint_event": {
-    "status": "FINAL",
-    "chain_id": "962421430",
-    "decimals": 18,
-    "amount_nusd": "1500000000000000",
-    "base_units": "1500000000000000000000000000000000",
-    "contract_address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
-    "transaction_hash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
-    "paused": true,
-    "receipt": "/downloads/nusd/deployment-receipt.json",
-    "external_backing_verified": false
-  },
+  "mint_event": null,
   "pendingRuntimeMigration": null,
   "frontierVersion": "4.0.0",
   "architectureLayers": {
@@ -85,7 +76,7 @@
   "source": "NUMINA",
   "evidence": "NUMINA",
   "provider": "NUMINA",
-  "provider_verification": true,
+  "provider_verification": null,
   "core": "NUMINA",
   "worker": "NUMINA",
   "journal": "NUMINA",
@@ -306,5 +297,51 @@
     "externalProviderSubmissionStatus": "UNVERIFIED",
     "externalProviderSettlementStatus": "UNVERIFIED"
   },
-  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury"
+  "authoritativeCurrentTreasuryRoute": "/api/control/v1/treasury",
+  "currentChainStateVerified": false,
+  "metadataAlignment": {
+    "authority": "NUMINA",
+    "softwareSourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
+    "record": "/metadata-alignment.json",
+    "constructorMintBlock": "51725",
+    "settlementContractDeploymentBlock": "51726",
+    "historicalEvidencePreserved": true
+  },
+  "historical_mint_event": {
+    "status": "HISTORICAL_CHAIN_RECEIPT",
+    "chain_id": "962421430",
+    "decimals": 18,
+    "amount_nusd": "1500000000000000",
+    "base_units": "1500000000000000000000000000000000",
+    "contract_address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "transaction_hash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "paused": true,
+    "receipt": "/downloads/nusd/deployment-receipt.json",
+    "external_backing_verified": false,
+    "historicalRecord": true,
+    "currentJournalConfirmed": false,
+    "currentChainStateVerified": false,
+    "observedAt": "2026-09-18T15:35:24.884Z",
+    "block_number": "51725",
+    "receipt_status": "0x1",
+    "mint_receipt": "/downloads/nusd/mint-receipt.json",
+    "settlement_contract_deployment": {
+      "scope": "CONTRACT_DEPLOYMENT",
+      "blockNumber": "51726",
+      "receiptStatus": "0x1",
+      "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "contractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
+    }
+  },
+  "mintStatus": "PREPARED_IN_JOURNAL",
+  "mint_request": {
+    "kind": "mint_request",
+    "amount": "1500000000000000",
+    "unit": "NUSD",
+    "status": "PREPARED",
+    "submission_performed": false,
+    "receipt": null,
+    "observedRevision": 142,
+    "snapshotIsLive": false
+  }
 }
