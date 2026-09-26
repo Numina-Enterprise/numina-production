@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {existsSync,readdirSync,readFileSync,writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_TREASURY_JOURNAL_OBSERVATION} from '../public/treasury-connection-model.js';
+import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT,NUMINA_BASE_USDC_DESTINATION,NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_TREASURY_JOURNAL_OBSERVATION} from '../public/treasury-connection-model.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -41,6 +41,8 @@ export function createMetadataAlignment(){
     authoritativeCurrentTreasuryRoute:'/api/control/v1/treasury',
     canonicalConstructorMint:mint,
     journalObservation:structuredClone(NUMINA_TREASURY_JOURNAL_OBSERVATION),
+    baseUsdcDestination:structuredClone(NUMINA_BASE_USDC_DESTINATION),
+    authorizedDepositIntent:structuredClone(NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT),
     currentChainStateVerified:false,providerBackingVerified:false,providerSettlementVerified:false,
     historicalInterpretation:{
       archivedRecordsAreTimeScoped:true,signaturesOrArchivedClaimsRewritten:false,

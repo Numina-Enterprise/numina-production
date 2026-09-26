@@ -23,6 +23,34 @@ export const NUMINA_TREASURY_JOURNAL_OBSERVATION=Object.freeze({
   baseUsdcTransferRequest:null,baseUsdcTransactionHash:null,providerReceipt:null,
   externalProviderSubmissionStatus:'UNVERIFIED',externalProviderSettlementStatus:'UNVERIFIED'
 });
+export const NUMINA_BASE_USDC_DESTINATION=Object.freeze({
+  schema:'numina.base-usdc.destination.v1',treasuryIdentity:'NUMINA',transportProvider:'Stripe',
+  stripeAccount:'acct_1UEEPnQdJat0efmT',
+  financialAccount:'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu',
+  financialAddress:'finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8',
+  currency:'USDC',settlementCurrency:'USDC',
+  address:'0x736bd8f274dce00a8bb374edd85df0d2e631018e',
+  network:'base',networkChainId:'8453',statusAtObservation:'active',observedDate:'2026-09-26',
+  providerBindingVerifiedAtObservation:true,providerBalanceAtObservation:'0',
+  providerInboundPendingAtObservation:'0',providerReceivedCreditsAtObservation:0,
+  canonicalTokenContract:null,canonicalTokenContractVerified:false,
+  observationScope:'AUTHENTICATED_PROVIDER_DESTINATION_AND_ZERO_BALANCE_OBSERVATION'
+});
+export const NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT=Object.freeze({
+  schema:'numina.treasury.deposit-intent.v1',treasuryIdentity:'NUMINA',
+  status:'OWNER_AUTHORIZATION_RECORDED',authorizationDate:'2026-09-26',
+  sourceOfAuthorization:'OWNER_INSTRUCTION',journalStatus:'NOT_RECORDED',
+  currency:'USDC',network:'base',networkChainId:'8453',
+  destination:NUMINA_BASE_USDC_DESTINATION.address,
+  destinationFinancialAccount:NUMINA_BASE_USDC_DESTINATION.financialAccount,
+  destinationBindingVerified:true,amountUsdc:null,sourceWallet:null,
+  canonicalTokenContract:null,canonicalTokenContractVerified:false,
+  sourceUsdcBalance:null,sourceBaseEthGasBalance:null,signerControlVerified:false,
+  journalTransferRequest:null,idempotencyVerified:false,replayProtectionVerified:false,
+  submissionPerformed:false,broadcast:false,transactionHash:null,onchainReceipt:null,
+  providerCredit:null,reconciliation:null,
+  executionDecision:'NOT_BROADCAST_MISSING_LIVE_PREREQUISITES'
+});
 // Consume only a projection already authenticated by the journal reader. This helper
 // does not turn a dated file or a prepared request into a current settlement.
 export function journalTreasuryMetadata(projection){
