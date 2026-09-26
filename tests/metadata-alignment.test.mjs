@@ -18,6 +18,18 @@ test('historical inventory preserves original records and applies one current in
   assert.equal(record.canonicalConstructorMint.settlementContractDeployment.blockNumber,'51726');
   assert.equal(record.journalObservation.observedRevision,142);
   assert.equal(record.journalObservation.baseUsdcTransferRequest,null);
+  assert.equal(record.baseUsdcDestination.address,'0x736bd8f274dce00a8bb374edd85df0d2e631018e');
+  assert.equal(record.baseUsdcDestination.network,'base');
+  assert.equal(record.baseUsdcDestination.networkChainId,'8453');
+  assert.equal(record.baseUsdcDestination.financialAccount,'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu');
+  assert.equal(record.baseUsdcDestination.financialAddress,'finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8');
+  assert.equal(record.baseUsdcDestination.providerBindingVerifiedAtObservation,true);
+  assert.equal(record.baseUsdcDestination.canonicalTokenContract,null);
+  assert.equal(record.authorizedDepositIntent.status,'OWNER_AUTHORIZATION_RECORDED');
+  assert.equal(record.authorizedDepositIntent.amountUsdc,null);
+  assert.equal(record.authorizedDepositIntent.journalTransferRequest,null);
+  assert.equal(record.authorizedDepositIntent.broadcast,false);
+  assert.equal(record.authorizedDepositIntent.transactionHash,null);
   assert.deepEqual(record.executionEffects,{journalWrite:false,tokenIssuance:false,conversion:false,externalDeposit:false,reconciliation:false});
   const indexed=new Map(record.retainedInventory.records.map(item=>[item.path,item]));
   for(const path of ['runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','config/treasury-aggregate-settlement-1500t.v1.json']){
@@ -40,6 +52,8 @@ test('built metadata and release aliases expose the same alignment record',()=>{
     assert.equal(release.transfersEnabled,null,name);
     assert.equal(release.nusd_transaction_receipts.deployment.block_number,'51725',name);
     assert.equal(release.nusd_transaction_receipts.settlement.block_number,'51726',name);
+    assert.deepEqual(release.baseUsdcDestination,record.baseUsdcDestination,name);
+    assert.deepEqual(release.authorizedDepositIntent,record.authorizedDepositIntent,name);
   }
 });
 

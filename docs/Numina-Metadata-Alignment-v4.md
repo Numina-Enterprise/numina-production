@@ -31,4 +31,10 @@ The [mint workflow](/api/nusd/v1/mint-workflow), [status](/api/nusd/v1/status), 
 
 The journal observation used in this publication is revision **142**, head `67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368`: a **500T NUSD** projection, a prepared NUSD mint request and a prepared USD bank request. That observation contains no Base USDC transfer request. It is a dated snapshot; later state must be read from the authenticated journal.
 
-This publication aligns metadata. It records no new issuance, conversion, deposit or reconciliation. Stripe's USDC destination uses Base; the Numina constructor mint uses chain `962421430`. A deposit requires its own exact transfer request, authorized source signer, source USDC and gas balances, replay protection and resulting receipts.
+## Authorized Base USDC deposit intent
+
+The owner authorized a deposit to Stripe financial account `fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu`, financial address `finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8`, at `0x736bd8f274dce00a8bb374edd85df0d2e631018e`. The provider observation identifies the currency as **USDC**, the network as **Base** (chain ID **8453**) and the address as active. The provider balance and inbound pending balance were both zero at that observation.
+
+The authorization is recorded as an unsubmitted intent because the authenticated journal snapshot contains no exact Base USDC transfer request or amount. The source wallet, signer control, source USDC balance, Base ETH gas balance and canonical Base USDC token contract also remain unverified. No journal write, broadcast, transaction hash, receipt, provider credit or reconciliation is recorded.
+
+This publication aligns metadata. It records no new issuance, conversion, deposit or reconciliation. The Stripe destination is on Base; the Numina constructor mint uses chain `962421430`. A broadcast requires its own exact journal transfer request and amount, authorized source signer, source balances, canonical token identity, replay protection and resulting receipts.

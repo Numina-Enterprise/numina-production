@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_JOURNAL_OBSERVATION as observation,NUMINA_TREASURY_CONNECTION as connection,NUSD_OPERATOR_ACTIVATION as activation} from '../public/treasury-connection-model.js';
+import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT as depositIntent,NUMINA_BASE_USDC_DESTINATION as destination,NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_JOURNAL_OBSERVATION as observation,NUMINA_TREASURY_CONNECTION as connection,NUSD_OPERATOR_ACTIVATION as activation} from '../public/treasury-connection-model.js';
 
 // Synchronize current metadata projections. Journal events, historical evidence,
 // provider observations, signatures and artifact bytes are never rewritten.
@@ -75,6 +75,9 @@ for(const path of ['runtime/nusd/treasury-settlement-receipt.json','docs/nusd/tr
   assert.deepEqual(record.components,native.components,path+' holdings');
 }
 assert.equal(native.components.find(item=>item.settledUnit==='USDC').usdcAddress,connection.nativeLocationBindings.stripeUsdc.usdcAddress,'Canonical Stripe USDC deposit address');
+assert.equal(destination.address,connection.nativeLocationBindings.stripeUsdc.usdcAddress,'Aligned Base USDC destination');
+assert.equal(destination.financialAccount,connection.nativeLocationBindings.stripeUsdc.financialAccount,'Aligned Stripe financial account');
+assert.equal(depositIntent.destination,destination.address,'Authorized deposit destination');
 assert.equal(values.status,'JOURNAL_SNAPSHOT');
 assert.equal(values.canonical,false);
 assert.equal(values.observation.observedRevision,observation.observedRevision);
@@ -153,7 +156,7 @@ for(const path of currentPaths){
   updateValues(data);
   data.treasuryJournalObservation=structuredClone(observation);
   data.authoritativeCurrentTreasuryRoute=observation.authoritativeCurrentRoute;
-  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,historicalEvidencePreserved:true};
+  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),historicalEvidencePreserved:true};
   records.set(path,data);
 }
 const architecture=records.get('config/numina-architecture.json');
