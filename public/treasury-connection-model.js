@@ -33,7 +33,8 @@ export const NUMINA_BASE_USDC_DESTINATION=Object.freeze({
   network:'base',networkChainId:'8453',statusAtObservation:'active',observedDate:'2026-09-26',
   providerBindingVerifiedAtObservation:true,providerBalanceAtObservation:'0',
   providerInboundPendingAtObservation:'0',providerReceivedCreditsAtObservation:0,
-  canonicalTokenContract:null,canonicalTokenContractVerified:false,
+  canonicalTokenContract:'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',canonicalTokenContractVerified:true,
+  canonicalTokenContractVerificationSource:'https://developers.circle.com/stablecoins/usdc-contract-addresses',
   observationScope:'AUTHENTICATED_PROVIDER_DESTINATION_AND_ZERO_BALANCE_OBSERVATION'
 });
 export const NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT=Object.freeze({
@@ -43,13 +44,27 @@ export const NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT=Object.freeze({
   currency:'USDC',network:'base',networkChainId:'8453',
   destination:NUMINA_BASE_USDC_DESTINATION.address,
   destinationFinancialAccount:NUMINA_BASE_USDC_DESTINATION.financialAccount,
-  destinationBindingVerified:true,amountUsdc:null,sourceWallet:null,
-  canonicalTokenContract:null,canonicalTokenContractVerified:false,
+  destinationBindingVerified:true,amountUsdc:'500000000000000.00',amountSource:'OWNER_INSTRUCTION',
+  sourceWallet:null,canonicalTokenContract:NUMINA_BASE_USDC_DESTINATION.canonicalTokenContract,
+  canonicalTokenContractVerified:NUMINA_BASE_USDC_DESTINATION.canonicalTokenContractVerified,
   sourceUsdcBalance:null,sourceBaseEthGasBalance:null,signerControlVerified:false,
   journalTransferRequest:null,idempotencyVerified:false,replayProtectionVerified:false,
   submissionPerformed:false,broadcast:false,transactionHash:null,onchainReceipt:null,
   providerCredit:null,reconciliation:null,
+  blockingPrerequisites:Object.freeze(['CANONICAL_JOURNAL_TRANSFER_REQUEST','SOURCE_WALLET','SIGNER_CONTROL','SOURCE_USDC_BALANCE','SOURCE_BASE_ETH_GAS_BALANCE','IDEMPOTENCY_AND_REPLAY_STATE']),
   executionDecision:'NOT_BROADCAST_MISSING_LIVE_PREREQUISITES'
+});
+export const NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT=Object.freeze({
+  schema:'numina.treasury.bank-deposit-alignment.v1',treasuryIdentity:'NUMINA',
+  status:'OWNER_CLAIM_RECORDED_PROVIDER_CONFIRMATION_REQUIRED',recordedDate:'2026-09-26',
+  sourceOfStatement:'OWNER_INSTRUCTION',institution:'Bank of America',accountLast4:'3486',
+  fullAccountNumberPublished:false,achRoutingNumber:'073000176',confirmation:'8000750550',
+  clearedDate:'2026-08-31',amountUsd:'500000000000000.00',
+  linkedBaseUsdcIntentAmount:NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT.amountUsdc,
+  assetConversionVerified:false,providerBalanceVerified:false,providerTransactionVerified:false,
+  externalFundsMovementVerified:false,externalSettlementVerified:false,
+  retainedProviderObservation:Object.freeze({transactionAmountUsd:'12.00',confirmation:'XXXXX50550',clearedDate:'2026-08-31',amountMatchesOwnerClaim:false,confirmationMatchesOwnerClaim:false}),
+  evidenceRequired:'/downloads/Provider-Confirmation-Request-v4.md'
 });
 // Consume only a projection already authenticated by the journal reader. This helper
 // does not turn a dated file or a prepared request into a current settlement.

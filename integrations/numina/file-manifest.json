@@ -768,8 +768,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 33233,
-      "sha256": "7932becaf8404d3762bf509c984269f45f24b47467d41970b9416889c724d6f6"
+      "bytes": 34902,
+      "sha256": "fac7efb902ea17f0658273fcd28a2695d22ead56c6699f2f236c1b6cc6ff4b3e"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -848,8 +848,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 10839,
-      "sha256": "83f79f9566f038bd04752c395edc7c4d3049ac2a73cad8bcec1b9b1508349b6a"
+      "bytes": 12508,
+      "sha256": "c3d0d272f447407b802e714aa740fd55169fcf077255af43210228e637c8a17c"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -973,8 +973,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 31779,
-      "sha256": "06e786e6e3d2d603b96466ea36cc4c10765abd0c2af643da92df5afc83de12bc"
+      "bytes": 33448,
+      "sha256": "cad575da2a9c4bd2c0f4e8767e407c17d0cac8db58aa28cfcfeb752215b5c376"
     }
   ],
   "currentChainStateVerified": false,
@@ -1002,8 +1002,9 @@
       "providerBalanceAtObservation": "0",
       "providerInboundPendingAtObservation": "0",
       "providerReceivedCreditsAtObservation": 0,
-      "canonicalTokenContract": null,
-      "canonicalTokenContractVerified": false,
+      "canonicalTokenContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "canonicalTokenContractVerified": true,
+      "canonicalTokenContractVerificationSource": "https://developers.circle.com/stablecoins/usdc-contract-addresses",
       "observationScope": "AUTHENTICATED_PROVIDER_DESTINATION_AND_ZERO_BALANCE_OBSERVATION"
     },
     "authorizedDepositIntent": {
@@ -1019,10 +1020,11 @@
       "destination": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
       "destinationFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
       "destinationBindingVerified": true,
-      "amountUsdc": null,
+      "amountUsdc": "500000000000000.00",
+      "amountSource": "OWNER_INSTRUCTION",
       "sourceWallet": null,
-      "canonicalTokenContract": null,
-      "canonicalTokenContractVerified": false,
+      "canonicalTokenContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "canonicalTokenContractVerified": true,
       "sourceUsdcBalance": null,
       "sourceBaseEthGasBalance": null,
       "signerControlVerified": false,
@@ -1035,7 +1037,43 @@
       "onchainReceipt": null,
       "providerCredit": null,
       "reconciliation": null,
+      "blockingPrerequisites": [
+        "CANONICAL_JOURNAL_TRANSFER_REQUEST",
+        "SOURCE_WALLET",
+        "SIGNER_CONTROL",
+        "SOURCE_USDC_BALANCE",
+        "SOURCE_BASE_ETH_GAS_BALANCE",
+        "IDEMPOTENCY_AND_REPLAY_STATE"
+      ],
       "executionDecision": "NOT_BROADCAST_MISSING_LIVE_PREREQUISITES"
+    },
+    "ownerProvidedBankDepositAlignment": {
+      "schema": "numina.treasury.bank-deposit-alignment.v1",
+      "treasuryIdentity": "NUMINA",
+      "status": "OWNER_CLAIM_RECORDED_PROVIDER_CONFIRMATION_REQUIRED",
+      "recordedDate": "2026-09-26",
+      "sourceOfStatement": "OWNER_INSTRUCTION",
+      "institution": "Bank of America",
+      "accountLast4": "3486",
+      "fullAccountNumberPublished": false,
+      "achRoutingNumber": "073000176",
+      "confirmation": "8000750550",
+      "clearedDate": "2026-08-31",
+      "amountUsd": "500000000000000.00",
+      "linkedBaseUsdcIntentAmount": "500000000000000.00",
+      "assetConversionVerified": false,
+      "providerBalanceVerified": false,
+      "providerTransactionVerified": false,
+      "externalFundsMovementVerified": false,
+      "externalSettlementVerified": false,
+      "retainedProviderObservation": {
+        "transactionAmountUsd": "12.00",
+        "confirmation": "XXXXX50550",
+        "clearedDate": "2026-08-31",
+        "amountMatchesOwnerClaim": false,
+        "confirmationMatchesOwnerClaim": false
+      },
+      "evidenceRequired": "/downloads/Provider-Confirmation-Request-v4.md"
     },
     "historicalEvidencePreserved": true
   }

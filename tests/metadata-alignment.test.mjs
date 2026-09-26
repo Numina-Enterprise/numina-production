@@ -24,12 +24,20 @@ test('historical inventory preserves original records and applies one current in
   assert.equal(record.baseUsdcDestination.financialAccount,'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu');
   assert.equal(record.baseUsdcDestination.financialAddress,'finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8');
   assert.equal(record.baseUsdcDestination.providerBindingVerifiedAtObservation,true);
-  assert.equal(record.baseUsdcDestination.canonicalTokenContract,null);
+  assert.equal(record.baseUsdcDestination.canonicalTokenContract,'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913');
+  assert.equal(record.baseUsdcDestination.canonicalTokenContractVerified,true);
   assert.equal(record.authorizedDepositIntent.status,'OWNER_AUTHORIZATION_RECORDED');
-  assert.equal(record.authorizedDepositIntent.amountUsdc,null);
+  assert.equal(record.authorizedDepositIntent.amountUsdc,'500000000000000.00');
   assert.equal(record.authorizedDepositIntent.journalTransferRequest,null);
   assert.equal(record.authorizedDepositIntent.broadcast,false);
   assert.equal(record.authorizedDepositIntent.transactionHash,null);
+  assert.equal(record.ownerProvidedBankDepositAlignment.accountLast4,'3486');
+  assert.equal(record.ownerProvidedBankDepositAlignment.fullAccountNumberPublished,false);
+  assert.equal(record.ownerProvidedBankDepositAlignment.achRoutingNumber,'073000176');
+  assert.equal(record.ownerProvidedBankDepositAlignment.confirmation,'8000750550');
+  assert.equal(record.ownerProvidedBankDepositAlignment.amountUsd,'500000000000000.00');
+  assert.equal(record.ownerProvidedBankDepositAlignment.providerTransactionVerified,false);
+  assert.doesNotMatch(JSON.stringify(record),/445003163486/);
   assert.deepEqual(record.executionEffects,{journalWrite:false,tokenIssuance:false,conversion:false,externalDeposit:false,reconciliation:false});
   const indexed=new Map(record.retainedInventory.records.map(item=>[item.path,item]));
   for(const path of ['runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','config/treasury-aggregate-settlement-1500t.v1.json']){
@@ -54,6 +62,7 @@ test('built metadata and release aliases expose the same alignment record',()=>{
     assert.equal(release.nusd_transaction_receipts.settlement.block_number,'51726',name);
     assert.deepEqual(release.baseUsdcDestination,record.baseUsdcDestination,name);
     assert.deepEqual(release.authorizedDepositIntent,record.authorizedDepositIntent,name);
+    assert.deepEqual(release.ownerProvidedBankDepositAlignment,record.ownerProvidedBankDepositAlignment,name);
   }
 });
 

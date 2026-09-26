@@ -1,4 +1,4 @@
-import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT as depositIntent,NUMINA_BASE_USDC_DESTINATION as destination,NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_NATIVE_TREASURY_SYNC as native} from '../public/treasury-connection-model.js';
+import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT as depositIntent,NUMINA_BASE_USDC_DESTINATION as destination,NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_NATIVE_TREASURY_SYNC as native,NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT as bankAlignment} from '../public/treasury-connection-model.js';
 
 // Both release builders use this projection. Retained receipts remain byte-for-byte
 // evidence; this wrapper states what their dated observations establish.
@@ -10,6 +10,7 @@ export function alignNusdReleaseMetadata(record){
   record.metadataAlignment='/metadata-alignment.json';
   record.baseUsdcDestination=structuredClone(destination);
   record.authorizedDepositIntent=structuredClone(depositIntent);
+  record.ownerProvidedBankDepositAlignment=structuredClone(bankAlignment);
   record.transfersEnabled=null;
   record.transferStateSource='CURRENT_CHAIN_STATE_UNVERIFIED';
   record.nusd_transaction_receipts={

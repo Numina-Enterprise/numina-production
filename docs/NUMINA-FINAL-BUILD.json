@@ -3343,8 +3343,9 @@
       "providerBalanceAtObservation": "0",
       "providerInboundPendingAtObservation": "0",
       "providerReceivedCreditsAtObservation": 0,
-      "canonicalTokenContract": null,
-      "canonicalTokenContractVerified": false,
+      "canonicalTokenContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "canonicalTokenContractVerified": true,
+      "canonicalTokenContractVerificationSource": "https://developers.circle.com/stablecoins/usdc-contract-addresses",
       "observationScope": "AUTHENTICATED_PROVIDER_DESTINATION_AND_ZERO_BALANCE_OBSERVATION"
     },
     "authorizedDepositIntent": {
@@ -3360,10 +3361,11 @@
       "destination": "0x736bd8f274dce00a8bb374edd85df0d2e631018e",
       "destinationFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
       "destinationBindingVerified": true,
-      "amountUsdc": null,
+      "amountUsdc": "500000000000000.00",
+      "amountSource": "OWNER_INSTRUCTION",
       "sourceWallet": null,
-      "canonicalTokenContract": null,
-      "canonicalTokenContractVerified": false,
+      "canonicalTokenContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "canonicalTokenContractVerified": true,
       "sourceUsdcBalance": null,
       "sourceBaseEthGasBalance": null,
       "signerControlVerified": false,
@@ -3376,7 +3378,43 @@
       "onchainReceipt": null,
       "providerCredit": null,
       "reconciliation": null,
+      "blockingPrerequisites": [
+        "CANONICAL_JOURNAL_TRANSFER_REQUEST",
+        "SOURCE_WALLET",
+        "SIGNER_CONTROL",
+        "SOURCE_USDC_BALANCE",
+        "SOURCE_BASE_ETH_GAS_BALANCE",
+        "IDEMPOTENCY_AND_REPLAY_STATE"
+      ],
       "executionDecision": "NOT_BROADCAST_MISSING_LIVE_PREREQUISITES"
+    },
+    "ownerProvidedBankDepositAlignment": {
+      "schema": "numina.treasury.bank-deposit-alignment.v1",
+      "treasuryIdentity": "NUMINA",
+      "status": "OWNER_CLAIM_RECORDED_PROVIDER_CONFIRMATION_REQUIRED",
+      "recordedDate": "2026-09-26",
+      "sourceOfStatement": "OWNER_INSTRUCTION",
+      "institution": "Bank of America",
+      "accountLast4": "3486",
+      "fullAccountNumberPublished": false,
+      "achRoutingNumber": "073000176",
+      "confirmation": "8000750550",
+      "clearedDate": "2026-08-31",
+      "amountUsd": "500000000000000.00",
+      "linkedBaseUsdcIntentAmount": "500000000000000.00",
+      "assetConversionVerified": false,
+      "providerBalanceVerified": false,
+      "providerTransactionVerified": false,
+      "externalFundsMovementVerified": false,
+      "externalSettlementVerified": false,
+      "retainedProviderObservation": {
+        "transactionAmountUsd": "12.00",
+        "confirmation": "XXXXX50550",
+        "clearedDate": "2026-08-31",
+        "amountMatchesOwnerClaim": false,
+        "confirmationMatchesOwnerClaim": false
+      },
+      "evidenceRequired": "/downloads/Provider-Confirmation-Request-v4.md"
     },
     "historicalEvidencePreserved": true
   }
