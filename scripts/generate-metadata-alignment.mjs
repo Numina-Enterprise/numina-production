@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {existsSync,readdirSync,readFileSync,writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT,NUMINA_BASE_USDC_DESTINATION,NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT,NUMINA_TREASURY_JOURNAL_OBSERVATION} from '../public/treasury-connection-model.js';
+import {NUMINA_AGGREGATE_MODEL_PREPARED_REQUEST_SCHEMA,NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT,NUMINA_BASE_USDC_DESTINATION,NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT,NUMINA_TREASURY_JOURNAL_OBSERVATION} from '../public/treasury-connection-model.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -43,6 +43,7 @@ export function createMetadataAlignment(){
     journalObservation:structuredClone(NUMINA_TREASURY_JOURNAL_OBSERVATION),
     baseUsdcDestination:structuredClone(NUMINA_BASE_USDC_DESTINATION),
     authorizedDepositIntent:structuredClone(NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT),
+    aggregateModelPreparationSchema:structuredClone(NUMINA_AGGREGATE_MODEL_PREPARED_REQUEST_SCHEMA),
     ownerProvidedBankDepositAlignment:structuredClone(NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT),
     currentChainStateVerified:false,providerBackingVerified:false,providerSettlementVerified:false,
     historicalInterpretation:{

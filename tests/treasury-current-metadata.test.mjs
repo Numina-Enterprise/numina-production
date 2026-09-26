@@ -117,13 +117,27 @@ test('retained mint and settlement evidence bytes are preserved',()=>{
     'docs/nusd/treasury-settlement-receipt.json':'b966343d78c20ff9d36b6f40d12fff29c8ace3b6a75ca760a66bb68d8d2ec0a9',
     'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json':'b966343d78c20ff9d36b6f40d12fff29c8ace3b6a75ca760a66bb68d8d2ec0a9',
     'runtime/nusd/mint-receipt.json':'3dab1a847ba8b0b4a14a92a0b881e5e888af7ffbbab74a9af0e1fe9935bc63ee',
-    'runtime/nusd/settlement-receipt.json':'47a8494d6342ea9793c4d17d9925d46da7198e914a9fe87e128242dc4e3af9f4',
     'runtime/nusd/policies/issuer-policy-1500t-18d.json':'3215a97a723f5cdb5ef9d2acd9315274dbb3a301f8269960e93d9629955463ba',
     'config/treasury-aggregate-settlement-1500t.v1.json':'2f6ef7c485f21a37743230b8da8e9e317b009c4920226b3e44e42c678ae4e6e8'
   };
   for(const [path,expected] of Object.entries(baselines)){
     assert.equal(createHash('sha256').update(read(path)).digest('hex'),expected,path);
   }
+  const validationPaths=['runtime/nusd/treasury-settlement-receipt-validation.json','docs/nusd/treasury-settlement-receipt-validation.json','release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json'];
+  const validation=json(validationPaths[0]);
+  for(const path of validationPaths)assert.deepEqual(json(path),validation,path);
+  assert.equal(validation.classification,'NUMINA_VERIFIED_ASSERTION');
+  assert.equal(validation.assertionVerifiedBy,'NUMINA');
+  assert.equal(validation.journalAuthentication.authenticated,false);
+  assert.equal(validation.executionVerification.executionVerified,false);
+  assert.equal(validation.executionVerification.submissionPerformed,false);
+  assert.equal(validation.executionVerification.settlementPerformed,false);
+  assert.equal(validation.authorization.executionAuthorized,true);
+  const summary=json('runtime/nusd/settlement-receipt.json');
+  assert.equal(summary.settlement.status,'NOT_SETTLED');
+  assert.equal(summary.settlement.journalAuthenticated,false);
+  assert.equal(summary.settlement.executionVerified,false);
+  assert.equal(summary.settlement.settlementPerformed,false);
 });
 
 test('packaged integration keeps current journal claims separate from dated chain evidence',()=>{

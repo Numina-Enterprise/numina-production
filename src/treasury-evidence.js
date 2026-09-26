@@ -42,7 +42,9 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
   const nativeSettlement={sourceOfRecord:journal.sourceOfRecord,status:journal.settlementStatus,submissionPerformed:journal.submissionPerformed,settlementPerformed:journal.settlementPerformed,
     receipt:currentReceipt,currentJournalProjection:{balance:journal.journalProjectionBalance,unit:journal.journalProjectionUnit,revision:treasury?.revision??null,head:treasury?.head??null,eventId:treasury?.projection?.last_event_id??null},
     externalProviderSubmissionStatus:journal.externalProviderSubmissionStatus,externalProviderSettlementStatus:journal.externalProviderSettlementStatus,
-    historicalReceipt:NUMINA_NATIVE_TREASURY_SYNC.singularSettlementReceipt,canonicalTreasuryValues:NUMINA_NATIVE_TREASURY_SYNC.canonicalTreasuryValues};
+    historicalReceipt:NUMINA_NATIVE_TREASURY_SYNC.historicalSettlementReceipt,
+    settlementReceiptValidation:NUMINA_NATIVE_TREASURY_SYNC.settlementReceiptValidation,
+    canonicalTreasuryValues:NUMINA_NATIVE_TREASURY_SYNC.canonicalTreasuryValues};
   const source=structuredClone({nativeSettlement,nativeTreasury:treasury,canonicalTreasury:canonicalTreasuryReference(treasury),ownerDeclaration:frontier.fundingDeclaration??null,
     fundingPlan:frontier.fundingPlan??null,accountReferences:frontier.accounts??[],providerObservation,supportingDocuments});
   const records={schema:'numina.treasury.record-sources.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,componentsAreSeparateTreasuries:false,

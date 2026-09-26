@@ -19,7 +19,7 @@ async function fixture(path){const db=database(path);await bootstrapControl(db,o
 const treasury=db=>createNuminaTreasury({db,root:owner,principal:owner});
 async function command(db,operation='INITIALIZE',extra={},id='native-init'){
   const row=await readControl(db);
-  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',SETTLE_AGGREGATE_MODEL:'treasury.aggregate.settle'};
+  const objectives={INITIALIZE:'treasury.initialize',ADJUST_PROJECTION:'treasury.project',PREPARE_MINT:'treasury.mint.prepare',PREPARE_BANK_TRANSACTION:'treasury.bank.prepare',PREPARE_USDC_DEPOSIT:'treasury.usdc.prepare',PREPARE_AGGREGATE_MODEL:'treasury.aggregate.prepare',SETTLE_AGGREGATE_MODEL:'treasury.aggregate.settle'};
   return {id,expectedRevision:row.revision,expectedHead:row.head_hash,Principal:owner,Authority:'NUMINA',Objective:objectives[operation],Intent:{operation,reason:'Isolated test of the Numina-native model',...extra}};
 }
 
@@ -268,17 +268,70 @@ test('treasury prevents authority substitution, unknown fields, replay mutation 
     assert.equal((await readControl(db)).head_hash,before.head_hash);
   }finally{db.close();}
 });
-test('prepared mint and bank requests are journaled without changing projection or fabricating receipts',async()=>{
+test('prepared mint, bank and Base USDC requests are journaled without changing projection or fabricating receipts',async()=>{
   const db=await fixture();try{
     const api=treasury(db);await api.writeTreasury(await command(db));
-    for(const [operation,data]of [['PREPARE_MINT',{amount:'100',networkReference:'numina-main',destinationReference:'owner-wallet'}],['PREPARE_BANK_TRANSACTION',{amountMinor:'10000',currency:'USD',destinationReference:'owner-bank'}]]){
+    for(const [operation,data]of [['PREPARE_MINT',{amount:'100',networkReference:'numina-main',destinationReference:'owner-wallet'}],['PREPARE_BANK_TRANSACTION',{amountMinor:'10000',currency:'USD',destinationReference:'owner-bank'}],['PREPARE_USDC_DEPOSIT',{amount:'500000000000000',destinationReference:'0x736bd8f274dce00a8bb374edd85df0d2e631018e'}]]){
       const result=await api.writeTreasury(await command(db,operation,data,operation));
       assert.equal(result.transaction_request.status,'PREPARED');assert.equal(result.transaction_request.receipt,null);assert.equal(result.transaction_request.submission_performed,false);
       assert.equal(result.projection.balance,'500000000000000');assert.equal(result.mint_event,null);assert.equal(result.bank_transaction,null);
+      if(operation==='PREPARE_USDC_DEPOSIT'){
+        assert.equal(result.transaction_request.kind,'usdc_transfer_request');assert.equal(result.transaction_request.network,'Base');assert.equal(result.transaction_request.chain_id,8453);
+        assert.equal(result.transaction_request.token_address,'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913');assert.equal(result.transaction_request.amount_base_units,'500000000000000000000');
+        assert.equal(result.transaction_request.destination_reference,'0x736bd8f274dce00a8bb374edd85df0d2e631018e');assert.equal(result.transaction_request.destination_financial_account,'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu');assert.equal(result.transaction_request.destination_financial_address,'finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8');assert.equal(result.transaction_request.destination_binding_verified,true);
+        assert.equal(result.transaction_request.journal_idempotency_key,operation);assert.deepEqual(result.transaction_request.journal_replay_preconditions,['expectedRevision','expectedHead']);
+        assert.equal(result.transaction_request.source_wallet,null);assert.equal(result.transaction_request.signer_control_verified,false);assert.equal(result.transaction_request.execution_performed,false);assert.equal(result.transaction_request.broadcast_performed,false);assert.equal(result.transaction_request.transaction_hash,null);
+        assert.deepEqual(result.transaction_request.prerequisite_blockers,['SOURCE_WALLET_NOT_RECORDED','BASE_SIGNER_CONTROL_NOT_VERIFIED','SOURCE_USDC_BALANCE_NOT_VERIFIED','BASE_ETH_GAS_BALANCE_NOT_VERIFIED']);
+      }
     }
-    const row=await readControl(db);assert.equal(row.eventCount,4);
+    const row=await readControl(db);assert.equal(row.eventCount,5);
     await db.prepare('UPDATE numina_control_events SET event_json=? WHERE id=?').bind('{}','PREPARE_MINT').run();
     await assert.rejects(api.readTreasury(),/JOURNAL_CORRUPT/);
+  }finally{db.close();}
+});
+test('aggregate preparation records one model-only request without external execution claims',async()=>{
+  const db=await fixture();try{
+    const api=treasury(db);await api.writeTreasury(await command(db));
+    const before=await api.readTreasury();
+    const intent={
+      aggregateAmount:'1500000000000000',nativeAmount:'500000000000000',stripeAmount:'500000000000000',bankAmount:'500000000000000',
+      reason:'Prepare the three-role aggregate model without asserting external execution'
+    };
+    const event=await command(db,'PREPARE_AGGREGATE_MODEL',intent,'prepare-aggregate-model');
+    assert.equal(event.Objective,'treasury.aggregate.prepare');
+    assert.deepEqual(event.Intent,{operation:'PREPARE_AGGREGATE_MODEL',...intent});
+    const result=await api.writeTreasury(event),request=result.transaction_request;
+    assert.equal(request.kind,'aggregate_model_request');
+    assert.equal(request.status,'PREPARED_MODEL_ONLY');
+    assert.equal(request.authority,'NUMINA');
+    assert.deepEqual(request.owner_approval,{status:'OWNER_APPROVAL_RECORDED',reference:'/owner-approval.js'});
+    assert.equal(request.aggregate_amount,'1500000000000000');
+    assert.equal(request.aggregation,'SUM_OF_SEPARATE_ROLE_AMOUNTS');
+    assert.deepEqual(request.components.map(component=>[component.role,component.observation_scope,component.amount,component.unit]),[
+      ['NATIVE_VALUE','RECEIPT_BACKED_ISSUANCE','500000000000000','NUSD'],
+      ['DIGITAL_DOLLAR_ROUTE','PROVIDER_SCOPED_OBSERVATION','500000000000000','USDC'],
+      ['BANK_ROUTE','NUMINA_SCOPED_OBSERVATION','500000000000000','USD']
+    ]);
+    const issuance=request.components[0];assert.equal(issuance.issuer_policy_hash,'0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');assert.equal(issuance.policy_declaration_scope,'ISSUER_POLICY_DECLARATION_NOT_EXTERNAL_BACKING');
+    assert.deepEqual(issuance.burn_observation,{block_number:'51749',scope:'DATED_DEPLOYMENT_VERIFICATION_OBSERVATION',constructor_issuance_base_units:'1500000000000000000000000000000000',total_supply_base_units:'1500000000000000000000000000000000',recipient_balance_base_units:'1500000000000000000000000000000000',burned_nusd:'0',burned_base_units:'0',current_chain_burn_state_verified:false});
+    assert.equal(issuance.externally_backed_claim,false);assert.equal(issuance.external_settlement_usdc,false);assert.equal(issuance.reserves_verified,false);
+    for(const component of request.components){
+      assert.equal(typeof component.id,'string');assert.ok(component.id);
+      assert.equal(typeof component.source,'string');assert.ok(component.source);
+      assert.equal(typeof component.status,'string');assert.ok(component.status);
+      assert.ok(Object.hasOwn(component,'evidence_references'));
+      assert.equal(Object.values(component).filter(value=>typeof value==='boolean').every(value=>value===false),true);
+    }
+    for(const field of ['external_balance_verified','external_provider_verification','external_backing_verified','external_funds_moved','execution_performed','broadcast_performed','submission_performed','settlement_performed'])assert.equal(request[field],false);
+    assert.equal(request.transaction_hash,null);assert.equal(request.receipt,null);
+    assert.deepEqual(request.reconciliation,{status:'PENDING_EVIDENCE',evidence_required:true});
+    assert.equal(result.projection.balance,before.projection.balance);
+    assert.equal(result.projection.last_event_id,event.id);
+    assert.equal(result.projection.transaction_requests.length,before.projection.transaction_requests.length+1);
+    assert.deepEqual(result.projection.transaction_requests.at(-1),request);
+    assert.equal(result.head_advancement.revision,before.revision+1);
+    assert.equal(result.mint_event,null);assert.equal(result.bank_transaction,null);
+    assert.ok(await verifyTreasuryRecord(await api.readTreasury()));
   }finally{db.close();}
 });
 test('current treasury metadata follows the replayed journal instead of a packaged settlement receipt',async()=>{
@@ -428,6 +481,10 @@ test('HTTP exposes one treasury write route, checks owner and origin, and redire
     const event=await command(db);
     assert.equal((await worker.fetch(req('treasury',event,{'oai-authenticated-user-id':'test','oai-authenticated-user-email':'owner@example.test',Origin:'https://wrong.test'}),env)).status,403);
     const result=await worker.fetch(req('treasury',event),env);assert.equal(result.status,200);assert.equal((await result.json()).status,'FINAL');
+    const invalidUsdc=await command(db,'PREPARE_USDC_DEPOSIT',{amount:'500000000000000',destinationReference:'not-an-address'},'invalid-usdc');
+    const rejected=await worker.fetch(req('treasury',invalidUsdc),env);assert.equal(rejected.status,400);assert.equal((await rejected.json()).error,'INVALID_TRANSACTION_REFERENCE');
+    const usdc=await command(db,'PREPARE_USDC_DEPOSIT',{amount:'500000000000000',destinationReference:'0x736bd8f274dce00a8bb374edd85df0d2e631018e'},'prepare-usdc');
+    const prepared=await worker.fetch(req('treasury',usdc),env);assert.equal(prepared.status,200);const preparedBody=await prepared.json();assert.equal(preparedBody.transaction_request.kind,'usdc_transfer_request');assert.equal(preparedBody.transaction_request.status,'PREPARED');assert.equal(preparedBody.transaction_request.execution_performed,false);assert.equal(preparedBody.transaction_request.broadcast_performed,false);
     const read=await worker.fetch(req('treasury'),env);assert.equal(read.headers.get('Cache-Control'),'private, no-store');assert.equal((await read.json()).projection.balance,'500000000000000');
     const legacy=await worker.fetch(req('treasury-attestation'),env);assert.equal(legacy.status,308);assert.equal(legacy.headers.get('Location'),'/api/control/v1/treasury');
     const alternate=await worker.fetch(req('commands',{id:'wrong-route',expectedRevision:1,type:'treasury',data:{}}),env);assert.equal(alternate.status,409);assert.equal((await alternate.json()).error,'CANONICAL_TREASURY_ROUTE_REQUIRED');
