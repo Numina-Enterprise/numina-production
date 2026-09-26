@@ -73,6 +73,8 @@ const overlays=[
  ['docs/Numina-Browser-Deployment-Preparation.md','client/downloads/Numina-Browser-Deployment-Preparation.md'],
  ['docs/Numina-500T-Simulation.md','client/downloads/Numina-500T-Simulation.md'],
  ['runtime/nusd/README.md','client/downloads/nusd/README.md'],
+ ['runtime/nusd/settlement-receipt.json','client/downloads/nusd/settlement-receipt.json'],
+ ['runtime/nusd/treasury-settlement-receipt-validation.json','client/downloads/nusd/treasury-settlement-receipt-validation.json'],
  ['public/metadata-alignment.json','client/metadata-alignment.json'],
  ['docs/Numina-Metadata-Alignment-v4.json','client/downloads/Numina-Metadata-Alignment-v4.json'],
  ['docs/Numina-Metadata-Alignment-v4.md','client/downloads/Numina-Metadata-Alignment-v4.md'],
@@ -160,7 +162,7 @@ const presentation=['index','government','financial-institutions','partners','de
 const hashes=new Set();for(const name of presentation){const html=readFileSync('dist/client/'+name+'.html','utf8');for(const m of html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g))hashes.add("'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");if(name!=='index'){const rule='/'+name+'.html /'+name+' 301';if(!redirects.split(/\r?\n/).includes(rule))redirects+='\n'+rule;}}
 headers=headers.replace(/script-src ([^;]+)/,(_,tokens)=>'script-src '+[...new Set([...tokens.trim().split(/\s+/),...hashes])].join(' '));writeFileSync('dist/client/_headers',headers);writeFileSync('dist/client/_redirects',redirects+'\n');
 const sourceAlignment=json('dist/client/source-alignment.json');
-const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
+const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 for(const file of currentInputs){const bytes=readFileSync(file);captured.set(file,{path:file,bytes:bytes.length,sha256:hash(bytes)});}
@@ -172,7 +174,8 @@ sourceAlignment.provider_routing=NUSD_PROVIDER_ROUTING;
 sourceAlignment.metadataAlignment=json('public/metadata-alignment.json');
 sourceAlignment.canonicalTreasuryValues=values;
 delete sourceAlignment.singularSettlementReceipt;
-sourceAlignment.historicalSettlementReceipt={...receipt,historicalRecord:true,currentJournalConfirmed:false};
+sourceAlignment.settlementReceiptValidation=structuredClone(receipt);
+sourceAlignment.historicalSettlementReceipt={id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,status:'HISTORICAL_OWNER_ASSERTION',historicalRecord:true,currentJournalConfirmed:false};
 sourceAlignment.treasury=NUMINA_LAYERS.treasury;sourceAlignment.contract_record=NUSD_CONTRACT_RECORD;
 sourceAlignment.treasury_client_verification=treasuryClientVerificationManifest(hash(readFileSync('public/treasury-proof.js')));
 sourceAlignment.requiredArchitecture.canonicalTreasuryValues=values;
@@ -213,7 +216,8 @@ architecture.software_alignment=null;
 architecture.historical_software_alignment={...historicalSoftwareAlignment,historicalRecord:true,currentJournalConfirmed:false,treasuryModelScope:'HISTORICAL_SOURCE_ARTIFACT'};
 writeFileSync('dist/client/source-alignment.json',JSON.stringify(sourceAlignment,null,2)+'\n');
 const allowed=new Set([...overlays.map(x=>x[1]),'client/source-alignment.json']);let retained=0;for(const x of baselineClient)if(!allowed.has(x.path)){assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Unrelated published asset changed: '+x.path);retained++;}
-assert.equal(json('dist/client/downloads/nusd/treasury-settlement-receipt.json').id,receipt.id);
+assert.equal(json('dist/client/downloads/nusd/treasury-settlement-receipt.json').id,receipt.validatedReceiptId);
+assert.equal(json('dist/client/downloads/nusd/treasury-settlement-receipt-validation.json').id,receipt.id);
 assert.equal(json('dist/client/final-build.json').canonicalTreasuryValues.aggregate.current,values.aggregate.current);
 const aliases=['release.json','application-release-v2.json','application-release-v3.json','application-release-v4.json'].map(n=>'client/downloads/'+n),excluded=new Set(aliases);
 const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=relative?relative+'/'+n:n,a=path.join(dir,n);return statSync(a).isDirectory()?collect(a,p):excluded.has(p)?[]:[{path:p,sha256:hash(readFileSync(a))}];});
@@ -226,7 +230,7 @@ release.conversion_workflow=NUSD_CONVERSION_WORKFLOW;
 release.owner_approval={...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:hash(readFileSync('public/owner-approval.js'))};
 release.canonicalTreasuryValues=values;release.contract_record=NUSD_CONTRACT_RECORD;
 release.softwareTreasury={identity:'NUMINA',singular:true,...structuredClone(connection.softwareBalanceModel)};
-release.native_treasury_alignment={...release.native_treasury_alignment,status:'JOURNAL_SNAPSHOT',historicalSettlementReceipt:{...receipt,historicalRecord:true,currentJournalConfirmed:false},settlementStatus:values.settlementStatus??'UNVERIFIED',settlementScope:values.sourceOfRecord,mintStatus:values.mintStatus,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,aggregateModeledValue:null,historicalAggregateModeledValue:'1500000000000000',modeledAllocationsAdditive:false,verificationScope:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT'};
+release.native_treasury_alignment={...release.native_treasury_alignment,status:'JOURNAL_SNAPSHOT',settlementReceiptValidation:structuredClone(receipt),historicalSettlementReceipt:{id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,status:'HISTORICAL_OWNER_ASSERTION',historicalRecord:true,currentJournalConfirmed:false},settlementStatus:values.settlementStatus??'UNVERIFIED',settlementScope:values.sourceOfRecord,mintStatus:values.mintStatus,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,aggregateModeledValue:null,historicalAggregateModeledValue:'1500000000000000',modeledAllocationsAdditive:false,verificationScope:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT'};
 delete release.native_treasury_alignment.singularSettlementReceipt;
 const nativeRecord=json('docs/native-package-record-v4.json'),iosInputs=iosInputSnapshot(root);
 const iosSource=nativeRecord.sourceArchives.find(item=>item.platform==='ios');

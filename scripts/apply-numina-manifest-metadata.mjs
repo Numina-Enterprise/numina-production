@@ -60,20 +60,25 @@ for(const key of ['currentChainStateVerified','currentJournalProjectionInferred'
 }
 
 const native=json('runtime/nusd/treasury-settlement-receipt.json');
-for(const path of ['runtime/nusd/treasury-settlement-receipt.json','docs/nusd/treasury-settlement-receipt.json',receipt.path]){
+const validation=json('runtime/nusd/treasury-settlement-receipt-validation.json');
+for(const path of ['runtime/nusd/treasury-settlement-receipt-validation.json','docs/nusd/treasury-settlement-receipt-validation.json',receipt.path]){
   const record=json(path);
-  assert.equal(record.id,receipt.id,path+' receipt ID');
-  assert.equal(record.identity,'NUMINA',path+' identity');
-  assert.equal(record.sourceOfRecord,receipt.sourceOfRecord,path+' source');
-  assert.equal(record.singular,true,path+' singular');
-  assert.equal(record.status,receipt.status,path+' status');
-  assert.equal(record.final,true,path+' finality');
-  assert.equal(record.submissionPerformed,receipt.submissionPerformed,path+' native submission');
-  assert.equal(record.settlementPerformed,receipt.settlementPerformed,path+' native settlement');
-  assert.deepEqual(record.aggregate,native.aggregate,path+' aggregate');
-  assert.deepEqual(record.mintEvidence,native.mintEvidence,path+' mint evidence');
-  assert.deepEqual(record.components,native.components,path+' holdings');
+  assert.deepEqual(record,validation,path+' validation copy');
+  assert.equal(record.id,receipt.id,path+' validation ID');
+  assert.equal(record.classification,'NUMINA_VERIFIED_ASSERTION',path+' assertion classification');
+  assert.equal(record.assertionVerifiedBy,'NUMINA',path+' assertion authority');
+  assert.equal(record.status,'NOT_SETTLED',path+' execution status');
+  assert.equal(record.journalAuthentication.authenticated,false,path+' journal authentication');
+  assert.equal(record.executionVerification.executionVerified,false,path+' execution verification');
+  assert.equal(record.executionVerification.submissionPerformed,false,path+' submission');
+  assert.equal(record.executionVerification.settlementPerformed,false,path+' settlement');
+  assert.equal(record.authorization.executionAuthorized,true,path+' execution authorization');
+  assert.equal(record.authorization.settlementAuthorized,true,path+' settlement authorization');
+  assert.equal(record.authorization.journalAppendAuthorized,true,path+' append authorization');
 }
+assert.equal(native.id,receipt.validatedReceiptId,'Preserved historical receipt ID');
+assert.equal(native.status,'SETTLED','Preserved historical assertion status');
+assert.equal(validation.evaluatedReceipt.rawEvidenceImmutable,true,'Historical receipt bytes remain immutable');
 assert.equal(native.components.find(item=>item.settledUnit==='USDC').usdcAddress,connection.nativeLocationBindings.stripeUsdc.usdcAddress,'Canonical Stripe USDC deposit address');
 assert.equal(destination.address,connection.nativeLocationBindings.stripeUsdc.usdcAddress,'Aligned Base USDC destination');
 assert.equal(destination.financialAccount,connection.nativeLocationBindings.stripeUsdc.financialAccount,'Aligned Stripe financial account');
@@ -99,8 +104,8 @@ assert.equal(native.mintEvidence.mintedNusd,values.separateChainMintEvidence.amo
 assert.equal(native.mintEvidence.transactionHash,receipt.mintTransactionHash);
 assert.equal(native.components.reduce((sum,item)=>sum+BigInt(item.amountNusd),0n).toString(),values.aggregate.modeledTarget);
 for(const item of native.components){
-  assert.equal(item.settlementReceiptId,receipt.id);
-  assert.equal(item.status,receipt.status);
+  assert.equal(item.settlementReceiptId,receipt.validatedReceiptId);
+  assert.equal(item.status,'SETTLED');
   assert.equal(item.settledAmount,values.components[item.settledUnit].modeledTarget??values.components[item.settledUnit].current);
 }
 
@@ -114,8 +119,9 @@ function updateValues(value){
     if(/^(historical|retained)/i.test(key)||['approved_review','simulation'].includes(key))continue;
     if(key==='canonicalTreasuryValues'||key==='canonicalValues'&&item?.schema==='numina.canonical-treasury-values.v1'){
       value[key]=structuredClone(values);
-    }else if(key==='singularSettlementReceipt'&&item?.id===receipt.id){
+    }else if(key==='singularSettlementReceipt'&&(item?.id===receipt.id||item?.id===receipt.validatedReceiptId)){
       value.historicalSettlementReceipt={...item,historicalRecord:true,currentJournalConfirmed:false};
+      value.settlementReceiptValidation=structuredClone(receipt);
       delete value[key];
     }else if(key==='allocationInstruction'&&item?.schema==='numina.treasury.allocation-instruction.v1'){
       value.historicalAllocationInstruction={...item,historicalRecord:true,currentJournalConfirmed:false};
@@ -156,7 +162,7 @@ for(const path of currentPaths){
   updateValues(data);
   data.treasuryJournalObservation=structuredClone(observation);
   data.authoritativeCurrentTreasuryRoute=observation.authoritativeCurrentRoute;
-  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),ownerProvidedBankDepositAlignment:structuredClone(bankAlignment),historicalEvidencePreserved:true};
+  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),ownerProvidedBankDepositAlignment:structuredClone(bankAlignment),settlementReceiptValidation:structuredClone(receipt),historicalEvidencePreserved:true};
   records.set(path,data);
 }
 const architecture=records.get('config/numina-architecture.json');
@@ -168,11 +174,12 @@ architecture.mint_request={...observation.requests.find(item=>item.kind==='mint_
 Object.assign(architecture.treasury,{verification:'JOURNAL_SNAPSHOT',verificationScope:'JOURNAL_CONTINUITY_AT_OBSERVATION',provider_verification:null,providerBalancesVerified:false,modeled_role_values_additive:false,aggregate_modeled_value:null,projection:observation.projection.balance});
 const override=records.get('config/numina-metadata-overrides.v1.json');
 override.resolution.treasurySettlement=null;
-override.resolution.historicalTreasurySettlement=receipt.id;
+override.resolution.historicalTreasurySettlement=receipt.validatedReceiptId;
+override.resolution.treasurySettlementValidation=receipt.id;
 override.canonicalSettlementAppliesTo='NONE_WITHOUT_MATCHING_JOURNAL_EVENT';
 const finalBuild=records.get('public/final-build.json');
 finalBuild.treasury=structuredClone(connection);
-finalBuild.historicalTreasuryRelease={historicalRecord:true,currentJournalConfirmed:false,allocationInstruction:'release-evidence/treasury-allocation-instruction-2026-09-19.json',achInstruction:'release-evidence/numina-bofa-ach-instruction-2026-09-19.json',settlementReceipt:receipt.path};
+finalBuild.historicalTreasuryRelease={historicalRecord:true,currentJournalConfirmed:false,allocationInstruction:'release-evidence/treasury-allocation-instruction-2026-09-19.json',achInstruction:'release-evidence/numina-bofa-ach-instruction-2026-09-19.json',settlementReceipt:receipt.historicalReceiptPath,settlementReceiptValidation:receipt.path};
 if(finalBuild.syncAll){
   if(finalBuild.syncAll.nativeTreasuryAlignment){
     finalBuild.syncAll.historicalNativeTreasuryAlignment={...finalBuild.syncAll.nativeTreasuryAlignment,historicalRecord:true,currentJournalConfirmed:false};
@@ -214,7 +221,8 @@ const finalHash=createHash('sha256').update(finalBytes).digest('hex');
 const manifest=records.get('public/final-manifest.json');
 manifest.frontierId=manifest.canonicalSha256=finalHash;
 Object.assign(manifest.finalBuild,{gitBlobSha1:finalPin,sha256:finalHash,canonicalSha256:finalHash});
-manifest.historicalSettlementReceipt={...receipt,historicalRecord:true,currentJournalConfirmed:false};
+manifest.settlementReceiptValidation=structuredClone(receipt);
+manifest.historicalSettlementReceipt={id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,historicalRecord:true,currentJournalConfirmed:false,status:'HISTORICAL_OWNER_ASSERTION'};
 delete manifest.singularSettlementReceipt;
 const manifestBytes=serialize('public/final-manifest.json',manifest);
 planned.set('public/final-manifest.json',manifestBytes);
@@ -223,7 +231,8 @@ const environments=records.get('public/current-environments.json');
 environments.frontierId=finalHash;
 environments.contentHashes.finalBuildSha256=finalHash;
 environments.contentHashes.finalManifestSha256=createHash('sha256').update(manifestBytes).digest('hex');
-environments.historicalSettlementReceipt={...receipt,historicalRecord:true,currentJournalConfirmed:false};
+environments.settlementReceiptValidation=structuredClone(receipt);
+environments.historicalSettlementReceipt={id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,historicalRecord:true,currentJournalConfirmed:false,status:'HISTORICAL_OWNER_ASSERTION'};
 delete environments.singularSettlementReceipt;
 packageData.numina.finalBuildManifest.blob=finalPin;
 for(const [path,data] of records){

@@ -57,23 +57,24 @@ test('current treasury metadata distinguishes journal balance from historical ta
   assert.deepEqual(NUSD_CONTRACT_RECORD.canonicalTreasuryValues,canonical);
 });
 
-test('current settlement summary binds native receipt without relabeling provider evidence',()=>{
-  const canonical=JSON.parse(read('runtime/nusd/treasury-settlement-receipt.json'));
+test('current settlement summary binds the superseding validation without relabeling authorization as execution',()=>{
+  const validation=JSON.parse(read('runtime/nusd/treasury-settlement-receipt-validation.json'));
   const summary=JSON.parse(read('runtime/nusd/settlement-receipt.json'));
-  assert.equal(summary.settlement.numinaNativeReceiptId,canonical.id);
-  assert.equal(summary.settlement.nativeEvidenceScope,canonical.sourceOfRecord);
-  assert.equal(summary.settlement.numinaNativeStatus,canonical.status);
+  assert.equal(summary.settlementReceiptValidationId,validation.id);
+  assert.equal(summary.historicalSettlementReceiptId,validation.evaluatedReceipt.id);
+  assert.equal(summary.settlement.classification,'NUMINA_VERIFIED_ASSERTION');
+  assert.equal(summary.settlement.assertionVerifiedBy,'NUMINA');
+  assert.equal(summary.settlement.status,'NOT_SETTLED');
+  assert.equal(summary.settlement.journalAuthenticated,false);
+  assert.equal(summary.settlement.executionVerified,false);
+  assert.equal(summary.settlement.submissionPerformed,false);
+  assert.equal(summary.settlement.settlementPerformed,false);
+  assert.equal(summary.authorization.executionAuthorized,true);
   assert.equal(summary.settlement.externallyVerified,false);
   assert.deepEqual(summary.settlement.providerSettlementReceipts,[]);
-  for(const rail of summary.allocation.rails){
-    assert.equal(rail.numinaNativeStatus,canonical.status);
-    if(rail.id==='numina_native_treasury'){
-      assert.notEqual(rail.externallyVerified,true);
-      assert.equal(rail.externalReceipt??null,null);
-    }else{
-      assert.equal(rail.externallyVerified,false);
-      assert.equal(rail.externalReceipt,null);
-    }
+  for(const rail of summary.aggregateModel.rails){
+    assert.equal(rail.status,'PREPARED_MODEL_ONLY');
+    assert.equal(rail.receipt,null);
   }
 });
 

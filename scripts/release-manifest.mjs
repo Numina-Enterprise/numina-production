@@ -52,6 +52,7 @@ function collect(base='dist',relative=''){
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
+const singularSettlementValidation=JSON.parse(readFileSync('release-evidence/numina-singular-treasury-settlement-validation-2026-09-26.json'));
 const record={
  owner_approval:{...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:digest(readFileSync('public/owner-approval.js'))},
  approval_handoff:{archive:'/downloads/Numina-1500T-Approval-Handoff.zip',sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff.zip')),record:'/downloads/Numina-1500T-Approval-Handoff-Package-Record.json',record_sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff-Package-Record.json')),status:'EVIDENCE_HANDOFF_PREPARED',scope:'Original dated evidence intake; owner authorization is recorded separately in owner_approval and does not manufacture signatures, review findings or receipts'},
@@ -72,6 +73,21 @@ const record={
  source_alignment:{identity:NUMINA,manifest:'/source-alignment.json',layers:['L1','L2','L3','L4','L5']},
  recorded_release_evidence:releaseEvidence,
  recorded_release_evidence_context:{classification:'historical',source:'/downloads/release-evidence-2026-09-13.json',latestReleaseManifest:'/v'+major+'/release/manifest',currentNativeDistribution:'/downloads/'+nativeRecordFile,deploymentOfCurrentBuildVerified:false},
+ current_treasury_settlement:{
+  schema:singularSettlementValidation.schema,
+  id:singularSettlementValidation.id,
+  validatesAssertionId:singularSettlementValidation.validatesAssertionId,
+  status:singularSettlementValidation.status,
+  final:singularSettlementValidation.final,
+  journalAuthenticated:singularSettlementValidation.journalAuthenticated,
+  submissionPerformed:singularSettlementValidation.submissionPerformed,
+  settlementPerformed:singularSettlementValidation.settlementPerformed,
+  externalFundsMoved:singularSettlementValidation.externalFundsMoved,
+  validationRecord:'/downloads/nusd/treasury-settlement-receipt.json',
+  validationSource:'release-evidence/numina-singular-treasury-settlement-validation-2026-09-26.json',
+  historicalOwnerAssertion:singularSettlementValidation.historicalOwnerAssertion.path,
+  mintEvidenceScope:singularSettlementValidation.mintEvidence.scope
+ },
  treasury_client_verification:treasuryClientVerificationManifest(digest(readFileSync('public/treasury-proof.js'))),
  owner_wallet_execution:{
   schema:'numina.owner-wallet.release-binding.v1',workspace:'/wallet-signing#execution-title',owner_endpoint:'/api/control/v1/nusd-deployment',
