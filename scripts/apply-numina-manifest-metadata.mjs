@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT as depositIntent,NUMINA_BASE_USDC_DESTINATION as destination,NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_JOURNAL_OBSERVATION as observation,NUMINA_TREASURY_CONNECTION as connection,NUSD_OPERATOR_ACTIVATION as activation} from '../public/treasury-connection-model.js';
+import {NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT as depositIntent,NUMINA_BASE_USDC_DESTINATION as destination,NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT as bankAlignment,NUMINA_SINGULAR_SETTLEMENT_RECEIPT as receipt,NUMINA_TREASURY_JOURNAL_OBSERVATION as observation,NUMINA_TREASURY_CONNECTION as connection,NUSD_OPERATOR_ACTIVATION as activation} from '../public/treasury-connection-model.js';
 
 // Synchronize current metadata projections. Journal events, historical evidence,
 // provider observations, signatures and artifact bytes are never rewritten.
@@ -156,7 +156,7 @@ for(const path of currentPaths){
   updateValues(data);
   data.treasuryJournalObservation=structuredClone(observation);
   data.authoritativeCurrentTreasuryRoute=observation.authoritativeCurrentRoute;
-  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),historicalEvidencePreserved:true};
+  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),ownerProvidedBankDepositAlignment:structuredClone(bankAlignment),historicalEvidencePreserved:true};
   records.set(path,data);
 }
 const architecture=records.get('config/numina-architecture.json');

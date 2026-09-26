@@ -33,8 +33,12 @@ The journal observation used in this publication is revision **142**, head `67b4
 
 ## Authorized Base USDC deposit intent
 
-The owner authorized a deposit to Stripe financial account `fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu`, financial address `finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8`, at `0x736bd8f274dce00a8bb374edd85df0d2e631018e`. The provider observation identifies the currency as **USDC**, the network as **Base** (chain ID **8453**) and the address as active. The provider balance and inbound pending balance were both zero at that observation.
+The owner authorized a deposit of **500,000,000,000,000.00 USDC** to Stripe financial account `fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu`, financial address `finaddr_61VNd8JyhbqklVBhF16VNcN9EZSQiQliazWdBc8FkRw8`, at `0x736bd8f274dce00a8bb374edd85df0d2e631018e`. The provider observation identifies the currency as **USDC**, the network as **Base** (chain ID **8453**) and the address as active. The provider balance and inbound pending balance were both zero at that observation. Circle's current contract registry identifies native Base USDC as `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
 
-The authorization is recorded as an unsubmitted intent because the authenticated journal snapshot contains no exact Base USDC transfer request or amount. The source wallet, signer control, source USDC balance, Base ETH gas balance and canonical Base USDC token contract also remain unverified. No journal write, broadcast, transaction hash, receipt, provider credit or reconciliation is recorded.
+The authorization and exact amount are recorded as an unsubmitted intent because the authenticated journal snapshot contains no Base USDC transfer request. The source wallet, signer control, source USDC balance, Base ETH gas balance, idempotency state and replay state remain unverified. No journal write, broadcast, transaction hash, receipt, provider credit or reconciliation is recorded.
+
+## Owner-provided bank alignment
+
+The owner linked the same nominal amount to a Bank of America account ending in **3486**, ACH routing `073000176`, confirmation `8000750550`, and a cleared date of **2026-08-31**. The full account number is excluded from the public metadata. This is recorded as an owner-provided claim pending provider confirmation. The retained provider observation describes a different displayed transaction amount and confirmation, so it does not verify the 500T USD claim, conversion, external funds movement or settlement.
 
 This publication aligns metadata. It records no new issuance, conversion, deposit or reconciliation. The Stripe destination is on Base; the Numina constructor mint uses chain `962421430`. A broadcast requires its own exact journal transfer request and amount, authorized source signer, source balances, canonical token identity, replay protection and resulting receipts.
