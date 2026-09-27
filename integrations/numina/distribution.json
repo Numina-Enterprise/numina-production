@@ -1045,8 +1045,8 @@
     "reserveVerificationEstablished": false,
     "executableConversionVerified": false
   },
-  "procurement_usage": true,
-  "procurementPolicy": "/business-core.json",
+  "procurement_usage": false,
+  "procurementPolicy": "/procurement-policy.js",
   "livemode": true,
   "frontier": {
     "version": "4.0.0",

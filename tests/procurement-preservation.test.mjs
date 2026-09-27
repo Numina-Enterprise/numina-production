@@ -1,0 +1,26 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const base='f74582f1ebd8a0d5543093e640cb7198330c11ea';
+const original=p=>execFileSync('git',['show',base+':'+p],{maxBuffer:16*1024*1024});
+const current=p=>fs.readFileSync(new URL('../'+p,import.meta.url));
+const json=b=>JSON.parse(b);
+test('procurement repair preserves treasury sources, contracts, receipts and financial values byte for byte',()=>{
+ for(const p of ['public/treasury-connection-model.js','public/nusd-contract-record.js','src/native-treasury.js','src/treasury-alignment.js','src/stripe-treasury.js','src/treasury-evidence.js','runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','runtime/nusd/deployment-verification.json','runtime/nusd/treasury-settlement-receipt.json','runtime/nusd/treasury-settlement-receipt-validation.json'])assert.deepEqual(current(p),original(p),p);
+ for(const p of ['public/business-core.json','config/numina-architecture.json']){
+  const a=json(original(p)),b=json(current(p));delete a.procurement_usage;delete b.procurement_usage;delete a.procurementAuthorization;delete b.procurementAuthorization;assert.deepEqual(b,a,p);
+ }
+});
+test('inventory repair removes only the nonexistent historical entry, preserving every financial field',()=>{
+ for(const p of ['public/metadata-alignment.json','docs/Numina-Metadata-Alignment-v4.json']){
+  const a=json(original(p)),b=json(current(p));const missing='release-evidence/numina-singular-treasury-settlement-validation-2026-09-26.json';
+  const removed=a.retainedInventory.records.find(x=>x.path===missing);assert.equal(removed.sha256,'516f8aa968584603d88f607030ef10b8ca624b33be08fe123a50b63e2d6d2dad');assert.equal(fs.existsSync(new URL('../'+missing,import.meta.url)),false);
+  a.retainedInventory.records=a.retainedInventory.records.filter(x=>x.path!==missing);a.retainedInventory.recordCount=a.retainedInventory.records.length;assert.deepEqual(b,a,p);
+ }
+});
+test('published policy, schema and release aliases consistently disable automatic procurement',()=>{
+ for(const file of ['release.json','application-release-v2.json','application-release-v3.json','application-release-v4.json']){const r=json(current('dist/client/downloads/'+file));assert.equal(r.procurement_usage,false);assert.equal(r.procurement.status,'DISABLED_BY_DEFAULT');assert.equal(r.procurement.automaticPurchasing,false);}
+ assert.equal(json(current('public/schemas/application-release-v2.schema.json')).properties.procurement_usage.const,false);
+ for(const p of ['procurement-policy.js','procurement-projection.js','schemas/procurement-evidence-v1.schema.json'])assert.deepEqual(current('dist/client/'+p),current('public/'+p));
+});

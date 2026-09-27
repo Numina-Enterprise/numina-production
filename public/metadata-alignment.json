@@ -422,7 +422,7 @@
       "json",
       "jsonl"
     ],
-    "recordCount": 84,
+    "recordCount": 83,
     "records": [
       {
         "path": "config/treasury-aggregate-settlement-1500t.v1.json",
@@ -842,15 +842,6 @@
         "path": "release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json",
         "bytes": 3216,
         "sha256": "f49b4a04275e4ae8504e7d395280731da2cf18df116f31d2b5f9fd38d525d596",
-        "scope": "RETAINED_SOURCE_SCOPED_RECORD",
-        "originalBytesPreserved": true,
-        "currentBalanceOrReadinessInferred": false,
-        "currentInterpretation": "/metadata-alignment.json"
-      },
-      {
-        "path": "release-evidence/numina-singular-treasury-settlement-validation-2026-09-26.json",
-        "bytes": 4496,
-        "sha256": "516f8aa968584603d88f607030ef10b8ca624b33be08fe123a50b63e2d6d2dad",
         "scope": "RETAINED_SOURCE_SCOPED_RECORD",
         "originalBytesPreserved": true,
         "currentBalanceOrReadinessInferred": false,

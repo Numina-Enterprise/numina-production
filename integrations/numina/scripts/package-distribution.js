@@ -98,7 +98,7 @@ const distribution={
  ...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,singular:true,integrationManifest:integrationManifestRef,nusdContracts,treasuryAlignment,
  treasury_client_verification:treasuryClientVerificationManifest(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'src/treasury-proof.js'))).digest('hex')),
  denomination_policy:NUMINA_DENOMINATION_POLICY,
- procurement_usage:true,procurementPolicy:'/business-core.json',
+ procurement_usage:false,procurementPolicy:'/procurement-policy.js',
  livemode:true,frontier:{version:metadata.version,transport:'stdio-to-streamable-http',script:'bin/control-mcp-stdio.js',endpoint:'https://numinalabs.xyz/api/control/v2/mcp',protocolVersion:'2025-11-25',tokenEnvironmentVariable:'NUMINA_API_TOKEN',a2a:'https://numinalabs.xyz/.well-known/agent-card.json'},
  schema:'numina.integration.distribution.v2',version:metadata.version,revision,
  applicationManifest:'/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,

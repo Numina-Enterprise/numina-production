@@ -1028,8 +1028,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8608,
-      "sha256": "76a0f2e143989ce8e6a7bf4639210bf60589f0be9f4c5f7b8bfd3836ba763616"
+      "bytes": 8605,
+      "sha256": "8a6e65d39b0f4e20906880b25593b702814bd0cfff15d8da2fe7b4b65b02d472"
     },
     {
       "path": "SECURITY.md",
@@ -1053,8 +1053,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 52925,
-      "sha256": "cd854c5442cb6b0e5d086e1124253dbec632fb59dcb36e49013ed92bb6be0670"
+      "bytes": 52929,
+      "sha256": "411f5291cf4250ac928a55410eb0f8cbd161dab8b00eb580c23b48ad0881a46b"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -1198,8 +1198,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 12742,
-      "sha256": "2493f524972f5ce6a804ddae5620e8bee1ae1e7ca18d527db4a2cca2b163bd58"
+      "bytes": 12746,
+      "sha256": "592a24404f44fdaa22396ba0410ea2b3ace733202ea3c19d4305a49061730c0f"
     },
     {
       "path": "src/client.js",
@@ -1259,7 +1259,7 @@
     {
       "path": "verification.json",
       "bytes": 52224,
-      "sha256": "07cac5d17783487cbceeef517c54bf13f8e9effea5be87108d5cfc9fa31098d9"
+      "sha256": "b795ca165324006c2f24847011df6962bd1c0fe0c7c16004032c6340d256e62e"
     }
   ],
   "currentChainStateVerified": false,
