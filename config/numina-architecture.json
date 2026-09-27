@@ -2,7 +2,7 @@
   "schema": "numina.required-architecture.v1",
   "classification": "numina_manifest_contract",
   "runtime": "1.9.0-rc26",
-  "procurement_usage": true,
+  "procurement_usage": false,
   "root_count": 1,
   "root_lifetime": "perpetual",
   "lineage_count": 1,

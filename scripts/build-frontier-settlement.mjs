@@ -35,6 +35,11 @@ execFileSync('tar',['-xzf','-','-C','dist'],{input:archive});
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/procurement-policy.js','client/procurement-policy.js'],
+ ['public/procurement-projection.js','client/procurement-projection.js'],
+ ['public/schemas/procurement-evidence-v1.schema.json','client/schemas/procurement-evidence-v1.schema.json'],
+ ['public/schemas/application-release-v2.schema.json','client/schemas/application-release-v2.schema.json'],
+ ['public/owner-approval.js','client/owner-approval.js'],
  ['public/final-manifest.json','client/final-manifest.json'],
  ['docs/NUMINA-FINAL-MANIFEST.json','client/downloads/NUMINA-FINAL-MANIFEST.json'],
  ['public/current-environments.json','client/current-environments.json'],
@@ -84,7 +89,7 @@ const overlays=[
  ['integrations/numina/file-manifest.json','client/downloads/integration-manifest.json'],
 ];
 for(const [source,target]of overlays)copyFileSync(source,'dist/'+target);
-const modules=['public/treasury-connection-model.js','public/nusd-contract-record.js','public/architecture-layers.js','src/treasury-alignment.js','src/native-treasury.js','src/bank-route-model.js','src/stripe-treasury.js','src/treasury-evidence.js'];
+const modules=['public/treasury-connection-model.js','public/nusd-contract-record.js','public/architecture-layers.js','public/owner-approval.js','src/treasury-alignment.js','src/native-treasury.js','src/bank-route-model.js','src/stripe-treasury.js','src/treasury-evidence.js'];
 const original=Buffer.from(readFileSync('reference/live-server-index.js.b64','utf8').trim(),'base64').toString();
 assert.equal(hash(original),baseline.workerSha256);
 let worker=original;const substitutions=[];
@@ -92,6 +97,7 @@ const compile=s=>s.replace(/\r\n/g,'\n').replace(/^import .*;\n/gm,'').replace(/
 for(const source of modules){
   const before=readFileSync('reference/settlement-metadata-bases/'+path.basename(source)+'.txt','utf8');
   let after=compile(readFileSync(source,'utf8'));
+  if(source==='public/architecture-layers.js')after=compile(readFileSync('public/procurement-policy.js','utf8'))+after;
   if(source==='src/stripe-treasury.js'){
     const start=after.indexOf('const NATIVE_USDC_MODEL='),end=after.indexOf('function stripeTreasuryError',start);
     assert.ok(start>=0&&end>start,'Stripe routing metadata boundaries');
@@ -162,6 +168,8 @@ const presentation=['index','government','financial-institutions','partners','de
 const hashes=new Set();for(const name of presentation){const html=readFileSync('dist/client/'+name+'.html','utf8');for(const m of html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g))hashes.add("'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");if(name!=='index'){const rule='/'+name+'.html /'+name+' 301';if(!redirects.split(/\r?\n/).includes(rule))redirects+='\n'+rule;}}
 headers=headers.replace(/script-src ([^;]+)/,(_,tokens)=>'script-src '+[...new Set([...tokens.trim().split(/\s+/),...hashes])].join(' '));writeFileSync('dist/client/_headers',headers);writeFileSync('dist/client/_redirects',redirects+'\n');
 const sourceAlignment=json('dist/client/source-alignment.json');
+sourceAlignment.procurement_usage=false;sourceAlignment.procurement=NUMINA_LAYERS.procurement;
+sourceAlignment.requiredArchitecture.procurement_usage=false;
 const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
@@ -223,6 +231,7 @@ const aliases=['release.json','application-release-v2.json','application-release
 const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=relative?relative+'/'+n:n,a=path.join(dir,n);return statSync(a).isDirectory()?collect(a,p):excluded.has(p)?[]:[{path:p,sha256:hash(readFileSync(a))}];});
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0),buildId=hash(artifacts.map(x=>x.sha256+'  '+x.path+'\n').join(''));
 const release=structuredClone(baseline);
+release.procurement_usage=false;release.procurement=NUMINA_LAYERS.procurement;
 function align(o){if(!o||typeof o!=='object')return;for(const k of Object.keys(o))if(k==='canonicalTreasuryValues')o[k]=structuredClone(values);else align(o[k]);}align(release);
 release.provider_routing=NUSD_PROVIDER_ROUTING;
 release.mint_workflow=NUSD_MINT_WORKFLOW;

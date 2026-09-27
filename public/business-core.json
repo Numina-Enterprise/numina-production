@@ -66,29 +66,40 @@
       "externalBalancesAggregated": false
     }
   },
-  "procurement_usage": true,
+  "procurement_usage": false,
   "providerEvidenceRequired": true,
   "sourceAlignment": "/source-alignment.json",
   "procurementAuthorization": {
-    "schema": "numina.owner-authorization.v1",
-    "source": "owner_instruction",
-    "status": "OWNER_AUTHORIZED",
-    "creditUsageAuthorized": true,
-    "usageFlag": "/procurement_usage",
+    "schema": "numina.procurement-policy.v1",
+    "id": "numina:procurement:direct-partnership:v1",
+    "revision": 1,
+    "status": "DISABLED_BY_DEFAULT",
+    "mode": "PROJECTION_ONLY",
+    "procurement_usage": false,
+    "singular": true,
+    "identity": "NUMINA",
+    "scope": "NUMINA",
+    "policy": "/procurement-policy.js",
     "automaticPurchasing": false,
-    "permissions": "existing_owner_and_delegated_permissions",
-    "paymentEvidence": "provider_confirmation_required",
-    "scope": [
-      "Numina OS",
-      "website",
-      "plugin",
-      "release provenance",
-      "mobile applications",
-      "integration clients and adapters",
-      "payment integrations"
+    "executionPerformedByEvaluator": false,
+    "providerMutationPerformed": false,
+    "allowedCategories": [
+      "DIRECT_PARTNERSHIP"
     ],
-    "execution": "Use existing authorized provider access and available credits",
-    "providerBillingObservation": null
+    "currencies": [
+      "USD"
+    ],
+    "permissions": "request_bound_owner_or_owner_delegated_approval",
+    "requirements": [
+      "signed_approval",
+      "signed_budget_reservation",
+      "signed_provider_access"
+    ],
+    "paymentEvidence": "exact_signed_provider_receipt",
+    "evidenceSchema": "/schemas/procurement-evidence-v1.schema.json",
+    "evaluator": "/procurement-projection.js",
+    "trustAnchors": "server_owned_configuration_required",
+    "execution": "manual_provider_workflow_requires_fresh_authority_and_atomic_budget_claim"
   },
   "intellectualProperty": {
     "owner": "SK Consulting LLC",

@@ -17,7 +17,7 @@ Authenticated operations use https://numinalabs.xyz/api/control/v2/mcp and the s
 
 Numina 4 source alignment is published at https://numinalabs.xyz/source-alignment.json. Its package versions and source hashes describe this release; read the current journal head through the MCP tool. Preserve the same Numina root across every architecture layer.
 
-The public `numina_capabilities` response publishes `procurement_usage` and its policy scope. Use this flag for owner-authorized procurement workflows under existing permissions. It does not supply payment authorization, funds, provider receipts, or permission to bypass human approvals.
+Procurement is disabled by default (`procurement_usage: false`, `automaticPurchasing: false`). The current policy at https://numinalabs.xyz/procurement-policy.js permits only a projection of explicit direct-partnership requests with matching owner or owner-delegated signed approval, budget reservation, and provider access. Completed usage requires an exact signed provider receipt. Historical statements and usage flags do not authorize purchases. The evaluator performs no execution; manual provider workflows must revalidate authority and claim budget atomically.
 
 ## Shared denomination policy
 

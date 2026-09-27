@@ -71,7 +71,7 @@ async function refresh(){
     await refreshControlRoom();if(!isCurrent())return;
     try{
       const m=await readApi('manifest');if(!isCurrent())return;
-      $('#frontier-status').textContent=m.livemode?'Production · Live mode · '+m.version+(m.procurement_usage===true?' · Procurement usage enabled':''):'Production configuration unavailable';
+      $('#frontier-status').textContent=m.livemode?'Production · Live mode · '+m.version+(m.procurement_usage===true?' · Procurement request evidence required':''):'Production configuration unavailable';
       $('#providers').replaceChildren(...m.providers.map(p=>{const n=node('article','');n.append(node('h3',p.id),node('p',p.submission?'Internal records available':'Handoff preparation available; provider submission not connected'));return n;}));
     }catch{if(!isCurrent())return;$('#frontier-status').textContent='Production status unavailable';}
     try{
