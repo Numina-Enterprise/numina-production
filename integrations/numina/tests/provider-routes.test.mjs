@@ -83,3 +83,15 @@ test('network and runtime-build discovery preserve optional public provider-rout
   assert.equal(calls.length,2);for(const {url,options}of calls){assert.ok(url.endsWith('/status')||url.endsWith('/v4/release/manifest'));assert.equal(options.headers.Authorization,undefined);}
  }
 });
+
+// Public policy objects may be retained; credential-shaped values remain redacted.
+test('public authorization policy is retained without permitting credential smuggling',async()=>{
+ const policy={authorizedBy:'NUMINA',executionAuthorized:true,journalAppendAuthorized:true,settlementAuthorized:true};
+ for(const [authorization,retained] of [[policy,true],[{...policy,secret:token},false],[{...policy,authorizedBy:token},false],[{...policy,executionAuthorized:token},false],[token,false]]){
+  const source={...observation(),extra:{authorization}};
+  const result=await client(async()=>Response.json(source)).readProviderRoutes({});
+  assert.equal(Object.hasOwn(result.data.extra,'authorization'),retained);
+  if(retained)assert.deepEqual(result.data.extra.authorization,policy);
+  assert.equal(JSON.stringify(result).includes(token),false);
+ }
+});

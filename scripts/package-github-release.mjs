@@ -5,12 +5,13 @@ import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='13f095acb9da7ad9cf6de6e15249dabb6533b2e9';
+const FINAL_BUILD_MANIFEST_BLOB='41715723d453f0372725a54365b69cdd20d70356';
 const finalBuildBytes=readFileSync(finalBuildPath);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
 execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
 const finalBuild=JSON.parse(finalBuildBytes);
+execFileSync(process.execPath,['scripts/production-pair.mjs'],{stdio:'inherit'});
 if(finalBuild.productionBinding?.productionDeploymentAllowed!==true||finalBuild.productionBinding?.regenerationRequired!==false)throw Error('Production universal pair is unbound: regenerate and verify production bindings before release');
 if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
 if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');
