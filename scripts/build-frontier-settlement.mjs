@@ -82,6 +82,7 @@ const overlays=[
  ['runtime/nusd/treasury-settlement-receipt-validation.json','client/downloads/nusd/treasury-settlement-receipt-validation.json'],
  ['public/metadata-alignment.json','client/metadata-alignment.json'],
  ['docs/Numina-Metadata-Alignment-v4.json','client/downloads/Numina-Metadata-Alignment-v4.json'],
+ ['docs/Numina-DevDay-2026-Adoption.json','client/downloads/Numina-DevDay-2026-Adoption.json'],
  ['docs/Numina-Metadata-Alignment-v4.md','client/downloads/Numina-Metadata-Alignment-v4.md'],
  ['docs/treasury-client-alignment.md','client/downloads/treasury-client-alignment.md'],
  ['docs/native-package-record-v4.json','client/downloads/native-package-record-v4.json'],
