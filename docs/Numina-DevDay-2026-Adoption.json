@@ -11,7 +11,7 @@
     "scope": "historical_network_observation",
     "currentNodeVerified": false
   },
-  "assessmentScope": "Adoption requirements; no announcement is marked implemented by this inventory. Dispositions are Numina engineering assessments, not OpenAI certification.",
+  "assessmentScope": "Evidence-based adoption inventory. Implemented scopes are explicit; provider availability and host-session rendering require separate verification.",
   "features": [
     {
       "id": 1,
@@ -105,9 +105,29 @@
       "id": 12,
       "announcement": "Plugin extensions",
       "numinaDisposition": "integration_evidence_required",
-      "gate": "OPEN",
-      "implemented": false,
-      "providerVerified": false
+      "gate": "PARTIALLY_IMPLEMENTED_PENDING_HOST_RENDER_VERIFICATION",
+      "implemented": true,
+      "providerVerified": false,
+      "implementation": {
+        "scope": "public_workspace_sidebar_and_conversation_panel",
+        "source": "src/sites-mcp.js",
+        "tool": "numina_open_panel",
+        "resource": "ui://numina/public-workspace/v1.html",
+        "entrypoints": [
+          "global",
+          "thread"
+        ],
+        "privateOperationsExposed": false,
+        "hostRenderVerified": false,
+        "remainingExtensionScopes": [
+          "settings",
+          "file_viewers",
+          "deep_links",
+          "model_app_context",
+          "composer_mentions",
+          "rich_forms"
+        ]
+      }
     },
     {
       "id": 13,
@@ -221,11 +241,18 @@
     }
   ],
   "distributionGates": {
-    "web": "BUILD_REQUIRED",
+    "web": "DEPLOYED_VERIFIED_CHECKPOINT_V128",
     "android": "CURRENT_SOURCE_BUILD_AND_STORE_RECEIPT_REQUIRED",
     "ios": "CURRENT_SOURCE_BUILD_SIGNING_AND_STORE_RECEIPT_REQUIRED",
     "plugin": "PROTOCOL_UI_TEST_AND_PUBLICATION_REQUIRED",
     "adapters": "INTEGRATION_TEST_AND_PROVIDER_ACCESS_REQUIRED"
   },
-  "allGatesGreen": false
+  "allGatesGreen": false,
+  "verifiedWebCheckpoint": {
+    "version": 128,
+    "sourceCommit": "29c84b4a07488a7c6ee3a87143a72c42f78f20e6",
+    "buildId": "5d32d491a22424bf364ff2858d5d5547dd5f43843c7467cd47ac13c107caa2ee",
+    "deploymentId": "appgdep_6abcdc75440081918ff7245279407d25",
+    "scope": "Prior verified publication; later source changes require a new deployment receipt."
+  }
 }
