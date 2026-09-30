@@ -25,6 +25,7 @@ export function verifyProductionPair(){
  for(const path of [...paths,'public/current-environments.json']){
   const v=json(path),pair=v.universalPair;
   assert.equal(pair?.schema,'numina.universal-pair.production.v1');
+  if(v.hostedPlugin)for(const source of v.hostedPlugin.sourceInputs)assert.equal(createHash('sha256').update(readFileSync(root+source.path)).digest('hex'),source.sha256,'Hosted plugin source pin');
   assert.equal(pair.genesisHash,genesis);assert.equal(pair.bound,true);
   assert.deepEqual(pair.sources,sources);assert.equal(pair.bindingCount,4);
   assert.deepEqual(pair.bindings,sources.flatMap((source,index)=>['LIVE','FRONTIER_FINAL'].map(environment=>({sourceIndex:index+1,sourceId:source.sha256,derivedHashId:source.sha256,environment,artifacts:paths}))));
@@ -34,6 +35,11 @@ export function verifyProductionPair(){
  return {identity:'NUMINA',sources,genesisHash:genesis,bindingsVerified:true,providerExecutionVerified:false};
 }
 function regenerate(){
+ const hosting=json('.openai/hosting.json');
+ if(hosting.capabilities?.includes('mcp')){
+  const inputs=['src/sites-mcp.js','.openai/hosting.json'].map(path=>({path,sha256:createHash('sha256').update(readFileSync(root+path)).digest('hex')}));
+  for(const path of paths){const v=json(path);v.hostedPlugin={endpoint:'/mcp',profile:'public_read_only_discovery',privateOperationsExposed:false,sourceInputs:inputs};write(path,v);}
+ }
  const sources=paths.map(path=>({path,sha256:pairSourceHash(json(path))}));
  const bindings=sources.flatMap((source,index)=>['LIVE','FRONTIER_FINAL'].map(environment=>({sourceIndex:index+1,sourceId:source.sha256,derivedHashId:source.sha256,environment,artifacts:paths})));
  const pair={schema:'numina.universal-pair.production.v1',identity:'NUMINA',status:'SOURCE_BOUND',bound:true,genesisHash:genesis,genesisSource:'runtime/nusd/deployment-receipt.json',sourceDigestAlgorithm:'sha256',sourceDigestScope:'sorted-json-source-payload-excluding-derived-bindings-and-cross-file-pins',sourceDigestImplementation:'scripts/production-pair.mjs#pairSourcePayload',sources,bindingCount:bindings.length,bindings,providerExecutionVerified:false};

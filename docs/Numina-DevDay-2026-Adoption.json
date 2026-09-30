@@ -121,9 +121,15 @@
       "id": 14,
       "announcement": "Sites hosting plugins",
       "numinaDisposition": "integration_evidence_required",
-      "gate": "OPEN",
-      "implemented": false,
-      "providerVerified": false
+      "gate": "IMPLEMENTED_PENDING_HOSTED_PLUGIN_VERIFICATION",
+      "implemented": true,
+      "providerVerified": false,
+      "implementation": {
+        "route": "/mcp",
+        "profile": "public_read_only_discovery",
+        "source": "src/sites-mcp.js",
+        "privateOperationsExposed": false
+      }
     },
     {
       "id": 15,
