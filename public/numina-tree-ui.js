@@ -24,7 +24,7 @@ function renderTree(data){
  }
  $('tree-status').textContent='Room configuration read. Provider confirmation is shown separately.';
 }
-function clearPrivate(){scope.reset();$('tree-task-form').hidden=true;$('tree-tasks').replaceChildren();}
+function clearPrivate(){scope.reset();$('tree-task-form').hidden=true;$('tree-task-form').reset();$('tree-tasks').replaceChildren();}
 function signIn(){clearPrivate();const link=node('a','Sign in to Numina to assign tasks');link.href='/signin-with-chatgpt?return_to=%2Ffrontier';$('task-status').replaceChildren(link);}
 async function readTasks(){
  const generation=scope.generation;
@@ -34,14 +34,15 @@ async function readTasks(){
   if(!($('tree-tasks').children.length))$('tree-tasks').append(node('p','No recorded room tasks.'));
  }catch(error){if(!scope.isCurrent(generation))return;if(error.status===401||error.status===403)signIn();else{$('tree-task-form').hidden=true;$('task-status').textContent='Task records unavailable: '+error.message;}}
 }
-async function refresh(){clearPrivate();const button=$('tree-refresh');button.disabled=true;try{const data=await requestJson('/api/control/v2/tree',{credentials:'omit'});renderTree(data);await readTasks();}catch(error){$('tree-status').textContent='Current tree unavailable: '+error.message;$('tree-rooms').replaceChildren();clearPrivate();}finally{button.disabled=false;}}
+async function refresh(){clearPrivate();const generation=scope.generation,signal=scope.signal,button=$('tree-refresh');button.disabled=true;try{const data=await requestJson('/api/control/v2/tree',{credentials:'omit',signal});if(!scope.isCurrent(generation))return;renderTree(data);await readTasks();}catch(error){if(!scope.isCurrent(generation))return;$('tree-status').textContent='Current tree unavailable: '+error.message;$('tree-rooms').replaceChildren();clearPrivate();}finally{button.disabled=false;}}
 if($('subagent-control-room')){
 $('tree-refresh').addEventListener('click',refresh);
-$('tree-task-form').addEventListener('submit',async event=>{event.preventDefault();const formElement=event.currentTarget;const button=formElement.querySelector('button');if(button.disabled)return;button.disabled=true;
- try{const state=await requestJson('/api/control/v2/state');const form=new FormData(formElement);const data={operation:'assign',id:crypto.randomUUID(),roomId:form.get('roomId'),objective:form.get('objective').trim(),acceptanceCriteria:form.get('acceptanceCriteria').trim().split(/\n+/).map(value=>value.trim()).filter(Boolean),evidenceReferences:[]};
-  await requestJson('/api/control/v2/tree/tasks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:crypto.randomUUID(),expectedRevision:state.revision,data})});
-  formElement.reset();await refresh();
- }catch(error){if(error.status===401||error.status===403)signIn();else $('task-status').textContent='Task was not confirmed: '+error.message;}finally{button.disabled=false;}
+$('tree-task-form').addEventListener('submit',async event=>{event.preventDefault();const formElement=event.currentTarget;const button=formElement.querySelector('button');if(button.disabled)return;button.disabled=true;const generation=scope.generation,signal=scope.signal;
+ try{const form=new FormData(formElement);const data={operation:'assign',id:crypto.randomUUID(),roomId:form.get('roomId'),objective:form.get('objective').trim(),acceptanceCriteria:form.get('acceptanceCriteria').trim().split(/\n+/).map(value=>value.trim()).filter(Boolean),evidenceReferences:[]};
+  const state=await requestJson('/api/control/v2/state',{signal});if(!scope.isCurrent(generation))return;
+  await requestJson('/api/control/v2/tree/tasks',{signal,method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:crypto.randomUUID(),expectedRevision:state.revision,data})});
+  if(!scope.isCurrent(generation))return;formElement.reset();await refresh();
+ }catch(error){if(!scope.isCurrent(generation))return;if(error.status===401||error.status===403)signIn();else $('task-status').textContent='Task was not confirmed: '+error.message;}finally{button.disabled=false;}
 });
 document.addEventListener('numina-owner-access-lost',signIn);window.addEventListener('pagehide',clearPrivate);window.addEventListener('pageshow',event=>{if(event.persisted)refresh();});refresh();
 }
