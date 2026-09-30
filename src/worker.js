@@ -1,3 +1,4 @@
+import {sitesMcpHttp} from './sites-mcp.js';
 import {financialEvidenceHttp} from './financial-evidence.js';
 import {transferReceiptsHttp,TRANSFER_RECEIPTS_ROUTE} from './transfer-receipts.js';
 import {treasuryConnectionHttp} from './treasury-connection-http.js';
@@ -29,6 +30,7 @@ export default {
   const requestId=span.requestId;let status=200;
   const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
+   const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mcp)return finish(mcp);
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
    if(path==='/favicon.ico'){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));

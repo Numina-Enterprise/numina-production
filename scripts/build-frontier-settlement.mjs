@@ -147,6 +147,18 @@ const policyRouteAfter=frontierSource.slice(policyRouteStart,policyRouteEnd).tri
 assert.equal(worker.split(policyRouteBefore).length,2,'Unique retained treasury policy route');
 worker=worker.replace(policyRouteBefore,policyRouteAfter);
 substitutions.push({source:'src/frontier-http.js#treasury-policy-route',before:policyRouteBefore,after:policyRouteAfter});
+// Add the hosted MCP alias without replacing authorization or private routes.
+const mcpSource=compile(readFileSync('src/sites-mcp.js','utf8'));
+const mcpExportBefore='export default {';
+const mcpExportAfter=mcpSource+'\n'+mcpExportBefore;
+assert.equal(worker.split(mcpExportBefore).length,2,'Unique worker entrypoint');
+worker=worker.replace(mcpExportBefore,mcpExportAfter);
+substitutions.push({source:'src/sites-mcp.js',before:mcpExportBefore,after:mcpExportAfter});
+const mcpRouteBefore="   if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));";
+const mcpRouteAfter='   const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mcp)return finish(mcp);\n'+mcpRouteBefore;
+assert.equal(worker.split(mcpRouteBefore).length,2,'Unique hosted MCP route insertion');
+worker=worker.replace(mcpRouteBefore,mcpRouteAfter);
+substitutions.push({source:'src/sites-mcp.js#route',before:mcpRouteBefore,after:mcpRouteAfter});
 // Correct the retained policy address literal outside the metadata modules.
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
@@ -175,6 +187,7 @@ sourceAlignment.procurement_usage=false;sourceAlignment.procurement=NUMINA_LAYER
 sourceAlignment.requiredArchitecture.procurement_usage=false;
 const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
+currentInputs.add('src/sites-mcp.js');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 for(const file of currentInputs){const bytes=readFileSync(file);captured.set(file,{path:file,bytes:bytes.length,sha256:hash(bytes)});}
 sourceAlignment.sourceInputs=[...captured.values()].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);

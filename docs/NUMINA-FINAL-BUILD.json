@@ -3493,19 +3493,19 @@
     "sources": [
       {
         "path": "public/final-build.json",
-        "sha256": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15"
+        "sha256": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665"
       },
       {
         "path": "public/final-manifest.json",
-        "sha256": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+        "sha256": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
       }
     ],
     "bindingCount": 4,
     "bindings": [
       {
         "sourceIndex": 1,
-        "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
-        "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+        "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+        "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
         "environment": "LIVE",
         "artifacts": [
           "public/final-build.json",
@@ -3514,8 +3514,8 @@
       },
       {
         "sourceIndex": 1,
-        "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
-        "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+        "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+        "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
         "environment": "FRONTIER_FINAL",
         "artifacts": [
           "public/final-build.json",
@@ -3524,8 +3524,8 @@
       },
       {
         "sourceIndex": 2,
-        "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
-        "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+        "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+        "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
         "environment": "LIVE",
         "artifacts": [
           "public/final-build.json",
@@ -3534,8 +3534,8 @@
       },
       {
         "sourceIndex": 2,
-        "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
-        "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+        "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+        "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
         "environment": "FRONTIER_FINAL",
         "artifacts": [
           "public/final-build.json",
@@ -3564,15 +3564,15 @@
   ],
   "universalPairBuilds": [],
   "currentSourceIds": [
-    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
-    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+    "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+    "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
   ],
   "currentSourceCount": 2,
   "environmentBindings": [
     {
       "sourceIndex": 1,
-      "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
-      "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+      "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
       "environment": "LIVE",
       "artifacts": [
         "public/final-build.json",
@@ -3581,8 +3581,8 @@
     },
     {
       "sourceIndex": 1,
-      "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
-      "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+      "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
       "environment": "FRONTIER_FINAL",
       "artifacts": [
         "public/final-build.json",
@@ -3591,8 +3591,8 @@
     },
     {
       "sourceIndex": 2,
-      "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
-      "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+      "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
       "environment": "LIVE",
       "artifacts": [
         "public/final-build.json",
@@ -3601,8 +3601,8 @@
     },
     {
       "sourceIndex": 2,
-      "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
-      "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+      "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
       "environment": "FRONTIER_FINAL",
       "artifacts": [
         "public/final-build.json",
@@ -3611,17 +3611,17 @@
     }
   ],
   "currentBuildIds": [
-    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
-    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+    "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+    "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
   ],
   "universalPairSources": [
     {
       "path": "public/final-build.json",
-      "sha256": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15"
+      "sha256": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665"
     },
     {
       "path": "public/final-manifest.json",
-      "sha256": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+      "sha256": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
     }
   ],
   "treasuryJournalObservation": {
@@ -4076,5 +4076,20 @@
     "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
     "scope": "SOFTWARE_SOURCE_BINDINGS_ONLY",
     "providerExecutionVerified": false
+  },
+  "hostedPlugin": {
+    "endpoint": "/mcp",
+    "profile": "public_read_only_discovery",
+    "privateOperationsExposed": false,
+    "sourceInputs": [
+      {
+        "path": "src/sites-mcp.js",
+        "sha256": "a28b240aaf9ffe75ff506fb7d0b2724472f0836eab7c5ed4e4f7b2225e38925f"
+      },
+      {
+        "path": ".openai/hosting.json",
+        "sha256": "d3bddb5eae17558a8a54426d03f550ec09ba2be9508eea8a8baaefda81b0e3a4"
+      }
+    ]
   }
 }
