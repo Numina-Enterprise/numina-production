@@ -24,3 +24,9 @@ body.v4-subpage{--bg:#080a09;--panel:#101310;--panel2:#171b16;--text:#f1f3ec;--m
 @media(min-width:1600px){.v4-subpage :is(.page-hero,.hero,.about-hero){width:min(1680px,calc(100% - 128px))}}
 @media(max-width:760px){.v4-subpage :is(.page-hero,.hero,.about-hero){width:calc(100% - 40px);padding-block:40px}.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:clamp(2.6rem,10vw,4rem)}.v4-subpage :is(.page-hero,.hero,.about-hero) p{font-size:16px}.v4-subpage .about-hero{display:grid;grid-template-columns:1fr;gap:32px}.v4-subpage .readiness-heading{padding-block:36px}.v4-subpage .site-wrap .wrap{width:calc(100% - 40px)}.v4-subpage .site-header{gap:16px}.v4-subpage .hero-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:24px}}
 @media(prefers-reduced-motion:reduce){.v4-subpage *{animation:none!important;transition:none!important}}
+/* Readable professional hierarchy across content and operator pages. */
+.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:clamp(2.3rem,3.6vw,3.9rem);letter-spacing:-.035em;line-height:1.18;max-width:980px}
+.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading){padding-top:52px;padding-bottom:40px}
+.v4-subpage .section{padding-block:58px}.v4-subpage .section h2{font-size:clamp(1.7rem,2.5vw,2.6rem);line-height:1.25}
+.v4-subpage .section-content>p{max-width:78ch;font-size:16px;line-height:1.85}
+@media(max-width:760px){.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:2.3rem}.v4-subpage .section{padding-block:40px}}
