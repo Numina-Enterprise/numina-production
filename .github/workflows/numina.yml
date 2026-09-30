@@ -18,7 +18,7 @@ env:
   NUMINA_FINAL_BUILD_MANIFEST: public/final-build.json
   NUMINA_FINAL_BUILD_MANIFEST_ROLE: synchronized_projection
   NUMINA_FINAL_BUILD_SYNC: ACROSS_ALL
-  NUMINA_FINAL_BUILD_MANIFEST_BLOB: 4f4ea8fef0805acb33538553e2430f0d2ada02b1
+  NUMINA_FINAL_BUILD_MANIFEST_BLOB: c7096c7875793f6dfd431afdad46f427d2c04cdd
 
 concurrency:
   group: numina-${{ github.ref }}
