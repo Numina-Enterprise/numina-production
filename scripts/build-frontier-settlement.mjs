@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
@@ -11,13 +11,15 @@ import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_PROVIDER_ROUTING} from '../src/stripe-treasury.js';
 import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW} from '../src/nusd-http.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
-import {iosInputSnapshot} from './ios-release.mjs';
+import {checkIOSRelease,iosInputSnapshot} from './ios-release.mjs';
 import {treasuryClientVerificationManifest} from '../public/treasury-proof.js';
 import {alignNusdReleaseMetadata} from './align-nusd-release-metadata.mjs';
+import {checkSoftwareRelease,softwareReleaseInputs} from './check-software-release.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));process.chdir(root);
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const json=f=>JSON.parse(readFileSync(f,'utf8'));
 const baseline=json('reference/frontier-baseline-release.json');
+const softwareReleaseAlignment=checkSoftwareRelease(root);
 assert.equal(baseline.workerSha256,'3cd09e0db9b25ae1fd291103039d9af2c58ff5db7dc832e287be0f2f9951e6bc');
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/generate-metadata-alignment.mjs','--check'],{stdio:'inherit'});
@@ -30,12 +32,17 @@ resetBuildOutput(root);
 const snapshot=json('reference/frontier-baseline-client.json');
 const archive=Buffer.concat(snapshot.parts.map(part=>{assert.match(part.path,/^reference\/frontier-baseline-client\.part[0-9]{2}$/);const bytes=readFileSync(part.path);assert.equal(bytes.length,part.bytes);assert.equal(hash(bytes),part.sha256);return bytes;}));
 assert.equal(archive.length,snapshot.bytes);assert.equal(hash(archive),snapshot.sha256);
-execFileSync('tar',['-xzf','-','-C','dist'],{input:archive});
+// Use a verified file input so tar/gzip cannot stall on a synchronous stdin pipe.
+const baselineArchivePath='dist/.numina-baseline.tar.gz';
+writeFileSync(baselineArchivePath,archive);
+try{execFileSync('tar',['-xzf',baselineArchivePath,'-C','dist'],{stdio:'inherit'});}
+finally{unlinkSync(baselineArchivePath);}
 // Every retained published client asset is restored byte-for-byte from the
 // release inventory. This build has no network reads or provider writes.
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/app.html','client/app.html'],
  ['public/motion.css','client/motion.css'],
  ['public/numina4-ui.js','client/numina4-ui.js'],
  ['public/numina4-core.webp','client/numina4-core.webp'],
@@ -93,6 +100,8 @@ const overlays=[
  ['docs/Numina-Metadata-Alignment-v4.md','client/downloads/Numina-Metadata-Alignment-v4.md'],
  ['docs/treasury-client-alignment.md','client/downloads/treasury-client-alignment.md'],
  ['docs/native-package-record-v4.json','client/downloads/native-package-record-v4.json'],
+ ['docs/Source-Alignment-v4.md','client/downloads/Source-Alignment-v4.md'],
+ ['docs/numina-os-4.0.0-android-source.zip','client/downloads/numina-os-4.0.0-android-source.zip'],
  ['docs/numina-os-4.0.0-ios-source.zip','client/downloads/numina-os-4.0.0-ios-source.zip'],
  ['integrations/numina/file-manifest.json','client/downloads/integration-manifest.json'],
 ];
@@ -215,9 +224,16 @@ currentInputs.add('src/sites-mcp.js');
 currentInputs.add('src/numina-tree.js');
 currentInputs.add('src/frontier.js');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
+const currentIosInputs=iosInputSnapshot(root);
+for(const file of [...softwareReleaseInputs,'scripts/check-software-release.mjs',...currentIosInputs.inputs.map(x=>x.path)])currentInputs.add(file);
 for(const file of currentInputs){const bytes=readFileSync(file);captured.set(file,{path:file,bytes:bytes.length,sha256:hash(bytes)});}
 sourceAlignment.sourceInputs=[...captured.values()].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 sourceAlignment.sourceInputCount=sourceAlignment.sourceInputs.length;
+sourceAlignment.versions={...sourceAlignment.versions,...softwareReleaseAlignment.versions};
+sourceAlignment.nativeBuildNumber=softwareReleaseAlignment.nativeSourceBuildNumbers.android;
+sourceAlignment.nativeSourceBuildNumbers=softwareReleaseAlignment.nativeSourceBuildNumbers;
+sourceAlignment.softwareReleaseAlignment=softwareReleaseAlignment;
+sourceAlignment.iosSource={...checkIOSRelease(root),sourceInputs:currentIosInputs};
 sourceAlignment.sourceInputCaptureScope='Current metadata overlay inputs; other entries retained from the preserved published source inventory';
 sourceAlignment.sourceInputProvenance={baselineBuildId:baseline.build_id,currentMetadataInputs:[...currentInputs].sort(),otherInputs:'retained_published_inventory'};
 sourceAlignment.provider_routing=NUSD_PROVIDER_ROUTING;
@@ -274,6 +290,7 @@ const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=rel
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0),buildId=hash(artifacts.map(x=>x.sha256+'  '+x.path+'\n').join(''));
 const release=structuredClone(baseline);
 release.procurement_usage=false;release.procurement=NUMINA_LAYERS.procurement;
+release.software_release_alignment=softwareReleaseAlignment;
 function align(o){if(!o||typeof o!=='object')return;for(const k of Object.keys(o))if(k==='canonicalTreasuryValues')o[k]=structuredClone(values);else align(o[k]);}align(release);
 release.provider_routing=NUSD_PROVIDER_ROUTING;
 release.mint_workflow=NUSD_MINT_WORKFLOW;

@@ -2,7 +2,7 @@
 
 This is a concrete Android Gradle project for the existing Numina workspace at https://numinalabs.xyz/app. It uses Google's Android Browser Helper 2.7.3 to launch a Trusted Web Activity, with the normal browser fallback. It does not embed a WebView, signing key, billing SDK, custody wallet or token transaction mechanism. The hosted application's current access and payment rules still apply.
 
-**Current Android release: 4.0.0, version code 3. The APK and upload AAB were compiled, signed and signature-verified in build [34947973846](https://github.com/skott34-dot/numina-production/actions/runs/34947973846) from source `cd28af207f39fe8ba010ef83eafbd832448ffbbf`.** The Android source and signing workflow are unchanged in merged release `c6ffbb50d77ff53323b71b7048872637677e6b42`. See `../../docs/native-package-record-v4.json` and `../../docs/android-signed-build-record-v4.json`. Device installation and Play release submission are not established by this build record.
+**Current Android source: 4.0.0, version code 4; a matching compiled and signed artifact is not recorded.** The historical 4.0.0/code 3 APK and upload AAB were compiled, signed and signature-verified in build [34947973846](https://github.com/skott34-dot/numina-production/actions/runs/34947973846) from source `cd28af207f39fe8ba010ef83eafbd832448ffbbf`. Those binaries retain their exact bytes, identities and original provenance. See `../../docs/native-package-record-v4.json` and `../../docs/android-signed-build-record-v4.json`. Device installation and Play release submission are not established by this build record.
 
 **Prior binary status: Android 3.0.0 APK and AAB compiled and signed successfully in hosted build 34785067667, completed 2026-09-13 at 21:53:32 UTC.** Signature checks passed. Neither artifact was installed on a device or submitted to a store. No tests were run. Exact binaries and their source commit are recorded in `../../docs/native-package-record-v3.json`.
 
@@ -11,7 +11,7 @@ Historical local attempt, superseded by the successful hosted build: the initial
 | Field | Candidate value |
 | --- | --- |
 | Native display version | 4.0.0 |
-| Native build/version code | 3 |
+| Native source build/version code | 4 |
 | Proposed package ID | xyz.numinalabs.app |
 | Minimum Android SDK | 23 |
 | Compile / target SDK | 36 |
@@ -35,7 +35,7 @@ Digital Asset Links are published for the actual release certificate identified 
 
 ## Remaining release work
 
-Use the recorded signed 4.0.0 upload AAB for the Play release candidate. It opens the current hosted workspace and retains its exact original build provenance. Check existing Play uploads before selecting version code 3; any subsequent native update must preserve the package and signing identities and use an acceptable increasing version code. Complete publisher identity review and the remaining device/store review steps. Domain association uses the published `/.well-known/assetlinks.json` and actual signing certificate; store app-signing identities require their own association. No native authentication, device behavior or store acceptance has been verified. The browser supplies the existing sign-in context; the source route `/signin-with-chatgpt?return_to=...` is not a new native OAuth integration. Consulting checkout, digital-service billing classification, privacy/deletion disclosures, accessibility and account review access remain store-specific checks. This candidate must not be presented as a token wallet or as enabling NUSD execution.
+Compile and sign the current 4.0.0/code 4 source with the existing release/upload identities before treating it as the current Play release candidate. The recorded signed code 3 AAB is historical and retains its original build provenance. Check existing Play uploads before using code 4; preserve the package and signing identities and use an acceptable increasing version code. Complete publisher identity review and the remaining device/store review steps. Domain association uses the published `/.well-known/assetlinks.json` and actual signing certificate; store app-signing identities require their own association. No native authentication, device behavior or store acceptance has been verified. The browser supplies the existing sign-in context; the source route `/signin-with-chatgpt?return_to=...` is not a new native OAuth integration. Consulting checkout, digital-service billing classification, privacy/deletion disclosures, accessibility and account review access remain store-specific checks. This candidate must not be presented as a token wallet or as enabling NUSD execution.
 
 The browser dependency is Apache-2.0 licensed; it is referenced as a Maven dependency, not vendored. Its resolved transitive dependencies and notices must be included in the actual native build inventory. The copied Numina icon retains the source application's unresolved ownership status; this package does not certify IP title.
 

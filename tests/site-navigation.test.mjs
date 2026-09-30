@@ -11,12 +11,14 @@ test('every website page shares the Numina design and complete primary navigatio
     assert.ok(header,file);assert.match(header,/Intelligence in Motion/,file);assert.match(html,/href="\/motion.css"/,file);
     for(const label of ['Main navigation','Mobile navigation']){
       const nav=header.match(new RegExp('<nav[^>]*aria-label="'+label+'"[^>]*>(.*?)</nav>','s'))?.[1];
-      assert.ok(nav,file+' '+label);assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),routes,file);
-      assert.equal([...nav.matchAll(/aria-current="page"/g)].length,1,file);
+      const landing=['index.html','frontier.html'].includes(file)&&label==='Main navigation';
+      const expected=landing?['#platform','/services','/integrations','/build','/app']:routes;
+      assert.ok(nav,file+' '+label);assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),expected,file);
+      assert.equal([...nav.matchAll(/aria-current="page"/g)].length,landing?0:1,file);
     }
     assert.doesNotMatch(html,/<a[^>]*href="(?:https:\/\/(?:www\.)?numinalabs.xyz)?\/pricing(?:["#?])/);
   }
-  assert.equal(read('index.html'),read('frontier.html'));
+  for(const page of ['index.html','frontier.html'])assert.match(read(page),/numina4-core\.webp/);
 });
 
 test('services and pricing combine scope, terms and the existing enterprise request routes once',()=>{

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 const base='f74582f1ebd8a0d5543093e640cb7198330c11ea';
 const original=p=>execFileSync('git',['show',base+':'+p],{maxBuffer:16*1024*1024});
 const current=p=>fs.readFileSync(new URL('../'+p,import.meta.url));
@@ -12,11 +13,19 @@ test('procurement repair preserves treasury sources, contracts, receipts and fin
   const a=json(original(p)),b=json(current(p));delete a.procurement_usage;delete b.procurement_usage;delete a.procurementAuthorization;delete b.procurementAuthorization;assert.deepEqual(b,a,p);
  }
 });
-test('inventory repair removes only the nonexistent historical entry, preserving every financial field',()=>{
+test('inventory repair preserves financial fields and tracks version-only changes to maintained packages',()=>{
  for(const p of ['public/metadata-alignment.json','docs/Numina-Metadata-Alignment-v4.json']){
   const a=json(original(p)),b=json(current(p));const missing='release-evidence/numina-singular-treasury-settlement-validation-2026-09-26.json';
   const removed=a.retainedInventory.records.find(x=>x.path===missing);assert.equal(removed.sha256,'516f8aa968584603d88f607030ef10b8ca624b33be08fe123a50b63e2d6d2dad');assert.equal(fs.existsSync(new URL('../'+missing,import.meta.url)),false);
-  a.retainedInventory.records=a.retainedInventory.records.filter(x=>x.path!==missing);a.retainedInventory.recordCount=a.retainedInventory.records.length;assert.deepEqual(b,a,p);
+  a.retainedInventory.records=a.retainedInventory.records.filter(x=>x.path!==missing);
+  for(const directory of ['runtime/nusd','runtime/nusd/development'])for(const file of ['package.json','package-lock.json']){
+    const source=directory+'/'+file,old=json(original(source)),now=json(current(source));
+    old.version='4.0.0';if(file==='package-lock.json')old.packages[''].version='4.0.0';
+    assert.deepEqual(now,old,'Only maintained package version identities may change: '+source);
+    const record=a.retainedInventory.records.find(x=>x.path===source),bytes=current(source);
+    record.bytes=bytes.length;record.sha256=createHash('sha256').update(bytes).digest('hex');
+  }
+  a.retainedInventory.recordCount=a.retainedInventory.records.length;assert.deepEqual(b,a,p);
  }
 });
 test('published policy, schema and release aliases consistently disable automatic procurement',()=>{

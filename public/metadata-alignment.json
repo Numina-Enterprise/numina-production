@@ -1012,7 +1012,7 @@
       {
         "path": "runtime/nusd/development/package-lock.json",
         "bytes": 164617,
-        "sha256": "6dc10bd224f0ac22ad52a427574cd612fde51cabda72b8e12c3e72dfe505bfac",
+        "sha256": "f3acd1bc07bcfabbdbb58bf53cb8ca1b050bceefb449cafc080606b01f7e22d1",
         "scope": "RETAINED_SOURCE_SCOPED_RECORD",
         "originalBytesPreserved": true,
         "currentBalanceOrReadinessInferred": false,
@@ -1021,7 +1021,7 @@
       {
         "path": "runtime/nusd/development/package.json",
         "bytes": 462,
-        "sha256": "84c8a033053488270757eee8cfd04cc7608f0a9190757ac2cd5dd5eea10e9753",
+        "sha256": "d8e4be33740df7394def2ab41c7fb7e41630acee49f8b79ae9e4a6e62c147048",
         "scope": "RETAINED_SOURCE_SCOPED_RECORD",
         "originalBytesPreserved": true,
         "currentBalanceOrReadinessInferred": false,
@@ -1048,7 +1048,7 @@
       {
         "path": "runtime/nusd/package-lock.json",
         "bytes": 4327,
-        "sha256": "30d49ec8d7a797e2661f520579bfe36b4f77241b6ab7eb558e137c2bc16cabd2",
+        "sha256": "ed59526678868538a4abe9aff96a2816368e534536c0fe1308854436c7beb415",
         "scope": "RETAINED_SOURCE_SCOPED_RECORD",
         "originalBytesPreserved": true,
         "currentBalanceOrReadinessInferred": false,
@@ -1057,7 +1057,7 @@
       {
         "path": "runtime/nusd/package.json",
         "bytes": 226,
-        "sha256": "6bb8a6eb8b94b2ebea35662e3f2eeadd540ff6ee4685c8553a6d7fc02111e401",
+        "sha256": "5f9cc99859f9cf989ac57d11a7c8fcb17c3ba2a7c21aa54e37255bb53c6cb2d2",
         "scope": "RETAINED_SOURCE_SCOPED_RECORD",
         "originalBytesPreserved": true,
         "currentBalanceOrReadinessInferred": false,
