@@ -1,0 +1,225 @@
+{
+  "schema": "numina.devday-adoption.v1",
+  "identity": "NUMINA",
+  "source": "https://openai.com/index/devday-2026-recap/",
+  "announcementDate": "2026-09-29",
+  "announcementCount": 25,
+  "networkAnchor": {
+    "chainId": "962421430",
+    "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+    "source": "runtime/nusd/deployment-receipt.json",
+    "scope": "historical_network_observation",
+    "currentNodeVerified": false
+  },
+  "assessmentScope": "Adoption requirements; no announcement is marked implemented by this inventory. Dispositions are Numina engineering assessments, not OpenAI certification.",
+  "features": [
+    {
+      "id": 1,
+      "announcement": "Dots",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 2,
+      "announcement": "GPT-6.1 Sol",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 3,
+      "announcement": "Ultrafast",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 4,
+      "announcement": "Private Intelligence",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 5,
+      "announcement": "Codex in the cloud",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 6,
+      "announcement": "Codex CLI",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 7,
+      "announcement": "Code Review",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 8,
+      "announcement": "Codex Security Cloud",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 9,
+      "announcement": "Decisions API",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 10,
+      "announcement": "Agents API with Computer use",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 11,
+      "announcement": "Bedrock Managed Agents",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 12,
+      "announcement": "Plugin extensions",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 13,
+      "announcement": "Plugin creation and discovery",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 14,
+      "announcement": "Sites hosting plugins",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 15,
+      "announcement": "MCP events",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 16,
+      "announcement": "ChatGPT Space",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 17,
+      "announcement": "Pages",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 18,
+      "announcement": "Collaborative slides",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 19,
+      "announcement": "Teams and shared tasks",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 20,
+      "announcement": "ChatGPT in Slack and Teams",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 21,
+      "announcement": "Meetings plugin",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 22,
+      "announcement": "Shareable profiles",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 23,
+      "announcement": "Sign in with ChatGPT",
+      "numinaDisposition": "integration_evidence_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 24,
+      "announcement": "Pro 500",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    },
+    {
+      "id": 25,
+      "announcement": "OpenAI Marketplace",
+      "numinaDisposition": "provider_account_availability_required",
+      "gate": "OPEN",
+      "implemented": false,
+      "providerVerified": false
+    }
+  ],
+  "distributionGates": {
+    "web": "BUILD_REQUIRED",
+    "android": "CURRENT_SOURCE_BUILD_AND_STORE_RECEIPT_REQUIRED",
+    "ios": "CURRENT_SOURCE_BUILD_SIGNING_AND_STORE_RECEIPT_REQUIRED",
+    "plugin": "PROTOCOL_UI_TEST_AND_PUBLICATION_REQUIRED",
+    "adapters": "INTEGRATION_TEST_AND_PROVIDER_ACCESS_REQUIRED"
+  },
+  "allGatesGreen": false
+}
