@@ -1203,8 +1203,8 @@
     },
     {
       "path": "src/client.js",
-      "bytes": 17406,
-      "sha256": "df4641726676ca6d62a425bcf49461ed0695f1ce9b759fc5b7c43bc1afde35e3"
+      "bytes": 17532,
+      "sha256": "627274bfd41c382ddaffa89c65bfc690c5ec495424cf81a0dafdb526959be0c7"
     },
     {
       "path": "src/index.d.ts",
@@ -1259,7 +1259,7 @@
     {
       "path": "verification.json",
       "bytes": 52224,
-      "sha256": "f7fbd837527a4db358573e94388c1e11d1525887992ea195524dbae6856d6ae6"
+      "sha256": "2ba88cc2e019d3a8d5ed64d3315bc4f7544a5e4ba04ffcf642f19efaa56a5d68"
     }
   ],
   "currentChainStateVerified": false,

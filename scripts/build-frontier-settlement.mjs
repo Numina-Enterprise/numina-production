@@ -22,6 +22,7 @@ assert.equal(baseline.workerSha256,'3cd09e0db9b25ae1fd291103039d9af2c58ff5db7dc8
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/generate-metadata-alignment.mjs','--check'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/production-pair.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['integrations/numina/scripts/package-distribution.js'],{stdio:'inherit'});
 execFileSync(process.env.NUMINA_PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/package-current-integration.py'],{stdio:'inherit'});
 assert.deepEqual(readFileSync('public/treasury-proof.js'),readFileSync('integrations/numina/src/treasury-proof.js'));
@@ -43,6 +44,7 @@ const overlays=[
  ['public/final-manifest.json','client/final-manifest.json'],
  ['docs/NUMINA-FINAL-MANIFEST.json','client/downloads/NUMINA-FINAL-MANIFEST.json'],
  ['public/current-environments.json','client/current-environments.json'],
+ ['public/control.html','client/control.html'],
  ['public/index.html','client/index.html'],
  ['public/economy.html','client/economy.html'],
  ['public/blockchain.html','client/blockchain.html'],

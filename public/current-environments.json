@@ -1,19 +1,34 @@
 {
   "schema": "numina.current-environments.v5",
   "identity": "NUMINA",
-  "status": "UNBOUND",
+  "status": "SOURCE_BOUND",
   "matrix": "2x2",
-  "sourceIdCount": 0,
-  "idCount": 0,
+  "sourceIdCount": 2,
+  "idCount": 2,
   "environmentCount": 2,
-  "bindingCount": 0,
-  "id": [],
-  "ids": [],
-  "sourceIds": [],
-  "derivedHashIds": [],
-  "sourceIdSources": [],
-  "idMirrorsSourceIds": false,
-  "derivedHashIdsMirrorSourceIds": false,
+  "bindingCount": 4,
+  "id": [
+    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+  ],
+  "ids": [
+    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+  ],
+  "sourceIds": [
+    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+  ],
+  "derivedHashIds": [
+    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+  ],
+  "sourceIdSources": [
+    "public/final-build.json",
+    "public/final-manifest.json"
+  ],
+  "idMirrorsSourceIds": true,
+  "derivedHashIdsMirrorSourceIds": true,
   "environments": [
     "LIVE",
     "FRONTIER_FINAL"
@@ -26,41 +41,127 @@
     "/final-build.json",
     "/final-manifest.json"
   ],
-  "everyCellReceivesBothFiles": false,
+  "everyCellReceivesBothFiles": true,
   "invariant": {
     "schema": "numina.derived-hash-source-invariant.v1",
     "name": "DERIVED_HASH_ID_EQUALS_SOURCE_ID",
     "expression": "derivedHashId = sourceId",
-    "derivedHashIdSource": "sourceId",
-    "idSource": "sourceId",
-    "buildIdSource": "sourceId",
     "scope": "UNIVERSAL_PAIR_2X2",
-    "bindingCount": 0,
-    "enforced": false,
-    "status": "UNBOUND"
+    "bindingCount": 4,
+    "enforced": true
   },
   "contentHashes": {
-    "finalBuildSha256": "813606079c2cf29f98853b687b9f0432446fc1cd9fad462fdf160f507b3c68e2",
-    "finalManifestSha256": "9610501d8c87408b8eff3b7694f96715ecb77b39a43816557193a42b6d977854"
+    "finalBuildSha256": "3f29a5a2d315a02c6bb990abaf06b8a5430629cc286f161ec7cb15b38d5e7f54",
+    "finalManifestSha256": "243bef1689bc3d4923694aa0b097e774e09accbbec73c3d38c0dd076ea2a6b64"
   },
-  "frontierId": "813606079c2cf29f98853b687b9f0432446fc1cd9fad462fdf160f507b3c68e2",
+  "frontierId": "3f29a5a2d315a02c6bb990abaf06b8a5430629cc286f161ec7cb15b38d5e7f54",
   "universalPair": {
-    "schema": "numina.universal-pair.resolved.v2",
+    "schema": "numina.universal-pair.production.v1",
     "identity": "NUMINA",
-    "status": "UNBOUND",
-    "bound": false,
-    "regenerationRequired": true,
-    "productionDeploymentAllowed": false,
+    "status": "SOURCE_BOUND",
+    "bound": true,
     "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
     "genesisSource": "runtime/nusd/deployment-receipt.json",
-    "reason": "Universal pair must be regenerated from the production build; only the network genesis hash is retained as a fixed anchor.",
-    "members": [],
-    "bindings": [],
-    "sourceIds": [],
-    "derivedHashIds": [],
-    "bindingCount": 0
+    "sourceDigestAlgorithm": "sha256",
+    "sourceDigestScope": "sorted-json-source-payload-excluding-derived-bindings-and-cross-file-pins",
+    "sourceDigestImplementation": "scripts/production-pair.mjs#pairSourcePayload",
+    "sources": [
+      {
+        "path": "public/final-build.json",
+        "sha256": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15"
+      },
+      {
+        "path": "public/final-manifest.json",
+        "sha256": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+      }
+    ],
+    "bindingCount": 4,
+    "bindings": [
+      {
+        "sourceIndex": 1,
+        "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+        "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+        "environment": "LIVE",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ]
+      },
+      {
+        "sourceIndex": 1,
+        "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+        "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+        "environment": "FRONTIER_FINAL",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ]
+      },
+      {
+        "sourceIndex": 2,
+        "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+        "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+        "environment": "LIVE",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ]
+      },
+      {
+        "sourceIndex": 2,
+        "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+        "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+        "environment": "FRONTIER_FINAL",
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ]
+      }
+    ],
+    "providerExecutionVerified": false
   },
-  "bindings": [],
+  "bindings": [
+    {
+      "sourceIndex": 1,
+      "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "environment": "LIVE",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    },
+    {
+      "sourceIndex": 1,
+      "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "environment": "FRONTIER_FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "environment": "LIVE",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "environment": "FRONTIER_FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    }
+  ],
   "appliesTo": "ALL_NUMINA_SOFTWARE",
   "scope": "ALL_DOWNSTREAM_PROJECTIONS",
   "canonicalTreasuryValues": {
@@ -715,12 +816,73 @@
     "componentCount": 3
   },
   "productionBinding": {
-    "status": "UNBOUND",
-    "bound": false,
-    "regenerationRequired": true,
-    "productionDeploymentAllowed": false,
+    "status": "SOURCE_BOUND",
+    "bound": true,
+    "regenerationRequired": false,
+    "productionDeploymentAllowed": true,
     "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
-    "genesisSource": "runtime/nusd/deployment-receipt.json",
-    "reason": "Universal pair must be regenerated from the production build; only the network genesis hash is retained as a fixed anchor."
-  }
+    "scope": "SOFTWARE_SOURCE_BINDINGS_ONLY",
+    "providerExecutionVerified": false
+  },
+  "currentSourceIds": [
+    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+  ],
+  "currentBuildIds": [
+    "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+    "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+  ],
+  "environmentBindings": [
+    {
+      "sourceIndex": 1,
+      "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "environment": "LIVE",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    },
+    {
+      "sourceIndex": 1,
+      "sourceId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "derivedHashId": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15",
+      "environment": "FRONTIER_FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "environment": "LIVE",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    },
+    {
+      "sourceIndex": 2,
+      "sourceId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "derivedHashId": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39",
+      "environment": "FRONTIER_FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    }
+  ],
+  "universalPairBuildCount": 2,
+  "universalPairSources": [
+    {
+      "path": "public/final-build.json",
+      "sha256": "7998f45cf4845ee3f62721daee8aa0cc354deab2f0a77961ebb8da745e0eff15"
+    },
+    {
+      "path": "public/final-manifest.json",
+      "sha256": "9ef61a1f94f72e4f0a5c2cdca2964dbc885bc4c8282fa321f9f1fcb9ef39aa39"
+    }
+  ]
 }
