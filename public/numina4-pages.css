@@ -1,0 +1,26 @@
+/* Numina 4 subpages. Loaded last so specialist layouts share the public theme. */
+body.v4-subpage{--bg:#080a09;--panel:#101310;--panel2:#171b16;--text:#f1f3ec;--muted:#a8afa5;--line:#2a3029;--cyan:#d3f86a;--purple:#d3f86a;background:var(--bg);color:var(--text);font-family:Manrope,Arial,sans-serif}
+.v4-subpage .site-wrap{width:100%;max-width:none;padding:0}
+.v4-subpage .site-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.v4-subpage .motion-brand{display:flex;flex-direction:column;align-items:flex-start;text-decoration:none;color:var(--text)}
+.v4-subpage .desktop-nav a[aria-current=page]{color:var(--cyan)}
+.v4-subpage :is(.page-hero,.about-hero,.hero,.readiness-heading){padding-top:76px;padding-bottom:60px;background:none;border-color:var(--line)}
+.v4-subpage :is(.page-hero,.hero,.about-hero){width:min(1440px,calc(100% - 96px));margin-inline:auto}
+.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:clamp(2.8rem,5.6vw,6rem);font-weight:500;letter-spacing:-.065em;line-height:1.08;max-width:1050px}
+.v4-subpage h1 em,.v4-subpage h2 em{color:var(--cyan);font-style:normal}
+.v4-subpage :is(.page-hero,.hero,.about-hero) p{max-width:700px;font-size:18px;line-height:1.8;color:var(--muted)}
+.v4-subpage :is(.section,.contact,.role){border-color:var(--line)}
+.v4-subpage h2{letter-spacing:-.04em;line-height:1.2;font-weight:500}
+.v4-subpage :is(.cards article,.commerce-card,.contact-options article,.service-grid article,.plan,.control-panel,.app-panel,.preparation-panel,.local-signing-panel,.readiness-panel,.treasury-node,.treasury-core,.journey-panel,.connection-card){background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:none;color:var(--text)}
+.v4-subpage :is(.eyebrow,.section-label,.role-meta){color:var(--muted);font-size:12px;letter-spacing:.12em}
+.v4-subpage .about-portrait img{border-radius:8px;border:1px solid var(--line)}
+.v4-subpage :is(input,textarea,select){background:var(--panel);color:var(--text);border:1px solid #485141;border-radius:6px;padding:12px;font:inherit}
+.v4-subpage button:not([disabled]){cursor:pointer}
+.v4-subpage :is(button,.button){min-height:44px}
+.v4-subpage a:focus-visible,.v4-subpage button:focus-visible,.v4-subpage summary:focus-visible,.v4-subpage input:focus-visible,.v4-subpage select:focus-visible,.v4-subpage textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+.v4-subpage :is(pre,code){overflow-wrap:anywhere}.v4-subpage pre{max-width:100%;overflow-x:auto}
+.v4-subpage :is(.readiness-layout,.cards,.section-content,.split)>*{min-width:0}
+.v4-subpage .site-footer{border-top:1px solid var(--line);background:transparent}
+@media(min-width:1600px){.v4-subpage :is(.page-hero,.hero,.about-hero){width:min(1680px,calc(100% - 128px))}}
+@media(max-width:760px){.v4-subpage :is(.page-hero,.hero,.about-hero){width:calc(100% - 40px);padding-block:40px}.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:clamp(2.6rem,10vw,4rem)}.v4-subpage :is(.page-hero,.hero,.about-hero) p{font-size:16px}.v4-subpage .about-hero{display:grid;grid-template-columns:1fr;gap:32px}.v4-subpage .readiness-heading{padding-block:36px}.v4-subpage .site-wrap .wrap{width:calc(100% - 40px)}.v4-subpage .site-header{gap:16px}.v4-subpage .hero-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:24px}}
+@media(prefers-reduced-motion:reduce){.v4-subpage *{animation:none!important;transition:none!important}}
