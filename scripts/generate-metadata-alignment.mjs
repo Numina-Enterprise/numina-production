@@ -12,7 +12,7 @@ const retainedFiles=['config/treasury-aggregate-settlement-1500t.v1.json'];
 function collect(relative){
   return readdirSync(path.join(root,relative),{withFileTypes:true}).flatMap(entry=>{
     const item=relative+'/'+entry.name;
-    if(entry.isSymbolicLink())return [];
+    if(entry.isSymbolicLink()||entry.name==='node_modules')return [];
     if(entry.isDirectory())return collect(item);
     return /\.(?:json|jsonl)$/.test(item)?[item]:[];
   });
