@@ -1,5 +1,6 @@
 import {stable,controlHash,controlError,authorizeControl,normalizeRecord} from './control.js';
 import {NUMINA_TREASURY_POLICIES} from './treasury-policy.js';
+import {reduceTreeTask} from './numina-tree.js';
 
 export const FRONTIER_VERSION='4.0.0';
 export const FRONTIER_PROVIDERS=[
@@ -44,7 +45,14 @@ export async function frontierDecision(state,request,now){
 export async function reduceFrontier(state,command,actor,now){
   const data=command.data,f=state.frontier??=frontierState(state);let result;
   const owner=()=>frontierAssert(actor===state.root,'OWNER_REQUIRED',403);
-  if(command.type==='frontier.principal'){
+  if(command.type==='frontier.room_task'){
+    owner();frontierAssert(data&&['assign','start','result'].includes(data.operation),'INVALID_TREE_OPERATION',400);
+    const {operation,...taskData}=data;
+    const tasks=f.roomTasks??=[];
+    frontierAssert(operation!=='assign'||tasks.length<100,'STATE_CAPACITY',409);
+    result=reduceTreeTask(tasks,{type:'tree.'+operation,data:taskData},actor,now,state.root);
+    result.eventId=command.id;
+  }else if(command.type==='frontier.principal'){
     owner();frontierExact(data,['id','name','credentialSha256']);
     frontierAssert(/^agent:[A-Za-z0-9_-]{1,80}$/.test(data.id)&&frontierText(data.name)&&/^[a-f0-9]{64}$/.test(data.credentialSha256),'INVALID_PRINCIPAL',400);
     frontierAssert(!f.principals.some(p=>p.id===data.id||p.credentialSha256===data.credentialSha256),'PRINCIPAL_CONFLICT',409);

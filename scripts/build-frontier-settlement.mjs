@@ -36,6 +36,8 @@ execFileSync('tar',['-xzf','-','-C','dist'],{input:archive});
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/numina-tree.css','client/numina-tree.css'],
+ ['public/numina-tree-ui.js','client/numina-tree-ui.js'],
  ['public/procurement-policy.js','client/procurement-policy.js'],
  ['public/procurement-projection.js','client/procurement-projection.js'],
  ['public/schemas/procurement-evidence-v1.schema.json','client/schemas/procurement-evidence-v1.schema.json'],
@@ -159,6 +161,25 @@ const mcpRouteAfter='   const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mc
 assert.equal(worker.split(mcpRouteBefore).length,2,'Unique hosted MCP route insertion');
 worker=worker.replace(mcpRouteBefore,mcpRouteAfter);
 substitutions.push({source:'src/sites-mcp.js#route',before:mcpRouteBefore,after:mcpRouteAfter});
+// Add structured rooms and owner-only journaled assignments to the retained runtime.
+const treeSource=compile(readFileSync('src/numina-tree.js','utf8'));
+const treeEntrypoint='export default {';
+const treeEntrypointAfter=treeSource+'\n'+treeEntrypoint;
+assert.equal(worker.split(treeEntrypoint).length,2);
+worker=worker.replace(treeEntrypoint,treeEntrypointAfter);
+substitutions.push({source:'src/numina-tree.js',before:treeEntrypoint,after:treeEntrypointAfter});
+const treeEdits=[
+ ["const frontierRoutes={","const frontierRoutes={'tree/tasks':'room_task',"],
+ ["    if(path==='/api/control/v2/architecture'","    if(path==='/api/control/v2/tree'&&req.method==='GET')return frontierResponse(numinaTree());\n    if(path==='/api/control/v2/architecture'"],
+ ["    if(route==='state'&&req.method==='GET'){","    if(route==='tree/tasks'&&req.method==='GET'){frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);return frontierResponse({revision:row.revision,head:row.head_hash,...readRoomTasks(row.manifest)});}\n    if(route==='state'&&req.method==='GET'){"],
+ ["f.accounts=[];delete f.treasuryPolicies;","f.accounts=[];delete f.roomTasks;delete f.treasuryPolicies;"]
+];
+const treeReducer=compile(readFileSync('src/frontier.js','utf8'));
+const treeBranchStart=treeReducer.indexOf("  if(command.type==='frontier.room_task'){");
+const treeBranchEnd=treeReducer.indexOf("  }else if(command.type==='frontier.principal'){",treeBranchStart);
+assert.ok(treeBranchStart>=0&&treeBranchEnd>treeBranchStart,'Structured room reducer boundaries');
+treeEdits.push(["  if(command.type==='frontier.principal'){",treeReducer.slice(treeBranchStart,treeBranchEnd)+"  }else if(command.type==='frontier.principal'){"]);
+for(const [before,after] of treeEdits){assert.equal(worker.split(before).length,2,'Unique tree insertion: '+before);worker=worker.replace(before,after);substitutions.push({source:'numina-tree#runtime',before,after});}
 // Correct the retained policy address literal outside the metadata modules.
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
@@ -188,6 +209,8 @@ sourceAlignment.requiredArchitecture.procurement_usage=false;
 const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
 currentInputs.add('src/sites-mcp.js');
+currentInputs.add('src/numina-tree.js');
+currentInputs.add('src/frontier.js');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 for(const file of currentInputs){const bytes=readFileSync(file);captured.set(file,{path:file,bytes:bytes.length,sha256:hash(bytes)});}
 sourceAlignment.sourceInputs=[...captured.values()].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
