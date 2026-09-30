@@ -1,4 +1,6 @@
-# Numina NUSD managed runtime candidate
+# Numina 4 NUSD managed runtime candidate
+
+Maintained adapter and contract-development package identities are 4.0.0. This is source alignment, not a new container deployment or contract deployment. Previously attested archives keep their exact original bytes and provenance; historical review tools keep their recorded versions. The control runtime remains 1.9.0-rc26 and the frozen core remains 1.8.0.
 
 ## Contract lifecycle
 

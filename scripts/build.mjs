@@ -17,6 +17,7 @@ if(finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL'||finalBuild.manif
 execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inherit'});
 // Fail before producing web artifacts if the iOS/runtime release binding has drifted.
 execFileSync(process.execPath,['scripts/ios-release.mjs','check'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/check-software-release.mjs'],{stdio:'inherit'});
 // Source safeguards can pass while Play upload, declarations and device checks remain blocked.
 execFileSync(process.execPath,['scripts/check-play-readiness.mjs','--source-only'],{stdio:'inherit'});
 // Regenerate the canonical integration manifest and its dependent metadata from current same-repo source before validating or copying it.
