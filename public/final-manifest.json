@@ -3,8 +3,8 @@
   "identity": "NUMINA",
   "status": "FINAL",
   "frontier": "NEXT_FRONTIER",
-  "frontierId": "3a88126e2933ce31e517029902b6b51b992b1a197ff0cfd2290c116378cc7f19",
-  "canonicalSha256": "3a88126e2933ce31e517029902b6b51b992b1a197ff0cfd2290c116378cc7f19",
+  "frontierId": "39c9ed129eb51443b1fb8f87c23b07c246c57506157befb0fc8b52da5505d418",
+  "canonicalSha256": "39c9ed129eb51443b1fb8f87c23b07c246c57506157befb0fc8b52da5505d418",
   "applicationVersion": "4.0.0",
   "repository": {
     "schema": "numina.repository.v1",
@@ -42,9 +42,9 @@
   ],
   "finalBuild": {
     "path": "public/final-build.json",
-    "gitBlobSha1": "4f4ea8fef0805acb33538553e2430f0d2ada02b1",
-    "sha256": "3a88126e2933ce31e517029902b6b51b992b1a197ff0cfd2290c116378cc7f19",
-    "canonicalSha256": "3a88126e2933ce31e517029902b6b51b992b1a197ff0cfd2290c116378cc7f19",
+    "gitBlobSha1": "c7096c7875793f6dfd431afdad46f427d2c04cdd",
+    "sha256": "39c9ed129eb51443b1fb8f87c23b07c246c57506157befb0fc8b52da5505d418",
+    "canonicalSha256": "39c9ed129eb51443b1fb8f87c23b07c246c57506157befb0fc8b52da5505d418",
     "identity": "NUMINA",
     "status": "FINAL",
     "applicationVersion": "4.0.0",
@@ -204,19 +204,19 @@
     "sources": [
       {
         "path": "public/final-build.json",
-        "sha256": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665"
+        "sha256": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5"
       },
       {
         "path": "public/final-manifest.json",
-        "sha256": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
+        "sha256": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
       }
     ],
     "bindingCount": 4,
     "bindings": [
       {
         "sourceIndex": 1,
-        "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
-        "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+        "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+        "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
         "environment": "LIVE",
         "artifacts": [
           "public/final-build.json",
@@ -225,8 +225,8 @@
       },
       {
         "sourceIndex": 1,
-        "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
-        "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+        "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+        "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
         "environment": "FRONTIER_FINAL",
         "artifacts": [
           "public/final-build.json",
@@ -235,8 +235,8 @@
       },
       {
         "sourceIndex": 2,
-        "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
-        "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+        "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+        "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
         "environment": "LIVE",
         "artifacts": [
           "public/final-build.json",
@@ -245,8 +245,8 @@
       },
       {
         "sourceIndex": 2,
-        "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
-        "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+        "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+        "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
         "environment": "FRONTIER_FINAL",
         "artifacts": [
           "public/final-build.json",
@@ -275,15 +275,15 @@
   ],
   "universalPairBuilds": [],
   "currentSourceIds": [
-    "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
-    "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
+    "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+    "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
   ],
   "currentSourceCount": 2,
   "environmentBindings": [
     {
       "sourceIndex": 1,
-      "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
-      "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+      "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+      "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
       "environment": "LIVE",
       "artifacts": [
         "public/final-build.json",
@@ -292,8 +292,8 @@
     },
     {
       "sourceIndex": 1,
-      "sourceId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
-      "derivedHashId": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
+      "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+      "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
       "environment": "FRONTIER_FINAL",
       "artifacts": [
         "public/final-build.json",
@@ -302,8 +302,8 @@
     },
     {
       "sourceIndex": 2,
-      "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
-      "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+      "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+      "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
       "environment": "LIVE",
       "artifacts": [
         "public/final-build.json",
@@ -312,8 +312,8 @@
     },
     {
       "sourceIndex": 2,
-      "sourceId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
-      "derivedHashId": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e",
+      "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+      "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
       "environment": "FRONTIER_FINAL",
       "artifacts": [
         "public/final-build.json",
@@ -322,17 +322,17 @@
     }
   ],
   "currentBuildIds": [
-    "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665",
-    "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
+    "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+    "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
   ],
   "universalPairSources": [
     {
       "path": "public/final-build.json",
-      "sha256": "a346a2ecb05eda7177e977bcf592be49b729b50adb3a55c2d8fd2f14e7b77665"
+      "sha256": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5"
     },
     {
       "path": "public/final-manifest.json",
-      "sha256": "4a1f5b15f4211f143cf6ebe0fd39fc0954f8b230a62e9ad6334c089aedad5a1e"
+      "sha256": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
     }
   ],
   "canonicalTreasuryValues": {
@@ -1002,7 +1002,7 @@
     "sourceInputs": [
       {
         "path": "src/sites-mcp.js",
-        "sha256": "a28b240aaf9ffe75ff506fb7d0b2724472f0836eab7c5ed4e4f7b2225e38925f"
+        "sha256": "abda6b22471aa17feb00c0d98b385f6a211cff3ee859e9a59fef79a4eeb5839d"
       },
       {
         "path": ".openai/hosting.json",
