@@ -1259,7 +1259,7 @@
     {
       "path": "verification.json",
       "bytes": 52224,
-      "sha256": "7a09dac99e3bf7c6e4add9af89f12fd6e300357c8e2653167195b1476e467cc3"
+      "sha256": "a319b489e123d2a7f3639fb327e2bfd4146783e0f7687a97fc5e325094196c76"
     }
   ],
   "currentChainStateVerified": false,
