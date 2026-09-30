@@ -36,6 +36,9 @@ execFileSync('tar',['-xzf','-','-C','dist'],{input:archive});
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/motion.css','client/motion.css'],
+ ['public/numina4-ui.js','client/numina4-ui.js'],
+ ['public/numina4-core.webp','client/numina4-core.webp'],
  ['public/numina-tree.css','client/numina-tree.css'],
  ['public/numina-tree-ui.js','client/numina-tree-ui.js'],
  ['public/procurement-policy.js','client/procurement-policy.js'],
