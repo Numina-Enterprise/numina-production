@@ -38,6 +38,13 @@ docs/Numina-Requested-Asset-Fee.json -text
 docs/NUMINA-FINAL-BUILD.json -text
 docs/native-package-record-v4.json -text
 release-evidence/numina-bofa-ach-instruction-2026-09-19.json -text
+# Retained evidence inventories use raw Git bytes on every checkout.
+release-evidence/** -text
+docs/** -text
+reference/** -text
+config/** -text
+scripts/** -text
+.openai/** -text
 
 # Preserve the published migration bytes across platforms.
 drizzle/** -text

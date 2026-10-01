@@ -14,6 +14,7 @@ const canonicalTreasuryValues=metadata.canonicalTreasuryValues;
 const treasuryJournalObservation=metadata.treasuryJournalObservation;
 const authoritativeCurrentTreasuryRoute=metadata.authoritativeCurrentTreasuryRoute;
 const metadataAlignment=metadata.metadataAlignment;
+const activeProvenancePolicy=metadata.activeProvenancePolicy;
 if(canonicalTreasuryValues?.status!=='JOURNAL_SNAPSHOT'||canonicalTreasuryValues.canonical!==false||
    treasuryJournalObservation?.schema!=='numina.treasury.journal-observation.v1'||
    treasuryJournalObservation.snapshotIsLive!==false||
@@ -91,7 +92,7 @@ const verification={
  settlementConnected:false,externalBackingVerified:false,
  externalProviderSubmissionStatus:'UNVERIFIED',externalProviderSettlementStatus:'UNVERIFIED',
  historicalChainMintEvidence:nusdContracts.historicalChainMintEvidence,nusdContracts,treasuryAlignment,
- currentChainStateVerified:false,metadataAlignment
+ currentChainStateVerified:false,metadataAlignment,activeProvenancePolicy
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
 const distribution={
@@ -108,7 +109,7 @@ const distribution={
  mcp:{transport:'stdio',command:'node',script:'bin/mcp-stdio.js',template:'examples/mcp-host.example.json',protocols:verification.mcpProtocolsImplemented,hostedRemoteEndpoint:null},
  installation:'INSTALL.md',compatibility:'COMPATIBILITY.md',validation:'VALIDATION.md',
  applicationSignatureVerification:false,artifactBytesVerified:false,installedInProviders:false,registryPublished:false,
- currentChainStateVerified:false,metadataAlignment
+ currentChainStateVerified:false,metadataAlignment,activeProvenancePolicy
 };
 fs.writeFileSync(path.join(root,'distribution.json'),JSON.stringify(distribution,null,2)+'\n');
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
@@ -123,6 +124,6 @@ const fileManifest={schema:'numina.integration.manifest.v2',...singularIdentitie
  if(/(?:^|\/)\.env|\.private\.|\.(?:pem|key|tgz|zip)$/.test(relative))throw new Error('Private or archive files are not distribution inputs');
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
-}),currentChainStateVerified:false,metadataAlignment};
+}),currentChainStateVerified:false,metadataAlignment,activeProvenancePolicy};
 fs.writeFileSync(path.join(root,'file-manifest.json'),JSON.stringify(fileManifest,null,2)+'\n');
 console.log(JSON.stringify({version:metadata.version,files:files.length+1,testsRun:false,providerFormats:providerFormats.length,defaultTools:verification.defaultTools.length}));

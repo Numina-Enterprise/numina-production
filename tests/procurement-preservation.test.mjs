@@ -7,10 +7,18 @@ const base='f74582f1ebd8a0d5543093e640cb7198330c11ea';
 const original=p=>execFileSync('git',['show',base+':'+p],{maxBuffer:16*1024*1024});
 const current=p=>fs.readFileSync(new URL('../'+p,import.meta.url));
 const json=b=>JSON.parse(b);
+const activeProvenancePolicy=json(current('config/active-provenance-policy.v1.json'));
+function removeForwardProvenanceFields(currentRecord,originalRecord){
+ assert.deepEqual(currentRecord.activeProvenancePolicy,activeProvenancePolicy);
+ delete currentRecord.activeProvenancePolicy;
+ if(currentRecord.metadataAlignment)for(const key of Object.keys(activeProvenancePolicy)){
+  if(!Object.hasOwn(originalRecord.metadataAlignment??{},key))delete currentRecord.metadataAlignment[key];
+ }
+}
 test('procurement repair preserves treasury sources, contracts, receipts and financial values byte for byte',()=>{
- for(const p of ['public/treasury-connection-model.js','public/nusd-contract-record.js','src/native-treasury.js','src/treasury-alignment.js','src/stripe-treasury.js','src/treasury-evidence.js','runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','runtime/nusd/deployment-verification.json','runtime/nusd/treasury-settlement-receipt.json','runtime/nusd/treasury-settlement-receipt-validation.json'])assert.deepEqual(current(p),original(p),p);
+ for(const p of ['public/treasury-connection-model.js','public/nusd-contract-record.js','src/native-treasury.js','src/treasury-alignment.js','src/stripe-treasury.js','src/treasury-evidence.js','runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','runtime/nusd/deployment-verification.json','runtime/nusd/treasury-settlement-receipt.json','runtime/nusd/treasury-settlement-receipt-validation.json','docs/nusd/treasury-settlement-receipt-validation.json','release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json'])assert.deepEqual(current(p),original(p),p);
  for(const p of ['public/business-core.json','config/numina-architecture.json']){
-  const a=json(original(p)),b=json(current(p));delete a.procurement_usage;delete b.procurement_usage;delete a.procurementAuthorization;delete b.procurementAuthorization;assert.deepEqual(b,a,p);
+  const a=json(original(p)),b=json(current(p));delete a.procurement_usage;delete b.procurement_usage;delete a.procurementAuthorization;delete b.procurementAuthorization;removeForwardProvenanceFields(b,a);assert.deepEqual(b,a,p);
  }
 });
 test('inventory repair preserves financial fields and tracks version-only changes to maintained packages',()=>{
@@ -25,7 +33,7 @@ test('inventory repair preserves financial fields and tracks version-only change
     const record=a.retainedInventory.records.find(x=>x.path===source),bytes=current(source);
     record.bytes=bytes.length;record.sha256=createHash('sha256').update(bytes).digest('hex');
   }
-  a.retainedInventory.recordCount=a.retainedInventory.records.length;assert.deepEqual(b,a,p);
+  a.retainedInventory.recordCount=a.retainedInventory.records.length;removeForwardProvenanceFields(b,a);assert.deepEqual(b,a,p);
  }
 });
 test('published policy, schema and release aliases consistently disable automatic procurement',()=>{

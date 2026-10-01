@@ -21,6 +21,14 @@ const currentPaths=[
   'integrations/numina/package.json','integrations/numina/distribution.json',
   'integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
+const activeProvenancePolicy=json('config/active-provenance-policy.v1.json');
+const provenanceFields=[
+  'historicalEvidencePreserved','historicalEvidenceRewritten','rawExternalSourceEvidencePreserved',
+  'providerObservationsSourceScoped','providerObservationsCanonical','providerObservationsAggregated',
+  'externalProviderVerificationPromoted','retainSourceScopedProviderObservations',
+  'softwareAmountConflictsOverwritten','rewritePerformed','providerConfirmationRequiresIndependentEvidence'
+];
+const provenanceBoundary=Object.fromEntries(provenanceFields.map(key=>[key,activeProvenancePolicy[key]]));
 
 // Bind the shared constructor-mint projection to both retained receipts before
 // emitting metadata. The later settlement-contract deployment is a distinct event.
@@ -162,7 +170,8 @@ for(const path of currentPaths){
   updateValues(data);
   data.treasuryJournalObservation=structuredClone(observation);
   data.authoritativeCurrentTreasuryRoute=observation.authoritativeCurrentRoute;
-  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),ownerProvidedBankDepositAlignment:structuredClone(bankAlignment),settlementReceiptValidation:structuredClone(receipt),historicalEvidencePreserved:true};
+  data.activeProvenancePolicy=structuredClone(activeProvenancePolicy);
+  data.metadataAlignment={authority:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',record:'/metadata-alignment.json',constructorMintBlock:constructorMint.blockNumber,settlementContractDeploymentBlock:settlementDeployment.blockNumber,baseUsdcDestination:structuredClone(destination),authorizedDepositIntent:structuredClone(depositIntent),ownerProvidedBankDepositAlignment:structuredClone(bankAlignment),settlementReceiptValidation:structuredClone(receipt),...provenanceBoundary};
   records.set(path,data);
 }
 const architecture=records.get('config/numina-architecture.json');

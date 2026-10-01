@@ -7,7 +7,7 @@ import {resetBuildOutput} from './build-output.mjs';
 const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
 const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='c7096c7875793f6dfd431afdad46f427d2c04cdd';
+const FINAL_BUILD_MANIFEST_BLOB='33adbedc600835207f90d68a1b6c6b1058fb83f9';
 const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
