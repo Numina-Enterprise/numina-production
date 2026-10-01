@@ -3,6 +3,7 @@
   "identity": "NUMINA",
   "recorded_on": "2026-10-01",
   "transaction_identity": "numina-native-treasury-to-stripe-usd-1500t-2026-10-01",
+  "single_transaction": true,
   "source": {
     "treasury": "NUMINA Native Treasury",
     "asset": "NUSD",
@@ -25,9 +26,28 @@
     "stripe_account": "acct_1UEEPnQdJat0efmT",
     "financial_account": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
     "financial_address_id": "finaddr_61VNd8MPZBI0U9XXz16VNcN9EZSQiQliazWdBc8FkVYW",
+    "rail": "ACH",
+    "currency": "USD",
+    "settlement_currency": "USD",
+    "status": "active",
     "bank_name": "FIFTH THIRD BANK US",
     "account_holder_name": "SK Consulting LLC",
+    "routing_number": "071919133",
     "account_last4": "4028"
+  },
+  "mpp_paid_access": {
+    "contract": "numina_mpp_paid_response",
+    "api_access_fee_usd_minor_units": 50,
+    "stripe_charge_id": "ch_3UKBMsQdJat0efmT5n2bG1qq",
+    "payment_intent": "pi_3UKBMsQdJat0efmT5BJ5z6zK",
+    "receipt_checksum": "d9b11ef72dc86cea70b259056a9e000e02b1df6dd07874e15b5bf4fe32b0819c",
+    "access_payment_status": "succeeded",
+    "transfer_amount_bound_to_contract": "1500000000000000",
+    "transfer_unit_bound_to_contract": "NUSD",
+    "requested_output_unit_bound_to_contract": "USD",
+    "destination_financial_address_id": "finaddr_61VNd8MPZBI0U9XXz16VNcN9EZSQiQliazWdBc8FkVYW",
+    "scope": "paid_api_access_evidence",
+    "provider_transfer_receipt": false
   },
   "authorization": {
     "owner_authorized": true,
@@ -48,5 +68,5 @@
     "external_settlement_verified": false,
     "status": "AUTHORIZED_NOT_PROVIDER_SUBMITTED"
   },
-  "note": "This record commits the owner-authorized Numina transfer instruction and native evidence. It is not a Stripe provider receipt and does not assert provider-side settlement."
+  "note": "One transaction identity for the owner-authorized 1.5 quadrillion NUSD-to-USD instruction. The active Stripe Treasury Fifth Third ACH destination and paid MPP access evidence are bound to this record. The MPP access payment is not a provider transfer receipt."
 }
