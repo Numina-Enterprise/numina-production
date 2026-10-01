@@ -1053,8 +1053,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 52929,
-      "sha256": "411f5291cf4250ac928a55410eb0f8cbd161dab8b00eb580c23b48ad0881a46b"
+      "bytes": 54065,
+      "sha256": "e10086bd95084a940a62f7fbad3ce3626ad78ffdd62cb21d2f07c8eaed0e7e6e"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -1133,8 +1133,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 24577,
-      "sha256": "0840ef6532c5e3a8bb142e482c8ea2afe6b066a60a9ecaa2a166f50f50bb5e6a"
+      "bytes": 25713,
+      "sha256": "4ec43c859ad6f90d915e21ae4d2bfbc0cdba6efde4fe5a02efe89b9c933b4d35"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -1198,8 +1198,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 12746,
-      "sha256": "592a24404f44fdaa22396ba0410ea2b3ace733202ea3c19d4305a49061730c0f"
+      "bytes": 12877,
+      "sha256": "d2dcc7aa764d21ff53fbd1164d90cdf437a6ba3aa540adcaa7bfa0525820fb68"
     },
     {
       "path": "src/client.js",
@@ -1258,8 +1258,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 52224,
-      "sha256": "c755a2cf1d0b5495406617bac0b2d3a68bb9877af6743366ebe702c4dbcb985d"
+      "bytes": 53360,
+      "sha256": "3360668ba946cad634488cb1a7d8de3e46a95d39278b94b15697ed0f55432b1a"
     }
   ],
   "currentChainStateVerified": false,
@@ -1489,6 +1489,32 @@
       "aggregateNusd": "1500000000000000",
       "componentCount": 3
     },
-    "historicalEvidencePreserved": true
+    "historicalEvidencePreserved": true,
+    "historicalEvidenceRewritten": false,
+    "rawExternalSourceEvidencePreserved": true,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsCanonical": false,
+    "providerObservationsAggregated": false,
+    "externalProviderVerificationPromoted": false,
+    "retainSourceScopedProviderObservations": true,
+    "softwareAmountConflictsOverwritten": false,
+    "rewritePerformed": false,
+    "providerConfirmationRequiresIndependentEvidence": true
+  },
+  "activeProvenancePolicy": {
+    "schema": "numina.active-provenance-policy.v1",
+    "identity": "NUMINA",
+    "scope": "ACTIVE_V4_SOFTWARE_ASSERTION",
+    "historicalEvidencePreserved": true,
+    "historicalEvidenceRewritten": false,
+    "rawExternalSourceEvidencePreserved": true,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsCanonical": false,
+    "providerObservationsAggregated": false,
+    "externalProviderVerificationPromoted": false,
+    "retainSourceScopedProviderObservations": true,
+    "softwareAmountConflictsOverwritten": false,
+    "rewritePerformed": false,
+    "providerConfirmationRequiresIndependentEvidence": true
   }
 }

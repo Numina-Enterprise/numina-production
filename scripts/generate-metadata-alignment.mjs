@@ -28,6 +28,7 @@ function scope(file){
   return 'RETAINED_SOURCE_SCOPED_RECORD';
 }
 export function createMetadataAlignment(){
+  const activeProvenancePolicy=JSON.parse(readFileSync(path.join(root,'config/active-provenance-policy.v1.json'),'utf8'));
   const mint=structuredClone(NUMINA_CANONICAL_TREASURY_VALUES.separateChainMintEvidence);
   const receipt=JSON.parse(readFileSync(path.join(root,mint.receipt),'utf8'));
   for(const key of ['blockNumber','transactionHash','tokenAddress','chainId','amountNusd','decimals','receiptStatus'])assert.equal(mint[key],receipt[key]);
@@ -46,6 +47,7 @@ export function createMetadataAlignment(){
     aggregateModelPreparationSchema:structuredClone(NUMINA_AGGREGATE_MODEL_PREPARED_REQUEST_SCHEMA),
     ownerProvidedBankDepositAlignment:structuredClone(NUMINA_OWNER_PROVIDED_BANK_DEPOSIT_ALIGNMENT),
     currentChainStateVerified:false,providerBackingVerified:false,providerSettlementVerified:false,
+    activeProvenancePolicy,
     historicalInterpretation:{
       archivedRecordsAreTimeScoped:true,signaturesOrArchivedClaimsRewritten:false,
       earlier500TReview:{supplyNusd:'500000000000000',decimals:6,scope:'HISTORICAL_UNDEPLOYED_REVIEW_AND_SIMULATION',currentDeployedToken:false},

@@ -1,0 +1,16 @@
+{
+  "schema": "numina.active-provenance-policy.v1",
+  "identity": "NUMINA",
+  "scope": "ACTIVE_V4_SOFTWARE_ASSERTION",
+  "historicalEvidencePreserved": true,
+  "historicalEvidenceRewritten": false,
+  "rawExternalSourceEvidencePreserved": true,
+  "providerObservationsSourceScoped": true,
+  "providerObservationsCanonical": false,
+  "providerObservationsAggregated": false,
+  "externalProviderVerificationPromoted": false,
+  "retainSourceScopedProviderObservations": true,
+  "softwareAmountConflictsOverwritten": false,
+  "rewritePerformed": false,
+  "providerConfirmationRequiresIndependentEvidence": true
+}

@@ -3493,19 +3493,19 @@
     "sources": [
       {
         "path": "public/final-build.json",
-        "sha256": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5"
+        "sha256": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b"
       },
       {
         "path": "public/final-manifest.json",
-        "sha256": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
+        "sha256": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a"
       }
     ],
     "bindingCount": 4,
     "bindings": [
       {
         "sourceIndex": 1,
-        "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
-        "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+        "sourceId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
+        "derivedHashId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
         "environment": "LIVE",
         "artifacts": [
           "public/final-build.json",
@@ -3514,8 +3514,8 @@
       },
       {
         "sourceIndex": 1,
-        "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
-        "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+        "sourceId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
+        "derivedHashId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
         "environment": "FRONTIER_FINAL",
         "artifacts": [
           "public/final-build.json",
@@ -3524,8 +3524,8 @@
       },
       {
         "sourceIndex": 2,
-        "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
-        "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+        "sourceId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
+        "derivedHashId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
         "environment": "LIVE",
         "artifacts": [
           "public/final-build.json",
@@ -3534,8 +3534,8 @@
       },
       {
         "sourceIndex": 2,
-        "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
-        "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+        "sourceId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
+        "derivedHashId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
         "environment": "FRONTIER_FINAL",
         "artifacts": [
           "public/final-build.json",
@@ -3564,15 +3564,15 @@
   ],
   "universalPairBuilds": [],
   "currentSourceIds": [
-    "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
-    "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
+    "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
+    "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a"
   ],
   "currentSourceCount": 2,
   "environmentBindings": [
     {
       "sourceIndex": 1,
-      "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
-      "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+      "sourceId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
+      "derivedHashId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
       "environment": "LIVE",
       "artifacts": [
         "public/final-build.json",
@@ -3581,8 +3581,8 @@
     },
     {
       "sourceIndex": 1,
-      "sourceId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
-      "derivedHashId": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
+      "sourceId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
+      "derivedHashId": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
       "environment": "FRONTIER_FINAL",
       "artifacts": [
         "public/final-build.json",
@@ -3591,8 +3591,8 @@
     },
     {
       "sourceIndex": 2,
-      "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
-      "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+      "sourceId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
+      "derivedHashId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
       "environment": "LIVE",
       "artifacts": [
         "public/final-build.json",
@@ -3601,8 +3601,8 @@
     },
     {
       "sourceIndex": 2,
-      "sourceId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
-      "derivedHashId": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b",
+      "sourceId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
+      "derivedHashId": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a",
       "environment": "FRONTIER_FINAL",
       "artifacts": [
         "public/final-build.json",
@@ -3611,17 +3611,17 @@
     }
   ],
   "currentBuildIds": [
-    "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5",
-    "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
+    "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b",
+    "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a"
   ],
   "universalPairSources": [
     {
       "path": "public/final-build.json",
-      "sha256": "f7b94d3fbd7c0cec3d778765d5aac6dd347c4843c20f4c856592628417ebe6c5"
+      "sha256": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b"
     },
     {
       "path": "public/final-manifest.json",
-      "sha256": "90d969930aa13e644b6b5c68cba54bd5df079fee7054ce3561e1c0ae055c527b"
+      "sha256": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a"
     }
   ],
   "treasuryJournalObservation": {
@@ -4066,7 +4066,17 @@
       "aggregateNusd": "1500000000000000",
       "componentCount": 3
     },
-    "historicalEvidencePreserved": true
+    "historicalEvidencePreserved": true,
+    "historicalEvidenceRewritten": false,
+    "rawExternalSourceEvidencePreserved": true,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsCanonical": false,
+    "providerObservationsAggregated": false,
+    "externalProviderVerificationPromoted": false,
+    "retainSourceScopedProviderObservations": true,
+    "softwareAmountConflictsOverwritten": false,
+    "rewritePerformed": false,
+    "providerConfirmationRequiresIndependentEvidence": true
   },
   "productionBinding": {
     "status": "SOURCE_BOUND",
@@ -4091,5 +4101,21 @@
         "sha256": "d3bddb5eae17558a8a54426d03f550ec09ba2be9508eea8a8baaefda81b0e3a4"
       }
     ]
+  },
+  "activeProvenancePolicy": {
+    "schema": "numina.active-provenance-policy.v1",
+    "identity": "NUMINA",
+    "scope": "ACTIVE_V4_SOFTWARE_ASSERTION",
+    "historicalEvidencePreserved": true,
+    "historicalEvidenceRewritten": false,
+    "rawExternalSourceEvidencePreserved": true,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsCanonical": false,
+    "providerObservationsAggregated": false,
+    "externalProviderVerificationPromoted": false,
+    "retainSourceScopedProviderObservations": true,
+    "softwareAmountConflictsOverwritten": false,
+    "rewritePerformed": false,
+    "providerConfirmationRequiresIndependentEvidence": true
   }
 }

@@ -679,7 +679,17 @@
       "aggregateNusd": "1500000000000000",
       "componentCount": 3
     },
-    "historicalEvidencePreserved": true
+    "historicalEvidencePreserved": true,
+    "historicalEvidenceRewritten": false,
+    "rawExternalSourceEvidencePreserved": true,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsCanonical": false,
+    "providerObservationsAggregated": false,
+    "externalProviderVerificationPromoted": false,
+    "retainSourceScopedProviderObservations": true,
+    "softwareAmountConflictsOverwritten": false,
+    "rewritePerformed": false,
+    "providerConfirmationRequiresIndependentEvidence": true
   },
   "historical_mint_event": {
     "status": "HISTORICAL_CHAIN_RECEIPT",
@@ -717,5 +727,21 @@
     "receipt": null,
     "observedRevision": 142,
     "snapshotIsLive": false
+  },
+  "activeProvenancePolicy": {
+    "schema": "numina.active-provenance-policy.v1",
+    "identity": "NUMINA",
+    "scope": "ACTIVE_V4_SOFTWARE_ASSERTION",
+    "historicalEvidencePreserved": true,
+    "historicalEvidenceRewritten": false,
+    "rawExternalSourceEvidencePreserved": true,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsCanonical": false,
+    "providerObservationsAggregated": false,
+    "externalProviderVerificationPromoted": false,
+    "retainSourceScopedProviderObservations": true,
+    "softwareAmountConflictsOverwritten": false,
+    "rewritePerformed": false,
+    "providerConfirmationRequiresIndependentEvidence": true
   }
 }
