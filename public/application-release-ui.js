@@ -17,7 +17,7 @@ const all=selector=>document.querySelectorAll(selector);
 const set=(selector,value)=>all(selector).forEach(element=>{element.textContent=value;});
 let requestGeneration=0,activeController,downloadUrl=null,verificationCommand='';
 
-function clearApplicationEvidence(message='Loading deployed release…'){
+function clearApplicationEvidence(message='Loading application release manifest…'){
  if(downloadUrl){URL.revokeObjectURL(downloadUrl);downloadUrl=null;}
  verificationCommand='';
  set('[data-application-state]',message);
@@ -113,45 +113,58 @@ async function refreshApplicationRelease(){
  clearApplicationEvidence();
  set('[data-application-build]','Loading…');
  set('[data-application-manifest-sha]','Loading…');
- let timer;
+ let timer,manifestReceived=false;
+ const deadline=new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Deadline exceeded'));},12000);});
  try{
-  const {data,bytes,digest}=await Promise.race([
-   new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Deadline exceeded'));},12000);}),
+  const {data,bytes}=await Promise.race([
+   deadline,
    (async()=>{
     const response=await fetch(MANIFEST_PATH,{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal,headers:{Accept:'application/json'}});
     if(!response.ok||response.redirected)throw Error('Release response unavailable');
     const bytes=await readManifestBytes(response);
     const data=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
     if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='4.0.0'||data.product!=='Numina'||data.release!=='numina-v4.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
-    // Hash the response body itself. JSON.stringify(data) would change the signed bytes.
-    const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),byte=>byte.toString(16).padStart(2,'0')).join('');
-    return {data,bytes,digest};
+    return {data,bytes};
    })()
   ]);
   if(generation!==requestGeneration||controller.signal.aborted)return;
+  manifestReceived=true;
+  set('[data-application-state]','Application release 4.0.0 manifest received · calculating fingerprint…');
   set('[data-application-version]','4.0.0');
   renderReleaseRequirements(data);
   set('[data-application-build]',data.build_id);
-  set('[data-application-manifest-sha]',digest);
-  set('[data-application-hash-note]','Calculated from the exact manifest response downloaded during this refresh. This fingerprint alone does not verify a signature.');
+  set('[data-application-hash-note]','Manifest received; fingerprint calculation is in progress.');
   const generated=data.assurance?.builder_signed_provenance;
   set('[data-application-generation-metadata]',generated===false
    ?'The inventory generator did not create builder-signed provenance. A later detached attestation can sign these unchanged bytes.'
    :generated===true?'This inventory reports builder-signed provenance at generation time. That report has not been independently verified here.'
     :'The inventory does not report a generation-time builder-signing result.');
-  const lookup='https://api.github.com/repos/'+APPLICATION_PROVENANCE_POLICY.sourceRepository+'/attestations/sha256:'+digest+'?predicate_type=provenance';
-  all('[data-application-attestation-lookup]').forEach(link=>{
-   link.href=lookup;link.removeAttribute('aria-disabled');link.removeAttribute('tabindex');
-  });
   downloadUrl=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
   all('[data-application-download]').forEach(button=>{button.disabled=false;});
   verificationCommand=commandForPolicy();
   set('[data-application-verification-command]',verificationCommand||'The reviewed builder revision has not been configured yet. A pinned verification command will appear when it is available.');
   all('[data-application-copy-command]').forEach(button=>{button.disabled=!verificationCommand;});
   set('[data-application-provenance-status]','Not verified in this browser. Look up statements for this fingerprint, then verify the signature and builder identity.');
-  set('[data-application-state]','Release 4.0.0 manifest received · fingerprint calculated');
+  // Fingerprinting is a separate check; failure does not erase a received manifest.
+  // Hash the response body itself. JSON.stringify(data) would change the signed bytes.
+  const digestBytes=await Promise.race([crypto.subtle.digest('SHA-256',bytes),deadline]);
+  if(generation!==requestGeneration||controller.signal.aborted)return;
+  const digest=Array.from(new Uint8Array(digestBytes),byte=>byte.toString(16).padStart(2,'0')).join('');
+  set('[data-application-manifest-sha]',digest);
+  set('[data-application-hash-note]','Calculated from the exact manifest response downloaded during this refresh. This fingerprint alone does not verify a signature.');
+  const lookup='https://api.github.com/repos/'+APPLICATION_PROVENANCE_POLICY.sourceRepository+'/attestations/sha256:'+digest+'?predicate_type=provenance';
+  all('[data-application-attestation-lookup]').forEach(link=>{
+   link.href=lookup;link.removeAttribute('aria-disabled');link.removeAttribute('tabindex');
+  });
+  set('[data-application-state]','Application release 4.0.0 manifest received · fingerprint calculated');
  }catch{
-  if(generation===requestGeneration)clearApplicationEvidence('Current release response unavailable');
+  if(generation!==requestGeneration)return;
+  if(manifestReceived){
+   set('[data-application-state]','Application release 4.0.0 manifest received · fingerprint unavailable');
+   set('[data-application-manifest-sha]','Unavailable');
+   set('[data-application-hash-note]','The manifest was received, but its fingerprint could not be calculated during this refresh.');
+   set('[data-application-provenance-status]','Not verified in this browser. Download the received manifest to verify its signature and builder identity independently.');
+  }else clearApplicationEvidence('Application release manifest could not be loaded');
  }finally{clearTimeout(timer);if(activeController===controller)activeController=null;}
 }
 
