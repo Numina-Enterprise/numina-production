@@ -39,11 +39,16 @@ async function readJson(fetcher, path, parentSignal, timeoutMs) {
         });
         if (response.redirected) throw new Error('The endpoint redirected; its evidence was not accepted.');
         if (!response.ok) throw new Error('Endpoint unavailable (HTTP ' + response.status + ').');
-        const data = await response.json(); // The deadline includes reading and parsing the body.
+        let data;
+        try { data = await response.json(); } // The deadline includes reading and parsing the body.
+        catch { throw new Error('The endpoint returned an unreadable JSON response.'); }
         if (!recordObject(data)) throw new Error('The endpoint returned an unrecognized JSON response.');
         return data;
       })()
     ]);
+  } catch (error) {
+    if (error instanceof TypeError) throw new Error('The endpoint could not be reached.');
+    throw error;
   } finally {
     clearTimeout(timer);
     parentSignal.removeEventListener('abort', onAbort);
@@ -98,6 +103,7 @@ export function createRuntimeReleaseUI({
     const ok = name => current[name]?.phase === 'ok';
     const pending = Object.values(current).some(record => record.phase === 'pending');
     const failed = Object.values(current).some(record => record.phase === 'error');
+    const manifestPending = current.manifest?.phase === 'pending';
     const manifest = assessed.release;
     const hasManifest = ok('manifest');
     for (const [name, selector] of Object.entries(jsonSelectors)) {
@@ -105,11 +111,11 @@ export function createRuntimeReleaseUI({
         current[name]?.phase === 'pending' ? 'Waiting for a current response.' :
         current[name]?.error || 'No current response available.');
     }
-    set('[data-release-version]', hasManifest ? 'v' + text(manifest.production_version) : pending ? 'Checking…' : 'Unavailable');
-    set('[data-core-version]', hasManifest ? 'v' + text(manifest.core_version) : 'Unavailable');
-    set('[data-build-id]', hasManifest ? text(manifest.build_id) : 'Unavailable');
-    set('[data-production-root]', hasManifest ? text(manifest.production_files_root) : 'Unavailable');
-    set('[data-core-root]', hasManifest ? text(manifest.frozen_core_manifest_root) : 'Unavailable');
+    set('[data-release-version]', hasManifest ? 'v' + text(manifest?.production_version) : manifestPending ? 'Checking…' : 'Unavailable');
+    set('[data-core-version]', hasManifest ? 'v' + text(manifest?.core_version) : 'Unavailable');
+    set('[data-build-id]', hasManifest ? text(manifest?.build_id) : 'Unavailable');
+    set('[data-production-root]', hasManifest ? text(manifest?.production_files_root) : 'Unavailable');
+    set('[data-core-root]', hasManifest ? text(manifest?.frozen_core_manifest_root) : 'Unavailable');
     const status = ok('status') ? assessed.status : null;
     const count = value => Number.isSafeInteger(value) && value >= 0 ? value : 'Not reported';
     set('[data-frozen-files]', status ? count(status.frozen_core?.checked_files) : 'Unavailable');
@@ -126,7 +132,8 @@ export function createRuntimeReleaseUI({
       current.attestation?.phase === 'pending' ? 'Checking…' : 'Not verified');
     set('[data-key-id]', assessed.key ? assessed.key.key_id : 'Not verified');
 
-    let label = 'Unavailable', message = 'No current release manifest is available.';
+    let label = 'Runtime manifest unavailable', message = 'The runtime manifest at ' + RUNTIME_ENDPOINTS.manifest + ' could not be loaded.';
+    if (current.manifest?.phase === 'error') message += ' ' + current.manifest.error;
     if (hasManifest && !assessed.manifestMatches) {
       label = 'Needs attention';
       message = 'The observed manifest does not match the pinned rc26 release identity.';
@@ -141,24 +148,28 @@ export function createRuntimeReleaseUI({
         label = 'Needs attention';
         message += ' A runtime or supply-chain response does not match the expected rc26 identity.';
       }
-    } else if (pending) {
+    } else if (manifestPending) {
       label = 'Checking…';
-      message = 'Loading current release and runtime responses independently.';
+      message = 'Loading the runtime manifest from ' + RUNTIME_ENDPOINTS.manifest + '.';
     }
     set('[data-live-status]', label);
     set('[data-release-message]', message);
     all('[data-live-status]').forEach(element => {
-      element.dataset.state = label === 'Needs attention' ? 'error' : assessed.releaseDeclarationVerified ? 'verified' : hasManifest && assessed.manifestMatches ? 'observed' : 'error';
+      element.dataset.state = manifestPending ? 'checking' : label === 'Needs attention' ? 'error' : assessed.releaseDeclarationVerified ? 'verified' : hasManifest && assessed.manifestMatches ? 'observed' : 'error';
     });
-    set('[data-runtime-release-summary]', hasManifest ? 'Runtime ' + text(manifest.production_version) + ' · ' + label.toLowerCase() : label);
-    set('[data-runtime-release-detail]', message + (assessed.controlManifestBound ? ' The legacy control route receipt matches the NUMINA manifest.' : ' NUMINA control-manifest binding is not verified.'));
+    set('[data-runtime-release-summary]', hasManifest ? 'Runtime ' + text(manifest?.production_version) + ' · ' + label.toLowerCase() : label);
+    const binding = assessed.controlManifestBound ? 'The legacy control route receipt matches the NUMINA manifest.' :
+      current.control?.phase === 'pending' ? 'NUMINA control-manifest binding check is running.' :
+      current.control?.phase === 'error' ? 'NUMINA control-manifest binding could not be checked. ' + current.control.error :
+      'NUMINA control-manifest binding is not verified.';
+    set('[data-runtime-release-detail]', message + ' ' + binding + ' Application release fingerprints and network connection checks are reported separately.');
     set('[data-checked-at]', 'Response check ' + now().toLocaleString());
     // Raw observed artifacts remain downloadable; a key is offered only after verification against the configured pin.
     downloadBundle = {
       manifest: hasManifest ? current.manifest.data : null,
       attestation: ok('attestation') ? current.attestation.data : null,
       key: assessed.key,
-      version: hasManifest && assessed.manifestMatches ? manifest.production_version : 'observed-runtime'
+      version: hasManifest && assessed.manifestMatches ? manifest?.production_version : 'observed-runtime'
     };
     downloads().forEach(button => { button.disabled = !downloadBundle[button.dataset.download]; });
   }
@@ -171,7 +182,7 @@ export function createRuntimeReleaseUI({
     controller = new AbortController();
     const activeController = controller;
     records = Object.fromEntries(Object.keys(RUNTIME_ENDPOINTS).map(name => [name, {phase: 'pending'}]));
-    resetDisplay('Checking…', 'Loading current release and runtime responses independently.');
+    resetDisplay('Checking…', 'Loading runtime evidence; application release and network checks are separate.');
     refreshButtons().forEach(button => { button.disabled = true; });
     await Promise.all(Object.entries(RUNTIME_ENDPOINTS).map(async ([name, path]) => {
       let record;

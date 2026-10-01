@@ -73,7 +73,7 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const attestation = await verifyRuntimeReceipt(value('attestation'), pinnedKey);
   const control = value('control');
   const controlReceipt = await verifyRuntimeReceipt(control, pinnedKey);
-  const manifestRelease=manifest?.release??manifest;
+  const manifestRelease=object(manifest?.release)?manifest.release:manifest;
   const manifestMatches=Boolean(object(manifest)&&manifest.root==='NUMINA'&&manifest.identity==='NUMINA'&&manifest.authority==='NUMINA'&&manifest.source==='NUMINA'&&manifest.evidence==='NUMINA'&&manifest.provider==='NUMINA'&&manifest.provider_verification===true&&releaseIdentityMatches(manifestRelease))||releaseIdentityMatches(manifest);
   const declarationProjection=attestation.envelope?.payload;
   const declaration=declarationProjection?.payload??declarationProjection;

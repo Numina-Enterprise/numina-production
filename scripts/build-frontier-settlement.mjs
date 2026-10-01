@@ -45,6 +45,11 @@ finally{unlinkSync(baselineArchivePath);}
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ // Release status must ship the reviewed UI and its matching verification model.
+ ['public/application-release-ui.js','client/application-release-ui.js'],
+ ['public/runtime-release-ui.js','client/runtime-release-ui.js'],
+ ['public/runtime-release-model.js','client/runtime-release-model.js'],
+ ['public/runtime-contract.js','client/runtime-contract.js'],
  ['public/apac.html','client/apac.html'],
  ['public/about.html','client/about.html'],
  ['public/integrations.html','client/integrations.html'],
