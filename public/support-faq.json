@@ -1,0 +1,89 @@
+{
+  "schema": "numina.support-faq.v1",
+  "reviewedAt": "2026-10-01",
+  "scope": "Public service and privacy information; account questions require human support.",
+  "humanEscalation": {
+    "email": "skott34@numinalabs.xyz",
+    "phone": "+1 (630) 715-0598",
+    "responsePromise": null
+  },
+  "faq": [
+    {
+      "id": "request-help",
+      "question": "How do I get help with an existing request?",
+      "answer": "Sign in to Numina OS to view your service requests and delivery notes. You can also email skott34@numinalabs.xyz with a brief description of the issue and your request reference, if available.",
+      "source": [
+        "https://numinalabs.xyz/app",
+        "https://numinalabs.xyz/contact"
+      ]
+    },
+    {
+      "id": "assessment-cost",
+      "question": "What do the diagnostic and audit cost?",
+      "answer": "The Operational Agent Diagnostic is a fixed fee of $5,000 USD. The Agentic Systems & Operations Audit is a fixed fee of $25,000 USD. Implementation programs are priced against a written scope.",
+      "source": [
+        "https://numinalabs.xyz/services#pricing"
+      ]
+    },
+    {
+      "id": "request-and-payment",
+      "question": "Does submitting a brief book an engagement?",
+      "answer": "Submitting a brief saves a request for review. Payment and engagement acceptance are separate steps. Scope, scheduling, authorized access and confidentiality are confirmed in writing before work begins. Review the published service terms for payment and refund conditions; an FAQ answer does not confirm an account action.",
+      "source": [
+        "https://numinalabs.xyz/app",
+        "https://numinalabs.xyz/services"
+      ]
+    },
+    {
+      "id": "international",
+      "question": "Can teams outside the United States inquire?",
+      "answer": "Yes. Include your operating country and proposed workflow. International requests, country eligibility and payment availability are reviewed before checkout or engagement acceptance.",
+      "source": [
+        "https://numinalabs.xyz/contact#partners",
+        "https://numinalabs.xyz/services"
+      ]
+    },
+    {
+      "id": "safe-sharing",
+      "question": "What information should I share first?",
+      "answer": "Describe the workflow, systems, constraints and desired outcome at a high level. Do not send credentials, payment-card numbers, personal datasets or confidential source material. Agree a suitable transfer method and confidentiality terms before sharing sensitive materials.",
+      "source": [
+        "https://numinalabs.xyz/contact",
+        "https://numinalabs.xyz/privacy"
+      ]
+    },
+    {
+      "id": "delete-account",
+      "question": "How do I request account deletion?",
+      "answer": "Email skott34@numinalabs.xyz with the subject “Delete my Numina account”, using the email associated with Numina when possible. The operator will reply with any ownership-verification steps and the request outcome. Some payment or security records may need to be retained; sending an email does not instantly delete records.",
+      "source": [
+        "https://numinalabs.xyz/privacy#delete-account"
+      ]
+    },
+    {
+      "id": "installation",
+      "question": "How do I install the web app?",
+      "answer": "Open Numina OS in your browser. When available, select Install app or use the browser’s installation menu. On iPhone or iPad, use Share, then Add to Home Screen. Sign-in and current records require an internet connection.",
+      "source": [
+        "https://numinalabs.xyz/integrations#install"
+      ]
+    },
+    {
+      "id": "store-status",
+      "question": "Is Numina available in app stores?",
+      "answer": "At this FAQ’s October 1, 2026 review, the published integrations page lists the web app as available and Apple, Google Play, Microsoft, Samsung and Amazon store listings as unpublished. Check that page for the latest distribution status. A downloadable build package does not establish an approved store listing.",
+      "source": [
+        "https://numinalabs.xyz/integrations#install"
+      ]
+    },
+    {
+      "id": "security-report",
+      "question": "How do I report a security concern?",
+      "answer": "Email skott34@numinalabs.xyz with a minimal description and the affected page. Arrange a secure channel before sharing sensitive details. The published security documentation describes its own evidence scope; it does not establish an independent assessment or certification.",
+      "source": [
+        "https://numinalabs.xyz/security",
+        "https://numinalabs.xyz/privacy"
+      ]
+    }
+  ]
+}

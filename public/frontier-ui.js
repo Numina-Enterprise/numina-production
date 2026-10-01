@@ -7,6 +7,7 @@ import {mountTreasuryAdjustment} from './treasury-adjustment-ui.js';
 import {mountTreasuryPreparation} from './treasury-preparation-ui.js';
 const $=s=>document.querySelector(s);
 import {NUMINA_LAYERS} from './architecture-layers.js';
+import {PUBLIC_LAYER_LABELS} from './architecture-labels.js';
 const canonical=v=>v===null||typeof v!=='object'?JSON.stringify(v):Array.isArray(v)?'['+v.map(canonical).join(',')+']':'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}';
 const frontierScope=createViewScope();
 const privatePanels=['#treasury-actions','#treasury-policy','#accounts','#requests','#treasury-balances','#funding-plan'];
@@ -103,7 +104,7 @@ async function refresh(){
     }catch{if(!isCurrent())return;for(const selector of privatePanels.filter(s=>s!=='#requests'))$(selector)?.replaceChildren();$('#treasury-status').textContent='Treasury records could not be verified. Refresh to read the current canonical record.';}
   }finally{if(isCurrent())$('#refresh').disabled=false;}
 }
-const layers=$('#architecture-layers');if(layers)layers.replaceChildren(...NUMINA_LAYERS.layers.map(layer=>{const card=node('article','');card.append(node('h3',layer.id+' · '+layer.name),node('p',layer.capabilities.join(' · ')));return card;}));
+const layers=$('#architecture-layers');if(layers)layers.replaceChildren(...NUMINA_LAYERS.layers.map(layer=>{const display=PUBLIC_LAYER_LABELS[layer.id]||{title:'Related records',description:'Browse the published records for this layer.'};const card=node('article','');card.append(node('h3',layer.id+' · '+display.title),node('p',display.description));return card;}));
 $('#refresh').onclick=refresh;refresh();
 async function refreshApplicationIdentity(signal,isCurrent){
   $('#core-release-status').textContent='Checking the current Numina build…';
