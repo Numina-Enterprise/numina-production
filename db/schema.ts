@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, uniqueIndex, index, primaryKey } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, integer, text, uniqueIndex, unique, index, primaryKey } from 'drizzle-orm/sqlite-core';
 // Existing legacy tables are retained unchanged. This migration owns only new tables.
 export const controlState=sqliteTable('numina_control_state',{
  id:integer('id').primaryKey().notNull(),revision:integer('revision').notNull(),stateJson:text('state_json').notNull(),stateHash:text('state_hash').notNull(),headHash:text('head_hash').notNull(),mutationId:text('mutation_id').notNull()
@@ -27,3 +27,14 @@ export const appRate=sqliteTable('numina_app_rate',{
 
 // Dedicated reviewer authentication limiter; all service records stay in production.
 export const reviewLoginRate=sqliteTable('numina_review_login_rate',{bucket:text('bucket').notNull(),window:integer('window').notNull(),count:integer('count').notNull()},table=>[primaryKey({columns:[table.bucket,table.window]})]);
+
+// Owner intent and provider observations remain outside the native NUSD journal.
+export const depositIntents=sqliteTable('numina_deposit_intents',{
+ id:text('id').primaryKey().notNull(),owner:text('owner').notNull(),idempotencyKey:text('idempotency_key').notNull(),intentHash:text('intent_hash').notNull(),intentJson:text('intent_json').notNull(),authorizationJson:text('authorization_json').notNull(),createdAt:text('created_at').notNull(),pollGeneration:integer('poll_generation').notNull().default(0)
+},table=>[unique('numina_deposit_intents_owner_key').on(table.owner,table.idempotencyKey)]);
+export const depositObservations=sqliteTable('numina_deposit_observations',{
+ sequence:integer('sequence').primaryKey({autoIncrement:true}).notNull(),id:text('id').notNull(),intentId:text('intent_id').notNull(),generation:integer('generation').notNull(),observedAt:text('observed_at').notNull(),observationJson:text('observation_json').notNull()
+},table=>[unique('numina_deposit_observations_id').on(table.id),index('numina_deposit_observation_intent').on(table.intentId,table.observedAt,table.sequence)]);
+export const depositReceipts=sqliteTable('numina_deposit_receipts',{
+ receiptId:text('receipt_id').primaryKey().notNull(),intentId:text('intent_id').notNull(),financialAccount:text('financial_account').notNull(),createdAt:text('created_at').notNull()
+},table=>[unique('numina_deposit_receipts_intent').on(table.intentId)]);

@@ -10,6 +10,7 @@ import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_SINGULAR_SETTLEMENT_RE
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_PROVIDER_ROUTING} from '../src/stripe-treasury.js';
+import {STRIPE_DEPOSIT_CAPABILITY} from '../src/stripe-deposit-provider.js';
 import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW} from '../src/nusd-http.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {checkIOSRelease,iosInputSnapshot} from './ios-release.mjs';
@@ -135,6 +136,7 @@ const overlays=[
  ['public/business-core.json','client/business-core.json'],
  ['docs/NUMINA-FINAL-BUILD.json','client/downloads/NUMINA-FINAL-BUILD.json'],
  ['docs/Treasury-Evidence-v3.md','client/downloads/Treasury-Evidence-v3.md'],
+ ['docs/Stripe-Deposit-Workflow.md','client/downloads/Stripe-Deposit-Workflow.md'],
  ['docs/NUSD-Minting-v4.md','client/downloads/NUSD-Minting-v4.md'],
  ['docs/NUSD-Contracts-v4.md','client/downloads/NUSD-Contracts-v4.md'],
  ['docs/NUSD-Conversion-Contracts.md','client/downloads/NUSD-Conversion-Contracts.md'],
@@ -206,6 +208,29 @@ for(const source of modules){
   assert.equal(worker.split(before).length,2,'Unique runtime module: '+source);
   worker=worker.replace(before,after);substitutions.push({source,before,after});
 }
+// Install the new GET-only provider reader and durable owner intent store in
+// the normal production build, while retaining the surrounding live runtime.
+const depositModules=['src/stripe-deposit-provider.js','src/treasury-deposit-store.js'];
+const stripeSource=readFileSync('src/stripe-treasury.js','utf8');
+const depositConstants=['STRIPE_TREASURY_ACCOUNT','STRIPE_TREASURY_FINANCIAL_ACCOUNT'].map(name=>{
+  const declaration=stripeSource.match(new RegExp('^export const '+name+'=[^\\r\\n]+','m'))?.[0];
+  assert.ok(declaration,'Pinned deposit destination declaration: '+name);
+  assert.equal(worker.includes('const '+name+'='),false,'Deposit destination has no conflicting declaration');
+  return compile(declaration);
+}).join('');
+const depositStart=worker.indexOf('async function treasuryConnectionHttp(');
+const depositEnd=worker.indexOf('async function readConnectionManifest(',depositStart);
+assert.ok(depositStart>=0&&depositEnd>depositStart,'Retained deposit route boundaries');
+const depositBefore=worker.slice(depositStart,depositEnd);
+const depositAfter=depositConstants+depositModules.map(source=>compile(readFileSync(source,'utf8'))).join('\n')+compile(readFileSync('src/treasury-connection-http.js','utf8'))+'\n\n';
+assert.equal(worker.split(depositBefore).length,2,'Unique retained deposit route');
+worker=worker.replace(depositBefore,()=>depositAfter);
+substitutions.push({source:'treasury-deposit#runtime',before:depositBefore,after:depositAfter});
+const depositHeaderBefore="if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');";
+const depositHeaderAfter="if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/')||path==='/api/treasury/v1/submissions')headers.set('X-Numina-Provider-Verification','scoped-observation-only');";
+assert.equal(worker.split(depositHeaderBefore).length,2,'Unique scoped provider header');
+worker=worker.replace(depositHeaderBefore,depositHeaderAfter);
+substitutions.push({source:'treasury-deposit#verification-header',before:depositHeaderBefore,after:depositHeaderAfter});
 // Update the mutable NUSD status views without altering the adopted
 // redemption policy or its digest in the retained runtime.
 const nusdSource=compile(readFileSync('src/nusd-http.js','utf8'));
@@ -285,8 +310,14 @@ mkdirSync('dist/server',{recursive:true});writeFileSync('dist/server/index.js',w
 execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
 mkdirSync('dist/.openai',{recursive:true});writeFileSync('dist/.openai/hosting.json',JSON.stringify(json('.openai/hosting.json'),null,2)+'\n');
 function copyTree(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=path.join(from,n),b=path.join(to,n);statSync(a).isDirectory()?copyTree(a,b):copyFileSync(a,b);}}
+const migrationJournalBase='reference/settlement-metadata-bases/deposit-migration-journal.json.txt';
+assert.equal(hash(readFileSync(migrationJournalBase)),baseline.artifacts.find(a=>a.path==='.openai/drizzle/meta/_journal.json').sha256,'Retained migration journal bytes');
+const retainedMigrationJournal=json(migrationJournalBase);
 copyTree('drizzle','dist/.openai/drizzle');
-for(const a of baseline.artifacts.filter(x=>x.path.startsWith('.openai/drizzle/')))assert.equal(hash(readFileSync('dist/'+a.path)),a.sha256,'Published migration bytes: '+a.path);
+const currentMigrationJournal=json('dist/.openai/drizzle/meta/_journal.json');
+assert.deepEqual(currentMigrationJournal.entries.slice(0,retainedMigrationJournal.entries.length),retainedMigrationJournal.entries,'Retained migration history');
+assert.deepEqual(currentMigrationJournal.entries.slice(retainedMigrationJournal.entries.length).map(entry=>entry.tag),['0006_treasury_deposit_instructions'],'Only the additive deposit migration');
+for(const a of baseline.artifacts.filter(x=>x.path.startsWith('.openai/drizzle/')&&x.path!=='.openai/drizzle/meta/_journal.json'))assert.equal(hash(readFileSync('dist/'+a.path)),a.sha256,'Published migration bytes: '+a.path);
 let headers=readFileSync('public/_headers','utf8'),redirects=readFileSync('public/_redirects','utf8').trimEnd();
 const presentation=['index','government','financial-institutions','partners','developers','trust','uk-eu','mena','apac','contact'];
 const hashes=new Set();for(const name of presentation){const html=readFileSync('dist/client/'+name+'.html','utf8');for(const m of html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g))hashes.add("'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");if(name!=='index'){const rule='/'+name+'.html /'+name+' 301';if(!redirects.split(/\r?\n/).includes(rule))redirects+='\n'+rule;}}
@@ -300,6 +331,8 @@ for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/t
 currentInputs.add('src/sites-mcp.js');
 currentInputs.add('src/numina-tree.js');
 currentInputs.add('src/frontier.js');
+for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
+currentInputs.add(migrationJournalBase);
 currentInputs.add('src/control-http.js');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 const currentIosInputs=iosInputSnapshot(root);
@@ -376,6 +409,14 @@ release.provider_routing=NUSD_PROVIDER_ROUTING;
 release.activeProvenancePolicy=structuredClone(activeProvenancePolicy);
 release.mint_workflow=NUSD_MINT_WORKFLOW;
 release.conversion_workflow=NUSD_CONVERSION_WORKFLOW;
+release.stripe_deposit_workflow={
+  ...STRIPE_DEPOSIT_CAPABILITY,endpoint:'/api/treasury/v1/submissions',
+  authorization:'authenticated_owner_with_explicit_request_bound_confirmation',
+  documentation:'/downloads/Stripe-Deposit-Workflow.md',migration:'0006_treasury_deposit_instructions',
+  instructions_are_submission:false,nusd_mint_is_usd_backing_evidence:false,
+  source_sha256:Object.fromEntries([...depositModules,'src/treasury-connection-http.js','src/treasury-submission.js'].map(file=>[file,hash(readFileSync(file))]))
+};
+release.compatibility.additive_migrations=[...new Set([...release.compatibility.additive_migrations,'0006_treasury_deposit_instructions'])];
 release.owner_approval={...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:hash(readFileSync('public/owner-approval.js'))};
 release.canonicalTreasuryValues=values;release.contract_record=NUSD_CONTRACT_RECORD;
 release.softwareTreasury={identity:'NUMINA',singular:true,...structuredClone(connection.softwareBalanceModel)};
