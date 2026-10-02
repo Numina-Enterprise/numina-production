@@ -8,6 +8,18 @@ import {NUSD_MINT_WORKFLOW,NUSD_POLICY,nusdHttp} from '../src/nusd-http.js';
 const root=new URL('../',import.meta.url);
 const read=path=>readFileSync(new URL(path,root));
 const json=path=>JSON.parse(read(path));
+const digest=value=>createHash('sha256').update(value).digest('hex');
+const retainedTextDigest=value=>digest(value.toString('utf8').replace(/\r\n/g,'\n'));
+// Content pins are SHA-256 of the exact LF blobs in original commit 6fc60ba, not checkout raw hashes.
+const retainedTextBaselines={
+  'runtime/nusd/treasury-settlement-receipt.json':'36b9b9667b572d6edc759ed1237f62166e45b6193f5c53ddfcacd18048e24014',
+  'docs/nusd/treasury-settlement-receipt.json':'36b9b9667b572d6edc759ed1237f62166e45b6193f5c53ddfcacd18048e24014',
+  'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json':'c5fb1d41fbb443cfd599d146f581a78c424a9d5ceb21d3c7c3876c27550d4128',
+  'runtime/nusd/mint-receipt.json':'3dab1a847ba8b0b4a14a92a0b881e5e888af7ffbbab74a9af0e1fe9935bc63ee',
+  'runtime/nusd/policies/issuer-policy-1500t-18d.json':'ef2c5e723cf1af57332f46b7882fe7f88ee5c76942d8238c1ba54d94410a1c53',
+  'config/treasury-aggregate-settlement-1500t.v1.json':'17505ed9e944b32641a59b55d759adb3ac8beed7084ed40e8ab07a88f8af263b'
+};
+const assertRetainedText=(value,expected,path)=>assert.equal(retainedTextDigest(value),expected,path);
 const currentFiles=[
   'package.json','config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json',
   'config/numina-architecture.json',
@@ -97,17 +109,9 @@ test('maintained metadata stays anchored to the dated journal observation, witho
   }
 });
 
-test('retained mint and settlement evidence bytes are preserved',()=>{
-  const baselines={
-    'runtime/nusd/treasury-settlement-receipt.json':'36b9b9667b572d6edc759ed1237f62166e45b6193f5c53ddfcacd18048e24014',
-    'docs/nusd/treasury-settlement-receipt.json':'b966343d78c20ff9d36b6f40d12fff29c8ace3b6a75ca760a66bb68d8d2ec0a9',
-    'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json':'783486abc7dae3a4eacf42c2afc582d723cdba0dc7594eb6f01574cc7cb39be9',
-    'runtime/nusd/mint-receipt.json':'3dab1a847ba8b0b4a14a92a0b881e5e888af7ffbbab74a9af0e1fe9935bc63ee',
-    'runtime/nusd/policies/issuer-policy-1500t-18d.json':'ef2c5e723cf1af57332f46b7882fe7f88ee5c76942d8238c1ba54d94410a1c53',
-    'config/treasury-aggregate-settlement-1500t.v1.json':'a7e95a1fb88a350ed07578eaeee6933ab11d90afff86539f08c447c877fda66d'
-  };
-  for(const [path,expected] of Object.entries(baselines)){
-    assert.equal(createHash('sha256').update(read(path)).digest('hex'),expected,path);
+test('retained mint and settlement evidence content preserves original Git blob pins',()=>{
+  for(const [path,expected] of Object.entries(retainedTextBaselines)){
+    assertRetainedText(read(path),expected,path);
   }
   const validationPaths=['runtime/nusd/treasury-settlement-receipt-validation.json','docs/nusd/treasury-settlement-receipt-validation.json','release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json'];
   const validation=json(validationPaths[0]);
@@ -119,6 +123,19 @@ test('retained mint and settlement evidence bytes are preserved',()=>{
   assert.equal(validation.executionVerification.submissionPerformed,false);
   assert.equal(validation.executionVerification.settlementPerformed,false);
   assert.equal(validation.authorization.executionAuthorized,true);
+});
+
+test('retained evidence content pins accept LF and CRLF checkouts but reject changed claims',()=>{
+  for(const [path,expected] of Object.entries(retainedTextBaselines)){
+    const lf=read(path).toString('utf8').replace(/\r\n/g,'\n'),crlf=lf.replace(/\n/g,'\r\n');
+    assertRetainedText(Buffer.from(lf),expected,path+': LF');
+    assertRetainedText(Buffer.from(crlf),expected,path+': CRLF');
+    assert.notEqual(digest(lf),digest(crlf),path+': raw checkout hashes differ');
+    const altered=lf.replace(/"(?:status|amountNusd|amount|aggregateNusd|schema)"\s*:\s*"[^"]+"/,match=>match.replace(/"([^"\n]+)"$/, '"ALTERED_EVIDENCE"'));
+    assert.notEqual(altered,lf,path+': mutation changes an evidence field');
+    for(const mutation of [altered,altered.replace(/\n/g,'\r\n')])
+      assert.throws(()=>assertRetainedText(Buffer.from(mutation),expected,path),{code:'ERR_ASSERTION'},path+': changed evidence rejected');
+  }
 });
 
 test('packaged integration keeps current journal claims separate from dated chain evidence',()=>{

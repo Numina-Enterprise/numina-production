@@ -8,6 +8,43 @@ const root=new URL('../',import.meta.url);
 const workflowDirectory=new URL('.github/workflows/',root);
 const providerWorkflow=()=>readFileSync(new URL('verify-provider-observations.yml',workflowDirectory),'utf8');
 
+test('NUSD artifact validation workflow cannot rewrite pins, create canonical drafts or push commits',()=>{
+  const workflow=readFileSync(new URL('rebuild-nusd-artifacts.yml',workflowDirectory),'utf8').replaceAll('\r\n','\n');
+  assert.match(workflow,/permissions:\n  contents: read\n/);
+  assert.match(workflow,/persist-credentials: false/);
+  assert.match(workflow,/group: rebuild-nusd-\$\{\{ github\.ref \}\}/);
+  assert.match(workflow,/cancel-in-progress: true/);
+  assert.doesNotMatch(workflow,/contents:\s*write|git\s+(?:commit|push|add|config)|refresh-token-pins|prepare-review-draft|unsigned-production-deployment|production-review-draft|--candidate-output|--output|6DEC/i);
+  const steps=workflow.split(/(?=^      - )/m);
+  const compiler=steps.findIndex(step=>step.includes('- name: Validate retained compiler artifact pins'));
+  const receipts=steps.findIndex(step=>step.includes('- name: Validate retained 18-decimal receipt bindings'));
+  const contracts=steps.findIndex(step=>step.includes('- name: Test contract implementation locally'));
+  const guard=steps.findIndex(step=>step.includes('- name: Verify retained source and evidence were not changed'));
+  const upload=steps.findIndex(step=>step.includes('- name: Upload validated retained artifacts and receipts'));
+  assert.ok(compiler>=0&&receipts>compiler&&contracts>receipts&&guard>contracts&&upload>guard,'All retained-artifact validation must pass before upload');
+  assert.match(steps[compiler],/run: npm run compile/);
+  assert.match(steps[contracts],/working-directory: runtime\/nusd\/development\n        run: npm test/);
+  assert.match(steps[guard],/run: git diff --exit-code -- runtime\/nusd\/contracts runtime\/nusd\/artifacts/);
+  assert.doesNotMatch(workflow,/continue-on-error|\|\|\s*true/);
+  assert.match(steps[upload],/name: NUSD-18DEC-RETAINED-RECEIPT-BOUND-ARTIFACTS/);
+  for(const file of ['deployment-receipt.json','deployment-verification.json','mint-receipt.json','scripts/token-artifact.mjs'])assert.ok(steps[upload].includes('runtime/nusd/'+file));
+});
+
+test('NUSD workflow validates its actual 18-decimal receipt-bound inputs without changing retained bytes',()=>{
+  const workflow=readFileSync(new URL('rebuild-nusd-artifacts.yml',workflowDirectory),'utf8').replaceAll('\r\n','\n');
+  const match=workflow.match(/^          node --input-type=module <<'NODE'\n([\s\S]*?)^          NODE$/m);
+  assert.ok(match,'Receipt validation must execute an explicit Node module');
+  const code=match[1].replace(/^ {10}/gm,'');
+  const retained=['scripts/token-artifact.mjs','deployment-receipt.json','deployment-verification.json','mint-receipt.json'];
+  for(const contract of ['NuminaUSD','NuminaSettlement','NuminaUSDCConversion','NuminaUSDRedemption'])retained.push('contracts/'+contract+'.sol','artifacts/'+contract+'.json');
+  const snapshot=()=>retained.map(file=>readFileSync(new URL('runtime/nusd/'+file,root)));
+  const before=snapshot();
+  const result=execFileSync(process.execPath,['--input-type=module','-e',code],{cwd:fileURLToPath(root),encoding:'utf8'});
+  assert.match(result,/Validated retained 18-decimal source, artifact and receipt bindings/);
+  assert.match(result,/current chain state remains unverified; no artifact writes or provider transactions/);
+  assert.deepEqual(snapshot(),before);
+});
+
 test('CI runner checker accepts the preserved execution substrates and singular NUMINA identity',()=>{
   const result=execFileSync(process.execPath,['scripts/check-runner-policy.mjs'],{cwd:fileURLToPath(root),encoding:'utf8'});
   assert.match(result,/NUMINA runners preserved: 33/);
