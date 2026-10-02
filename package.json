@@ -651,5 +651,12 @@
     "softwareAmountConflictsOverwritten": false,
     "rewritePerformed": false,
     "providerConfirmationRequiresIndependentEvidence": true
+  },
+  "numinaStateReconciliation": {
+    "schema": "numina.state-reconciliation.v1",
+    "route": "/api/control/v2/state-reconciliation",
+    "download": "/state-reconciliation.json",
+    "classification": "scoped_state_reconciliation",
+    "applicationVersion": "4.0.0"
   }
 }

@@ -1,3 +1,4 @@
+import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -23,6 +24,8 @@ const hash=b=>createHash('sha256').update(b).digest('hex');
 const json=f=>JSON.parse(readFileSync(f,'utf8'));
 const baseline=json('reference/frontier-baseline-release.json');
 const activeProvenancePolicy=json('config/active-provenance-policy.v1.json');
+for(const file of ['config/numina-state-reconciliation.v1.json','public/state-reconciliation.json','runtime/vercel-production/state-reconciliation.json'])assert.deepEqual(json(file),NUMINA_STATE_RECONCILIATION,'State reconciliation mirror: '+file);
+assert.deepEqual(readFileSync('public/state-reconciliation.js'),readFileSync('integrations/numina/src/state-reconciliation.js'));
 const softwareReleaseAlignment=checkSoftwareRelease(root);
 assert.equal(baseline.workerSha256,'3cd09e0db9b25ae1fd291103039d9af2c58ff5db7dc832e287be0f2f9951e6bc');
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
@@ -46,6 +49,10 @@ finally{unlinkSync(baselineArchivePath);}
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/state-reconciliation.js','client/state-reconciliation.js'],
+ ['public/state-reconciliation.json','client/state-reconciliation.json'],
+ ['docs/numina-codex-plugin-4.0.0.zip','client/downloads/numina-codex-plugin-4.0.0.zip'],
+ ['docs/codex-plugin-v4-record.json','client/downloads/codex-plugin-v4-record.json'],
  // Release status must ship the reviewed UI and its matching verification model.
  ['public/application-release-ui.js','client/application-release-ui.js'],
  ['public/runtime-release-ui.js','client/runtime-release-ui.js'],
@@ -71,7 +78,6 @@ const overlays=[
  ['public/treasury-simulation.html','client/treasury-simulation.html'],
  ['public/trust.html','client/trust.html'],
  ['public/reviewer.html','client/reviewer.html'],
- ['public/pricing.html','client/pricing.html'],
  ['public/contact.html','client/contact.html'],
  ['public/contact-support.css','client/contact-support.css'],
  ['public/support-chat.css','client/support-chat.css'],
@@ -158,6 +164,31 @@ const original=Buffer.from(readFileSync('reference/live-server-index.js.b64','ut
 assert.equal(hash(original),baseline.workerSha256);
 let worker=original;const substitutions=[];
 const compile=s=>s.replace(/\r\n/g,'\n').replace(/^import .*;\n/gm,'').replace(/^export \{.*\};\n/gm,'').replace(/export (?!default)/g,'').trimStart().trimEnd()+'\n';
+// Include the reviewed state descriptor before any architecture references.
+const stateBefore=worker.slice(0,worker.indexOf('\n')+1);
+const stateAfter=compile(readFileSync('public/state-reconciliation.js','utf8'))+stateBefore;
+assert.equal(worker.split(stateBefore).length,2,'Unique worker state preamble');
+worker=worker.replace(stateBefore,stateAfter);substitutions.push({source:'public/state-reconciliation.js',before:stateBefore,after:stateAfter});
+// Preserve the retained runtime while annotating its existing public readbacks.
+const frontierBefore="async function frontierHttp(req,env){\n  const path=new URL(req.url).pathname;";
+const frontierAfter=frontierBefore+"\n  if(path==='/api/control/v2/state-reconciliation'&&req.method==='GET')return frontierResponse(NUMINA_STATE_RECONCILIATION);";
+assert.equal(worker.split(frontierBefore).length,2,'Unique reconciliation route');
+worker=worker.replace(frontierBefore,frontierAfter);substitutions.push({source:'src/frontier-http.js#state-reconciliation',before:frontierBefore,after:frontierAfter});
+const releaseBefore=worker.split('\n').find(line=>line.includes('return {schema:value.schema,schema_version:value.schema_version'));
+assert.ok(releaseBefore,'Public artifact declaration projection');
+const releaseAfter=releaseBefore.replace('return {schema:value.schema,','return {stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:value.schema,');
+worker=worker.replace(releaseBefore,releaseAfter);substitutions.push({source:'src/worker.js#public-release-state',before:releaseBefore,after:releaseAfter});
+const controlBefore="adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',";
+const controlAfter='stateReconciliation:NUMINA_STATE_RECONCILIATION,'+controlBefore;
+assert.equal(worker.split(controlBefore).length,2,'Unique v1 control manifest');
+worker=worker.replace(controlBefore,controlAfter);substitutions.push({source:'src/control-http.js#state-reconciliation',before:controlBefore,after:controlAfter});
+const capabilityLines=worker.split('\n').filter(line=>line.includes('providers:FRONTIER_PROVIDERS,'));
+assert.equal(capabilityLines.length,2,'Manifest and discovery capability readbacks');
+for(const before of capabilityLines){const after=before.replace('providers:FRONTIER_PROVIDERS,','providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,');assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/frontier-http.js#capabilities',before,after});}
+const headBefore=worker.split('\n').find(line=>line.includes("scope:'NUMINA finalized singular build projection'"));
+assert.ok(headBefore,'Public projection scope');
+const headAfter=headBefore.replace("scope:'NUMINA finalized singular build projection'","scope:'NUMINA finalized singular build projection',rootHashScope:'public_identity_projection_not_control_genesis',recordedControlGenesisRoot:NUMINA_STATE_RECONCILIATION.roots.recordedControlGenesisRoot,currentJournalRootVerified:false");
+worker=worker.replace(headBefore,headAfter);substitutions.push({source:'src/frontier-http.js#projection-scope',before:headBefore,after:headAfter});
 for(const source of modules){
   const before=readFileSync('reference/settlement-metadata-bases/'+path.basename(source)+'.txt','utf8');
   let after=compile(readFileSync(source,'utf8'));
@@ -292,15 +323,17 @@ const presentation=['index','government','financial-institutions','partners','de
 const hashes=new Set();for(const name of presentation){const html=readFileSync('dist/client/'+name+'.html','utf8');for(const m of html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g))hashes.add("'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");if(name!=='index'){const rule='/'+name+'.html /'+name+' 301';if(!redirects.split(/\r?\n/).includes(rule))redirects+='\n'+rule;}}
 headers=headers.replace(/script-src ([^;]+)/,(_,tokens)=>'script-src '+[...new Set([...tokens.trim().split(/\s+/),...hashes])].join(' '));writeFileSync('dist/client/_headers',headers);writeFileSync('dist/client/_redirects',redirects+'\n');
 const sourceAlignment=json('dist/client/source-alignment.json');
+sourceAlignment.stateReconciliation=NUMINA_STATE_RECONCILIATION;
 sourceAlignment.procurement_usage=false;sourceAlignment.procurement=NUMINA_LAYERS.procurement;
 sourceAlignment.requiredArchitecture.procurement_usage=false;
-const currentInputs=new Set([...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
+const currentInputs=new Set(['config/numina-state-reconciliation.v1.json','public/state-reconciliation.js','runtime/vercel-production/state-reconciliation.json',...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
 currentInputs.add('src/sites-mcp.js');
 currentInputs.add('src/numina-tree.js');
 currentInputs.add('src/frontier.js');
 for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
 currentInputs.add(migrationJournalBase);
+currentInputs.add('src/control-http.js');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 const currentIosInputs=iosInputSnapshot(root);
 for(const file of [...softwareReleaseInputs,'scripts/check-software-release.mjs',...currentIosInputs.inputs.map(x=>x.path)])currentInputs.add(file);
@@ -368,6 +401,7 @@ const aliases=['release.json','application-release-v2.json','application-release
 const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=relative?relative+'/'+n:n,a=path.join(dir,n);return statSync(a).isDirectory()?collect(a,p):excluded.has(p)?[]:[{path:p,sha256:hash(readFileSync(a))}];});
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0),buildId=hash(artifacts.map(x=>x.sha256+'  '+x.path+'\n').join(''));
 const release=structuredClone(baseline);
+release.stateReconciliation=NUMINA_STATE_RECONCILIATION;
 release.procurement_usage=false;release.procurement=NUMINA_LAYERS.procurement;
 release.software_release_alignment=softwareReleaseAlignment;
 function align(o){if(!o||typeof o!=='object')return;for(const k of Object.keys(o))if(k==='canonicalTreasuryValues')o[k]=structuredClone(values);else align(o[k]);}align(release);

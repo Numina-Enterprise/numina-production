@@ -1,7 +1,7 @@
 {
   "name": "numina",
   "version": "4.0.0",
-  "description": "Intelligence in motion. Read Numina OS architecture, capabilities and canonical journal head.",
+  "description": "Read Numina architecture, capabilities and scoped intended, implemented and provider-confirmed state.",
   "author": {
     "name": "Numina Labs · SK Consulting LLC"
   },

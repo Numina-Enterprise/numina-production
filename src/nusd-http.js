@@ -1,3 +1,4 @@
+import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {NUSD_OPERATOR_ACTIVATION,NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
@@ -72,7 +73,7 @@ export const NUSD_POLICY={
  mint_workflow:NUSD_MINT_WORKFLOW,
  conversion_workflow:NUSD_CONVERSION_WORKFLOW,
  provider_routing:NUSD_PROVIDER_ROUTING,
- denomination_policy:NUMINA_DENOMINATION_POLICY,
+ denomination_policy:NUMINA_DENOMINATION_POLICY,stateReconciliation:NUMINA_STATE_RECONCILIATION,
  treasury_policy:'/api/control/v2/treasury/policy',
  native_treasury:{source:'/api/control/v1/treasury',unit:'NUSD',authority:'NUMINA',system_of_record:'NUMINA',access:'owner_authenticated'},
  asset:{name:'Numina USD',symbol:'NUSD',decimals:18,asset_id:'NUSD:962421430:0x491c1DF1b5CA77AF797f052c2310ca17039C931b',chain:'962421430',contract:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b'},
