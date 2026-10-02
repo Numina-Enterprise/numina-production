@@ -6,6 +6,7 @@ import { Interface, getAddress, parseUnits, ZeroAddress, keccak256 } from 'ether
 import { loadTokenArtifact, TOKEN_ARTIFACT_SHA256 } from './token-artifact.mjs';
 
 const CHAIN_ID = 962421430;
+const NUSD_DECIMALS = 18;
 const MAX_LIFETIME_SECONDS = 7 * 24 * 60 * 60;
 const MAX_UINT48 = 2 ** 48 - 1;
 const MAX_UINT256 = 2n ** 256n - 1n;
@@ -44,10 +45,10 @@ export function prepareMint(requestFile, { nowSeconds = Math.floor(Date.now() / 
   if (addresses.issuer === addresses.minter) throw invalid('Issuer and minter addresses must be distinct');
   let amount;
   try {
-    if (typeof config.amountNusd !== 'string' || !/^(?:0|[1-9][0-9]{0,77})(?:\.[0-9]{1,6})?$/.test(config.amountNusd)) throw new Error();
-    amount = parseUnits(config.amountNusd, 6);
+    if (typeof config.amountNusd !== 'string' || !/^(?:0|[1-9][0-9]{0,77})(?:\.[0-9]{1,18})?$/.test(config.amountNusd)) throw new Error();
+    amount = parseUnits(config.amountNusd, NUSD_DECIMALS);
     if (amount <= 0n || amount > MAX_UINT256) throw new Error();
-  } catch { throw invalid('A positive uint256 NUSD amount in decimal text with at most 6 decimals is required'); }
+  } catch { throw invalid('A positive uint256 NUSD amount in decimal text with at most 18 decimals is required'); }
   if (typeof config.reserveReference !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(config.reserveReference) ||
       /^0x0{64}$/.test(config.reserveReference)) throw invalid('An explicit nonzero bytes32 reserve reference is required');
   if (!Number.isSafeInteger(nowSeconds) || nowSeconds < 0 || nowSeconds > MAX_UINT48 ||
