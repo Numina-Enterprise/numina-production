@@ -630,5 +630,12 @@
     }
   },
   "canonicalSource": "NUMINA",
-  "sourceOfTruth": "NUMINA"
+  "sourceOfTruth": "NUMINA",
+  "stateReconciliation": {
+    "schema": "numina.state-reconciliation.v1",
+    "route": "/api/control/v2/state-reconciliation",
+    "download": "/state-reconciliation.json",
+    "sourceAlignmentOnly": true,
+    "storeSubmissionConfirmed": false
+  }
 }

@@ -22,3 +22,5 @@ The public `numina_capabilities` response publishes `procurement_usage` and its 
 ## Shared denomination policy
 
 Read `denomination_policy` from the live `numina_architecture` or `numina_capabilities` response. Numina declares **1 NUSD = 1 USDC = 1 USD** across L1–L5 and the hosted application. This is one native balance with declared equivalent values; keep provider balances, asset identity and execution status as reported. A declaration does not establish external reserves or a completed conversion.
+
+Read stateReconciliation from numina_capabilities or https://numinalabs.xyz/api/control/v2/state-reconciliation. Keep intended assertions, implemented control capabilities and dated provider observations separate. Stripe onboarding and paid API access do not prove a treasury transfer or executable NUSD conversion. Public projection hashes are separate from the recorded control genesis root.

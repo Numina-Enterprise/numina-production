@@ -50,3 +50,7 @@ Open `/connections` to run current-session read checks across all 19 registered 
 ## Security
 
 Numina maintains [one security and financial control model](docs/Numina-Security.md), available from every website interface at https://numinalabs.xyz/security. The document covers implemented controls, evidence, incident response and the operating requirements that remain unverified.
+
+## Current state reconciliation
+
+`/api/control/v2/state-reconciliation` and `/state-reconciliation.json` separate current owner assertions, implemented software and dated provider readbacks. Stripe confirms account details submission and historical USD payment/balance-transfer activity. The internal control adapter and denomination policy still perform no provider execution; the requested NUSD conversion and treasury instruction have no provider receipt. This descriptor changes no genesis identity, journal, balance, historical receipt or native/store acceptance state.
