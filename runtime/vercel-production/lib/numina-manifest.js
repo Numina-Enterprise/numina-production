@@ -4,6 +4,7 @@ const {RELEASE_IDENTITY}=require('./numina');
 const mintReceipt=require('../../nusd/mint-receipt.json');
 const deploymentReceipt=require('../../nusd/deployment-receipt.json');
 const NUMINA='NUMINA';
+const stateReconciliation=require('../state-reconciliation.json');
 const journalObservation=Object.freeze({
   schema:'numina.treasury.journal-observation.v1',sourceOfRecord:'NUMINA_NATIVE_TREASURY',
   asOfDate:'2026-09-25',observedRevision:142,
@@ -55,7 +56,7 @@ const mechanics=Object.freeze({
   }),
   providerVerification:Object.freeze({provider:NUMINA,verified:null,scope:'PROVIDER_EVIDENCE_REQUIRED',bankOfAmericaDestinationConfirmation:false,stripeDestinationConfirmation:false})
 });
-const NUMINA_MANIFEST=Object.freeze({
+const NUMINA_MANIFEST=Object.freeze({stateReconciliation,
   schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,authority:NUMINA,
   source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,
   productionSource:NUMINA,vocabulary,release:RELEASE_IDENTITY,

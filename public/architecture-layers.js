@@ -1,9 +1,11 @@
+import {NUMINA_STATE_RECONCILIATION} from './state-reconciliation.js';
 import {NUMINA_PROCUREMENT_POLICY} from './procurement-policy.js';
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
 // Numina's five functional architecture layers resolve to one finalized singular build. The public frontier is a finalized-build projection; legacy journal/storage code is not required for public readiness.
 export const NUMINA_LAYERS = Object.freeze({
   schema:'numina.architecture-layers.v1',classification:'architecture',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',metadataNamespace:'NUMINA',metadataScope:Object.freeze(['historical','current','canonical']),nativeEvidenceStatus:'FINAL',
+  stateReconciliation:NUMINA_STATE_RECONCILIATION,
   rootCount:1,lineageCount:1,productionEnvironmentCount:1,
   denomination_policy:NUMINA_DENOMINATION_POLICY,
   procurement_usage:false,
@@ -21,6 +23,10 @@ export const NUMINA_LAYERS = Object.freeze({
     externalProviderSubmissionPerformed:null,externalProviderSettlementVerified:null,
     historicalSettlementReceipt:NUMINA_NATIVE_TREASURY_SYNC.singularSettlementReceipt,
     singularIdentity:true,singular:true,treasuryCount:1,accountCount:1,balanceCount:1,
+    unit:'NUSD',sharedAcrossLayers:true,fundingStatusPointer:'/nativeFundingView/status',
+    transportVerificationChannel:'NUMINA',alignmentSchema:'numina.treasury.alignment.v2',
+    accountViewSchema:'numina.treasury.account-view.v2',canonicalReferenceSchema:'numina.treasury.canonical-reference.v2',
+    separateRoles:true,providerRoleBalancesAdditive:false,
     aggregateModeledValue:null,historicalAggregateModeledValue:'1500000000000000',
     nativeProjectionUnit:'NUSD',componentRoleValue:'500000000000000',componentRoleValueScope:'HISTORICAL_TARGET',
     bankLocation:{label:'Bank of America Savings 3486',target:'500000000000000',current:null,available:null,unit:'USD',verified:null,settlementStatus:'UNVERIFIED'},

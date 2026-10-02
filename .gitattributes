@@ -49,3 +49,6 @@ scripts/** -text
 # Preserve the published migration bytes across platforms.
 drizzle/** -text
 reference/settlement-metadata-bases/** -text
+
+# Workflow parsers use portable LF text on every host.
+.github/workflows/*.yml text eol=lf
