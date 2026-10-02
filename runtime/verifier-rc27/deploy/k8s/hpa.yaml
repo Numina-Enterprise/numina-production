@@ -1,0 +1,14 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: {name: numina-verifier, namespace: numina}
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: numina-verifier}
+  minReplicas: 3
+  maxReplicas: 12
+  behavior:
+    scaleDown: {stabilizationWindowSeconds: 300}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target: {type: Utilization, averageUtilization: 60}

@@ -6,7 +6,7 @@ The current source targets bundle version 4.0.0 and build number 5. It now inclu
 
 ## Shared software release binding
 
-The application remains **4.0.0**, with iOS source build **5** and runtime **1.9.0-rc26** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
+The application remains **4.0.0**, with iOS source build **5** and runtime **1.9.0-rc27** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
 
 `node scripts/ios-release.mjs check` verifies the iOS identity against the root application package, required architecture, runtime contract and shared distribution policy. `node scripts/ios-release.mjs sync` regenerates only `Configuration/NuminaRelease.xcconfig`; it does not change the source build counter or create a binary. The generated dependency values are embedded into Info.plist and shown in native diagnostics.
 

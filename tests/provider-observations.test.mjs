@@ -56,7 +56,7 @@ test('Arc observation fails closed on the wrong chain',async()=>{
 test('provider observation set schema keeps one aggregate partnership assertion inside the signed projection payload',()=>{
   const inner={
     schema:'numina.provider-observation-set.v1',
-    release:'1.9.0-rc26',
+    release:'1.9.0-rc27',
     mode:'public-read-only-health',
     providers:['arc','circle'],
     credentialed:false,

@@ -14,7 +14,7 @@ export default async function handler(req,res){
     res.setHeader('cache-control','no-store');
     return res.end(JSON.stringify({
       error:'RETIRED_EVIDENCE_INGEST_ROUTE',
-      persistence:'github_release_assets',
+      persistence:'numina_release_assets',
       canonical:'NUMINA'
     }));
   }

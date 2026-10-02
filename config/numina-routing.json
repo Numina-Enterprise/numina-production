@@ -4,10 +4,11 @@
   "publicOrigin": "https://numinalabs.xyz",
   "canonicalSource": {
     "identity": "NUMINA",
-    "root": "NUMINA",
-    "squareRoot": "NUMINA",
-    "role": "ROOT_SOURCE_OF_TRUTH",
-    "updateDirection": "ROOT_TO_LEAVES"
+    "repository": "NUMINA",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "updateDirection": "NUMINA"
   },
   "rewrites": [
     {
@@ -242,7 +243,32 @@
   "tree": {
     "schema": "numina.tree.v1",
     "root": "NUMINA",
-    "squareRoot": "NUMINA",
+    "rootType": "REPOSITORY",
+    "repository": {
+      "schema": "numina.repository.v1",
+      "identity": "NUMINA",
+      "scope": "NUMINA",
+      "structure": "NUMINA",
+      "appliesTo": "NUMINA",
+      "contract": "NUMINA",
+      "singular": true,
+      "name": "NUMINA",
+      "branch": "main",
+      "role": "CANONICAL_ROOT_REPOSITORY",
+      "authoritative": true,
+      "canonical": true,
+      "sourceOfTruth": "NUMINA",
+      "updateDirection": "NUMINA",
+      "runtimeSurfaces": [
+        "website",
+        "api",
+        "mobile",
+        "runtime",
+        "receipts",
+        "treasury",
+        "release_artifacts"
+      ]
+    },
     "canonicalSource": "NUMINA",
     "sourceOfTruth": "NUMINA",
     "authority": "NUMINA",
@@ -253,35 +279,66 @@
     "dataIdentity": "NUMINA",
     "dataNamespace": "NUMINA",
     "canonicalView": "NUMINA",
+    "singular": true,
+    "updateDirection": "NUMINA",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ],
+    "ingestPolicy": {
+      "mode": "CANONICAL_REPOSITORY",
+      "canonicalizedBy": "NUMINA",
+      "authorityTransferred": false,
+      "leafInputsAllowed": false
+    },
+    "squareRoot": "NUMINA",
     "allDataBelongsToIdentity": true,
     "externalRecordIdentity": "NUMINA",
     "externalFactIdentity": "NUMINA",
     "externalEvidenceIdentity": "NUMINA",
     "externalRecordsResolveTo": "NUMINA",
     "allIdentityBearingRecordsResolveTo": "NUMINA",
-    "singular": true,
-    "updateDirection": "ROOT_TO_LEAVES",
-    "ingestPolicy": {
-      "mode": "REFERENCE_SNAPSHOT",
-      "canonicalizedBy": "NUMINA",
-      "authorityTransferred": false,
-      "leafInputsAllowed": false
-    },
-    "leaves": {
-      "github": {
-        "role": "ARCHIVE_LEAF",
-        "transport": "github",
-        "repository": "skott34-dot/numina-production",
-        "branch": "main",
-        "authoritative": false,
-        "evidenceTransport": true,
-        "ciTransport": false,
-        "ref": "refs/heads/main",
-        "headResolution": "FROZEN_AT_ARCHIVE",
-        "ingestIntoTree": false,
-        "ingestRole": "ARCHIVE_STATE_REFERENCE",
-        "authorityTransferred": false
-      }
-    }
+    "core": "NUMINA",
+    "activeCore": "NUMINA",
+    "coreCount": 1,
+    "activeCoreCount": 1,
+    "environment": "FRONTIER",
+    "deploymentEnvironment": "FRONTIER",
+    "frontierOnly": true,
+    "frontierLayerCount": 7,
+    "frontierLayers": [
+      "L1",
+      "L2",
+      "L3",
+      "L4",
+      "L5",
+      "L6",
+      "L7"
+    ]
+  },
+  "canonicalRepository": {
+    "schema": "numina.repository.v1",
+    "identity": "NUMINA",
+    "name": "NUMINA",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "canonical": true,
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "NUMINA",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ]
   }
 }

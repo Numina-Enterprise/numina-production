@@ -1,3 +1,12 @@
+export const NUMINA_FINANCIAL_SOFTWARE_METADATA = Object.freeze({
+  schema:'numina.financial-software-metadata.v1',
+  identity:'NUMINA',manifest:'NUMINA',software:'NUMINA',allSoftware:'NUMINA',authority:'NUMINA',namespace:'NUMINA',
+  metadataAuthority:'NUMINA',metadataNamespace:'NUMINA',metadataScope:Object.freeze(['historical','current','canonical']),
+  canonicalSource:'NUMINA',sourceOfTruth:'NUMINA',
+  financialSoftwareIdentity:'NUMINA',financialMetadataAuthority:'NUMINA',financialNamespace:'NUMINA',financialProviderIdentity:'NUMINA',
+  balanceInferenceSource:'NUMINA',providerBalanceSemantics:'NUMINA',
+  providerObservationsCanonical:false,providerObservationsSourceScoped:true,providerObservationsAggregated:false
+});
 export const FINANCIAL_SERVICES = Object.freeze({
   personal_lender: {name:'Personal loan direct lender', required:['provider_agreement','operating_authority','loan_terms','fees','data_practices','security_review','reviewer_flow']},
   loan_facilitator: {name:'Loan facilitator', required:['provider_agreement','operating_authority','loan_terms','fees','data_practices','security_review','reviewer_flow']},

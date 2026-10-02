@@ -88,5 +88,5 @@
     "settlementReceipts": [],
     "ownerDeclarationsAreProviderEvidence": false
   },
-  "scope": "Website/source deployment observation only. Public model values, owner activation/authorization and smart-contract deployment receipts do not establish external transfer submission, funded reserves or settlement. No funds moved by this work."
+  "scope": "NUMINA"
 }

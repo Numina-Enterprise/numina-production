@@ -1,7 +1,7 @@
 // Copyright © 2026 SK Consulting LLC. Numina™. See OWNERSHIP.md.
 // Bounded, process-local measurements. No request bodies, headers or identities.
 export const TELEMETRY_VERSION = '4.0.0';
-export const TELEMETRY_RUNTIME = '1.9.0-rc26';
+export const TELEMETRY_RUNTIME = '1.9.0-rc27';
 export const TELEMETRY_BOUNDS_MS = Object.freeze([10, 50, 100, 250, 500, 1000, 2500, 5000, 15000, 60000]);
 const TELEMETRY_METHODS = new Set(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']);
 export function telemetryRoute(path) {

@@ -3,7 +3,7 @@ import {stable,controlHash,controlError,grantValid} from './control.js';
 import {readControl,commitControl} from './control-store.js';
 import {controlActor,controlBody} from './control-http.js';
 import {createNuminaTreasury} from './native-treasury.js';
-import {FRONTIER_VERSION,FRONTIER_PROVIDERS,frontierState,frontierRequest,frontierDecision,frontierAssert,frontierExact,frontierSign} from './frontier.js';
+import {FRONTIER_VERSION,FRONTIER_PROVIDERS,frontierManifestView,frontierRequest,frontierDecision,frontierAssert,frontierExact,frontierSign} from './frontier.js';
 import {rateLimit} from './store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_TREASURY_CURRENT_POLICY} from './treasury-policy.js';
@@ -32,7 +32,7 @@ async function frontierJson(req){
 async function frontierActor(req,env,row){
   const bearer=req.headers.get('authorization');
   if(bearer?.startsWith('Bearer ')){
-    const hash=await controlHash(bearer.slice(7)),p=frontierState(row.manifest).principals.find(p=>!p.revoked&&p.credentialSha256===hash);
+    const hash=await controlHash(bearer.slice(7)),p=frontierManifestView(row.manifest).principals.find(p=>!p.revoked&&p.credentialSha256===hash);
     if(p)return p.id;
   }
   return controlActor(req,env);
@@ -50,7 +50,7 @@ async function frontierMutate(route,body,actor,env){
   if(route==='treasury/accounts'){
     frontierExact(body.data,['id','provider','legalEntity','accountLabel','providerAccountReference']);
     const current=await readControl(env.DB);frontierAssert(actor===current.manifest.root,'OWNER_REQUIRED',403);
-    const existing=frontierState(current.manifest).accounts.find(a=>!a.supersededBy&&['provider','legalEntity','accountLabel','providerAccountReference'].every(k=>a[k]===body.data[k]));
+    const existing=frontierManifestView(current.manifest).accounts.find(a=>!a.supersededBy&&['provider','legalEntity','accountLabel','providerAccountReference'].every(k=>a[k]===body.data[k]));
     if(existing&&existing.id!==body.data.id)return {status:'REFERENCE_ALREADY_EXISTS',id:existing.id,journalCommit:false,receipt:null};
   }
   // Verify persistent signing configuration before committing any frontier operation.
@@ -94,7 +94,7 @@ async function frontierDiscovery(req,env){
   if(version&&version!=='2025-11-25')return error(-32602,'Supported MCP protocol version: 2025-11-25');
   if(msg.method==='initialize')return result({protocolVersion:'2025-11-25',capabilities:{tools:{listChanged:false}},serverInfo:{name:'numina-discovery',version:FRONTIER_VERSION}});
   if(msg.method==='ping')return result({});
-  const names={numina_connections:'Discover the canonical Numina surface inventory and live-check workspace; no private records or financial operations.',numina_architecture:'Read Numina L1 through L5 architecture layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the finalized singular build head; no mutable state or private records.'};
+  const names={numina_connections:'Discover the canonical Numina surface inventory and live-check workspace; no private records or financial operations.',numina_architecture:'Read Numina L1 through L7 final frontier layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the finalized singular build head; no mutable state or private records.'};
   if(msg.method==='tools/list')return result({tools:Object.entries(names).map(([name,description])=>({name,description,inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false}}))});
   if(msg.method!=='tools/call')return error(-32601,'Method not found');
   if(!Object.hasOwn(names,msg.params?.name??'')||!msg.params.arguments||Array.isArray(msg.params.arguments)||typeof msg.params.arguments!=='object'||Object.keys(msg.params.arguments).length)return error(-32602,'Expected a listed tool and empty arguments');
@@ -121,13 +121,13 @@ export async function frontierHttp(req,env){
     const now=Math.floor(Date.now()/1000),bucket=await controlHash('frontier:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
     if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
     if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
-      const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
+      const row=await readControl(env.DB),record=frontierManifestView(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
       const currentRecorded=record?.id===policy.id&&record.hash===policyHash;
       return frontierResponse({policy,policyHash,activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},revision:row.revision});
     }
     const row=await readControl(env.DB);frontierAssert(row.manifest.root===env.NUMINA_CONTROL_OWNER,'ROOT_CONFIGURATION_MISMATCH',503);
     const actor=await frontierActor(req,env,row);
-    frontierAssert(actor===row.manifest.root||frontierState(row.manifest).principals.some(p=>p.id===actor&&!p.revoked),'AUTHORITY_DENIED',403);
+    frontierAssert(actor===row.manifest.root||frontierManifestView(row.manifest).principals.some(p=>p.id===actor&&!p.revoked),'AUTHORITY_DENIED',403);
     if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
     if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_REQUIRED',403);
     if(['/api/control/v2/mcp','/api/control/v2/a2a'].includes(path))return req.method==='POST'?frontierRpc(req,env,actor):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
@@ -143,11 +143,6 @@ export async function frontierHttp(req,env){
       const requests=body.requestIds.map(id=>frontierRequest(row.manifest,id,actor));
       const decisions=await Promise.all(requests.map(async request=>({requestId:request.id,...await frontierDecision(row.manifest,request,now)})));
       return frontierResponse({revision:row.revision,head:row.head_hash,observedAt:now,decisions});
-    }
-    if(route==='state'&&req.method==='GET'){
-      const f=structuredClone(frontierState(row.manifest));for(const p of f.principals)delete p.credentialSha256;
-      if(actor!==row.manifest.root){f.principals=f.principals.filter(p=>p.id===actor);f.requests=f.requests.filter(r=>r.Principal===actor);f.approvals=f.approvals.filter(a=>f.requests.some(r=>r.id===a.requestId));f.accounts=[];delete f.treasuryPolicies;delete f.fundingPlan;delete f.fundingDeclaration;const ids=new Set(f.requests.map(r=>r.policyId));f.policies=f.policies.filter(p=>ids.has(p.id));}
-      return frontierResponse({root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',revision:row.revision,head:row.head_hash,content:f,compatibility:{route:'/api/control/v2/state',role:'legacy_route_only'}});
     }
     if(route==='decisions'&&req.method==='POST'){const body=await controlBody(req);frontierExact(body,['requestId']);const request=frontierRequest(row.manifest,body.requestId,actor);return frontierResponse(await frontierDecision(row.manifest,request,now));}
     if(route.startsWith('receipts/')&&req.method==='GET')return frontierResponse(await frontierReceipt(env.DB,route.slice(9),actor,env));
@@ -167,7 +162,7 @@ export async function frontierHttp(req,env){
       frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
       const treasury=await createNuminaTreasury({db:env.DB,principal:actor,root:row.manifest.root}).readTreasury();
       frontierAssert(treasury.revision===row.revision&&treasury.head===row.head_hash,'TREASURY_SNAPSHOT_CHANGED',409);
-      return frontierResponse(alignTreasuryAccounts(treasury,frontierState(row.manifest)));
+      return frontierResponse(alignTreasuryAccounts(treasury,frontierManifestView(row.manifest)));
     }
     if(Object.hasOwn(frontierRoutes,route)&&req.method==='POST')return frontierResponse(await frontierMutate(route,await controlBody(req),actor,env));
     return frontierResponse({error:'NOT_FOUND'},404);

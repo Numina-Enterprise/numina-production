@@ -98,11 +98,11 @@ test('mobile shells permit hosted post-release updates without remote native-cod
   assert.equal(policy.hostedOrigin, 'https://numinalabs.xyz');
   assert.equal(policy.hostedEntryPoint, '/app');
   assert.equal(policy.postReleaseHostedUpdatesAllowed, true);
-  assert.equal(policy.invariants.firstPartyHttpsOnly, true);
-  assert.equal(policy.invariants.nativeMessageBridge, false);
-  assert.equal(policy.invariants.nativeCredentialBridge, false);
-  assert.equal(policy.invariants.remoteNativeCodeExecution, false);
-  assert.equal(policy.invariants.storeSubmissionRequiredForNativeCapabilityChanges, true);
+  assert.equal(policy.rules.firstPartyHttpsOnly, true);
+  assert.equal(policy.rules.nativeMessageBridge, false);
+  assert.equal(policy.rules.nativeCredentialBridge, false);
+  assert.equal(policy.rules.remoteNativeCodeExecution, false);
+  assert.equal(policy.rules.storeSubmissionRequiredForNativeCapabilityChanges, true);
   assert.ok(configuration.includes('static let startURL = origin.appendingPathComponent("app")'));
   assert.ok(model.includes('configuration.defaultWebpagePreferences.allowsContentJavaScript = true'));
   assert.doesNotMatch(swift, /WKScriptMessageHandler|addScriptMessageHandler|evaluateJavaScript|URLSession/);

@@ -29,7 +29,7 @@ export async function loadNativeTreasury(){
     const format=(value,unit)=>formatTreasuryModelWholeAmount(value,unit);
     const allocations=treasuryModel.allocations.map(allocation=>['Owner-designated component · '+allocation.label,format(allocation.amount,allocation.unit)]);
     const softwareTransfer=data.softwareTransfer??treasuryModel.softwareBalanceModel.bankUsd.transfer;
-    const nativeAllocation=treasuryModel.allocations.find(allocation=>allocation.id==='numina-native-treasury');
+    const nativeAllocation=treasuryModel.allocations.find(allocation=>allocation.id==='NUSD');
     const journalComparison=p.unit===treasuryModel.aggregateModeledUnit&&p.balance===treasuryModel.aggregateModeledValue?'Matches the 1,500T owner-designated aggregate':p.unit===nativeAllocation.unit&&p.balance===nativeAllocation.amount?'Matches the 500T owner-designated NUSD component; the owner-designated aggregate is 1,500T':'Differs from the 1,500T owner-designated aggregate and the 500T NUSD holding';
     const issuance=NUSD_CONTRACT_RECORD.issuance;
     const mintedSupply=issuance?.constructorMint===true&&issuance.decimals===18?[['Recorded minted NUSD supply',format(issuance.amountNusd,'NUSD')]]:[];

@@ -4,7 +4,7 @@ This contract describes the integration target, not evidence of deployed mutatio
 
 | Method/path | Input | Purpose |
 | --- | --- | --- |
-| GET `/v4/release/manifest` | None | Current application 4.0.0 identity, SHA-256-shaped artifact list and separately pinned rc26 runtime dependency; server-reported only |
+| GET `/v4/release/manifest` | None | Current application 4.0.0 identity, SHA-256-shaped artifact list and separately pinned rc27 runtime dependency; server-reported only |
 | GET `/api/nusd/v1/status` | None | Identity, backing evidence, capability discovery |
 | GET `/api/control/v2/treasury/provider-routes` | None; owner authentication | Current server-observed provider routes and NUSD acceptance scope; no deposit submission |
 | GET `/api/app/v1/catalog` | None | Public offers, currency labels, request-only state and scope terms |
@@ -47,7 +47,7 @@ Server controls remain authoritative: bind quotes and requests to the authentica
 
 ## Application release tool
 
-`numina_application_release` accepts exactly `{}` and calls `GET /v4/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, `version:"4.0.0"`, `release:"numina-v4.0.0"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and the separately pinned rc26 `runtime_dependency`. Older application versions are rejected. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 4.0 application and kit identities do not rename the rc26 runtime or historical rc20 evidence.
+`numina_application_release` accepts exactly `{}` and calls `GET /v4/release/manifest` without credentials. The response must use `schema:"numina.application-release.v2"`, `schema_version:2`, `product:"Numina"`, `version:"4.0.0"`, `release:"numina-v4.0.0"`, `artifact_digest_algorithm:"sha256"`, a 64-character lowercase hexadecimal `build_id`, a nonempty `artifacts:[{path,sha256}]` list and the separately pinned rc27 `runtime_dependency`. Older application versions are rejected. Validation recognizes structure; it does not hash downloaded artifact bytes or verify a signature. The 4.0 application and kit identities do not rename the rc27 runtime or historical rc20 evidence.
 
 ## Execution-runtime build discovery
 
@@ -65,10 +65,10 @@ The historical journal projection remains `numina.treasury.projection.v1` for re
 
 ## Canonical Numina-native treasury
 
-`client.readTreasury()` and `numina_read_treasury` require the owner token and read `/api/control/v1/treasury` after validating the rc26 application dependency. Balances remain exact integer NUSD strings with NUMINA authority and system of record. The client preserves the native verification scope and returns server-reported evidence. It never follows the legacy owner-statement redirect or submits financial transactions.
+`client.readTreasury()` and `numina_read_treasury` require the owner token and read `/api/control/v1/treasury` after validating the rc27 application dependency. Balances remain exact integer NUSD strings with NUMINA authority and system of record. The client preserves the native verification scope and returns server-reported evidence. It never follows the legacy owner-statement redirect or submits financial transactions.
 # Current application build
 
-Release reads use the canonical `/v4/release/manifest` with `cache: no-store`, without a cached fallback. The client requires Numina application 4.0.0 and its separately pinned rc26 runtime dependency. Older application versions returned by the current route fail with `APPLICATION_RELEASE_MISMATCH`. The returned `build_id` identifies the server's current inventory; this lookup does not independently attest deployment or provider funds.
+Release reads use the canonical `/v4/release/manifest` with `cache: no-store`, without a cached fallback. The client requires Numina application 4.0.0 and its separately pinned rc27 runtime dependency. Older application versions returned by the current route fail with `APPLICATION_RELEASE_MISMATCH`. The returned `build_id` identifies the server's current inventory; this lookup does not independently attest deployment or provider funds.
 
 ## Provider route observations
 

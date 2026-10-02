@@ -29,7 +29,7 @@
     "native_navigation_or_authentication_bridge_change",
     "downloaded_executable_code_that_changes_native_app_functionality"
   ],
-  "invariants": {
+  "rules": {
     "firstPartyHttpsOnly": true,
     "nativeMessageBridge": false,
     "nativeCredentialBridge": false,

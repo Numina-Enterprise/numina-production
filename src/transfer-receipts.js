@@ -5,6 +5,7 @@ import {rateLimit} from './store.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {verifyAchReceipt} from './ach-receipt-verifier.js';
 import {verifyUsdcReceipt} from './usdc-receipt-verifier.js';
+import {NUMINA_FINANCIAL_SOFTWARE_METADATA} from '../public/financial-model.js';
 
 export const TRANSFER_RECEIPTS_ROUTE='/api/financial/v1/receipts';
 const transferReceiptHash=/^[a-f0-9]{64}$/;
@@ -37,7 +38,7 @@ export function validateTransferReceipt(input){
   }
   return evidence;
 }
-function transferReceiptResponse(value,status=200){return Response.json({...value,financialExecution:false},{status,headers:{'Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Content-Type-Options':'nosniff'}});}
+function transferReceiptResponse(value,status=200){return Response.json({...NUMINA_FINANCIAL_SOFTWARE_METADATA,...value,financialExecution:false},{status,headers:{'Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Content-Type-Options':'nosniff'}});}
 async function transferReceiptStoredJson(bucket,key){
   const object=await bucket.get(key);if(!object)controlError('RECEIPT_NOT_FOUND',404);
   if(!Number.isSafeInteger(object.size)||object.size>20000)controlError('RECEIPT_INTEGRITY_FAILED',503);

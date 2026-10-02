@@ -45,48 +45,8 @@ if ($token) {
   }
 }
 
-if ($StatusOnly) {
-  [pscustomobject]@{
-    identity = 'NUMINA'
-    host = 'NUMINA'
-    runner_home = $RunnerHome
-    local_configured = $true
-    remote_runner_id = $remoteId
-    remote_status = $remoteState
-    future_runner_creation = 'DENIED'
-  } | ConvertTo-Json -Depth 3
-  exit 0
-}
-
-$serviceMarker = Join-Path $RunnerHome '.service'
-if ((Test-Path $serviceMarker) -and (Test-Path $svcCmd)) {
-  Push-Location $RunnerHome
-  try {
-    & $svcCmd start | Out-Host
-    & $svcCmd status | Out-Host
-  } finally {
-    Pop-Location
-  }
-} else {
-  $existing = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
-    Where-Object { $_.CommandLine -and $_.CommandLine -like "*$RunnerHome*Runner.Listener*" }
-  if (-not $existing) {
-    Start-Process -FilePath $runCmd -WorkingDirectory $RunnerHome -WindowStyle Hidden
-  }
-}
-
-if ($token) {
-  Start-Sleep -Seconds 3
-  $headers = @{
-    Authorization = "Bearer $token"
-    Accept = 'application/vnd.github+json'
-    'X-GitHub-Api-Version' = '2022-11-28'
-  }
-  $response = Invoke-RestMethod -Method Get -Uri "https://api.github.com/repos/$repo/actions/runners?per_page=100" -Headers $headers
-  $matches = @($response.runners | Where-Object { $_.name -eq 'NUMINA' })
-  if ($matches.Count -ne 1) { Fail 'NUMINA_RUNNER_PRESERVATION_CHECK_FAILED' }
-  $remoteState = [string]$matches[0].status
-  $remoteId = $matches[0].id
+if (-not $StatusOnly) {
+  Fail 'NUMINA_SELF_HOSTED_RUNNER_EXECUTION_DENIED'
 }
 
 [pscustomobject]@{
@@ -96,5 +56,8 @@ if ($token) {
   local_configured = $true
   remote_runner_id = $remoteId
   remote_status = $remoteState
+  registration_record = 'PRESERVED'
+  execution = 'DENIED'
+  scheduling = 'DENIED'
   future_runner_creation = 'DENIED'
 } | ConvertTo-Json -Depth 3

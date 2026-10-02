@@ -102,7 +102,8 @@ async function refresh(){
     }catch{if(!isCurrent())return;for(const selector of privatePanels.filter(s=>s!=='#requests'))$(selector)?.replaceChildren();$('#treasury-status').textContent='Treasury records could not be verified. Refresh to read the current canonical record.';}
   }finally{if(isCurrent())$('#refresh').disabled=false;}
 }
-const layers=$('#architecture-layers');if(layers)layers.replaceChildren(...NUMINA_LAYERS.layers.map(layer=>{const card=node('article','');card.append(node('h3',layer.id+' · '+layer.name),node('p',layer.capabilities.join(' · ')));return card;}));
+const frontierLayers=NUMINA_LAYERS.frontierLayers??NUMINA_LAYERS.layers??[];
+const layers=$('#architecture-layers');if(layers)layers.replaceChildren(...frontierLayers.map(layer=>{const card=node('article','');card.append(node('h3',layer.id+' · '+layer.name),node('p',layer.capabilities.join(' · ')));return card;}));
 $('#refresh').onclick=refresh;refresh();
 async function refreshApplicationIdentity(signal,isCurrent){
   $('#core-release-status').textContent='Checking the current Numina build…';

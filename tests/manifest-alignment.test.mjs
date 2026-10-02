@@ -6,6 +6,7 @@ import {NuminaClient} from '../integrations/numina/src/client.js';
 import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
+import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
@@ -28,7 +29,7 @@ test('one owner approval binds both runtime manifests without manufacturing fina
  assert.equal(handoff.sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff.zip')));
  assert.equal(handoff.sha256,packageRecord.sha256);
  assert.equal(handoff.record_sha256,digest(bytes('docs/Numina-1500T-Approval-Handoff-Package-Record.json')));
- const config=json('config/numina-routing.json');assert.equal(config.identity,'NUMINA');assert.equal(config.publicOrigin,'https://numinalabs.xyz');assert.deepEqual(config.canonicalSource,{identity:'NUMINA',root:'NUMINA',squareRoot:'NUMINA',role:'ROOT_SOURCE_OF_TRUTH',updateDirection:'ROOT_TO_LEAVES'});assert.equal(config.tree.root,'NUMINA');assert.equal(config.tree.squareRoot,'NUMINA');assert.equal(config.tree.sourceOfTruth,'NUMINA');assert.equal(config.tree.updateDirection,'ROOT_TO_LEAVES');assert.deepEqual(config.tree.leaves.github,{role:'ARCHIVE_LEAF',transport:'github',repository:'skott34-dot/numina-production',branch:'main',authoritative:false,evidenceTransport:true,ciTransport:false,ref:'refs/heads/main',headResolution:'FROZEN_AT_ARCHIVE',ingestIntoTree:false,ingestRole:'ARCHIVE_STATE_REFERENCE',authorityTransferred:false});assert.deepEqual(config.tree.ingestPolicy,{mode:'REFERENCE_SNAPSHOT',canonicalizedBy:'NUMINA',authorityTransferred:false,leafInputsAllowed:false});
+ const config=json('config/numina-routing.json');assert.equal(config.identity,'NUMINA');assert.equal(config.publicOrigin,'https://numinalabs.xyz');assert.deepEqual(config.canonicalSource,{identity:'NUMINA',repository:'NUMINA',branch:'main',role:'CANONICAL_ROOT_REPOSITORY',authoritative:true,updateDirection:'NUMINA'});assert.equal(config.tree.root,'NUMINA');assert.equal(config.tree.rootType,'REPOSITORY');assert.equal(config.tree.sourceOfTruth,'NUMINA');assert.equal(config.tree.updateDirection,'NUMINA');assert.equal(config.tree.repository.role,'CANONICAL_ROOT_REPOSITORY');assert.equal(config.tree.repository.authoritative,true);assert.deepEqual(config.tree.ingestPolicy,{mode:'CANONICAL_REPOSITORY',canonicalizedBy:'NUMINA',authorityTransferred:false,leafInputsAllowed:false});
  for(const source of ['/wallet-signing','/wallet-signing.html','/deployment-readiness'])assert.equal(config.redirects.find(r=>r.source===source),undefined);
  assert.equal(config.rewrites.find(r=>r.source==='/api/control/v1/:path*')?.destination,'https://personal-space-m7q9.skott34.chatgpt.site/api/control/v1/:path*');
  for(const version of ['2','3','4'])assert.equal(config.rewrites.find(r=>r.source==='/v'+version+'/release/manifest')?.destination,'/api/application-release');
@@ -54,7 +55,7 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.version,'4.0.0');
   assert.equal(release.release,'numina-v4.0.0');
   assert.equal(release.schema,'numina.application-release.v2');
-  assert.equal(release.runtime_dependency.version,'1.9.0-rc26');
+  assert.equal(release.runtime_dependency.version,'1.9.0-rc27');
   assert.equal(release.identity,'NUMINA');
   for(const field of ['root','manifest','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release.compatibility.identity_aliases[field],'NUMINA',field);
   assert.equal(release.provider_verification,true);
@@ -118,6 +119,7 @@ test('release and client manifests bind the identical treasury verifier without 
 
 test('runtimeBuild preserves optional treasury verification as server-reported metadata',async()=>{
   const release=json(releasePath),calls=[];let include=true;
+  release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   assert.ok(release.treasury_client_verification,'Fixture must contain the generated current binding');
   const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async(url,options)=>{
     calls.push({url,method:options.method,authorization:options.headers.Authorization});

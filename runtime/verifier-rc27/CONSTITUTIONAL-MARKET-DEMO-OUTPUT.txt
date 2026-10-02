@@ -1,0 +1,5 @@
+gross_open: 1150000
+bilateral_net: (('BANK-A', 'BANK-B', 650000),)
+net_abs_exposure: 650000
+collateral_reserved: 400000
+state_root: 34bb65803e91ff1761ea65ec56c71f76663cd449aef545d5b2b9f928b156d209

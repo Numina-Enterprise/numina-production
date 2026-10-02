@@ -4,7 +4,7 @@ import {requestJson} from './http-client.js';
 import {verifyTreasuryRecord} from './treasury-proof.js';
 
 export function verifiedUsdcRoutes(record){
-  if(record?.schema!=='numina.treasury.provider-routes.v1'||!(record.provider==='Stripe'||record.provider==='NUMINA'&&record.identity==='NUMINA'&&record.treasuryIdentity==='NUMINA'&&record.transportProvider==='Stripe')||record.connection!=='read_only'||
+  if(record?.schema!=='numina.treasury.provider-routes.v1'||!(record.provider==='NUMINA'&&record.identity==='NUMINA'&&record.treasuryIdentity==='NUMINA'&&record.transportProvider==='NUMINA')||record.connection!=='read_only'||
     record.canonical_treasury!==model.nativeJournal||!Array.isArray(record.routes)||record.routes.length>50||
     record.transfer_execution!==false||record.submission_performed!==false||record.receipt!==null||
     typeof record.observed_at!=='string'||!Number.isFinite(Date.parse(record.observed_at)))throw Error('Provider routes unavailable');
@@ -36,20 +36,20 @@ if(typeof document!=='undefined'&&document.getElementById('treasury-connection')
   for(const allocation of model.allocations)put(allocation.id+'-amount',formatTreasuryModelWholeAmount(allocation.amount,allocation.unit));
   put('treasury-model-total',formatTreasuryModelWholeAmount(model.aggregateModeledValue,'NUSD')+' owner-designated equivalent');
   let controller,generation=0;
-  const clear=()=>{put('native-connected-balance',formatTreasuryModelWholeAmount(model.softwareBalanceModel.nativeNusd.current,'NUSD'));put('native-connected-proof','NUMINA software value');put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value');put('bank-connected-route',formatTreasuryModelWholeAmount(model.softwareBalanceModel.bankUsd.current,'USD')+' · NUMINA software value');element('stripe-connected-routes').replaceChildren();};
+  const clear=()=>{put('native-connected-balance',formatTreasuryModelWholeAmount(model.softwareBalanceModel.nativeNusd.current,'NUSD'));put('native-connected-proof','NUMINA balance');put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA balance');put('bank-connected-route',formatTreasuryModelWholeAmount(model.softwareBalanceModel.bankUsd.current,'USD')+' · NUMINA balance');element('stripe-connected-routes').replaceChildren();};
   async function refresh(){
     controller?.abort();controller=new AbortController();const current=++generation;clear();
     put('treasury-connection-status','Reading the owner-authenticated native journal and provider observations…');
     try{
       const result=await readConnectedTreasury({signal:controller.signal});
       if(current!==generation||controller.signal.aborted)return;
-      put('native-connected-balance',formatTreasuryModelWholeAmount(model.softwareBalanceModel.nativeNusd.current,'NUSD')+' · NUMINA software value');
+      put('native-connected-balance',formatTreasuryModelWholeAmount(model.softwareBalanceModel.nativeNusd.current,'NUSD')+' · NUMINA balance');
       put('native-connected-proof','Journal verified · revision '+result.native.revision+' · '+(result.native.head??'No head'));
       const stripe=result.stripe;
       if(stripe?.schema==='numina.stripe.treasury.v1'&&stripe.account?.livemode===true){
         const amounts=['usd','usdc'].map(unit=>{const balance=stripe.balances?.available?.[unit];return balance?formatTreasuryProviderDisplayAmount(balance.value,unit):unit.toUpperCase()+' not reported';});
-        put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value · observation '+amounts.join(' / ')+' · '+stripe.observed_at);
-      }else put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA software value · observation unavailable');
+        put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA balance · observation '+amounts.join(' / ')+' · '+stripe.observed_at);
+      }else put('stripe-connected-balances',formatTreasuryModelWholeAmount(model.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA balance · observation unavailable');
       const bank=result.bank,transfer=model.softwareBalanceModel.bankUsd.transfer;
       put('bank-connected-route',formatTreasuryModelWholeAmount(transfer.amount,transfer.unit)+' transfer · COMPLETED · CLEARED 8/31/2026 · Confirmation 8000750550 · NUMINA software verified'+(bank?.schema==='numina.treasury.bank-route.v1'&&/^[0-9]{4}$/.test(bank.accountLast4)?' · savings ending '+bank.accountLast4:''));
       const routes=element('stripe-connected-routes');

@@ -5,7 +5,8 @@ import {execFileSync} from 'node:child_process';
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));
 const finalBuildPath='public/final-build.json';
-const FINAL_BUILD_MANIFEST_BLOB='ca011e92b6fc5c929df1121a2132476f4bb583cd';
+const FINAL_BUILD_MANIFEST_BLOB=pkg.numina?.finalBuildManifest?.blob;
+if(!/^[0-9a-f]{40}$/i.test(String(FINAL_BUILD_MANIFEST_BLOB||'')))throw Error('Preserved FINAL build manifest blob missing');
 const finalBuildBytes=readFileSync(finalBuildPath);
 const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
 if(finalBuildBlob!==FINAL_BUILD_MANIFEST_BLOB)throw Error('FINAL build manifest blob mismatch');
@@ -13,7 +14,7 @@ execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'
 const finalBuild=JSON.parse(finalBuildBytes);
 if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL')throw Error('Invalid FINAL NUMINA build manifest');
 if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');
-if(finalBuild.buildModel?.finalCount!==1||finalBuild.buildModel?.finalIdentity!=='NUMINA'||finalBuild.buildModel?.canonicalHeadIdentity!=='NUMINA'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v2'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.role!=='synchronized_projection'||finalBuild.manifestContract?.synchronization!=='ACROSS_ALL')throw Error('FINAL build manifest identity model mismatch');
+if(finalBuild.buildModel?.finalCount!==1||finalBuild.buildModel?.finalIdentity!=='NUMINA'||finalBuild.buildModel?.canonicalHeadIdentity!=='NUMINA'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v2'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.singular!==true)throw Error('Preserved FINAL NUMINA build manifest identity model mismatch');
 const archive=resolve(process.argv[2]||`numina-release-v${pkg.version}.tar.gz`);
 const required=['dist/client','dist/server/index.js','dist/client/downloads/application-release-v4.json'];
 for(const path of required)if(!existsSync(path))throw Error('Missing NUMINA build output: '+path);

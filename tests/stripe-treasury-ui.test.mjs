@@ -10,8 +10,8 @@ const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {
 async function settled(){for(let i=0;i<8;i++)await new Promise(resolve=>setTimeout(resolve,0));}
 const dashboard='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury';
 const amount=(currency,value=0)=>({currency,value,formatted:formatTreasuryProviderAmount(value,currency)});
-function stripeFixture(){return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',account:{name:'Test financial account',status:'open',livemode:true},observed_at:'2026-01-02T12:00:00Z',dashboard_url:dashboard,transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null,nusd_settlement:false,balances:Object.fromEntries(['available','inbound_pending','outbound_pending'].map(bucket=>[bucket,{usd:amount('usd'),usdc:amount('usdc')}]))};}
-function routesFixture(){return {schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',complete:true,routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null};}
+function stripeFixture(){return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'NUMINA',connection:'read_only',account:{name:'Test financial account',status:'open',livemode:true},observed_at:'2026-01-02T12:00:00Z',dashboard_url:dashboard,transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null,nusd_settlement:false,balances:Object.fromEntries(['available','inbound_pending','outbound_pending'].map(bucket=>[bucket,{usd:amount('usd'),usdc:amount('usdc')}]))};}
+function routesFixture(){return {schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'NUMINA',connection:'read_only',complete:true,routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null};}
 
 class Element{
  constructor(tag='div'){this.tagName=tag;this.children=[];this.hidden=false;this.disabled=false;this.value='';this.checked=false;this._text='';this.listeners={};}
@@ -46,7 +46,7 @@ function values(h){const items=h.get('stripe-treasury-details').children,rows={}
 function assertCleared(h){assert.equal(h.get('stripe-treasury-details').children.length,0);assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.equal(h.get('stripe-treasury-dashboard').getAttribute('href'),null);}
 
 test('deposit route check displays exact provider currency and network without claiming NUSD acceptance',async()=>{
- const calls=[],routes={schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',complete:true,
+ const calls=[],routes={schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'NUMINA',connection:'read_only',complete:true,
   routes:[{currency:'usdc',network:'base',address:'0x1234567890',memo:null,status:'active',provider_reported_active:true}],
   nusd:{status:'NOT_REPORTED',provider_acceptance_verified:false},transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null};
  const h=harness(async path=>{calls.push(path);return response(path.endsWith('/provider-routes')?routes:stripeFixture());});
@@ -100,7 +100,7 @@ for(const status of [401,403])test('Numina route HTTP '+status+' still clears ow
 test('Stripe Treasury renders confirmed zero balances separately from an omitted currency',async()=>{
  const fixture=stripeFixture();fixture.balances.inbound_pending.usdc=null;
  const h=harness(async()=>response(fixture));
- try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Software external'],'No');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Stripe data below is observation metadata and does not replace the NUMINA software balance/);}finally{h.close();}
+ try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Software external'],'No');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Stripe data below is observation metadata and does not replace the NUMINA balance/);}finally{h.close();}
 });
 
 test('Stripe Treasury connection failure never substitutes zero or retains an old balance link',async()=>{

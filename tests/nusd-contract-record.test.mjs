@@ -7,6 +7,7 @@ import {createNusdContractRecord,contractDescriptor} from '../scripts/nusd-contr
 import {nusdHttp,NUSD_POLICY,NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW} from '../src/nusd-http.js';
 import {contractSourcePresentation,assessFinancialStatus} from '../public/runtime-build-ui.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
+import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 const read=path=>fs.readFileSync(new URL('../'+path,import.meta.url));
 
 test('published contract stays bound to the finalized deployed source, artifact and receipts',()=>{
@@ -100,6 +101,7 @@ test('contract API and UI separate compiled functions from activated financial o
 });
 test('integration retains the contract source record without interpreting it as live execution',async()=>{
   const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));let include=true;
+  release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async url=>Response.json(url.endsWith('/status')?{schema:'numina.nusd.status.v1',...(include?{contract_record:record}:{})}:{...release,contract_record:include?record:undefined})});
   assert.deepEqual((await client.network()).data.contract_record,record);
   const build=await client.runtimeBuild();assert.deepEqual(build.data.contract_record,record);assert.equal(build.asset_execution_available,false);
@@ -126,6 +128,7 @@ test('mint workflow reports implemented preparation while receipt and provider c
 
 test('integration retains optional mint workflow metadata without activating execution',async()=>{
   const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+  release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   let workflow=NUSD_MINT_WORKFLOW;
   const calls=[];
   const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async(url,options)=>{

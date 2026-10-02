@@ -4,6 +4,7 @@ docs/provenance/run-34717406980/* -text
 runtime/nusd/** -text
 docs/contracts/** -text
 runtime/verifier-rc26/** -text
+runtime/verifier-rc27/** -text
 docs/provenance/runtime-34725802271/* -text
 # Distributed source inventories hash exact bytes on Windows and Linux.
 integrations/** -text
@@ -15,6 +16,7 @@ runtime/vercel-production/package.json -text
 config/numina-architecture.json -text
 docs/treasury-client-alignment.md -text
 scripts/package-rc26.py -text
+scripts/package-rc27.py -text
 scripts/publish-with-telemetry.mjs -text
 scripts/connect-ibm-quantum.mjs -text
 # Preserve byte equality between source modules, gateway copies and ownership notices.

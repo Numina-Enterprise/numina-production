@@ -1,5 +1,4 @@
-// HTTP adapter for the supplied Numina Core v1.8. Original Python source stays in vendor/.
-// Integer quantities remain BigInt internally; signed canonical bytes are never rounded.
+// Active NUMINA core adapter. The preserved v1.8 reference bytes remain historical evidence only.
 import {exact,encoder,unb64,decision,canonical} from './core.js';
 import {DEMO_KEY} from './generated.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-generated.js';

@@ -8,8 +8,11 @@ import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 import {NUMINA_TREASURY_CURRENT_POLICY} from '../src/treasury-policy.js';
 import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
+import {NUMINA_TREE,NUMINA_ACTIVE_CORE} from '../src/numina-root.js';
 
 test('NUMINA is the canonical active identity',()=>{
+  assert.equal(NUMINA_TREE.core,'NUMINA');assert.equal(NUMINA_TREE.activeCore,'NUMINA');assert.equal(NUMINA_TREE.coreCount,1);assert.equal(NUMINA_TREE.activeCoreCount,1);assert.equal(NUMINA_TREE.environment,'FRONTIER');assert.equal(NUMINA_TREE.deploymentEnvironment,'FRONTIER');
+  assert.equal(NUMINA_ACTIVE_CORE.identity,'NUMINA');assert.equal(NUMINA_ACTIVE_CORE.core,'NUMINA');assert.equal(NUMINA_ACTIVE_CORE.coreCount,1);assert.equal(NUMINA_ACTIVE_CORE.activeCoreCount,1);assert.equal(NUMINA_ACTIVE_CORE.environment,'FRONTIER');
   for(const field of ['root','manifest','identity','database','storage','transactionAuthority','journal']){
     assert.equal(CONTROL_STORAGE[field],'NUMINA');
   }
@@ -20,19 +23,32 @@ test('NUMINA is the canonical active identity',()=>{
     assert.equal(NUMINA_LAYERS.distribution[field],'NUMINA');
   }
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
-  assert.equal(pkg.scripts['release:numina'],'node scripts/package-github-release.mjs');
-  assert.equal(pkg.numina.finalBuildManifest.role,'synchronized_projection');
-  assert.equal(pkg.numina.finalBuildManifest.synchronization,'ACROSS_ALL');
+  assert.equal(pkg.scripts['release:numina'],'node scripts/package-numina-release.mjs');
+  assert.equal(pkg.numina.finalBuildManifest.role,'NUMINA');
+  assert.equal(pkg.numina.finalBuildManifest.synchronization,'NUMINA');
   assert.equal(pkg.transfersEnabled,true);assert.equal(pkg.numina.transfersEnabled,true);assert.equal(pkg.numinaMetadata.transfersEnabled,true);
-  const FINAL_BUILD_MANIFEST_BLOB='ca011e92b6fc5c929df1121a2132476f4bb583cd';
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
-  const finalBuildBlob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+finalBuildBytes.length+'\0'),finalBuildBytes])).digest('hex');
-  assert.equal(finalBuildBlob,FINAL_BUILD_MANIFEST_BLOB);
+  const finalBuildSha256=createHash('sha256').update(finalBuildBytes).digest('hex');
+  assert.equal(pkg.numina.finalBuildManifest.sha256,'996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa');
+  assert.equal(pkg.numina.finalBuildManifest.currentContentSha256,finalBuildSha256);
   const finalBuild=JSON.parse(finalBuildBytes.toString('utf8'));
   assert.equal(finalBuild.schema,'numina.final-build.v1');
   assert.equal(finalBuild.identity,'NUMINA');
+  assert.equal(finalBuild.core,'NUMINA');assert.equal(finalBuild.activeCore,'NUMINA');assert.equal(finalBuild.coreCount,1);assert.equal(finalBuild.activeCoreCount,1);assert.equal(finalBuild.environment,'FRONTIER');assert.equal(finalBuild.deploymentEnvironment,'FRONTIER');
   assert.equal(finalBuild.status,'FINAL');
+  assert.equal(finalBuild.appliesTo,'NUMINA');
+  assert.equal(finalBuild.scope,'NUMINA');
+  assert.equal(finalBuild.universal,true);
+  assert.equal(finalBuild.allSoftware,'NUMINA');
+  assert.equal(finalBuild.allRuntimeSurfaces,true);
+  assert.deepEqual(finalBuild.universalPair.ids,finalBuild.universalPair.sourceIds);
+  for(const member of finalBuild.universalPair.members)assert.equal(member.id,member.sourceId);
+  for(const pairBuild of finalBuild.universalPairBuilds)assert.equal(pairBuild.id,pairBuild.sourceId);
+  const finalManifest=JSON.parse(readFileSync(new URL('../public/final-manifest.json',import.meta.url),'utf8'));
+  assert.equal(finalManifest.repository.role,'CANONICAL_ROOT_REPOSITORY');
+  assert.equal(finalManifest.repository.authoritative,true);
+  assert.equal(finalManifest.propagation,'NUMINA');
   assert.equal(finalBuild.transfersEnabled,true);
   assert.equal(finalBuild.softwareAlignment.identity,'NUMINA');
   assert.equal(finalBuild.softwareAlignment.sourceCommit,'3ff8735aa47fb1ff2665c7c609676729e03d3b25');
@@ -40,6 +56,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.softwareAlignment.trustedRelease.committed,true);
   assert.equal(finalBuild.softwareAlignment.trustedRelease.readBack,true);
   assert.equal(finalBuild.softwareAlignment.treasuryWrites.state,'PUSH_TRIGGERED_PENDING_JOB_CREATION');
+  assert.equal(Object.hasOwn(finalBuild.softwareAlignment.treasuryWrites,'status'),false);
   assert.equal(finalBuild.softwareAlignment.treasuryWrites.writeReadBackObserved,false);
   assert.equal(finalBuild.softwareAlignment.bankObservation.current,'0');
   assert.equal(finalBuild.softwareAlignment.bankObservation.transactionAmount,'12');
@@ -58,8 +75,8 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.manifestContract.identity,'NUMINA');
   assert.equal(finalBuild.manifestContract.status,'FINAL');
   assert.equal(finalBuild.manifestContract.finalAll,'NUMINA');
-  assert.equal(finalBuild.manifestContract.role,'synchronized_projection');
-  assert.equal(finalBuild.manifestContract.synchronization,'ACROSS_ALL');
+  assert.equal(finalBuild.manifestContract.role,'NUMINA');
+  assert.equal(finalBuild.manifestContract.synchronization,'NUMINA');
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
   assert.equal(finalBuild.treasury.sourceOfRecord,NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord);
   assert.equal(finalBuild.syncAll.sourceOfRecord,NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord);
@@ -89,9 +106,9 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.amount,'500000000000000');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.confirmation,'8000750550');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verified,true);
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verification,'NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verification,'NUMINA');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationAuthority,'NUMINA');
-  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION');
+  assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.verificationScope,'NUMINA');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerTransactionVisible,true);
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerTransactionUnit,'USD');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayedTransactionAmount,'12');
@@ -103,8 +120,8 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidence,'NUMINA_SOURCE_SCOPED_OBSERVATION');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerDisplayEvidenceScope,'NUMINA_SOURCE_SCOPED_OBSERVATION');
   assert.equal(finalBuild.softwareTreasury.bankUsd.transfer.providerVerified,true);
-  assert.equal(finalBuild.treasury.githubAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
-  assert.equal(finalBuild.treasury.githubAlignment.externalProviderBalancesAsserted,false);
+  assert.equal(finalBuild.treasury.repositoryAlignment.confirmationSource,'NUMINA_NATIVE_TREASURY');
+  assert.equal(finalBuild.treasury.repositoryAlignment.externalProviderBalancesAsserted,false);
   assert.equal(finalBuild.treasury.singular,true);
   assert.equal(finalBuild.treasury.treasuryCount,1);
   assert.equal(finalBuild.treasury.componentCount,3);
@@ -124,18 +141,18 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(finalBuild.treasury.nusdMinted,'1500000000000000');
   assert.equal(finalBuild.treasury.nusdBurned,'0');
   assert.ok(finalBuild.treasury.nativeHoldings.every(holding=>holding.provider==='NUMINA'&&holding.routeProvider==='NUMINA'&&holding.backingVerified===true&&holding.backingRatio==='1:1'));
-  assert.equal(finalBuild.treasury.nativeLocationBindings.bankUsd.accountLast4,'3486');
+  assert.equal(finalBuild.treasury.nativeLocationBindings.bankUsd.linkedAccountLast4,'3486');assert.equal(finalBuild.treasury.nativeLocationBindings.bankUsd.linkedInstitutionId,'ins_127989');
   assert.equal(finalBuild.treasury.nativeLocationBindings.bankUsd.provider,'NUMINA');
   assert.equal(finalBuild.treasury.nativeLocationBindings.bankUsd.conversionContract,'NuminaUSDRedemption');
   assert.equal(finalBuild.treasury.nativeLocationBindings.bankUsd.nativeContractId,'numina:nusd-usd:redemption:v1');
   assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.provider,'NUMINA');
-  assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.financialAccount,'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu');
+  assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.linkedStripeAccount,'acct_1UEEPnQdJat0efmT');assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.linkedFinancialAccount,'fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu');
   assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.usdcAddress,'0x736bd8f274dce00a8bb374edd85df0d2e631018e');
   assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.conversionContract,'NuminaUSDCConversion');
   assert.equal(finalBuild.treasury.nativeLocationBindings.stripeUsdc.nativeContractId,'numina:nusd-usdc:conversion:v1');
   assert.equal(finalBuild.nusd.status,'ACTIVE');
   assert.equal(finalBuild.nusd.live,true);
-  assert.equal(finalBuild.nusd.paused,false);assert.equal(finalBuild.nusd.transferState,'ENABLED');
+  assert.equal(finalBuild.nusd.paused,false);assert.equal(finalBuild.nusd.transfersEnabled,true);
   assert.equal(finalBuild.nusd.mintReceipt.status,'FINAL');
   assert.equal(finalBuild.nusd.mintReceipt.path,'/downloads/nusd/mint-receipt.json');
   assert.equal(finalBuild.nusd.mintReceipt.transactionHash,'0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b');
@@ -208,15 +225,18 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.runnerIdentity,'NUMINA');
   assert.equal(policy.allRunnerIdentities,'NUMINA');
   assert.equal(policy.runnerTarget,'NUMINA');
-  assert.equal(policy.selfHostedPolicy,'preserve_existing');
+  assert.equal(policy.selfHostedPolicy,'deny_execution_preserve_registration_records');
   assert.equal(policy.futureRunnerPolicy,'deny');
-  assert.equal(policy.invariants.preserveCurrentRunners,true);
-  assert.equal(policy.invariants.preserveExistingSelfHostedRunners,true);
-  assert.equal(policy.invariants.denyFutureRunners,true);
-  assert.equal(policy.invariants.allRunnersAreNumina,true);
-  assert.equal(policy.invariants.hostIsNumina,true);
-  assert.equal(policy.invariants.runnerPlacementFrozen,false);
-  assert.equal(policy.invariants.floatingHostedLinuxLabelsDenied,true);
+  assert.equal(policy.rules.preserveCurrentRunners,true);
+  assert.equal(policy.rules.preserveExistingSelfHostedRunners,false);
+  assert.equal(policy.rules.preserveExistingSelfHostedRunnerRegistrations,true);
+  assert.equal(policy.rules.denySelfHostedRunnerExecution,true);
+  assert.equal(policy.rules.denySelfHostedRunnerScheduling,true);
+  assert.equal(policy.rules.denyFutureRunners,true);
+  assert.equal(policy.rules.allRunnersAreNumina,true);
+  assert.equal(policy.rules.hostIsNumina,true);
+  assert.equal(policy.rules.runnerPlacementFrozen,false);
+  assert.equal(policy.rules.floatingHostedLinuxLabelsDenied,true);
   assert.equal(policy.executionTargets.hostedLinuxPolicy.pinnedTarget,'ubuntu-24.04');
   assert.deepEqual(policy.executionTargets.hostedLinuxPolicy.floatingLabelsDenied,['ubuntu-latest']);
   assert.equal(policy.executionTargets.hostedLinuxPolicy.migrationNotice.migrationBegins,'2026-10-19');
@@ -228,6 +248,7 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   let declarations=0;
   for(const name of readdirSync(workflowsUrl).filter(name=>/\.ya?ml$/i.test(name))){
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');
+    assert.doesNotMatch(content,/\bself-hosted\b/i,name+' must not reference a self-hosted runner');
     const targets=[...content.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)].map(match=>match[1].trim().replace(/^['"]|['"]$/g,''));
     declarations+=targets.length;
     const targetSet=policy.executionTargets.workflowTargetSets?.[name];
@@ -241,12 +262,17 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
 });
 
 
-test('NUMINA activation preserves existing runner only',()=>{
+test('NUMINA self-hosted runner status is read-only and activation is denied',()=>{
   const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
   assert.equal(pkg.scripts['runner:activate'],'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1');
   assert.equal(pkg.scripts['runner:status'],'powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1 -StatusOnly');
   const activation=readFileSync(new URL('../scripts/activate-numina-runner.ps1',import.meta.url),'utf8');
   assert.match(activation,/NUMINA_RUNNER_NOT_REGISTERED_FUTURE_RUNNER_CREATION_DENIED/);
+  assert.match(activation,/NUMINA_SELF_HOSTED_RUNNER_EXECUTION_DENIED/);
+  assert.match(activation,/execution = 'DENIED'/);
+  assert.match(activation,/scheduling = 'DENIED'/);
+  assert.doesNotMatch(activation,/Start-Process/);
+  assert.doesNotMatch(activation,/svcCmd start/);
   assert.doesNotMatch(activation,/registration-token/i);
   assert.doesNotMatch(activation,/config\.cmd/i);
 });

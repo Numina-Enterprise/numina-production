@@ -160,7 +160,7 @@ test('an observation label alone cannot authenticate currency or balance records
 test('reconciliation preserves each captured provider status without aggregating amounts or granting deposit readiness',async()=>{
   const input={treasury:{root:owner,status:'READY',revision:4,head:'a'.repeat(64),projection:{balance:'500000000000000',unit:'NUSD',verification:'VERIFIED'}},
     frontier:{fundingDeclaration:{FUNDED_PLAN:true,bankFundingVerified:true},fundingPlan:{confirmedFunding:{amount:'500000000000000',unit:'USDC'},externalReceipt:{id:'owner-claim'}}},
-    providerObservation:{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:{schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',
+    providerObservation:{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:{schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'NUMINA',connection:'read_only',
       account:{id:STRIPE_TREASURY_FINANCIAL_ACCOUNT,livemode:true,status:'open'},reported_currencies:['usd','usdc','nusd'],
       balances:{available:{usd:{currency:'usd',value:0},usdc:{currency:'usdc',value:'500000000000000000001'}},inbound_pending:{usd:{currency:'usd',value:12500}}},
       provider_nusd_balance:{buckets:{available:{currency:'nusd',value:500}}}}},

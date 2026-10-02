@@ -3,11 +3,13 @@
   "identity": "NUMINA",
   "authoritativePublicOrigin": "https://numinalabs.xyz",
   "authoritativeHosting": "NUMINA_PUBLIC_ORIGIN",
-  "repository": "https://github.com/skott34-dot/numina-production",
-  "repositoryReleaseAssets": "releases/v4.0.0/",
+  "repository": "NUMINA",
   "chatgptSitesRole": "OPTIONAL_MIRROR",
   "chatgptSitesRequiredForRelease": false,
   "mobileStoreDistributionRequiredForWebRelease": false,
   "externalFinancialExecutionRequired": false,
-  "canonicalSource": "GITHUB_MAIN"
+  "canonicalSource": "NUMINA_REPOSITORY",
+  "repositoryRole": "CANONICAL_ROOT_REPOSITORY",
+  "repositoryBranch": "main",
+  "propagation": "NUMINA"
 }
