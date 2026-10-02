@@ -3,6 +3,10 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {stable} from '../../../src/control.js';
 
+// Retained six-decimal candidate tooling; it cannot confirm or bind the
+// active eighteen-decimal deployment evidence into the current journal.
+throw Error('HISTORICAL_6D_CANDIDATE_TOOL_DISABLED');
+
 async function numinaControlToken(){
   const oidcUrl=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
   const oidcRequestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;

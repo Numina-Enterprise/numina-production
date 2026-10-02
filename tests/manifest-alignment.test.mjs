@@ -43,7 +43,23 @@ test('root release manifest binds the owner workflow, additive migration and act
  assert.equal(binding.attempt_storage.migration_sha256,digest(bytes('drizzle/0004_wallet_deployment_intents.sql')));assert.equal(binding.attempt_storage.native_journal_modified,false);
  assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents','0005_numina_manifest_control']);
  assert.deepEqual(binding.evidence,{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false});
- for(const [name,flag] of Object.entries(release.scope))assert.equal(flag,name==='nusd_issuance_verified_in_current_state'||name==='contract_deployment_verified_in_current_state',name);
+ assert.deepEqual(release.scope,{
+  financial_execution_activated_by_this_release:false,
+  nusd_issuance_activated_by_this_release:false,
+  nusd_issuance_verified_in_current_state:false,
+  contract_deployment_verified_in_current_state:false,
+  reserve_verification_established_by_this_release:false,
+  external_settlement_activated_by_this_release:false
+ });
+ const receipts=release.nusd_transaction_receipts,mint=json('runtime/nusd/mint-receipt.json'),deployment=json('runtime/nusd/deployment-receipt.json');
+ assert.equal(receipts.historicalRecord,true);assert.equal(receipts.currentChainStateVerified,false);
+ assert.equal(receipts.deployment.transaction_hash,mint.transactionHash);assert.equal(receipts.deployment.amount_nusd,mint.amountNusd);
+ assert.equal(receipts.deployment.decimals,mint.decimals);assert.equal(receipts.deployment.base_units,mint.baseUnits);
+ assert.equal(receipts.deployment.historicalRecord,true);assert.equal(receipts.deployment.currentChainStateVerified,false);
+ assert.equal(receipts.deployment.verification.status,'verified_at_observation');
+ assert.equal(receipts.settlement.transaction_hash,deployment.settlement.transactionHash);
+ assert.equal(receipts.settlement.historicalRecord,true);assert.equal(receipts.settlement.currentChainStateVerified,false);
+ assert.equal(receipts.settlement.verification.status,'verified_at_observation');assert.equal(receipts.settlement.financial_settlement_verified,false);
 });
 
 test('application manifest aliases contain the same current release bytes',()=>{
@@ -60,14 +76,60 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.provider_verification,true);
   assert.equal(release.softwareExternal,false);
   assert.equal(release.softwareIdentity,'NUMINA');
-  assert.deepEqual(release.softwareTreasury,{identity:'NUMINA',singular:true,bankUsd:{current:'500000000000000',available:'500000000000000',unit:'USD'},stripeUsdc:{current:'500000000000000',available:'500000000000000',unit:'USDC'},nativeNusd:{current:'500000000000000',available:'500000000000000',unit:'NUSD'},aggregate:{current:'1500000000000000',unit:'NUSD'}});
+  const softwareTreasury=release.softwareTreasury;
+  assert.equal(softwareTreasury.identity,'NUMINA');assert.equal(softwareTreasury.singular,true);
+  assert.deepEqual(Object.keys(softwareTreasury).sort(),['aggregate','bankUsd','identity','nativeNusd','singular','stripeUsdc']);
+  const {historicalTransfer,...bankUsd}=softwareTreasury.bankUsd;
+  assert.deepEqual(bankUsd,{current:null,available:null,unit:'USD'});
+  assert.equal(historicalTransfer.providerObservationVerified,true);assert.equal(historicalTransfer.providerBalanceSnapshotCurrent,'0');
+  assert.equal(historicalTransfer.providerBalanceSnapshotAvailable,'0');assert.equal(historicalTransfer.providerObservationFreshness,'unknown');
+  for(const key of ['providerBalanceCurrentVerified','providerTransactionCurrentVerified','providerAmountMatchesSoftwareModel','providerBalanceMatchesSoftwareModel','externalFundsMovedVerified','externalSettlementVerified'])assert.equal(historicalTransfer[key],false,key);
+  assert.deepEqual(softwareTreasury.stripeUsdc,{current:null,available:null,unit:'USDC',modeledTarget:'500000000000000'});
+  assert.deepEqual(softwareTreasury.nativeNusd,{current:'500000000000000',available:null,unit:'NUSD',observationRevision:142});
+  assert.deepEqual(softwareTreasury.aggregate,{current:'500000000000000',unit:'NUSD',observationRevision:142,modeledTarget:'1500000000000000'});
+  const canonical=release.canonicalTreasuryValues;
+  assert.equal(canonical.status,'JOURNAL_SNAPSHOT');assert.equal(canonical.canonical,false);
+  assert.equal(canonical.observation.observedRevision,142);assert.equal(canonical.observation.snapshotIsLive,false);
+  assert.equal(canonical.observation.observedHead,'67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368');
+  assert.equal(canonical.observation.projection.balance,softwareTreasury.nativeNusd.current);
+  assert.deepEqual(canonical.observation.requests.map(({kind,status,submission_performed,receipt})=>({kind,status,submission_performed,receipt})),[
+   {kind:'mint_request',status:'PREPARED',submission_performed:false,receipt:null},
+   {kind:'bank_transaction_request',status:'PREPARED',submission_performed:false,receipt:null}
+  ]);
+  assert.equal(canonical.observation.baseUsdcTransferRequest,null);assert.equal(canonical.observation.baseUsdcTransactionHash,null);
+  assert.equal(canonical.observation.providerReceipt,null);assert.equal(canonical.settlementStatus,'UNVERIFIED');
   const nativeModel=release.native_treasury_alignment;
-  assert.equal(nativeModel.aggregation,'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES');
+  assert.equal(nativeModel.aggregation,'ONE_JOURNAL_NUSD_PROJECTION_WITH_HISTORICAL_ALLOCATION_TARGETS');
   assert.equal(nativeModel.treasuryCount,1);assert.equal(nativeModel.accountCount,1);assert.equal(nativeModel.holdingsCount,3);
-  assert.equal(BigInt(nativeModel.aggregateModeledValue),BigInt(nativeModel.targetAmount)*3n);
+  assert.equal(nativeModel.status,'JOURNAL_SNAPSHOT');assert.equal(nativeModel.aggregateModeledValue,null);assert.equal(nativeModel.modeledAllocationsAdditive,false);
+  assert.equal(BigInt(nativeModel.historicalAggregateModeledValue),BigInt(nativeModel.targetAmount)*3n);
   assert.deepEqual(nativeModel.componentUnits,['USD','USDC','NUSD']);
-  assert.equal(nativeModel.verificationScope,'NUMINA_MANIFEST_FINAL');
+  assert.equal(nativeModel.verificationScope,'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT');
+  assert.equal(nativeModel.originalSignedEventsRetained,true);assert.equal(nativeModel.settlementStatus,'UNVERIFIED');
+  assert.equal(nativeModel.mintStatus,'PREPARED_IN_JOURNAL');assert.equal(nativeModel.mintedNusd,null);assert.equal(nativeModel.burnedNusd,null);
   assert.equal(nativeModel.externalBalancesAggregated,false);assert.equal(nativeModel.externalFundingCreatedByRelease,false);
+});
+
+test('current settlement validation binds the retained owner assertion without treating it as an executed settlement',()=>{
+  const release=json(releasePath),current=release.current_treasury_settlement;
+  const validation=json(current.validationSource),historical=json(current.historicalOwnerAssertion);
+  assert.equal(digest(bytes(current.historicalOwnerAssertion)),'783486abc7dae3a4eacf42c2afc582d723cdba0dc7594eb6f01574cc7cb39be9');
+  assert.equal(historical.status,'SETTLED');assert.equal(historical.settlementPerformed,true);assert.equal(historical.submissionPerformed,true);
+  assert.equal(current.schema,validation.schema);assert.equal(current.id,validation.id);assert.equal(current.validatesAssertionId,historical.id);
+  assert.equal(current.status,validation.status);assert.equal(current.status,'NOT_SETTLED');assert.equal(current.final,true);
+  assert.equal(current.journalAuthenticated,validation.journalAuthentication.authenticated);assert.equal(current.journalAuthenticated,false);
+  assert.equal(validation.journalAuthentication.revisionChecked,142);assert.equal(validation.journalAuthentication.matchingEventCount,0);
+  assert.equal(validation.journalAuthentication.aggregateSettlementEventPresent,false);
+  for(const key of ['submissionPerformed','settlementPerformed','externalFundsMoved']){
+   assert.equal(current[key],validation.executionVerification[key],key);assert.equal(current[key],false,key);
+  }
+  assert.equal(current.mintEvidenceScope,validation.verifiedEvidence.nusdMintEvidenceScope);
+  assert.equal(current.mintEvidenceScope,'NUSD_CONSTRUCTOR_MINT_ONLY');assert.equal(validation.verifiedEvidence.nusdConstructorMint,true);
+  const native=release.native_treasury_alignment;
+  assert.equal(native.historicalSettlementReceipt.id,historical.id);assert.equal(native.historicalSettlementReceipt.historicalRecord,true);
+  assert.equal(native.historicalSettlementReceipt.currentJournalConfirmed,false);
+  assert.equal(native.settlementReceiptValidation.id,current.id);assert.equal(native.settlementReceiptValidation.executionVerified,false);
+  assert.equal(native.settlementReceiptValidation.settlementVerified,false);assert.equal(native.settlementReceiptValidation.providerSettlementVerified,false);
 });
 
 test('current native distribution retains its actual Android and iOS build identities',()=>{

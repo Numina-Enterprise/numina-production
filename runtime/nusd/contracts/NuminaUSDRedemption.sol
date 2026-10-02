@@ -13,22 +13,20 @@ interface INuminaBurnable { function burn(uint256 amount) external; }
 /// @notice Escrows NUSD for an operator-handled bank payout at 1 NUSD = 1 USD gross.
 /// @dev This contract cannot send USD or verify a bank. A distinct confirmer attests an
 /// external outcome; its hash is a reference, not cryptographic proof of bank settlement.
-/// A processing deadline only moves an overdue claim into reconciliation; it never releases escrow.
-/// Candidate is unaudited and starts paused.
+/// No automatic timeout releases a processing claim. Candidate is unaudited and starts paused.
 contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
     bytes32 public constant CONFIRMER_ROLE = keccak256("CONFIRMER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant HOLDER_ROLE = keccak256("HOLDER_ROLE");
-    uint256 public constant NUSD_UNITS_PER_USD_CENT = 10_000;
+    uint256 public constant NUSD_UNITS_PER_USD_CENT = 10_000_000_000_000_000;
     uint256 public constant RATE_NUMERATOR = 1;
     uint256 public constant RATE_DENOMINATOR = 1;
-    uint48 public constant PROCESSING_WINDOW = 7 days;
     IERC20 public immutable nusd;
     uint256 public totalEscrowedNusd;
 
-    enum Status { Unused, Requested, Processing, PaidAttested, Refundable, Refunded, Cancelled, Reconciliation }
+    enum Status { Unused, Requested, Processing, PaidAttested, Refundable, Refunded, Cancelled }
     struct Redemption {
         uint256 amountNusd;
         uint256 usdCents;
@@ -36,7 +34,6 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
         bytes32 destinationCommitment;
         bytes32 paymentReference;
         bytes32 evidenceHash;
-        uint48 processingDeadline;
         Status status;
     }
     mapping(address holder => mapping(bytes32 operationId => Redemption)) public redemptions;
@@ -54,10 +51,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
 
     event RedemptionRequested(address indexed holder, bytes32 indexed operationId, uint256 amountNusd,
         uint256 usdCents, bytes32 destinationCommitment);
-    event PaymentProcessing(address indexed holder, bytes32 indexed operationId, bytes32 indexed paymentReference,
-        uint48 processingDeadline);
-    event PaymentReconciliationRequired(address indexed holder, bytes32 indexed operationId,
-        bytes32 indexed paymentReference, uint48 processingDeadline);
+    event PaymentProcessing(address indexed holder, bytes32 indexed operationId, bytes32 indexed paymentReference);
     event BankOutcomeAttested(address indexed holder, bytes32 indexed operationId, bytes32 indexed paymentReference,
         bytes32 evidenceHash, uint256 usdCents, bool paid);
     event TokensReturned(address indexed holder, bytes32 indexed operationId, uint256 amountNusd, Status status);
@@ -65,7 +59,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
     constructor(address nusdToken, address admin, address operator, address confirmer,
         address pauser, uint48 adminDelaySeconds)
         AccessControlDefaultAdminRules(adminDelaySeconds, admin) {
-        if (nusdToken.code.length == 0 || IERC20Metadata(nusdToken).decimals() != 6) revert InvalidConfiguration();
+        if (nusdToken.code.length == 0 || IERC20Metadata(nusdToken).decimals() != 18) revert InvalidConfiguration();
         nusd = IERC20(nusdToken);
         _grantRole(OPERATOR_ROLE, operator);
         _grantRole(CONFIRMER_ROLE, confirmer);
@@ -126,22 +120,8 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
         usedPaymentReferences[paymentReference] = true;
         item.paymentOperator = msg.sender;
         item.paymentReference = paymentReference;
-        item.processingDeadline = uint48(block.timestamp + PROCESSING_WINDOW);
         item.status = Status.Processing;
-        emit PaymentProcessing(holder, operationId, paymentReference, item.processingDeadline);
-    }
-
-    /// @notice Marks an overdue payment attempt for reconciliation without releasing escrow.
-    /// @dev Anyone may mark the overdue state. A distinct confirmer still needs terminal provider
-    /// evidence before the claim can become PaidAttested or Refundable.
-    function markReconciliationRequired(address holder, bytes32 operationId, bytes32 paymentReference) external {
-        Redemption storage item = redemptions[holder][operationId];
-        if (item.status == Status.Reconciliation && item.paymentReference == paymentReference) return;
-        if ((item.status != Status.Processing && item.status != Status.Reconciliation) ||
-            item.paymentReference != paymentReference) revert InvalidState();
-        if (block.timestamp <= item.processingDeadline) revert InvalidState();
-        item.status = Status.Reconciliation;
-        emit PaymentReconciliationRequired(holder, operationId, paymentReference, item.processingDeadline);
+        emit PaymentProcessing(holder, operationId, paymentReference);
     }
 
     /// @notice A distinct role records the bank's confirmed final outcome for the exact gross amount.
@@ -162,8 +142,7 @@ contract NuminaUSDRedemption is AccessControlDefaultAdminRules, Pausable, Reentr
             if (item.paymentReference != paymentReference || item.evidenceHash != evidenceHash) revert OperationMutation();
             return;
         }
-        if ((item.status != Status.Processing && item.status != Status.Reconciliation) ||
-            item.paymentReference != paymentReference) revert InvalidState();
+        if (item.status != Status.Processing || item.paymentReference != paymentReference) revert InvalidState();
         if (usedEvidenceHashes[evidenceHash]) revert ReferenceAlreadyUsed();
         usedEvidenceHashes[evidenceHash] = true;
         item.evidenceHash = evidenceHash;

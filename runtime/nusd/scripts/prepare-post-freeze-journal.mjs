@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {stable} from '../../../src/control.js';
 
+// Retained six-decimal candidate tooling; no current journal writes are
+// authorized by this historical preparation procedure.
+throw Error('HISTORICAL_6D_CANDIDATE_TOOL_DISABLED');
+
 async function numinaControlToken(){
   const oidcUrl=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
   const oidcRequestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;

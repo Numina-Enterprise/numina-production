@@ -1,32 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {NUMINA_TREASURY_CONNECTION as model,NUMINA_OWNER_EXECUTION_AUTHORITY,NUSD_OPERATOR_ACTIVATION} from '../public/treasury-connection-model.js';
+import {NUMINA_TREASURY_CONNECTION as model,NUSD_OPERATOR_ACTIVATION} from '../public/treasury-connection-model.js';
 import {readConnectedTreasury,verifiedUsdcRoutes} from '../public/treasury-connection.js';
 import {readPrivateBankRoute} from '../src/bank-route-config.js';
 import handler from '../api/status.js';
 const routes={schema:'numina.treasury.provider-routes.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',transfer_execution:false,submission_performed:false,receipt:null,canonical_treasury:model.nativeJournal,observed_at:'2026-09-18T00:00:00Z',routes:[{currency:'usdc',settlement_currency:'usdc',status:'active',provider_reported_active:true,network:'base',address:'0x'+'1'.repeat(40),memo:null}]};
-test('one singular 1500T treasury has three additive 500T holdings with provider evidence scoped by holding',()=>{
+test('one journal projection keeps three historical targets separate from provider balances',()=>{
  assert.equal(model.singular,true);assert.equal(model.balanceCount,1);
- assert.equal(model.ownerExecutionAuthority,NUMINA_OWNER_EXECUTION_AUTHORITY);
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.principal,'OWNER');
- for(const role of ['initiator','authorizer','executor','externalAttestor','thirdParty'])assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY[role],'OWNER');
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.externalEvidenceSource,'OWNER_ATTESTATION');
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.evidenceProvenance,'OWNER_ATTESTED_EXTERNAL_EVIDENCE');
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.thirdPartyIndependent,false);
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.independentThirdPartyVerification,false);
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.independentProviderVerification,false);
- assert.equal(NUMINA_OWNER_EXECUTION_AUTHORITY.externalExecutionRequiresOwnerAction,true);
- assert.equal(model.positionNamespace,'NUMINA');assert.equal(model.connectionNamespace,'NUMINA');assert.deepEqual(model.positionScope,['internal','external_connected']);assert.equal(model.externalConnectionsAreNumina,true);assert.equal(model.providerEvidenceSourceScoped,true);
- assert.equal(model.aggregateModeledValue,'1500000000000000');
- assert.equal(model.softwareBalanceModel.bankUsd.transfer.amount,'500000000000000');
- assert.equal(model.softwareBalanceModel.bankUsd.transfer.unit,'USD');
- assert.equal(model.modeledAllocationsAdditive,true);
+ assert.equal(model.aggregateModeledValue,null);
+ assert.equal(model.historicalAggregateModeledValue,'1500000000000000');
+ assert.equal(model.modeledAllocationsAdditive,false);
  assert.ok(model.allocations.every(value=>value.amount==='500000000000000'));
- const bank=model.allocations.find(value=>value.id==='bank-of-america-savings'),stripe=model.allocations.find(value=>value.id==='stripe-numina-native-treasury'),native=model.allocations.find(value=>value.id==='numina-native-treasury');
- assert.equal(bank.providerBalanceVerified,false);assert.equal(bank.providerObservationVerified,true);assert.equal(bank.providerBalanceVerificationScope,'LINKED_PROVIDER_SNAPSHOT');assert.equal(bank.providerObservationFreshness,'unknown');assert.equal(bank.providerObservationStaleOrIndeterminate,true);assert.equal(bank.providerBalanceCurrentVerified,false);assert.equal(bank.observedProviderBalance,'0');assert.equal(bank.providerBalanceMatchesModeledValue,false);assert.equal(bank.providerTransactionVerified,true);assert.equal(bank.providerTransactionCurrentVerified,false);assert.equal(bank.observedProviderTransactionAmount,'12');assert.equal(bank.providerAmountMatchesModeledValue,false);assert.equal(bank.externalSettlementVerified,false);
- assert.equal(stripe.providerBalanceVerified,false);assert.equal(native.providerBalanceVerified,false);assert.equal(model.externalBalancesAggregated,false);
- assert.equal(NUSD_OPERATOR_ACTIVATION.evidenceType,'verified_live_state');assert.equal(NUSD_OPERATOR_ACTIVATION.currentChainActivityVerified,true);assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);assert.equal(NUSD_OPERATOR_ACTIVATION.providerAcceptanceVerified,false);
+ assert.equal(model.softwareBalanceModel.bankUsd.current,null);
+ assert.equal(model.softwareBalanceModel.stripeUsdc.available,null);
+ assert.equal(model.settlementStatus,'UNVERIFIED');assert.equal(model.submissionPerformed,false);
+ assert.ok(model.allocations.every(value=>value.providerBalanceVerified===false));
+ assert.equal(model.externalBalancesAggregated,false);
+ assert.equal(NUSD_OPERATOR_ACTIVATION.paymentCompletionVerified,false);
+ assert.equal(NUSD_OPERATOR_ACTIVATION.providerAcceptanceVerified,false);
 });
+
 test('provider route display preserves exact USDC destination and rejects invalid network/address',()=>{
  assert.equal(verifiedUsdcRoutes(routes)[0].address,routes.routes[0].address);
  for(const mutate of [r=>r.routes[0].network='bitcoin',r=>r.routes[0].address='0x1',r=>r.provider='unknown']){

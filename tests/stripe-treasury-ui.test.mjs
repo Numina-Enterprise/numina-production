@@ -39,7 +39,7 @@ function harness(fetcher,{control=false}={}){
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:listen,dispatchEvent:event=>{dispatched.push(event.type);fire(event.type,event);return true;},querySelectorAll:selector=>selector.includes('workspace')?[...nodes.values()].filter(node=>node.tagName==='button'):[]};
  const context=vm.createContext({document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
  const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
- vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('treasury-amount.js')+'\n'+source('treasury-connection-model.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
+ vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('treasury-amount.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
  return {get,context,subject:context.subject,dispatched,fire,close(){if(control)fire('pagehide');else context.subject.clearStripeTreasury();}};
 }
 function values(h){const items=h.get('stripe-treasury-details').children,rows={};for(let i=0;i<items.length;i+=2)rows[items[i].textContent]=items[i+1].textContent;return rows;}
@@ -76,7 +76,7 @@ test('Stripe route permission denial replaces old destinations with guidance and
   await h.subject.loadStripeTreasury();const [button,result]=h.get('stripe-treasury-details').children.at(-1).children;
   await button.onclick();assert.match(result.textContent,/0x1234567890/);
   denied=true;await button.onclick();assert.match(result.textContent,/Stripe denied access/i);assert.match(result.textContent,/Money Management Financial Address Read/i);assert.doesNotMatch(result.textContent,/0x1234567890|Provider reports active|has not listed an NUSD/);assert.equal(result.textContent.includes(canary),false);
-  assert.equal(h.get('stripe-treasury-panel').hidden,false);assert.equal(values(h)['Observed Available USD'],'$0.00');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.deepEqual(h.dispatched,[]);assert.equal(button.disabled,false);
+  assert.equal(h.get('stripe-treasury-panel').hidden,false);assert.equal(values(h)['Available USD'],'$0.00');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.deepEqual(h.dispatched,[]);assert.equal(button.disabled,false);
  }finally{h.close();}
 });
 
@@ -100,12 +100,12 @@ for(const status of [401,403])test('Numina route HTTP '+status+' still clears ow
 test('Stripe Treasury renders confirmed zero balances separately from an omitted currency',async()=>{
  const fixture=stripeFixture();fixture.balances.inbound_pending.usdc=null;
  const h=harness(async()=>response(fixture));
- try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Software external'],'No');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Stripe data below is observation metadata and does not replace the NUMINA software balance/);}finally{h.close();}
+ try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Available USD'],'$0.00');assert.equal(rows['Available USDC'],'0.00 USDC');assert.equal(rows['Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Transfers from Numina'],'Not connected');assert.equal(rows['NUSD settlement'],'Not connected');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Balances retrieved from Stripe/);}finally{h.close();}
 });
 
 test('Stripe Treasury connection failure never substitutes zero or retains an old balance link',async()=>{
  let unavailable=false;const h=harness(async()=>unavailable?response({error:'STRIPE_TREASURY_NOT_CONNECTED'},503):response(stripeFixture()));
- try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Observed Available USD'],'$0.00');unavailable=true;await h.subject.loadStripeTreasury();assert.equal(values(h)['NUMINA software USDC'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.match(h.get('stripe-treasury-message').textContent,/Provider observation is currently unavailable/);}finally{h.close();}
+ try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Available USD'],'$0.00');unavailable=true;await h.subject.loadStripeTreasury();assertCleared(h);assert.match(h.get('stripe-treasury-message').textContent,/not configured.*No current balance/);assert.doesNotMatch(h.get('stripe-treasury-message').textContent,/0\.00/);}finally{h.close();}
 });
 
 for(const status of [401,403])test('Stripe Treasury HTTP '+status+' clears prior data and notifies the parent of lost owner access',async()=>{
@@ -126,13 +126,13 @@ test('clearing Stripe Treasury prevents a late response from restoring balances'
 test('a newer Stripe Treasury view cannot be overwritten by an older response',async()=>{
  const pending=deferred();let calls=0;const fresh=stripeFixture();fresh.balances.available.usd=amount('usd',1234);
  const h=harness(()=>++calls===1?pending.promise:Promise.resolve(response(fresh)));
- try{const older=h.subject.loadStripeTreasury();await h.subject.loadStripeTreasury();pending.resolve(response(stripeFixture()));await older;assert.equal(values(h)['Observed Available USD'],'≈ $12.00');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);}finally{h.close();}
+ try{const older=h.subject.loadStripeTreasury();await h.subject.loadStripeTreasury();pending.resolve(response(stripeFixture()));await older;assert.equal(values(h)['Available USD'],'≈ $12.00');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);}finally{h.close();}
 });
 
 test('invalid Stripe execution or balance data cannot be presented as a current balance',async()=>{
  for(const corrupt of [fixture=>fixture.transfer_execution=true,fixture=>fixture.submission_performed=true,fixture=>fixture.settlement_performed=true,fixture=>fixture.receipt={id:'native-receipt'},fixture=>fixture.provider='Stripe',fixture=>delete fixture.transportProvider,fixture=>delete fixture.balances.available.usd]){
   const fixture=stripeFixture();corrupt(fixture);const h=harness(async()=>response(fixture));
-  try{await h.subject.loadStripeTreasury();assert.equal(values(h)['NUMINA software USDC'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.match(h.get('stripe-treasury-message').textContent,/Provider observation is currently unavailable/);}finally{h.close();}
+  try{await h.subject.loadStripeTreasury();assertCleared(h);assert.match(h.get('stripe-treasury-message').textContent,/could not be checked/);}finally{h.close();}
  }
 });
 
@@ -154,7 +154,7 @@ test('Stripe Treasury rounds only large amount displays while preserving exact p
  const before=structuredClone(fixture),calls=[];
  const h=harness(async(path,options)=>{calls.push({path,method:options.method??'GET'});return response(fixture);});
  try{
-  await h.subject.loadStripeTreasury();assert.equal(values(h)['Observed Available USD'],'≈ $500,000,000,000,000.00');assert.equal(values(h)['Observed Available USDC'],'≈ 500,000,000,000,000.00 USDC');
+  await h.subject.loadStripeTreasury();assert.equal(values(h)['Available USD'],'≈ $500,000,000,000,000.00');assert.equal(values(h)['Available USDC'],'≈ 500,000,000,000,000.00 USDC');
   assert.deepEqual(fixture,before);assert.deepEqual(calls,[{path:'/api/control/v1/stripe-treasury',method:'GET'}]);
  }finally{h.close();}
 });
@@ -167,9 +167,9 @@ test('Stripe Treasury uses currency precision and exact integers for signed whol
  const h=harness(async()=>response(fixture));
  try{
   await h.subject.loadStripeTreasury();const rows=values(h);
-  assert.equal(rows['Observed Available USD'],'≈ $12,346.00');assert.equal(rows['Observed Available USDC'],'≈ 1.00 USDC');
-  assert.equal(rows['Observed Incoming pending USD'],'≈ -$2.00');assert.equal(rows['Observed Incoming pending USDC'],'≈ -2.00 USDC');
-  assert.equal(rows['Observed Outgoing pending USD'],'≈ $90,071,992,547,410.00');assert.equal(rows['Observed Outgoing pending USDC'],'≈ 0.00 USDC');
+  assert.equal(rows['Available USD'],'≈ $12,346.00');assert.equal(rows['Available USDC'],'≈ 1.00 USDC');
+  assert.equal(rows['Incoming pending USD'],'≈ -$2.00');assert.equal(rows['Incoming pending USDC'],'≈ -2.00 USDC');
+  assert.equal(rows['Outgoing pending USD'],'≈ $90,071,992,547,410.00');assert.equal(rows['Outgoing pending USDC'],'≈ 0.00 USDC');
  }finally{h.close();}
 });
 
@@ -177,7 +177,7 @@ test('noncanonical or already rounded large amounts cannot populate the Stripe v
  for(const value of ['01','-0','1e20','1.5','9'.repeat(79),9007199254740992]){
   const fixture=stripeFixture();fixture.balances.available.usd.value=value;
   const h=harness(async()=>response(fixture));
-  try{await h.subject.loadStripeTreasury();assert.equal(values(h)['NUMINA software USDC'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);}finally{h.close();}
+  try{await h.subject.loadStripeTreasury();assertCleared(h);}finally{h.close();}
  }
 });
 
@@ -188,5 +188,5 @@ test('Control Room pagehide clears the real Stripe module, balances and dashboar
   if(path.endsWith('/treasury-attestation'))return response({schema:'numina.treasury.owner_statement.v1',classification:'owner_reported_not_independently_verified',reported_owner:'Test LLC',reported_institution:'Test institution',reported_account_type:'Test account',reported_as_of:'2026-01-02',reported_amount_usd:'0',reported_custodian:'Test custodian',source:'Test fixture',owner_reports_evidence_supplied:false});
   return response({projection:'complete',revision:1,state:{requests:[],evidence:[],grants:[]},decisions:[]});
  },{control:true});
- try{await settled();assert.equal(values(h)['Observed Available USD'],'$0.00');assert.equal(h.get('stripe-treasury-panel').hidden,false);h.fire('pagehide');assertCleared(h);assert.equal(h.get('stripe-treasury-panel').hidden,true);assert.equal(h.get('workspace').hidden,true);}finally{h.close();}
+ try{await settled();assert.equal(values(h)['Available USD'],'$0.00');assert.equal(h.get('stripe-treasury-panel').hidden,false);h.fire('pagehide');assertCleared(h);assert.equal(h.get('stripe-treasury-panel').hidden,true);assert.equal(h.get('workspace').hidden,true);}finally{h.close();}
 });
