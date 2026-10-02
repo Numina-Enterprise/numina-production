@@ -1,3 +1,4 @@
+import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_DELIVERY_SURFACES,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from './numina-root.js';
 import {NUMINA_TREASURY_INITIAL_BALANCE} from './native-treasury-model.js';
@@ -113,7 +114,7 @@ async function controlNuminaManifest(req,env){
     provider_verification:NUMINA_PROVIDER_VERIFICATION,
     denomination_policy:NUMINA_LAYERS.denomination_policy,
     procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,
-    adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',
+    stateReconciliation:NUMINA_STATE_RECONCILIATION,adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',
     verificationScope:'NUMINA',financialVerification:false,externalExecution:false
   });
 }
