@@ -39,3 +39,6 @@ test('release, architecture, integration and mobile records keep the same scoped
  assert.notEqual(state.roots.recordedControlGenesisRoot,state.roots.publicIdentityProjectionRoot);
  assert.equal(state.roots.rootMutationPerformed,false);
 });
+test('static pricing asset cannot bypass the canonical Worker redirect',()=>{
+ assert.equal(fs.existsSync('dist/client/pricing.html'),false);
+});
