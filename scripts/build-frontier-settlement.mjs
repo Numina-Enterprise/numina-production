@@ -77,7 +77,6 @@ const overlays=[
  ['public/treasury-simulation.html','client/treasury-simulation.html'],
  ['public/trust.html','client/trust.html'],
  ['public/reviewer.html','client/reviewer.html'],
- ['public/pricing.html','client/pricing.html'],
  ['public/contact.html','client/contact.html'],
  ['public/contact-support.css','client/contact-support.css'],
  ['public/support-chat.css','client/support-chat.css'],
@@ -177,6 +176,10 @@ const releaseBefore=worker.split('\n').find(line=>line.includes('return {schema:
 assert.ok(releaseBefore,'Public artifact declaration projection');
 const releaseAfter=releaseBefore.replace('return {schema:value.schema,','return {stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:value.schema,');
 worker=worker.replace(releaseBefore,releaseAfter);substitutions.push({source:'src/worker.js#public-release-state',before:releaseBefore,after:releaseAfter});
+const controlBefore="adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',";
+const controlAfter='stateReconciliation:NUMINA_STATE_RECONCILIATION,'+controlBefore;
+assert.equal(worker.split(controlBefore).length,2,'Unique v1 control manifest');
+worker=worker.replace(controlBefore,controlAfter);substitutions.push({source:'src/control-http.js#state-reconciliation',before:controlBefore,after:controlAfter});
 const capabilityLines=worker.split('\n').filter(line=>line.includes('providers:FRONTIER_PROVIDERS,'));
 assert.equal(capabilityLines.length,2,'Manifest and discovery capability readbacks');
 for(const before of capabilityLines){const after=before.replace('providers:FRONTIER_PROVIDERS,','providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,');assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/frontier-http.js#capabilities',before,after});}
@@ -297,6 +300,7 @@ for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/t
 currentInputs.add('src/sites-mcp.js');
 currentInputs.add('src/numina-tree.js');
 currentInputs.add('src/frontier.js');
+currentInputs.add('src/control-http.js');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 const currentIosInputs=iosInputSnapshot(root);
 for(const file of [...softwareReleaseInputs,'scripts/check-software-release.mjs',...currentIosInputs.inputs.map(x=>x.path)])currentInputs.add(file);
