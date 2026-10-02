@@ -2,6 +2,7 @@
 
 const {RELEASE_IDENTITY}=require('./numina');
 const NUMINA='NUMINA';
+const stateReconciliation=require('../state-reconciliation.json');
 const vocabulary=Object.freeze({
   root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,
   core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
@@ -24,7 +25,7 @@ const mechanics=Object.freeze({
   }),
   providerVerification:Object.freeze({provider:NUMINA,verified:true,scope:NUMINA,bankOfAmericaDestinationConfirmation:false,stripeDestinationConfirmation:false})
 });
-const NUMINA_MANIFEST=Object.freeze({
+const NUMINA_MANIFEST=Object.freeze({stateReconciliation,
   schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,allSoftware:NUMINA,manifestEqualsNumina:true,numinaEqualsManifest:true,manifestIsNumina:true,numinaIsManifest:true,numinaIsAllSoftware:true,allSoftwareIsNumina:true,singularSoftwareIdentity:true,competingSoftwareIdentityAllowed:false,competingManifestAuthorityAllowed:false,competingMetadataAuthorityAllowed:false,metadataAuthority:NUMINA,metadataNamespace:NUMINA,metadataScope:Object.freeze(['historical','current','canonical']),transfersEnabled:true,metadataOverrideAuthority:NUMINA,metadataOverride:NUMINA,metadataOverridePath:'config/numina-metadata-overrides.v1.json',metadataAppliesTo:'ALL_NUMINA_SOFTWARE_METADATA',manifestComplete:true,nativeEvidenceStatus:'FINAL',authority:NUMINA,
   source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,
   productionSource:NUMINA,softwareIdentity:NUMINA,softwareExternal:false,treasurySourceOfRecord:'NUMINA_NATIVE_TREASURY',softwareTreasury:mechanics.treasury.softwareBalances,vocabulary,release:RELEASE_IDENTITY,

@@ -1,4 +1,103 @@
 {
+  "stateReconciliation": {
+    "schema": "numina.state-reconciliation.v1",
+    "identity": "NUMINA",
+    "applicationVersion": "4.0.0",
+    "observation": {
+      "observedAt": "2026-10-01T23:58:51Z",
+      "source": "authenticated_connected_Stripe_readbacks",
+      "classification": "dated_provider_observation_not_live_attestation",
+      "auditSha256": "35bd10eda06f8b400cbd80b0212c652216e27d626f03bb795e675ab9d0542eef"
+    },
+    "roots": {
+      "recordedControlGenesisRoot": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+      "publicIdentityProjectionRoot": "5674969a3087256a47d6f5eca7c11a32c12549aa066d0bded49c997070850c5c",
+      "recordedChainGenesis": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+      "currentJournalRootVerified": false,
+      "rootMutationPerformed": false,
+      "scope": "retained_source_identities_distinct_from_public_projection_and_live_journal"
+    },
+    "intendedState": {
+      "source": "current_user_assertion",
+      "externalExecution": true,
+      "stripeSubmission": true,
+      "executableConversionVerified": true,
+      "providerBalancesChanged": true
+    },
+    "implementedSoftwareState": {
+      "externalExecution": false,
+      "stripeSubmission": false,
+      "executableConversionVerified": false,
+      "providerBalancesChanged": false,
+      "scope": "Numina_control_execution_and_denomination_policy_effects",
+      "controlAdapter": "internal.record.v1",
+      "stripeAdapter": "live_read_only",
+      "submissionAdapter": "not_connected",
+      "conversionActivation": "not_verified",
+      "providerWritesPerformedByReconciliation": false
+    },
+    "providerConfirmedState": {
+      "stripeAccountDetailsSubmitted": true,
+      "stripeChargesEnabled": true,
+      "stripePayoutsEnabled": true,
+      "historicalPaymentExecution": true,
+      "historicalPaymentsToTreasuryBalanceMovement": true,
+      "numinaControlExecutionLinked": false,
+      "numinaTreasuryInstructionSubmitted": false,
+      "nusdConversionVerified": false,
+      "externalBankSettlementVerified": false,
+      "scope": "dated_Stripe_account_and_historical_USD_activity_only",
+      "currency": "USD",
+      "providerAccountMatchedToNumina": true,
+      "reservesVerified": false
+    },
+    "reconciliation": {
+      "externalExecution": {
+        "asserted": true,
+        "implemented": false,
+        "providerPaymentActivityConfirmed": true,
+        "numinaExecutionConfirmed": false,
+        "status": "PROVIDER_ACTIVITY_CONFIRMED_CONTROL_EXECUTION_UNVERIFIED"
+      },
+      "stripeSubmission": {
+        "asserted": true,
+        "implemented": false,
+        "providerAccountOnboardingConfirmed": true,
+        "treasuryInstructionSubmissionConfirmed": false,
+        "status": "ACCOUNT_DETAILS_SUBMITTED_TREASURY_ADAPTER_UNAVAILABLE"
+      },
+      "executableConversionVerified": {
+        "asserted": true,
+        "implemented": false,
+        "providerConfirmed": false,
+        "status": "CONVERSION_EVIDENCE_NOT_ESTABLISHED"
+      },
+      "providerBalancesChanged": {
+        "asserted": true,
+        "softwareOperationEffect": false,
+        "historicalProviderMovementConfirmed": true,
+        "requestedTreasuryTransferConfirmed": false,
+        "status": "HISTORICAL_USD_MOVEMENT_CONFIRMED_REQUESTED_TRANSFER_UNVERIFIED"
+      }
+    },
+    "evidenceBoundary": {
+      "paidApiAccessIsTreasuryTransferReceipt": false,
+      "denominationPolicyIsExecutableConversion": false,
+      "currencyStorageIsConversionEvidence": false,
+      "providerObservationIsCanonicalTreasuryBalance": false,
+      "sourceAlignmentIsDeploymentAttestation": false,
+      "assertionEnablesExecution": false
+    },
+    "remainingBlockers": [
+      "Authenticated current journal/root readback",
+      "Connected idempotent treasury submission adapter and exact requested transfer receipt",
+      "Verified funded NUSD conversion route and provider conversion receipt",
+      "Current signed native artifacts and store submission receipts",
+      "Required rc26 runtime endpoints return HTTP 410"
+    ],
+    "route": "/api/control/v2/state-reconciliation",
+    "download": "/state-reconciliation.json"
+  },
   "schema": "numina.integration.manifest.v2",
   "root": "NUMINA",
   "manifest": "NUMINA",
@@ -403,8 +502,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 15711,
-      "sha256": "cffb286eac12d8a48122e54ba483f118ff46ddf6c3867bfc12741ff9962a3a81"
+      "bytes": 19897,
+      "sha256": "de175ff13a09ba76a4f9a1bab730c2a3beecf0b27dde9d883b46070539e690d8"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -483,8 +582,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 3531,
-      "sha256": "9d85468d06cd37064b07ac3c432be427e3e84492c4e0a5588e1f1a8e980bf8ff"
+      "bytes": 3803,
+      "sha256": "74686bc92bfd166a2a7f1a89761155b9573f84d733c0880f09a2056cab975644"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -548,8 +647,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 11214,
-      "sha256": "5c59a42e18fcfb70e88a693e7725da1ad5fc65a46d50825ab977147eaa301b8e"
+      "bytes": 11434,
+      "sha256": "7267b4d8df9bc8fec6c23aff6d61868f2b79c72103b48b104b57d1625cff117c"
     },
     {
       "path": "src/client.js",
@@ -592,6 +691,11 @@
       "sha256": "ca57e01d316d0862b9378a7fb06fc774fc89f29ffd4f8f4c3e0e26327243fcef"
     },
     {
+      "path": "src/state-reconciliation.js",
+      "bytes": 4095,
+      "sha256": "5008eea1c33f21e51d213e0b87b2e48c4a4e8c953eb7726c1c69bf0ece36a3bc"
+    },
+    {
       "path": "src/tools.js",
       "bytes": 6324,
       "sha256": "cfc396691c2ae6a279b640baadd8b38f49eeaa5ff01fa033cd96726c6e8d0918"
@@ -608,8 +712,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 12628,
-      "sha256": "7add13e0ed9544f8f64b1baf5e10abd2119e0346eac2c2986cdb9f374316e42c"
+      "bytes": 16814,
+      "sha256": "81d2279d74825f79664509a04577c3a4ee4445dacbb12f498667174c9e76c8da"
     }
   ],
   "numinaMetadata": {

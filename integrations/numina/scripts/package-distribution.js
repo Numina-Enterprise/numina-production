@@ -1,3 +1,4 @@
+import {NUMINA_STATE_RECONCILIATION} from '../src/state-reconciliation.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -30,7 +31,7 @@ const runtimeBuild={tool:'numina_runtime_build',manifestField:'execution_runtime
 const treasuryAlignment={...singularIdentities,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA',numinaTree,canonicalTreasuryValues,schema:'numina.treasury.alignment.v2',planSchema:'numina.treasury.alignment-plan.v2',status:'ALIGNED_MODEL',modelIdentity:'NUMINA',modelAligned:true,externalEvidenceStatus:'PENDING_PROVIDER_EVIDENCE',targetAmount:'500000000000000',aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',verifiedModeledValue:'1500000000000000',verificationScope:'NUMINA_NATIVE_TREASURY_CONFIRMED_INTERNAL_MODELED_AGGREGATE',designatedRoleCount:3,accountViewSchema:'numina.treasury.account-view.v2',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',separateRoles:true,singularIdentity:true,historicalProjectionSchema:'numina.treasury.projection.v1',providerRoleBalancesAdditive:false,modeledRoleValuesAdditive:true,externalBalancesAggregated:false,componentRoleValue:'500000000000000',componentUnits:['USD','USDC','NUSD'],treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,componentsAreSeparateTreasuries:false};
 const nusdContracts={"schema":"numina.nusd.contract-lifecycle.v1","modelIdentity":"NUMINA","identity":"NUMINA","status":"DEPLOYED_VERIFIED","initiatedOn":"2026-09-18","contractCount":4,"contracts":["NuminaUSD","NuminaSettlement","NuminaUSDCConversion","NuminaUSDRedemption"],"deploymentPreparationInitiated":true,"deploymentVerified":true,"chainReceiptVerified":true,"mintStatus":"MINT_VERIFIED","mintSuccessReported":true,"mintVerified":true,"mintPerformed":true,"constructorMint":true,"decimals":18,"mintAmountNusd":"1500000000000000","tokenAddress":"0x491c1DF1b5CA77AF797f052c2310ca17039C931b","tokenTransactionHash":"0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b","settlementAddress":"0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0","settlementTransactionHash":"0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b","paused":true,"conversionPerformed":false,"redemptionPerformed":false,"settlementPerformed":false,"externalDepositsPerformed":false,"externalBackingVerified":false};
 const integrationManifestRef={path:'file-manifest.json',schema:'numina.integration.manifest.v2',identity:'NUMINA',canonical:true};
-const verification={
+const verification={stateReconciliation:NUMINA_STATE_RECONCILIATION,
  schema:'numina.integration.package.v2',...singularIdentities,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA',numinaTree,canonicalTreasuryValues,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
  package:{name:metadata.name,version:metadata.version,private:metadata.private},revision,
  applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
@@ -44,7 +45,7 @@ const verification={
  nusdActivated:true,mintStatus:'MINT_VERIFIED',mintSuccessReported:true,mintVerified:true,mintPerformed:true,transferPerformed:false,settlementConnected:false,externalBackingVerified:false,nusdContracts,treasuryAlignment
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
-const distribution={
+const distribution={stateReconciliation:NUMINA_STATE_RECONCILIATION,
  ...singularIdentities,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA',numinaTree,canonicalTreasuryValues,singular:true,integrationManifest:integrationManifestRef,nusdContracts,treasuryAlignment,
  treasury_client_verification:treasuryClientVerificationManifest(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'src/treasury-proof.js'))).digest('hex')),
  denomination_policy:NUMINA_DENOMINATION_POLICY,
@@ -68,7 +69,7 @@ const files=[
  'package.json','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
  'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
 ].sort();
-const fileManifest={schema:'numina.integration.manifest.v2',...singularIdentities,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA',numinaTree,canonicalTreasuryValues,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',nusdContracts,application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
+const fileManifest={stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:'numina.integration.manifest.v2',...singularIdentities,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA',numinaTree,canonicalTreasuryValues,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',nusdContracts,application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
  if(/(?:^|\/)\.env|\.private\.|\.(?:pem|key|tgz|zip)$/.test(relative))throw new Error('Private or archive files are not distribution inputs');
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};

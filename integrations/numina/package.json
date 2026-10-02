@@ -119,5 +119,12 @@
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
     "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+  },
+  "numinaStateReconciliation": {
+    "schema": "numina.state-reconciliation.v1",
+    "route": "/api/control/v2/state-reconciliation",
+    "download": "/state-reconciliation.json",
+    "classification": "scoped_state_reconciliation",
+    "applicationVersion": "4.0.0"
   }
 }
