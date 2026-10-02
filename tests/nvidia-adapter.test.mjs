@@ -18,7 +18,7 @@ function harness(calls=[call()],release=manifest()){
   }};
  return {options,requests,reads,configs};
 }
-test('NIM discovery binds rc26, retains tool call IDs and limits the model round trip',async()=>{
+test('NIM discovery binds rc27, retains tool call IDs and limits the model round trip',async()=>{
  const h=harness();await nvidiaNimRoundTrip(h.options);
  assert.equal(h.requests.length,2);assert.equal(h.reads.length,2);
  assert.equal(h.requests[1].messages[2].tool_call_id,'call1');

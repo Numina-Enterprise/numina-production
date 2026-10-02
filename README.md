@@ -11,7 +11,7 @@ The 4.0.0 control extension uses the existing canonical journal. The website, wo
 
 ## Production architecture
 
-Production uses the rc26 runtime with its pinned key and manifest identity. The L3 authority, L4 execution and L5 canonical-evidence layers run as frontier control 4.0.0 on the application journal. See the [recorded rc26 deployment](docs/rc26-production-deployment.json) and [source alignment](docs/Source-Alignment-v4.md). Recheck the running runtime with `npm run check:runtime`.
+Production uses the rc27 runtime with its pinned key and manifest identity. The L3 authority, L4 execution and L5 canonical-evidence layers run as frontier control 4.0.0 on the application journal. See the [recorded rc27 deployment](docs/rc27-production-deployment.json) and [source alignment](docs/Source-Alignment-v4.md). Recheck the running runtime with `npm run check:runtime`.
 
 Numina 4.0.0 is configured to serve the website, Numina OS operations workspace and installable mobile web app at https://numinalabs.xyz. Existing application and control APIs remain at `/api/app/v1` and `/api/control/v1`; the application manifest is `/v4/release/manifest`. No data migration is required for this application release.
 
@@ -21,7 +21,7 @@ The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(ev
 
 ## Build and provenance
 
-Use Node 24. Install the pinned test dependencies with `npm ci --prefix runtime/nusd --ignore-scripts` and `npm ci --prefix runtime/nusd/development --ignore-scripts`, then run `npm run build`, `npm test`, and `npm run release:numina`. The suite verifies generated build artifacts, so build before testing. GitHub Actions follows this order and requires the suite to pass before publication. **NUMINA is the model, repository, database, journal, build, release, deployment, source, evidence and provenance identity.**
+Use Node 24. Install the pinned test dependencies with `npm ci --prefix runtime/nusd --ignore-scripts` and `npm ci --prefix runtime/nusd/development --ignore-scripts`, then run `npm run build`, `npm test`, and `npm run release:numina`. The suite verifies generated build artifacts, so build before testing. **NUMINA REPOSITORY is the canonical repository root; all builds, releases, deployments, evidence, and runtime surfaces are downstream productions of NUMINA.**
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
@@ -29,15 +29,15 @@ Runtime signing keys, provider credentials and private records belong only in pr
 
 ### Native distribution
 
-The canonical final build is published at `/final-build.json` and binds website, NUMINA OS, NUSD receipts, Android versionCode 4 and iOS build 6 to application version 4.0.0. Android package identity `xyz.numinalabs.app` is registered in Google Play and its Play App Signing fingerprint is recorded; the final release workflow compiles and signs current source. iOS build 6 compiles current source and signs it only when a valid Apple distribution certificate, App Store provisioning profile and Team ID are present in GitHub Actions.
+The canonical final manifest is published at `/final-manifest.json` and binds the canonical final build at `/final-build.json` to website, APIs, NUMINA OS, runtime, receipts, treasury views, and release artifacts for application version 4.0.0. Android package identity `xyz.numinalabs.app` remains registered in Google Play; iOS and Android signing remain downstream production steps that require valid platform credentials.
 
 Store publication is evidence-bound: Google Play and App Store are not marked submitted until their provider upload/submission receipts exist. Signed artifact production and store acceptance are separate states.
 
 ## Source and rights
 
-`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain source material. NUMINA is the canonical source and square root of the software tree. Provenance workflows operate through repository leaves and bind exact build artifacts back to NUMINA release records; deployment state still requires actual runtime/provider evidence.
+`src/` contains the Worker, `public/` the website, `docs/` downloadable specifications, and `vendor/numina-core-v1.8` the preserved core. Existing tests and historical fixtures remain source material. NUMINA REPOSITORY is the canonical root of the software tree. Downstream provenance records bind exact build artifacts back to NUMINA release records; deployment state still requires actual runtime/provider evidence.
 
-NUMINA is the canonical source. The production GitHub repository is a non-authoritative leaf projection used for source transport, CI, releases and evidence persistence. GitHub source, build logs and workflow artifacts require repository access, but GitHub does not replace NUMINA as root authority. External hosting, storage, network and provider service names are substrate metadata or historical compatibility references; they do not create separate NUMINA identities or authorities. External events are treated as confirmed only when their factual evidence is available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
+NUMINA REPOSITORY is the canonical root source. Its main branch produces all downstream runtime surfaces. Downstream systems, build logs, workflow artifacts, hosts, and provider substrates do not replace NUMINA REPOSITORY as root authority. External hosting, storage, network and provider service names are substrate metadata or historical compatibility references; they do not create separate NUMINA identities or authorities. External events are treated as confirmed only when their factual evidence is available. No new open-source license or trademark license is granted; existing third-party notices and licenses remain applicable.
 
 ## Source alignment
 

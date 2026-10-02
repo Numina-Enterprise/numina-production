@@ -19,7 +19,7 @@ Historical local attempt, superseded by the successful hosted build: the initial
 | Gradle / JDK | 8.13 / 17 |
 | Browser integration | com.google.androidbrowserhelper:androidbrowserhelper:2.7.3 |
 
-Google Play Console confirms the package `xyz.numinalabs.app`; Samsung registration remains unverified. Future updates must preserve this identity and use an acceptable increasing version code. The application release 4.0.0 uses the separately pinned rc26 verifier runtime.
+Google Play Console confirms the package `xyz.numinalabs.app`; Samsung registration remains unverified. Future updates must preserve this identity and use an acceptable increasing version code. The application release 4.0.0 uses the separately pinned rc27 verifier runtime.
 
 ## Build the release artifacts
 

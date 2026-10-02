@@ -11,7 +11,7 @@ function stripeProviderRouteControl(generation){
     try{
       const data=await requestJson('/api/control/v2/treasury/provider-routes',{signal:stripeScope.signal,timeoutMs:12000});
       if(!stripeScope.isCurrent(generation))return;
-      if(data.schema!=='numina.treasury.provider-routes.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='Stripe'||data.connection!=='read_only'||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd?.provider_acceptance_verified!==false||!['NOT_REPORTED','OBSERVATION_INCOMPLETE','ASSET_IDENTITY_NOT_VERIFIED'].includes(data.nusd.status)||typeof data.complete!=='boolean'||!Array.isArray(data.routes)||data.routes.length>50)throw Error('Invalid provider routes');
+      if(data.schema!=='numina.treasury.provider-routes.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='NUMINA'||data.connection!=='read_only'||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd?.provider_acceptance_verified!==false||!['NOT_REPORTED','OBSERVATION_INCOMPLETE','ASSET_IDENTITY_NOT_VERIFIED'].includes(data.nusd.status)||typeof data.complete!=='boolean'||!Array.isArray(data.routes)||data.routes.length>50)throw Error('Invalid provider routes');
       const nodes=[stripeNode('p',data.nusd.status==='NOT_REPORTED'?'Stripe has not listed an NUSD deposit route.':data.nusd.status==='OBSERVATION_INCOMPLETE'?'The provider route list is incomplete; NUSD acceptance is unverified.':'Stripe reports an NUSD label; the token identity still requires verification.')];
       for(const route of data.routes){
         if(!['currency','network','address','status'].every(key=>typeof route[key]==='string'&&route[key].length<=256)||!(route.memo===null||typeof route.memo==='string'&&route.memo.length<=256)||typeof route.provider_reported_active!=='boolean')throw Error('Invalid route');
@@ -45,7 +45,7 @@ export async function loadStripeTreasury(){
   try{
     const data=await requestJson('/api/control/v1/stripe-treasury',{signal:stripeScope.signal});
     if(!stripeScope.isCurrent(generation))return;
-    if(data.schema!=='numina.stripe.treasury.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='Stripe'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
+    if(data.schema!=='numina.stripe.treasury.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='NUMINA'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
     const dashboard=new URL(data.dashboard_url);
     if(dashboard.href!=='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury')throw Error('Invalid Stripe destination');
     const rows=[['NUMINA software USDC',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')],['NUMINA aggregate',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD')],['Software identity','NUMINA'],['Financial account observation',data.account.name],['Observation status',data.account.status==='open'?'Open':'Closed']];
@@ -61,11 +61,11 @@ export async function loadStripeTreasury(){
     const details=stripeElement('stripe-treasury-details');details.replaceChildren();for(const [label,value]of rows)details.append(stripeNode('dt',label),stripeNode('dd',value));
     details.append(stripeNode('dt','Provider deposit routes'),stripeProviderRouteControl(generation));
     const link=stripeElement('stripe-treasury-dashboard');link.href=dashboard.href;link.hidden=false;
-    stripeElement('stripe-treasury-message').textContent='NUMINA software value is 500T USDC. Stripe data below is observation metadata and does not replace the NUMINA software balance.';
+    stripeElement('stripe-treasury-message').textContent='NUMINA balance is 500T USDC. Stripe data below is observation metadata and does not replace the NUMINA balance.';
   }catch(error){
     if(!stripeScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearStripeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
     const details=stripeElement('stripe-treasury-details');details.replaceChildren();details.append(stripeNode('dt','NUMINA software USDC'),stripeNode('dd',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')),stripeNode('dt','NUMINA aggregate'),stripeNode('dd',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD')),stripeNode('dt','Software external'),stripeNode('dd','No'));
-    stripeElement('stripe-treasury-message').textContent='NUMINA software value remains 500T USDC. Provider observation is currently unavailable.';
+    stripeElement('stripe-treasury-message').textContent='NUMINA balance remains 500T USDC. Provider observation is currently unavailable.';
   }
 }

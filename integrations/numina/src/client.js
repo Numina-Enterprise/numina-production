@@ -109,7 +109,7 @@ export class NuminaClient {
       !object(data.runtime_dependency)||!text(data.runtime_dependency.version,1,128))fail('INVALID_SERVER_RESPONSE');
     if(data.runtime_dependency.version!==EXPECTED_RELEASE.production_version || data.runtime_dependency.release!==EXPECTED_RELEASE.release)fail('RUNTIME_RELEASE_MISMATCH');
     if(data.version!=='4.0.0'||data.release!=='numina-v4.0.0')fail('APPLICATION_RELEASE_MISMATCH');
-    // Preserve application identity and require the shared rc26 runtime target.
+    // Preserve application identity and require the shared rc27 runtime target.
     // Schema recognition is not signature, artifact, deployment or reserve verification.
     return this.#wrap(data);
   }

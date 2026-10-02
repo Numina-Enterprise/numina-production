@@ -1,9 +1,9 @@
-name: Numina reconstructed rc26 verifier provenance
+name: Historical Numina RC26 verifier provenance
 on:
   workflow_dispatch:
 permissions: {}
 concurrency:
-  group: numina-rc26-verifier-provenance
+  group: historical-numina-rc26-verifier-provenance
   cancel-in-progress: false
 jobs:
   build-and-attest:

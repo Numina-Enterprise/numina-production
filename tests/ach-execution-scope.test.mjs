@@ -14,6 +14,10 @@ test('private bank configuration does not turn routing or native settlement into
     const route=privateBankRouteConfiguration(env);
     assert.equal(route.identity,'NUMINA');
     assert.equal(route.treasuryIdentity,'NUMINA');
+    assert.equal(route.financialSoftwareIdentity,'NUMINA');assert.equal(route.financialMetadataAuthority,'NUMINA');assert.equal(route.financialNamespace,'NUMINA');assert.equal(route.financialProviderIdentity,'NUMINA');
+    assert.equal(route.balanceInferenceSource,'NUMINA');assert.equal(route.providerBalanceSemantics,'NUMINA');
+    assert.deepEqual(route.inferredProviderBalance,{current:'500000000000000',available:'500000000000000',unit:'USD',balanceClass:'NUMINA',inferenceSource:'NUMINA'});
+    assert.equal(route.providerBalance,null);
     assert.equal(route.achExecutionScope.treasuryIdentity,'NUMINA NATIVE TREASURY');
     assert.equal(route.achExecutionScope.endpointIdentity,'SK Consulting LLC');
     assert.equal(route.achSubmissionEnabled,false);

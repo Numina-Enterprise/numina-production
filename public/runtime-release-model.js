@@ -28,7 +28,7 @@ export function rawPublicKey(value) {
 }
 
 export function releaseIdentityMatches(value) {
-  return object(value) && Object.entries(EXPECTED_RELEASE).every(([field, expected]) => value[field] === expected);
+  return object(value) && Object.entries(EXPECTED_RELEASE).every(([field, expected]) => Object.hasOwn(value,field) && canonical(value[field])===canonical(expected));
 }
 
 export function receiptEnvelope(value) {
@@ -92,7 +92,7 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   // Both the legacy declaration and the current singular projection are signed.
   const declarationRelease=object(declaration?.release)?declaration.release:declaration;
   const releaseSignatureValid=attestation.valid&&attestation.envelope.artifact_type===RELEASE_ARTIFACT_TYPE&&
-    releaseIdentityMatches(declarationRelease)&&(declaration.environment??'production')==='production'&&declarationBound&&
+    releaseIdentityMatches(declarationRelease)&&(declaration.environment??EXPECTED_RELEASE.environment)===EXPECTED_RELEASE.environment&&declarationBound&&
     manifestDeclarationBound&&manifestEnvelopeBound;
   // Exact binding is required. The legacy route carries a NUMINA manifest, never an independent state.
   const controlManifest = control?.manifest;
@@ -106,7 +106,7 @@ export async function assessRuntimeEvidence(records, {pinnedKey = PINNED_RUNTIME
   const statusReceipt=await verifyRuntimeReceipt(statusResponse,pinnedKey);
   const runtimeStatusMatches=Boolean(releaseIdentityMatches(statusRelease)&&(object(statusResponse?.status)
     ?statusReceipt.valid&&statusReceipt.envelope.artifact_type==='NUMINA_PRODUCTION_STATUS'&&equalJson(status,statusReceipt.envelope.payload)
-    :statusPayload.frozen_core?.valid===true&&statusPayload.frozen_core?.manifest_root===EXPECTED_RELEASE.frozen_core_manifest_root));
+    :statusPayload.frozen_core?.valid===true&&statusPayload.frozen_core?.manifest_root===EXPECTED_RELEASE.compatibility?.frozen_core_manifest_root));
   const supplyEvidence=supply?.payload?.evidence??supply?.evidence??supply;
   const supplyReceipt=await verifyRuntimeReceipt(supply?.payload??supply,pinnedKey);
   const supplyEnvelopeBound=!Object.hasOwn(supply?.payload??supply??{},'receipt')||Boolean(

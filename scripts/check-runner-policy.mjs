@@ -10,14 +10,16 @@ const failures = [];
 if (policy.identity !== 'NUMINA' || policy.hostIdentity !== 'NUMINA' || policy.runnerIdentity !== 'NUMINA' || policy.allRunnerIdentities !== 'NUMINA' || policy.runnerTarget !== 'NUMINA') {
   failures.push('Host, runner identities and runner targets must be NUMINA');
 }
-if (policy.invariants?.preserveCurrentRunners !== true) failures.push('Current runners must be preserved');
-if (policy.invariants?.preserveExistingSelfHostedRunners !== true) failures.push('Existing self-hosted runners must be preserved');
-if (policy.invariants?.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
-if (policy.invariants?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
-if (policy.invariants?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
-if (policy.invariants?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
-if (policy.invariants?.floatingHostedLinuxLabelsDenied !== true) failures.push('Floating hosted Linux labels must be denied');
-if (policy.selfHostedPolicy !== 'preserve_existing') failures.push('Existing self-hosted runner policy must remain preserve_existing');
+if (policy.rules?.preserveCurrentRunners !== true) failures.push('Current runners must be preserved');
+if (policy.rules?.preserveExistingSelfHostedRunners !== false) failures.push('Self-hosted runner execution must not be preserved');
+if (policy.rules?.preserveExistingSelfHostedRunnerRegistrations !== true) failures.push('Existing self-hosted registration records must be preserved as non-executing state');
+if (policy.rules?.denySelfHostedRunnerExecution !== true || policy.rules?.denySelfHostedRunnerScheduling !== true) failures.push('Self-hosted runner execution and scheduling must remain denied');
+if (policy.rules?.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
+if (policy.rules?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
+if (policy.rules?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
+if (policy.rules?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
+if (policy.rules?.floatingHostedLinuxLabelsDenied !== true) failures.push('Floating hosted Linux labels must be denied');
+if (policy.selfHostedPolicy !== 'deny_execution_preserve_registration_records') failures.push('Self-hosted runner policy must deny execution while preserving registration records');
 const executionTargets = policy.executionTargets;
 const overrides = executionTargets?.workflowOverrides || {};
 const targetSets = executionTargets?.workflowTargetSets || {};
@@ -31,6 +33,7 @@ const usedOverrides = new Set();
 let declarations = 0;
 for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(name)).sort()) {
   const text = readFileSync(resolve(workflowsDir, name), 'utf8');
+  if (/\bself-hosted\b/i.test(text)) failures.push(name + ' contains a denied self-hosted runner reference');
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
@@ -61,4 +64,4 @@ if (failures.length) {
   for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
   process.exit(1);
 }
-console.log('NUMINA runners preserved: ' + declarations + '; placement mutable; future runners denied.');
+console.log('NUMINA runner policy verified: ' + declarations + ' preserved hosted declarations; self-hosted execution denied; future runners denied.');

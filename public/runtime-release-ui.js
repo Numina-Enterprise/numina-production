@@ -117,10 +117,10 @@ export function createRuntimeReleaseUI({
     set('[data-sbom-hash]', ok('supply') ? text(assessed.supply?.spdx_sbom_sha256) : 'Unavailable');
     set('[data-provenance-hash]', ok('supply') ? text(assessed.supply?.slsa_provenance_sha256) : 'Unavailable');
     set('[data-supply-status]', ok('supply') ? assessed.supplyIdentityMatches ?
-      assessed.releaseDeclarationVerified ? 'Artifact hashes match the signed manifest' : 'Artifact hashes match the pins; release signature unavailable' : 'Reported artifact identity does not match rc26' :
+      assessed.releaseDeclarationVerified ? 'Artifact hashes match the signed manifest' : 'Artifact hashes match the pins; release signature unavailable' : 'Reported artifact identity does not match rc27' :
       current.supply?.phase === 'pending' ? 'Checking…' : 'Unavailable');
     set('[data-readiness]', status ? assessed.runtimeStatusMatches ?
-      'Runtime responding · rc26 identity matches' : 'Runtime response identity does not match rc26' :
+      'Runtime responding · rc27 identity matches' : 'Runtime response identity does not match rc27' :
       current.status?.phase === 'pending' ? 'Checking…' : 'Unavailable');
     set('[data-signature-status]', assessed.releaseDeclarationVerified ? 'Signed runtime declaration verified' :
       current.attestation?.phase === 'pending' ? 'Checking…' : 'Not verified');
@@ -129,17 +129,17 @@ export function createRuntimeReleaseUI({
     let label = 'Unavailable', message = 'No current release manifest is available.';
     if (hasManifest && !assessed.manifestMatches) {
       label = 'Needs attention';
-      message = 'The observed manifest does not match the pinned rc26 release identity.';
+      message = 'The observed manifest does not match the pinned rc27 release identity.';
     } else if (hasManifest) {
       label = assessed.releaseDeclarationVerified ? 'Signed declaration verified' : 'Observed release';
       message = assessed.releaseDeclarationVerified ?
-        'The rc26 release signature verifies against the established production key and binds the displayed source and artifact hashes.' :
-        'The response declares the expected rc26 identity. Its signed runtime declaration has not been verified.';
+        'The rc27 release signature verifies against the established production key and binds the displayed source and artifact hashes.' :
+        'The response declares the expected rc27 identity. Its signed runtime declaration has not been verified.';
       if (failed) message += ' One or more runtime evidence endpoints are unavailable.';
       else if (pending) message += ' Other evidence checks are still running.';
       if ((ok('status') && !assessed.runtimeStatusMatches) || (ok('supply') && !assessed.supplyIdentityMatches)) {
         label = 'Needs attention';
-        message += ' A runtime or supply-chain response does not match the expected rc26 identity.';
+        message += ' A runtime or supply-chain response does not match the expected rc27 identity.';
       }
     } else if (pending) {
       label = 'Checking…';

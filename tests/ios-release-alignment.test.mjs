@@ -11,10 +11,10 @@ function input() {
     native:json('docs/native-package-record-v'+pkg.version.split('.')[0]+'.json'),
     policy:json('mobile/signing/distribution-policy.json'),settings:read('mobile/ios/Configuration/Numina.xcconfig')};
 }
-test('iOS release binds the shared application, core and rc26 runtime',()=>{
+test('iOS release binds the shared application, core and rc27 runtime',()=>{
   const identity=checkIOSRelease();
   assert.equal(identity.applicationVersion,json('package.json').version);
-  assert.equal(identity.runtimeVersion,'1.9.0-rc26');
+  assert.equal(identity.runtimeVersion,'1.9.0-rc27');
   assert.equal(identity.coreVersion,'1.8.0');
   assert.equal(identity.applicationManifest,'/v4/release/manifest');
   assert.equal(identity.nativeCompilationEstablished,false);
@@ -32,7 +32,7 @@ test('application version drift fails rather than relabeling an artifact',()=>{
   assert.throws(()=>deriveIOSIdentity(value),/APPLICATION_VERSION_MISMATCH/);
 });
 test('unapproved runtime migrations fail',()=>{
-  const value=input(); value.architecture.runtime='1.9.0-rc27';
+  const value=input(); value.architecture.runtime='1.9.0-rc28';
   assert.throws(()=>deriveIOSIdentity(value),/RUNTIME_PIN_MISMATCH/);
 });
 test('bundle identity mismatch and build regression fail',()=>{
@@ -70,7 +70,8 @@ test('iOS source archive retains its packaged identity while current source may 
   assert.equal(evidence.compiledArtifact.sha256,record.ios.binaries[0].sha256);
   assert.equal(evidence.compiledInfoPlist.CFBundleIdentifier,record.proposedPackageIdentity);
   assert.equal(evidence.compiledInfoPlist.CFBundleVersion,String(record.ios.binaryVersionCode));
-  assert.equal(evidence.compiledInfoPlist.NuminaRuntimeVersion,checkIOSRelease().runtimeVersion);
+  assert.equal(evidence.compiledInfoPlist.NuminaRuntimeVersion,'1.9.0-rc26');
+  assert.notEqual(evidence.compiledInfoPlist.NuminaRuntimeVersion,checkIOSRelease().runtimeVersion);
   assert.equal(evidence.compiledInfoPlist.NuminaFrozenCoreRoot,checkIOSRelease().frozenCoreRoot);
   assert.ok(Object.values(evidence.checks).every(value=>value===true));
   assert.ok(record.ios.binaries.length>0);

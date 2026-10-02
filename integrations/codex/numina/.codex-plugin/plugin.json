@@ -11,7 +11,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Numina",
-    "shortDescription": "One core, one root and five architecture layers.",
+    "shortDescription": "One core, one root and seven final frontier layers.",
     "longDescription": "Connect Codex to Numina OS 4 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint.",
     "developerName": "Numina Labs",
     "category": "Productivity",
@@ -23,7 +23,7 @@
     "defaultPrompt": [
       "Show Numina’s current production capabilities.",
       "Read Numina’s canonical journal head.",
-      "Explain Numina’s L1 through L5 layers."
+      "Explain Numina’s L1 through L7 layers."
     ],
     "composerIcon": "./assets/icon.png",
     "logo": "./assets/logo.png"

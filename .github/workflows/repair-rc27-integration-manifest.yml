@@ -1,4 +1,4 @@
-name: Repair rc26 integration manifest
+name: Repair rc27 integration manifest
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
       - 'integrations/numina/package.json'
       - 'integrations/numina/scripts/package-distribution.js'
       - 'config/numina-architecture.json'
-      - '.github/workflows/repair-rc26-integration-manifest.yml'
+      - '.github/workflows/repair-rc27-integration-manifest.yml'
 
 permissions:
   contents: write

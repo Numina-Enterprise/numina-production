@@ -1,6 +1,7 @@
 // Customer identity and provider credentials stay local.
 import {RUNTIME_ORIGIN,RUNTIME_VERSION,EXPECTED_RELEASE} from '../public/runtime-contract.js';
 import {routeRuntimeRevocation} from './runtime-revocation.js';
+import {routeLocalRuntime} from './runtime-release-local.js';
 export {RUNTIME_ORIGIN};
 export const RUNTIME_READ_PATHS = new Set([
   '/v1/status', '/v1/control/state', '/v1/release/manifest',
@@ -16,7 +17,7 @@ function runtimeError(status, error, extra = {}) {
   return Response.json({error}, {status, headers: {'Cache-Control':'no-store', ...extra}});
 }
 function object(value){return value!==null&&typeof value==='object'&&!Array.isArray(value);}
-function releaseIdentityMatches(value){return object(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>value[field]===expected);}
+function releaseIdentityMatches(value){return object(value)&&Object.entries(EXPECTED_RELEASE).every(([field,expected])=>Object.hasOwn(value,field)&&JSON.stringify(value[field])===JSON.stringify(expected));}
 function releaseIdentityFor(path,payload){
   const candidates=path==='/v1/release/manifest'
     ?[payload?.manifest?.release,payload?.manifest,payload]
@@ -29,14 +30,14 @@ function releaseIdentityFor(path,payload){
 }
 function supplyIdentityMatches(value){const evidence=value?.payload?.evidence??value?.evidence??value;return object(evidence)&&evidence.valid===true&&['spdx_sbom_sha256','slsa_provenance_sha256'].every(field=>evidence[field]===EXPECTED_RELEASE[field]);}
 
-export async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 12000) {
+export async function routeRuntime(request, upstreamFetch = fetch, timeoutMs = 12000, env = {}) {
   const requestUrl = new URL(request.url), path = requestUrl.pathname;
   if(path==='/v1/evidence/revoke')return routeRuntimeRevocation(request,upstreamFetch);
   if (!RUNTIME_READ_PATHS.has(path)) return null;
   if (!['GET','HEAD'].includes(request.method)) return runtimeError(405, 'METHOD_NOT_ALLOWED', {Allow:'GET, HEAD'});
-  // The historical verifier origin now resolves to the canonical public origin.
-  // Never proxy a public request back into the same origin; that would recurse.
-  if(requestUrl.origin===new URL(RUNTIME_ORIGIN).origin)return runtimeError(410,'RUNTIME_COMPATIBILITY_ROUTE_RETIRED');
+  // Numina owns the current runtime surface. Same-origin reads are served locally;
+  // they are signed only when the pinned production signer is actually available.
+  if(requestUrl.origin===new URL(RUNTIME_ORIGIN).origin)return routeLocalRuntime(request,env);
   const controller = new AbortController();
   let reader;
   const deadline = new Promise((_, reject) => {

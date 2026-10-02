@@ -2,7 +2,7 @@
 
 Numina OS, the control panel, Frontier, and the integration kit read the existing canonical native treasury through `readTreasury()` at `/api/control/v1/treasury`. The account view at `/api/control/v2/treasury/accounts` now returns `numina.treasury.alignment.v2` with `numina.treasury.account-view.v2`. It derives every role view from that same record. Treasury mutations continue exclusively through `writeTreasury(event)` in the existing root and journal.
 
-`config/numina-architecture.json` binds the required architecture to Numina 4.0.0 and its retained 1.9.0-rc26 runtime. The build checks its release versions, five layers, execution contract and single treasury against the maintained software and includes the contract in `/source-alignment.json`. This contract describes required software behavior; live head, deployment and balances come from their authenticated records.
+`config/numina-architecture.json` binds the required architecture to Numina 4.0.0 and its retained 1.9.0-rc27 runtime. The build checks its release versions, five layers, execution contract and single treasury against the maintained software and includes the contract in `/source-alignment.json`. This contract describes required software behavior; live head, deployment and balances come from their authenticated records.
 
 External balances are read from Stripe through `/api/control/v1/stripe-treasury`, with fresh provider requests and private, uncached responses. The adapter retains each currency and available, inbound-pending and outbound-pending bucket. A release does not write provider balances or combine them with the native projection. Bank observations remain unavailable until an authenticated bank source is connected.
 
@@ -28,7 +28,7 @@ Review reads and verifies the current projection before freezing the complete ev
 
 Pending requests survive control-room refresh within the current tab. An uncertain attempt can only retry its original event; it cannot be replaced with a new ID or revised concurrency conditions. After a verified result, the owner can start a new request against a freshly read head. Download the exact request and result for retention. Publishing this interface does not itself record any request.
 
-The rc26 release display also requires a production declaration that signs every displayed manifest field. An unsigned extra field or a staging declaration cannot pass the release check. The runtime's pinned identity remains unchanged.
+The rc27 release display also requires a production declaration that signs every displayed manifest field. An unsigned extra field or a staging declaration cannot pass the release check. The runtime's pinned identity remains unchanged.
 
 The frozen starting projection remains 500,000,000,000,000 NUSD, Authority NUMINA, Verification VERIFIED, System of record NUMINA, within the Numina-native model. This software update performs no treasury write or account-reference mutation.
 

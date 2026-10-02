@@ -23,12 +23,15 @@ test('canonical repository release is bound to the tagged source and exact bytes
   assert.equal(tagged,release.sourceCommit);
 });
 
-test('Numina public origin is authoritative and GitHub main is canonical',()=>{
+test('Numina public origin is downstream of the canonical NUMINA repository',()=>{
   const policy=json('public/publication-policy.json');
   assert.equal(policy.schema,'numina.publication-policy.v1');
   assert.equal(policy.authoritativePublicOrigin,'https://numinalabs.xyz');
   assert.equal(policy.authoritativeHosting,'NUMINA_PUBLIC_ORIGIN');
-  assert.equal(policy.canonicalSource,'GITHUB_MAIN');
+  assert.equal(policy.canonicalSource,'NUMINA_REPOSITORY');
+  assert.equal(policy.repository,'NUMINA');
+  assert.equal(policy.repositoryRole,'CANONICAL_ROOT_REPOSITORY');
+  assert.equal(policy.propagation,'NUMINA');
   assert.equal(policy.chatgptSitesRole,'OPTIONAL_MIRROR');
   assert.equal(policy.chatgptSitesRequiredForRelease,false);
   assert.equal(policy.mobileStoreDistributionRequiredForWebRelease,false);

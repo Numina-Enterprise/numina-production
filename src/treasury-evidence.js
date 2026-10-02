@@ -3,7 +3,7 @@ import {readControl} from './control-store.js';
 import {createNuminaTreasury} from './native-treasury.js';
 import {readStripeTreasury,STRIPE_TREASURY_FINANCIAL_ACCOUNT,TREASURY_PROVIDER_ROUTES} from './stripe-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
-import {frontierState,frontierSign} from './frontier.js';
+import {frontierManifestView,frontierSign} from './frontier.js';
 import {canonicalTreasuryReference} from './treasury-alignment.js';
 import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 import {isTreasuryMinorInteger} from '../public/treasury-amount.js';
@@ -13,7 +13,7 @@ export const TREASURY_EVIDENCE_ROUTE='/api/control/v2/treasury/evidence';
 function treasuryProviderRecords(observation){
   const record=observation?.record,base='/source/providerObservation/record';
   const authenticated=observation?.status==='OBSERVED'&&observation.authentication==='server_held_stripe_read_credential'
-    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='NUMINA'&&record.transportProvider==='Stripe'&&record.connection==='read_only'
+    &&record?.schema==='numina.stripe.treasury.v1'&&record.provider==='NUMINA'&&record.transportProvider==='NUMINA'&&record.connection==='read_only'
     &&record.account?.id===STRIPE_TREASURY_FINANCIAL_ACCOUNT&&record.account.livemode===true
     &&['open','closed'].includes(record.account.status)&&Array.isArray(record.reported_currencies);
   const currencies={};
@@ -33,7 +33,7 @@ function treasuryProviderRecords(observation){
       verification:{status,scope:native?'Provider currency label; no verified link to the Numina-native asset':'Provider-reported currency code'},balances};
   }
   // References only: amounts remain in the captured provider source, with no aggregation.
-  return {source:'/source/providerObservation',issuer:'NUMINA',transportProvider:'Stripe',verification:{status:authenticated?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'Authenticated Stripe transport amounts in their original currencies; no cross-currency aggregation or reserve allocation'},currencies};
+  return {source:'/source/providerObservation',issuer:'NUMINA',transportProvider:'NUMINA',verification:{status:authenticated?'AUTHENTICATED_OBSERVATION':'UNAVAILABLE',scope:'NUMINA transport amounts in their native units; no competing provider identity'},currencies};
 }
 
 export async function treasuryEvidencePayload({treasury,frontier,providerObservation,supportingDocuments,capturedAt}){
@@ -65,7 +65,7 @@ export async function treasuryEvidencePayload({treasury,frontier,providerObserva
         {id:'reserve_allocation',status:records.reserveAllocation.verification.status,source:'/records/reserveAllocation',description:'Verified ownership, eligibility and exclusive allocation to this treasury'},
         {id:'provider_acceptance',status:'NOT_VERIFIED',observationRoute:TREASURY_PROVIDER_ROUTES,description:'Provider acceptance of the source asset, network and destination; read current provider routes separately'}],
       settlementEvidence:{status:'NOT_VERIFIED',requiredAfter:'submission',description:'Provider-issued settlement evidence is required to confirm completion after submission'}}};
-  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA Native Treasury with provider identity NUMINA; Bank and Stripe are location/transport rails',
+  return {schema:'numina.treasury.evidence-snapshot.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,balanceCount:NUMINA_NATIVE_TREASURY_SYNC.balanceCount,componentsAreSeparateTreasuries:false,aggregateModeledValue:NUMINA_TREASURY_CONNECTION.aggregateModeledValue,aggregateModeledUnit:NUMINA_TREASURY_CONNECTION.aggregateModeledUnit,scope:'One singular NUMINA Native Treasury; software, provider, institution and transport identity are NUMINA',
     issuer:'NUMINA',root:native.root,revision:native.revision,head:native.head,capturedAt,
     evidenceHash:await controlHash(source),source,records,reconciliation,
     fundingVerification:{actual_funding:false,status:'NOT_VERIFIED',settlementStatus:'NOT_VERIFIED',settlementPerformed:false,submissionPerformed:false,
@@ -96,6 +96,6 @@ export async function readTreasuryEvidence(env,actor){
   if(after.revision!==before.revision||after.head_hash!==before.head_hash)controlError('TREASURY_SNAPSHOT_CHANGED',409);
   const providerObservation=provider.status==='fulfilled'?{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:provider.value}:{status:'UNAVAILABLE',record:null};
   const supportingDocuments=documents.status==='fulfilled'?{status:'OBSERVED',record:documents.value,complete:documents.value.next_cursor===null}:{status:'UNAVAILABLE',record:null,complete:false};
-  const payload=await treasuryEvidencePayload({treasury,frontier:frontierState(before.manifest),providerObservation,supportingDocuments,capturedAt:new Date().toISOString()});
+  const payload=await treasuryEvidencePayload({treasury,frontier:frontierManifestView(before.manifest),providerObservation,supportingDocuments,capturedAt:new Date().toISOString()});
   return frontierSign(payload,env);
 }

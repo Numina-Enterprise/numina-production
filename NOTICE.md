@@ -4,7 +4,7 @@ The original Numina materials are attributed to SK Consulting LLC under OWNERSHI
 
 Retain the original license text when distributing third-party material. Known bundled notices in this repository include runtime/nusd/licenses/OpenZeppelin-LICENSE (Zeppelin Group Ltd, MIT) and runtime/nusd/licenses/ethers-LICENSE.md (Richard Moore, MIT). Their ownership remains with their respective rightsholders.
 
-Hosted fonts are requested from Google Fonts and have their own font licenses. Python packages listed by the rc26 requirements lock and provider SDKs remain governed by their upstream licenses. No third-party source is relicensed by the Numina notice.
+Hosted fonts are requested from Google Fonts and have their own font licenses. Python packages listed by the rc27 requirements lock and provider SDKs remain governed by their upstream licenses. No third-party source is relicensed by the Numina notice.
 
 Frozen core files, prior signed evidence, and retained native binaries preserve their original bytes. New notices accompany the current distribution; they do not represent re-signing an old artifact.
 

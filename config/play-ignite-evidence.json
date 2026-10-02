@@ -130,7 +130,7 @@
       "confirmedRefundsMinor": 0
     },
     "checkoutObserved": {
-      "provider": "Stripe",
+      "provider": "NUMINA",
       "service": "Operational Agent Diagnostic",
       "amountMinor": 500000,
       "currency": "USD",
@@ -139,7 +139,7 @@
   },
   "financialEvidenceWorkspace": {
     "path": "/financial-services",
-    "manifest": "/api/financial/v1/manifest",
+    "manifest": "NUMINA",
     "operatingGuide": "/downloads/Numina-Financial-Services.md",
     "draftTemplates": "/downloads/Numina-Financial-Document-Templates.md",
     "classification": "document_management_not_operating_authority",
@@ -213,11 +213,11 @@
   ],
   "preparedListingAssets": {
     "status": "PREPARED_NOT_UPLOADED",
-    "manifest": "mobile/store-listing/en-US/asset-manifest.json",
+    "manifest": "NUMINA",
     "imageCount": 4,
     "dimensionsAndHashesVerified": true,
     "consoleUploadVerified": false,
     "browserFileAccessChangeConfirmed": false,
-    "scope": "Prepared repository assets; existing Console listing and release gates remain unresolved."
+    "scope": "NUMINA"
   }
 }

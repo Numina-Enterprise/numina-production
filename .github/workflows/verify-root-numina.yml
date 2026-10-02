@@ -29,6 +29,9 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
       - name: Validate pinned Node runtime
         run: |
           node --input-type=module <<'NODE'
@@ -56,11 +59,19 @@ jobs:
           const rewrites=new Map((routing.rewrites||[]).map(rule=>[rule.source,rule.destination]));
           for(const source of ['/readyz','/v1/bootstrap/attestation','/v1/frontier/readiness','/v1/deployment/provenance','/v1/status','/v1/control/state','/v1/control/evaluate','/v1/execution/providers','/v1/execution/prepare','/v1/execution/submit','/v1/execution/evidence/bind','/v1/release/manifest','/v1/release/supply-chain','/v1/release/attestation','/v2/release/manifest','/v3/release/manifest','/v4/release/manifest']) if(!rewrites.has(source)) throw new Error('missing Numina route: '+source);
           for(const retired of ['vercel.json','runtime/vercel-production/vercel.json','runtime/verifier-rc26/deploy/vercel/vercel.json']) if(existsSync(retired)) throw new Error('retired provider deployment config returned: '+retired);
-          for(const path of ['src/numina-root.js','public/runtime-contract.js','integrations/numina/src/runtime-contract.js','api/application-release.mjs','api/execution-prepare.js','api/evidence-bind.js','scripts/package-rc26.py','scripts/source-alignment.mjs','scripts/prepare-ios-v4.py','mobile/signing/distribution-policy.json','public/publication-policy.json','public/final-build.json','config/numina-manifest.v2.json']){
+          for(const path of ['src/numina-root.js','public/runtime-contract.js','integrations/numina/src/runtime-contract.js','api/application-release.mjs','api/execution-prepare.js','api/evidence-bind.js','scripts/package-rc27.py','scripts/source-alignment.mjs','scripts/prepare-ios-v4.py','mobile/signing/distribution-policy.json','public/publication-policy.json','public/final-build.json','config/numina-manifest.v2.json']){
             const text=readFileSync(path,'utf8');
             if(/numina-production\.vercel\.app|VERCEL_(?:PROJECT|DEPLOYMENT|TARGET|ENV|URL)/i.test(text)) throw new Error('active provider dependency returned: '+path);
           }
           NODE
+      - name: Validate RC27 verifier
+        env:
+          PYTHONPATH: runtime/verifier-rc27
+        run: |
+          python -m pip install -r runtime/verifier-rc27/requirements.test.txt
+          python -m compileall -q runtime/verifier-rc27/numina runtime/verifier-rc27/numina_prod
+          python -m pytest -q runtime/verifier-rc27/tests runtime/verifier-rc27/tests_prod
+          python scripts/package-rc27.py "$RUNNER_TEMP/numina-rc27-${GITHUB_RUN_ID}"
       - name: Validate governed Arc provider submitter
         run: node --test tests/provider-submitter.test.mjs
       - name: Validate NUSD simulation API

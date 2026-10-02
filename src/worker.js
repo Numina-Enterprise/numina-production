@@ -62,7 +62,7 @@ export default {
     const artifact=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:req.method}));
     const headers=new Headers(artifact.headers);headers.set('Cache-Control','no-store');return finish(new Response(artifact.body,{status:artifact.status,headers}));
    }
-   const runtime=await routeRuntime(req);if(runtime)return finish(runtime);
+   const runtime=await routeRuntime(req,fetch,12000,env);if(runtime)return finish(runtime);
    if(path.startsWith('/v1/archive/rc20/'))return finish(response({error:'RC20_RUNTIME_RETIRED',message:'Historical rc20 runtime evidence is retained in repository artifacts; no legacy upstream runtime is active.'},410,{'X-Numina-Release-Context':'historical-rc20'}));
    const rc20=await routeRc20(req,env);if(rc20)return finish(rc20);
    if(path.startsWith('/api/control/'))return finish(await controlHttp(req,env));

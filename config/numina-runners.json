@@ -1,24 +1,27 @@
 {
-  "schema": "numina.runner-policy.v13",
+  "schema": "numina.runner-policy.v14",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
   "runnerTarget": "NUMINA",
   "preserveMode": "current_runner_count",
   "preservedRunnerCount": 33,
-  "selfHostedPolicy": "preserve_existing",
+  "selfHostedPolicy": "deny_execution_preserve_registration_records",
   "futureRunnerPolicy": "deny",
   "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
   "authorizationLiteral": "NUMINA",
-  "invariants": {
+  "rules": {
     "preserveCurrentRunners": true,
-    "preserveExistingSelfHostedRunners": true,
+    "preserveExistingSelfHostedRunners": false,
     "denyFutureRunners": true,
     "allRunnersAreNumina": true,
     "runnerPlacementFrozen": false,
     "hostIsNumina": true,
     "externalSigningRequiresExplicitAuthorization": true,
-    "floatingHostedLinuxLabelsDenied": true
+    "floatingHostedLinuxLabelsDenied": true,
+    "preserveExistingSelfHostedRunnerRegistrations": true,
+    "denySelfHostedRunnerExecution": true,
+    "denySelfHostedRunnerScheduling": true
   },
   "hostIdentity": "NUMINA",
   "executionTargets": {
@@ -43,7 +46,7 @@
       "verify-nusd-production.yml": "ubuntu-24.04",
       "verify-root-numina.yml": "ubuntu-24.04"
     },
-    "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Numina root verification, provider verification, privileged control/deployment checks, and declared native workflows may use their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted NUMINA runner registrations remain preserved; no new self-hosted signing identity is introduced.",
+    "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Numina root verification, provider verification, privileged control/deployment checks, and declared native workflows use only their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted runner registration records may be retained as historical/admin state, but self-hosted execution and scheduling are denied; no new runner or signing identity is introduced.",
     "workflowTargetSets": {
       "numina-mobile-release-build.yml": [
         "ubuntu-24.04",

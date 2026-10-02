@@ -12,6 +12,7 @@ runtime/nusd/artifacts/unsigned-deployment.json
 dist/
 
 .vercel/
+.wrangler/
 .openai/publishing/
 
 # Private Apple signing inputs and native build output

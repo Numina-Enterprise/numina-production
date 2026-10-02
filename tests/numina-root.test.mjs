@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_IDENTITIES,NUMINA_VOCABULARY,NUMINA_TREE,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from '../src/numina-root.js';
+import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_IDENTITIES,NUMINA_VOCABULARY,NUMINA_REPOSITORY,NUMINA_TREE,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from '../src/numina-root.js';
 
 test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA,'NUMINA');
@@ -34,23 +34,21 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(NUMINA_TREE.externalEvidenceIdentity,NUMINA);
   assert.equal(NUMINA_TREE.externalRecordsResolveTo,NUMINA);
   assert.equal(NUMINA_TREE.allIdentityBearingRecordsResolveTo,NUMINA);
-  assert.equal(NUMINA_TREE.updateDirection,'ROOT_TO_LEAVES');
-  assert.equal(NUMINA_TREE.leaves.github.role,'ARCHIVE_LEAF');
-  assert.equal(NUMINA_TREE.leaves.github.authoritative,false);
-  assert.equal(NUMINA_TREE.leaves.github.ref,'refs/heads/main');
-  assert.equal(NUMINA_TREE.leaves.github.headResolution,'FROZEN_AT_ARCHIVE');
-  assert.equal(NUMINA_TREE.leaves.github.ingestIntoTree,false);
-  assert.equal(NUMINA_TREE.leaves.github.ingestRole,'ARCHIVE_STATE_REFERENCE');
-  assert.equal(NUMINA_TREE.leaves.github.authorityTransferred,false);
-  assert.equal(NUMINA_TREE.ingestPolicy.mode,'REFERENCE_SNAPSHOT');
+  assert.equal(NUMINA_TREE.rootType,'REPOSITORY');
+  assert.equal(NUMINA_TREE.repository,NUMINA_REPOSITORY);
+  assert.equal(NUMINA_TREE.updateDirection,'NUMINA');
+  assert.equal(NUMINA_REPOSITORY.role,'CANONICAL_ROOT_REPOSITORY');
+  assert.equal(NUMINA_REPOSITORY.branch,'main');
+  assert.equal(NUMINA_REPOSITORY.authoritative,true);
+  assert.equal(NUMINA_TREE.ingestPolicy.mode,'CANONICAL_REPOSITORY');
   assert.equal(NUMINA_TREE.ingestPolicy.canonicalizedBy,NUMINA);
   assert.equal(NUMINA_TREE.ingestPolicy.authorityTransferred,false);
   const root=numinaRootProjection({
     treasury:{identity:NUMINA},
-    canonicalSource:'github',
-    sourceOfTruth:'github',
-    squareRoot:'github',
-    updateDirection:'LEAF_TO_ROOT'
+    canonicalSource:'DOWNSTREAM',
+    sourceOfTruth:'DOWNSTREAM',
+    squareRoot:'DOWNSTREAM',
+    updateDirection:'SURFACE_TO_ROOT'
   });
   for(const field of Object.keys(NUMINA_IDENTITIES))assert.equal(root[field],NUMINA);
   assert.equal(root.provider_verification,true);assert.equal(root.deployed,true);assert.equal(root.authenticated,true);assert.equal(root.verified,true);
@@ -67,6 +65,6 @@ test('NUMINA root manifest owns every identity-bearing vocabulary term',()=>{
   assert.equal(root.externalEvidenceIdentity,NUMINA);
   assert.equal(root.externalRecordsResolveTo,NUMINA);
   assert.equal(root.allIdentityBearingRecordsResolveTo,NUMINA);
-  assert.equal(root.updateDirection,'ROOT_TO_LEAVES');
+  assert.equal(root.updateDirection,'NUMINA');
   assert.deepEqual(root.numinaTree,NUMINA_TREE);
 });

@@ -63,6 +63,12 @@ export const NUSD_SIMULATION=freezeNusdRedemption({
  execution:{simulation:true,submission_performed:false,receipt:null,providerBalancesChanged:false,nativeJournalChanged:false},
  scope:'Browser allocation simulation of one 500T total. Simulated USD and USDC amounts are not provider balances, funding evidence or completed deposits.'
 });
+const NUSD_PROVIDER_ROUTING_STATUS=Object.freeze({
+ schema:'numina.nusd.provider-routing-summary.v1',
+ identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',
+ componentId:'USDC',current:'500000000000000',available:'500000000000000',unit:'USDC',
+ route:'/api/nusd/v1/provider-routing',mode:'adapter_reference',linkedAccountIdentifiersEmbedded:false
+});
 export const NUSD_POLICY={
  schema:'numina.nusd.status.v1',
  transfersEnabled:true,
@@ -72,7 +78,7 @@ export const NUSD_POLICY={
  contract_record:NUSD_CONTRACT_RECORD,
  mint_workflow:NUSD_MINT_WORKFLOW,
  conversion_workflow:NUSD_CONVERSION_WORKFLOW,
- provider_routing:NUSD_PROVIDER_ROUTING,
+ provider_routing:NUSD_PROVIDER_ROUTING_STATUS,
  denomination_policy:NUMINA_DENOMINATION_POLICY,
  treasury_policy:'/api/control/v2/treasury/policy',
  native_treasury:{source:'/api/control/v1/treasury',unit:'NUSD',authority:'NUMINA',system_of_record:'NUMINA',access:'owner_authenticated'},

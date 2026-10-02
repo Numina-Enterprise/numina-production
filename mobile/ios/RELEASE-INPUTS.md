@@ -16,7 +16,7 @@ Historical status updated September 13, 2026: the unsigned 3.0.0 device package 
 | Privacy policy | `/privacy` is linked in the native menu. Confirm that the published notice covers the distributed iOS experience and all actual data flows. |
 | Account deletion | Saved web privacy source says automated account deletion is unavailable. Determine and implement the required in-app deletion route where account creation is offered. |
 | Payments and services | Review the actual service types, geographic availability and payment flows against current platform requirements before distribution. This wrapper does not add purchases or activate payments. |
-| Shared software alignment | Root application 4.0.0 and rc26/core 1.8.0 are checked by scripts/ios-release.mjs and the normal software build. The iOS source archive must match current input hashes. This is source evidence only. |
+| Shared software alignment | Root application 4.0.0 and rc27/core 1.8.0 are checked by scripts/ios-release.mjs and the normal software build. The iOS source archive must match current input hashes. This is source evidence only. |
 | Fresh signing input | `.github/workflows/numina-ios-signing.yml` compiles current source, then `scripts/sign-ios-release.py` checks its bundle identity/build and the real Apple distribution identity/profile before signing. It does not select the historical unsigned bundle. |
 | Release evidence | No simulator/device run, sign-in validation, screenshots, accessibility review, purchase review, archive validation or store review exists. |
 | Listing | Confirm product name, support/privacy URLs, rights, category, age rating, review access and all final listing content. |

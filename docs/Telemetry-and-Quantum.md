@@ -1,6 +1,6 @@
 # Numina 4.0 telemetry and quantum adapter
 
-Numina emits one structured HTTP completion event for each instrumented request. The Sites Worker, Vercel Node gateway and rc26 ASGI deployment wrapper use the same field names and bounded route groups. Native apps and plugins using the canonical APIs appear in those server measurements; this does not install agents on devices.
+Numina emits one structured HTTP completion event for each instrumented request. The Sites Worker, Vercel Node gateway and rc27 ASGI deployment wrapper use the same field names and bounded route groups. Native apps and plugins using the canonical APIs appear in those server measurements; this does not install agents on devices.
 
 The owner can open **Frontier → Runtime metrics** and choose **Read runtime metrics**, or request **GET /api/ops/v1/telemetry** using the existing owner authentication. Metrics reads do not access or change the treasury. The endpoint uses private, no-store responses and excludes its own polling from request counts. The public field map is **/telemetry-metrics.json**.
 
@@ -32,7 +32,7 @@ Increase application compute capacity using the host's deployment controls when 
 
 Logs contain no raw paths, query strings, IPs, user identifiers, authorization headers, request bodies, provider URLs, circuits, objectives or treasury values. NUMINA_TELEMETRY_LOGS=false disables the new HTTP event logs; local metrics remain available. No telemetry collector credential is embedded, no drain is configured by source changes, and no telemetry network request is made on the business request path. Provider-native access logs may have their own retention and redaction settings.
 
-Vercel's active rc26 assembly is created with scripts/package-rc26.py. Its generated entrypoint wraps the preserved ASGI app; the 105 frozen core files remain unchanged. The old rc22 gateway files are historical and are not the telemetry deployment target.
+Vercel's active rc27 assembly is created with scripts/package-rc27.py. Its generated entrypoint wraps the preserved ASGI app; the 105 frozen core files remain unchanged. The old rc22 gateway files are historical and are not the telemetry deployment target.
 
 ## Publishing telemetry and recovery
 

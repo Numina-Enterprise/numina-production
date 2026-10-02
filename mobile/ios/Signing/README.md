@@ -1,6 +1,6 @@
 # Numina iOS signing handoff
 
-Prepared for application 4.0.0, iOS source build 5, runtime 1.9.0-rc26, core 1.8.0.
+Prepared for application 4.0.0, iOS source build 5, runtime 1.9.0-rc27, core 1.8.0.
 These documents configure a future signing operation. They are not an Apple certificate, a provisioning profile, a signed IPA, or an App Store receipt.
 
 ## Included documents

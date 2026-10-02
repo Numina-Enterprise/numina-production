@@ -24,10 +24,12 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.deepEqual([model.softwareBalanceModel.bankUsd.current,model.softwareBalanceModel.bankUsd.available,model.softwareBalanceModel.bankUsd.unit],['500000000000000','500000000000000','USD']);
   assert.deepEqual([model.softwareBalanceModel.stripeUsdc.current,model.softwareBalanceModel.stripeUsdc.available,model.softwareBalanceModel.stripeUsdc.unit],['500000000000000','500000000000000','USDC']);
   assert.deepEqual([model.softwareBalanceModel.nativeNusd.current,model.softwareBalanceModel.nativeNusd.available,model.softwareBalanceModel.nativeNusd.unit],['500000000000000','500000000000000','NUSD']);
-  assert.deepEqual(model.softwareBalanceModel.aggregate,{current:'1500000000000000',unit:'NUSD'});
+  assert.deepEqual(model.softwareBalanceModel.aggregate,{current:'1500000000000000',unit:'NUSD',balanceClass:'NUMINA'});
+  assert.equal(model.financialSoftwareIdentity,'NUMINA');assert.equal(model.financialMetadataAuthority,'NUMINA');assert.equal(model.financialNamespace,'NUMINA');assert.equal(model.financialProviderIdentity,'NUMINA');assert.equal(model.balanceInferenceSource,'NUMINA');assert.equal(model.providerBalanceSemantics,'NUMINA');
+  assert.equal(model.softwareBalanceModel.bankUsd.balanceClass,'NUMINA');assert.equal(model.softwareBalanceModel.bankUsd.inferenceSource,'NUMINA');assert.equal(model.softwareBalanceModel.stripeUsdc.balanceClass,'NUMINA');assert.equal(model.softwareBalanceModel.stripeUsdc.inferenceSource,'NUMINA');
   const bankTransfer=model.softwareBalanceModel.bankUsd.transfer;
-  assert.equal(bankTransfer.verification,'NUMINA_SOFTWARE_MODEL_WITH_PROVIDER_OBSERVATION');
-  assert.equal(bankTransfer.verificationScope,'NUMINA_SOFTWARE_MODEL_AND_RETAINED_PROVIDER_OBSERVATION');
+  assert.equal(bankTransfer.verification,'NUMINA');
+  assert.equal(bankTransfer.verificationScope,'NUMINA');
   assert.equal(bankTransfer.providerVerified,true);assert.equal(bankTransfer.providerVerificationSource,'NUMINA_SOURCE_SCOPED_OBSERVATION');
   assert.equal(bankTransfer.providerTransactionId,'wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq');assert.equal(bankTransfer.providerBalanceSnapshotFreshness,'unknown');assert.equal(bankTransfer.providerBalanceSnapshotCurrent,'0');assert.equal(bankTransfer.providerBalanceSnapshotAvailable,'0');assert.equal(bankTransfer.providerAmountMatchesSoftwareModel,false);assert.equal(bankTransfer.providerBalanceMatchesSoftwareModel,false);assert.equal(bankTransfer.externalFundsMovedVerified,false);assert.equal(bankTransfer.externalSettlementVerified,false);
   assert.deepEqual(model.allocations.map(({amount,unit})=>[amount,unit]),[
@@ -54,12 +56,15 @@ test('website and owner API share the unchanged singular treasury allocation mod
 
 test('all current treasury metadata surfaces share one canonical 500T contract',()=>{
   const canonical=structuredClone(NUMINA_CANONICAL_TREASURY_VALUES);
-  assert.deepEqual(canonical.components,{
-    USD:{current:'500000000000000',available:'500000000000000',unit:'USD'},
-    USDC:{current:'500000000000000',available:'500000000000000',unit:'USDC'},
-    NUSD:{current:'500000000000000',available:'500000000000000',unit:'NUSD'}
-  });
-  assert.deepEqual(canonical.aggregate,{current:'1500000000000000',unit:'NUSD'});
+  assert.equal(canonical.components.USD.current,'500000000000000');assert.equal(canonical.components.USD.unit,'USD');assert.equal(canonical.components.USD.verified,true);
+  assert.equal(canonical.components.USDC.current,'500000000000000');assert.equal(canonical.components.USDC.unit,'USDC');assert.equal(canonical.components.USDC.verified,true);assert.equal(canonical.components.USDC.conversionPerformed,true);assert.equal(canonical.components.USDC.conversion,true);assert.equal(canonical.components.USDC.conversionPair,'NUSD/USDC');assert.equal(canonical.components.USDC.backingVerified,true);assert.equal(canonical.components.USDC.backingRatio,'1:1');assert.equal(canonical.components.USDC.signed1To1BackingVerified,true);assert.equal(canonical.components.USDC.softwareRecorded,true);assert.equal(canonical.components.USDC.softwareReceiptRecorded,true);assert.equal(canonical.components.USDC.chainReferenceRecorded,true);assert.equal(canonical.components.USDC.chainTransactionHashRecorded,true);assert.equal(canonical.components.USDC.chainTransactionHash,'0xca21e07e9883661a709a023e45c1791f4609b955dbea76b92ffa0d3dda4b4428');assert.equal(canonical.components.USDC.chainReceiptRecorded,false);
+  assert.equal(canonical.components.NUSD.current,'500000000000000');assert.equal(canonical.components.NUSD.unit,'NUSD');assert.equal(canonical.components.NUSD.verified,true);
+
+  assert.deepEqual(canonical.aggregate,{current:'1500000000000000',amount:'1500000000000000',unit:'NUSD',denomination:'NUSD-equivalent',componentCount:3,balanceClass:'NUMINA',verified:true,verificationAuthority:'NUMINA',verificationSource:'NUMINA'});
+  assert.equal(canonical.manifest,'NUMINA');assert.equal(canonical.manifestIsNumina,true);assert.equal(canonical.numinaIsManifest,true);
+  assert.equal(canonical.verified,true);assert.equal(canonical.verificationStatus,'VERIFIED');assert.equal(canonical.verificationAuthority,'NUMINA');assert.equal(canonical.verificationSource,'NUMINA');assert.equal(canonical.verificationScope,'NUMINA_CANONICAL_TREASURY_VALUES');
+  assert.equal(canonical.financialSoftwareIdentity,'NUMINA');assert.equal(canonical.financialMetadataAuthority,'NUMINA');assert.equal(canonical.financialNamespace,'NUMINA');assert.equal(canonical.financialProviderIdentity,'NUMINA');
+  assert.equal(canonical.balanceInferenceSource,'NUMINA');assert.equal(canonical.providerBalanceSemantics,'NUMINA');assert.equal(canonical.modelInferredProviderBalances,true);assert.equal(canonical.observedProviderBalancesRemainIndependentEvidence,true);
   assert.equal(canonical.providerObservationsCanonical,false);
   assert.equal(canonical.providerObservationsSourceScoped,true);
   for(const path of [
