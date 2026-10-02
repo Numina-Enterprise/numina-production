@@ -16,8 +16,7 @@ const currentPaths=[
   'package.json',
   'config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json',
   'config/numina-architecture.json',
-  'public/final-build.json','docs/NUMINA-FINAL-BUILD.json','public/business-core.json',
-  'public/final-manifest.json','docs/NUMINA-FINAL-MANIFEST.json','public/current-environments.json',
+  'public/business-core.json',
   'integrations/numina/package.json','integrations/numina/distribution.json',
   'integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
@@ -186,77 +185,15 @@ override.resolution.treasurySettlement=null;
 override.resolution.historicalTreasurySettlement=receipt.validatedReceiptId;
 override.resolution.treasurySettlementValidation=receipt.id;
 override.canonicalSettlementAppliesTo='NONE_WITHOUT_MATCHING_JOURNAL_EVENT';
-const finalBuild=records.get('public/final-build.json');
-finalBuild.treasury=structuredClone(connection);
-finalBuild.historicalTreasuryRelease={historicalRecord:true,currentJournalConfirmed:false,allocationInstruction:'release-evidence/treasury-allocation-instruction-2026-09-19.json',achInstruction:'release-evidence/numina-bofa-ach-instruction-2026-09-19.json',settlementReceipt:receipt.historicalReceiptPath,settlementReceiptValidation:receipt.path};
-if(finalBuild.syncAll){
-  if(finalBuild.syncAll.nativeTreasuryAlignment){
-    finalBuild.syncAll.historicalNativeTreasuryAlignment={...finalBuild.syncAll.nativeTreasuryAlignment,historicalRecord:true,currentJournalConfirmed:false};
-    delete finalBuild.syncAll.nativeTreasuryAlignment;
-  }
-  finalBuild.syncAll.historicalAggregateModeledValue=finalBuild.syncAll.historicalAggregateModeledValue??finalBuild.syncAll.aggregateModeledValue;
-  finalBuild.syncAll.aggregateModeledValue=null;
-  finalBuild.syncAll.historicalNusdMinted=finalBuild.syncAll.historicalNusdMinted??finalBuild.syncAll.nusdMinted;
-  finalBuild.syncAll.nusdMinted=null;
-  finalBuild.syncAll.treasuryJournalObservation=structuredClone(observation);
-}
-finalBuild.softwareTreasury={sourceOfRecord:'NUMINA_NATIVE_TREASURY',journalObservation:structuredClone(observation),canonicalValues:structuredClone(values),bankUsd:structuredClone(connection.softwareBalanceModel.bankUsd),stripeUsdc:structuredClone(connection.softwareBalanceModel.stripeUsdc),nativeNusd:structuredClone(connection.softwareBalanceModel.nativeNusd),aggregate:structuredClone(connection.softwareBalanceModel.aggregate),aggregateModeledValue:null,historicalAggregateModeledValue:receipt.aggregateNusd};
-if(finalBuild.softwareAlignment){finalBuild.historicalSoftwareAlignment={...finalBuild.softwareAlignment,historicalRecord:true};delete finalBuild.softwareAlignment;}
-if(finalBuild.delivery?.browserAlignment){finalBuild.delivery.historicalBrowserAlignment={...finalBuild.delivery.browserAlignment,historicalRecord:true};delete finalBuild.delivery.browserAlignment;}
-for(const data of [finalBuild,records.get('public/business-core.json')])if(data.nusd){
-  data.historicalNusdRelease=data.historicalNusdRelease??{...data.nusd,historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false};
-  Object.assign(data.historicalNusdRelease,{historicalRecord:true,currentJournalConfirmed:false,currentChainStateVerified:false,scope:'RETAINED_RELEASE_CLAIM',metadataAlignment:'/metadata-alignment.json'});
-  data.nusd={
-    sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',status:'JOURNAL_SNAPSHOT',snapshotIsLive:false,
-    journalObservation:structuredClone(observation),journalMintStatus:'PREPARED',
-    journalMintRequestAmount:observation.requests.find(request=>request.kind==='mint_request')?.amount??null,
-    journalSubmissionPerformed:false,journalMintReceipt:null,mintedNusd:null,
-    currentChainState:'UNVERIFIED',operatorActivation:structuredClone(activation),
-    nativeBackingVerified:null,providerReserveVerified:false,
-    usdcConversion:{status:'UNVERIFIED',backingVerified:null,providerLiquidityVerified:false},
-    usdRedemption:{status:'UNVERIFIED',backingVerified:null,providerLiquidityVerified:false},
-    historicalChainMintEvidence:structuredClone(constructorMint),
-    historicalReleaseReference:'historicalNusdRelease'
-  };
-}
-// This updates a native receipt projection, not an operation or provider balance.
-const finalBytes=serialize('public/final-build.json',finalBuild);
-planned.set('public/final-build.json',finalBytes);
-planned.set('docs/NUMINA-FINAL-BUILD.json',finalBytes);
-const packageData=records.get('package.json');
-const previousPin=packageData.numina.finalBuildManifest.blob;
-const finalPin=blob(finalBytes);
-const finalHash=createHash('sha256').update(finalBytes).digest('hex');
-const manifest=records.get('public/final-manifest.json');
-manifest.frontierId=manifest.canonicalSha256=finalHash;
-Object.assign(manifest.finalBuild,{gitBlobSha1:finalPin,sha256:finalHash,canonicalSha256:finalHash});
-manifest.settlementReceiptValidation=structuredClone(receipt);
-manifest.historicalSettlementReceipt={id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,historicalRecord:true,currentJournalConfirmed:false,status:'HISTORICAL_OWNER_ASSERTION'};
-delete manifest.singularSettlementReceipt;
-const manifestBytes=serialize('public/final-manifest.json',manifest);
-planned.set('public/final-manifest.json',manifestBytes);
-planned.set('docs/NUMINA-FINAL-MANIFEST.json',manifestBytes);
-const environments=records.get('public/current-environments.json');
-environments.frontierId=finalHash;
-environments.contentHashes.finalBuildSha256=finalHash;
-environments.contentHashes.finalManifestSha256=createHash('sha256').update(manifestBytes).digest('hex');
-environments.settlementReceiptValidation=structuredClone(receipt);
-environments.historicalSettlementReceipt={id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,historicalRecord:true,currentJournalConfirmed:false,status:'HISTORICAL_OWNER_ASSERTION'};
-delete environments.singularSettlementReceipt;
-packageData.numina.finalBuildManifest.blob=finalPin;
-for(const [path,data] of records){
-  if(!planned.has(path))planned.set(path,serialize(path,data));
-}
-for(const path of ['scripts/build.mjs','scripts/package-github-release.mjs','.github/workflows/numina.yml']){
-  const original=read(path);
-  assert.ok(original.includes(previousPin)||original.includes(finalPin),path+' FINAL pin missing');
-  planned.set(path,original.split(previousPin).join(finalPin).replace(/\r\n/g,'\n'));
-}
+// The archive retains byte-pinned FINAL releases and source-scoped receipts.
+// Only mutable current projections are synchronized; execution gates and source
+// modules are never rewritten by text substitutions.
+for(const [path,data] of records)planned.set(path,serialize(path,data));
 const changed=[...planned].filter(([path,body])=>read(path)!==body);
 if(check){
   console.log(JSON.stringify({identity:'NUMINA',receiptId:receipt.id,consistent:changed.length===0,staleFiles:changed.map(([path])=>path)}));
   if(changed.length)process.exitCode=1;
 }else{
   for(const [path,body] of changed)writeFileSync(fileURLToPath(new URL(path,root)),body);
-  console.log(JSON.stringify({identity:'NUMINA',receiptId:receipt.id,updatedFiles:changed.map(([path])=>path),finalBuildBlob:finalPin}));
+  console.log(JSON.stringify({identity:'NUMINA',receiptId:receipt.id,updatedFiles:changed.map(([path])=>path),frozenArtifactsPreserved:true,sourceModulesPreserved:true,providerExecutionPerformed:false}));
 }
