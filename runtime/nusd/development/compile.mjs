@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import solc from 'solc';
-import {loadTokenArtifact} from '../scripts/token-artifact.mjs';
+import {validateRetainedTokenPins} from './refresh-token-pins.mjs';
 const here=path.dirname(fileURLToPath(import.meta.url)),root=path.resolve(here,'..');
 export function compileSource(sourceName,content,contractName,schema='numina.nusd.settlement-candidate.v1'){
   if(solc.version()!=='0.8.37+commit.f401782d.Emscripten.clang')throw Error('Compiler version mismatch');
@@ -22,7 +22,7 @@ export function compileSource(sourceName,content,contractName,schema='numina.nus
     metadata:JSON.parse(compiled.metadata),dependencies:{'@openzeppelin/contracts':'5.4.0'}};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
-  loadTokenArtifact();
+  validateRetainedTokenPins();
   const args=process.argv.slice(2);
   if(args.length===0){
     console.log('Validated retained NUSD source and artifact pins; no compilation or artifact writes.');

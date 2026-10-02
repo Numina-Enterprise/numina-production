@@ -64,7 +64,18 @@ export function validateDeployment(file) {
     'redeemabilityTermsAndOperations', 'financialCrimeAndSanctionsControls', 'independentRoleKeyCustody',
     'incidentAndPauseRecovery', 'applicationSettlementAndFulfillmentReview'
   ]) required(config.reviewRecords?.[key], `Review record: ${key}`);
-  return { config, cap, initialSupply, initialRecipient, roles, policyHash, requestSha256, errors };
+  const retainedProductionRequest=absolute===path.join(root,'deployment.production.json');
+  const deploymentScope=retainedProductionRequest?'retained_deployment_receipt_binding.v1':'explicit_unsigned_candidate.v1';
+  if(retainedProductionRequest){
+    try{
+      const receipt=JSON.parse(fs.readFileSync(path.join(root,'deployment-receipt.json'),'utf8'));
+      const retainedPolicyHash=receipt.token?.state?.issuerPolicyHash?.replace(/^0x/,'').toLowerCase();
+      if(receipt.issuance?.decimals!==18||!/^\d+$/.test(receipt.issuance?.baseUnits)||!/^\d+$/.test(receipt.issuance?.amountNusd)||!/^[a-f0-9]{64}$/.test(receipt.requestSha256)||!/^[a-f0-9]{64}$/.test(retainedPolicyHash||''))throw Error();
+      if(requestSha256!==receipt.requestSha256||config.issuer?.policySha256?.toLowerCase()!==retainedPolicyHash)errors.push('RETAINED_PRODUCTION_REQUEST_EVIDENCE_MISMATCH: superseded production candidate is not bound to the finalized eighteen-decimal receipt; prepare an explicit unsigned candidate for versioned review');
+      if(policyHash?.toLowerCase()!==retainedPolicyHash)errors.push('RETAINED_PRODUCTION_POLICY_EVIDENCE_MISMATCH: current approved-policy bytes do not match the finalized receipt policy hash; historical policy bytes must be preserved');
+    }catch{errors.push('RETAINED_PRODUCTION_DEPLOYMENT_EVIDENCE_UNAVAILABLE: a valid finalized eighteen-decimal request and policy binding is required before production dispatch');}
+  }
+  return { config, cap, initialSupply, initialRecipient, roles, policyHash, requestSha256, deploymentScope, productionDispatchAllowed:retainedProductionRequest&&errors.length===0, errors };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
