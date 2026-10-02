@@ -4,7 +4,6 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { getAddress, parseUnits, ZeroAddress, ContractFactory } from 'ethers';
 import { loadTokenArtifact, TOKEN_ARTIFACT_SHA256 } from './token-artifact.mjs';
-const NUSD_DECIMALS = 6;
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export function validateDeployment(file) {
@@ -28,16 +27,16 @@ export function validateDeployment(file) {
   required(config.network?.finalityPolicy, 'Network finality policy');
   let cap = null;
   try {
-    if (typeof config.supplyCapNusd !== 'string' || !/^\d+(\.\d{1,6})?$/.test(config.supplyCapNusd)) throw new Error();
-    cap = parseUnits(config.supplyCapNusd, NUSD_DECIMALS);
+    if (typeof config.supplyCapNusd !== 'string' || !/^\d+(\.\d{1,18})?$/.test(config.supplyCapNusd)) throw new Error();
+    cap = parseUnits(config.supplyCapNusd, 18);
     if (cap <= 0n || cap >= 2n ** 256n) throw new Error();
-  } catch { errors.push('An explicitly approved supply cap in NUSD decimal text is required (maximum 6 decimals)'); }
+  } catch { errors.push('An explicitly approved supply cap in NUSD decimal text is required (maximum 18 decimals)'); }
   let initialSupply = null, initialRecipient = null;
   try {
-    if (typeof config.initialSupplyNusd !== 'string' || !/^\d+(\.\d{1,6})?$/.test(config.initialSupplyNusd)) throw new Error();
-    initialSupply = parseUnits(config.initialSupplyNusd, NUSD_DECIMALS);
+    if (typeof config.initialSupplyNusd !== 'string' || !/^\d+(\.\d{1,18})?$/.test(config.initialSupplyNusd)) throw new Error();
+    initialSupply = parseUnits(config.initialSupplyNusd, 18);
     if (initialSupply < 0n || initialSupply >= 2n ** 256n || cap === null || initialSupply > cap) throw new Error();
-  } catch { errors.push('An explicit initial supply from zero through the approved cap in NUSD decimal text is required (maximum 6 decimals)'); }
+  } catch { errors.push('An explicit initial supply from zero through the approved cap in NUSD decimal text is required (maximum 18 decimals)'); }
   try {
     initialRecipient = getAddress(config.initialRecipient);
     if (initialRecipient === ZeroAddress) throw new Error();

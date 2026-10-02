@@ -31,9 +31,11 @@ for(const item of [instruction,projection]){
 assert.equal(instruction.destination.routingReference,fields.endpoint);
 assert.equal(projection.routingReference,fields.endpoint);
 const bank=privateBankRouteConfiguration({});
-for(const [key,value] of Object.entries(fields))assert.equal(bank.achExecutionScope[key],value,key);
+for(const [key,value] of Object.entries(fields))assert.equal(bank.historicalAchExecutionScope[key],value,key);
 assert.equal(bank.treasuryIdentity,'NUMINA');
-assert.equal(bank.achInstructionStatus,'INITIATED');
+assert.equal(bank.achInstructionStatus,'PREPARED');
+assert.equal(bank.achExecutionScope.instructionState,'PREPARED');
+assert.equal(bank.treasuryInstructionSubmissionPerformed,false);
 assert.equal(bank.achSubmissionEnabled,false);
 assert.equal(bank.settlementPerformed,false);
 assert.equal(bank.bankSettlementVerified,false);

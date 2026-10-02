@@ -38,7 +38,8 @@ test('Treasury read is one pinned GET and returns a sanitized read-only projecti
  assert.equal(headers.has('Cookie'),false);assert.equal(headers.has('oai-authenticated-user-email'),false);
  assert.equal(result.schema,'numina.stripe.treasury.v1');assert.equal(result.connection,'read_only');
  assert.equal(result.identity,'NUMINA');assert.equal(result.treasuryIdentity,'NUMINA');assert.equal(result.provider,'NUMINA');assert.equal(result.transportProvider,'Stripe');
- assert.equal(result.backingVerified,true);assert.equal(result.nativeEvidenceStatus,'FINAL');assert.equal(result.nativeModel.scope,'NUMINA_MANIFEST_FINAL');
+ assert.equal(result.backingVerified,null);assert.equal(result.nativeModel.scope,'HISTORICAL_DECLARATION');
+ assert.equal(result.modeledValueScope,'HISTORICAL_TARGET');
  assert.equal(result.submission_performed,false);assert.equal(result.settlement_performed,false);assert.equal(result.receipt,null);
  assert.equal(result.account.id,STRIPE_TREASURY_FINANCIAL_ACCOUNT);assert.equal(result.account.name,'Local fixture financial account');assert.equal(result.account.status,'open');assert.equal(result.account.livemode,true);
  assert.equal(result.transfer_execution,false);assert.equal(result.nusd_settlement,false);assertSafe(result);
@@ -220,7 +221,7 @@ test('owner Treasury reads stay private, leave the journal unchanged and cannot 
   const after=await readControl(env.DB);assert.equal(after.state_hash,before.state_hash);assert.equal(after.revision,before.revision);assert.equal(after.eventCount,before.eventCount);
   for(const route of ['/api/control/v1/health','/api/control/v1/manifest','/api/control/v1/state','/api/nusd/v1/status','/api/nusd/v1/redemption-policy']){
    const response=await worker.fetch(new Request('https://numina.test'+route,{headers:ownerHeaders}),env);assert.equal(response.status,200);const raw=await response.text();assertSafe(raw);assert.equal(raw.includes(STRIPE_TREASURY_FINANCIAL_ACCOUNT),false);assert.equal(raw.includes('Local fixture financial account'),false);
-   if(route==='/api/nusd/v1/status'){const status=JSON.parse(raw);for(const capability of ['mint','exchange','redemption','settlement'])assert.equal(status.capabilities[capability],false);assert.equal(status.capabilities.transfer,true);assert.equal(status.treasury_backing.valuation,null);}
+   if(route==='/api/nusd/v1/status'){const status=JSON.parse(raw);for(const capability of ['transfer','mint','exchange','redemption','settlement'])assert.equal(status.capabilities[capability],false);assert.equal(status.treasury_backing.valuation,null);}
   }
   assert.equal(calls,2);
  }finally{env.DB.close();}

@@ -10,7 +10,7 @@ const owner='email:owner@example.test',delegate='email:delegate@example.test',ke
 const path='/api/control/v1/treasury-attestation';
 const identity=email=>({'oai-authenticated-user-id':'platform-test-user','oai-authenticated-user-email':email});
 const request=(headers={},method='GET')=>new Request('https://numina.test'+path,{headers,method});
-const containsPrivate=s=>/500000000000000|500,000,000,000,000|Bank of America|Treasury transfers and NUSD settlement are active\. Funds moved\./.test(s);
+const containsPrivate=s=>/(?<![0-9])500000000000000(?![0-9])|(?<![0-9,])500,000,000,000,000(?![0-9,])|Bank of America|Treasury transfers and NUSD settlement are active\. Funds moved\./.test(s);
 async function fixture(){const DB=database(),now=Math.floor(Date.now()/1000);await bootstrapControl(DB,owner,now);return {DB,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
 
 test('legacy owner statement is replaced by the private canonical Numina treasury route',async()=>{

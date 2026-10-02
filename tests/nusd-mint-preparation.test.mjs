@@ -37,10 +37,10 @@ test('offline mint draft encodes exact 500T authorization and dependent distinct
   const f = fixture(t), draft = prepareMint(f.file, f), abi = new Interface(loadTokenArtifact().abi);
   const [authorize, mint] = draft.transactions;
   assert.equal(draft.status, 'UNSIGNED_MINT_REVIEW_DRAFT_NOT_APPROVED');
-  assert.equal(draft.request.amountBaseUnits, '500000000000000000000');
+  assert.equal(draft.request.amountBaseUnits, '500000000000000000000000000000000');
   assert.equal(draft.integrity.requestSha256, hash(fs.readFileSync(f.file)));
   assert.deepEqual(Array.from(abi.decodeFunctionData('authorizeIssuance', authorize.transaction.data)),
-    [f.config.reserveReference, f.config.recipient, 500000000000000000000n, BigInt(f.config.expiresAt)]);
+    [f.config.reserveReference, f.config.recipient, 500000000000000000000000000000000n, BigInt(f.config.expiresAt)]);
   assert.deepEqual(Array.from(abi.decodeFunctionData('mintAuthorized', mint.transaction.data)), [f.config.reserveReference]);
   assert.equal(authorize.transaction.from, f.config.issuer); assert.equal(mint.transaction.from, f.config.minter);
   assert.equal(mint.dependsOnStep, 1);
@@ -64,12 +64,35 @@ test('offline mint draft encodes exact 500T authorization and dependent distinct
 
 test('fractional NUSD remains exact and amount validation rejects unsafe or out-of-range values', t => {
   const f = fixture(t);
-  for (const [value, expected] of [['0.000001', '1'], ['500000000000000.000001', '500000000000000000001']]) {
-    f.config.amountNusd = value; f.save(); assert.equal(prepareMint(f.file, f).request.amountBaseUnits, expected);
+  const abi = new Interface(loadTokenArtifact().abi);
+  for (const [value, expected] of [
+    ['0.000000000000000001', '1'],
+    ['0.000001', '1000000000000'],
+    ['500000000000000.000000000000000001', '500000000000000000000000000000001'],
+    ['115792089237316195423570985008687907853269984665640564039457.584007913129639935', (2n ** 256n - 1n).toString()]
+  ]) {
+    f.config.amountNusd = value; f.save();
+    const draft = prepareMint(f.file, f);
+    assert.equal(draft.request.amountBaseUnits, expected);
+    assert.equal(abi.decodeFunctionData('authorizeIssuance', draft.transactions[0].transaction.data)[2], BigInt(expected));
   }
-  for (const value of [0, 500000000000000, '0', '-1', '1e6', '01', ' 1', '1.0000001', (2n ** 256n).toString(), '9'.repeat(1000)]) {
+  for (const value of [0, 500000000000000, '0', '0.000000000000000000', '-1', '1e6', '01', ' 1', '1.0000000000000000001',
+    '115792089237316195423570985008687907853269984665640564039457.584007913129639936', (2n ** 256n).toString(), '9'.repeat(1000)]) {
     f.config.amountNusd = value; f.save(); assert.throws(() => prepareMint(f.file, f), error => error.code === 'INVALID_MINT_REQUEST');
   }
+});
+
+test('CLI rejects uint256 overflow before creating output or modifying the mint request', t => {
+  const f = fixture(t);
+  f.config.amountNusd = '115792089237316195423570985008687907853269984665640564039457.584007913129639936';
+  f.save(); const original = fs.readFileSync(f.file);
+  const result = spawnSync(process.execPath, [cli, f.file, '--output', f.output], { encoding: 'utf8', timeout: 10000 });
+  assert.equal(result.status, 1);
+  const failure = JSON.parse(result.stderr);
+  assert.equal(failure.error, 'INVALID_MINT_REQUEST');
+  assert.equal(failure.submissionApproved, false); assert.equal(failure.broadcast, false);
+  assert.equal(fs.existsSync(f.output), false);
+  assert.ok(fs.readFileSync(f.file).equals(original));
 });
 
 test('expiry boundaries are bounded uint48 seconds and use no claimed chain observation', t => {

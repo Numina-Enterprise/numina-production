@@ -28,7 +28,7 @@ test('retained token artifact pins exact source bytes; settlement rebuild matche
 });
 test('issuance enforces distinct roles, pause, bounded authorization, exact mint and supply cap',async t=>{
   const f=await fixture(t),{coin,addresses,issuer,minter,outsider,pauser}=f;
-  assert.equal(await coin.totalSupply(),0n);assert.equal(await coin.decimals(),6n);assert.equal(await coin.paused(),true);
+  assert.equal(await coin.totalSupply(),0n);assert.equal(await coin.decimals(),18n);assert.equal(await coin.paused(),true);
   await assert.rejects(coin.connect(outsider).unpause());await sent(coin.unpause());
   await assert.rejects(coin.grantRole(await coin.MINTER_ROLE(),addresses[1]));
   await assert.rejects(coin.connect(outsider).authorizeIssuance(id('bad'),addresses[4],1n,2000000000));
