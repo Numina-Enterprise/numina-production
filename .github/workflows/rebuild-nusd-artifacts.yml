@@ -1,73 +1,83 @@
-name: Rebuild NUSD Artifacts
+name: Validate Retained NUSD Artifacts
 
 on:
   pull_request:
     branches: [main]
     paths:
       - 'runtime/nusd/contracts/**'
+      - 'runtime/nusd/artifacts/**'
       - 'runtime/nusd/development/**'
+      - 'runtime/nusd/scripts/token-artifact.mjs'
+      - 'runtime/nusd/deployment-receipt.json'
+      - 'runtime/nusd/deployment-verification.json'
+      - 'runtime/nusd/mint-receipt.json'
+      - 'scripts/nusd-contract-record.mjs'
+      - 'tests/nusd-compiler-guard.test.mjs'
+      - 'tests/nusd-contract-record.test.mjs'
+      - 'tests/workflow-integrity.test.mjs'
       - '.github/workflows/rebuild-nusd-artifacts.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: rebuild-nusd-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  rebuild:
+  validate:
     runs-on: NUMINA
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
       - name: Install pinned compiler dependencies
         working-directory: runtime/nusd/development
         run: npm ci --ignore-scripts
-      - name: Compile canonical NUSD contracts
+      - name: Validate retained compiler artifact pins
         working-directory: runtime/nusd/development
         run: npm run compile
-      - name: Refresh exact token pins
-        run: node runtime/nusd/development/refresh-token-pins.mjs
-      - name: Install production deployment encoder
-        working-directory: runtime/nusd
-        run: npm ci --ignore-scripts
-      - name: Encode exact 1,500T production deployment
-        working-directory: runtime/nusd
-        run: node scripts/validate-deployment.mjs deployment.production.json --output artifacts/unsigned-production-deployment.json
-      - name: Derive exact creation-data hashes
-        working-directory: runtime/nusd
-        run: node scripts/prepare-review-draft.mjs deployment.production.json --output artifacts/production-review-draft.json
-      - name: Commit canonical artifacts
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+      - name: Validate retained 18-decimal receipt bindings
         shell: bash
         run: |
-          git config user.name "NUMINA"
-          git config user.email "actions@users.noreply.github.com"
-          git add runtime/nusd/artifacts/NuminaUSD.json
-          git add runtime/nusd/artifacts/NuminaSettlement.json
-          git add runtime/nusd/artifacts/NuminaUSDCConversion.json
-          git add runtime/nusd/artifacts/NuminaUSDRedemption.json
-          git add runtime/nusd/scripts/token-artifact.mjs
-          git add -f runtime/nusd/artifacts/unsigned-production-deployment.json
-          git add -f runtime/nusd/artifacts/production-review-draft.json
-          if git diff --cached --quiet; then
-            echo "Canonical artifacts already current."
-          else
-            git commit -m "Rebuild 6-decimal NUSD artifacts"
-            git push origin HEAD:${{ github.head_ref }}
-          fi
-      - name: Upload rebuilt canonical artifacts
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {loadTokenArtifact} from './runtime/nusd/scripts/token-artifact.mjs';
+          import {createNusdContractRecord} from './scripts/nusd-contract-record.mjs';
+          loadTokenArtifact();
+          const {record}=createNusdContractRecord();
+          assert.equal(record.issuance.decimals,18);
+          assert.equal(record.issuance.currentOperationalState,'UNVERIFIED');
+          assert.equal(record.issuance.mintedNusd,null);
+          assert.equal(record.issuance.burnedNusd,null);
+          console.log('Validated retained 18-decimal source, artifact and receipt bindings; current chain state remains unverified; no artifact writes or provider transactions.');
+          NODE
+      - name: Test contract implementation locally
+        working-directory: runtime/nusd/development
+        run: npm test
+      - name: Verify read-only compiler and workflow guards
+        run: node --test tests/nusd-compiler-guard.test.mjs tests/workflow-integrity.test.mjs
+      - name: Verify retained source and evidence were not changed
+        run: git diff --exit-code -- runtime/nusd/contracts runtime/nusd/artifacts runtime/nusd/scripts/token-artifact.mjs runtime/nusd/deployment-receipt.json runtime/nusd/deployment-verification.json runtime/nusd/mint-receipt.json runtime/nusd/policies
+      - name: Upload validated retained artifacts and receipts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: NUSD-6DEC-ARTIFACTS
+          name: NUSD-18DEC-RETAINED-RECEIPT-BOUND-ARTIFACTS
           path: |
+            runtime/nusd/contracts/NuminaUSD.sol
+            runtime/nusd/contracts/NuminaSettlement.sol
+            runtime/nusd/contracts/NuminaUSDCConversion.sol
+            runtime/nusd/contracts/NuminaUSDRedemption.sol
             runtime/nusd/artifacts/NuminaUSD.json
             runtime/nusd/artifacts/NuminaSettlement.json
             runtime/nusd/artifacts/NuminaUSDCConversion.json
             runtime/nusd/artifacts/NuminaUSDRedemption.json
-            runtime/nusd/artifacts/unsigned-production-deployment.json
-            runtime/nusd/artifacts/production-review-draft.json
+            runtime/nusd/deployment-receipt.json
+            runtime/nusd/deployment-verification.json
+            runtime/nusd/mint-receipt.json
             runtime/nusd/scripts/token-artifact.mjs
           if-no-files-found: error

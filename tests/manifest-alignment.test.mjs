@@ -10,6 +10,8 @@ import {walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
 const digest=value=>createHash('sha256').update(value).digest('hex');
+// Retained text content is pinned to the original Git blob's LF bytes; checkout raw hashes may use CRLF.
+const retainedTextDigest=value=>digest(value.toString('utf8').replace(/\r\n/g,'\n'));
 const releasePath='dist/client/downloads/application-release-v4.json';
 
 test('one owner approval binds both runtime manifests without manufacturing financial evidence',()=>{
@@ -113,7 +115,7 @@ test('application manifest aliases contain the same current release bytes',()=>{
 test('current settlement validation binds the retained owner assertion without treating it as an executed settlement',()=>{
   const release=json(releasePath),current=release.current_treasury_settlement;
   const validation=json(current.validationSource),historical=json(current.historicalOwnerAssertion);
-  assert.equal(digest(bytes(current.historicalOwnerAssertion)),'783486abc7dae3a4eacf42c2afc582d723cdba0dc7594eb6f01574cc7cb39be9');
+  assert.equal(retainedTextDigest(bytes(current.historicalOwnerAssertion)),'c5fb1d41fbb443cfd599d146f581a78c424a9d5ceb21d3c7c3876c27550d4128');
   assert.equal(historical.status,'SETTLED');assert.equal(historical.settlementPerformed,true);assert.equal(historical.submissionPerformed,true);
   assert.equal(current.schema,validation.schema);assert.equal(current.id,validation.id);assert.equal(current.validatesAssertionId,historical.id);
   assert.equal(current.status,validation.status);assert.equal(current.status,'NOT_SETTLED');assert.equal(current.final,true);
