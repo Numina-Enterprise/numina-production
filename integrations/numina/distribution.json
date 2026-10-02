@@ -1,4 +1,103 @@
 {
+  "stateReconciliation": {
+    "schema": "numina.state-reconciliation.v1",
+    "identity": "NUMINA",
+    "applicationVersion": "4.0.0",
+    "observation": {
+      "observedAt": "2026-10-01T23:58:51Z",
+      "source": "authenticated_connected_Stripe_readbacks",
+      "classification": "dated_provider_observation_not_live_attestation",
+      "auditSha256": "35bd10eda06f8b400cbd80b0212c652216e27d626f03bb795e675ab9d0542eef"
+    },
+    "roots": {
+      "recordedControlGenesisRoot": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+      "publicIdentityProjectionRoot": "5674969a3087256a47d6f5eca7c11a32c12549aa066d0bded49c997070850c5c",
+      "recordedChainGenesis": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+      "currentJournalRootVerified": false,
+      "rootMutationPerformed": false,
+      "scope": "retained_source_identities_distinct_from_public_projection_and_live_journal"
+    },
+    "intendedState": {
+      "source": "current_user_assertion",
+      "externalExecution": true,
+      "stripeSubmission": true,
+      "executableConversionVerified": true,
+      "providerBalancesChanged": true
+    },
+    "implementedSoftwareState": {
+      "externalExecution": false,
+      "stripeSubmission": false,
+      "executableConversionVerified": false,
+      "providerBalancesChanged": false,
+      "scope": "Numina_control_execution_and_denomination_policy_effects",
+      "controlAdapter": "internal.record.v1",
+      "stripeAdapter": "live_read_only",
+      "submissionAdapter": "not_connected",
+      "conversionActivation": "not_verified",
+      "providerWritesPerformedByReconciliation": false
+    },
+    "providerConfirmedState": {
+      "stripeAccountDetailsSubmitted": true,
+      "stripeChargesEnabled": true,
+      "stripePayoutsEnabled": true,
+      "historicalPaymentExecution": true,
+      "historicalPaymentsToTreasuryBalanceMovement": true,
+      "numinaControlExecutionLinked": false,
+      "numinaTreasuryInstructionSubmitted": false,
+      "nusdConversionVerified": false,
+      "externalBankSettlementVerified": false,
+      "scope": "dated_Stripe_account_and_historical_USD_activity_only",
+      "currency": "USD",
+      "providerAccountMatchedToNumina": true,
+      "reservesVerified": false
+    },
+    "reconciliation": {
+      "externalExecution": {
+        "asserted": true,
+        "implemented": false,
+        "providerPaymentActivityConfirmed": true,
+        "numinaExecutionConfirmed": false,
+        "status": "PROVIDER_ACTIVITY_CONFIRMED_CONTROL_EXECUTION_UNVERIFIED"
+      },
+      "stripeSubmission": {
+        "asserted": true,
+        "implemented": false,
+        "providerAccountOnboardingConfirmed": true,
+        "treasuryInstructionSubmissionConfirmed": false,
+        "status": "ACCOUNT_DETAILS_SUBMITTED_TREASURY_ADAPTER_UNAVAILABLE"
+      },
+      "executableConversionVerified": {
+        "asserted": true,
+        "implemented": false,
+        "providerConfirmed": false,
+        "status": "CONVERSION_EVIDENCE_NOT_ESTABLISHED"
+      },
+      "providerBalancesChanged": {
+        "asserted": true,
+        "softwareOperationEffect": false,
+        "historicalProviderMovementConfirmed": true,
+        "requestedTreasuryTransferConfirmed": false,
+        "status": "HISTORICAL_USD_MOVEMENT_CONFIRMED_REQUESTED_TRANSFER_UNVERIFIED"
+      }
+    },
+    "evidenceBoundary": {
+      "paidApiAccessIsTreasuryTransferReceipt": false,
+      "denominationPolicyIsExecutableConversion": false,
+      "currencyStorageIsConversionEvidence": false,
+      "providerObservationIsCanonicalTreasuryBalance": false,
+      "sourceAlignmentIsDeploymentAttestation": false,
+      "assertionEnablesExecution": false
+    },
+    "remainingBlockers": [
+      "Authenticated current journal/root readback",
+      "Connected idempotent treasury submission adapter and exact requested transfer receipt",
+      "Verified funded NUSD conversion route and provider conversion receipt",
+      "Current signed native artifacts and store submission receipts",
+      "Required rc26 runtime endpoints return HTTP 410"
+    ],
+    "route": "/api/control/v2/state-reconciliation",
+    "download": "/state-reconciliation.json"
+  },
   "root": "NUMINA",
   "manifest": "NUMINA",
   "identity": "NUMINA",

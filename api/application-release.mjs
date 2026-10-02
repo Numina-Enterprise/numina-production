@@ -1,3 +1,4 @@
+import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {createHash,createPublicKey,verify as verifySignature} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {EXPECTED_RELEASE,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE_ARTIFACT_TYPE} from '../public/runtime-contract.js';
@@ -18,7 +19,7 @@ function nativeTreasuryMetadata(){return {
   mintStatus:CANONICAL_TREASURY_VALUES.mintStatus,mintedNusd:CANONICAL_TREASURY_VALUES.mintedNusd,burnedNusd:CANONICAL_TREASURY_VALUES.burnedNusd,
   providerObservationsSourceScoped:true,externalBalancesAggregated:false,externalProviderSettlementVerified:false
 };}
-function localApplicationRelease(){return {schema:'numina.application-release.v2',schema_version:2,identity:NUMINA,singular:true,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,softwareTreasury:nativeTreasuryMetadata(),product:NUMINA,modelIdentity:NUMINA,version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:NUMINA,repository:NUMINA,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
+function localApplicationRelease(){return {stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:'numina.application-release.v2',schema_version:2,identity:NUMINA,singular:true,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,softwareTreasury:nativeTreasuryMetadata(),product:NUMINA,modelIdentity:NUMINA,version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,provenance:NUMINA,repository:NUMINA,runtime_dependency:{singular:true,identity:EXPECTED_RELEASE.identity,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};}
 const SPKI_PREFIX=Buffer.from('302a300506032b6570032100','hex');
 const NUMINA_FIELDS=['root','manifest','identity','authority','source','evidence','provider','host','provenance','core','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection'];
 
@@ -28,7 +29,7 @@ export function validateApplicationRelease(value){
   if(Object.hasOwn(value,'root')){
     if(NUMINA_FIELDS.some(field=>value[field]!=='NUMINA')||value.provider_verification!==true||value.authenticated!==true||value.verified!==true||value.deployed!==true)throw new Error('APPLICATION_RELEASE_MISMATCH');
   }
-  if(value.product!==NUMINA||value.version!==APPLICATION_VERSION||value.release!==APPLICATION_RELEASE)throw new Error('APPLICATION_RELEASE_MISMATCH');
+  if(!([NUMINA,'Numina'].includes(value.product))||value.version!==APPLICATION_VERSION||value.release!==APPLICATION_RELEASE)throw new Error('APPLICATION_RELEASE_MISMATCH');
   if(!/^[0-9a-f]{64}$/i.test(String(value.build_id||'')))throw new Error('APPLICATION_BUILD_ID_INVALID');
   const runtime=value.runtime_dependency;
   if(!runtime||runtime.identity!==EXPECTED_RELEASE.identity||runtime.identity!=='NUMINA'||runtime.version!==EXPECTED_RELEASE.production_version||runtime.release!==EXPECTED_RELEASE.release)throw new Error('RUNTIME_RELEASE_MISMATCH');
