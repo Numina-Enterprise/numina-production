@@ -18,6 +18,14 @@ test('any active package drift blocks publication', () => {
   }
 });
 
+test('stale native procurement permission claims block publication', () => {
+  for (const platform of ['android', 'ios']) {
+    const input = loadSoftwareRelease();
+    input.nativeGuidance[platform] = input.nativeGuidance[platform].replace('procurement_usage: false', 'procurement_usage: true');
+    assert.throws(() => verifySoftwareRelease(input), /must not claim procurement is enabled/);
+  }
+});
+
 test('stale dependency lock identities block publication without changing dependencies', () => {
   for (const index of [0, 1]) {
     const input = loadSoftwareRelease();

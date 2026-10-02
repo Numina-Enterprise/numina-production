@@ -16,6 +16,7 @@ export const softwareReleaseInputs = [
   'integrations/numina/verification.json', 'integrations/numina/file-manifest.json',
   'integrations/codex/numina/.codex-plugin/plugin.json',
   'mobile/android/app/build.gradle', 'mobile/ios/Configuration/Numina.xcconfig',
+  'mobile/android/README.md', 'mobile/ios/README.md',
   'mobile/ios/Signing/signing-inputs.json', 'mobile/signing/release-identities.json'
 ];
 
@@ -59,6 +60,7 @@ export function loadSoftwareRelease(root = ROOT) {
     androidBuild: Number(capture('mobile/android/app/build.gradle', /versionCode (\d+)/)),
     iosBuild: Number(capture('mobile/ios/Configuration/Numina.xcconfig', /CURRENT_PROJECT_VERSION = (\d+)/)),
     native, identities,
+    nativeGuidance: Object.fromEntries(['android', 'ios'].map(platform => [platform, read('mobile/' + platform + '/README.md')])),
     iosSigningBuild: json('mobile/ios/Signing/signing-inputs.json').sourceBuildNumber,
     runtimeVersion: EXPECTED_RELEASE.production_version,
     coreVersion: EXPECTED_RELEASE.core_version
@@ -67,6 +69,11 @@ export function loadSoftwareRelease(root = ROOT) {
 
 export function verifySoftwareRelease(input) {
   assert.equal(input.version, '4.0.0', 'Numina 4 source release');
+  for (const [platform, guidance] of Object.entries(input.nativeGuidance)) {
+    assert.doesNotMatch(guidance, /procurement_usage\s*:\s*true/i, platform + ' source must not claim procurement is enabled');
+    assert.match(guidance, /https:\/\/numinalabs\.xyz\/api\/control\/v2\/manifest/, platform + ' guidance must reference the live capability gate');
+    assert.match(guidance, /request-bound owner or delegated approval/, platform + ' guidance must retain per-request authority');
+  }
   for (const [name, version] of Object.entries(input.versions))
     assert.equal(version, input.version, 'Source version mismatch: ' + name);
   for (const {path, pkg, lock} of input.locks) {
