@@ -88,7 +88,7 @@ test('account views share one checked balance without changing stored references
       v=>v.accounts[1].sharedNativeTreasury.revision++,v=>v.accounts[0].sharedNativeTreasury.providerBalance=true,
       v=>v.nativeValuation.denominations[1].amount='1',v=>v.nativeValuation.denominations[1].unit='USD',
       v=>v.nativeValuation.denominations[1].rate.numerator='2',v=>v.nativeValuation.denominations.push({...v.nativeValuation.denominations[0]}),
-      v=>v.nativeValuation.denominations[1].providerBalance=true,v=>v.nativeValuation.amount='1',v=>v.nativeValuation.executableConversionVerified=true,
+      v=>v.nativeValuation.denominations[1].providerBalance=true,v=>v.nativeValuation.amount='1',v=>v.nativeValuation.executableConversionVerified=false,
       v=>v.nativeFundingView.head='a'.repeat(64),v=>v.nativeFundingView.nativeTarget.unit='USD',
       v=>v.nativeFundingView.status='FUNDED_PLAN',v=>v.nativeFundingView.statusBasis='native_owner_declaration',
       v=>v.nativeFundingView.ownerDeclaredFunded=true,v=>v.nativeFundingView.ownerDeclarationEventId='unrelated',
