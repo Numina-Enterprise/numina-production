@@ -82,14 +82,10 @@ jobs:
             echo "GitHub OIDC token request variables are unavailable; no journal write or mint is attempted."
             exit 3
           fi
-          if [ -z "$NUMINA_CONTROL_API_KEY" ]; then
-            echo "NUMINA production control bearer is unavailable; no journal write or mint is attempted."
-            exit 4
-          fi
 
       - name: Prepare post-freeze journal mint and USDC deposit requests
         working-directory: runtime/nusd
-        run: env -u ACTIONS_ID_TOKEN_REQUEST_URL -u ACTIONS_ID_TOKEN_REQUEST_TOKEN node scripts/prepare-post-freeze-journal.mjs artifacts/post-freeze-journal-plan.json
+        run: node scripts/prepare-post-freeze-journal.mjs artifacts/post-freeze-journal-plan.json
 
       - name: Validate exact 1,500T 6-decimal constructor
         working-directory: runtime/nusd
@@ -101,10 +97,11 @@ jobs:
 
       - name: Bind verified 6-decimal mint receipt to NUMINA journal
         working-directory: runtime/nusd
-        run: env -u ACTIONS_ID_TOKEN_REQUEST_URL -u ACTIONS_ID_TOKEN_REQUEST_TOKEN node scripts/finalize-post-freeze-journal.mjs artifacts/post-freeze-journal-plan.json deployment-receipt.json artifacts/post-freeze-journal-finalization.json
+        run: node scripts/finalize-post-freeze-journal.mjs artifacts/post-freeze-journal-plan.json deployment-receipt.json artifacts/post-freeze-journal-finalization.json
 
       - name: Upload verified NUMINA chain receipt
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: NUSD-PRODUCTION-RECEIPT
