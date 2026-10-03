@@ -1,5 +1,5 @@
-name: Build and publish Numina
-# Canonical frontier publication is the singular GitHub tree plus its validated package artifact.
+name: Build and verify Numina Sites source
+# This workflow verifies source publication only. Deployment requires a separate provider receipt.
 
 on:
   workflow_dispatch:
@@ -89,9 +89,47 @@ jobs:
           if-no-files-found: error
 
       - name: Publish Numina Sites mirror
-        continue-on-error: true
+        id: sites_source
         shell: bash
         run: npm run publish:source -- sites
+
+      - name: Verify Sites source publication result
+        if: always()
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFileSync,readFileSync,readdirSync} from 'node:fs';
+          const directory = '.openai/publishing';
+          let report;
+          try {
+            const files = readdirSync(directory).filter(name => /^sites-[a-f0-9-]+\.json$/.test(name));
+            if (files.length === 1) report = JSON.parse(readFileSync(directory + '/' + files[0], 'utf8'));
+          } catch {}
+          const expected = process.env.GITHUB_SHA;
+          const verified = /^[a-f0-9]{40}$/.test(expected || '')
+            && report?.schema === 'numina.publishing-telemetry.v1'
+            && report.target === 'sites'
+            && report.host === 'git.chatgpt-team.site'
+            && report.branch === 'refs/heads/main'
+            && report.sourcePushVerified === true
+            && report.sourceCommit === expected
+            && report.remoteCommit === expected
+            && report.failure === 'none'
+            && ['source_push_verified','source_reconciled_after_ambiguous_push'].includes(report.status)
+            && report.deploymentStarted === false;
+          const summary = [
+            '### Sites source publication',
+            'Source push verified: **' + (verified ? 'yes' : 'no') + '**',
+            'Deployment: **not performed by this workflow**; a separate matching provider receipt is required.',
+            'Artifact upload status is independent of Sites authentication and source verification.',
+            ''
+          ].join('\n\n');
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+          if (!verified) {
+            console.error('::error::Sites source publication is unverified for the exact triggering revision. Inspect the sanitized publishing telemetry; restore authorized repository access before retrying.');
+            process.exitCode = 1;
+          }
+          NODE
 
       - name: Upload Sites publishing telemetry
         if: always()
