@@ -33,7 +33,7 @@ const resolved=await resolveRpcAuthorization({
     [process.env.KALEIDO_APP_USERNAME,process.env.KALEIDO_APP_PASSWORD],
     [process.env.KALEIDO_USERNAME,process.env.KALEIDO_PASSWORD]
   ],
-  adminInputs:[process.env.NUMINA_KALEIDO_API_KEY,process.env.KALEIDO_API_KEY],
+  adminInputs:[process.env.NUMINA_RPC_AUTHORIZATION,process.env.NUMINA_KALEIDO_API_KEY,process.env.KALEIDO_API_KEY],
   allowAdminBootstrap:true
 });
 
