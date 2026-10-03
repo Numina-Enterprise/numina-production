@@ -13,12 +13,16 @@ const inputPath=resolve(process.env.NUMINA_PROVIDER_EVIDENCE_PATH||''),outputPat
 const inputBytes=readFileSync(inputPath),evidenceFileDigest='sha256:'+createHash('sha256').update(inputBytes).digest('hex');
 const artifactName=String(process.env.NUMINA_ARCHIVE_ARTIFACT_NAME||'').trim(),artifactId=String(process.env.NUMINA_ARCHIVE_ARTIFACT_ID||'').trim();
 const artifactDigestRaw=String(process.env.NUMINA_ARCHIVE_ARTIFACT_DIGEST||'').trim(),artifactDigest=/^[0-9a-f]{64}$/i.test(artifactDigestRaw)?'sha256:'+artifactDigestRaw.toLowerCase():artifactDigestRaw.toLowerCase();
-const actionsArchiveAvailable=!!artifactName&&/^\d+$/.test(artifactId)&&/^sha256:[0-9a-f]{64}$/i.test(artifactDigest);
+const archiveOutcome=String(process.env.NUMINA_ARCHIVE_OUTCOME||'unknown').trim();
+const actionsArchiveAvailable=archiveOutcome==='success'&&!!artifactName&&/^[1-9]\d*$/.test(artifactId)&&/^sha256:[0-9a-f]{64}$/i.test(artifactDigest);
 const workflowRunId=String(process.env.GITHUB_RUN_ID||'').trim(),runAttempt=String(process.env.GITHUB_RUN_ATTEMPT||'').trim();
 const archive=JSON.parse(inputBytes);
 assert(archive?.schema==='numina.provider-evidence-archive.v3'&&archive.root==='NUMINA'&&archive.manifest==='NUMINA','archive manifest drift');
 assert(archive.integrity_model==='github_commit_plus_release_sha256_readback'&&archive.credentialed===false&&archive.partnership_status==='asserted'&&archive.external_execution_performed===false,'archive boundary drift');
 assert(/^[0-9a-f]{40}$/i.test(String(archive.source_commit||'')),'source commit invalid');
+assert(archive.source_commit===(process.env.NUMINA_EXPECTED_GIT_SHA||process.env.GITHUB_SHA||'').trim(),'archive source does not match triggering commit');
+const {archive_sha256,...archivePayload}=archive;
+assert(digest(archivePayload)===archive_sha256,'archive SHA-256 mismatch');
 assert(archive.transport?.identity==='NUMINA'&&archive.transport?.role==='diagnostic_only'&&archive.transport?.verified===true&&archive.transport?.observation?.transport==='github'&&archive.transport?.observation?.git_commit_sha===archive.source_commit,'GitHub transport diagnostics missing');
 assert(/^\d+$/.test(workflowRunId)&&/^\d+$/.test(runAttempt),'GitHub workflow metadata invalid');
 
@@ -39,7 +43,7 @@ const artifact_json={
   integrity_model:archive.integrity_model,
   transport:archive.transport,
   provider_observation:{observation_set:archive.observation_set},
-  archive:{...persistence,workflow_name:'Verify provider observations',workflow_run_id:Number(workflowRunId),run_attempt:Number(runAttempt),git_commit_sha:archive.source_commit,archive_sha256:archive.archive_sha256},
+  archive:{...persistence,actions_upload_outcome:archiveOutcome,workflow_name:'Verify provider observations',workflow_run_id:Number(workflowRunId),run_attempt:Number(runAttempt),git_commit_sha:archive.source_commit,archive_sha256:archive.archive_sha256},
   assertions:{transport_commit_verified:true,provider_observation_public_read_only:true,github_artifact_digest_verified:actionsArchiveAvailable,github_release_sha256_readback_required:true,provider_set_schema:observation.schema,runtime_release:observation.release,providers:observation.providers,provider_status:observation.status,all_healthy:observation.all_healthy,circle_message:circle.observed.message,arc_chain_id:arc.observed.chain_id,arc_latest_block:arc.observed.latest_block,fresh_timestamp:true,credentialed:false,partnership_status:'asserted',external_execution_performed:false}
 };
 const artifact_root=digest(artifact_json);

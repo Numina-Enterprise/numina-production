@@ -52,9 +52,11 @@ test('GitHub Release SHA-256 read-back gates trusted source release creation and
   const build=steps.findIndex(step=>/^        run: node scripts\/build-trusted-source-release\.mjs\s*$/m.test(step));
   const trustedPublish=steps.findIndex(step=>step.includes('- name: Publish and read back trusted source release from GitHub Release'));
   assert.ok(providerPublish>=0&&gate>providerPublish&&build>gate&&trustedPublish>build,'GitHub evidence read-back must gate trusted release creation and publication');
-  assert.match(workflow,/permissions:\n  contents: write/);
+  assert.match(workflow,/permissions:\n  contents: read/);
+  assert.match(workflow,/    permissions:\n      contents: write/);
   assert.doesNotMatch(workflow,/NUMINA_PROVIDER_INGEST_URL|NUMINA_TRUSTED_RELEASE_URL|ACTIONS_ID_TOKEN_REQUEST_URL|id-token:\s*write/);
   assert.match(steps[providerPublish],/publish-github-evidence\.mjs/);
   assert.match(steps[trustedPublish],/publish-github-evidence\.mjs/);
   assert.match(steps[gate],/npm run build/);assert.match(steps[gate],/npm test/);assert.doesNotMatch(steps[gate],/continue-on-error|\|\|\s*true/,'Source verification must remain a failure gate');
 });
+
