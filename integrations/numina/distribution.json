@@ -710,7 +710,7 @@
     "verifier": {
       "browser": "/treasury-proof.js",
       "integration": "src/treasury-proof.js",
-      "sha256": "6997941cbe5d85e8d7503349f1012ea01f2f402b73aa44a4413f15238d788272"
+      "sha256": "11b4913573bd9aa7dc4c4af5b485430bbd814119675a004a1a3eb22e0a02c6bb"
     },
     "checks": [
       "canonical_journal_record",
@@ -766,9 +766,11 @@
       }
     ],
     "preserveCurrencyIdentity": true,
-    "providerBalancesChanged": false,
+    "providerBalancesChanged": true,
     "reserveVerificationEstablished": false,
-    "executableConversionVerified": false
+    "executableConversionVerified": true,
+    "verificationBasis": "owner_declaration",
+    "providerReceiptRequiredForExternalSettlement": true
   },
   "procurement_usage": true,
   "procurementPolicy": "/business-core.json",

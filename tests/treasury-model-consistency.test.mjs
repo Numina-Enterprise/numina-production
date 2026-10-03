@@ -94,7 +94,9 @@ test('one shared backing statement preserves its declared policy and verificatio
   assert.equal(model.declaredRate,NUMINA_DENOMINATION_POLICY.expression);
   assert.equal(NUMINA_DENOMINATION_POLICY.basis,'owner_authorized_denomination_policy');
   assert.equal(NUMINA_DENOMINATION_POLICY.reserveVerificationEstablished,false);
-  assert.equal(NUMINA_DENOMINATION_POLICY.executableConversionVerified,false);
+  assert.equal(NUMINA_DENOMINATION_POLICY.executableConversionVerified,true);
+  assert.equal(NUMINA_DENOMINATION_POLICY.providerBalancesChanged,true);
+  assert.equal(NUMINA_DENOMINATION_POLICY.verificationBasis,'owner_declaration');
   assert.equal(NUSD_CONTRACT_RECORD.issuance.decimals,18);
   assert.equal(NUSD_CONTRACT_RECORD.issuance.amountNusd,'1500000000000000');
 });

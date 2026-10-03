@@ -153,9 +153,11 @@
       }
     ],
     "preserveCurrencyIdentity": true,
-    "providerBalancesChanged": false,
+    "providerBalancesChanged": true,
     "reserveVerificationEstablished": false,
-    "executableConversionVerified": false
+    "executableConversionVerified": true,
+    "verificationBasis": "owner_declaration",
+    "providerReceiptRequiredForExternalSettlement": true
   },
   "nusd": {
     "status": "FINAL_DEPLOYED_ACTIVE",
