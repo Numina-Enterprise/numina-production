@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: probe-live-numina-treasury
@@ -22,22 +23,31 @@ jobs:
     timeout-minutes: 5
     env:
       NUMINA_APPLICATION_ORIGIN: https://numinalabs.xyz
-      NUMINA_CONTROL_API_KEY: ${{ secrets.NUMINA_CONTROL_API_KEY }}
     steps:
-      - name: Read current treasury execution fields
+      - name: Read current treasury execution fields with GitHub OIDC
         shell: bash
         run: |
           set -euo pipefail
-          test -n "$NUMINA_CONTROL_API_KEY"
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_URL"
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
           node --input-type=module <<'NODE'
+          const endpoint=new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+          endpoint.searchParams.set('audience','numina-control');
+          const oidcResponse=await fetch(endpoint,{
+            headers:{Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN},
+            signal:AbortSignal.timeout(15000)
+          });
+          const oidcText=await oidcResponse.text();
+          if(!oidcResponse.ok)throw Error('OIDC token request failed HTTP '+oidcResponse.status);
+          const oidc=JSON.parse(oidcText);
+          if(typeof oidc.value!=='string'||oidc.value.split('.').length!==3)throw Error('invalid OIDC token');
           const origin=process.env.NUMINA_APPLICATION_ORIGIN;
-          const token=process.env.NUMINA_CONTROL_API_KEY;
           const response=await fetch(origin+'/api/control/v1/treasury',{
             redirect:'error',signal:AbortSignal.timeout(15000),
-            headers:{Accept:'application/json',Authorization:'Bearer '+token}
+            headers:{Accept:'application/json',Authorization:'Bearer '+oidc.value}
           });
           const text=await response.text();
-          if(!response.ok)throw Error('treasury read failed HTTP '+response.status);
+          if(!response.ok)throw Error('treasury read failed HTTP '+response.status+' '+text.slice(0,500));
           const t=JSON.parse(text);
           const requests=Array.isArray(t?.projection?.transaction_requests)?t.projection.transaction_requests.map(r=>({
             id:r.id??null,kind:r.kind??null,status:r.status??null,amount:r.amount??r.amount_minor??null,
