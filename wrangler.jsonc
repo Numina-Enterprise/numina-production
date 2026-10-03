@@ -6,8 +6,38 @@
   "workers_dev": true,
   "preview_urls": true,
   "routes": [
-    { "pattern": "numinalabs.xyz/*", "zone_name": "numinalabs.xyz" },
-    { "pattern": "www.numinalabs.xyz/*", "zone_name": "numinalabs.xyz" }
+    {
+      "pattern": "numinalabs.xyz/v2/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/v2/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "numinalabs.xyz/v3/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/v3/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "numinalabs.xyz/v4/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/v4/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "numinalabs.xyz/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/*",
+      "zone_name": "numinalabs.xyz"
+    }
   ],
   "assets": {
     "directory": "./dist/client",
