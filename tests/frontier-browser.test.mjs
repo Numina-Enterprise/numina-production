@@ -95,7 +95,7 @@ test('frontier rejects older, missing and mixed application release metadata',as
 
 test('frontier rejects a mixed treasury account snapshot before rendering native balances',async()=>{
   const view=await accountView();view.accounts[0].sharedNativeTreasury.amount='1';const h=harness(view);
-  try{await settled();assert.match(h.get('#treasury-status').textContent,/could not be verified/);for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);}finally{h.close();}
+  try{await h.subject.refresh();assert.match(h.get('#treasury-status').textContent,/could not be verified/);for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);}finally{h.close();}
 });
 
 test('frontier never renders provider verification substituted for an owner designation',async()=>{
