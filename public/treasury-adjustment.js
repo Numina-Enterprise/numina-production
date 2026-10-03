@@ -1,5 +1,5 @@
 import {requestJson} from './http-client.js';
-import {verifyTreasuryRecord} from './treasury-proof.js';
+import {verifyTreasuryRecord,verifyTreasuryWriteRecord} from './treasury-proof.js';
 
 const route = '/api/control/v1/treasury';
 const unsigned = /^(0|[1-9][0-9]{0,77})$/;
@@ -92,10 +92,7 @@ export function createTreasuryAdjustment({
         && advancement.head === response.canonical_proof.hash && advancement.revision === event.revision
         && hash(current?.head) && revision(current.revision) && current.revision >= event.revision
         && (current.revision !== event.revision || current.head === response.canonical_proof.hash)
-        && await verifyTreasuryRecord({schema: 'numina.treasury.v1', route: response.route, root: 'NUMINA', principal: snapshot.principal, manifest: 'NUMINA', identity: 'NUMINA', authority: 'NUMINA', source: 'NUMINA', evidence: 'NUMINA', provider: 'NUMINA', provider_verification: true,
-          status: 'READY', revision: event.revision, head: response.canonical_proof.hash,
-          projection: response.projection, canonical_proof: response.canonical_proof,
-          verification_scope: snapshot.verification_scope});
+        && await verifyTreasuryWriteRecord(snapshot,response);
     } catch { valid = false; }
     if (!valid) fail('TREASURY_ADJUSTMENT_PROOF_INVALID', 'The adjustment response did not match the reviewed draft or its journal proof.');
     return response;

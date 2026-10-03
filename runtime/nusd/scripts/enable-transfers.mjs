@@ -4,6 +4,10 @@ import {fileURLToPath} from 'node:url';
 import {Interface,getAddress} from 'ethers';
 import {resolveRpcAuthorization} from './rpc-auth.mjs';
 
+// Retained six-decimal candidate tooling; it cannot operate the active
+// eighteen-decimal artifacts or establish current transfer activation.
+throw Error('HISTORICAL_6D_CANDIDATE_TOOL_DISABLED');
+
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const receiptFile=path.resolve(process.argv[2]||path.join(root,'deployment-receipt.json'));
 const outputFile=path.resolve(process.argv[3]||path.join(root,'artifacts/activation-receipt.json'));

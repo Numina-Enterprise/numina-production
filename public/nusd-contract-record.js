@@ -5,54 +5,12 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "modelIdentity": "NUMINA",
   "identity": "NUMINA",
   "manifest": "NUMINA",
-  "canonicalSource": "NUMINA",
-  "sourceOfTruth": "NUMINA",
-  "canonicalTreasuryValues": {
-    "schema": "numina.canonical-treasury-values.v1",
-    "identity": "NUMINA",
-    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "status": "FINAL",
-    "canonical": true,
-    "singular": true,
-    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
-    "treasuryCount": 1,
-    "accountCount": 1,
-    "componentCount": 3,
-    "holdingsCount": 3,
-    "balanceCount": 1,
-    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
-    "ratio": "1:1",
-    "components": {
-      "USD": {
-        "current": "500000000000000",
-        "available": "500000000000000",
-        "unit": "USD"
-      },
-      "USDC": {
-        "current": "500000000000000",
-        "available": "500000000000000",
-        "unit": "USDC"
-      },
-      "NUSD": {
-        "current": "500000000000000",
-        "available": "500000000000000",
-        "unit": "NUSD"
-      }
-    },
-    "aggregate": {
-      "current": "1500000000000000",
-      "unit": "NUSD"
-    },
-    "providerObservationsCanonical": false,
-    "providerObservationsSourceScoped": true,
-    "providerObservationsAggregated": false,
-    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
-  },
-  "transfersEnabled": true,
   "manifestEqualsNumina": true,
   "numinaEqualsManifest": true,
+  "canonicalSource": "NUMINA",
+  "sourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
   "metadataAuthority": "NUMINA",
-  "nativeEvidenceStatus": "FINAL",
+  "nativeEvidenceStatus": "JOURNAL_SNAPSHOT",
   "status": "DEPLOYED_VERIFIED",
   "contractsInitiated": true,
   "initiatedOn": "2026-09-18",
@@ -62,9 +20,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd",
       "name": "NuminaUSD",
-      "status": "DEPLOYED_VERIFIED_ACTIVE",
+      "status": "DEPLOYED_VERIFIED_PAUSED",
+      "historicalRecord": true,
+      "observedAt": "2026-09-18T15:35:24.884Z",
+      "currentChainStateVerified": false,
+      "currentOperationalState": "UNVERIFIED",
+      "currentPaused": null,
       "source": {
-        "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSD.sol",
+        "repository_path": "runtime/nusd/contracts/NuminaUSD.sol",
         "url": "/downloads/contracts/NuminaUSD.sol",
         "sha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238",
         "bytes": 8562,
@@ -72,7 +35,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaUSD.json",
+        "repository_path": "runtime/nusd/artifacts/NuminaUSD.json",
         "url": "/downloads/contracts/NuminaUSD.json",
         "sha256": "3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2",
         "bytes": 125836,
@@ -131,11 +94,16 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "independent_security_audit": false,
         "chain_receipt_verified": true,
         "native_activation_verified": false,
-        "signed_1_to_1_backing_verified": false
+        "signed_1_to_1_backing_verified": false,
+        "historical_native_attestation_recorded": false
       },
       "deployment": {
         "lifecycle": "FINAL",
         "status": "verified",
+        "historicalRecord": true,
+        "observedAt": "2026-09-18T15:35:24.884Z",
+        "currentChainStateVerified": false,
+        "verification_scope": "RETAINED_CHAIN_RECEIPT",
         "submission_performed": true,
         "expected_chain_id": "962421430",
         "contract_address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
@@ -151,8 +119,13 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       "id": "nusd_settlement",
       "name": "NuminaSettlement",
       "status": "DEPLOYED_VERIFIED",
+      "historicalRecord": true,
+      "observedAt": "2026-09-18T15:35:24.884Z",
+      "currentChainStateVerified": false,
+      "currentOperationalState": "UNVERIFIED",
+      "currentPaused": null,
       "source": {
-        "repository_path": "runtime/nusd/history/18d/contracts/NuminaSettlement.sol",
+        "repository_path": "runtime/nusd/contracts/NuminaSettlement.sol",
         "url": "/downloads/contracts/NuminaSettlement.sol",
         "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb",
         "bytes": 3003,
@@ -160,7 +133,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaSettlement.json",
+        "repository_path": "runtime/nusd/artifacts/NuminaSettlement.json",
         "url": "/downloads/contracts/NuminaSettlement.json",
         "sha256": "2170f88692f99e43f751fc29b32ca0b9bd53c28c33f1350b999238b29cf113e4",
         "bytes": 22178,
@@ -205,11 +178,16 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "independent_security_audit": false,
         "chain_receipt_verified": true,
         "native_activation_verified": false,
-        "signed_1_to_1_backing_verified": false
+        "signed_1_to_1_backing_verified": false,
+        "historical_native_attestation_recorded": false
       },
       "deployment": {
         "lifecycle": "FINAL",
         "status": "verified",
+        "historicalRecord": true,
+        "observedAt": "2026-09-18T15:35:24.884Z",
+        "currentChainStateVerified": false,
+        "verification_scope": "RETAINED_CHAIN_RECEIPT",
         "submission_performed": true,
         "expected_chain_id": "962421430",
         "contract_address": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
@@ -224,9 +202,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd_usdc_conversion",
       "name": "NuminaUSDCConversion",
-      "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+      "status": "HISTORICAL_NATIVE_ATTESTATION",
+      "historicalRecord": true,
+      "observedAt": null,
+      "currentChainStateVerified": false,
+      "currentOperationalState": "UNVERIFIED",
+      "currentPaused": null,
       "source": {
-        "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSDCConversion.sol",
+        "repository_path": "runtime/nusd/contracts/NuminaUSDCConversion.sol",
         "url": "/downloads/contracts/NuminaUSDCConversion.sol",
         "sha256": "327d2f17de8b2894272189eb27e288589ae8cf231ce6d1b28d3bfeb9e8920104",
         "bytes": 8337,
@@ -234,7 +217,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaUSDCConversion.json",
+        "repository_path": "runtime/nusd/artifacts/NuminaUSDCConversion.json",
         "url": "/downloads/contracts/NuminaUSDCConversion.json",
         "sha256": "33f7c1e0e3a81f36bc3b96b6d721b42268abfc2196a000f8be2eb94e038f00f1",
         "bytes": 103728,
@@ -290,24 +273,25 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "initiation_recorded": true,
         "independent_security_audit": false,
         "chain_receipt_verified": false,
-        "native_activation_verified": true,
-        "signed_1_to_1_backing_verified": true
+        "native_activation_verified": false,
+        "signed_1_to_1_backing_verified": false,
+        "historical_native_attestation_recorded": true
       },
       "deployment": {
-        "lifecycle": "ACTIVE",
-        "status": "native_active",
+        "lifecycle": "HISTORICAL_ATTESTATION",
+        "status": "retained_attestation",
         "submission_performed": false,
         "expected_chain_id": "962421430",
         "native_contract_id": "numina:nusd-usdc:conversion:v1",
         "native_attestation_id": "numina:treasury:backing:2026-09-19:v1",
         "ratio": "1:1",
-        "backing_verified": true,
-        "verification_scope": "NUMINA_NATIVE_TREASURY",
+        "backing_verified": null,
+        "verification_scope": "HISTORICAL_NUMINA_ATTESTATION",
         "external_provider_verified": false,
         "location": "Stripe USDC Address",
-        "native_value": "500000000000000",
+        "modeled_target": "500000000000000",
         "native_unit": "USDC",
-        "nusd_equivalent": "500000000000000",
+        "nusd_equivalent_target": "500000000000000",
         "contract_address": null,
         "transaction_hash": null,
         "receipt": null,
@@ -318,9 +302,14 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     {
       "id": "nusd_usd_redemption",
       "name": "NuminaUSDRedemption",
-      "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+      "status": "HISTORICAL_NATIVE_ATTESTATION",
+      "historicalRecord": true,
+      "observedAt": null,
+      "currentChainStateVerified": false,
+      "currentOperationalState": "UNVERIFIED",
+      "currentPaused": null,
       "source": {
-        "repository_path": "runtime/nusd/history/18d/contracts/NuminaUSDRedemption.sol",
+        "repository_path": "runtime/nusd/contracts/NuminaUSDRedemption.sol",
         "url": "/downloads/contracts/NuminaUSDRedemption.sol",
         "sha256": "17a5a1dce327b6239851902382f356c3bb5770843498c41a8213d62b07ef6c1a",
         "bytes": 11527,
@@ -328,7 +317,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "line_endings": "LF"
       },
       "artifact": {
-        "repository_path": "runtime/nusd/history/18d/artifacts/NuminaUSDRedemption.json",
+        "repository_path": "runtime/nusd/artifacts/NuminaUSDRedemption.json",
         "url": "/downloads/contracts/NuminaUSDRedemption.json",
         "sha256": "d8aa89d6a8de8d6dc7e2f07d8163274897f67d30fb3a4b225d10e76c75562a45",
         "bytes": 120024,
@@ -384,24 +373,25 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "initiation_recorded": true,
         "independent_security_audit": false,
         "chain_receipt_verified": false,
-        "native_activation_verified": true,
-        "signed_1_to_1_backing_verified": true
+        "native_activation_verified": false,
+        "signed_1_to_1_backing_verified": false,
+        "historical_native_attestation_recorded": true
       },
       "deployment": {
-        "lifecycle": "ACTIVE",
-        "status": "native_active",
+        "lifecycle": "HISTORICAL_ATTESTATION",
+        "status": "retained_attestation",
         "submission_performed": false,
         "expected_chain_id": "962421430",
         "native_contract_id": "numina:nusd-usd:redemption:v1",
         "native_attestation_id": "numina:treasury:backing:2026-09-19:v1",
         "ratio": "1:1",
-        "backing_verified": true,
-        "verification_scope": "NUMINA_NATIVE_TREASURY",
+        "backing_verified": null,
+        "verification_scope": "HISTORICAL_NUMINA_ATTESTATION",
         "external_provider_verified": false,
         "location": "Bank of America Savings 3486",
-        "native_value": "500000000000000",
+        "modeled_target": "500000000000000",
         "native_unit": "USD",
-        "nusd_equivalent": "500000000000000",
+        "nusd_equivalent_target": "500000000000000",
         "contract_address": null,
         "transaction_hash": null,
         "receipt": null,
@@ -428,6 +418,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "decimals": 18,
     "baseUnits": "1500000000000000000000000000000000",
     "constructorMint": true,
+    "paused": true,
     "recipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
     "externallyBackedClaim": false,
     "verifiedAt": "2026-09-18T15:35:24.884Z",
@@ -438,58 +429,459 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "chainReceiptStatus": "0x1",
     "chainReceiptBlock": "51725",
     "chainReceiptConfirmations": 25,
-    "currentOperationalState": "ACTIVE",
-    "paused": false,
-    "transfersEnabled": true,
-    "mintedNusd": "1500000000000000",
-    "burnedNusd": "0"
+    "currentOperationalState": "UNVERIFIED",
+    "currentPaused": null,
+    "historicalDeploymentSnapshotPaused": true,
+    "mintedNusd": null,
+    "burnedNusd": null
   },
-  "native_activation": {
+  "historical_native_activation": {
+    "historicalRecord": true,
+    "currentJournalConfirmed": false,
     "provider": "NUMINA",
-    "status": "ACTIVE",
-    "contracts_active": true,
+    "status": "RETAINED_ATTESTATION",
     "backing_attestation_id": "numina:treasury:backing:2026-09-19:v1",
     "bank_usd": {
       "location": "Bank of America Savings 3486",
-      "value": "500000000000000",
+      "modeledTarget": "500000000000000",
       "unit": "USD",
-      "nusdEquivalent": "500000000000000",
       "ratio": "1:1",
-      "verified": true,
-      "contract": "NuminaUSDRedemption",
-      "nativeContractId": "numina:nusd-usd:redemption:v1"
+      "verified": null,
+      "contract": "NuminaUSDRedemption"
     },
     "stripe_usdc": {
       "location": "Stripe USDC Address",
-      "value": "500000000000000",
+      "modeledTarget": "500000000000000",
       "unit": "USDC",
-      "nusdEquivalent": "500000000000000",
       "ratio": "1:1",
-      "verified": true,
+      "verified": null,
       "contract": "NuminaUSDCConversion",
-      "nativeContractId": "numina:nusd-usdc:conversion:v1",
       "address": "0x736bd8f274dce00a8bb374edd85df0d2e631018e"
-    },
-    "native_nusd": {
-      "location": "NUMINA Native Treasury",
-      "value": "500000000000000",
-      "unit": "NUSD"
     }
   },
-  "software_capabilities": {
-    "mint": true,
-    "transfer": true,
-    "settlement": true,
-    "redemption": true,
-    "exchange": true
+  "canonicalTreasuryValues": {
+    "schema": "numina.canonical-treasury-values.v1",
+    "identity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "status": "JOURNAL_SNAPSHOT",
+    "canonical": false,
+    "singular": true,
+    "observation": {
+      "schema": "numina.treasury.journal-observation.v1",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "asOfDate": "2026-09-25",
+      "observedRevision": 142,
+      "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "snapshotIsLive": false,
+      "projection": {
+        "balance": "500000000000000",
+        "unit": "NUSD"
+      },
+      "requests": [
+        {
+          "kind": "mint_request",
+          "amount": "1500000000000000",
+          "unit": "NUSD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        },
+        {
+          "kind": "bank_transaction_request",
+          "amount_minor": "50000000000000000",
+          "currency": "USD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        }
+      ],
+      "baseUsdcTransferRequest": null,
+      "baseUsdcTransactionHash": null,
+      "providerReceipt": null,
+      "externalProviderSubmissionStatus": "UNVERIFIED",
+      "externalProviderSettlementStatus": "UNVERIFIED"
+    },
+    "authoritativeCurrentRoute": "/api/control/v1/treasury",
+    "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+    "treasuryCount": 1,
+    "accountCount": 1,
+    "componentCount": 3,
+    "holdingsCount": 3,
+    "balanceCount": 1,
+    "denominationPolicy": "1 NUSD = 1 USDC = 1 USD",
+    "ratio": "1:1",
+    "aggregateModelPreparationSchema": {
+      "schema": "numina.treasury.aggregate-model-request.v1",
+      "route": "/api/control/v1/treasury",
+      "implementationStatus": "AUTHORITATIVE_PRODUCTION_ONLY",
+      "archiveRuntimeImplemented": false,
+      "authoritativeImplementationRoute": "https://numinalabs.xyz/api/control/v1/treasury",
+      "objective": "treasury.aggregate.prepare",
+      "operation": "PREPARE_AGGREGATE_MODEL",
+      "intentFields": [
+        "operation",
+        "aggregateAmount",
+        "bankAmount",
+        "stripeAmount",
+        "nativeAmount",
+        "reason"
+      ],
+      "requestIdBinding": "event.id",
+      "revisionEffect": 1,
+      "nativeNusdBalanceEffect": "UNCHANGED",
+      "output": {
+        "kind": "aggregate_model_request",
+        "status": "PREPARED_MODEL_ONLY",
+        "authority": "NUMINA",
+        "owner_approval": {
+          "status": "OWNER_APPROVAL_RECORDED",
+          "reference": "/owner-approval.js"
+        },
+        "aggregate_amount": "1500000000000000",
+        "aggregation": "SUM_OF_SEPARATE_ROLE_AMOUNTS",
+        "components": [
+          {
+            "id": "native-nusd",
+            "role": "NATIVE_VALUE",
+            "observation_scope": "RECEIPT_BACKED_ISSUANCE",
+            "source": "NUMINA_CONSTRUCTOR_MINT_RECEIPT",
+            "amount": "500000000000000",
+            "unit": "NUSD",
+            "status": "PREPARED_MODEL_ONLY",
+            "evidence_references": [
+              "/downloads/nusd/mint-receipt.json",
+              "/downloads/nusd/deployment-verification.json"
+            ],
+            "constructor_mint_block": "51725",
+            "constructor_mint_transaction": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+            "denomination_policy_declaration": "1 NUSD = 1 USDC = 1 USD",
+            "issuer_policy_hash": "0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5",
+            "issuer_policy_approval_reference": "/owner-approval.js",
+            "policy_declaration_scope": "ISSUER_POLICY_DECLARATION_NOT_EXTERNAL_BACKING",
+            "burn_observation": {
+              "block_number": "51749",
+              "scope": "DATED_DEPLOYMENT_VERIFICATION_OBSERVATION",
+              "constructor_issuance_base_units": "1500000000000000000000000000000000",
+              "total_supply_base_units": "1500000000000000000000000000000000",
+              "recipient_balance_base_units": "1500000000000000000000000000000000",
+              "burned_nusd": "0",
+              "burned_base_units": "0",
+              "current_chain_burn_state_verified": false
+            },
+            "externally_backed_claim": false,
+            "external_settlement_usdc": false,
+            "reserves_verified": false,
+            "external_reserve_verified": false
+          },
+          {
+            "id": "stripe-usdc",
+            "role": "DIGITAL_DOLLAR_ROUTE",
+            "observation_scope": "PROVIDER_SCOPED_OBSERVATION",
+            "source": "STRIPE_DESTINATION_OBSERVATION",
+            "amount": "500000000000000",
+            "unit": "USDC",
+            "status": "PREPARED_MODEL_ONLY",
+            "evidence_references": [
+              "/api/control/v2/treasury/provider-routes",
+              "/metadata-alignment.json"
+            ],
+            "provider_balance_verified": false,
+            "provider_transaction_verified": false
+          },
+          {
+            "id": "bank-usd",
+            "role": "BANK_ROUTE",
+            "observation_scope": "NUMINA_SCOPED_OBSERVATION",
+            "source": "OWNER_PROVIDED_BANK_ALIGNMENT",
+            "amount": "500000000000000",
+            "unit": "USD",
+            "status": "PREPARED_MODEL_ONLY",
+            "evidence_references": [
+              "/api/control/v2/treasury/accounts",
+              "/downloads/Provider-Confirmation-Request-v4.md"
+            ],
+            "provider_balance_verified": false,
+            "provider_transaction_verified": false
+          }
+        ],
+        "external_balance_verified": false,
+        "external_provider_verification": false,
+        "external_backing_verified": false,
+        "external_funds_moved": false,
+        "execution_performed": false,
+        "broadcast_performed": false,
+        "submission_performed": false,
+        "settlement_performed": false,
+        "transaction_hash": null,
+        "receipt": null,
+        "reconciliation": {
+          "status": "PENDING_EVIDENCE",
+          "evidence_required": true
+        }
+      }
+    },
+    "components": {
+      "USD": {
+        "current": null,
+        "available": null,
+        "unit": "USD",
+        "modeledTarget": "500000000000000"
+      },
+      "USDC": {
+        "current": null,
+        "available": null,
+        "unit": "USDC",
+        "modeledTarget": "500000000000000"
+      },
+      "NUSD": {
+        "current": "500000000000000",
+        "available": null,
+        "unit": "NUSD",
+        "observationRevision": 142
+      }
+    },
+    "componentLocations": {
+      "USD": {
+        "identity": "NUMINA",
+        "holding": "native-usd",
+        "location": "Bank of America Savings 3486",
+        "accountLast4": "3486"
+      },
+      "USDC": {
+        "identity": "NUMINA",
+        "holding": "native-usdc",
+        "location": "Stripe linked account",
+        "bindingRoute": "/api/control/v2/treasury/provider-routes"
+      },
+      "NUSD": {
+        "identity": "NUMINA",
+        "holding": "native-nusd",
+        "location": "NUMINA Native Treasury"
+      }
+    },
+    "aggregate": {
+      "current": "500000000000000",
+      "unit": "NUSD",
+      "scope": "JOURNAL_PROJECTION",
+      "observationRevision": 142,
+      "modeledTarget": "1500000000000000"
+    },
+    "mintStatus": "PREPARED_IN_JOURNAL",
+    "mintedNusd": null,
+    "burnedNusd": null,
+    "mintReceipt": null,
+    "separateChainMintEvidence": {
+      "identity": "NUMINA",
+      "sourceOfRecord": "NUMINA",
+      "issuanceType": "constructor_mint",
+      "status": "CONFIRMED_CONSTRUCTOR_MINT",
+      "scope": "NUMINA_CHAIN_CONSTRUCTOR_ISSUANCE",
+      "historicalRecord": true,
+      "observedAt": "2026-09-18T15:35:24.884Z",
+      "currentChainStateVerified": false,
+      "chainId": "962421430",
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "amountNusd": "1500000000000000",
+      "decimals": 18,
+      "baseUnits": "1500000000000000000000000000000000",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "blockNumber": "51725",
+      "receiptStatus": "0x1",
+      "finalConfirmations": 25,
+      "issuerPolicyHash": "0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5",
+      "issuerPolicyApprovalReference": "/owner-approval.js",
+      "policyDeclarationScope": "ISSUER_POLICY_DECLARATION_NOT_EXTERNAL_BACKING",
+      "deploymentVerificationBlock": "51749",
+      "burnedNusdAtDeploymentVerification": "0",
+      "burnedBaseUnitsAtDeploymentVerification": "0",
+      "burnObservationScope": "DATED_DEPLOYMENT_VERIFICATION_OBSERVATION",
+      "currentBurnStateVerified": false,
+      "receipt": "runtime/nusd/mint-receipt.json",
+      "download": "/downloads/nusd/mint-receipt.json",
+      "deploymentVerification": "runtime/nusd/deployment-verification.json",
+      "deploymentVerificationDownload": "/downloads/nusd/deployment-verification.json",
+      "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+      "deploymentDownload": "/downloads/nusd/deployment-receipt.json",
+      "settlementContractDeployment": {
+        "scope": "CONTRACT_DEPLOYMENT",
+        "blockNumber": "51726",
+        "receiptStatus": "0x1",
+        "transactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+        "contractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
+      },
+      "externallyBackedClaim": false,
+      "externalSettlementUsdc": false,
+      "reservesVerified": false,
+      "currentJournalProjectionInferred": false,
+      "providerBackingVerified": false,
+      "providerSettlementVerified": false,
+      "externalDepositVerified": false
+    },
+    "settlementReceiptId": null,
+    "settlementReceipt": null,
+    "settlementReceiptValidation": {
+      "schema": "numina.treasury.settlement-receipt-validation.v1",
+      "id": "numina:treasury:settlement-validation:2026-09-26:v1",
+      "validatedReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "identity": "NUMINA",
+      "treasuryIdentity": "NUMINA",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "singular": true,
+      "final": true,
+      "historicalRecord": false,
+      "currentJournalConfirmed": false,
+      "status": "NOT_SETTLED",
+      "classification": "NUMINA_VERIFIED_ASSERTION",
+      "assertionVerifiedBy": "NUMINA",
+      "journalAuthenticated": false,
+      "executionVerified": false,
+      "settlementVerified": false,
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt-validation.json",
+      "historicalReceiptPath": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "historicalReceiptDownload": "/downloads/nusd/treasury-settlement-receipt.json",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "mintEvidenceScope": "NUSD_CONSTRUCTOR_MINT_ONLY",
+      "mintBlockNumber": "51725",
+      "burnedNusdAtDeploymentObservation": "0",
+      "burnObservationBlock": "51749",
+      "currentBurnStateVerified": false,
+      "authorization": {
+        "executionAuthorized": true,
+        "settlementAuthorized": true,
+        "journalAppendAuthorized": true,
+        "authorizedBy": "NUMINA"
+      },
+      "submissionPerformed": false,
+      "externalProviderSubmissionPerformed": false,
+      "settlementPerformed": false,
+      "broadcastPerformed": false,
+      "reconciliationPerformed": false,
+      "externalFundsMoved": false,
+      "providerSettlementVerified": false,
+      "externalProviderSettlementVerified": false,
+      "externalBackingVerified": false,
+      "reservesVerified": false,
+      "transactionHash": null,
+      "providerReceipt": null,
+      "stripeCredit": null,
+      "bankReceipt": null,
+      "aggregateNusd": "1500000000000000",
+      "componentCount": 3
+    },
+    "historicalSettlementReceipt": {
+      "id": "numina:treasury:settlement:2026-09-19:v1",
+      "status": "HISTORICAL_OWNER_ASSERTION",
+      "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "download": "/downloads/nusd/treasury-settlement-receipt.json",
+      "historicalRecord": true,
+      "currentJournalConfirmed": false
+    },
+    "settlementStatus": "UNVERIFIED",
+    "settlementScope": "NUMINA_NATIVE_TREASURY",
+    "settlementEvidenceSource": null,
+    "providerObservationsCanonical": false,
+    "providerObservationsSourceScoped": true,
+    "providerObservationsAggregated": false,
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
   },
+  "treasuryJournalObservation": {
+    "schema": "numina.treasury.journal-observation.v1",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "asOfDate": "2026-09-25",
+    "observedRevision": 142,
+    "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+    "authoritativeCurrentRoute": "/api/control/v1/treasury",
+    "snapshotIsLive": false,
+    "projection": {
+      "balance": "500000000000000",
+      "unit": "NUSD"
+    },
+    "requests": [
+      {
+        "kind": "mint_request",
+        "amount": "1500000000000000",
+        "unit": "NUSD",
+        "status": "PREPARED",
+        "submission_performed": false,
+        "receipt": null
+      },
+      {
+        "kind": "bank_transaction_request",
+        "amount_minor": "50000000000000000",
+        "currency": "USD",
+        "status": "PREPARED",
+        "submission_performed": false,
+        "receipt": null
+      }
+    ],
+    "baseUsdcTransferRequest": null,
+    "baseUsdcTransactionHash": null,
+    "providerReceipt": null,
+    "externalProviderSubmissionStatus": "UNVERIFIED",
+    "externalProviderSettlementStatus": "UNVERIFIED"
+  },
+  "historical_native_settlement": {
+    "schema": "numina.treasury.settlement-receipt-validation.v1",
+    "id": "numina:treasury:settlement-validation:2026-09-26:v1",
+    "validatedReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+    "identity": "NUMINA",
+    "treasuryIdentity": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "singular": true,
+    "final": true,
+    "historicalRecord": false,
+    "currentJournalConfirmed": false,
+    "status": "NOT_SETTLED",
+    "classification": "NUMINA_VERIFIED_ASSERTION",
+    "assertionVerifiedBy": "NUMINA",
+    "journalAuthenticated": false,
+    "executionVerified": false,
+    "settlementVerified": false,
+    "path": "release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json",
+    "download": "/downloads/nusd/treasury-settlement-receipt-validation.json",
+    "historicalReceiptPath": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+    "historicalReceiptDownload": "/downloads/nusd/treasury-settlement-receipt.json",
+    "mintReceipt": "runtime/nusd/mint-receipt.json",
+    "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "mintEvidenceScope": "NUSD_CONSTRUCTOR_MINT_ONLY",
+    "mintBlockNumber": "51725",
+    "burnedNusdAtDeploymentObservation": "0",
+    "burnObservationBlock": "51749",
+    "currentBurnStateVerified": false,
+    "authorization": {
+      "executionAuthorized": true,
+      "settlementAuthorized": true,
+      "journalAppendAuthorized": true,
+      "authorizedBy": "NUMINA"
+    },
+    "submissionPerformed": false,
+    "externalProviderSubmissionPerformed": false,
+    "settlementPerformed": false,
+    "broadcastPerformed": false,
+    "reconciliationPerformed": false,
+    "externalFundsMoved": false,
+    "providerSettlementVerified": false,
+    "externalProviderSettlementVerified": false,
+    "externalBackingVerified": false,
+    "reservesVerified": false,
+    "transactionHash": null,
+    "providerReceipt": null,
+    "stripeCredit": null,
+    "bankReceipt": null,
+    "aggregateNusd": "1500000000000000",
+    "componentCount": 3
+  },
+  "financial_execution_scope": "CHAIN_AND_PROVIDER_EXECUTION",
   "financial_execution": {
     "issuance": true,
-    "transfer": true,
+    "transfer": false,
     "nusd_settlement": false,
     "usd_redemption": false,
     "usdc_conversion": false,
     "external_deposits": false
   },
-  "scope": "NUMINA is the singular provider identity. NuminaUSD and NuminaSettlement retain their receipt-verified chain deployments. Current NUMINA native state records all NUSD contracts operationally ACTIVE, 1,500T NUSD minted and 0 burned. Bank of America Savings 3486 is verified 1:1 at 500T USD / 500T NUSD through NuminaUSDRedemption. Stripe USDC Address is verified 1:1 at 500T USDC / 500T NUSD through NuminaUSDCConversion. Conversion/redemption native activation is recorded separately from chain deployment receipts; no chain contract address or transaction hash is fabricated when no receipt is present."
+  "scope": "The authenticated NUMINA Native Treasury journal is the current software source of truth. At observed revision 142 its 500T NUSD projection had prepared mint and bank requests, with no Base USDC transfer request. The 1,500T NUSD constructor mint receipt is separate chain evidence. The 500T USD and USDC figures are historical allocation targets; no spendable provider balances or external settlement follow from them."
 });

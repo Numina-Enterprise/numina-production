@@ -32,8 +32,10 @@ test('website evidence and maintained source versions agree without inventing mo
  assert.ok(read('mobile/ios/Configuration/Numina.xcconfig').includes('CURRENT_PROJECT_VERSION = '+release.mobile.ios.buildNumber));
  assert.equal(release.delivery.website.sourceAligned,true);
  assert.equal(release.delivery.website.observedDeployment.status,'READY');
- assert.equal(release.treasury.aggregateModeledValue,treasuryModel.aggregateModeledValue);
- assert.equal(release.treasury.modeledRoleValuesAdditive,treasuryModel.modeledAllocationsAdditive);
+ assert.equal(release.treasury.aggregateModeledValue,treasuryModel.historicalAggregateModeledValue);
+ assert.equal(release.treasury.modeledRoleValuesAdditive,true);
+ assert.equal(treasuryModel.aggregateModeledValue,null);
+ assert.equal(treasuryModel.modeledAllocationsAdditive,false);
  assert.equal(release.treasury.balanceCount,treasuryModel.balanceCount);
  assert.deepEqual(release.treasury.components.map(({unit,modeledValue})=>({unit,modeledValue})),treasuryModel.allocations.map(({unit,amount})=>({unit,modeledValue:amount})));
  assert.ok(release.treasury.components.every(component=>component.identity==='NUMINA'&&component.treasuryIdentity==='NUMINA'&&component.singular===true));

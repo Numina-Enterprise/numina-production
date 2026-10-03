@@ -16,13 +16,14 @@ const receipt=(artifact_type,payload)=>{const value={artifact_type,key_id:keyId,
 const verifyEnvelope=(value,type)=>verifyReleaseEnvelope(value,type,{pinnedKey,keyId});
 const observedAt='2026-09-19T18:00:00Z',now=Date.parse(observedAt),expectedGitSha='a'.repeat(40);
 const options={verifyEnvelope,now};
-function fixture(){
-  const deployment=deploymentProvenance({NUMINA_ENV:'production',GITHUB_RUN_ID:'fixture',GITHUB_SHA:expectedGitSha,GITHUB_REF_NAME:'main'});
+function fixture({enabled=false}={}){
+  const deployment=deploymentProvenance({VERCEL_ENV:'production',VERCEL_DEPLOYMENT_ID:'dpl_fixture',VERCEL_URL:'numina-production-fixture.vercel.app',VERCEL_GIT_COMMIT_SHA:expectedGitSha,VERCEL_GIT_COMMIT_REF:'main'});
   const application={schema:'numina.application-release.v2',schema_version:2,product:'NUMINA',version:APPLICATION_VERSION,release:APPLICATION_RELEASE,build_id:EXPECTED_APPLICATION_ARTIFACT_BUILD_ID,runtime_dependency:{singular:true,identity:'NUMINA',version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release,manifest:'/v1/release/manifest',signed_declaration:'/v1/release/attestation'}};
   const manifest=structuredClone(manifestModule.NUMINA_MANIFEST),supply={valid:true,release:EXPECTED_RELEASE.release,production_files_root:EXPECTED_RELEASE.production_files_root,spdx_sbom_sha256:EXPECTED_RELEASE.spdx_sbom_sha256,slsa_provenance_sha256:EXPECTED_RELEASE.slsa_provenance_sha256};
   const readiness={schema:'numina.frontier-readiness.v3',observed_at:observedAt,...evaluateFrontierReadiness({application,deployment,manifest:{manifest,receipt:receipt('NUMINA_MANIFEST',manifest)},attestation:receipt(RELEASE_ARTIFACT_TYPE,EXPECTED_RELEASE),supply:{evidence:supply,receipt:receipt('NUMINA_SUPPLY_CHAIN_EVIDENCE',supply)}},{verifyEnvelope:(value,type)=>{try{verifyEnvelope(value,type);return true;}catch{return false;}}})};
-  const control=projection.project('control-manifest',{schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:EXPECTED_RELEASE.production_version,controls:legacyRuntime.ownerControls(),funds:legacyRuntime.fundsManifest(),execution:legacyRuntime.executionManifest(),partnership:legacyRuntime.partnershipManifest(),external_execution_performed:false,external_funds_moved:false});
-  return {expectedGitSha,frontier:{readiness,receipt:receipt('NUMINA_FRONTIER_READINESS',readiness)},transportResponse:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',deployed:true,transport:{identity:'NUMINA',role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:{identity:'NUMINA',service:'NUMINA',substrate:'NUMINA',verified:true,observation:deployment}},receipt:receipt('NUMINA_TRANSPORT_OBSERVATION',deployment)},controlResponse:{manifest:control,receipt:receipt('NUMINA_CONTROL_MANIFEST',control)}};
+  const runtimeControls=legacyRuntime.controls({env:enabled?{NUMINA_REAL_FUNDS_ENABLED:'true',NUMINA_PUBLIC_EXECUTION_API_ENABLED:'true',NUMINA_LIVE_PROVIDER_SUBMITTER_ENABLED:'true'}:{},signingReady:()=>true});
+  const control=projection.project('control-manifest',{schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:EXPECTED_RELEASE.production_version,controls:legacyRuntime.ownerControls(runtimeControls),funds:legacyRuntime.fundsManifest({runtimeControls}),execution:legacyRuntime.executionManifest({runtimeControls}),partnership:legacyRuntime.partnershipManifest(),external_execution_performed:false,external_funds_moved:false});
+  return {expectedGitSha,frontier:{readiness,receipt:receipt('NUMINA_FRONTIER_READINESS',readiness)},transportResponse:{root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',host:'NUMINA',provenance:'NUMINA',deployment:'NUMINA',deployed:true,transport:{identity:'NUMINA',role:'factual_transport_verification_channel',separate_roles:true,singular_identity:true,substrate_observation:structuredClone(readiness.transport.substrate_observation)},receipt:receipt('NUMINA_TRANSPORT_OBSERVATION',deployment)},controlResponse:{manifest:control,receipt:receipt('NUMINA_CONTROL_MANIFEST',control)}};
 }
 
 test('trusted release binds current v3 readiness to separate signed control authorization and actual transport',()=>{
@@ -35,6 +36,7 @@ test('trusted release binds current v3 readiness to separate signed control auth
   assert.equal(result.fundableTargets.target_amount,'500000000000000');
   assert.equal(result.fundableTargets.external_balance_verified,false);
   assert.equal(result.transportObservation.git_commit_sha,expectedGitSha);
+  assert.equal(input.transportResponse.transport.substrate_observation.service,'Vercel');
   assert.equal(result.transportVerified,true);assert.deepEqual(input,before);
 });
 
@@ -58,6 +60,34 @@ test('signed unsafe execution or external-funding assertions cannot pass a trust
   for(const [label,mutate] of cases){const input=structuredClone(fixture());mutate(input.controlResponse.manifest.payload);input.controlResponse.receipt=receipt('NUMINA_CONTROL_MANIFEST',input.controlResponse.manifest);assert.throws(()=>readTrustedReleaseEvidence(input,options),undefined,label);}
 });
 
+test('signed release evidence permits closed controls without promoting recorded owner intent into availability',()=>{
+  for(const enabled of [false,true]){
+    const input=fixture({enabled}),result=readTrustedReleaseEvidence(input,options);
+    assert.equal(result.control.execution.live_submission_enabled,enabled);
+    assert.equal(result.control.funds.real_funds_enabled,enabled);
+    assert.equal(result.control.controls.intended_owner_authorization.record.execution_authorized,true);
+    assert.equal(result.control.execution.production_treasury_linked,false);
+    assert.equal(result.control.execution.provider_execution_verified,false);
+  }
+});
+
+test('signed availability cannot bypass configured gates or imply a production treasury connection',()=>{
+  for(const mutate of [
+    x=>x.controls.live_submission_enabled=true,
+    x=>x.execution.live_submission_enabled=true,
+    x=>x.funds.real_funds_enabled=true,
+    x=>x.controls.configured_controls.runtime_signing_ready='true',
+    x=>x.execution.configured_controls.public_execution_api_enabled=true,
+    x=>x.execution.production_treasury_linked=true,
+    x=>x.execution.provider_execution_verified=true,
+    x=>x.controls.intended_owner_authorization.scope='EFFECTIVE_RUNTIME_CONTROLS'
+  ]){
+    const input=structuredClone(fixture());mutate(input.controlResponse.manifest.payload);
+    input.controlResponse.receipt=receipt('NUMINA_CONTROL_MANIFEST',input.controlResponse.manifest);
+    assert.throws(()=>readTrustedReleaseEvidence(input,options));
+  }
+});
+
 test('missing, unsigned, mismatched or wrong-key control evidence fails despite release readiness',()=>{
   for(const mutate of [x=>delete x.controlResponse,x=>delete x.controlResponse.receipt,x=>x.controlResponse.manifest.payload.extra='unsigned',x=>x.controlResponse.receipt.signature='A'.repeat(88),x=>x.controlResponse.receipt.public_key='A'.repeat(44)]){
     const input=structuredClone(fixture());mutate(input);assert.throws(()=>readTrustedReleaseEvidence(input,options));
@@ -66,7 +96,7 @@ test('missing, unsigned, mismatched or wrong-key control evidence fails despite 
 });
 
 test('current transport verification rejects stale commits, nonproduction provenance and unsigned wrapper substitutions',()=>{
-  for(const mutate of [x=>x.transport.substrate_observation.verified=false,x=>x.transport.role='diagnostic_only',x=>x.transport.substrate_observation.observation.git_commit_sha='b'.repeat(40),x=>x.receipt.signature='A'.repeat(88)]){
+  for(const mutate of [x=>x.transport.substrate_observation.verified=false,x=>x.transport.substrate_observation.service='NUMINA',x=>x.transport.substrate_observation.identity='NUMINA',x=>x.transport.role='diagnostic_only',x=>x.transport.substrate_observation.observation.git_commit_sha='b'.repeat(40),x=>x.receipt.signature='A'.repeat(88)]){
     const response=structuredClone(fixture().transportResponse);mutate(response);assert.throws(()=>readSignedTransport(response,{verifyEnvelope,expectedGitSha}));
   }
   for(const field of ['environment','git_commit_ref','git_commit_sha']){

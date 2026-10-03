@@ -33,7 +33,7 @@ const ALLOWED_ACTIONS=new Set(['observe','analyze','recommend','prepare','reques
 const ECONOMIC_ACTIONS=new Set(['transfer','trade','withdraw','deposit','mint','burn','stake','unstake']);
 const SUPPORTED_PROVIDERS=new Set(['trm','elliptic','chainalysis','circle','arc','ripple','settlemint','openreserve','custom']);
 const PROVIDERS={
-  arc:{provider:'arc',kind:'settlement-network',capabilities:['stablecoin-settlement','transaction-submission','receipt-reference'],execution_capable:true,live_adapter_shipped:false,notes:'Arc-facing handoffs are provider-neutral in rc26; no private key or RPC submitter is bundled.'},
+  arc:{provider:'arc',kind:'settlement-network',capabilities:['stablecoin-settlement','transaction-submission','receipt-reference'],execution_capable:true,live_adapter_shipped:true,implementation_scope:'Arc Testnet pre-signed transaction submission',production_treasury_linked:false,notes:'The signed Arc Testnet adapter is shipped. Current availability requires configured controls and the pinned runtime signing identity; no private key or production treasury connection is bundled.'},
   circle:{provider:'circle',kind:'wallet-settlement-infrastructure',capabilities:['wallet-action','usdc-settlement','crosschain-intent','receipt-reference'],execution_capable:true,live_adapter_shipped:false,notes:'Circle-facing handoffs are prepared without embedding credentials or performing submission.'},
   ripple:{provider:'ripple',kind:'custody-settlement-infrastructure',capabilities:['custody-action','settlement-intent','receipt-reference'],execution_capable:true,live_adapter_shipped:false,notes:'Ripple-facing handoffs are prepared without custody credentials.'},
   settlemint:{provider:'settlemint',kind:'tokenization-orchestration',capabilities:['tokenization-intent','workflow-action','receipt-reference'],execution_capable:true,live_adapter_shipped:false,notes:'SettleMint-facing handoffs are prepared as orchestration requests only.'},
@@ -56,27 +56,46 @@ const OWNER_AUTHORIZATION=Object.freeze({
   pre_signed_payload_required:true,fundable_targets:FUNDABLE_TARGETS,partnership_status:PARTNERSHIP_STATUS,
   external_balance_verified:false,external_funds_moved:false,external_execution_performed:false,external_partnership_verified:false
 });
-function ownerControls(base={}){
-  return {...base,runtime_controls_configurable:true,real_funds_enabled:true,employer_ip_enabled:false,
-    public_execution_api_enabled:true,public_execution_route_exposed:true,execution_authorized:true,
-    live_submission_enabled:true,provider_submitter_approved:true,live_provider_submitter_enabled:true,
+function ownerControls(base=controls()){
+  const configured={real_funds_enabled:base.real_funds_enabled===true,
+    public_execution_api_enabled:base.public_execution_api_enabled===true,
+    live_provider_submitter_enabled:base.live_provider_submitter_enabled===true,
+    runtime_signing_ready:base.runtime_signing_ready===true};
+  const enabled=Object.values(configured).every(value=>value===true);
+  return {...base,runtime_controls_configurable:true,configured_controls:configured,
+    real_funds_enabled:enabled,employer_ip_enabled:false,
+    public_execution_api_enabled:enabled,public_execution_route_exposed:enabled,execution_authorized:enabled,
+    live_submission_enabled:enabled,provider_submitter_approved:enabled,live_provider_submitter_enabled:enabled,
     owner_authorization_required:true,pre_signed_payload_required:true,arbitrary_provider_url_allowed:false,
-    embedded_private_key_allowed:false,fundable_targets:FUNDABLE_TARGETS};
+    embedded_private_key_allowed:false,fundable_targets:FUNDABLE_TARGETS,
+    implementation_scope:'ARC_TESTNET_PRE_SIGNED_TRANSACTIONS',production_treasury_linked:false,
+    intended_owner_authorization:{scope:'RECORDED_OWNER_INTENT_NOT_EFFECTIVE_RUNTIME_CONTROLS',record:OWNER_AUTHORIZATION}};
 }
-function fundsManifest(){return {
+function fundsManifest({runtimeControls=controls()}={}){const effective=ownerControls(runtimeControls);return {
   schema:'numina.funds-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
-  status:'ENABLED_BY_OWNER',real_funds_enabled:true,fundable_targets:FUNDABLE_TARGETS,
+  status:effective.real_funds_enabled?'CONFIGURED_ARC_TESTNET_ENABLED':'CONTROL_GATES_CLOSED',
+  real_funds_enabled:effective.real_funds_enabled,configured_controls:effective.configured_controls,
+  intended_owner_authorization:effective.intended_owner_authorization,fundable_targets:FUNDABLE_TARGETS,
+  implementation_scope:effective.implementation_scope,production_treasury_linked:false,
   external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false,
-  evidence_basis:'numina_owner_authorization_capability_and_numina_native_target_only',
+  evidence_basis:'configured_control_and_signing_readiness_separate_from_owner_intent_and_native_target',
   authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
-function executionManifest({credentialedProviderSubmitterAvailable=false}={}){return {
+function executionManifest({credentialedProviderSubmitterAvailable=false,runtimeControls=controls()}={}){const effective=ownerControls(runtimeControls);return {
   schema:'numina.execution-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
-  status:'GOVERNED_LIVE_SUBMISSION_ENABLED',execution_authorized:true,live_submission_enabled:true,
-  provider_submitter_approved:true,public_execution_api_enabled:true,public_execution_route_exposed:true,
-  live_provider_submitter_exposed:true,supported_live_providers:['arc'],submit_route:'/v1/execution/submit',
-  owner_authorization_required:true,pre_signed_payload_required:true,pre_signed_provider_submitter_available:true,
-  credentialed_provider_submitter_available:credentialedProviderSubmitterAvailable,arbitrary_provider_url_allowed:false,
+  status:effective.live_submission_enabled?'CONFIGURED_ARC_TESTNET_ENABLED':'CONTROL_GATES_CLOSED',
+  execution_authorized:effective.execution_authorized,live_submission_enabled:effective.live_submission_enabled,
+  provider_submitter_approved:effective.provider_submitter_approved,
+  public_execution_api_enabled:effective.public_execution_api_enabled,public_execution_route_exposed:effective.public_execution_route_exposed,
+  live_provider_submitter_exposed:effective.live_provider_submitter_enabled,
+  supported_live_providers:effective.live_submission_enabled?['arc']:[],shipped_submission_providers:['arc'],submit_route:'/v1/execution/submit',
+  implementation_scope:effective.implementation_scope,production_treasury_linked:false,provider_execution_verified:false,
+  availability_scope:'CONFIGURED_CONTROL_AND_SIGNING_READINESS_NOT_PROVIDER_HEALTH_OR_DEPLOYMENT_ATTESTATION',
+  configured_controls:effective.configured_controls,intended_owner_authorization:effective.intended_owner_authorization,
+  owner_authorization_required:true,pre_signed_payload_required:true,
+  pre_signed_provider_submitter_shipped:true,pre_signed_provider_submitter_available:effective.live_submission_enabled,
+  credentialed_provider_submitter_configured:credentialedProviderSubmitterAvailable===true,
+  credentialed_provider_submitter_available:false,arbitrary_provider_url_allowed:false,
   embedded_private_key_allowed:false,external_execution_performed:false,authorization_id:OWNER_AUTHORIZATION.authorization_id
 };}
 function partnershipManifest(){return {
@@ -88,10 +107,17 @@ function partnershipManifest(){return {
 function sorted(v){if(Array.isArray(v))return v.map(sorted);if(v&&typeof v==='object'){const o={};for(const k of Object.keys(v).sort())o[k]=sorted(v[k]);return o;}return v;}
 function canonical(v){return Buffer.from(JSON.stringify(sorted(v)),'utf8');}
 function digest(v){return crypto.createHash('sha256').update(canonical(v)).digest('hex');}
-function boolEnv(name,def=false){const v=process.env[name];if(v===undefined)return def;return ['1','true','yes','on'].includes(String(v).toLowerCase());}
-function controls(){return {runtime_controls_configurable:true,real_funds_enabled:boolEnv('NUMINA_REAL_FUNDS_ENABLED',false),employer_ip_enabled:boolEnv('NUMINA_EMPLOYER_IP_ENABLED',false),public_execution_api_enabled:boolEnv('NUMINA_PUBLIC_EXECUTION_API_ENABLED',false)};}
-function identity(){
-  const b64=process.env.NUMINA_RUNTIME_SIGNING_KEY_DER_B64;
+function boolEnv(name,def=false,env=process.env){const v=env[name];if(v===undefined)return def;return ['1','true','yes','on'].includes(String(v).toLowerCase());}
+function signingConfigurationReady(env){try{identity(env);return true;}catch{return false;}}
+function controls({env=process.env,signingReady=signingConfigurationReady}={}){return {
+  runtime_controls_configurable:true,real_funds_enabled:boolEnv('NUMINA_REAL_FUNDS_ENABLED',false,env),
+  employer_ip_enabled:boolEnv('NUMINA_EMPLOYER_IP_ENABLED',false,env),
+  public_execution_api_enabled:boolEnv('NUMINA_PUBLIC_EXECUTION_API_ENABLED',false,env),
+  live_provider_submitter_enabled:boolEnv('NUMINA_LIVE_PROVIDER_SUBMITTER_ENABLED',false,env),
+  runtime_signing_ready:signingReady(env)===true
+};}
+function identity(env=process.env){
+  const b64=env.NUMINA_RUNTIME_SIGNING_KEY_DER_B64;
   if(!b64)throw new Error('NUMINA_RUNTIME_SIGNING_KEY_DER_B64 required');
   const privateKey=crypto.createPrivateKey({key:Buffer.from(b64,'base64'),format:'der',type:'pkcs8'});
   const publicKey=crypto.createPublicKey(privateKey);
@@ -109,7 +135,7 @@ function evaluate(body={},runtimeControls=null){
   const uniq=[...new Set(providers)].sort(),evidence_root=digest({observations,providers:uniq}),policy_root=digest(policy);
   const base=(decision,reason,requires,permitted)=>({schema:'numina.control-decision.v1',release:RUNTIME_VERSION,decision,reason,action,requires_human_approval:requires,execution_permitted:permitted,evidence_root,policy_root,provider_set:uniq});
   if(ECONOMIC_ACTIONS.has(action)){
-    const c=runtimeControls&&typeof runtimeControls==='object'?runtimeControls:controls(),policyAllows=!!policy.economic_execution_allowed,humanRequired=policy.require_human_approval===undefined?true:!!policy.require_human_approval,humanGranted=!!policy.human_approval_granted;
+    const c=ownerControls(runtimeControls&&typeof runtimeControls==='object'?runtimeControls:controls()),policyAllows=!!policy.economic_execution_allowed,humanRequired=policy.require_human_approval===undefined?true:!!policy.require_human_approval,humanGranted=!!policy.human_approval_granted;
     if(!policyAllows)return base('HUMAN_APPROVAL_REQUIRED','economic execution requires an explicit policy grant',true,false);
     if(humanRequired&&!humanGranted)return base('HUMAN_APPROVAL_REQUIRED','economic execution policy requires human approval',true,false);
     if(!c.real_funds_enabled||!c.public_execution_api_enabled)return base('CONTROL_GATE_CLOSED','runtime execution controls are not enabled',humanRequired,false);
@@ -127,11 +153,11 @@ function bindEvidence(body={}){const d=providerDescriptor(body.provider),hr=body
 function respond(res,status,obj){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(obj));}
 function requireMethod(req,res,m){if(req.method!==m){respond(res,405,{error:'METHOD_NOT_ALLOWED'});return false;}return true;}
 function getBody(req){if(req.body&&typeof req.body==='object')return req.body;try{return JSON.parse(req.body||'{}')}catch{return {};}}
-function statusPayload(){const id=identity();return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,authenticated:true,verified:true,deployment:'NUMINA',deployed:true,...RELEASE_IDENTITY,environment:'production',runtime_surface:'live-serverless-control-plane',frozen_core:{valid:true,checked_files:105,manifest_root:RELEASE_IDENTITY.frozen_core_manifest_root,verification_basis:'preserved core rc26 binding'},conformance:{valid:true,passing_tests:309,scope:'historical core conformance retained by the rc26 binding'},controls:controls(),signing_identity:{algorithm:'Ed25519',key_id:id.keyId,public_key:id.publicKeyB64},live_provider_submitter_exposed:false,external_execution_performed:false};}
-function releaseDeclaration(){return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,...RELEASE_IDENTITY,environment:'production',role:'public-verifier',runtime_surface:'live-serverless-control-plane',frozen_core:{valid:true,manifest_root:RELEASE_IDENTITY.frozen_core_manifest_root,checked_files:105},conformance:{valid:true,passing_tests:309,scope:'historical core conformance retained by the rc26 binding'},controls:controls(),financial_execution_performed:false};}
+function statusPayload(){const id=identity(),effective=ownerControls(controls());return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,authenticated:true,verified:true,deployment:'NUMINA',deployed:true,...RELEASE_IDENTITY,environment:'production',runtime_surface:'live-serverless-control-plane',frozen_core:{valid:true,checked_files:105,manifest_root:RELEASE_IDENTITY.frozen_core_manifest_root,verification_basis:'preserved core rc26 binding'},conformance:{valid:true,passing_tests:309,scope:'historical core conformance retained by the rc26 binding'},controls:effective,signing_identity:{algorithm:'Ed25519',key_id:id.keyId,public_key:id.publicKeyB64},live_provider_submitter_exposed:effective.live_provider_submitter_enabled,external_execution_performed:false};}
+function releaseDeclaration(){return {root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,...RELEASE_IDENTITY,environment:'production',role:'public-verifier',runtime_surface:'live-serverless-control-plane',frozen_core:{valid:true,manifest_root:RELEASE_IDENTITY.frozen_core_manifest_root,checked_files:105},conformance:{valid:true,passing_tests:309,scope:'historical core conformance retained by the rc26 binding'},controls:ownerControls(controls()),financial_execution_performed:false};}
 function makeHandler(kind){return async function(req,res){try{
   if(kind==='status'){if(!requireMethod(req,res,'GET'))return;return respond(res,200,statusPayload());}
-  if(kind==='control-state'){if(!requireMethod(req,res,'GET'))return;const payload={schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:RUNTIME_VERSION,controls:controls(),public_execution_route_exposed:false};return respond(res,200,{manifest:payload,receipt:sign(payload,'NUMINA_CONTROL_MANIFEST'),compatibility:{route:'/v1/control/state',role:'legacy_route_only'}});}
+  if(kind==='control-state'){if(!requireMethod(req,res,'GET'))return;const effective=ownerControls(controls()),payload={schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',release:RUNTIME_VERSION,controls:effective,public_execution_route_exposed:effective.public_execution_route_exposed};return respond(res,200,{manifest:payload,receipt:sign(payload,'NUMINA_CONTROL_MANIFEST'),compatibility:{route:'/v1/control/state',role:'legacy_route_only'}});}
   if(kind==='control-evaluate'){if(!requireMethod(req,res,'POST'))return;const decision=evaluate(getBody(req));return respond(res,200,{decision,receipt:sign(decision,'NUMINA_CONTROL_DECISION'),external_execution_performed:false});}
   if(kind==='providers'){if(!requireMethod(req,res,'GET'))return;return respond(res,200,{schema:'numina.execution-provider-catalog.v1',release:RUNTIME_VERSION,providers:Object.keys(PROVIDERS).sort().map(k=>PROVIDERS[k]),live_submission_route_exposed:false});}
   if(kind==='execution-prepare'){if(!requireMethod(req,res,'POST'))return;const handoff=prepare(getBody(req));return respond(res,200,{handoff,receipt:sign(handoff,'NUMINA_EXECUTION_HANDOFF'),external_execution_performed:false});}
