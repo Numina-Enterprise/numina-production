@@ -4,11 +4,13 @@
   "publicOrigin": "https://numinalabs.xyz",
   "canonicalSource": {
     "identity": "NUMINA",
+    "root": "NUMINA",
+    "squareRoot": "NUMINA",
     "repository": "NUMINA",
     "branch": "main",
-    "role": "CANONICAL_ROOT_REPOSITORY",
+    "role": "ROOT_SOURCE_OF_TRUTH",
     "authoritative": true,
-    "updateDirection": "NUMINA"
+    "updateDirection": "ROOT_TO_LEAVES"
   },
   "rewrites": [
     {
@@ -280,7 +282,7 @@
     "dataNamespace": "NUMINA",
     "canonicalView": "NUMINA",
     "singular": true,
-    "updateDirection": "NUMINA",
+    "updateDirection": "ROOT_TO_LEAVES",
     "runtimeSurfaces": [
       "website",
       "api",
@@ -319,7 +321,23 @@
       "L5",
       "L6",
       "L7"
-    ]
+    ],
+    "leaves": {
+      "github": {
+        "role": "ARCHIVE_LEAF",
+        "transport": "github",
+        "repository": "skott34-dot/numina-production",
+        "branch": "main",
+        "authoritative": false,
+        "evidenceTransport": true,
+        "ciTransport": false,
+        "ref": "refs/heads/main",
+        "headResolution": "FROZEN_AT_ARCHIVE",
+        "ingestIntoTree": false,
+        "ingestRole": "ARCHIVE_STATE_REFERENCE",
+        "authorityTransferred": false
+      }
+    }
   },
   "canonicalRepository": {
     "schema": "numina.repository.v1",
