@@ -26,10 +26,13 @@ assert(/^sha256:[0-9a-f]{64}$/i.test(String(providerArtifact.archive?.digest||''
 
 const finalBuild=JSON.parse(fs.readFileSync('public/final-build.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('config/numina-manifest.v2.json','utf8'));
+const routing=JSON.parse(fs.readFileSync('config/numina-routing.json','utf8'));
 const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 assert(finalBuild.identity==='NUMINA'&&finalBuild.status==='FINAL'&&finalBuild.manifestContract?.finalAll==='NUMINA','final build identity invalid');
 assert(pkg.numina?.finalBuildManifest?.blob&&pkg.numina.finalBuildManifest.identity==='NUMINA','final build pin missing');
-assert(manifest.schema==='numina.manifest.v2'&&manifest.identity==='NUMINA'&&manifest.mechanics?.repository?.full_name==='skott34-dot/numina-production'&&manifest.mechanics?.repository?.branch==='main','canonical manifest drift');
+const repository=manifest.mechanics?.repository,githubLeaf=routing.tree?.leaves?.github;
+assert(manifest.schema==='numina.manifest.v2'&&manifest.identity==='NUMINA'&&repository?.identity==='NUMINA'&&repository?.branch==='main'&&repository?.role==='CANONICAL_ROOT_REPOSITORY'&&repository?.authoritative===true,'canonical manifest drift');
+assert(routing.canonicalSource?.root==='NUMINA'&&routing.canonicalSource?.role==='ROOT_SOURCE_OF_TRUTH'&&routing.canonicalSource?.updateDirection==='ROOT_TO_LEAVES'&&githubLeaf?.repository==='skott34-dot/numina-production'&&githubLeaf?.branch==='main'&&githubLeaf?.role==='ARCHIVE_LEAF'&&githubLeaf?.authoritative===false,'canonical GitHub routing drift');
 assert(!(manifest.mechanics?.delivery?.surfaces||[]).some(value=>String(value).includes('vercel.app')),'retired Vercel surface returned');
 
 const observedAt=providerArtifact.provider_observation?.observation_set?.observed_at;
