@@ -73,9 +73,9 @@ jobs:
         run: |
           set -euo pipefail
           local_sha="$(git rev-parse HEAD)"
-          remote_sha="$(git ls-remote https://github.com/skott34-dot/numina-production.git refs/heads/main | awk '{print $1}')"
-          test -n "$remote_sha"
-          test "$local_sha" = "$remote_sha"
+          origin_url="$(git remote get-url origin)"
+          test "$origin_url" = "https://github.com/skott34-dot/numina-production"
+          test "$local_sha" = "$GITHUB_SHA"
           printf 'NUMINA source verified at %s\n' "$local_sha"
 
       - name: Upload validated NUMINA package

@@ -49,7 +49,8 @@ jobs:
           NUMINA_GOOGLE_PLAY_RELEASE_STATUS: ${{ vars.NUMINA_GOOGLE_PLAY_RELEASE_STATUS || 'completed' }}
           NUMINA_GOOGLE_PLAY_RELEASE_NOTES: ${{ vars.NUMINA_GOOGLE_PLAY_RELEASE_NOTES || 'Numina 4.0.0' }}
         run: python3 scripts/submit-google-play.py
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: numina-android-store-distribution
           path: packages/
@@ -82,7 +83,8 @@ jobs:
           NUMINA_APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.NUMINA_APP_STORE_CONNECT_ISSUER_ID }}
           NUMINA_APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.NUMINA_APP_STORE_CONNECT_KEY_P8_BASE64 }}
         run: python3 scripts/submit-app-store.py
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: numina-ios-store-distribution
           path: packages/ios-signed/

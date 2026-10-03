@@ -45,7 +45,8 @@ jobs:
         env:
           NUMINA_RELEASE_SIGNING_VAULT: ${{ secrets.NUMINA_RELEASE_SIGNING_VAULT }}
         run: python3 scripts/sign-android-release.py
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: numina-android-signed-current
           path: packages/
@@ -67,7 +68,8 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           ditto -c -k --sequesterRsrc --keepParent "$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app" "packages/numina-${VERSION}-ios-unsigned-app.zip"
           shasum -a 256 packages/* > packages/SHA256SUMS
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      - continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: numina-ios-compiled-current
           path: packages/

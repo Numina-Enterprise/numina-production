@@ -8,6 +8,8 @@ on:
       - 'scripts/package-github-release.mjs'
       - 'scripts/publish-github-release.mjs'
       - 'scripts/build.mjs'
+      - 'scripts/apply-numina-manifest-metadata.mjs'
+      - 'config/numina-routing.json'
       - 'scripts/check-final-build.mjs'
       - 'package.json'
       - 'public/final-build.json'
