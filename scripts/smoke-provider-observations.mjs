@@ -64,7 +64,7 @@ const base={
   schema:'numina.provider-evidence-archive.v3',
   root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',
   archived_at:new Date().toISOString(),source_commit:EXPECTED_GIT_SHA,
-  integrity_model:'github_commit_plus_artifact_and_release_sha256_readback',
+  integrity_model:'github_commit_plus_release_sha256_readback',
   transport:{identity:'NUMINA',role:'diagnostic_only',verified:true,current_expected_commit:true,observation:transportObservation},
   observation_set:observationSet,
   credentialed:false,partnership_status:'asserted',external_execution_performed:false,

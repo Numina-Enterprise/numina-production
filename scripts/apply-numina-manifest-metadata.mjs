@@ -155,6 +155,12 @@ function normalizeAllActiveJsonMetadata(){
   }
   return touched;
 }
+function preserveRoutingSemantics(){
+  const path=join(ROOT,'config/numina-routing.json'),routing=JSON.parse(readFileSync(path,'utf8'));
+  routing.canonicalSource={identity:'NUMINA',root:'NUMINA',squareRoot:'NUMINA',repository:'NUMINA',branch:'main',role:'ROOT_SOURCE_OF_TRUTH',authoritative:true,updateDirection:'ROOT_TO_LEAVES'};
+  routing.tree={...routing.tree,root:'NUMINA',squareRoot:'NUMINA',sourceOfTruth:'NUMINA',updateDirection:'ROOT_TO_LEAVES',leaves:{github:{role:'ARCHIVE_LEAF',transport:'github',repository:'skott34-dot/numina-production',branch:'main',authoritative:false,evidenceTransport:true,ciTransport:false,ref:'refs/heads/main',headResolution:'FROZEN_AT_ARCHIVE',ingestIntoTree:false,ingestRole:'ARCHIVE_STATE_REFERENCE',authorityTransferred:false}}};
+  writeFileSync(path,JSON.stringify(routing,null,2)+'\n');
+}
 function stampJson(path,current=false){
   const p=join(ROOT,path),data=JSON.parse(readFileSync(p,'utf8'));
   normalizeMetadataBlocks(data);
@@ -181,6 +187,7 @@ function patchText(path,replacements){
 }
 const changed=rewriteTextMetadata();
 const normalizedJson=normalizeAllActiveJsonMetadata();
+preserveRoutingSemantics();
 for(const path of [
   'config/numina-manifest.v2.json','config/numina-architecture.json','config/treasury-aggregate-settlement-1500t.v1.json',
   'integrations/numina/package.json','runtime/nusd/treasury-write-request.json','runtime/nusd/policies/issuer-policy-1500t-6d.json',

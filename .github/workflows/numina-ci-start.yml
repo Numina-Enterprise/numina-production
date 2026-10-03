@@ -22,7 +22,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-          fetch-depth: 1
+          fetch-depth: 0
       - name: Use Node 26
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -37,5 +37,11 @@ jobs:
           [[ "${{ github.repository }}" == "skott34-dot/numina-production" ]]
           [[ "$(git rev-parse HEAD)" == "${{ github.sha }}" ]]
           node --version
+      - name: Install pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+      - name: Build release artifacts
+        run: npm run build
       - name: Run full regression
         run: npm test
