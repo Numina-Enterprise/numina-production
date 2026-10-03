@@ -9,6 +9,8 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const roots=['release-evidence','runtime/nusd','docs/nusd','docs/provenance','integrations/numina/history','reference'];
 const retainedFiles=['config/treasury-aggregate-settlement-1500t.v1.json'];
+// Package licenses are maintained source configuration, not immutable evidence.
+const maintainedPackageInputs=new Set(['runtime/nusd/package.json','runtime/nusd/package-lock.json','runtime/nusd/development/package.json','runtime/nusd/development/package-lock.json']);
 function collect(relative){
   return readdirSync(path.join(root,relative),{withFileTypes:true}).flatMap(entry=>{
     const item=relative+'/'+entry.name;
@@ -18,6 +20,7 @@ function collect(relative){
   });
 }
 function scope(file){
+  if(maintainedPackageInputs.has(file))return 'MAINTAINED_SOURCE_CONFIGURATION';
   if(file.endsWith('/mint-receipt.json'))return 'CONFIRMED_CONSTRUCTOR_MINT_AT_OBSERVATION';
   if(/\/(deployment-receipt|deployment-verification)\.json$/.test(file))return 'DATED_CHAIN_DEPLOYMENT_OBSERVATION';
   if(file.includes('/provenance/'))return 'RETAINED_BUILD_PROVENANCE';
@@ -34,7 +37,7 @@ export function createMetadataAlignment(){
   for(const key of ['blockNumber','transactionHash','tokenAddress','chainId','amountNusd','decimals','receiptStatus'])assert.equal(mint[key],receipt[key]);
   const records=[...roots.flatMap(collect),...retainedFiles].sort().map(file=>{
     const bytes=readFileSync(path.join(root,file));
-    return {path:file,bytes:bytes.length,sha256:sha256(bytes),scope:scope(file),originalBytesPreserved:true,currentBalanceOrReadinessInferred:false,currentInterpretation:'/metadata-alignment.json'};
+    return {path:file,bytes:bytes.length,sha256:sha256(bytes),scope:scope(file),originalBytesPreserved:!maintainedPackageInputs.has(file),currentBalanceOrReadinessInferred:false,currentInterpretation:'/metadata-alignment.json'};
   });
   return {
     schema:'numina.metadata-alignment.v1',identity:'NUMINA',metadataAuthority:'NUMINA',

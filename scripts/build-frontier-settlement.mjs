@@ -49,6 +49,20 @@ finally{unlinkSync(baselineArchivePath);}
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ // Current licensing accompanies preserved runtime and contract artifact bytes.
+ ['public/LICENSE.md','client/LICENSE.md'],
+ ['public/NOTICE.md','client/NOTICE.md'],
+ ['public/OWNERSHIP.md','client/OWNERSHIP.md'],
+ ['public/ownership.json','client/ownership.json'],
+ ['docs/LICENSE.md','client/downloads/LICENSE.md'],
+ ['docs/NOTICE.md','client/downloads/NOTICE.md'],
+ ['docs/OWNERSHIP.md','client/downloads/OWNERSHIP.md'],
+ ['docs/contracts/LICENSE.md','client/downloads/contracts/LICENSE.md'],
+ ['docs/contracts/NOTICE.md','client/downloads/contracts/NOTICE.md'],
+ ['docs/contracts/OWNERSHIP.md','client/downloads/contracts/OWNERSHIP.md'],
+ ['runtime/nusd/LICENSE.md','client/downloads/nusd/LICENSE.md'],
+ ['runtime/nusd/NOTICE.md','client/downloads/nusd/NOTICE.md'],
+ ['runtime/nusd/OWNERSHIP.md','client/downloads/nusd/OWNERSHIP.md'],
  ['public/state-reconciliation.js','client/state-reconciliation.js'],
  ['public/state-reconciliation.json','client/state-reconciliation.json'],
  ['docs/numina-codex-plugin-4.0.0.zip','client/downloads/numina-codex-plugin-4.0.0.zip'],

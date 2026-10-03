@@ -2,7 +2,7 @@
   "name": "numina-nusd-contract-development",
   "version": "4.0.0",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "BSD-3-Clause",
   "type": "module",
   "engines": { "node": "24.x" },
   "scripts": {

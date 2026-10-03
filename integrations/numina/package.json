@@ -27,7 +27,7 @@
     "schemas": "node scripts/export-tools.js",
     "package:build": "node scripts/package-distribution.js"
   },
-  "license": "SEE LICENSE IN LICENSE.md",
+  "license": "BSD-3-Clause",
   "author": "Numina · SK Consulting LLC",
   "identity": "NUMINA",
   "source": "NUMINA",
