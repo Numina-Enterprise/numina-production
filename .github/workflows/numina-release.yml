@@ -10,6 +10,8 @@ on:
       - 'scripts/build.mjs'
       - 'scripts/apply-numina-manifest-metadata.mjs'
       - 'config/numina-routing.json'
+      - 'scripts/build-trusted-source-release.mjs'
+      - 'runtime/nusd/scripts/prepare-post-freeze-journal.mjs'
       - 'scripts/check-final-build.mjs'
       - 'package.json'
       - 'public/final-build.json'

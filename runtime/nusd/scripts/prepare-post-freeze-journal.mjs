@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {stable} from '../../../src/control.js';
 
+// Production workflow authentication is repository-scoped GitHub OIDC; the API key remains a bounded fallback for non-OIDC callers.
 async function numinaControlToken(){
   const oidcUrl=process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
   const oidcRequestToken=process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;

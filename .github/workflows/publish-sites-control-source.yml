@@ -19,6 +19,8 @@ on:
       - 'scripts/release-manifest.mjs'
       - 'scripts/package.mjs'
       - 'scripts/publish-with-telemetry.mjs'
+      - 'scripts/build-trusted-source-release.mjs'
+      - 'runtime/nusd/scripts/prepare-post-freeze-journal.mjs'
       - 'package.json'
       - '.nvmrc'
 
