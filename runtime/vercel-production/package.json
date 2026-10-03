@@ -2,6 +2,6 @@
   "name": "numina-production",
   "version": "4.0.0",
   "private": true,
-  "license": "SEE LICENSE IN LICENSE.md",
+  "license": "BSD-3-Clause",
   "author": "Numina \u00b7 SK Consulting LLC"
 }
