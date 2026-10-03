@@ -17,7 +17,7 @@
     "runner:activate": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1",
     "runner:status": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1 -StatusOnly"
   },
-  "license": "SEE LICENSE IN LICENSE.md",
+  "license": "BSD-3-Clause",
   "author": "Numina · SK Consulting LLC",
   "numina": {
     "identity": "NUMINA",

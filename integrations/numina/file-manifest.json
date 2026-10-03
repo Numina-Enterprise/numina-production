@@ -733,18 +733,18 @@
     },
     {
       "path": "LICENSE.md",
-      "bytes": 1210,
-      "sha256": "ef793b4563210568ac5afc60563de3c1dc9a18475171391cebb94a7845d3cb6e"
+      "bytes": 1503,
+      "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
     },
     {
       "path": "NOTICE.md",
-      "bytes": 1247,
-      "sha256": "9889230cb2063bc5aaf3edf62b45b07761a4ac5b2288126ba47a8dd6c4f7e0b3"
+      "bytes": 2515,
+      "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
     },
     {
       "path": "OWNERSHIP.md",
-      "bytes": 1543,
-      "sha256": "fbab0d68245f37abe44a06d98135b9ec89e57867c38998da4e8165feca8cef43"
+      "bytes": 1767,
+      "sha256": "a5bc1d30f99dd136be61c573b52091138043b3806ab20f31f800fa613d49d22a"
     },
     {
       "path": "README.md",
@@ -853,8 +853,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 31843,
-      "sha256": "c0636cde16d20d0400bac02591343112376f828183be466fe4ac4d1d4d51e5e6"
+      "bytes": 31830,
+      "sha256": "03b801c8096cdeed1639be14fe07b1b88dc4e641b8ffc7134f7c489be35a81dc"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
