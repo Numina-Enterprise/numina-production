@@ -1,13 +1,28 @@
-# Numina proprietary software notice
+BSD 3-Clause License
 
-Copyright © 2026 SK Consulting LLC. All rights reserved in Numina-owned material.
+Copyright (c) 2026 SK Consulting LLC
 
-Numina is the product and brand operated by SK Consulting LLC. The maintained original Numina software, documentation, designs, telemetry, quantum adapters and circuit simulator are covered by the ownership statement in OWNERSHIP.md.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-No general copyright or trademark license is granted by public availability of source code, downloads or hosted services. Use, reproduction, modification, distribution and commercial rights in Numina-owned material require the applicable written agreement or an express license. Existing customer agreements and separately granted licenses continue to govern their respective material.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-Third-party components and contributions retain their own notices and licenses. This statement does not supersede those terms, claim third-party ownership, change historical signed artifacts or establish rights in employer-owned material.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-Numina™ and related claimed marks are identified in OWNERSHIP.md. No trademark registration, patent grant, copyright registration or contributor assignment is asserted by this notice.
+3. Neither the name of the copyright holder nor the names of its contributors
+   may be used to endorse or promote products derived from this software
+   without specific prior written permission.
 
-Rights contact: skott34@numinalabs.xyz
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
