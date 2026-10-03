@@ -5,7 +5,7 @@
   "allRunnerIdentities": "NUMINA",
   "runnerTarget": "NUMINA",
   "preserveMode": "current_runner_count",
-  "preservedRunnerCount": 33,
+  "preservedRunnerCount": 34,
   "selfHostedPolicy": "preserve_existing",
   "futureRunnerPolicy": "deny",
   "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
@@ -41,7 +41,8 @@
       "verify-workflow-pins.yml": "ubuntu-24.04",
       "sync-control-key-pin.yml": "ubuntu-24.04",
       "verify-nusd-production.yml": "ubuntu-24.04",
-      "verify-root-numina.yml": "ubuntu-24.04"
+      "verify-root-numina.yml": "ubuntu-24.04",
+      "numina-ci-start.yml": "ubuntu-24.04"
     },
     "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Numina root verification, provider verification, privileged control/deployment checks, and declared native workflows may use their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted NUMINA runner registrations remain preserved; no new self-hosted signing identity is introduced.",
     "workflowTargetSets": {
@@ -73,6 +74,12 @@
         "target": "ubuntu-26",
         "source": "https://github.com/actions/runner-images/issues/14748"
       }
+    },
+    "regressionPolicy": {
+      "workflow": "numina-ci-start.yml",
+      "selfHosted": "deny",
+      "runnerEnvironment": "github-hosted",
+      "nodeMajor": 26
     }
   }
 }
