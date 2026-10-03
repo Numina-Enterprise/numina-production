@@ -2,6 +2,11 @@ name: Probe live Numina treasury
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - numina-treasury-live-probe-20261003
+    paths:
+      - '.github/workflows/initiate-treasury-aggregate-model.yml'
 
 permissions:
   contents: read
