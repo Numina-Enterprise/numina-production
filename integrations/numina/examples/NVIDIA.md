@@ -1,6 +1,6 @@
 # NVIDIA NIM host integration
 
-The adapter uses NIM's OpenAI-compatible Chat Completions API. It checks the Numina application and rc26 identity before requesting a model response, exposes the existing discovery tools, and validates the entire bounded tool batch before execution. It creates no new root, journal or treasury. A model response is not a FINAL receipt or proof of hardware deployment.
+The adapter uses NIM's OpenAI-compatible Chat Completions API. It checks the Numina application and rc27 identity before requesting a model response, exposes the existing discovery tools, and validates the entire bounded tool batch before execution. It creates no new root, journal or treasury. A model response is not a FINAL receipt or proof of hardware deployment.
 
 Use an already configured host SDK:
 
