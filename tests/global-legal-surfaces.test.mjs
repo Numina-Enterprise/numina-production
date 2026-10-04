@@ -9,14 +9,14 @@ import {createHash} from 'node:crypto';
 import {COUNTRY_CODES} from '../public/country-codes.js';
 import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
 import {countryOptions} from '../public/app-entry.js';
-import {appIntake,APP_CONSENT_VERSION} from '../src/app-core.js';
+import {appIntake,APP_CONSENT_VERSION,APP_OFFERS} from '../src/app-core.js';
 import worker from '../src/worker.js';
 import {database} from '../scripts/sqlite.mjs';
 import {verifyMaintainedHostedLegalOverlay} from '../scripts/production-pair.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const built=(await import('../dist/server/index.js')).default;
-const files=['compliance.html','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','compliance-ui.js','compliance-model.js','compliance.css','legal-discovery.js','country-codes.js'];
+const files=['compliance.html','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','charitable-relationship.json','compliance-ui.js','compliance-model.js','compliance.css','legal-discovery.js','country-codes.js'];
 const intake={idempotencyKey:'a'.repeat(8)+'-aaaa-aaaa-aaaa-'+'a'.repeat(12),service:'diagnostic_enterprise',title:'Review operations',brief:'Review this authorized operational workflow.',successCriteria:'A scoped and evidence-backed plan.',consent:true,consentVersion:APP_CONSENT_VERSION};
 const routes=[['/api/app/v1/legal-manifest','compliance-coverage.json'],['/api/app/v1/country-readiness','country-readiness.json']];
 function environment(changes={}){
@@ -101,7 +101,7 @@ test('delivered integration, plugin and mobile source archives contain exact sha
 import hashlib,json,pathlib,zipfile
 root=pathlib.Path('.')
 archives=[('numina-integration-kit-v4.0.0.zip','integrations/numina'),('numina-codex-plugin-4.0.0.zip','integrations/codex/numina'),('numina-os-4.0.0-android-source.zip','mobile/android'),('numina-os-4.0.0-ios-source.zip','mobile/ios')]
-expected_snapshots={'legal-policy.json','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'}
+expected_snapshots={'legal-policy.json','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','charitable-relationship.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'}
 verified=0
 for archive,source in archives:
  with zipfile.ZipFile(root/'docs'/archive) as z:
@@ -127,9 +127,9 @@ for archive,source in archives:
     assert z.read(prefix+file)==(root/source/file).read_bytes()
 print(json.dumps({'archives':len(archives),'exactCompanionSnapshots':verified,'nativeLinkSourceMatches':True,'nativeCompilationEstablished':False}))
 `],{cwd:root,encoding:'utf8'});
- assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).exactCompanionSnapshots,44);
+ assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).exactCompanionSnapshots,48);
  for(const file of ['verification.json','distribution.json','file-manifest.json']){
-  const metadata=JSON.parse(read('integrations/numina/'+file));assert.equal(metadata.legal.recordRevision,NUMINA_LEGAL_DISCOVERY.recordRevision);assert.equal(metadata.legal.legalApproval,false);
+  const metadata=JSON.parse(read('integrations/numina/'+file));assert.equal(metadata.legal.recordRevision,NUMINA_LEGAL_DISCOVERY.recordRevision);assert.equal(metadata.legal.legalApproval,false);assert.equal(metadata.legal.charitableRelationship,NUMINA_LEGAL_DISCOVERY.charitableRelationship);
  }
  const plugin=JSON.parse(read('integrations/codex/numina/.codex-plugin/plugin.json'));assert.match(plugin.interface.longDescription,/https:\/\/numinalabs\.xyz\/compliance/);
  const android=read('mobile/android/app/src/main/AndroidManifest.xml');assert.equal((android.match(/<uses-permission /g)||[]).length,1);assert.doesNotMatch(android,/ADDITIONAL_TRUSTED_ORIGINS|personal-space/);
@@ -180,4 +180,29 @@ test('built workspace persists scoped foreign intake but cannot issue a checkout
   await db.prepare('UPDATE numina_service_orders SET country=? WHERE id=?').bind('ZZ',order.id).run();assert.equal((await call('orders/'+order.id+'/checkout',{})).status,409);
   await db.prepare('UPDATE numina_service_orders SET country=? WHERE id=?').bind('US',order.id).run();const accepted=await call('orders/'+order.id+'/checkout',{country:'FR'});assert.equal(accepted.status,200);assert.equal(new URL((await accepted.json()).url).origin,'https://book.stripe.com');
  }finally{db.close();}
+});
+
+
+test('charitable giving uses the exact Foundation route and cannot enter commercial intake',()=>{
+ const record=JSON.parse(read('public/charitable-relationship.json'));
+ assert.equal(record.schema,'numina.charitable-relationship.v1');assert.equal(record.identity,'NUMINA');assert.equal(record.application_version,'4.0.0');
+ assert.equal(record.policy_revision,APP_CONSENT_VERSION);assert.equal(record.coverage_revision,NUMINA_LEGAL_DISCOVERY.recordRevision);
+ assert.equal(record.giving.official_foundation_give_now_url,'https://cffrv.fcsuite.com/erp/donate/create/fund?funit_id=6517');
+ assert.equal(record.giving.numina_commercial_checkout_accepts_charitable_gifts,false);assert.equal(record.giving.commercial_services_separate,true);
+ assert.equal(record.giving.automatic_venture_revenue_pledge_or_percentage,false);
+ for(const [key,value] of Object.entries(record.scope_limits))assert.equal(value,false,key);
+ assert.equal(NUMINA_LEGAL_DISCOVERY.charitableRelationship,'https://numinalabs.xyz/charitable-relationship.json');
+ for(const file of ['about.html','compliance.html']){
+  const html=read('public/'+file);assert.ok(html.includes(record.charitable_component.owner_preferred_display_name));
+  assert.ok(html.includes('href="'+record.giving.official_foundation_give_now_url+'" target="_blank" rel="noopener noreferrer"'));
+  assert.match(html,/href="\/charitable-relationship\.json"/);assert.match(html,/Foundation controls fund assets and distribution decisions/);
+  assert.match(html,/commercial services and payments remain separate/);
+ }
+ assert.ok(read('public/about.html').includes(record.charitable_component.formal_foundation_profile_name.replace('&','&amp;')));
+ assert.ok(read('public/about.html').includes(record.giving.official_profile_url));
+ const paid=Object.entries(APP_OFFERS).filter(([,offer])=>!offer.retired&&!offer.requestOnly);
+ assert.deepEqual(paid.map(([key])=>key).sort(),['audit_enterprise','diagnostic_enterprise']);
+ for(const [,offer]of paid){assert.equal(offer.currency,'usd');assert.equal(new URL(offer.url).origin,'https://book.stripe.com');}
+ for(const service of ['donation','charity','charitable_gift'])assert.throws(()=>appIntake({...intake,country:'US',service}),/INVALID_INPUT/);
+ assert.equal(read('dist/client/charitable-relationship.json'),read('public/charitable-relationship.json'));
 });

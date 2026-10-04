@@ -114,6 +114,7 @@ const overlays=[
  ['public/THIRD-PARTY-NOTICES.txt','client/THIRD-PARTY-NOTICES.txt'],
  ['public/legal-policy.json','client/legal-policy.json'],
  ['public/iowa-entity-registry.json','client/iowa-entity-registry.json'],
+ ['public/charitable-relationship.json','client/charitable-relationship.json'],
  ['public/legal-discovery.js','client/legal-discovery.js'],
  ['public/sitemap.xml','client/sitemap.xml'],
  ['public/country-codes.js','client/country-codes.js'],

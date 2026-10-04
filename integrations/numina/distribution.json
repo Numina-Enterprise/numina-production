@@ -7,6 +7,7 @@
     "coverage": "https://numinalabs.xyz/compliance",
     "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
     "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+    "charitableRelationship": "https://numinalabs.xyz/charitable-relationship.json",
     "financialActivation": false,
     "legalApproval": false,
     "sourceCompanion": true,

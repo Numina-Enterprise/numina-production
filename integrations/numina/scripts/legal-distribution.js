@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import {NUMINA_LEGAL_DISCOVERY} from '../src/legal-discovery.js';
 
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
-const snapshots=['legal-policy.json','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'];
+const snapshots=['legal-policy.json','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','charitable-relationship.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'];
 
 export function writeLegalCompanion(destination,publicRoot){
  fs.mkdirSync(destination,{recursive:true});
@@ -24,5 +24,5 @@ export function writeLegalCompanion(destination,publicRoot){
   const item=manifest.snapshots.find(row=>row.path===file),bytes=fs.readFileSync(path.join(destination,file));
   if(!item||item.sha256!==hash(bytes)||item.bytes!==bytes.length)throw Error('Legal companion byte mismatch: '+file);
  }
- return {manifest:'legal/manifest.json',schema:manifest.schema,identity:manifest.identity,recordRevision:manifest.recordRevision,coverage:manifest.coverage,coverageManifest:manifest.coverageManifest,countryReadiness:manifest.countryReadiness,financialActivation:false,legalApproval:false,sourceCompanion:true,installedBinaryCoverageVerified:false};
+ return {manifest:'legal/manifest.json',schema:manifest.schema,identity:manifest.identity,recordRevision:manifest.recordRevision,coverage:manifest.coverage,coverageManifest:manifest.coverageManifest,countryReadiness:manifest.countryReadiness,charitableRelationship:manifest.charitableRelationship,financialActivation:false,legalApproval:false,sourceCompanion:true,installedBinaryCoverageVerified:false};
 }

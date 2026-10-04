@@ -7,6 +7,7 @@
     "coverage": "https://numinalabs.xyz/compliance",
     "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
     "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+    "charitableRelationship": "https://numinalabs.xyz/charitable-relationship.json",
     "financialActivation": false,
     "legalApproval": false,
     "sourceCompanion": true,
@@ -1165,8 +1166,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 58771,
-      "sha256": "4a27cd8a045b34b7fcad4886480fe0da55e35eb6ee4060e5059841f8d62fff68"
+      "bytes": 58856,
+      "sha256": "447a878b4be4a0d3363e188a34724e12dc881f174f49f3494fb78851a029a133"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -1259,6 +1260,11 @@
       "sha256": "1a9bbd4a4b6ba950cd8dec747be4d98eb9058184996c6478ea252a7c434657a0"
     },
     {
+      "path": "legal/charitable-relationship.json",
+      "bytes": 4502,
+      "sha256": "299ca5dcd2ea1076a3fa790165e2a47c4adf55eeee6238318678aa4696da29c5"
+    },
+    {
       "path": "legal/compliance-coverage.json",
       "bytes": 58783,
       "sha256": "8a222f326ce9a08dda75f027b8d793c7d634fee7dbcb0ecd3c0ffd6a0e13ee24"
@@ -1280,8 +1286,8 @@
     },
     {
       "path": "legal/manifest.json",
-      "bytes": 2546,
-      "sha256": "bd85976af3df4352a7d4fd27f3dc606909fe209bb6450ea1722858f7ca8c1b56"
+      "bytes": 2792,
+      "sha256": "fd2de9f90015ee7f0c03777b17ad1174e598e8c0b3347160737dad4e3e4c7d31"
     },
     {
       "path": "legal/privacy.html",
@@ -1370,8 +1376,8 @@
     },
     {
       "path": "scripts/legal-distribution.js",
-      "bytes": 2767,
-      "sha256": "b3646d626d7a759a04cd02dae2c897fb67174cdbe20cd880f448eab7e33d8469"
+      "bytes": 2853,
+      "sha256": "6b57997cbfb73b79567f03d88b2b199c27c1c85164b50f19f59ee82d011cb378"
     },
     {
       "path": "scripts/package-distribution.js",
@@ -1395,8 +1401,8 @@
     },
     {
       "path": "src/legal-discovery.js",
-      "bytes": 705,
-      "sha256": "9fba52abb84ab3ef42d72493319b0a7b178284d97e1a67b214e97301f93f44a2"
+      "bytes": 784,
+      "sha256": "eae130bf3f3d5ff4cc2a3ccd3d2c56937a8e774739eb9f62c7290a78f1e84de6"
     },
     {
       "path": "src/mcp.js",
@@ -1445,8 +1451,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 58066,
-      "sha256": "8ec0ee36c087b848fdaf662ea0c9bd8be6a8cd0bc5cf5eac448bbb12745e2e27"
+      "bytes": 58151,
+      "sha256": "9f3603bf392fc597c0ad1a396ac987eec7fce12ccec9db3c8f2f10574360d6a9"
     }
   ],
   "currentChainStateVerified": false,
