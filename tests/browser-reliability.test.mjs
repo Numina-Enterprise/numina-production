@@ -119,3 +119,9 @@ test('Control Room drops stale records and disables actions after refresh failur
  });
  try{await settled();assert.ok(h.subject.snapshot);failed=true;await assert.rejects(h.subject.refresh());assert.equal(h.subject.snapshot,null);assert.equal(h.get('workspace').hidden,true);assert.equal(h.get('reconcile').disabled,true);assert.equal(h.get('health').textContent,'Unavailable');}finally{h.close();}
 });
+
+
+test('scoped foreign orders keep checkout hidden while their scope history remains available',async()=>{
+ const h=harness('app',appFetch(path=>path.endsWith('/foreign')?response({order:{...order('foreign'),country:'FR',status:'scoped'}}):null));
+ try{await settled();await h.subject.openOrder('foreign');assert.equal(h.get('order-detail').hidden,false);assert.equal(h.get('checkout-button').hidden,true);assert.match(h.get('checkout-status').textContent,/Paid checkout remains unavailable pending country and activity approval/);}finally{h.close();}
+});

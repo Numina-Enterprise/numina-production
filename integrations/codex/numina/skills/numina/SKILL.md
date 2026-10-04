@@ -24,3 +24,7 @@ Procurement is disabled by default (`procurement_usage: false`, `automaticPurcha
 Read `denomination_policy` from the live `numina_architecture` or `numina_capabilities` response. Numina declares **1 NUSD = 1 USDC = 1 USD** across L1–L5 and the hosted application. This is one native balance with declared equivalent values; keep provider balances, asset identity and execution status as reported. A declaration does not establish external reserves or a completed conversion.
 
 Read stateReconciliation from numina_capabilities or https://numinalabs.xyz/api/control/v2/state-reconciliation. Keep intended assertions, implemented control capabilities and dated provider observations separate. Stripe onboarding and paid API access do not prove a treasury transfer or executable NUSD conversion. Public projection hashes are separate from the recorded control genesis root.
+
+## Legal evidence discovery
+
+Use existing `numina_connections` or `numina_capabilities` to read the canonical legal URLs and record revision, then inspect the public coverage manifest and country readiness record. Terms, Privacy and notices are at https://numinalabs.xyz/compliance and bundled in `legal/manifest.json`. A listed country, policy link or source snapshot is not legal approval, a signed native release, or permission for provider access, procurement or financial execution. Preserve the reported evidence scope and pending gates.

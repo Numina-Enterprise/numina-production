@@ -12,7 +12,7 @@
   "interface": {
     "displayName": "Numina",
     "shortDescription": "One core, one root and five architecture layers.",
-    "longDescription": "Connect Codex to Numina OS 4 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint.",
+    "longDescription": "Connect Codex to Numina OS 4 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint. Shared Terms, Privacy, software licenses and country review gates: https://numinalabs.xyz/compliance. Source evidence: legal/manifest.json; this record does not authorize deployment or financial execution.",
     "developerName": "Numina Labs",
     "category": "Productivity",
     "capabilities": [

@@ -26,6 +26,8 @@ const baseline=json('reference/frontier-baseline-release.json');
 const activeProvenancePolicy=json('config/active-provenance-policy.v1.json');
 for(const file of ['config/numina-state-reconciliation.v1.json','public/state-reconciliation.json','runtime/vercel-production/state-reconciliation.json'])assert.deepEqual(json(file),NUMINA_STATE_RECONCILIATION,'State reconciliation mirror: '+file);
 assert.deepEqual(readFileSync('public/state-reconciliation.js'),readFileSync('integrations/numina/src/state-reconciliation.js'));
+// Ship current legal companions and matching integration/plugin/mobile source archives.
+execFileSync(process.env.NUMINA_PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/package-distributions.py'],{stdio:'inherit'});
 const softwareReleaseAlignment=checkSoftwareRelease(root);
 assert.equal(baseline.workerSha256,'3cd09e0db9b25ae1fd291103039d9af2c58ff5db7dc832e287be0f2f9951e6bc');
 execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--check'],{stdio:'inherit'});
@@ -108,6 +110,15 @@ const overlays=[
  ['public/software-licenses.json','client/software-licenses.json'],
  ['public/THIRD-PARTY-NOTICES.txt','client/THIRD-PARTY-NOTICES.txt'],
  ['public/legal-policy.json','client/legal-policy.json'],
+ ['public/legal-discovery.js','client/legal-discovery.js'],
+ ['public/sitemap.xml','client/sitemap.xml'],
+ ['public/country-codes.js','client/country-codes.js'],
+ ['public/compliance.html','client/compliance.html'],
+ ['public/compliance-coverage.json','client/compliance-coverage.json'],
+ ['public/country-readiness.json','client/country-readiness.json'],
+ ['public/compliance-ui.js','client/compliance-ui.js'],
+ ['public/compliance-model.js','client/compliance-model.js'],
+ ['public/compliance.css','client/compliance.css'],
  ['public/authority.html','client/authority.html'],
  ['public/financial-institutions.html','client/financial-institutions.html'],
  ['public/core.html','client/core.html'],
@@ -205,7 +216,7 @@ assert.equal(worker.split(controlBefore).length,2,'Unique v1 control manifest');
 worker=worker.replace(controlBefore,controlAfter);substitutions.push({source:'src/control-http.js#state-reconciliation',before:controlBefore,after:controlAfter});
 const capabilityLines=worker.split('\n').filter(line=>line.includes('providers:FRONTIER_PROVIDERS,'));
 assert.equal(capabilityLines.length,2,'Manifest and discovery capability readbacks');
-for(const before of capabilityLines){const after=before.replace('providers:FRONTIER_PROVIDERS,','providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,');assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/frontier-http.js#capabilities',before,after});}
+for(const before of capabilityLines){const after=before.replace('providers:FRONTIER_PROVIDERS,','providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,legal:NUMINA_LEGAL_DISCOVERY,');assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/frontier-http.js#capabilities',before,after});}
 const headBefore=worker.split('\n').find(line=>line.includes("scope:'NUMINA finalized singular build projection'"));
 assert.ok(headBefore,'Public projection scope');
 const headAfter=headBefore.replace("scope:'NUMINA finalized singular build projection'","scope:'NUMINA finalized singular build projection',rootHashScope:'public_identity_projection_not_control_genesis',recordedControlGenesisRoot:NUMINA_STATE_RECONCILIATION.roots.recordedControlGenesisRoot,currentJournalRootVerified:false");
@@ -283,15 +294,21 @@ const policyRouteAfter=frontierSource.slice(policyRouteStart,policyRouteEnd).tri
 assert.equal(worker.split(policyRouteBefore).length,2,'Unique retained treasury policy route');
 worker=worker.replace(policyRouteBefore,policyRouteAfter);
 substitutions.push({source:'src/frontier-http.js#treasury-policy-route',before:policyRouteBefore,after:policyRouteAfter});
+// Expose the current legal descriptor through the already installed discovery tools.
+const connectionLegalBefore='return validateConnectionManifest(await response.json());';
+const connectionLegalAfter='return {...validateConnectionManifest(await response.json()),legal:NUMINA_LEGAL_DISCOVERY};';
+assert.equal(worker.split(connectionLegalBefore).length,2,'Unique connection manifest readback');
+worker=worker.replace(connectionLegalBefore,connectionLegalAfter);substitutions.push({source:'src/connections-http.js#legal-discovery',before:connectionLegalBefore,after:connectionLegalAfter});
 // Add the hosted MCP alias without replacing authorization or private routes.
 const mcpSource=compile(readFileSync('src/sites-mcp.js','utf8'));
 const mcpExportBefore='export default {';
-const mcpExportAfter=mcpSource+'\n'+mcpExportBefore;
+const legalHttpSource=compile(readFileSync('src/legal-coverage.js','utf8'));
+const mcpExportAfter=legalHttpSource+'\n'+mcpSource+'\n'+mcpExportBefore;
 assert.equal(worker.split(mcpExportBefore).length,2,'Unique worker entrypoint');
 worker=worker.replace(mcpExportBefore,mcpExportAfter);
 substitutions.push({source:'src/sites-mcp.js',before:mcpExportBefore,after:mcpExportAfter});
 const mcpRouteBefore="   if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));";
-const mcpRouteAfter='   const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mcp)return finish(mcp);\n'+mcpRouteBefore;
+const mcpRouteAfter='   const legal=await legalCoverageHttp(req,env);if(legal)return finish(legal);\n   const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mcp)return finish(mcp);\n'+mcpRouteBefore;
 assert.equal(worker.split(mcpRouteBefore).length,2,'Unique hosted MCP route insertion');
 worker=worker.replace(mcpRouteBefore,mcpRouteAfter);
 substitutions.push({source:'src/sites-mcp.js#route',before:mcpRouteBefore,after:mcpRouteAfter});
@@ -322,7 +339,8 @@ const legalDeclarations=['APP_CONSENT_VERSION','APP_LEGAL_POLICY'].map(name=>{
   assert.ok(declaration,'Workspace policy declaration: '+name);return declaration;
 }).join('\n')+'\n';
 const appVersionBefore="const APP_VERSION='4.0.0';";
-const appVersionAfter=legalDeclarations+appVersionBefore;
+const legalShared=compile(readFileSync('public/country-codes.js','utf8'))+compile(readFileSync('public/legal-discovery.js','utf8'));
+const appVersionAfter=legalShared+legalDeclarations+appVersionBefore;
 assert.equal(worker.split(appVersionBefore).length,2,'Unique application version declaration');
 worker=worker.replace(appVersionBefore,appVersionAfter);substitutions.push({source:'workspace-policy#declarations',before:appVersionBefore,after:appVersionAfter});
 const intakeStart=worker.indexOf('function appIntake(input){'),intakeEnd=worker.indexOf('function appPaymentSummary(',intakeStart);
@@ -333,10 +351,12 @@ assert.equal(worker.split(intakeBefore).length,2,'Unique workspace intake policy
 worker=worker.replace(intakeBefore,intakeAfter);substitutions.push({source:'workspace-policy#intake',before:intakeBefore,after:intakeAfter});
 for(const [before,after]of [
  ["return appResponse({denomination_policy:NUMINA_LAYERS.denomination_policy","return appResponse({legalPolicy:APP_LEGAL_POLICY,denomination_policy:NUMINA_LAYERS.denomination_policy"],
- ["payloadHash,APP_VERSION,actor.id)","payloadHash,body.consentVersion,actor.id)"]
+ ["payloadHash,APP_VERSION,actor.id)","payloadHash,body.consentVersion,actor.id)"],
+ ["if(row.country!=='US'&&row.status!=='scoped')appFail('COUNTRY_REVIEW_REQUIRED',409);","if(row.country!=='US')appFail('COUNTRY_REVIEW_REQUIRED',409);"],
+ ["internationalRequests:'review_before_checkout',","internationalRequests:'review_before_checkout',internationalCheckout:'unavailable_pending_country_activity_approval',countryApprovalEvidenceImplemented:false,"]
 ]){assert.equal(worker.split(before).length,2,'Unique workspace acceptance insertion');worker=worker.replace(before,after);substitutions.push({source:'workspace-policy#acceptance',before,after});}
 const legalRouteBefore="if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path))";
-const legalRouteAfter="const legalPages={'/terms':'/terms.html','/terms/':'/terms.html','/privacy':'/privacy.html','/privacy/':'/privacy.html','/software-licenses':'/software-licenses.html','/software-licenses/':'/software-licenses.html'};\n   if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));\n   "+legalRouteBefore;
+const legalRouteAfter="const legalPages={'/compliance':'/compliance.html','/compliance/':'/compliance.html','/terms':'/terms.html','/terms/':'/terms.html','/privacy':'/privacy.html','/privacy/':'/privacy.html','/software-licenses':'/software-licenses.html','/software-licenses/':'/software-licenses.html'};\n   if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));\n   "+legalRouteBefore;
 assert.equal(worker.split(legalRouteBefore).length,2,'Unique maintained legal-page routing boundary');
 worker=worker.replace(legalRouteBefore,legalRouteAfter);substitutions.push({source:'workspace-policy#legal-routes',before:legalRouteBefore,after:legalRouteAfter});
 // Correct the retained policy address literal outside the metadata modules.
@@ -380,6 +400,7 @@ currentInputs.add('src/frontier.js');
 for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
 currentInputs.add(migrationJournalBase);
 currentInputs.add('src/control-http.js');
+for(const file of ['scripts/production-pair.mjs','reference/settlement-metadata-bases/sites-mcp.js.txt','src/connections-http.js','src/legal-coverage.js','public/legal-discovery.js','public/country-codes.js','scripts/package-distributions.py','scripts/package-legal-companions.mjs','integrations/numina/scripts/legal-distribution.js','integrations/numina/src/legal-discovery.js'])currentInputs.add(file);
 currentInputs.add('src/app-core.js');
 currentInputs.add('src/app-http.js');
 currentInputs.add('runtime/nusd/development/local-chain.mjs');

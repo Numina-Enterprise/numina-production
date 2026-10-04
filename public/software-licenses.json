@@ -8,14 +8,16 @@
   "numina_owned_license": "BSD-3-Clause",
   "owner_license_notice": "/NOTICE.md",
   "license_text": "/LICENSE.md",
-  "inventory_scope": "Current committed npm lockfiles and matching locally installed package metadata; retained ethers browser bundle; upstream source license files for the declared Python verifier lock; unpinned requirements declarations. This is a source/dependency inventory, not certification of every live host or future integration.",
+  "inventory_scope": "Current committed npm lockfiles and matching locally installed package metadata; retained ethers browser bundle; upstream source license files for the declared Python verifier lock; unpinned requirements declarations. This is a source/dependency inventory, not certification of every live host or future integration. Declared Android runtime/build dependencies, workflow JDK/SDK targets and Apple framework terms are listed separately with authoritative references; no complete native binary or OS inventory is implied.",
   "scope_boundaries": {
     "distributed_browser_bundle": "Served from website; retained original 6.15.0 bundle and notices.",
     "maintained_nusd_runtime": "Current 6.17.0 maintained NUSD package lock and installed package metadata.",
     "development_only": "Compiler and Hardhat local chain tooling; presence is not production execution or browser bundling. Optional platform packages are declared for other operating systems, not all locally installed.",
     "archived_review_tool": "Historical 6.15.0 tool lock remains an archived record; original package label and bytes retained. Numina-owned material remains subject to the accompanying BSD grant.",
     "declared_vercel_verifier_lock": "Exact declared Python versions verified against official PyPI metadata and hashed source archives; live installation and bundled native library inventory not independently verified.",
-    "declaration_not_resolved_installation": "Version ranges or standalone requirements, not a complete resolved host environment."
+    "declaration_not_resolved_installation": "Version ranges or standalone requirements, not a complete resolved host environment.",
+    "native_and_build_declarations": "Actual source declarations and primary POM/license references; not a resolved Gradle graph, compiled binary SBOM, SDK acceptance receipt, current signed build or store approval.",
+    "self_hosted_operating_system": "Actual production OS packages, services, container images and installed drivers are not exhaustively inventoried in this source record."
   },
   "snapshot_sha256": {
     "public/final-build.json": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
@@ -4743,6 +4745,22 @@
         "https://files.pythonhosted.org/packages/f2/0f/3f86e61397dd33bf2ccf28188c40db6a740658aeebbbf6e7dbc101a1f487/uvicorn-0.52.4.tar.gz!uvicorn-0.52.4/LICENSE.md"
       ],
       "text_sha256": "efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371"
+    },
+    {
+      "id": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+      "sources": [
+        "https://raw.githubusercontent.com/GoogleChrome/android-browser-helper/android-browser-helper-2.7.3/LICENSE"
+      ],
+      "text_sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+      "scope": "Declared native dependency or build-tool publisher notice; actual resolved distributions remain to be assessed."
+    },
+    {
+      "id": "9536d88ea948603d18e232a13f5958d67807cd80828036b082bff171d2cf0703",
+      "sources": [
+        "https://raw.githubusercontent.com/gradle/gradle/v8.13.0/LICENSE"
+      ],
+      "text_sha256": "9536d88ea948603d18e232a13f5958d67807cd80828036b082bff171d2cf0703",
+      "scope": "Declared native dependency or build-tool publisher notice; actual resolved distributions remain to be assessed."
     }
   ],
   "notice_text_file": "/THIRD-PARTY-NOTICES.txt",
@@ -4812,8 +4830,507 @@
       "Review the GPL Solidity compiler separately from the solc-js MIT wrapper before redistributing compiler binaries; compilation does not by itself grant a license to or require rewriting Numina source.",
       "For LGPL psycopg/psycopg-binary and MPL certifi, comply with applicable source, modification, linking and redistribution obligations for the distributed artifact. Hosted access alone is not a claim that these dependencies are relicensed.",
       "Do not distribute development packages with incomplete publisher license text until the upstream notice is obtained or the dependency is removed from that distributable.",
-      "Provider APIs, cloud services, model weights and remotely hosted fonts are subject to separate contracts; a package license is not an account entitlement."
+      "Provider APIs, cloud services, model weights and remotely hosted fonts are subject to separate contracts; a package license is not an account entitlement.",
+      "Resolve the complete target Android/iOS native and transitive graph and retain actual component-specific notices before claiming binary licensing clearance.",
+      "The Android SDK and Apple system SDK/developer agreements are separate account and platform terms; no acceptance is fabricated and no Numina BSD grant replaces them.",
+      "Verify actual self-hosted operating-system, container, service, driver, model and vendor inventories; website/package declarations do not exhaust every installed dependency."
     ]
   },
-  "universally_compliance_certified": false
+  "universally_compliance_certified": false,
+  "native_and_build_declarations": [
+    {
+      "name": "com.google.androidbrowserhelper:androidbrowserhelper",
+      "declared_version": "2.7.3",
+      "scope": "android_native_runtime",
+      "source_files": [
+        "mobile/android/app/build.gradle"
+      ],
+      "license_expression_or_terms": "Apache-2.0",
+      "status": "DECLARED_SOURCE_NOT_RESOLVED_BINARY",
+      "basis": "Exact maintained Gradle declaration and publisher Google Maven POM license. Full publisher release-tag license preserved; actual resolved AAR/transitive bundle and dependency-specific notices remain to be checked.",
+      "live_or_bundled_verification": false,
+      "publisher_metadata": {
+        "url": "https://dl.google.com/dl/android/maven2/com/google/androidbrowserhelper/androidbrowserhelper/2.7.3/androidbrowserhelper-2.7.3.pom",
+        "sha256": "3e53667831beb5273e75e780ba07df0b75b1253a5551a016875620ccc75ccffd",
+        "bytes": 1832,
+        "licenses": [
+          {
+            "name": "The Apache License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "dependencies": [
+          {
+            "group": "org.jetbrains.kotlin",
+            "name": "kotlin-bom",
+            "version": "1.8.22",
+            "scope": null
+          },
+          {
+            "group": "org.jetbrains.kotlinx",
+            "name": "kotlinx-coroutines-bom",
+            "version": "1.7.3",
+            "scope": null
+          },
+          {
+            "group": "androidx.annotation",
+            "name": "annotation",
+            "version": "1.9.1",
+            "scope": null
+          },
+          {
+            "group": "androidx.core",
+            "name": "core",
+            "version": "1.17.0",
+            "scope": null
+          },
+          {
+            "group": "androidx.appcompat",
+            "name": "appcompat",
+            "version": "1.7.0",
+            "scope": null
+          },
+          {
+            "group": "com.google.guava",
+            "name": "guava",
+            "version": "33.4.8-android",
+            "scope": null
+          },
+          {
+            "group": "androidx.browser",
+            "name": "browser",
+            "version": "1.10.0",
+            "scope": null
+          }
+        ]
+      },
+      "project": "https://github.com/GoogleChrome/android-browser-helper",
+      "publisher_release_license": "https://raw.githubusercontent.com/GoogleChrome/android-browser-helper/android-browser-helper-2.7.3/LICENSE",
+      "notice_id": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+      "transitive_declaration_scope": "POM first-level dependency declarations, including BOM metadata. These are not a resolved runtime graph or proof all components are bundled."
+    },
+    {
+      "name": "com.android.tools.build:gradle",
+      "declared_version": "8.13.2",
+      "scope": "android_build_tool_plugin",
+      "source_files": [
+        "mobile/android/build.gradle"
+      ],
+      "license_expression_or_terms": "Apache-2.0",
+      "status": "DECLARED_SOURCE_NOT_RESOLVED_BINARY",
+      "basis": "Exact maintained plugin declaration and publisher Google Maven POM license. Build-tool dependency declarations are not a distributed-app component inventory.",
+      "live_or_bundled_verification": false,
+      "publisher_metadata": {
+        "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.13.2/gradle-8.13.2.pom",
+        "sha256": "fc7edba93c5b91ce7267fa7bfdc1fa49422efc633ac279a363e02eb0fd29bcad",
+        "bytes": 11773,
+        "licenses": [
+          {
+            "name": "The Apache Software License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "dependencies": [
+          {
+            "group": "com.android.tools.build",
+            "name": "builder",
+            "version": "8.13.2",
+            "scope": "compile"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "builder-model",
+            "version": "8.13.2",
+            "scope": "compile"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "gradle-api",
+            "version": "8.13.2",
+            "scope": "compile"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "gradle-settings-api",
+            "version": "8.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools",
+            "name": "sdk-common",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools",
+            "name": "sdklib",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools",
+            "name": "repository",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.ddms",
+            "name": "ddmlib",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "aapt2-proto",
+            "version": "8.13.2-14304508",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "aaptcompiler",
+            "version": "8.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.analytics-library",
+            "name": "crash",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.analytics-library",
+            "name": "shared",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.lint",
+            "name": "lint-model",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.lint",
+            "name": "lint-typedef-remover",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "androidx.databinding",
+            "name": "databinding-compiler-common",
+            "version": "8.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "androidx.databinding",
+            "name": "databinding-common",
+            "version": "8.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.databinding",
+            "name": "baseLibrary",
+            "version": "8.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "builder-test-api",
+            "version": "8.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.layoutlib",
+            "name": "layoutlib-api",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-device-provider-ddmlib-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-device-provider-profile-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-test-plugin-host-additional-test-output-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-test-plugin-host-coverage-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-test-plugin-host-emulator-control-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-test-plugin-host-logcat-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-test-plugin-host-apk-installer-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.utp",
+            "name": "android-test-plugin-result-listener-gradle-proto",
+            "version": "31.13.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.jetbrains.kotlin",
+            "name": "kotlin-stdlib",
+            "version": "2.2.0",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "transform-api",
+            "version": "2.0.0-deprecated-use-gradle-api",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.apache.httpcomponents",
+            "name": "httpmime",
+            "version": "4.5.6",
+            "scope": "runtime"
+          },
+          {
+            "group": "commons-io",
+            "name": "commons-io",
+            "version": "2.16.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.ow2.asm",
+            "name": "asm",
+            "version": "9.8",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.ow2.asm",
+            "name": "asm-analysis",
+            "version": "9.8",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.ow2.asm",
+            "name": "asm-commons",
+            "version": "9.8",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.ow2.asm",
+            "name": "asm-util",
+            "version": "9.8",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.bouncycastle",
+            "name": "bcpkix-jdk18on",
+            "version": "1.79",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.glassfish.jaxb",
+            "name": "jaxb-runtime",
+            "version": "2.3.2",
+            "scope": "runtime"
+          },
+          {
+            "group": "net.sf.jopt-simple",
+            "name": "jopt-simple",
+            "version": "4.9",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build",
+            "name": "bundletool",
+            "version": "1.18.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build.jetifier",
+            "name": "jetifier-core",
+            "version": "1.0.0-beta10",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.android.tools.build.jetifier",
+            "name": "jetifier-processor",
+            "version": "1.0.0-beta10",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.squareup",
+            "name": "javapoet",
+            "version": "1.10.0",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.google.protobuf",
+            "name": "protobuf-java",
+            "version": "3.25.5",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.google.protobuf",
+            "name": "protobuf-java-util",
+            "version": "3.25.5",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.google.code.gson",
+            "name": "gson",
+            "version": "2.11.0",
+            "scope": "runtime"
+          },
+          {
+            "group": "io.grpc",
+            "name": "grpc-core",
+            "version": "1.69.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "io.grpc",
+            "name": "grpc-netty",
+            "version": "1.69.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "io.grpc",
+            "name": "grpc-protobuf",
+            "version": "1.69.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "io.grpc",
+            "name": "grpc-stub",
+            "version": "1.69.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "io.grpc",
+            "name": "grpc-inprocess",
+            "version": "1.69.1",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.google.crypto.tink",
+            "name": "tink",
+            "version": "1.7.0",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.google.testing.platform",
+            "name": "core-proto",
+            "version": "0.0.9-alpha03",
+            "scope": "runtime"
+          },
+          {
+            "group": "com.google.flatbuffers",
+            "name": "flatbuffers-java",
+            "version": "1.12.0",
+            "scope": "runtime"
+          },
+          {
+            "group": "org.tensorflow",
+            "name": "tensorflow-lite-metadata",
+            "version": "0.2.0",
+            "scope": "runtime"
+          }
+        ]
+      },
+      "primary_license_reference": "https://www.apache.org/licenses/LICENSE-2.0",
+      "full_toolchain_notice_review": "PENDING_FOR_ACTUAL_RESOLVED_TOOLCHAIN_REDISTRIBUTION"
+    },
+    {
+      "name": "Gradle distribution",
+      "declared_version": "8.13",
+      "scope": "android_build_tool",
+      "source_files": [
+        ".github/workflows/numina-android-release.yml",
+        ".github/workflows/numina-native-packages.yml"
+      ],
+      "license_expression_or_terms": "Apache-2.0 AND distribution-specific third-party notices",
+      "status": "DECLARED_SOURCE_NOT_RESOLVED_BINARY",
+      "basis": "Workflow downloads Gradle 8.13. The publisher v8.13.0 LICENSE, including additional third-party terms, is preserved; the downloaded distribution and its complete bundled inventory remain separate.",
+      "live_or_bundled_verification": false,
+      "publisher_license": "https://raw.githubusercontent.com/gradle/gradle/v8.13.0/LICENSE",
+      "notice_id": "9536d88ea948603d18e232a13f5958d67807cd80828036b082bff171d2cf0703"
+    },
+    {
+      "name": "Eclipse Temurin / OpenJDK",
+      "declared_version": "17 (major declaration; patch not pinned)",
+      "scope": "android_build_jdk",
+      "source_files": [
+        ".github/workflows/numina-android-release.yml",
+        ".github/workflows/numina-native-packages.yml"
+      ],
+      "license_expression_or_terms": "GPL-2.0 with applicable Classpath Exception and third-party notices",
+      "status": "DECLARED_SOURCE_NOT_RESOLVED_BINARY",
+      "basis": "Workflow chooses Temurin major17; the actual binary/vendor patch and license notices must be recorded. OpenJDK17 license references identify the family, not verification of the runner distribution.",
+      "live_or_bundled_verification": false,
+      "primary_license_references": [
+        "https://github.com/openjdk/jdk17u/blob/master/LICENSE",
+        "https://github.com/openjdk/jdk17u/blob/master/ADDITIONAL_LICENSE_INFO"
+      ]
+    },
+    {
+      "name": "Android SDK / platform APIs",
+      "declared_version": "compileSdk36 / targetSdk36 / minSdk23",
+      "scope": "android_sdk_platform",
+      "source_files": [
+        "mobile/android/app/build.gradle"
+      ],
+      "license_expression_or_terms": "Applicable Android SDK License Agreement; component-specific open-source terms retained",
+      "status": "DECLARED_SOURCE_NOT_RESOLVED_BINARY",
+      "basis": "Source API targets are declared. Actual SDK/build-tools versions, agreement acceptance, binary dependencies and redistributed components require build-specific records.",
+      "live_or_bundled_verification": false,
+      "primary_terms_reference": "https://developer.android.com/studio/terms",
+      "developer_account_acceptance_verified": false
+    },
+    {
+      "name": "Apple platform SDK frameworks",
+      "declared_version": "SDK version depends on actual Xcode build",
+      "scope": "ios_system_sdk",
+      "source_files": [
+        "mobile/ios/Numina/NuminaApp.swift",
+        "mobile/ios/Numina/HostedWebView.swift",
+        "mobile/ios/Numina/AppConfiguration.swift",
+        "mobile/ios/Numina/HostedAppModel.swift",
+        "mobile/ios/Numina/ContentView.swift"
+      ],
+      "license_expression_or_terms": "Applicable Xcode/Apple SDK and Apple Developer Program agreements; system framework rights not granted by Numina BSD",
+      "status": "DECLARED_SOURCE_NOT_RESOLVED_BINARY",
+      "basis": "Maintained source imports SwiftUI, WebKit, Foundation, Combine and UIKit. These system SDK terms and actual accepted account agreements are separate from Numina-owned source licensing.",
+      "live_or_bundled_verification": false,
+      "imported_frameworks": [
+        "SwiftUI",
+        "WebKit",
+        "Foundation",
+        "Combine",
+        "UIKit"
+      ],
+      "primary_terms_reference": "https://developer.apple.com/support/terms/",
+      "developer_account_acceptance_verified": false,
+      "native_build_status": "Current source build6 not verified compiled/signed; historical unsigned build5 keeps original evidence."
+    }
+  ]
 }

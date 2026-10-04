@@ -1,3 +1,4 @@
+import {writeLegalCompanion} from './legal-distribution.js';
 import {NUMINA_STATE_RECONCILIATION} from '../src/state-reconciliation.js';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,6 +9,8 @@ import {toolsForProfile} from '../src/tools.js';
 import {NUMINA_DENOMINATION_POLICY} from '../src/treasury-valuation.js';
 import {treasuryClientVerificationManifest} from '../src/treasury-proof.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const publicRoot=path.resolve(root,'../../public');
+const legal=writeLegalCompanion(path.join(root,'legal'),fs.existsSync(path.join(publicRoot,'compliance-coverage.json'))?publicRoot:null);
 const metadata=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const providerFormats=['openai-responses','openai-chat-completions','anthropic-messages','gemini-interactions','gemini-generate-content'];
 const revision='numina-root-v'+metadata.version;
@@ -78,7 +81,7 @@ const nusdContracts={
 };
 const integrationManifestRef={path:'file-manifest.json',schema:'numina.integration.manifest.v2',identity:'NUMINA',canonical:true};
 const verification={stateReconciliation:NUMINA_STATE_RECONCILIATION,
- schema:'numina.integration.package.v2',...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
+ legal,schema:'numina.integration.package.v2',...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
  package:{name:metadata.name,version:metadata.version,private:metadata.private},revision,
  applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
  testRunPerformed:false,tests:null,reason:'Packaging generates metadata; validation runs separately in the repository test suite.',
@@ -96,7 +99,7 @@ const verification={stateReconciliation:NUMINA_STATE_RECONCILIATION,
  currentChainStateVerified:false,metadataAlignment,activeProvenancePolicy
 };
 fs.writeFileSync(path.join(root,'verification.json'),JSON.stringify(verification,null,2)+'\n');
-const distribution={stateReconciliation:NUMINA_STATE_RECONCILIATION,
+const distribution={legal,stateReconciliation:NUMINA_STATE_RECONCILIATION,
  ...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,singular:true,integrationManifest:integrationManifestRef,nusdContracts,treasuryAlignment,
  treasury_client_verification:treasuryClientVerificationManifest(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'src/treasury-proof.js'))).digest('hex')),
  denomination_policy:NUMINA_DENOMINATION_POLICY,
@@ -119,9 +122,9 @@ const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).sort((a
 });
 const files=[
  'package.json','.gitignore','OWNERSHIP.md','LICENSE.md','NOTICE.md','README.md','INSTALL.md','API-CONTRACT.md','SECURITY.md','COMPATIBILITY.md','EVIDENCE.md','VALIDATION.md','verification.json','distribution.json',
- 'scripts/export-tools.js','scripts/package-distribution.js',...['src','bin','schemas','examples','history'].flatMap(walk)
+ 'scripts/export-tools.js','scripts/package-distribution.js','scripts/legal-distribution.js',...['src','bin','schemas','examples','history','legal'].flatMap(walk)
 ].sort();
-const fileManifest={stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:'numina.integration.manifest.v2',...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',nusdContracts,application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
+const fileManifest={legal,stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:'numina.integration.manifest.v2',...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,modelIdentity:'NUMINA',singular:true,canonical:true,role:'canonical_integration_manifest',version:metadata.version,revision,scope:'NUMINA',repository:'NUMINA',nusdContracts,application:{manifest:'/v4/release/manifest',schema:'numina.application-release.v2'},treasuryAlignment,distribution:{path:'distribution.json',schema:'numina.integration.distribution.v2'},verification:{path:'verification.json',schema:'numina.integration.package.v2'},files:files.map(relative=>{
  if(/(?:^|\/)\.env|\.private\.|\.(?:pem|key|tgz|zip)$/.test(relative))throw new Error('Private or archive files are not distribution inputs');
  const bytes=fs.readFileSync(path.join(root,relative));
  return {path:relative,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};

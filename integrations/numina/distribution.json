@@ -1,4 +1,17 @@
 {
+  "legal": {
+    "manifest": "legal/manifest.json",
+    "schema": "numina.legal-companion.v1",
+    "identity": "NUMINA",
+    "recordRevision": "numina-global-2026-10-04",
+    "coverage": "https://numinalabs.xyz/compliance",
+    "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
+    "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+    "financialActivation": false,
+    "legalApproval": false,
+    "sourceCompanion": true,
+    "installedBinaryCoverageVerified": false
+  },
   "stateReconciliation": {
     "schema": "numina.state-reconciliation.v1",
     "identity": "NUMINA",

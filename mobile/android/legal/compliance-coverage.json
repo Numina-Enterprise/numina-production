@@ -1,0 +1,1229 @@
+{
+  "schema": "numina.compliance-coverage.v1",
+  "identity": "NUMINA",
+  "application_version": "4.0.0",
+  "record_revision": "numina-global-2026-10-04",
+  "as_of": "2026-10-04",
+  "operator": {
+    "legal_name": "SK Consulting LLC",
+    "jurisdiction": "Iowa, USA",
+    "basis": "Owner designation and maintained published policies; current registry, name and foreign-authority receipts require separate verification.",
+    "contact": "skott34@numinalabs.xyz",
+    "human_founder": "Sam Kott",
+    "registered_address": null,
+    "entity_number": null,
+    "verified_registry_receipt": null
+  },
+  "summary": {
+    "status": "PREPARATION_WITH_UNRESOLVED_GATES",
+    "global_certification": false,
+    "approved_country_count": 0,
+    "regulated_financial_activation": false,
+    "assessment_scope": "Inspected maintained source, preserved records and primary authority guidance as of the stated date. No installed-host audit, executed legal assessment for all countries, bound coverage, filing completion or independent certification is inferred.",
+    "public_availability": "Information and initial scoped consulting inquiries. Country entry is not service availability or permission to perform a regulated activity."
+  },
+  "urls": {
+    "human": "/compliance",
+    "coverage": "/compliance-coverage.json",
+    "countries": "/country-readiness.json",
+    "coverage_api": "/api/app/v1/legal-manifest",
+    "countries_api": "/api/app/v1/country-readiness",
+    "terms": "/terms",
+    "privacy": "/privacy",
+    "licenses": "/software-licenses",
+    "license_inventory": "/software-licenses.json",
+    "notices": "/THIRD-PARTY-NOTICES.txt"
+  },
+  "existing_source_policy": {
+    "initial_checkout_country": "US",
+    "checkout_currency": "USD",
+    "checkout_scope": "Consulting service request only; payment is distinct from accepted work and regulated financial activation.",
+    "international_requests": "review_before_checkout",
+    "foreign_checkout_source_gate": "Backend rejects every non-US paid checkout, including scoped orders. International intake and scope review remain available; no country/activity approval receipt workflow or completed approval exists. Public coverage records do not grant live authorization.",
+    "financial_activation": false,
+    "country_policy_source_files": [
+      "public/country-codes.js",
+      "public/app-entry.js",
+      "src/app-http.js",
+      "src/app-core.js"
+    ],
+    "international_checkout": "unavailable_pending_country_activity_approval",
+    "country_approval_evidence_implemented": false
+  },
+  "governance": {
+    "accountable_human": "Sam Kott / actual authorized delegate",
+    "legal_compliance_lead": {
+      "name": null,
+      "status": "HUMAN_APPOINTMENT_AND_AUTHORITY_NOT_VERIFIED"
+    },
+    "external_counsel": {
+      "engagement": null,
+      "status": "NOT_VERIFIED"
+    },
+    "internal_ai_roles": "AI operating personas and aliases may organize preparation. They are not independent counsel, licensed human professionals, corporate signatories, insurance underwriters or evidence of a human appointment.",
+    "approval_scope": "Preserved owner instructions authorize their recorded scope; they do not substitute for counterparty permission, statutory authority, executed contracts, platform approval, independent assurance or coverage."
+  },
+  "status_semantics": {
+    "REQUIRED": "Requirement is needed for the described activity; operational completion remains separately recorded.",
+    "PENDING_ASSESSMENT": "Actual facts and jurisdiction must determine whether and how the requirement applies.",
+    "PENDING": "Required evidence or applicability determination is incomplete.",
+    "EVIDENCE_RECORDED": "A scoped record was inspected; this label is not universal compliance or authority.",
+    "NOT_APPLICABLE_ASSESSED": "Allowed only for a named activity, country and period with a verified human assessment, legal basis and evidence; absence of information is never not-applicable.",
+    "NOT_REVIEWED": "No completed country/activity review is recorded; activation remains gated."
+  },
+  "domains": [
+    {
+      "id": "entity-contracts",
+      "title": "Legal operator, authority and contracts",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "An identified human contracting party and accepted scope are needed for a service engagement. The operator is owner-designated SK Consulting LLC, Iowa, USA; registry and foreign authority receipts are not established by this record.",
+      "recorded_evidence_ids": [
+        "terms",
+        "policy",
+        "owner"
+      ],
+      "authority_ids": [
+        "iowa-entity",
+        "irs"
+      ],
+      "activation_requirements": [
+        "Current entity/name/good-standing record relevant to the agreement",
+        "Human signatory authority and counterparties",
+        "Executed scope, fees, applicable law, mandatory rights, DPA/SLA and liability terms where needed",
+        "Required local establishment, registrations and sector permissions for the actual work"
+      ],
+      "accountable_roles": [
+        "Human founder / authorized signatory",
+        "Engaged local counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "privacy-rights",
+      "title": "Privacy, lawful use and individual rights",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "Maintained account, intake, payment metadata and review workflows process personal data. Statutory coverage and rights can depend on region and processing facts.",
+      "recorded_evidence_ids": [
+        "privacy",
+        "policy"
+      ],
+      "authority_ids": [
+        "ftc-privacy",
+        "gdpr-scope",
+        "iowa-privacy",
+        "ccpa",
+        "ico-rights",
+        "ico-complaints"
+      ],
+      "activation_requirements": [
+        "Actual controller/processor role, data map, purposes, lawful bases and sensitive-data boundaries",
+        "Country and state applicability assessment using volumes, targeting and processing facts",
+        "Named rights and complaint owner, lawful verification, deadlines and tested request handling",
+        "Required DPO, representative, records, DPIA and consent controls assessed for the actual use"
+      ],
+      "accountable_roles": [
+        "Human privacy lead",
+        "Engaged privacy counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "transfers-residency",
+      "title": "Transfers, hosting and residency",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "Hosting, authentication, payments and optional connected providers can involve multiple jurisdictions. No regional residency or executed transfer agreement is verified here.",
+      "recorded_evidence_ids": [
+        "privacy"
+      ],
+      "authority_ids": [
+        "gdpr-transfer",
+        "sg-privacy",
+        "au-privacy",
+        "jp-privacy"
+      ],
+      "activation_requirements": [
+        "Actual provider/subprocessor countries, data access, support and backup locations",
+        "Executed applicable DPA, transfer mechanism, annexes and transfer-risk assessment where required",
+        "Local localization, export-of-data and government-access requirements assessed",
+        "Contractual region commitments match deployment and support configuration"
+      ],
+      "accountable_roles": [
+        "Human privacy lead",
+        "Infrastructure owner",
+        "Engaged local counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "retention-deletion",
+      "title": "Retention, deletion and backups",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "The privacy policy states purposes and retention criteria; exact production periods and backup deletion behavior require evidence.",
+      "recorded_evidence_ids": [
+        "privacy",
+        "policy"
+      ],
+      "authority_ids": [
+        "ftc-privacy",
+        "sg-privacy",
+        "cisa"
+      ],
+      "activation_requirements": [
+        "Approved schedule by account, intake, payment, evidence, audit log and backup data class",
+        "Implemented deletion, legal-hold and restore handling with tested request trail",
+        "Provider log, telemetry and backup configuration plus contract retention requirements",
+        "Human retention owner and review cadence"
+      ],
+      "accountable_roles": [
+        "Human privacy lead",
+        "Infrastructure owner"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "ai-governance",
+      "title": "AI role, transparency and human control",
+      "applicability": "PENDING_ASSESSMENT",
+      "status": "PENDING",
+      "basis": "The public FAQ is deterministic and does not call a model. Proposed models, agent actions and synthetic personas must be assessed by actual role and use before activation; no universal AI exemption follows from the FAQ.",
+      "recorded_evidence_ids": [
+        "privacy",
+        "terms"
+      ],
+      "authority_ids": [
+        "ai-act",
+        "ai-transparency",
+        "ai-copyright"
+      ],
+      "activation_requirements": [
+        "Inventory of actual models, provider terms, inputs, output uses and human approval boundaries",
+        "AI provider/deployer classification and prohibited/high-risk use assessment for intended markets",
+        "Applicable AI interaction, synthetic-content disclosure/marking and literacy evidence",
+        "Human oversight, evaluation, complaint/escalation and incident process for the proposed use"
+      ],
+      "accountable_roles": [
+        "Human product owner",
+        "Human privacy/security leads",
+        "Engaged AI counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "accessibility",
+      "title": "Accessibility and complete user journeys",
+      "applicability": "PENDING_ASSESSMENT",
+      "status": "PENDING",
+      "basis": "Accessibility duties depend on the service, users and local law; no independent WCAG or statutory conformance assessment is recorded.",
+      "recorded_evidence_ids": [
+        "terms"
+      ],
+      "authority_ids": [
+        "wcag",
+        "eaa"
+      ],
+      "activation_requirements": [
+        "Applicable country/sector/product accessibility law and fact-supported exemptions assessed",
+        "Keyboard, assistive-technology, visual, cognitive, authentication, purchase and native journeys tested",
+        "Documented issues, fixes, support route and conformance statement based on actual tested scope",
+        "Local requirements and third-party checkout/auth barriers addressed"
+      ],
+      "accountable_roles": [
+        "Product owner",
+        "Accessibility assessor",
+        "Engaged local counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "sanctions-export",
+      "title": "Sanctions, export and end-use controls",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "A US operator and distributed software need activity-specific screening and export assessment. Country codes, BSD source rights and owner approval are not transaction clearance.",
+      "recorded_evidence_ids": [
+        "terms",
+        "owner"
+      ],
+      "authority_ids": [
+        "ofac",
+        "ofac-lists",
+        "bis",
+        "bis-public"
+      ],
+      "activation_requirements": [
+        "Current counterparty, beneficial-owner, destination, end-user and end-use screening with escalation",
+        "EAR jurisdiction/ECCN/encryption assessment for each actual distribution and technology access",
+        "Applicable licenses, exceptions, filings and reporting supported by records",
+        "Refresh and re-screen at the applicable transaction and change events; blocked outcomes remain blocked"
+      ],
+      "accountable_roles": [
+        "Human compliance lead",
+        "Security/export owner",
+        "Engaged sanctions/export counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "consumer-payments-marketing",
+      "title": "Customer terms, payments and marketing",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "Current source offers USD-priced consulting services through Stripe; an intake or payment does not activate financial products or accept unagreed enterprise terms.",
+      "recorded_evidence_ids": [
+        "terms",
+        "privacy",
+        "policy"
+      ],
+      "authority_ids": [
+        "ftc-marketing",
+        "ftc-email"
+      ],
+      "activation_requirements": [
+        "Buyer/business/consumer classification, price, taxes, mandatory rights, cancellation/refund and language requirements assessed",
+        "Actual processor/merchant account, permitted geography, payout and dispute evidence",
+        "Purchase and recurring-payment disclosures/consents match the actual flow",
+        "Local email, cookie, social, advertising and endorsement rules assessed before campaigns"
+      ],
+      "accountable_roles": [
+        "Human commercial owner",
+        "Payments owner",
+        "Engaged consumer counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "regulated-finance",
+      "title": "Regulated finance, tokens, custody and corridors",
+      "applicability": "PENDING_ASSESSMENT",
+      "status": "PENDING",
+      "basis": "Current request checkout covers consulting; regulated financial activation is false for every country. Historical NUSD contracts and policies do not establish present offer, redemption, reserve or license evidence.",
+      "recorded_evidence_ids": [
+        "terms",
+        "owner",
+        "uk-eu",
+        "apac",
+        "mena"
+      ],
+      "authority_ids": [
+        "fincen",
+        "mica",
+        "fca",
+        "sg-payment",
+        "hk-finance",
+        "vara"
+      ],
+      "activation_requirements": [
+        "Exact issuer, service, instrument, customer type and money/asset flow classified in each jurisdiction",
+        "Named licensed execution parties and permissions independently checked for each activity",
+        "AML/KYC, sanctions, safeguarding, custody, reserves, settlement and redemption evidence where required",
+        "Approved marketing route and corridor-specific contracts plus live receipt review",
+        "Separate authorized human approval for the actual execution; country/source publication cannot activate it"
+      ],
+      "accountable_roles": [
+        "Human authorized financial principal",
+        "Licensed provider",
+        "Engaged financial-services counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "software-ip",
+      "title": "Software licensing, IP and rights chain",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "Numina-owned material has a recorded BSD grant. Third-party licenses, native components, patents and mark clearance remain separate. The inspected inventory explicitly includes gaps and unresolved declarations.",
+      "recorded_evidence_ids": [
+        "licenses",
+        "rights",
+        "terms"
+      ],
+      "authority_ids": [
+        "tm",
+        "patent",
+        "copyright",
+        "ai-copyright"
+      ],
+      "activation_requirements": [
+        "Actual deployed/distributed dependency and native/transitive inventory plus complete notices/source duties",
+        "Resolve published development analyzer notice gaps before affected redistribution; resolve actual Python environment",
+        "Human/contributor/vendor assignment and customer deliverable rights evidence",
+        "Jurisdiction-specific patent/trademark strategy, searches and actual filing receipts when claimed",
+        "Model/media/font/provider permissions and human-authorship claims match actual material"
+      ],
+      "accountable_roles": [
+        "Human IP owner",
+        "Release owner",
+        "Engaged IP counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "corporate-tax",
+      "title": "Corporate registration, tax and local presence",
+      "applicability": "PENDING_ASSESSMENT",
+      "status": "PENDING",
+      "basis": "Iowa operator designation does not establish registration, tax nexus or business authority in another market. Local selling, contractors, assets and recurring presence must be assessed.",
+      "recorded_evidence_ids": [
+        "terms",
+        "policy"
+      ],
+      "authority_ids": [
+        "iowa-entity",
+        "irs",
+        "irs-int"
+      ],
+      "activation_requirements": [
+        "Verified entity, tax classification, current filings and actual trade-name registrations",
+        "Local corporate/foreign qualification, permanent establishment and indirect tax nexus assessed",
+        "Required invoicing, VAT/GST/sales tax, withholding and reporting configured for actual flows",
+        "Tax/accounting owner and evidence of any required local appointments or registrations"
+      ],
+      "accountable_roles": [
+        "Human founder",
+        "Tax/accounting adviser",
+        "Engaged local counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "workforce",
+      "title": "Employment, contractors and human accountability",
+      "applicability": "PENDING_ASSESSMENT",
+      "status": "PENDING",
+      "basis": "AI operating aliases are not proof of employed humans, officers, licensed advisers or legal signatories. Any actual staff/contractor arrangements require local assessment.",
+      "recorded_evidence_ids": [
+        "terms"
+      ],
+      "authority_ids": [
+        "dol",
+        "irs-int"
+      ],
+      "activation_requirements": [
+        "Actual human workers, work locations, role authority and classification reviewed",
+        "Required contracts, payroll/tax, benefits, right-to-work and local labor safeguards",
+        "Confidentiality, invention/rights assignment and access offboarding evidence",
+        "Named human legal/compliance/incident escalation leads and engaged adviser authority"
+      ],
+      "accountable_roles": [
+        "Human founder",
+        "Human HR/operations owner",
+        "Engaged local employment counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "cyber-incidents",
+      "title": "Security, incident notification and resilience",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "Published controls and source tests can support preparation; live host configuration, incident operations and notification readiness require actual evidence.",
+      "recorded_evidence_ids": [
+        "security",
+        "privacy"
+      ],
+      "authority_ids": [
+        "cisa",
+        "ftc-breach"
+      ],
+      "activation_requirements": [
+        "Actual asset/provider inventory, access controls, secrets, logging, remediation and vulnerability process",
+        "Human incident commander, backups/restore and exercised response/continuity plan",
+        "Applicable country/sector/customer notice triggers, timelines and contacts mapped",
+        "Deployed evidence and monitored service boundaries, accepted RTO/RPO and incident records"
+      ],
+      "accountable_roles": [
+        "Human security lead",
+        "Infrastructure owner",
+        "Engaged privacy/security counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "assurance-coverage",
+      "title": "Independent assurance and insurance",
+      "applicability": "PENDING_ASSESSMENT",
+      "status": "PENDING",
+      "basis": "Source policies do not verify a SOC report, ISO certificate, government authorization or insurance binder. Each customer, regulated use and coverage requirement needs its own evidence.",
+      "recorded_evidence_ids": [
+        "security",
+        "government",
+        "terms"
+      ],
+      "authority_ids": [
+        "iso",
+        "insurance"
+      ],
+      "activation_requirements": [
+        "Customer/sector-required assurance scope and actual current report/certificate with exceptions",
+        "Required cyber, professional, general liability and other coverage assessed against activity/territory",
+        "Actual binder/policy, named insured, limits, exclusions, dates and applicable territory verified",
+        "Truthful public claims and contract commitments match evidence; intended coverage stays pending"
+      ],
+      "accountable_roles": [
+        "Human founder",
+        "Broker/insurer",
+        "Independent assessor",
+        "Engaged counsel"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    },
+    {
+      "id": "distribution-mobile",
+      "title": "App, plugin, OS and native distribution",
+      "applicability": "REQUIRED",
+      "status": "PENDING",
+      "basis": "Maintained source and frozen release artifacts can differ. Rebuilt binaries, signing, actual platform submissions, SDK inventory and region availability are separate gates.",
+      "recorded_evidence_ids": [
+        "terms",
+        "privacy",
+        "licenses"
+      ],
+      "authority_ids": [
+        "apple",
+        "play",
+        "bis",
+        "android-sdk",
+        "apple-sdk"
+      ],
+      "activation_requirements": [
+        "Actual artifact/source/build identity and legal snapshot version verified before distribution",
+        "Android/iOS signed build, signing ownership and current-source verification",
+        "Native/transitive SDK license inventory, data practices, store privacy declarations and encryption/export assessment",
+        "Actual platform review/publication receipt and country availability; old binaries are not updated by web policy edits",
+        "Plugin scopes, host permissions, provider terms, user approvals and native account deletion verified"
+      ],
+      "accountable_roles": [
+        "Human release owner",
+        "Platform account owner",
+        "Security/privacy leads"
+      ],
+      "verified_assessor": null,
+      "next_review": "Before new country, data use, regulated activity, distribution or accepted enterprise engagement."
+    }
+  ],
+  "regional_profiles": [
+    {
+      "id": "US",
+      "title": "United States / state-by-state",
+      "codes": [
+        "US"
+      ],
+      "status": "PARTIAL_POLICY_MAPPED",
+      "authority_ids": [
+        "ftc-privacy",
+        "iowa-privacy",
+        "ccpa",
+        "fincen",
+        "ofac",
+        "bis",
+        "irs",
+        "dol"
+      ],
+      "scope": "Iowa operator designation and current US USD consulting checkout are recorded. Federal, state, local and sector requirements remain activity-specific; no whole-US legal clearance is recorded."
+    },
+    {
+      "id": "EU",
+      "title": "European Union",
+      "codes": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CY",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "SE"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "gdpr-scope",
+        "gdpr-transfer",
+        "ai-act",
+        "ai-transparency",
+        "eaa",
+        "mica"
+      ],
+      "scope": "Map GDPR scope, actual transfers, AI role/use, accessibility, national implementation and regulated activity. Membership is a scoping aid, not an approval or a finding that every EU rule applies."
+    },
+    {
+      "id": "EEA_NON_EU",
+      "title": "EEA outside the EU",
+      "codes": [
+        "IS",
+        "LI",
+        "NO"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "gdpr-scope",
+        "gdpr-transfer"
+      ],
+      "scope": "Review EEA data protection and each country’s actual implementation and incorporation of other EU measures. Do not automatically apply EU-only market authorization or AI/consumer rules."
+    },
+    {
+      "id": "UK",
+      "title": "United Kingdom",
+      "codes": [
+        "GB"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "ico-rights",
+        "ico-complaints",
+        "fca"
+      ],
+      "scope": "UK GDPR/transfer and complaint processes, local consumer/accessibility rules and any financial-promotion or service permissions require separate review."
+    },
+    {
+      "id": "SG",
+      "title": "Singapore",
+      "codes": [
+        "SG"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "sg-privacy",
+        "sg-payment"
+      ],
+      "scope": "Assess PDPA duties, transfer/retention and actual payments/token licensing; local contracting, tax and workforce requirements remain pending."
+    },
+    {
+      "id": "HK",
+      "title": "Hong Kong",
+      "codes": [
+        "HK"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "hk-privacy",
+        "hk-finance"
+      ],
+      "scope": "Assess PDPO principles and the actual financial/virtual-asset service and targeting. Mainland China is a distinct legal assessment."
+    },
+    {
+      "id": "JP",
+      "title": "Japan",
+      "codes": [
+        "JP"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "jp-privacy"
+      ],
+      "scope": "Assess APPI scope, actual transfers and local licensing/consumer/tax requirements; no Japanese provider or market permission is recorded."
+    },
+    {
+      "id": "AU",
+      "title": "Australia",
+      "codes": [
+        "AU"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "au-privacy"
+      ],
+      "scope": "Assess Privacy Act/APP coverage, overseas disclosure and local service, consumer, financial, tax and workforce requirements."
+    },
+    {
+      "id": "AE",
+      "title": "United Arab Emirates / location-specific",
+      "codes": [
+        "AE"
+      ],
+      "status": "INITIAL_REQUIREMENTS_MAPPED_NOT_REVIEWED",
+      "authority_ids": [
+        "vara"
+      ],
+      "scope": "Determine emirate, free zone and actual activity. Dubai VARA and DIFC are distinct; a Dubai scoping page does not approve the UAE or the wider MENA region."
+    },
+    {
+      "id": "LOCAL_REVIEW",
+      "title": "Other countries and territories",
+      "codes": [],
+      "status": "NOT_REVIEWED",
+      "authority_ids": [
+        "ofac",
+        "bis"
+      ],
+      "scope": "Country-specific privacy/transfers/localization, AI, consumer/accessibility, finance, corporate/tax, workforce, cybersecurity and distribution rules have not been assessed. US sanctions/export duties still require activity-specific assessment. Language, provinces/states and territorial regimes are not resolved by a two-letter option."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "terms",
+      "title": "Workspace terms",
+      "status": "IMPLEMENTED_SOURCE",
+      "source_file": "public/terms.html",
+      "url": "/terms",
+      "snapshot_sha256": "babb5716c7df87044a4a65d6be7ea2b06422abb73cd3c026d5b50bef559b1868",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "privacy",
+      "title": "Privacy notice",
+      "status": "IMPLEMENTED_SOURCE",
+      "source_file": "public/privacy.html",
+      "url": "/privacy",
+      "snapshot_sha256": "abf9999f86b02a0ee773146248f5b7cc605344832a09af39dc53c094023d2cf9",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "licenses",
+      "title": "Scoped software license inventory",
+      "status": "SCOPED_INVENTORY_WITH_GAPS",
+      "source_file": "public/software-licenses.json",
+      "url": "/software-licenses.json",
+      "snapshot_sha256": "9c32d205d092e301bc127969652b97d5024e993def4406e55aa51ae3bdda0986",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "rights",
+      "title": "Rights and brand scope",
+      "status": "RECORDED_SCOPE",
+      "source_file": "public/ownership.json",
+      "url": "/ownership.json",
+      "snapshot_sha256": "bb04441689bf4883a90af78e1b9c7deef0a8f4a6157f468e04d6d52f79d50042",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "policy",
+      "title": "Legal policy and consent scope",
+      "status": "IMPLEMENTED_SOURCE",
+      "source_file": "public/legal-policy.json",
+      "url": "/legal-policy.json",
+      "snapshot_sha256": "37337c19e73b3969cebca9ef5c4ba53ddcf446022b15e2209ef48fc7e8574f67",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "owner",
+      "title": "Preserved owner approval",
+      "status": "OWNER_REPORTED_APPROVAL",
+      "source_file": "public/owner-approval.js",
+      "url": "/owner-approval.js",
+      "snapshot_sha256": "5586dafe0405e83bbf619c81422635a26a530cce86e031a82a4dd90c2a12b7e7",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "security",
+      "title": "Published security contact and scope",
+      "status": "DOCUMENTED_POLICY",
+      "source_file": "public/security.html",
+      "url": "/security",
+      "snapshot_sha256": "2dfc6c707a6174b66c1c73a39dd1be20ad421da5e504b610b73603c931e77aac",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "uk-eu",
+      "title": "UK/EU engagement scoping",
+      "status": "DOCUMENTED_SCOPE_RESTRICTIONS",
+      "source_file": "public/uk-eu.html",
+      "url": "/uk-eu",
+      "snapshot_sha256": "43193b8af97f951b03161d03ba9fd9494a68213efba4317d3e30110629d82ee6",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "apac",
+      "title": "APAC engagement scoping",
+      "status": "DOCUMENTED_SCOPE_RESTRICTIONS",
+      "source_file": "public/apac.html",
+      "url": "/apac",
+      "snapshot_sha256": "44d3204e3714057cbd5d3abd4e23f37c9751332387555538e56731138cdd3aba",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "mena",
+      "title": "MENA engagement scoping",
+      "status": "DOCUMENTED_SCOPE_RESTRICTIONS",
+      "source_file": "public/mena.html",
+      "url": "/mena",
+      "snapshot_sha256": "cc99059c2970a8daaff3f7318d7f29b380b4763e44ffb087886c3fe806adc399",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "government",
+      "title": "Government engagement scoping",
+      "status": "DOCUMENTED_SCOPE_RESTRICTIONS",
+      "source_file": "public/government.html",
+      "url": "/government",
+      "snapshot_sha256": "2a1e309216f672eb6ddafec64955b4b72218080b42dd0306a804e91776f3e1db",
+      "reviewed_on": "2026-10-04",
+      "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    }
+  ],
+  "primary_authorities": [
+    {
+      "id": "ftc-privacy",
+      "title": "FTC: Protecting personal information",
+      "url": "https://www.ftc.gov/business-guidance/resources/protecting-personal-information-guide-business",
+      "checked_on": "2026-10-04",
+      "summary": "Identify personal data, limit collection and retention, protect it, and plan for incidents. A privacy notice alone does not verify operating controls.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "gdpr-scope",
+      "title": "European Commission: GDPR application",
+      "url": "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/application-gdpr_en",
+      "checked_on": "2026-10-04",
+      "summary": "GDPR applicability depends on establishment and offering goods or services to, or monitoring, people in the EU; location of the operator alone is insufficient.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "gdpr-transfer",
+      "title": "European Commission: international transfers",
+      "url": "https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/rules-international-data-transfers_en",
+      "checked_on": "2026-10-04",
+      "summary": "Transfers subject to GDPR need an applicable legal route and safeguards; a published policy is not an executed transfer arrangement.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "iowa-privacy",
+      "title": "Iowa Code 715D (2026)",
+      "url": "https://www.legis.iowa.gov/docs/code/2026/715D.pdf",
+      "checked_on": "2026-10-04",
+      "summary": "Determine whether Iowa consumer-data thresholds and exclusions apply using actual processing volumes and activities; preserve the applicable consumer rights and response process.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ccpa",
+      "title": "California Attorney General: CCPA",
+      "url": "https://oag.ca.gov/privacy/ccpa",
+      "checked_on": "2026-10-04",
+      "summary": "Assess statutory coverage, exceptions and consumer rights against actual business and processing facts. No California applicability determination has been recorded here.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ico-rights",
+      "title": "ICO: subject access",
+      "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/subject-access-requests/a-guide-to-subject-access/",
+      "checked_on": "2026-10-04",
+      "summary": "UK rights requests require the applicable response process; operational identity checks, search capability and deadlines must be assigned.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ico-complaints",
+      "title": "ICO: data-protection complaints",
+      "url": "https://ico.org.uk/for-organisations/how-to-deal-with-data-protection-complaints/",
+      "checked_on": "2026-10-04",
+      "summary": "The UK complaints process now requires acknowledgment within 30 days, investigation without undue delay, progress information and outcome information where applicable.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ai-act",
+      "title": "European Commission: AI Act",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "checked_on": "2026-10-04",
+      "summary": "Classify the actual AI role and intended use. Prohibited practices and AI literacy already apply; the Commission describes separate high-risk timelines. Recheck the enacted rules for the intended deployment.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ai-transparency",
+      "title": "European Commission: Article 50 guidelines",
+      "url": "https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems",
+      "checked_on": "2026-10-04",
+      "summary": "Transparency obligations for covered AI systems and generated content apply from 2 August 2026. Identify applicable notices and marking duties for the actual role and content.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "wcag",
+      "title": "W3C: WCAG 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "checked_on": "2026-10-04",
+      "summary": "Use WCAG 2.2 as a technical assessment reference. Test each complete user journey, including keyboard, assistive technology, mobile and authentication; this record is not a conformance claim.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "eaa",
+      "title": "EU: European Accessibility Act",
+      "url": "https://eur-lex.europa.eu/eli/dir/2019/882/oj/eng",
+      "checked_on": "2026-10-04",
+      "summary": "Determine covered products and services, national implementation, timing and any fact-supported exemption; the Directive includes e-commerce services and specific microenterprise provisions.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ofac",
+      "title": "OFAC: Framework for Compliance Commitments",
+      "url": "https://ofac.treasury.gov/system/files/126/framework_ofac_cc.pdf",
+      "checked_on": "2026-10-04",
+      "summary": "A risk-based sanctions program includes management commitment, risk assessment, controls, testing and training. Assess parties, ownership, activities and relevant jurisdictions, rather than relying on a country selector.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ofac-lists",
+      "title": "OFAC: Sanctions List Service",
+      "url": "https://ofac.treasury.gov/sanctions-list-service",
+      "checked_on": "2026-10-04",
+      "summary": "Use current authoritative sanctions data in the applicable screening process. Listing a country in the UI does not authorize a transaction.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "bis",
+      "title": "BIS: encryption controls",
+      "url": "https://www.bis.gov/learn-support/encryption-controls?id=1160",
+      "checked_on": "2026-10-04",
+      "summary": "Assess EAR jurisdiction, encryption classification, end use, end user, destination and any applicable exception, notification or reporting for the actual exported software and technology.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "bis-public",
+      "title": "BIS: encryption items not subject to EAR",
+      "url": "https://www.bis.gov/learn-support/encryption-controls/encryption-items-not-subject-to-ear",
+      "checked_on": "2026-10-04",
+      "summary": "Public availability and source licensing do not themselves establish every encryption exclusion; confirm the exact classification, notification and publication conditions.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ftc-marketing",
+      "title": "FTC: Advertising and marketing",
+      "url": "https://www.ftc.gov/business-guidance/advertising-marketing",
+      "checked_on": "2026-10-04",
+      "summary": "Advertising claims and endorsements need truthful support; do not promote approvals, protection or capability beyond their evidence and scope.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ftc-email",
+      "title": "FTC: CAN-SPAM guide",
+      "url": "https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business",
+      "checked_on": "2026-10-04",
+      "summary": "Commercial email requires the applicable sender, content, address and opt-out controls. Other regions and channels can have separate consent and marketing requirements.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "fincen",
+      "title": "FinCEN: convertible virtual-currency business models",
+      "url": "https://www.fincen.gov/resources/statutes-regulations/guidance/application-fincens-regulations-certain-business-models",
+      "checked_on": "2026-10-04",
+      "summary": "Money-services obligations depend on the actual activity and business model. Software development and owner approval do not authorize money transmission, exchange or custody.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "mica",
+      "title": "ESMA: MiCA rulebook",
+      "url": "https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mica",
+      "checked_on": "2026-10-04",
+      "summary": "Classify the actual token, issuer and service and verify the named authorized party and permitted activities before regulated EU work; a general readiness record is not authorization.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "fca",
+      "title": "FCA: cryptoassets marketed to UK consumers",
+      "url": "https://www.fca.org.uk/firms/cryptoassets/marketing-uk-consumers",
+      "checked_on": "2026-10-04",
+      "summary": "UK cryptoasset promotions can include websites, apps and social media, including communications by overseas firms. Establish the lawful communication route and required safeguards before promotion.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "sg-privacy",
+      "title": "Singapore PDPC: data-protection obligations",
+      "url": "https://www.pdpc.gov.sg/overview-of-pdpa/the-legislation/personal-data-protection-act/data-protection-obligations",
+      "checked_on": "2026-10-04",
+      "summary": "Assess notification, accountability, protection, retention, access and transfer obligations for the proposed processing and local role.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "sg-payment",
+      "title": "MAS: Payment Services Act",
+      "url": "https://www.mas.gov.sg/regulation/acts/payment-services-act",
+      "checked_on": "2026-10-04",
+      "summary": "Match the actual payment or digital-token activity to the current licensing framework and named provider permissions; no MAS permission for Numina is established here.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "hk-privacy",
+      "title": "Hong Kong PCPD: six data-protection principles",
+      "url": "https://www.pcpd.org.hk/english/data_privacy_law/6_data_protection_principles/principles.html",
+      "checked_on": "2026-10-04",
+      "summary": "Map personal-data collection, use, retention, security, transparency and access to the actual Hong Kong activity and the Ordinance.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "hk-finance",
+      "title": "Hong Kong SFC: licensing requirements",
+      "url": "https://www.sfc.hk/en/Regulatory-functions/Intermediaries/Licensing/Do-you-need-a-licence-or-registration",
+      "checked_on": "2026-10-04",
+      "summary": "Assess the exact regulated service, trading/custody model and client targeting; an application or overseas approval is not a Hong Kong activity permission.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "jp-privacy",
+      "title": "Japan PPC: laws and policies",
+      "url": "https://www.ppc.go.jp/en/legal/",
+      "checked_on": "2026-10-04",
+      "summary": "Use the current APPI text and guidance to assess the actual operator, processing and transfer arrangements; local applicability and provider evidence remain unreviewed.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "au-privacy",
+      "title": "Australia OAIC: Australian Privacy Principles",
+      "url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/read-the-australian-privacy-principles",
+      "checked_on": "2026-10-04",
+      "summary": "Assess Privacy Act coverage and collection, security, transparency, access and overseas-disclosure duties for the actual arrangement, including exceptions supported by facts.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "vara",
+      "title": "Dubai VARA: licensed activities",
+      "url": "https://www.vara.ae/en/faq/",
+      "checked_on": "2026-10-04",
+      "summary": "Identify the activity and exact location. VARA regulates covered virtual-asset activities in or from Dubai excluding DIFC; other locations and financial free zones require their own assessment.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "irs",
+      "title": "IRS: business structures",
+      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/business-structures",
+      "checked_on": "2026-10-04",
+      "summary": "An LLC is a state-law structure with tax treatment determined by applicable facts and elections. Confirm the actual entity and tax status rather than inferring it from the brand.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "irs-int",
+      "title": "IRS: international business",
+      "url": "https://www.irs.gov/businesses/international-business",
+      "checked_on": "2026-10-04",
+      "summary": "Assess international reporting, withholding, treaty and tax obligations against actual counterparties, workers, assets and operations; this is not tax clearance for every market.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "iowa-entity",
+      "title": "Iowa Secretary of State: business FAQs",
+      "url": "https://sos.iowa.gov/businesses/business-faqs",
+      "checked_on": "2026-10-04",
+      "summary": "Verify the actual legal entity, good-standing and name records and any required operating filings; separate Iowa formation from authority in another jurisdiction.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "dol",
+      "title": "US Department of Labor: worker misclassification",
+      "url": "https://www.dol.gov/agencies/whd/flsa/misclassification",
+      "checked_on": "2026-10-04",
+      "summary": "Worker classification depends on the actual relationship under applicable rules. A title or contractor label does not establish lawful classification; local labor and payroll rules also need review.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ftc-breach",
+      "title": "FTC: data-breach response",
+      "url": "https://www.ftc.gov/business-guidance/resources/data-breach-response-guide-business",
+      "checked_on": "2026-10-04",
+      "summary": "Prepare containment, investigation and notifications to affected parties and authorities where required. Determine the applicable deadlines and recipient obligations for the actual incident.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "cisa",
+      "title": "CISA: business logging",
+      "url": "https://www.cisa.gov/audiences/small-and-medium-businesses/secure-your-business/use-logging-on-business-systems",
+      "checked_on": "2026-10-04",
+      "summary": "Protect logs, define retention and monitoring procedures, and designate response roles covering technology, communications, legal and business continuity.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "iso",
+      "title": "ISO: certification",
+      "url": "https://www.iso.org/certification.html",
+      "checked_on": "2026-10-04",
+      "summary": "Certification is assurance from an independent body. A control mapping, source test or policy publication is not an ISO certificate.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "insurance",
+      "title": "FTC: cyber insurance",
+      "url": "https://www.ftc.gov/business-guidance/small-businesses/cybersecurity/cyber-insurance",
+      "checked_on": "2026-10-04",
+      "summary": "Review actual policy coverage, exclusions, limits, response arrangements and required safeguards; an intake or intended purchase is not bound coverage.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "tm",
+      "title": "USPTO: trademark process",
+      "url": "https://www.uspto.gov/trademarks/basics/trademark-process",
+      "checked_on": "2026-10-04",
+      "summary": "Trademark registration requires the applicable search, application and examination process. A claimed mark or company name does not establish worldwide clearance or registration.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "patent",
+      "title": "USPTO: provisional applications",
+      "url": "https://www.uspto.gov/patents/basics/apply/provisional-application",
+      "checked_on": "2026-10-04",
+      "summary": "A provisional filing has requirements and a limited term and is not a patent grant; assess ownership, disclosure and filing strategy with the actual invention evidence.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "copyright",
+      "title": "US Copyright Office: computer programs",
+      "url": "https://www.copyright.gov/circs/circ61.pdf",
+      "checked_on": "2026-10-04",
+      "summary": "Copyright registration for computer programs requires the appropriate claim and deposit; source ownership statements do not prove a registration or assignment chain.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "ai-copyright",
+      "title": "US Copyright Office: AI copyrightability",
+      "url": "https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf",
+      "checked_on": "2026-10-04",
+      "summary": "Assess human authorship and the actual AI contribution before claiming exclusive rights in generated material; a synthetic portrait is not evidence of a real human officer.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "apple",
+      "title": "Apple: App Review Guidelines",
+      "url": "https://developer.apple.com/app-store/review/guidelines/",
+      "checked_on": "2026-10-04",
+      "summary": "Native submissions need accurate metadata, lawful business behavior, privacy/security and third-party SDK compliance; source updates do not update an installed or approved binary.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "play",
+      "title": "Google Play: User Data",
+      "url": "https://support.google.com/googleplay/android-developer/answer/10144311?hl=en",
+      "checked_on": "2026-10-04",
+      "summary": "Assess actual app and SDK data practices, disclosures, policy links and required account-deletion behavior; store availability requires an actual reviewed release and account evidence.",
+      "type": "PRIMARY_AUTHORITY_GUIDANCE"
+    },
+    {
+      "id": "android-sdk",
+      "title": "Google: Android SDK agreement",
+      "url": "https://developer.android.com/studio/terms",
+      "checked_on": "2026-10-04",
+      "summary": "Actual SDK terms and accepted account authority are separate from open-source component rights.",
+      "type": "PRIMARY_PROVIDER_TERMS"
+    },
+    {
+      "id": "apple-sdk",
+      "title": "Apple: SDK/developer agreements",
+      "url": "https://developer.apple.com/support/terms/",
+      "checked_on": "2026-10-04",
+      "summary": "Use and distribution require applicable actual accepted agreements; system framework rights are not a Numina BSD grant.",
+      "type": "PRIMARY_PROVIDER_TERMS"
+    }
+  ],
+  "required_domain_ids": [
+    "entity-contracts",
+    "privacy-rights",
+    "transfers-residency",
+    "retention-deletion",
+    "ai-governance",
+    "accessibility",
+    "sanctions-export",
+    "consumer-payments-marketing",
+    "regulated-finance",
+    "software-ip",
+    "corporate-tax",
+    "workforce",
+    "cyber-incidents",
+    "assurance-coverage",
+    "distribution-mobile"
+  ],
+  "activation_record_contract": {
+    "effect": "Readiness and review record only. Neither this public JSON nor its client UI grants provider permissions or changes live execution policies.",
+    "required_fields": [
+      "country_code",
+      "activity_scope",
+      "contracting_entity",
+      "human_reviewer",
+      "reviewed_on",
+      "valid_until",
+      "evidence_refs",
+      "domain_assessments",
+      "sanctions_export_transaction_review",
+      "authorized_human_release_receipt"
+    ],
+    "allowed_applicability": [
+      "REQUIRED",
+      "NOT_APPLICABLE_ASSESSED"
+    ],
+    "allowed_assessment_status": [
+      "SATISFIED",
+      "PENDING",
+      "NOT_APPLICABLE_ASSESSED"
+    ],
+    "not_applicable_requires": [
+      "country_code",
+      "activity_scope",
+      "human_reviewer",
+      "reviewed_on",
+      "valid_until",
+      "legal_basis",
+      "evidence_refs"
+    ],
+    "evidence_refs_need": "Identifiable actual source/receipt, reviewed scope and date; secure private evidence is kept separately and only its public-safe reference is published.",
+    "reassessment_triggers": [
+      "New country or subnational market",
+      "New data purpose, model, provider or transfer",
+      "Changed product, financial or custody activity",
+      "New binary/SDK/distribution or store region",
+      "Contract, law, permission or insurance change",
+      "Expired review or new screening risk"
+    ]
+  },
+  "distribution_scope": {
+    "website": "Maintained legal pages and shared coverage records. Publication verification is separate.",
+    "os_apps_plugins": "Maintained source and new legal companion snapshots must be tested and packaged; existing installed artifacts require separate rebuild/update evidence.",
+    "native_binary_status": "Current Android/iOS source updates do not prove current signed binary or store publication. Review actual release records before distribution.",
+    "inventory_limits": [
+      "Live self-hosted operating-system/service packages have not been exhaustively inventoried by this source review.",
+      "Android/iOS native and transitive dependencies require an actual resolved inventory; the npm/Python inventory is not a full native SBOM.",
+      "The software inventory explicitly records development analyzer full-notice gaps and unresolved Python ranges.",
+      "Host and platform terms remain separate from the Numina-owned BSD source grant."
+    ],
+    "declared_native_inventory": "software-licenses.json native_and_build_declarations: Android Browser Helper2.7.3, AGP8.13.2, Gradle8.13, Temurin/OpenJDK17 major, Android SDK36 targets and Apple imported system frameworks; actual resolved binary/OS inventory pending."
+  },
+  "preserved_finalized_records": {
+    "build": "/final-build.json",
+    "manifest": "/final-manifest.json",
+    "identity": "NUMINA",
+    "application_version": "4.0.0",
+    "bytes_preserved": true,
+    "snapshot_sha256": {
+      "public/final-build.json": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+      "public/final-manifest.json": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762"
+    }
+  },
+  "publication_status": "MAINTAINED_SOURCE_PREPARED; live deployment and installed artifact verification tracked separately by release receipts."
+}

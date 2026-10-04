@@ -3,4 +3,7 @@
     <string name="app_name">Numina OS</string>
     <string name="asset_statements" translatable="false">[{\"relation\":[\"delegate_permission/common.handle_all_urls\"],\"target\":{\"namespace\":\"web\",\"site\":\"https://numinalabs.xyz\"}}]</string>
     <string name="numina_ownership_notice">Copyright © 2026 SK Consulting LLC. Numina™. Numina-owned software is licensed under BSD-3-Clause. See LICENSE.md and NOTICE.md.</string>
+    <string name="terms_shortcut">Terms</string>
+    <string name="privacy_shortcut">Privacy</string>
+    <string name="coverage_shortcut">Legal coverage</string>
 </resources>

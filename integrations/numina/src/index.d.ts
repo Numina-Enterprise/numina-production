@@ -46,3 +46,11 @@ export function geminiGenerateContentTools(options?:{profile?:ToolProfile}):Arra
 export function providerTools(provider:ToolProvider,options?:{profile?:ToolProfile}):Array<Record<string,unknown>>;
 export function executeProviderCall(provider:ToolProvider,call:unknown,client:NuminaClient,options?:{profile?:ToolProfile}):Promise<Record<string,unknown>>;
 export function executeProviderCalls(provider:ToolProvider,calls:Array<unknown>,client:NuminaClient,options?:{profile?:ToolProfile;maxCalls?:number}):Promise<Array<Record<string,unknown>>>;
+
+/** Policy and coverage evidence links; this descriptor grants no operating authority. */
+export const NUMINA_LEGAL_DISCOVERY: Readonly<{
+ identity:'NUMINA'; applicationVersion:'4.0.0'; recordRevision:string;
+ scope:'policy_and_coverage_evidence_not_operating_authorization'; canonicalOrigin:string;
+ terms:string; privacy:string; softwareLicenses:string; coverage:string;
+ coverageManifest:string; countryReadiness:string; financialActivation:false; globalLegalApproval:false;
+}>;
