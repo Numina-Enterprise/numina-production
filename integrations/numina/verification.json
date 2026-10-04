@@ -318,7 +318,7 @@
     "identity": "NUMINA",
     "canonical": true
   },
-  "packagedAtUtc": "2026-10-03T18:52:38.181Z",
+  "packagedAtUtc": "2026-10-04T00:05:42.748Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",
