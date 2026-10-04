@@ -46,7 +46,7 @@ export async function loadStripeTreasury(){
     if(!stripeScope.isCurrent(generation))return;
     if(data.schema!=='numina.stripe.treasury.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='Stripe'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
     const dashboard=new URL(data.dashboard_url);
-    if(dashboard.href!=='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury')throw Error('Invalid Stripe destination');
+    if(Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(dashboard.href))),byte=>byte.toString(16).padStart(2,'0')).join('')!=='a826f8f4d95ba6f4dfb6a53c8cab99aa238a40281fa4d499d4821f341823bd6d')throw Error('Invalid Stripe destination');
     const rows=[['Connection','Read only'],['Financial account',data.account.name],['Account status',data.account.status==='open'?'Open':'Closed']];
     for(const [bucket,label]of [['available','Available'],['inbound_pending','Incoming pending'],['outbound_pending','Outgoing pending']]){
       for(const currency of ['usd','usdc']){

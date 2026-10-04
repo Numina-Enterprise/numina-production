@@ -1,3 +1,4 @@
+import {publicMetadata} from './public-privacy.js';
 import {controlActor,controlBody} from './control-http.js';
 import {readControl} from './control-store.js';
 import {controlHash,controlError} from './control.js';
@@ -13,7 +14,7 @@ export async function treasuryConnectionHttp(req,env,{authorize=controlActor,dep
   const send=(value,status=200)=>Response.json(value,{status,headers:{'Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Content-Type-Options':'nosniff'}});
   if(!['/api/treasury/v1/model','/api/treasury/v1/bank-route','/api/treasury/v1/submissions'].includes(path))return send({error:'NOT_FOUND'},404);
   if(req.method!=='GET'&&!(path==='/api/treasury/v1/submissions'&&req.method==='POST'))return send({error:'METHOD_NOT_ALLOWED'},405);
-  if(path==='/api/treasury/v1/model')return send(NUMINA_TREASURY_CONNECTION);
+  if(path==='/api/treasury/v1/model')return send(publicMetadata(NUMINA_TREASURY_CONNECTION));
   if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==new URL(req.url).origin)return send({error:'ORIGIN_REQUIRED',submissionPerformed:false},403);
   try{
     const actor=await authorize(req,env);

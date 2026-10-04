@@ -31,13 +31,13 @@ export async function readConnectedTreasury({signal,request=requestJson,verify=v
     routes:observed[1].status==='fulfilled'?verifiedUsdcRoutes(observed[1].value):null};
 }
 const nativeHoldingText=unit=>unit==='NUSD'
-  ?formatTreasuryModelWholeAmount(values.observation.projection.balance,'NUSD')+' · dated journal observation, revision '+values.observation.observedRevision
+  ?(typeof values.observation.projection?.balance==='string'?formatTreasuryModelWholeAmount(values.observation.projection.balance,'NUSD')+' · dated journal observation, revision '+values.observation.observedRevision:'See the owner-approved public journal summary')
   :formatTreasuryModelWholeAmount(values.components[unit].modeledTarget,unit)+' · historical allocation target; current and available balance unverified';
 if(typeof document!=='undefined'&&document.getElementById('treasury-connection')){
   const element=id=>document.getElementById(id);
   const put=(id,text)=>{element(id).textContent=text;};
   for(const allocation of model.allocations)put(allocation.id+'-amount',formatTreasuryModelWholeAmount(allocation.amount,allocation.unit)+' · historical target');
-  put('treasury-model-total',formatTreasuryModelWholeAmount(values.observation.projection.balance,'NUSD')+' · dated native journal projection, revision '+values.observation.observedRevision);
+  put('treasury-model-total',typeof values.observation.projection?.balance==='string'?formatTreasuryModelWholeAmount(values.observation.projection.balance,'NUSD')+' · dated native journal projection, revision '+values.observation.observedRevision:'See the owner-approved public journal summary');
   let controller,generation=0;
   const clear=()=>{put('native-connected-balance','Current treasury state unavailable');put('native-connected-proof','An authenticated current journal record is required. The dated snapshot is shown separately.');put('stripe-connected-balances',nativeHoldingText('USDC'));put('bank-connected-route',nativeHoldingText('USD'));element('stripe-connected-routes').replaceChildren();};
   async function refresh(){

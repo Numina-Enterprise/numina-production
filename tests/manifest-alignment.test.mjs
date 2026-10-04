@@ -9,6 +9,7 @@ import {walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {alignNusdReleaseMetadata} from '../scripts/align-nusd-release-metadata.mjs';
 import {NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 import runtimeManifest from '../runtime/vercel-production/lib/numina-manifest.js';
+import {publicMetadata} from '../src/public-privacy.js';
 
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
@@ -67,7 +68,8 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(nativeModel.status,'CURRENT_STATE_UNAVAILABLE');
   assert.equal(nativeModel.aggregateModeledValue,null);
   assert.equal(nativeModel.targetAmount,null);
-  assert.equal(BigInt(nativeModel.historicalAggregateModeledValue),BigInt(nativeModel.historicalJournalObservation.projection.balance)*3n);
+  assert.equal(nativeModel.historicalJournalObservation,null,'Private historical projection is withheld from the public inventory');
+  assert.equal(BigInt(nativeModel.historicalAggregateModeledValue),BigInt(NUMINA_CANONICAL_TREASURY_VALUES.observation.projection.balance)*3n);
   assert.deepEqual(nativeModel.componentUnits,['USD','USDC','NUSD']);
   assert.equal(nativeModel.verificationScope,'AUTHENTICATED_CURRENT_RECORD_REQUIRED');
   assert.equal(nativeModel.externalBalancesAggregated,false);assert.equal(nativeModel.externalFundingCreatedByRelease,false);
@@ -107,7 +109,7 @@ test('current release preserves historical publication evidence and labels its s
 });
 
 test('both release generators replace stale execution claims with dated receipt observations',()=>{
-  const release=json(releasePath),aligned=alignNusdReleaseMetadata(structuredClone(release));
+  const release=json(releasePath),aligned=publicMetadata(alignNusdReleaseMetadata(structuredClone(release)));
   for(const key of ['transfersEnabled','transferStateSource','nusd_transaction_receipts','nusd_activation_readiness','scope','native_treasury_alignment'])assert.deepEqual(release[key],aligned[key],key);
   const stale={transfersEnabled:true,nusd_activation_readiness:{status:'DEPLOYED_PAUSED',transfersEnabled:true},scope:{nusd_issuance_verified_in_current_state:true,contract_deployment_verified_in_current_state:true}};
   const normalized=alignNusdReleaseMetadata(stale),mint=json('runtime/nusd/mint-receipt.json');
@@ -142,16 +144,18 @@ test('retained gateway metadata follows the journal snapshot without inventing b
   for(const holding of treasury.modeledHoldings.filter(value=>value.unit!=='NUSD')){assert.equal(holding.amount,null);assert.equal(holding.verified,null);}
 });
 
-test('release and client manifests bind the identical treasury verifier without provider claims',()=>{
+test('public and private release bindings identify their exact verifier bytes without provider claims',()=>{
   const release=json(releasePath),alignment=json('dist/client/source-alignment.json');
   const distribution=json('integrations/numina/distribution.json');
   const binding=release.treasury_client_verification;
   assert.ok(binding,'Current release must declare its treasury client verification binding');
   assert.deepEqual(alignment.treasury_client_verification,binding);
-  assert.deepEqual(distribution.treasury_client_verification,binding);
   assert.equal(binding.schema,'numina.treasury.client-verification.v2');
-  assert.equal(binding.verifier.sha256,digest(bytes('public/treasury-proof.js')));
-  assert.equal(binding.verifier.sha256,digest(bytes('integrations/numina/src/treasury-proof.js')));
+  assert.equal(binding.verifier.sha256,digest(bytes('dist/client/treasury-proof.js')));
+  assert.equal(binding.privateAccountVerifier.sha256,digest(bytes('public/treasury-proof.js')));
+  assert.equal(binding.privateAccountVerifier.sha256,digest(bytes('integrations/numina/src/treasury-proof.js')));
+  assert.equal(distribution.treasury_client_verification.verifier.sha256,binding.privateAccountVerifier.sha256);
+  assert.equal(binding.privateAccountVerifier.access,'authenticated_owner');
   assert.equal(binding.independentProviderVerification,false);
   assert.equal(binding.financialExecutionEnabled,false);
 });

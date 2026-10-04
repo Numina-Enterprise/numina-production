@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {TextEncoder} from 'node:util';
 import {workspaceSignInUrl,resumeWorkspaceSession} from '../public/workspace-session.js';
 import {formatTreasuryProviderAmount} from '../public/treasury-amount.js';
 
@@ -38,7 +39,7 @@ function harness(fetcher,{control=false,assetDirectory='public'}={}){
  const listen=(name,handler)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(handler);};
  const fire=(name,event={})=>{for(const handler of events.get(name)||[])handler(event);};
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:listen,dispatchEvent:event=>{dispatched.push(event.type);fire(event.type,event);return true;},querySelectorAll:selector=>selector.includes('workspace')?[...nodes.values()].filter(node=>node.tagName==='button'):[]};
- const context=vm.createContext({workspaceSignInUrl,resumeWorkspaceSession,location:{href:'https://numina.test/control'},NUMINA_TREASURY_CONNECTION:{softwareBalanceModel:{stripeUsdc:{current:null},aggregate:{current:null}}},document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
+ const context=vm.createContext({workspaceSignInUrl,resumeWorkspaceSession,location:{href:'https://numina.test/control'},NUMINA_TREASURY_CONNECTION:{softwareBalanceModel:{stripeUsdc:{current:null},aggregate:{current:null}}},document,window:{addEventListener:listen},fetch:fetcher,Response,URL,TextEncoder,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
  const loadAsset=name=>source(name,assetDirectory);
  const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+loadAsset('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
  vm.runInContext(loadAsset('http-client.js')+'\n'+receiptModule+'\n'+loadAsset('treasury-amount.js')+'\n'+loadAsset('stripe-treasury.js')+(control?'\n'+loadAsset('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);

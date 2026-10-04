@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
+import {publicMetadata} from '../src/public-privacy.js';
 
 const read=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(read(path));
@@ -109,7 +110,9 @@ test('historical inventory preserves original records and applies one current in
 });
 
 test('built metadata and release aliases expose the same alignment record',()=>{
-  const record=json('public/metadata-alignment.json');
+  const record=publicMetadata(json('public/metadata-alignment.json'));
+  assert.equal(record.ownerProvidedBankDepositAlignment,null);
+  assert.equal(record.baseUsdcDestination.financialAccount,null);
   assert.deepEqual(json('dist/client/metadata-alignment.json'),record);
   assert.deepEqual(json('dist/client/source-alignment.json').metadataAlignment,record);
   for(const name of ['release.json','application-release-v2.json','application-release-v3.json','application-release-v4.json']){
