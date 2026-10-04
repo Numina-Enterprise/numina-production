@@ -189,14 +189,14 @@ test('charitable giving uses the exact Foundation route and cannot enter commerc
  assert.equal(record.policy_revision,APP_CONSENT_VERSION);assert.equal(record.coverage_revision,NUMINA_LEGAL_DISCOVERY.recordRevision);
  assert.equal(record.giving.official_foundation_give_now_url,'https://cffrv.fcsuite.com/erp/donate/create/fund?funit_id=6517');
  assert.equal(record.giving.numina_commercial_checkout_accepts_charitable_gifts,false);assert.equal(record.giving.commercial_services_separate,true);
- assert.equal(record.giving.automatic_venture_revenue_pledge_or_percentage,false);
+ assert.equal(record.giving.automatic_venture_revenue_pledge_or_percentage,false);assert.deepEqual(record.owner_designated_verticals.map(({name,role})=>({name,role})),[{name:'Numina Ventures',role:'Investment and incubation'},{name:'Numina Foundation',role:'Charity'}]);for(const row of record.owner_designated_verticals)assert.equal(row.classification,'OWNER_DESIGNATED_OPERATING_VERTICAL');
  for(const [key,value] of Object.entries(record.scope_limits))assert.equal(value,false,key);
  assert.equal(NUMINA_LEGAL_DISCOVERY.charitableRelationship,'https://numinalabs.xyz/charitable-relationship.json');
  for(const file of ['about.html','compliance.html']){
   const html=read('public/'+file);assert.ok(html.includes(record.charitable_component.owner_preferred_display_name));
   assert.ok(html.includes('href="'+record.giving.official_foundation_give_now_url+'" target="_blank" rel="noopener noreferrer"'));
   assert.match(html,/href="\/charitable-relationship\.json"/);assert.match(html,/Foundation controls fund assets and distribution decisions/);
-  assert.match(html,/commercial services and payments remain separate/);
+  assert.match(html,/commercial services and payments remain separate/);assert.match(html,/Numina Ventures is Numina’s investment and incubation vertical/);assert.match(html,/Numina Foundation is Numina’s charitable vertical/);assert.match(html,/do not establish investment permissions, a separate charitable incorporation, or tax-exempt status/);
  }
  assert.ok(read('public/about.html').includes(record.charitable_component.formal_foundation_profile_name.replace('&','&amp;')));
  assert.ok(read('public/about.html').includes(record.giving.official_profile_url));

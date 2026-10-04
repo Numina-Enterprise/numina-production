@@ -1261,8 +1261,8 @@
     },
     {
       "path": "legal/charitable-relationship.json",
-      "bytes": 4502,
-      "sha256": "299ca5dcd2ea1076a3fa790165e2a47c4adf55eeee6238318678aa4696da29c5"
+      "bytes": 5872,
+      "sha256": "b3eafd712dda086c5ed2b7c69a9f76889b33354ad80f35940a6217827e8c05a2"
     },
     {
       "path": "legal/compliance-coverage.json",
@@ -1287,7 +1287,7 @@
     {
       "path": "legal/manifest.json",
       "bytes": 2792,
-      "sha256": "fd2de9f90015ee7f0c03777b17ad1174e598e8c0b3347160737dad4e3e4c7d31"
+      "sha256": "90da13c343cbc025bd8897b1f45c01c4835b02fcd0116c298034cff1d95f3903"
     },
     {
       "path": "legal/privacy.html",
@@ -1452,7 +1452,7 @@
     {
       "path": "verification.json",
       "bytes": 58151,
-      "sha256": "9f3603bf392fc597c0ad1a396ac987eec7fce12ccec9db3c8f2f10574360d6a9"
+      "sha256": "e8fed7d30e6ef93ad6ea7db75077e8c6ee412a57e25b2eefa375ee1423e4e670"
     }
   ],
   "currentChainStateVerified": false,
