@@ -1,3 +1,4 @@
+import built from '../dist/server/index.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import worker from '../src/worker.js';
@@ -50,7 +51,7 @@ test('collector returns the complete verifier bundle using only fixed read metho
  assert.equal(rpc.calls.filter(call=>call.method==='eth_getTransactionReceipt').length,1);assert.equal(rpc.calls.filter(call=>call.method==='eth_getCode').length,1);assert.equal(rpc.calls.filter(call=>call.method==='eth_call').length,3);
 });
 
-test('missing logs, conflicting block bindings, and mismatched live state fail closed',async()=>{
+test('missing logs, conflicting block bindings, and invalid live state fail closed',async()=>{
  for(const [mutate,code]of [
   [data=>{data.receipt.logs=[];},'EVIDENCE_MISMATCH'],
   [data=>{data.receiptBlock.hash='0x'+'44'.repeat(32);},'EVIDENCE_MISMATCH'],
@@ -59,7 +60,7 @@ test('missing logs, conflicting block bindings, and mismatched live state fail c
   await assert.rejects(collectExistingTokenEvidence(env,{fetcher:rpc.fetcher}),error=>error.code===code);
  }
  const rpc=mockRpc(),original=rpc.fetcher;
- rpc.fetcher=async(url,options)=>{const request=JSON.parse(options.body),response=await original(url,options);return request.method==='eth_call'&&request.params[0].data==='0x5c975abb'?Response.json({jsonrpc:'2.0',id:request.id,result:word(0)}):response;};
+ rpc.fetcher=async(url,options)=>{const request=JSON.parse(options.body),response=await original(url,options);return request.method==='eth_call'&&request.params[0].data==='0x5c975abb'?Response.json({jsonrpc:'2.0',id:request.id,result:word(2)}):response;};
  await assert.rejects(collectExistingTokenEvidence(env,{fetcher:rpc.fetcher}),error=>error.code==='NUSD_STATE_MISMATCH');
 });
 
@@ -75,11 +76,15 @@ test('HTTP route rejects methods and all caller-selected RPC inputs before fetch
  assert.equal(calls,0);
 });
 
-test('Worker exposes the public fixed evidence route without reviewer authentication',async t=>{
+test('source and built Workers expose the same public fixed evidence route without reviewer authentication',async t=>{
  const rpc=mockRpc();t.mock.method(globalThis,'fetch',rpc.fetcher);
- const response=await worker.fetch(new Request('https://numina.test'+NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE),env);
- assert.equal(response.status,200);assert.equal(response.headers.get('cache-control'),'no-store');assert.ok(response.headers.get('x-request-id'));
- const evidence=await response.json();assert.equal(evidence.receipt.transactionHash,TRANSACTION);assert.equal(evidence.currentState.calls.length,3);assert.equal(evidence.executionPerformed,false);
+ for(const handler of [worker,built]){
+  const response=await handler.fetch(new Request('https://numina.test'+NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE),env);
+  assert.equal(response.status,200);assert.equal(response.headers.get('cache-control'),'no-store');assert.ok(response.headers.get('x-request-id'));
+  const evidence=await response.json();assert.equal(evidence.receipt.transactionHash,TRANSACTION);assert.equal(evidence.currentState.calls.length,3);assert.equal(evidence.executionPerformed,false);
+  assert.equal(evidence.currentState.observed.paused,true);assert.equal(evidence.currentState.observed.currentRoleControlVerified,false);
+  for(const method of ['POST','PUT','DELETE'])assert.equal((await handler.fetch(new Request('https://numina.test'+NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE,{method}),env)).status,405);
+ }
 });
 
 test('configuration and provider diagnostics never leak through the public response',async()=>{
@@ -87,4 +92,42 @@ test('configuration and provider diagnostics never leak through the public respo
  assert.equal(unavailable.status,503);const text=await unavailable.text();assert.match(text,/CONFIGURATION_MISMATCH/);assert.doesNotMatch(text,/attacker|secret|private-test-credential/);
  const denied=await existingTokenEvidenceHttp(new Request('https://numina.test'+NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE),env,{fetcher:async()=>new Response(JSON.stringify({error:'private-test-credential'}),{status:403,headers:{'Content-Type':'application/json'}})});
  assert.equal(denied.status,502);assert.doesNotMatch(await denied.text(),/private-test-credential/);
+});
+
+
+test('mutable supply and pause observations remain typed facts without approval, settlement or role-control claims',async()=>{
+ for(const [supply,paused] of [['0',false],['1500000000000000000000000000000001',true],['42',false]]){
+  const rpc=mockRpc(),original=rpc.fetcher;
+  const fetcher=async(url,options)=>{const request=JSON.parse(options.body),response=await original(url,options);
+   if(request.method!=='eth_call')return response;
+   const selector=request.params[0].data;
+   return selector==='0x18160ddd'||selector==='0x5c975abb'?Response.json({jsonrpc:'2.0',id:request.id,result:word(selector==='0x18160ddd'?supply:paused?1:0)}):response;
+  };
+  const evidence=await collectExistingTokenEvidence(env,{fetcher});
+  assert.deepEqual(evidence.currentState.observed,{decimals:18,totalSupplyBaseUnits:supply,paused,scope:'READ_ONLY_CHAIN_OBSERVATION',settlementVerified:false,approvalVerified:false,currentRoleControlVerified:false,activationAuthorized:false});
+  assert.equal(evidence.receipt.logs[0].data,word('1500000000000000000000000000000000'));
+  assert.equal(evidence.currentState.block.hash,STATE_HASH);assert.equal(evidence.signed,false);assert.equal(evidence.broadcast,false);assert.equal(evidence.executionPerformed,false);assert.equal(evidence.productionReceiptCreated,false);
+  assert.ok(rpc.calls.every(call=>!/^eth_(send|sign)/.test(call.method)));
+ }
+});
+
+test('observed-state collection rejects malformed ABI and changed immutable decimals',async()=>{
+ for(const [selector,result] of [['0x313ce567',word(6)],['0x18160ddd','0x1'],['0x18160ddd','0x'+'f'.repeat(65)],['0x5c975abb',word(2)]]){
+  const rpc=mockRpc(),original=rpc.fetcher;
+  const fetcher=async(url,options)=>{const request=JSON.parse(options.body),response=await original(url,options);return request.method==='eth_call'&&request.params[0].data===selector?Response.json({jsonrpc:'2.0',id:request.id,result}):response;};
+  await assert.rejects(collectExistingTokenEvidence(env,{fetcher}),error=>error.code==='NUSD_STATE_MISMATCH');
+ }
+});
+
+
+test('built collector preserves changed current observations without promoting historical issuance to activation',async t=>{
+ const rpc=mockRpc(),original=rpc.fetcher;
+ t.mock.method(globalThis,'fetch',async(url,options)=>{const request=JSON.parse(options.body),response=await original(url,options);
+  if(request.method!=='eth_call')return response;
+  const selector=request.params[0].data;return selector==='0x18160ddd'||selector==='0x5c975abb'?Response.json({jsonrpc:'2.0',id:request.id,result:word(selector==='0x18160ddd'?'42':0)}):response;
+ });
+ const response=await built.fetch(new Request('https://numina.test'+NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE),env);assert.equal(response.status,200);
+ const evidence=await response.json();assert.equal(evidence.currentState.observed.totalSupplyBaseUnits,'42');assert.equal(evidence.currentState.observed.paused,false);
+ for(const key of ['settlementVerified','approvalVerified','currentRoleControlVerified','activationAuthorized'])assert.equal(evidence.currentState.observed[key],false);
+ assert.equal(evidence.executionPerformed,false);assert.equal(evidence.broadcast,false);assert.equal(evidence.productionReceiptCreated,false);
 });

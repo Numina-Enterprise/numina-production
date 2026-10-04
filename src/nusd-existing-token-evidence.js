@@ -10,7 +10,6 @@ const SIGNER='0x1a45671ae2ee3e52264116151924faacb80fc02e';
 const TOKEN='0x491c1df1b5ca77af797f052c2310ca17039c931b';
 const TRANSACTION='0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b';
 const DECIMALS='18';
-const TOTAL_SUPPLY='1500000000000000000000000000000000';
 const CONFIRMATIONS=12n;
 const TIMEOUT_MS=8000;
 const MAX_BYTES=524288;
@@ -102,11 +101,17 @@ async function collectExistingTokenEvidence(env,{fetcher=(...args)=>globalThis.f
    const code=await rpc('eth_getCode',[TOKEN,stateReference]);
    requireEvidence(typeof code==='string'&&BYTECODE.test(code)&&!/^0x(?:00)+$/i.test(code),'NUSD_STATE_MISMATCH');
    const calls=[];
-   for(const [name,data,expected]of [['decimals','0x313ce567',DECIMALS],['totalSupply','0x18160ddd',TOTAL_SUPPLY],['paused','0x5c975abb','1']]){
+   // Supply and pause are mutable observations, not historical identity pins.
+   // Keep strict ABI types and the immutable token decimals; downstream
+   // authorization, settlement and role-control verification remain separate.
+   for(const [name,data]of [['decimals','0x313ce567'],['totalSupply','0x18160ddd'],['paused','0x5c975abb']]){
     const result=await rpc('eth_call',[{to:TOKEN,data},stateReference]);
-    requireEvidence(typeof result==='string'&&WORD.test(result)&&BigInt(result).toString()===expected,'NUSD_STATE_MISMATCH');
+    requireEvidence(typeof result==='string'&&WORD.test(result),'NUSD_STATE_MISMATCH');
+    const value=BigInt(result);
+    requireEvidence(name==='decimals'?value.toString()===DECIMALS:name==='paused'?value===0n||value===1n:true,'NUSD_STATE_MISMATCH');
     calls.push({name,to:TOKEN,blockHash:stateBlock.hash,data,result});
    }
+   const observed={decimals:Number(DECIMALS),totalSupplyBaseUnits:BigInt(calls.find(call=>call.name==='totalSupply').result).toString(),paused:BigInt(calls.find(call=>call.name==='paused').result)===1n,scope:'READ_ONLY_CHAIN_OBSERVATION',settlementVerified:false,approvalVerified:false,currentRoleControlVerified:false,activationAuthorized:false};
    const stateReread=block(await rpc('eth_getBlockByNumber',[stateBlock.number,false]));
    requireEvidence(stateReread.number===stateBlock.number&&same(stateReread.hash,stateBlock.hash),'EVIDENCE_MISMATCH');
    const finalBlockReread=block(await rpc('eth_getBlockByNumber',[transactionReceipt.blockNumber,false]));
@@ -114,7 +119,7 @@ async function collectExistingTokenEvidence(env,{fetcher=(...args)=>globalThis.f
    const headBlock=block(await rpc('eth_getBlockByNumber',['latest',false]));
    const headNumber=quantity(headBlock.number);
    requireEvidence(headNumber>=stateNumber&&headNumber-receiptNumber+1n>=CONFIRMATIONS&&headNumber-stateNumber+1n>=CONFIRMATIONS,'EVIDENCE_NOT_FINAL');
-   return {schema:'numina.nusd.existing-token-supplied-evidence.v1',classification:'single_authenticated_rpc_read_only_observation_not_independent_provider_or_reserve_verification',collectedAt:now(),collection:{source:'numina_worker_read_only',rpcOrigin:new URL(RPC_URL).origin,authorizationEnvironmentVariable:'NUMINA_RPC_AUTHORIZATION',authorizationPersisted:false,methods,signed:false,broadcast:false,executionPerformed:false},network:{chainId:observedChainId,genesisHash:genesis.hash},receipt:transactionReceipt,canonicalBlock,headBlock,finalBlockReread,runtime:{address:TOKEN,blockHash:stateBlock.hash,code},calls,currentState:{block:stateBlock,headBlock,finalBlockReread:stateReread,runtime:{address:TOKEN,blockHash:stateBlock.hash,code},calls},providerSourceReference:{type:'authenticated_rpc',origin:new URL(RPC_URL).origin,authorizationEnvironmentVariable:'NUMINA_RPC_AUTHORIZATION',authorizationStored:false},productionReceiptCreated:false,signed:false,broadcast:false,executionPerformed:false};
+   return {schema:'numina.nusd.existing-token-supplied-evidence.v1',classification:'single_authenticated_rpc_read_only_observation_not_independent_provider_or_reserve_verification',collectedAt:now(),collection:{source:'numina_worker_read_only',rpcOrigin:new URL(RPC_URL).origin,authorizationEnvironmentVariable:'NUMINA_RPC_AUTHORIZATION',authorizationPersisted:false,methods,signed:false,broadcast:false,executionPerformed:false},network:{chainId:observedChainId,genesisHash:genesis.hash},receipt:transactionReceipt,canonicalBlock,headBlock,finalBlockReread,runtime:{address:TOKEN,blockHash:stateBlock.hash,code},calls,currentState:{block:stateBlock,headBlock,finalBlockReread:stateReread,runtime:{address:TOKEN,blockHash:stateBlock.hash,code},calls,observed},providerSourceReference:{type:'authenticated_rpc',origin:new URL(RPC_URL).origin,authorizationEnvironmentVariable:'NUMINA_RPC_AUTHORIZATION',authorizationStored:false},productionReceiptCreated:false,signed:false,broadcast:false,executionPerformed:false};
   })()
  ]);}finally{clearTimeout(timer);controller.abort();}
 }

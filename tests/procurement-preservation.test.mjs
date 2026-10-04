@@ -1,3 +1,4 @@
+import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_RECORDED_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -8,6 +9,19 @@ const original=p=>execFileSync('git',['show',base+':'+p],{maxBuffer:16*1024*1024
 const current=p=>fs.readFileSync(new URL('../'+p,import.meta.url));
 const json=b=>JSON.parse(b);
 const activeProvenancePolicy=json(current('config/active-provenance-policy.v1.json'));
+// Owner-reviewed d38d316 metadata-only successors. These exact pins are narrow
+// exceptions, not a replacement for the immutable procurement baseline.
+const approvedProjectionSources={
+ 'public/treasury-connection-model.js':'7c5f998e9212526044281e7d2a2f041a7601258aa46eeadb3e0bf00cc64fdf4b',
+ 'public/nusd-contract-record.js':'6fa9ad7a8a0ea4db03787393ded6bd6692f9479a83f50e7ecc6a0db5dba93caf',
+ 'src/stripe-treasury.js':'0252e04102de225fce0b2cbe50f53134d61fc1ff48fddcebcdd450c0a3823dec'
+};
+const approvedProjectionRecords={
+ 'public/business-core.json':'7ce2de625c6c0afde86f4e8f0811fca17050f333c7e8d49c2ea7e3b9048a49b2',
+ 'config/numina-architecture.json':'e80e7bedc9215c0a1c6f41c1602b3fc2134827379faf7d3e9522e5a6beea584e'
+};
+const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
+
 // v147 authorizes these maintained package changes; retained financial and
 // historical records still use the original immutable procurement baseline.
 const approvedSecurityPackages={
@@ -52,11 +66,22 @@ function removeForwardProvenanceFields(currentRecord,originalRecord){
   if(!Object.hasOwn(originalRecord.metadataAlignment??{},key))delete currentRecord.metadataAlignment[key];
  }
 }
-test('procurement repair preserves treasury sources, contracts, receipts and financial values byte for byte',()=>{
- for(const p of ['public/treasury-connection-model.js','public/nusd-contract-record.js','src/native-treasury.js','src/treasury-alignment.js','src/stripe-treasury.js','src/treasury-evidence.js','runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','runtime/nusd/deployment-verification.json','runtime/nusd/treasury-settlement-receipt.json','runtime/nusd/treasury-settlement-receipt-validation.json','docs/nusd/treasury-settlement-receipt-validation.json','release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json'])assert.deepEqual(current(p),original(p),p);
- for(const p of ['public/business-core.json','config/numina-architecture.json']){
-  const a=json(original(p)),b=json(current(p));delete a.procurement_usage;delete b.procurement_usage;delete a.procurementAuthorization;delete b.procurementAuthorization;removeForwardProvenanceFields(b,a);assert.deepEqual(b,a,p);
+test('procurement preserves immutable receipts and pins reviewed current-versus-dated metadata without erasing original values',async()=>{
+ for(const p of ['public/treasury-connection-model.js','public/nusd-contract-record.js','src/native-treasury.js','src/treasury-alignment.js','src/stripe-treasury.js','src/treasury-evidence.js','runtime/nusd/mint-receipt.json','runtime/nusd/deployment-receipt.json','runtime/nusd/deployment-verification.json','runtime/nusd/treasury-settlement-receipt.json','runtime/nusd/treasury-settlement-receipt-validation.json','docs/nusd/treasury-settlement-receipt-validation.json','release-evidence/numina-singular-treasury-settlement-receipt-validation-2026-09-26.json']){
+  if(Object.hasOwn(approvedProjectionSources,p))assert.equal(digest(current(p)),approvedProjectionSources[p],p+' reviewed projection-only source');
+  else assert.deepEqual(current(p),original(p),p);
  }
+ const historical=await import('data:text/javascript;base64,'+original('public/treasury-connection-model.js').toString('base64'));
+ assert.deepEqual(NUMINA_RECORDED_TREASURY_VALUES,historical.NUMINA_CANONICAL_TREASURY_VALUES,'Entire original private treasury values are preserved');
+ assert.deepEqual(NUMINA_CANONICAL_TREASURY_VALUES.observation,NUMINA_RECORDED_TREASURY_VALUES.observation);
+ assert.equal(NUMINA_CANONICAL_TREASURY_VALUES.aggregate.current,null);
+ for(const p of ['public/business-core.json','config/numina-architecture.json']){
+  const a=json(original(p)),b=json(current(p));
+  assert.equal(digest(current(p)),approvedProjectionRecords[p],p+' exact reviewed current metadata');
+  assert.deepEqual(b.canonicalTreasuryValues.observation,a.canonicalTreasuryValues.observation,p+' retains private historical observation');
+  assert.deepEqual(b.canonicalTreasuryValues,NUMINA_CANONICAL_TREASURY_VALUES,p);
+ }
+
 });
 test('inventory repair preserves financial fields and permits only pinned v147 maintained package changes',()=>{
  for(const p of ['public/metadata-alignment.json','docs/Numina-Metadata-Alignment-v4.json']){
@@ -80,7 +105,13 @@ test('inventory repair preserves financial fields and permits only pinned v147 m
     record.bytes=bytes.length;record.sha256=createHash('sha256').update(bytes).digest('hex');
     record.originalBytesPreserved=false;record.scope='MAINTAINED_SOURCE_CONFIGURATION';
   }
-  a.retainedInventory.recordCount=a.retainedInventory.records.length;removeForwardProvenanceFields(b,a);assert.deepEqual(b,a,p);
+  a.retainedInventory.recordCount=a.retainedInventory.records.length;
+  a.currentTreasuryState=structuredClone(NUMINA_CANONICAL_TREASURY_VALUES.currentState);
+  const frozen=['/final-build.json','/final-manifest.json','/current-environments.json'];
+  assert.ok(frozen.every(path=>a.currentViews.includes(path)));
+  a.currentViews=a.currentViews.filter(path=>!frozen.includes(path));
+  a.frozenReleaseRecords=frozen;a.frozenReleaseRecordsAreCurrentState=false;
+  removeForwardProvenanceFields(b,a);assert.deepEqual(b,a,p);
  }
 });
 test('published policy, schema and release aliases consistently disable automatic procurement',()=>{

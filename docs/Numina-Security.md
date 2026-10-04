@@ -163,6 +163,8 @@ Observed September 15, 2026 on production version 76: reviewer sign-in succeeded
 
 This is the operating procedure to exercise and evidence; a completed drill or staffed response SLA is not yet documented.
 
+Current-process telemetry does not establish continuous security monitoring, alert delivery or a staffed on-call response. The operator must record alert routing, actual human coverage and a backup contact, and retain a successful alert-to-human exercise before claiming operational coverage.
+
 1. **Receive and classify:** record UTC time, reporter, affected component, observed behavior, affected accounts/assets and confidence. Keep private details out of public issues.
 2. **Contain:** an authorized operator suspends the affected capability, revokes compromised access or uses a tested pause control. Preserve the canonical journal and uncertain transactions for reconciliation.
 3. **Preserve:** retain original logs, artifact hashes, deployment identities, provider request identifiers and an access-controlled incident timeline. Avoid copying secrets into the incident report.

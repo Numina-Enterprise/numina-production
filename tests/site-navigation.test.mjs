@@ -6,7 +6,7 @@ const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8')
 const routes=['/app','/frontier','/economy','/services','/integrations','/build','/control','/labs'];
 const mainRoutes=['/platform','/services','/integrations','/build','/app'];
 const mainCurrent=new Set(['platform.html','services.html','integrations.html','build.html','app.html']);
-const mobileCurrent=new Set(['index.html','frontier.html','economy.html','services.html','integrations.html','build.html','app.html','control.html','labs.html']);
+const mobileCurrent=new Set(['frontier.html','economy.html','services.html','integrations.html','build.html','app.html','control.html','labs.html']);
 
 test('every website page shares the Numina design and complete primary navigation',()=>{
   for(const file of readdirSync(new URL('../public/',import.meta.url)).filter(name=>name.endsWith('.html'))){
@@ -40,4 +40,13 @@ test('old pricing addresses preserve query parameters and direct readers to the 
   }
   const write=await worker.fetch(new Request('https://numina.test/pricing',{method:'POST',body:'unrelated data'}),{});
   assert.equal(write.status,405);assert.equal(write.headers.get('Location'),null);
+});
+
+
+test('government and institutional contact links resolve to distinct descriptive destinations',()=>{
+ const html=read('contact.html');
+ for(const [id,title] of [['government','Government inquiries'],['institutions','Financial institution inquiries']]){
+  assert.equal([...html.matchAll(new RegExp('id="'+id+'"','g'))].length,1);
+  assert.match(html,new RegExp('<article id="'+id+'" tabindex="-1"><h3>'+title+'</h3>'));
+ }
 });

@@ -1,3 +1,4 @@
+import {resumeWorkspaceSession} from '../public/workspace-session.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -11,7 +12,7 @@ const owner='email:owner@example.test',delegate='email:delegate@example.test',ke
 const raw=(folder,name)=>readFileSync(new URL('../'+folder+'/'+name,import.meta.url),'utf8');
 const source=(folder,name)=>raw(folder,name).replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const built=(await import('../dist/server/index.js')).default;
-async function settled(){for(let i=0;i<12;i++)await new Promise(resolve=>setTimeout(resolve,0));}
+async function settled(ready){const deadline=Date.now()+2000;while(!ready()&&Date.now()<deadline)await new Promise(resolve=>setTimeout(resolve,2));assert.ok(ready(),'Canonical document response did not settle before the test deadline');}
 class Element{
  constructor(tag){this.tagName=tag;this.children=[];this.hidden=false;this.disabled=false;this._text='';this.value='';}
  set textContent(value){this._text=String(value);this.children=[];}
@@ -28,7 +29,7 @@ function harness(folder,fetcher){
  for(const match of raw(folder,'control.html').matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g)){const node=new Element(match[1]);node.hidden=/\bhidden\b/.test(match[0]);nodes.set(match[2],node);}
  const get=id=>{assert.ok(nodes.has(id),'Unknown UI node '+id);return nodes.get(id);};
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:(name,fn)=>events.set(name,fn),dispatchEvent:event=>events.get(event.type)?.(event),querySelectorAll:()=>[...nodes.values()].filter(node=>node.tagName==='button')};
- const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events.set(name,fn)},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent,clearNativeTreasury(){},async loadNativeTreasury(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
+ const context=vm.createContext({document,location:{href:origin+'/control',replace(){throw Error('Unexpected session navigation');}},resumeWorkspaceSession,window:{addEventListener:(name,fn)=>events.set(name,fn)},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent,clearNativeTreasury(){},async loadNativeTreasury(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
  const receipt='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source(folder,'control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
  const documents='const {clearTreasuryDocuments,loadTreasuryDocuments}=(()=>{'+source(folder,'treasury-documents.js')+';return {clearTreasuryDocuments,loadTreasuryDocuments};})();';
  vm.runInContext(source(folder,'http-client.js')+'\n'+receipt+'\n'+documents+'\n'+source(folder,'control.js')+'\nglobalThis.subject={refresh,run,get snapshot(){return snapshot;}};',context);
@@ -54,7 +55,7 @@ function transport(f,{stateOverride=()=>undefined,authenticated=()=>true,calls=[
 for(const folder of ['public','dist/client'])test(folder+' Control Room reads the real canonical view and registered supporting documents',async()=>{
  const f=await fixture(),calls=[],handler=folder==='public'?worker:built,h=harness(folder,transport(f,{calls,handler}));
  try{
-  await settled();assert.ok(h.subject.snapshot);assert.equal(h.subject.snapshot.scope,'complete');assert.equal(h.get('health').textContent,'Ready');assert.equal(h.get('integrity').textContent,'Checked');assert.equal(h.get('workspace').hidden,false);
+  await settled(()=>h.get('document-summary').textContent==='1 supporting document received.');assert.ok(h.subject.snapshot);assert.equal(h.subject.snapshot.scope,'complete');assert.equal(h.get('health').textContent,'Ready');assert.equal(h.get('integrity').textContent,'Checked');assert.equal(h.get('workspace').hidden,false);
   assert.match(h.get('requests').textContent,/record:review\/sample/);h.get('requests').children[0].onclick();assert.equal(h.get('attest-form').hidden,false);assert.equal(h.get('payload-detail').textContent,'Synthetic internal review');
   assert.equal(h.get('treasury-document-panel').hidden,false);assert.equal(h.get('document-summary').textContent,'1 supporting document received.');assert.match(h.get('document-list').textContent,/synthetic-support\.pdf/);
   const link=h.get('document-list').children[0].children[0];assert.equal(link.href,'/api/control/v1/treasury-documents/'+f.document.id);
@@ -65,13 +66,13 @@ for(const folder of ['public','dist/client'])test(folder+' Control Room reads th
 
 test('canonical delegated scope cannot be promoted by a legacy projection field to load owner documents',async()=>{
  const f=await fixture(),scoped=await f.scoped(),calls=[],h=harness('public',transport(f,{stateOverride:()=>({...scoped,projection:'complete'}),calls}));
- try{await settled();assert.equal(h.subject.snapshot.projection,'authority-scoped');assert.equal(h.get('workspace').hidden,false);assert.equal(h.get('treasury-document-panel').hidden,true);assert.equal(calls.includes('/api/control/v1/treasury-documents'),false);}finally{h.close();f.close();}
+ try{await settled(()=>h.subject.snapshot!==null);assert.equal(h.subject.snapshot.projection,'authority-scoped');assert.equal(h.get('workspace').hidden,false);assert.equal(h.get('treasury-document-panel').hidden,true);assert.equal(calls.includes('/api/control/v1/treasury-documents'),false);}finally{h.close();f.close();}
 });
 
 test('malformed current control responses clear prior private state and owner documents',async()=>{
  const f=await fixture();let current;const calls=[],h=harness('public',transport(f,{stateOverride:()=>current,calls}));
  try{
-  await settled();assert.equal(h.get('document-list').children.length,1);
+  await settled(()=>h.get('document-list').children.length===1);assert.equal(h.get('document-list').children.length,1);
   const canonical=await controlManifestView(f.env.DB,owner,Math.floor(Date.now()/1000));
   for(const corrupt of [value=>delete value.content,value=>value.content.requests=null,value=>value.scope='all',value=>value.identity='OTHER',value=>value.manifestHash=null,value=>value.decisions=[]]){
    current=structuredClone(canonical);corrupt(current);calls.length=0;
@@ -83,5 +84,5 @@ test('malformed current control responses clear prior private state and owner do
 
 test('owner authorization expiry clears actual document and control views',async()=>{
  const f=await fixture();let authenticated=true;const h=harness('public',transport(f,{authenticated:()=>authenticated}));
- try{await settled();assert.equal(h.get('document-list').children.length,1);authenticated=false;await assert.doesNotReject(h.subject.refresh());assert.equal(h.subject.snapshot,null);assert.equal(h.get('signin').hidden,false);assert.equal(h.get('document-list').textContent,'');assert.equal(h.get('treasury-document-panel').hidden,true);}finally{h.close();f.close();}
+ try{await settled(()=>h.get('document-list').children.length===1);assert.equal(h.get('document-list').children.length,1);authenticated=false;await assert.doesNotReject(h.subject.refresh());assert.equal(h.subject.snapshot,null);assert.equal(h.get('signin').hidden,false);assert.equal(h.get('document-list').textContent,'');assert.equal(h.get('treasury-document-panel').hidden,true);}finally{h.close();f.close();}
 });

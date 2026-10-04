@@ -1,6 +1,6 @@
 """Package maintained Numina sources without running application tests."""
 from pathlib import Path
-import argparse, datetime, hashlib, json, subprocess, zipfile
+import argparse, datetime, hashlib, json, os, subprocess, zipfile
 
 root = Path(__file__).resolve().parent.parent
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
@@ -8,7 +8,7 @@ write = lambda p, value: p.write_text(json.dumps(value, indent=2)+'\n', encoding
 sha = lambda data: hashlib.sha256(data).hexdigest()
 version = read(root/'package.json')['version']
 major = version.split('.')[0]
-now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+now = (datetime.datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']), datetime.timezone.utc) if 'SOURCE_DATE_EPOCH' in os.environ else datetime.datetime.now(datetime.timezone.utc)).isoformat()
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--native-only', action='store_true', help='Refresh native source archives without rebuilding integration distributions.')
 options = parser.parse_args()

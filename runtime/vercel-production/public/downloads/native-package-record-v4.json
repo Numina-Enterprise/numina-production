@@ -80,7 +80,7 @@
     },
     "hostPublicationVerified": false,
     "sourceBuildNumber": 6,
-    "sourceInputsSha256": "454c7d17f93842e23780867e4a0f3f1dab0d72a6868d726b711917398b7740a3",
+    "sourceInputsSha256": "391fcf7743170467348951a5795bc392735b900350aba4e975faa043784f081c",
     "signingInputMatchesCurrentSource": false,
     "sourceAlignmentScope": "current_source_package_not_native_build",
     "sourceCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
@@ -113,14 +113,14 @@
     {
       "platform": "ios",
       "file": "numina-os-4.0.0-ios-source.zip",
-      "bytes": 187789,
-      "sha256": "2a8b9d68f8c358c37d323a8e49f7b9090be721818d2b0be549aafd444f93394f",
+      "bytes": 187786,
+      "sha256": "766a61791ffb65697252178d90ed8f86a706e8dc80d2371850a3e1d83f2cc2b3",
       "kind": "source_archive",
       "installable": false,
       "sourceBuildNumber": 6,
-      "sourceInputsSha256": "454c7d17f93842e23780867e4a0f3f1dab0d72a6868d726b711917398b7740a3",
+      "sourceInputsSha256": "391fcf7743170467348951a5795bc392735b900350aba4e975faa043784f081c",
       "sourceTextNormalization": "utf8_lf_binary_unchanged",
-      "packagedAtUtc": "2026-10-04T07:28:03.450866+00:00"
+      "packagedAtUtc": "2026-10-04T09:02:00+00:00"
     }
   ],
   "previousRelease": {
@@ -128,9 +128,9 @@
     "record": "/downloads/native-package-record-v3.json",
     "scope": "Prior compiled binaries retain their version and original build evidence; they are not v4 binaries."
   },
-  "sourcePackagedAtUtc": "2026-10-04T07:28:02.728690+00:00",
+  "sourcePackagedAtUtc": "2026-10-04T09:02:00+00:00",
   "nativeDistributionPolicy": "Historical binaries retain their exact bytes and build evidence. Current iOS source requires a fresh compile and matching signing input.",
-  "iosSourcePackagedAtUtc": "2026-10-04T07:28:03.450866+00:00",
+  "iosSourcePackagedAtUtc": "2026-10-04T09:02:00+00:00",
   "historicalV4Preparation": {
     "record": "https://numinalabs.xyz/downloads/native-package-record-v4-pre-build5.json",
     "scope": "Preserved metadata-only iOS build3 preparation and retained Android3 binary evidence."

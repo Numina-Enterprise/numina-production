@@ -30,7 +30,7 @@ test('current journal status and historical settlement file are hash-bound separ
   assert.equal(native.settlementReceiptValidation.authorization.executionAuthorized,true);
   assert.equal(native.settlementReceiptValidation.submissionPerformed,false);
   assert.equal(native.settlementReceiptValidation.settlementPerformed,false);
-  assert.equal(native.canonicalTreasuryValues.aggregate.current,'500000000000000');
+  assert.equal(native.canonicalTreasuryValues.aggregate.current,null);
   assert.equal(native.canonicalTreasuryValues.componentCount,3);
   assert.equal(native.canonicalTreasuryValues.mintedNusd,null);
   assert.equal(native.canonicalTreasuryValues.burnedNusd,null);

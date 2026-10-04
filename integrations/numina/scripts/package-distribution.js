@@ -86,7 +86,7 @@ const nusdContracts={
 };
 const integrationManifestRef={path:'file-manifest.json',schema:'numina.integration.manifest.v2',identity:'NUMINA',canonical:true};
 const verification={stateReconciliation:NUMINA_STATE_RECONCILIATION,
- legal,schema:'numina.integration.package.v2',...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:new Date().toISOString(),
+ legal,schema:'numina.integration.package.v2',...singularIdentities,canonicalTreasuryValues,treasuryJournalObservation,authoritativeCurrentTreasuryRoute,singular:true,integrationManifest:integrationManifestRef,packagedAtUtc:process.env.SOURCE_DATE_EPOCH===undefined?new Date().toISOString():new Date(Number(process.env.SOURCE_DATE_EPOCH)*1000).toISOString(),
  package:{name:metadata.name,version:metadata.version,private:metadata.private},revision,
  applicationManifest:'https://numinalabs.xyz/v4/release/manifest',applicationSchema:'numina.application-release.v2',runtimeBuild,providerRoutes,
  testRunPerformed:false,tests:null,reason:'Packaging generates metadata; validation runs separately in the repository test suite.',

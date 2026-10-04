@@ -1,3 +1,4 @@
+import {publicMetadata} from '../src/public-privacy.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -62,7 +63,9 @@ test('conversion workflow binds both compiled contracts and preserves disabled l
  assert.equal(NUSD_CONVERSION_WORKFLOW.activation.financialExecutionEnabled,false);
  assert.deepEqual(NUSD_POLICY.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
  const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
- assert.deepEqual(release.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
+ assert.deepEqual(release.conversion_workflow,publicMetadata(NUSD_CONVERSION_WORKFLOW));
+ assert.doesNotMatch(JSON.stringify(release.conversion_workflow),/Savings\s+\d{4}|\b(?:acct|fa|finaddr)_[A-Za-z0-9]+/);
+ assert.equal(release.conversion_workflow.activation.financialExecutionEnabled,false);
 });
 test('contract records hash exact downloadable artifacts and never supply invented deployment identities',()=>{
   assert.deepEqual(createNusdContractRecord().record,record);
