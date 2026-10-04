@@ -1,3 +1,4 @@
+import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
 import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {publicMetadata} from '../src/public-privacy.js';
 import {privateArtifactRecords,projectPublicAssets} from './public-asset-privacy.mjs';
@@ -42,6 +43,7 @@ execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--c
 execFileSync(process.execPath,['scripts/generate-metadata-alignment.mjs','--check'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/production-pair.mjs'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/sync-final-manifest-reference.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['integrations/numina/scripts/package-distribution.js'],{stdio:'inherit'});
 execFileSync(process.env.NUMINA_PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/package-current-integration.py'],{stdio:'inherit'});
 assert.deepEqual(readFileSync('public/treasury-proof.js'),readFileSync('integrations/numina/src/treasury-proof.js'));
@@ -83,6 +85,7 @@ const overlays=[
  ['public/application-release-ui.js','client/application-release-ui.js'],
  ['public/runtime-release-ui.js','client/runtime-release-ui.js'],
  ['public/manifest-surface.js','client/manifest-surface.js'],
+ ['public/final-manifest-reference.js','client/final-manifest-reference.js'],
  ['public/control-room.js','client/control-room.js'],
  ['public/connection-model.js','client/connection-model.js'],
  ['public/runtime-release-model.js','client/runtime-release-model.js'],
@@ -224,7 +227,7 @@ let worker=original;const substitutions=[];
 const compile=s=>s.replace(/\r\n/g,'\n').replace(/^import .*;\n/gm,'').replace(/^export \{.*\};\n/gm,'').replace(/export (?!default)/g,'').trimStart().trimEnd()+'\n';
 // Include the reviewed state descriptor before any architecture references.
 const stateBefore=worker.slice(0,worker.indexOf('\n')+1);
-const stateAfter=compile(readFileSync('public/state-reconciliation.js','utf8'))+stateBefore;
+const stateAfter=compile(readFileSync('public/final-manifest-reference.js','utf8'))+compile(readFileSync('public/state-reconciliation.js','utf8'))+stateBefore;
 assert.equal(worker.split(stateBefore).length,2,'Unique worker state preamble');
 worker=worker.replace(stateBefore,stateAfter);substitutions.push({source:'public/state-reconciliation.js',before:stateBefore,after:stateAfter});
 // Preserve the retained runtime while annotating its existing public readbacks.
@@ -234,8 +237,12 @@ assert.equal(worker.split(frontierBefore).length,2,'Unique reconciliation route'
 worker=worker.replace(frontierBefore,frontierAfter);substitutions.push({source:'src/frontier-http.js#state-reconciliation',before:frontierBefore,after:frontierAfter});
 const releaseBefore=worker.split('\n').find(line=>line.includes('return {schema:value.schema,schema_version:value.schema_version'));
 assert.ok(releaseBefore,'Public artifact declaration projection');
-const releaseAfter=releaseBefore.replace('return {schema:value.schema,','return {stateReconciliation:NUMINA_STATE_RECONCILIATION,schema:value.schema,');
+const releaseAfter=releaseBefore.replace('return {schema:value.schema,','return {stateReconciliation:NUMINA_STATE_RECONCILIATION,finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,schema:value.schema,');
 worker=worker.replace(releaseBefore,releaseAfter);substitutions.push({source:'src/worker.js#public-release-state',before:releaseBefore,after:releaseAfter});
+const finalReferenceGuardBefore='function publicReleaseManifest(value){';
+const finalReferenceGuardAfter=finalReferenceGuardBefore+"\n if(stable(value?.finalManifestReference)!==stable(NUMINA_FINAL_MANIFEST_REFERENCE))throw new Error('PUBLIC_FINAL_REFERENCE_INVALID');";
+assert.equal(worker.split(finalReferenceGuardBefore).length,2,'Unique public FINAL reference guard');
+worker=worker.replace(finalReferenceGuardBefore,finalReferenceGuardAfter);substitutions.push({source:'src/worker.js#public-final-reference',before:finalReferenceGuardBefore,after:finalReferenceGuardAfter});
 const controlBefore="adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',";
 const controlAfter='stateReconciliation:NUMINA_STATE_RECONCILIATION,'+controlBefore;
 assert.equal(worker.split(controlBefore).length,2,'Unique v1 control manifest');
@@ -249,7 +256,7 @@ assert.ok(applicationReaderBefore.length>100&&applicationReaderAfter.length>100,
 assert.equal(worker.split(applicationReaderBefore).length,2,'Unique application inventory reader');
 worker=worker.replace(applicationReaderBefore,applicationReaderAfter);substitutions.push({source:'src/control-http.js#application-reader',before:applicationReaderBefore,after:applicationReaderAfter});
 const identityAliasesBefore='    core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,\n    authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,\n';
-const identityAliasesAfter='    applicationVersion:application?.version??null,\n    applicationRelease:application?.release??null,\n';
+const identityAliasesAfter='    applicationVersion:application?.version??null,\n    applicationRelease:application?.release??null,\n    finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,\n';
 assert.equal(worker.split(identityAliasesBefore).length,2,'Unique canonical manifest mechanics aliases');
 worker=worker.replace(identityAliasesBefore,identityAliasesAfter);substitutions.push({source:'src/control-http.js#manifest-mechanics',before:identityAliasesBefore,after:identityAliasesAfter});
 const capabilityLines=worker.split('\n').filter(line=>line.includes('providers:FRONTIER_PROVIDERS,'));
@@ -485,6 +492,7 @@ currentInputs.add('src/frontier.js');
 for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
 currentInputs.add(migrationJournalBase);
 currentInputs.add('src/control-http.js');
+for(const file of ['scripts/sync-final-manifest-reference.mjs','runtime/vercel-production/final-manifest-reference.json'])currentInputs.add(file);
 for(const file of ['src/public-privacy.js','src/publication-http.js','scripts/public-asset-privacy.mjs','public/journal-summary.json'])currentInputs.add(file);
 for(const file of ['scripts/production-pair.mjs','reference/settlement-metadata-bases/sites-mcp.js.txt','src/connections-http.js','src/legal-coverage.js','public/legal-discovery.js','public/country-codes.js','scripts/package-distributions.py','scripts/package-legal-companions.mjs','integrations/numina/scripts/legal-distribution.js','integrations/numina/src/legal-discovery.js'])currentInputs.add(file);
 for(const file of ['config/build-clock.json','src/nusd-existing-token-evidence.js','scripts/package-ios-source.py'])currentInputs.add(file);
@@ -576,6 +584,7 @@ for(const binding of currentBindings){
  binding.sha256=artifactHashes.get(artifactPath);
 }
 release.stateReconciliation=NUMINA_STATE_RECONCILIATION;
+release.finalManifestReference=NUMINA_FINAL_MANIFEST_REFERENCE;
 release.procurement_usage=false;release.procurement=NUMINA_LAYERS.procurement;
 release.software_release_alignment=softwareReleaseAlignment;
 function align(o){if(!o||typeof o!=='object')return;for(const k of Object.keys(o))if(k==='canonicalTreasuryValues')o[k]=structuredClone(values);else align(o[k]);}align(release);

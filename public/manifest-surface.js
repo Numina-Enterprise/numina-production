@@ -1,3 +1,4 @@
+import {NUMINA_FINAL_MANIFEST_REFERENCE} from './final-manifest-reference.js';
 // Fixed routes in the Numina Sites worker. Historical RC26 URLs stay in its
 // signed records; they are not current health or manifest destinations.
 export const MANIFEST_ROUTES=Object.freeze({
@@ -11,11 +12,18 @@ export const MANIFEST_ROUTES=Object.freeze({
 });
 const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 const version=value=>typeof value==='string'&&/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(value);
+function exactReference(value,expected=NUMINA_FINAL_MANIFEST_REFERENCE){
+  if(!expected||typeof expected!=='object')return value===expected;
+  return value&&typeof value==='object'&&!Array.isArray(value)&&
+    Object.keys(value).length===Object.keys(expected).length&&
+    Object.keys(expected).every(key=>Object.hasOwn(value,key)&&exactReference(value[key],expected[key]));
+}
 
 export function canonicalManifest(value){
   if(value?.schema!=='numina.manifest.v2'||value.singular!==true||
     !['root','identity','manifest','authority','repository'].every(key=>value[key]==='NUMINA')||
     !version(value.version)||!version(value.applicationVersion)||value.applicationRelease!=='numina-v'+value.applicationVersion||
+    !exactReference(value.finalManifestReference)||value.finalManifestReference.applicationVersion!==value.applicationVersion||
     value.mechanics?.repository?.identity!=='NUMINA'||value.mechanics.repository.source!=='/NUMINA'||
     !hash(value.mechanics?.artifact?.build_id)||!version(value.mechanics?.runtime?.version)||
     typeof value.mechanics.runtime.release!=='string')throw Error('Canonical manifest identity is incomplete or unexpected.');
@@ -27,7 +35,7 @@ export function alignedApplication(manifest,value){
   const runtime=value?.runtime_dependency;
   if(value?.schema!=='numina.application-release.v2'||value.schema_version!==2||value.singular!==true||
     value.identity!=='NUMINA'||value.manifest!=='NUMINA'||value.product!=='Numina'||value.release_channel!=='production'||
-    value.version!==manifest.applicationVersion||value.release!==manifest.applicationRelease||
+    value.version!==manifest.applicationVersion||value.release!==manifest.applicationRelease||!exactReference(value.finalManifestReference)||
     value.frontier?.version!==value.version||value.distribution?.codex_plugin?.version!==value.version||
     value.build_id!==manifest.mechanics.artifact.build_id||runtime?.identity!=='NUMINA'||runtime.singular!==true||
     runtime.version!==manifest.mechanics.runtime.version||runtime.release!==manifest.mechanics.runtime.release)

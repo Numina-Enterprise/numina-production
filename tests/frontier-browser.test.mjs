@@ -1,3 +1,4 @@
+import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -14,7 +15,7 @@ import {createTreasuryAdjustment} from '../public/treasury-adjustment.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
-const applicationManifest=()=>({identity:'NUMINA',manifest:'NUMINA',singular:true,release_channel:'production',runtime_dependency:{identity:'NUMINA',singular:true,version:'1.9.0-rc26',release:'core-v1.8+prod-v1.9.0-rc26'},schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64),frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}});
+const applicationManifest=()=>({identity:'NUMINA',manifest:'NUMINA',singular:true,release_channel:'production',runtime_dependency:{identity:'NUMINA',singular:true,version:'1.9.0-rc26',release:'core-v1.8+prod-v1.9.0-rc26'},schema:'numina.application-release.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64),frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}});
 async function settled(){for(let i=0;i<8;i++)await new Promise(r=>setTimeout(r,0));}
 class Element{
   constructor(){this.children=[];this._text='';}
@@ -43,7 +44,7 @@ function harness(view,override=()=>null,adjustmentClient=null,href='https://numi
     else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'},currentJournal:{revision:142,balance:'500000000000000',unit:'NUSD',settlementStatus:'UNVERIFIED',externalProviderSubmissionStatus:'UNVERIFIED'}};
     else if(path.endsWith('/stripe-treasury'))return Response.json({error:'Unavailable'},{status:503});
     else if(path.endsWith('/state'))body={revision:1,content:{requests:[]}};
-    else if(path===MANIFEST_ROUTES.manifest)body={schema:'numina.manifest.v2',singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:'a'.repeat(64)},runtime:applicationManifest().runtime_dependency}};
+    else if(path===MANIFEST_ROUTES.manifest)body={schema:'numina.manifest.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:'a'.repeat(64)},runtime:applicationManifest().runtime_dependency}};
     else if(path==='/v4/release/manifest')body=applicationManifest();
     else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
@@ -57,7 +58,7 @@ function harness(view,override=()=>null,adjustmentClient=null,href='https://numi
 test('frontier displays only current application identities and refreshes without stale responses',async()=>{
   const view=await accountView(),old=deferred();let calls=0;
   const h=harness(view,(path,options)=>{
-    if(path===MANIFEST_ROUTES.manifest)return Response.json({schema:'numina.manifest.v2',singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:calls?'b'.repeat(64):'a'.repeat(64)},runtime:applicationManifest().runtime_dependency}});
+    if(path===MANIFEST_ROUTES.manifest)return Response.json({schema:'numina.manifest.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:calls?'b'.repeat(64):'a'.repeat(64)},runtime:applicationManifest().runtime_dependency}});
     if(path!=='/v4/release/manifest')return null;
     assert.equal(options.cache,'no-store');assert.equal(options.credentials,'omit');assert.equal(options.redirect,'error');
     return ++calls===1?old.promise:Response.json({...applicationManifest(),build_id:'b'.repeat(64)});

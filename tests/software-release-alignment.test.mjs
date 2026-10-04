@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {loadSoftwareRelease, verifySoftwareRelease, checkSoftwareRelease} from '../scripts/check-software-release.mjs';
+
+test('integration download guidance names the exact configured discovery tool count',()=>{
+  const read=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
+  const tools=JSON.parse(read('integrations/numina/verification.json')).defaultTools;
+  const record=JSON.parse(read('docs/integration-kit-v4.0.0-record.json'));
+  assert.equal(new Set(tools).size,tools.length);
+  assert.deepEqual(record.defaultTools,tools);
+  for(const path of ['public/integrations.html','dist/client/integrations.html'])
+    assert.match(read(path),new RegExp('supplies '+tools.length+' read-only discovery tools'),path);
+});
 
 test('all maintained software uses Numina 4 while native binary provenance and runtime pins remain separate', () => {
   const record = checkSoftwareRelease();

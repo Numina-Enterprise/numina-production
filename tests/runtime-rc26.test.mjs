@@ -70,6 +70,8 @@ test('current singular runtime wrappers retain exact signed manifest, status and
 test('unsigned changes to singular runtime projections never inherit their receipt verification',async()=>{
   const cases=[
     ['releaseDeclarationVerified',records=>records.manifest.data.manifest.extra_claim='unsigned'],
+    ['releaseDeclarationVerified',records=>records.manifest.data.manifest.finalManifestReference.manifest.access='public'],
+    ['releaseDeclarationVerified',records=>records.attestation.data.payload.payload.manifest.finalManifestReference.currentTreasury.status='SETTLED'],
     ['releaseDeclarationVerified',records=>records.manifest.data.receipt.signature='A'.repeat(88)],
     ['releaseDeclarationVerified',records=>records.attestation.data.payload.payload.manifest.mechanics.treasury.nativeModelAmount='1'],
     ['runtimeStatusMatches',records=>records.status.data.status.payload.external_execution_performed=true],
