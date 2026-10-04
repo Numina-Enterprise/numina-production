@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {formatTreasuryProviderAmount} from '../public/treasury-amount.js';
 
-const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
+const source=(name,assetDirectory='public')=>readFileSync(new URL('../'+assetDirectory+'/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const response=(body,status=200)=>Response.json(body,{status});
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 async function settled(){for(let i=0;i<8;i++)await new Promise(resolve=>setTimeout(resolve,0));}
@@ -27,7 +27,7 @@ class Element{
  reset(){}
 }
 
-function harness(fetcher,{control=false}={}){
+function harness(fetcher,{control=false,assetDirectory='public'}={}){
  const nodes=new Map(),events=new Map(),dispatched=[];
  if(control){
   const html=readFileSync(new URL('../public/control.html',import.meta.url),'utf8');
@@ -37,9 +37,10 @@ function harness(fetcher,{control=false}={}){
  const listen=(name,handler)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(handler);};
  const fire=(name,event={})=>{for(const handler of events.get(name)||[])handler(event);};
  const document={getElementById:get,createElement:tag=>new Element(tag),addEventListener:listen,dispatchEvent:event=>{dispatched.push(event.type);fire(event.type,event);return true;},querySelectorAll:selector=>selector.includes('workspace')?[...nodes.values()].filter(node=>node.tagName==='button'):[]};
- const context=vm.createContext({document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
- const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
- vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+source('treasury-amount.js')+'\n'+source('stripe-treasury.js')+(control?'\n'+source('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
+ const context=vm.createContext({NUMINA_TREASURY_CONNECTION:{softwareBalanceModel:{stripeUsdc:{current:null},aggregate:{current:null}}},document,window:{addEventListener:listen},fetch:fetcher,Response,URL,AbortController,Intl,Date,crypto,setTimeout,clearTimeout,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},clearNativeTreasury(){},async loadNativeTreasury(){},clearTreasuryDocuments(){},async loadTreasuryDocuments(){}});
+ const loadAsset=name=>source(name,assetDirectory);
+ const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+loadAsset('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
+ vm.runInContext(loadAsset('http-client.js')+'\n'+receiptModule+'\n'+loadAsset('treasury-amount.js')+'\n'+loadAsset('stripe-treasury.js')+(control?'\n'+loadAsset('control.js'):'')+'\nglobalThis.subject={clearStripeTreasury,loadStripeTreasury};',context);
  return {get,context,subject:context.subject,dispatched,fire,close(){if(control)fire('pagehide');else context.subject.clearStripeTreasury();}};
 }
 function values(h){const items=h.get('stripe-treasury-details').children,rows={};for(let i=0;i<items.length;i+=2)rows[items[i].textContent]=items[i+1].textContent;return rows;}
@@ -184,9 +185,44 @@ test('noncanonical or already rounded large amounts cannot populate the Stripe v
 test('Control Room pagehide clears the real Stripe module, balances and dashboard link',async()=>{
  const h=harness(async path=>{
   if(path.endsWith('/stripe-treasury'))return response(stripeFixture());
-  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{stateIntegrity:true,evidenceHead:true}});
+  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{manifestIntegrity:true,evidenceHead:true}});
   if(path.endsWith('/treasury-attestation'))return response({schema:'numina.treasury.owner_statement.v1',classification:'owner_reported_not_independently_verified',reported_owner:'Test LLC',reported_institution:'Test institution',reported_account_type:'Test account',reported_as_of:'2026-01-02',reported_amount_usd:'0',reported_custodian:'Test custodian',source:'Test fixture',owner_reports_evidence_supplied:false});
-  return response({projection:'complete',revision:1,state:{requests:[],evidence:[],grants:[]},decisions:[]});
+  return response({identity:'NUMINA',root:'NUMINA',manifest:'NUMINA',scope:'complete',revision:1,manifestHash:'a'.repeat(64),evidenceHead:'b'.repeat(64),content:{schema:1,requests:[],evidence:[],records:[],grants:[]},decisions:[]});
  },{control:true});
  try{await settled();assert.equal(values(h)['Available USD'],'$0.00');assert.equal(h.get('stripe-treasury-panel').hidden,false);h.fire('pagehide');assertCleared(h);assert.equal(h.get('stripe-treasury-panel').hidden,true);assert.equal(h.get('workspace').hidden,true);}finally{h.close();}
+});
+
+
+// Exercise the uploaded files, since source-only checks missed the retained UI overlay.
+test('packaged Stripe display and strict amount helper match the maintained source',()=>{
+ for(const name of ['stripe-treasury.js','treasury-amount.js'])assert.deepEqual(readFileSync(new URL('../dist/client/'+name,import.meta.url)),readFileSync(new URL('../public/'+name,import.meta.url)),name+' must ship the reviewed source');
+});
+
+test('packaged Stripe view renders only current provider observations when modeled amounts are unavailable',async()=>{
+ const fixture=stripeFixture();fixture.balances.available.usd=amount('usd',1234);fixture.balances.inbound_pending.usdc=null;
+ const calls=[],h=harness(async(path,options)=>{calls.push({path,method:options.method??'GET'});return response(fixture);},{assetDirectory:'dist/client'});
+ try{
+  await assert.doesNotReject(h.subject.loadStripeTreasury());const rows=values(h);
+  assert.equal(rows['Available USD'],'≈ $12.00');assert.equal(rows['Available USDC'],'0.00 USDC');assert.equal(rows['Incoming pending USDC'],'Not provided by Stripe');
+  assert.equal(rows['Transfers from Numina'],'Not connected');assert.equal(rows['NUSD settlement'],'Not connected');assert.equal(rows['NUMINA software USDC'],undefined);
+  assert.match(h.get('stripe-treasury-message').textContent,/Balances retrieved from Stripe/);assert.doesNotMatch(h.get('stripe-treasury-message').textContent,/software value|Checking Stripe/);
+  assert.deepEqual(calls,[{path:'/api/control/v1/stripe-treasury',method:'GET'}]);assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);
+  for(const value of [null,undefined,1,'1.5','01'])assert.throws(()=>h.context.formatTreasuryModelWholeAmount(value,'USDC'),/INVALID_MODEL_WHOLE_AMOUNT/);
+ }finally{h.close();}
+});
+
+test('packaged Stripe failure clears prior observations without replacing them with modeled funds',async()=>{
+ let unavailable=false;const h=harness(async()=>unavailable?response({error:'STRIPE_TREASURY_NOT_CONNECTED'},503):response(stripeFixture()),{assetDirectory:'dist/client'});
+ try{
+  await assert.doesNotReject(h.subject.loadStripeTreasury());assert.equal(values(h)['Available USD'],'$0.00');
+  unavailable=true;await assert.doesNotReject(h.subject.loadStripeTreasury());assertCleared(h);
+  assert.match(h.get('stripe-treasury-message').textContent,/not configured.*No current balance/);assert.doesNotMatch(h.get('stripe-treasury-message').textContent,/0\.00|software value|Checking Stripe/);
+ }finally{h.close();}
+});
+
+test('packaged Stripe view rejects missing, unsafe or forged provider observations and leaves loading state',async()=>{
+ for(const corrupt of [fixture=>delete fixture.balances.available.usd,fixture=>fixture.balances.available.usd.value=null,fixture=>fixture.balances.available.usd.value=9007199254740992,fixture=>fixture.balances.available.usd.value='1.5',fixture=>fixture.transfer_execution=true]){
+  const fixture=stripeFixture();corrupt(fixture);const h=harness(async()=>response(fixture),{assetDirectory:'dist/client'});
+  try{await assert.doesNotReject(h.subject.loadStripeTreasury());assertCleared(h);assert.match(h.get('stripe-treasury-message').textContent,/could not be checked/);assert.doesNotMatch(h.get('stripe-treasury-message').textContent,/Checking Stripe|software value/);}finally{h.close();}
+ }
 });

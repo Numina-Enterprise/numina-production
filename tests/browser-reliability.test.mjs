@@ -104,9 +104,9 @@ test('browser restoration revalidates the app after aborting an in-flight boot',
 
 test('Control Room clears all private state when background owner authentication expires',async()=>{
  const h=harness('control',async path=>{
-  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{stateIntegrity:true,evidenceHead:true}});
+  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{manifestIntegrity:true,evidenceHead:true}});
   if(path.endsWith('/treasury'))return response({error:'UNAUTHENTICATED'},401);
-  return response({projection:'complete',revision:1,state:{requests:[],evidence:[],grants:[{id:'root',subject:'private-owner',resourcePrefix:'record:',scopes:['record.write']}]},decisions:[]});
+  return response({identity:'NUMINA',root:'NUMINA',manifest:'NUMINA',scope:'complete',revision:1,manifestHash:'a'.repeat(64),evidenceHead:'b'.repeat(64),content:{schema:1,requests:[],evidence:[],records:[],grants:[{id:'root',subject:'private-owner',resourcePrefix:'record:',scopes:['record.write']}]},decisions:[]});
  });
  try{await settled();assert.equal(h.subject.snapshot,null);assert.equal(h.get('workspace').hidden,true);assert.equal(h.get('grants').textContent,'');assert.equal(h.get('state-proof').textContent,'');assert.equal(h.get('signin').hidden,false);}finally{h.close();}
 });
@@ -114,8 +114,8 @@ test('Control Room clears all private state when background owner authentication
 test('Control Room drops stale records and disables actions after refresh failure',async()=>{
  let failed=false;const h=harness('control',async path=>{
   if(failed)return response({error:'DEPENDENCY_UNAVAILABLE'},503);
-  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{stateIntegrity:true,evidenceHead:true}});
-  return response({projection:'scoped',revision:1,state:{requests:[],evidence:[],grants:[]},decisions:[]});
+  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{manifestIntegrity:true,evidenceHead:true}});
+  return response({identity:'NUMINA',root:'NUMINA',manifest:'NUMINA',scope:'authority-scoped',revision:1,manifestHash:'a'.repeat(64),evidenceHead:'b'.repeat(64),content:{schema:1,requests:[],evidence:[],records:[],grants:[]},decisions:[]});
  });
  try{await settled();assert.ok(h.subject.snapshot);failed=true;await assert.rejects(h.subject.refresh());assert.equal(h.subject.snapshot,null);assert.equal(h.get('workspace').hidden,true);assert.equal(h.get('reconcile').disabled,true);assert.equal(h.get('health').textContent,'Unavailable');}finally{h.close();}
 });

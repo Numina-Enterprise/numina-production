@@ -24,13 +24,18 @@
     },
     {
       "path": "compliance-coverage.json",
-      "bytes": 56482,
-      "sha256": "8a07e5759aeaf266a055530bc8e44363123862ac57e2a7b59082f8b2f20f3b12"
+      "bytes": 58783,
+      "sha256": "8a222f326ce9a08dda75f027b8d793c7d634fee7dbcb0ecd3c0ffd6a0e13ee24"
     },
     {
       "path": "country-readiness.json",
       "bytes": 169643,
       "sha256": "5603e7ad51519d9cc1ddfe1d8424f4746ac7a834758234d472f642b5c210e1c8"
+    },
+    {
+      "path": "iowa-entity-registry.json",
+      "bytes": 1809,
+      "sha256": "6a24b85695efb95a88bb777fc3ec714497619134c3f239bb0ceb3421210e0d87"
     },
     {
       "path": "software-licenses.json",
