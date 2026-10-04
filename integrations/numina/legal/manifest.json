@@ -40,8 +40,8 @@
     },
     {
       "path": "charitable-relationship.json",
-      "bytes": 4502,
-      "sha256": "299ca5dcd2ea1076a3fa790165e2a47c4adf55eeee6238318678aa4696da29c5"
+      "bytes": 5872,
+      "sha256": "b3eafd712dda086c5ed2b7c69a9f76889b33354ad80f35940a6217827e8c05a2"
     },
     {
       "path": "software-licenses.json",

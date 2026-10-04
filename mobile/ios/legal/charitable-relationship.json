@@ -33,7 +33,7 @@
     "tax_acknowledgment_issuer": "Foundation, through its applicable donor-services process; no Numina tax receipt is promised",
     "automatic_venture_revenue_pledge_or_percentage": false
   },
-  "public_relationship_text": "Charity is a connective purpose of Numina's work in STEM and emerging technology in education. Sam Kott advises the existing Kott Family Fund at the Community Foundation of the Fox River Valley. Charitable contributions go directly to the Foundation through its official fund giving page; the Foundation controls fund assets and distribution decisions. Numina's commercial services and payments remain separate.",
+  "public_relationship_text": "Numina Ventures is Numina's investment and incubation vertical. Numina Foundation is Numina's charitable vertical, connecting its work in STEM and emerging technology in education. Sam Kott advises the existing Kott Family Fund at the Community Foundation of the Fox River Valley. Charitable contributions go directly to the Foundation through its official fund giving page; the Foundation controls fund assets and distribution decisions. Numina's commercial services and payments remain separate.",
   "evidence": [
     {
       "kind": "OFFICIAL_FOUNDATION_PUBLIC_PROFILE",
@@ -51,6 +51,11 @@
       "kind": "OWNER_CONFIRMATION",
       "observed_on": "2026-10-04",
       "scope": "Live verified DAF and preferred display name; charity remains a major connective component of Numina's venture purpose"
+    },
+    {
+      "kind": "OWNER_VERTICAL_ROLE_CORRECTION",
+      "observed_on": "2026-10-04",
+      "scope": "Numina Ventures is for investment and incubation; Numina Foundation is for charity. Operating names are distinct from actual legal entity and Foundation fund control."
     }
   ],
   "primary_guidance": [
@@ -65,6 +70,22 @@
     "executed_related_party_grant_or_service_agreement_inferred": false,
     "fundraising_or_country_clearance_inferred": false,
     "donation_deductibility_for_every_donor_inferred": false,
-    "new_entity_filing_rename_signature_or_fund_movement_performed": false
-  }
+    "new_entity_filing_rename_signature_or_fund_movement_performed": false,
+    "separate_venture_or_foundation_legal_entities_inferred": false,
+    "investment_or_fund_management_permission_inferred": false
+  },
+  "owner_designated_verticals": [
+    {
+      "name": "Numina Ventures",
+      "role": "Investment and incubation",
+      "classification": "OWNER_DESIGNATED_OPERATING_VERTICAL",
+      "legal_scope": "Owner-designated Numina operating name; this record establishes no separate legal entity, investment fund, investment-adviser permission or authorization to offer securities. Actual legal counterparties and activity-specific permissions remain governed by their own records."
+    },
+    {
+      "name": "Numina Foundation",
+      "role": "Charity",
+      "classification": "OWNER_DESIGNATED_OPERATING_VERTICAL",
+      "legal_scope": "Owner-designated charitable vertical. Its connection to the existing Kott charitable fund does not create a separate nonprofit corporation or tax-exempt organization, or transfer Foundation-controlled fund assets to Numina."
+    }
+  ]
 }
