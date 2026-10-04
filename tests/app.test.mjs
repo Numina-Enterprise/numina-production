@@ -1,12 +1,26 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync,mkdtempSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';
-import {database} from '../scripts/sqlite.mjs';import {appHttp} from '../src/app-http.js';import {APP_OFFERS,appPaymentSummary,appTransition} from '../src/app-core.js';
+import {database} from '../scripts/sqlite.mjs';import {appHttp} from '../src/app-http.js';import {APP_CONSENT_VERSION,APP_LEGAL_POLICY,APP_OFFERS,appPaymentSummary,appTransition} from '../src/app-core.js';
 const migration=['0001_useful_black_crow.sql','0002_chief_rachel_grey.sql'].flatMap(name=>readFileSync(new URL('../drizzle/'+name,import.meta.url),'utf8').split('--> statement-breakpoint').map(x=>x.trim()).filter(Boolean));
 const owner={'oai-authenticated-user-id':'user-owner','oai-authenticated-user-email':'owner@example.test'},customer={'oai-authenticated-user-id':'user-customer','oai-authenticated-user-email':'customer@example.test'},other={'oai-authenticated-user-id':'user-other','oai-authenticated-user-email':'other@example.test'};
 async function fixture(path){const db=database(path);for(const sql of migration)await db.prepare(sql).run();return {DB:db,NUMINA_CONTROL_OWNER:'email:owner@example.test',NUMINA_STRIPE_WEBHOOK_SECRET:'whsec_test_only_not_production'};}
 function request(path,body,identity=customer,extra={}){return new Request('https://numina.test/api/app/v1/'+path,{method:body===undefined?'GET':'POST',headers:{...identity,...(body===undefined?{}:{Origin:'https://numina.test','Content-Type':'application/json'}),...extra},body:body===undefined?undefined:JSON.stringify(body)});}
-const intake=()=>({idempotencyKey:crypto.randomUUID(),service:'diagnostic_enterprise',title:'Operations review',brief:'Review the authorized customer support triage workflow.',successCriteria:'A ranked set of supported automation opportunities.',country:'US',consent:true});
+const intake=()=>({idempotencyKey:crypto.randomUUID(),service:'diagnostic_enterprise',title:'Operations review',brief:'Review the authorized customer support triage workflow.',successCriteria:'A ranked set of supported automation opportunities.',country:'US',consent:true,consentVersion:APP_CONSENT_VERSION});
 async function call(env,path,body,identity=customer,extra){const r=await appHttp(request(path,body,identity,extra),env);return {status:r.status,body:await r.json()};}
 async function create(env,body=intake()){const r=await call(env,'orders',body);assert.equal(r.status,201,JSON.stringify(r.body));return r.body.order;}
+test('workspace Terms acceptance is revision-bound and never rewrites prior privacy acknowledgments',async()=>{
+ const env=await fixture();try{
+  assert.deepEqual((await call(env,'catalog')).body.legalPolicy,APP_LEGAL_POLICY);
+  for(const version of [undefined,'4.0.0','old-policy']){
+   const body={...intake(),consentVersion:version};const result=await call(env,'orders',body);
+   assert.equal(result.status,409);assert.equal(result.body.error,'LEGAL_POLICY_REVIEW_REQUIRED');
+  }
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders').first()).n,0);
+  const historical=await create(env);await env.DB.prepare('UPDATE numina_service_orders SET consent_version=? WHERE id=?').bind('4.0.0',historical.id).run();
+  const body=intake(),current=await create(env,body);assert.equal((await call(env,'orders',body)).body.replayed,true);
+  assert.equal((await env.DB.prepare('SELECT consent_version FROM numina_service_orders WHERE id=?').bind(current.id).first()).consent_version,APP_CONSENT_VERSION);
+  assert.equal((await env.DB.prepare('SELECT consent_version FROM numina_service_orders WHERE id=?').bind(historical.id).first()).consent_version,'4.0.0');
+ }finally{env.DB.close();}
+});
 async function webhook(env,event,options={}){const raw=JSON.stringify(event),time=options.time??Math.floor(Date.now()/1000);const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(env.NUMINA_STRIPE_WEBHOOK_SECRET),{name:'HMAC',hash:'SHA-256'},false,['sign']);const signature=Buffer.from(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode(time+'.'+raw))).toString('hex');const r=await appHttp(new Request('https://numina.test/api/app/v1/stripe-webhook',{method:'POST',headers:{'Content-Type':'application/json','Stripe-Signature':`t=${time},v1=${options.signature||signature}`},body:raw}),env);return {status:r.status,body:await r.json()};}
 function payment(order,overrides={}){return {id:'evt_'+crypto.randomUUID().replaceAll('-',''),type:'checkout.session.completed',livemode:true,created:Math.floor(Date.now()/1000),data:{object:{id:'cs_live_'+crypto.randomUUID().replaceAll('-',''),object:'checkout.session',mode:'payment',payment_status:'paid',payment_intent:'pi_'+crypto.randomUUID().replaceAll('-',''),client_reference_id:order.id,payment_link:APP_OFFERS.diagnostic_enterprise.paymentLink,currency:'usd',amount_total:500000,livemode:true,...overrides}}};}
 test('NUSD scope requests persist without checkout, Stripe payment substitution or fulfillment',async()=>{

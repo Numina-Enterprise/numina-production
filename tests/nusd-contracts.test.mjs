@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
-import ganache from '../runtime/nusd/development/node_modules/ganache/dist/node/core.js';
+import {localChain} from '../runtime/nusd/development/local-chain.mjs';
 import {BrowserProvider,ContractFactory,id,ZeroAddress} from '../runtime/nusd/development/node_modules/ethers/lib.esm/index.js';
 import {loadTokenArtifact,validateTokenArtifact} from '../runtime/nusd/scripts/token-artifact.mjs';
 import {compileSource} from '../runtime/nusd/development/compile.mjs';
@@ -10,7 +10,7 @@ const base=new URL('../runtime/nusd/',import.meta.url),read=path=>fs.readFileSyn
 const token=loadTokenArtifact(),settlement=JSON.parse(read('artifacts/NuminaSettlement.json'));
 const sent=async promise=>(await promise).wait();
 async function fixture(t,{adminDelay=0}={}){
-  const engine=ganache.provider({logging:{quiet:true},chain:{chainId:1337,hardfork:'london'},wallet:{deterministic:true,totalAccounts:8}});
+  const engine=await localChain();
   t.after(()=>engine.disconnect());const provider=new BrowserProvider(engine,undefined,{cacheTimeout:-1});provider.pollingInterval=10;
   const people=await Promise.all(Array.from({length:7},(_,i)=>provider.getSigner(i))),addresses=await Promise.all(people.map(p=>p.getAddress()));
   const [admin,issuer,minter,pauser,payer,recipient,outsider]=people;

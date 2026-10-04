@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {APP_OFFERS} from '../src/app-core.js';
+import {APP_CONSENT_VERSION,APP_LEGAL_POLICY,APP_OFFERS} from '../src/app-core.js';
 import {selectService,countryOptions,offerLabel} from '../public/app-entry.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
@@ -11,7 +11,7 @@ const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {
 const tick=()=>new Promise(r=>setTimeout(r,0));
 async function settled(){for(let i=0;i<8;i++)await tick();}
 class Element{
- constructor(tag='div'){this.tagName=tag;this.children=[];this.listeners={};this.hidden=false;this.disabled=false;this.value='';this.checked=false;this._text='';}
+ constructor(tag='div'){this.tagName=tag;this.children=[];this.listeners={};this.hidden=false;this.disabled=false;this.value='';this.checked=false;this._text='';this.dataset={};}
  set textContent(value){this._text=String(value);this.children=[];}
  get textContent(){return this._text+this.children.map(c=>c.textContent).join('');}
  get options(){return this.children;}
@@ -24,29 +24,30 @@ class Element{
  reset(){this.onReset?.();}
  async fire(name,extra={}){return this.listeners[name]?.({preventDefault(){},...extra});}
 }
-function harness(kind,fetcher){
+function harness(kind,fetcher,{href='https://numina.test/app'}={}){
  const nodes=new Map(),events={};const html=readFileSync(new URL('../public/'+(kind==='app'?'app':'control')+'.html',import.meta.url),'utf8');
- for(const match of html.matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g)){const node=new Element(match[1]);node.hidden=/\bhidden\b/.test(match[0]);nodes.set(match[2],node);}
+ for(const match of html.matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g)){const node=new Element(match[1]);node.hidden=/\bhidden\b/.test(match[0]);const policy=match[0].match(/data-legal-policy-revision="([^"]+)"/)?.[1];if(policy)node.dataset.legalPolicyRevision=policy;nodes.set(match[2],node);}
  const get=id=>{assert.ok(nodes.has(id),'Unknown UI node '+id);return nodes.get(id);};
+ const signInLinks=[...html.matchAll(/<a\b[^>]*href="(\/signin-with-chatgpt[^\"]*)"[^>]*>/g)].map(match=>{const id=match[0].match(/\bid="([^"]+)"/)?.[1];const link=id?get(id):new Element('a');link.href=match[1];return link;});
  if(kind==='app'){
   for(const id of ['diagnostic','audit']){const option=new Element('option');option.value=id;get('service').append(option);}get('service').value='diagnostic';
   get('request-form').onReset=()=>{for(const id of ['request-title','request-brief','request-success'])get(id).value='';get('service').value='diagnostic';};
  }
  const window={addEventListener:(name,fn)=>events[name]=fn,location:{assign(){throw new Error('Unexpected navigation in test');}}};
  const document={getElementById:get,createElement:tag=>new Element(tag),dispatchEvent:event=>events[event.type]?.(event),addEventListener:(name,fn)=>events[name]=fn,
-  querySelectorAll:selector=>selector.startsWith('a[')?[]:selector.includes('workspace')?[...nodes.values()].filter(n=>n.tagName==='button'):selector.includes('checkout-button')?[get('checkout-button')]:[]};
- const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,TextEncoder,CustomEvent,setTimeout,clearTimeout,console,selectService,countryOptions,offerLabel,
+  querySelectorAll:selector=>selector==='a[href^="/signin-with-chatgpt"]'?signInLinks.filter(link=>link.href.startsWith('/signin-with-chatgpt')):selector.startsWith('a[')?[]:selector.includes('workspace')?[...nodes.values()].filter(n=>n.tagName==='button'):selector.includes('checkout-button')?[get('checkout-button')]:[]};
+ const context=vm.createContext({document,window,navigator:{onLine:true},location:{href},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,TextEncoder,CustomEvent,setTimeout,clearTimeout,console,selectService,countryOptions,offerLabel,
   clearTreasuryDocuments(){},async loadTreasuryDocuments(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
  const exports=kind==='app'?'({api,openOrder,loadOrders,savedView,boot,clearSession,get session(){return session;},get selected(){return selected;}})':'({api,refresh,run,clearSession,get snapshot(){return snapshot;}})';
  const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
  const nativeModule='const {clearNativeTreasury,loadNativeTreasury}=(()=>{'+source('treasury-proof.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-amount.js')+'\n'+source('native-treasury.js')+';return {clearNativeTreasury,loadNativeTreasury};})();';
  vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+nativeModule+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
- return {get,events,subject:context.subject,context,close(){events.pagehide?.();}};
+ return {get,events,signInLinks,subject:context.subject,context,close(){events.pagehide?.();}};
 }
 function order(id,title=id){return {id,title,revision:0,brief:'Private brief '+id,successCriteria:'Private success '+id,service:'diagnostic',country:'US',status:'submitted',isOwner:true,payment:{status:'unconfirmed',gross:0,refunded:0}};}
 function appFetch(overrides=()=>null){return async(path,options)=>{
  const custom=overrides(path,options);if(custom)return await custom;
- if(path.endsWith('/catalog'))return response({offers:APP_OFFERS});
+ if(path.endsWith('/catalog'))return response({offers:APP_OFFERS,legalPolicy:APP_LEGAL_POLICY});
  if(path.endsWith('/health'))return response({status:'ready',paymentConfirmation:'configured'});
  if(path.endsWith('/session'))return response({email:'owner@example.test',operator:true});
  if(path.includes('/orders?'))return response({orders:[order('a')],next:null});
@@ -58,6 +59,12 @@ test('JSON deadlines cover stalled bodies and never retry a write',async()=>{
  let calls=0;const c=vm.createContext({fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(()=>{})};},AbortController,setTimeout,clearTimeout});
  vm.runInContext(source('http-client.js'),c);
  await assert.rejects(vm.runInContext("requestJson('/save',{method:'POST',timeoutMs:10})",c),{name:'TimeoutError'});assert.equal(calls,1);
+});
+test('the account link and separate ChatGPT CTA retain allowed service and anchor context after a 401',async()=>{
+ for(const origin of ['https://numinalabs.xyz','https://personal-space-m7q9.skott34.chatgpt.site']){
+  const h=harness('app',appFetch(path=>path.endsWith('/session')?response({error:'SIGN_IN_REQUIRED'},401):null),{href:origin+'/app?service=audit#service-work'});
+  try{await settled();assert.equal(h.signInLinks.length,2);for(const link of h.signInLinks){const target=new URL(link.href,origin);assert.equal(target.searchParams.get('return_to'),'/app?service=audit_enterprise#service-work');assert.equal(target.origin,'https://personal-space-m7q9.skott34.chatgpt.site');}assert.equal(h.get('request-fields').disabled,true);}finally{h.close();}
+ }
 });
 
 test('expired app session removes private records and ignores late responses',async()=>{
@@ -92,7 +99,7 @@ test('acknowledged save remains acknowledged when refresh fails and stale action
 
 test('browser restoration revalidates the app after aborting an in-flight boot',async()=>{
  const pending=deferred();let delay=true;const h=harness('app',appFetch(path=>delay&&path.endsWith('/catalog')?pending.promise:null));
- try{h.events.pagehide();delay=false;h.events.pageshow({persisted:true});pending.resolve(response({offers:APP_OFFERS}));await settled();assert.ok(h.subject.session);assert.equal(h.get('request-fields').disabled,false);}finally{h.close();}
+ try{h.events.pagehide();delay=false;h.events.pageshow({persisted:true});pending.resolve(response({offers:APP_OFFERS,legalPolicy:APP_LEGAL_POLICY}));await settled();assert.ok(h.subject.session);assert.equal(h.get('request-fields').disabled,false);}finally{h.close();}
 });
 
 test('Control Room clears all private state when background owner authentication expires',async()=>{

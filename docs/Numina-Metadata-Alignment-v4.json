@@ -1027,8 +1027,8 @@
       },
       {
         "path": "runtime/nusd/development/package-lock.json",
-        "bytes": 164619,
-        "sha256": "21d9b50254626da841cca9fb38bbfeabd263b60032868e1c6e027069e49f72c8",
+        "bytes": 51913,
+        "sha256": "6c89e27042f630a68c1d48d3fc8cf6f7d570b4a5945029ae8bb7eea3073b77eb",
         "scope": "MAINTAINED_SOURCE_CONFIGURATION",
         "originalBytesPreserved": false,
         "currentBalanceOrReadinessInferred": false,
@@ -1036,8 +1036,8 @@
       },
       {
         "path": "runtime/nusd/development/package.json",
-        "bytes": 470,
-        "sha256": "9a5a0bbe4def4b11915e010e67f239aa3934746a2d4ee1c7c389c404a9d7692d",
+        "bytes": 534,
+        "sha256": "5af2c47479ef0ed862aff5ef964cd0a351383078876dff9ad33040e5d38501dd",
         "scope": "MAINTAINED_SOURCE_CONFIGURATION",
         "originalBytesPreserved": false,
         "currentBalanceOrReadinessInferred": false,

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import ganache from '../runtime/nusd/development/node_modules/ganache/dist/node/core.js';
+import {localChain} from '../runtime/nusd/development/local-chain.mjs';
 import {BrowserProvider,ContractFactory,id,ZeroAddress,ZeroHash} from '../runtime/nusd/development/node_modules/ethers/lib.esm/index.js';
 import {compileSource} from '../runtime/nusd/development/compile.mjs';
 import {loadTokenArtifact} from '../runtime/nusd/scripts/token-artifact.mjs';
@@ -32,7 +32,7 @@ contract TestReserve is ERC20 {
 }`,'TestReserve');
 
 async function fixture(t,{supply=1000n*NUSD}={}) {
- const engine=ganache.provider({logging:{quiet:true},chain:{chainId:1337,hardfork:'london'},wallet:{deterministic:true,totalAccounts:9}});
+ const engine=await localChain();
  t.after(()=>engine.disconnect());const provider=new BrowserProvider(engine,undefined,{cacheTimeout:-1});provider.pollingInterval=10;
  const people=await Promise.all(Array.from({length:8},(_,i)=>provider.getSigner(i))),a=await Promise.all(people.map(x=>x.getAddress()));
  const [admin,operator,confirmer,pauser,holder,recipient,outsider,other]=people;
