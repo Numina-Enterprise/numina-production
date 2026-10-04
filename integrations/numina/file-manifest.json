@@ -1260,13 +1260,18 @@
     },
     {
       "path": "legal/compliance-coverage.json",
-      "bytes": 56482,
-      "sha256": "8a07e5759aeaf266a055530bc8e44363123862ac57e2a7b59082f8b2f20f3b12"
+      "bytes": 58783,
+      "sha256": "8a222f326ce9a08dda75f027b8d793c7d634fee7dbcb0ecd3c0ffd6a0e13ee24"
     },
     {
       "path": "legal/country-readiness.json",
       "bytes": 169643,
       "sha256": "5603e7ad51519d9cc1ddfe1d8424f4746ac7a834758234d472f642b5c210e1c8"
+    },
+    {
+      "path": "legal/iowa-entity-registry.json",
+      "bytes": 1809,
+      "sha256": "6a24b85695efb95a88bb777fc3ec714497619134c3f239bb0ceb3421210e0d87"
     },
     {
       "path": "legal/legal-policy.json",
@@ -1275,8 +1280,8 @@
     },
     {
       "path": "legal/manifest.json",
-      "bytes": 2386,
-      "sha256": "3f8f7cff40c91eb66cbc3d0a7509025bfea085d6ddf75355cbaf145b5ee01011"
+      "bytes": 2546,
+      "sha256": "bd85976af3df4352a7d4fd27f3dc606909fe209bb6450ea1722858f7ca8c1b56"
     },
     {
       "path": "legal/privacy.html",
@@ -1365,8 +1370,8 @@
     },
     {
       "path": "scripts/legal-distribution.js",
-      "bytes": 2739,
-      "sha256": "98c3f4826b0fe6db4b0cd4e105d1b93895298dc630e79b629b88fb1d9c428a7f"
+      "bytes": 2767,
+      "sha256": "b3646d626d7a759a04cd02dae2c897fb67174cdbe20cd880f448eab7e33d8469"
     },
     {
       "path": "scripts/package-distribution.js",
@@ -1441,7 +1446,7 @@
     {
       "path": "verification.json",
       "bytes": 58066,
-      "sha256": "13f01ec371bce79a94f65a6c5dd7ca94cb0d8ea21f06da5313b671dabb271f2b"
+      "sha256": "8ec0ee36c087b848fdaf662ea0c9bd8be6a8cd0bc5cf5eac448bbb12745e2e27"
     }
   ],
   "currentChainStateVerified": false,

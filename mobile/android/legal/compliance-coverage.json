@@ -7,12 +7,27 @@
   "operator": {
     "legal_name": "SK Consulting LLC",
     "jurisdiction": "Iowa, USA",
-    "basis": "Owner designation and maintained published policies; current registry, name and foreign-authority receipts require separate verification.",
+    "basis": "Owner designation identifies SK Consulting LLC as the Numina operator. Official Iowa UI readback on October 4, 2026 verifies an exact-name Active domestic LLC record #724721; association/control, human signing authority, trade-name status, certified good standing and foreign authority require their separate actual records.",
     "contact": "skott34@numinalabs.xyz",
     "human_founder": "Sam Kott",
     "registered_address": null,
-    "entity_number": null,
-    "verified_registry_receipt": null
+    "entity_number": "724721",
+    "verified_registry_receipt": {
+      "status": "EXACT_NAME_DISPLAYED_ACTIVE_RECORD_VERIFIED",
+      "url": "/iowa-entity-registry.json",
+      "official_search_url": "https://sos.iowa.gov/search/business/search.aspx",
+      "official_summary_url": "https://sos.iowa.gov/search/business/summary.aspx?q=r-O3XNrgtd9_rtNjG2dTGPJPLw8DyRJvstgzJc2PYzhdX9SO86mYgGvqHOO1-LPjjCZlw4VOAmUwGMLZwbQtXFv3uKPI_WDfHfY6E3ekqGF37WN4warCIkN4eRiRPBYukwF17-QOlOamOXLApdQk9dnY0TQlZf9Ve2wsV2yKud4KpG3QZ0mWFjDlgmSMu_kaHNPuvctb4BHfmyhwSAgMqUj4rFfkLHWvGTIBJxrkXmDgRTk0vfJaOJ8Eudnx9WbrwE6eul84ULKtbG0ab0Ztu-dFH5VXKxfB7ujIBPI1bW7mSJD85vFPyKWlP8zdnKerbb1hCrWyMViIkHgUNP2fgVnGqtaKKoktlWRFwgsS-ujHZfPVSC1Yy_7VDJlJhn_Jyopg51cyQ6ID4PCAFCZuWw2",
+      "observed_at": "2026-10-04T06:04:38.199Z",
+      "displayed_name": "SK CONSULTING LLC",
+      "displayed_status": "Active",
+      "chapter": "CODE 489 DOMESTIC LIMITED LIABILITY COMPANY",
+      "state": "IA",
+      "owner_control_verified": false,
+      "human_signer_authority_verified": false,
+      "certified_good_standing": false,
+      "trade_name_approval_verified": false,
+      "foreign_permission_verified": false
+    }
   },
   "summary": {
     "status": "PREPARATION_WITH_UNRESOLVED_GATES",
@@ -77,18 +92,19 @@
       "title": "Legal operator, authority and contracts",
       "applicability": "REQUIRED",
       "status": "PENDING",
-      "basis": "An identified human contracting party and accepted scope are needed for a service engagement. The operator is owner-designated SK Consulting LLC, Iowa, USA; registry and foreign authority receipts are not established by this record.",
+      "basis": "An identified human contracting party and accepted scope are needed for a service engagement. Owner designation names SK Consulting LLC as operator. Official Iowa readback verifies exact-name Active domestic LLC record #724721; human control/signing authority, any Numina trade name, certified good standing and foreign permissions remain separate unresolved evidence.",
       "recorded_evidence_ids": [
         "terms",
         "policy",
-        "owner"
+        "owner",
+        "iowa-registry"
       ],
       "authority_ids": [
         "iowa-entity",
         "irs"
       ],
       "activation_requirements": [
-        "Current entity/name/good-standing record relevant to the agreement",
+        "Reconcile Iowa exact-name entity record #724721 to actual ownership/governing records; verify trade-name and standing records as required for the agreement",
         "Human signatory authority and counterparties",
         "Executed scope, fees, applicable law, mandatory rights, DPA/SLA and liability terms where needed",
         "Required local establishment, registrations and sector permissions for the actual work"
@@ -795,6 +811,17 @@
       "snapshot_sha256": "2a1e309216f672eb6ddafec64955b4b72218080b42dd0306a804e91776f3e1db",
       "reviewed_on": "2026-10-04",
       "proof_scope": "Inspected maintained source or recorded artifact; not independent legal approval, live operating assurance or external certification."
+    },
+    {
+      "id": "iowa-registry",
+      "title": "Iowa exact-name Active entity record #724721",
+      "status": "OFFICIAL_EXACT_NAME_REGISTRY_READBACK",
+      "source_file": "public/iowa-entity-registry.json",
+      "url": "/iowa-entity-registry.json",
+      "snapshot_sha256": "6a24b85695efb95a88bb777fc3ec714497619134c3f239bb0ceb3421210e0d87",
+      "reviewed_on": "2026-10-04",
+      "observed_at": "2026-10-04T06:04:38.199Z",
+      "proof_scope": "Official displayed exact-name entity record only; owner designation separately associates the operator with Numina. Active is not a certified-good-standing receipt or proof of human control, signer authority, a Numina trade name, ownership assignments or foreign operating permission."
     }
   ],
   "primary_authorities": [

@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {COUNTRY_CODES} from '../public/country-codes.js';
 import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
 import {countryOptions} from '../public/app-entry.js';
@@ -15,7 +16,7 @@ import {verifyMaintainedHostedLegalOverlay} from '../scripts/production-pair.mjs
 const root=fileURLToPath(new URL('../',import.meta.url));
 const read=p=>readFileSync(resolve(root,p),'utf8');
 const built=(await import('../dist/server/index.js')).default;
-const files=['compliance.html','compliance-coverage.json','country-readiness.json','compliance-ui.js','compliance-model.js','compliance.css','legal-discovery.js','country-codes.js'];
+const files=['compliance.html','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','compliance-ui.js','compliance-model.js','compliance.css','legal-discovery.js','country-codes.js'];
 const intake={idempotencyKey:'a'.repeat(8)+'-aaaa-aaaa-aaaa-'+'a'.repeat(12),service:'diagnostic_enterprise',title:'Review operations',brief:'Review this authorized operational workflow.',successCriteria:'A scoped and evidence-backed plan.',consent:true,consentVersion:APP_CONSENT_VERSION};
 const routes=[['/api/app/v1/legal-manifest','compliance-coverage.json'],['/api/app/v1/country-readiness','country-readiness.json']];
 function environment(changes={}){
@@ -34,6 +35,16 @@ test('UI, intake and coverage use one exact country inventory without granting a
  for(const country of COUNTRY_CODES)assert.equal(appIntake({...intake,country}).country,country);
  for(const country of ['ZZ','UK','EU','us','USA','',null,'__proto__'])assert.throws(()=>appIntake({...intake,country}),/INVALID_INPUT/);
  for(const row of countries){assert.equal(row.financial_activation,false);assert.equal(row.enterprise_activation,false);assert.deepEqual(row.approved_activity_scopes,[]);}
+});
+test('Iowa entity observation stays source-bound without granting signer or market authority',()=>{
+ const raw=read('public/iowa-entity-registry.json'),registry=JSON.parse(raw),coverage=JSON.parse(read('public/compliance-coverage.json'));
+ assert.equal(registry.schema,'numina.iowa-entity-registry-readback.v1');assert.equal(registry.businessNumber,'724721');assert.equal(registry.status,'Active');
+ assert.equal(registry.personalOrStreetAddressesIncluded,false);assert.equal(registry.filingsOrAccountChangesPerformed,false);
+ const receipt=coverage.operator.verified_registry_receipt;assert.equal(receipt.url,'/iowa-entity-registry.json');
+ for(const flag of ['owner_control_verified','human_signer_authority_verified','certified_good_standing','trade_name_approval_verified','foreign_permission_verified'])assert.equal(receipt[flag],false,flag);
+ const evidence=coverage.evidence.find(item=>item.id==='iowa-registry');assert.ok(evidence);
+ assert.equal(evidence.source_file,'public/iowa-entity-registry.json');assert.equal(evidence.snapshot_sha256,createHash('sha256').update(raw).digest('hex'));
+ assert.equal(read('dist/client/iowa-entity-registry.json'),raw);
 });
 test('current public coverage is served unchanged by both source and built GET/HEAD APIs without private state',async()=>{
  for(const handler of [worker,built])for(const [route,file]of routes)for(const method of ['GET','HEAD']){
@@ -90,6 +101,8 @@ test('delivered integration, plugin and mobile source archives contain exact sha
 import hashlib,json,pathlib,zipfile
 root=pathlib.Path('.')
 archives=[('numina-integration-kit-v4.0.0.zip','integrations/numina'),('numina-codex-plugin-4.0.0.zip','integrations/codex/numina'),('numina-os-4.0.0-android-source.zip','mobile/android'),('numina-os-4.0.0-ios-source.zip','mobile/ios')]
+expected_snapshots={'legal-policy.json','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'}
+verified=0
 for archive,source in archives:
  with zipfile.ZipFile(root/'docs'/archive) as z:
   assert z.testzip() is None
@@ -99,19 +112,22 @@ for archive,source in archives:
   manifest=json.loads(z.read(paths[0]))
   assert manifest['recordRevision']=='numina-global-2026-10-04' and manifest['legalApproval'] is False
   assert z.read(paths[0])==(root/source/'legal/manifest.json').read_bytes()
+  assert len(manifest['snapshots'])==len(expected_snapshots)
+  assert {row['path'] for row in manifest['snapshots']}==expected_snapshots
   for row in manifest['snapshots']:
    data=z.read(prefix+'legal/'+row['path'])
    assert hashlib.sha256(data).hexdigest()==row['sha256']
    assert data==(root/'public'/row['path']).read_bytes()
+   verified+=1
   if source=='mobile/android':
    for file in ['app/src/main/AndroidManifest.xml','app/src/main/java/xyz/numinalabs/app/NuminaLauncherActivity.java','app/src/main/res/xml/legal_shortcuts.xml']:
     assert z.read(prefix+file)==(root/source/file).read_bytes()
   if source=='mobile/ios':
    for file in ['Numina/AppConfiguration.swift','Numina/ContentView.swift','Numina/HostedAppModel.swift','RELEASE-INPUTS.md']:
     assert z.read(prefix+file)==(root/source/file).read_bytes()
-print(json.dumps({'archives':len(archives),'exactCompanionSnapshots':40,'nativeLinkSourceMatches':True,'nativeCompilationEstablished':False}))
+print(json.dumps({'archives':len(archives),'exactCompanionSnapshots':verified,'nativeLinkSourceMatches':True,'nativeCompilationEstablished':False}))
 `],{cwd:root,encoding:'utf8'});
- assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).exactCompanionSnapshots,40);
+ assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).exactCompanionSnapshots,44);
  for(const file of ['verification.json','distribution.json','file-manifest.json']){
   const metadata=JSON.parse(read('integrations/numina/'+file));assert.equal(metadata.legal.recordRevision,NUMINA_LEGAL_DISCOVERY.recordRevision);assert.equal(metadata.legal.legalApproval,false);
  }

@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import {NUMINA_LEGAL_DISCOVERY} from '../src/legal-discovery.js';
 
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
-const snapshots=['legal-policy.json','compliance-coverage.json','country-readiness.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'];
+const snapshots=['legal-policy.json','compliance-coverage.json','country-readiness.json','iowa-entity-registry.json','software-licenses.json','THIRD-PARTY-NOTICES.txt','terms.html','privacy.html','software-licenses.html','LICENSE.md','NOTICE.md'];
 
 export function writeLegalCompanion(destination,publicRoot){
  fs.mkdirSync(destination,{recursive:true});
