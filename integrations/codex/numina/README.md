@@ -27,3 +27,7 @@ Procurement is disabled by default (`procurement_usage: false`, `automaticPurcha
 ## Shared denomination policy
 
 Read `denomination_policy` from the live `numina_architecture` or `numina_capabilities` response. Numina declares **1 NUSD = 1 USDC = 1 USD** across L1–L5 and the hosted application. This is one native balance with declared equivalent values; keep provider balances, asset identity and execution status as reported. A declaration does not establish external reserves or a completed conversion.
+
+## Terms, privacy, licenses and legal coverage
+
+Read [Terms](https://numinalabs.xyz/terms), [Privacy](https://numinalabs.xyz/privacy), [software licenses](https://numinalabs.xyz/software-licenses) and [global legal coverage](https://numinalabs.xyz/compliance). The public [coverage manifest](https://numinalabs.xyz/api/app/v1/legal-manifest) and [country inventory](https://numinalabs.xyz/api/app/v1/country-readiness) identify the shared review record. `legal/manifest.json` binds the included policy, coverage and notice snapshots by file hash. Countries and territories listed for intake are not approved deployments. These source companions do not establish native compilation, installation, privacy-flow review, marketplace acceptance or financial activation; the actual distributed binary and activity require their own evidence.

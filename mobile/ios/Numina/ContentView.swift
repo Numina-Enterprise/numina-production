@@ -48,6 +48,9 @@ struct ContentView: View {
                         Button("Reload", action: model.retry)
                         Button("Open in Browser", action: model.openBrowserWorkspace)
                         Button("System Status") { showingSystemStatus = true }
+                        Button("Terms") { model.load(AppConfiguration.termsURL) }
+                        Button("Software Licenses") { model.load(AppConfiguration.softwareLicensesURL) }
+                        Button("Legal & Global Coverage") { model.load(AppConfiguration.complianceURL) }
                         Button("Privacy") { model.load(AppConfiguration.privacyURL) }
                         Button("Support") { model.load(AppConfiguration.supportURL) }
                     } label: {

@@ -98,6 +98,19 @@
     "route": "/api/control/v2/state-reconciliation",
     "download": "/state-reconciliation.json"
   },
+  "legal": {
+    "manifest": "legal/manifest.json",
+    "schema": "numina.legal-companion.v1",
+    "identity": "NUMINA",
+    "recordRevision": "numina-global-2026-10-04",
+    "coverage": "https://numinalabs.xyz/compliance",
+    "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
+    "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+    "financialActivation": false,
+    "legalApproval": false,
+    "sourceCompanion": true,
+    "installedBinaryCoverageVerified": false
+  },
   "schema": "numina.integration.package.v2",
   "root": "NUMINA",
   "manifest": "NUMINA",
@@ -498,7 +511,7 @@
     "identity": "NUMINA",
     "canonical": true
   },
-  "packagedAtUtc": "2026-10-04T05:32:37.275Z",
+  "packagedAtUtc": "2026-10-04T05:52:10.180Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",

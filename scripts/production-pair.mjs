@@ -20,12 +20,30 @@ export function pairSourcePayload(value,path=[]){
   .map(key=>[key,pairSourcePayload(value[key],[...path,key])]));
 }
 export function pairSourceHash(value){return createHash('sha256').update(JSON.stringify(pairSourcePayload(value))).digest('hex');}
+export function verifyMaintainedHostedLegalOverlay(source,{maintainedSource}={}){
+ // The final manifests bind the original published source. Retain that evidence
+ // and allow only this public legal-directory overlay in maintained source.
+ assert.equal(source.path,'src/sites-mcp.js');
+ assert.equal(source.sha256,'abda6b22471aa17feb00c0d98b385f6a211cff3ee859e9a59fef79a4eeb5839d');
+ const before=readFileSync(root+'reference/settlement-metadata-bases/sites-mcp.js.txt','utf8');
+ assert.equal(createHash('sha256').update(before).digest('hex'),source.sha256,'Retained hosted plugin source pin');
+ const legalLink='<a href="https://numinalabs.xyz/compliance" target="_blank" rel="noopener noreferrer">Legal coverage<small>Terms, privacy, licenses and country review gates</small></a>';
+ const after="import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';\n"+before
+  .replace('</nav></body></html>',legalLink+'</nav></body></html>')
+  .replace("scope:'public_workspace_directory',externalExecution:false","scope:'public_workspace_directory',legal:NUMINA_LEGAL_DISCOVERY,externalExecution:false");
+ assert.equal(maintainedSource??readFileSync(root+source.path,'utf8'),after,'Only public legal discovery may overlay retained hosted MCP code');
+ return {historicalSourcePinPreserved:true,maintainedOverlay:'public_legal_directory_only',authorizationBytesPreserved:true};
+}
 export function verifyProductionPair(){
  const sources=paths.map(path=>({path,sha256:pairSourceHash(json(path))}));
  for(const path of [...paths,'public/current-environments.json']){
   const v=json(path),pair=v.universalPair;
   assert.equal(pair?.schema,'numina.universal-pair.production.v1');
-  if(v.hostedPlugin)for(const source of v.hostedPlugin.sourceInputs)assert.equal(createHash('sha256').update(readFileSync(root+source.path)).digest('hex'),source.sha256,'Hosted plugin source pin');
+  if(v.hostedPlugin)for(const source of v.hostedPlugin.sourceInputs){
+   const actual=createHash('sha256').update(readFileSync(root+source.path)).digest('hex');
+   if(actual===source.sha256)continue;
+   verifyMaintainedHostedLegalOverlay(source);
+  }
   assert.equal(pair.genesisHash,genesis);assert.equal(pair.bound,true);
   assert.deepEqual(pair.sources,sources);assert.equal(pair.bindingCount,4);
   assert.deepEqual(pair.bindings,sources.flatMap((source,index)=>['LIVE','FRONTIER_FINAL'].map(environment=>({sourceIndex:index+1,sourceId:source.sha256,derivedHashId:source.sha256,environment,artifacts:paths}))));

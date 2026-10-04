@@ -1,4 +1,17 @@
 {
+  "legal": {
+    "manifest": "legal/manifest.json",
+    "schema": "numina.legal-companion.v1",
+    "identity": "NUMINA",
+    "recordRevision": "numina-global-2026-10-04",
+    "coverage": "https://numinalabs.xyz/compliance",
+    "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
+    "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+    "financialActivation": false,
+    "legalApproval": false,
+    "sourceCompanion": true,
+    "installedBinaryCoverageVerified": false
+  },
   "stateReconciliation": {
     "schema": "numina.state-reconciliation.v1",
     "identity": "NUMINA",
@@ -1127,8 +1140,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 8605,
-      "sha256": "8a6e65d39b0f4e20906880b25593b702814bd0cfff15d8da2fe7b4b65b02d472"
+      "bytes": 9380,
+      "sha256": "af5f3792e22ff8e9b75cae7b1ad4fa438dc49e0bacc9afff06420ae5af9e2fbf"
     },
     {
       "path": "SECURITY.md",
@@ -1152,8 +1165,8 @@
     },
     {
       "path": "distribution.json",
-      "bytes": 58251,
-      "sha256": "ad263c990757507a01d45628ad28199a8e4a7a7873bc2dca6a2f98f40be7db7f"
+      "bytes": 58771,
+      "sha256": "4a27cd8a045b34b7fcad4886480fe0da55e35eb6ee4060e5059841f8d62fff68"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -1231,6 +1244,61 @@
       "sha256": "f56ce397ae38cc8c4ba6cda997dbc3498b753786046a3d17b134b4e5e97e0f9f"
     },
     {
+      "path": "legal/LICENSE.md",
+      "bytes": 1503,
+      "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
+    },
+    {
+      "path": "legal/NOTICE.md",
+      "bytes": 2515,
+      "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
+    },
+    {
+      "path": "legal/THIRD-PARTY-NOTICES.txt",
+      "bytes": 216665,
+      "sha256": "1a9bbd4a4b6ba950cd8dec747be4d98eb9058184996c6478ea252a7c434657a0"
+    },
+    {
+      "path": "legal/compliance-coverage.json",
+      "bytes": 56482,
+      "sha256": "8a07e5759aeaf266a055530bc8e44363123862ac57e2a7b59082f8b2f20f3b12"
+    },
+    {
+      "path": "legal/country-readiness.json",
+      "bytes": 169643,
+      "sha256": "5603e7ad51519d9cc1ddfe1d8424f4746ac7a834758234d472f642b5c210e1c8"
+    },
+    {
+      "path": "legal/legal-policy.json",
+      "bytes": 5992,
+      "sha256": "37337c19e73b3969cebca9ef5c4ba53ddcf446022b15e2209ef48fc7e8574f67"
+    },
+    {
+      "path": "legal/manifest.json",
+      "bytes": 2386,
+      "sha256": "3f8f7cff40c91eb66cbc3d0a7509025bfea085d6ddf75355cbaf145b5ee01011"
+    },
+    {
+      "path": "legal/privacy.html",
+      "bytes": 22627,
+      "sha256": "abf9999f86b02a0ee773146248f5b7cc605344832a09af39dc53c094023d2cf9"
+    },
+    {
+      "path": "legal/software-licenses.html",
+      "bytes": 10028,
+      "sha256": "9729238f37b4b93804d8b3bbbe6016445fe7c5a1d3a94fbaa7926fd6841a8355"
+    },
+    {
+      "path": "legal/software-licenses.json",
+      "bytes": 236570,
+      "sha256": "9c32d205d092e301bc127969652b97d5024e993def4406e55aa51ae3bdda0986"
+    },
+    {
+      "path": "legal/terms.html",
+      "bytes": 18479,
+      "sha256": "babb5716c7df87044a4a65d6be7ea2b06422abb73cd3c026d5b50bef559b1868"
+    },
+    {
       "path": "package.json",
       "bytes": 25972,
       "sha256": "28e2a43adb76038fabeb575e6b45eda7b1a7a0ef89522f2907c37e305038547a"
@@ -1296,9 +1364,14 @@
       "sha256": "b3c518b6123b3a04768fa11cd0b57f2a084d280959b3324bb61409f1797151d4"
     },
     {
+      "path": "scripts/legal-distribution.js",
+      "bytes": 2739,
+      "sha256": "98c3f4826b0fe6db4b0cd4e105d1b93895298dc630e79b629b88fb1d9c428a7f"
+    },
+    {
       "path": "scripts/package-distribution.js",
-      "bytes": 13097,
-      "sha256": "63f4143bde6420b6277135189aeee445a6c8444fb3a23909a52b1664ef7c23b0"
+      "bytes": 13406,
+      "sha256": "86cef18a520d1db14f4c8505914b2768c0a2585bccf465ff4e7fad234e86181f"
     },
     {
       "path": "src/client.js",
@@ -1307,13 +1380,18 @@
     },
     {
       "path": "src/index.d.ts",
-      "bytes": 3388,
-      "sha256": "e508c7b417df47877c563671ccd3c054d4511c1727f7e4b569e95522ef3d0a6e"
+      "bytes": 3871,
+      "sha256": "07bca4c927e2677fa44daef777ed2720d7f3f8ab261f3a2e5e87cb562a09eb30"
     },
     {
       "path": "src/index.js",
-      "bytes": 327,
-      "sha256": "116c6465975d3dc8045ec95f45fb2d911a732090ccaf00a4f14556acd9ebdcb8"
+      "bytes": 388,
+      "sha256": "045e23497cf7dacd307f936864adb1a537d1a7790dbbae82834f13f8be2a2b89"
+    },
+    {
+      "path": "src/legal-discovery.js",
+      "bytes": 705,
+      "sha256": "9fba52abb84ab3ef42d72493319b0a7b178284d97e1a67b214e97301f93f44a2"
     },
     {
       "path": "src/mcp.js",
@@ -1362,8 +1440,8 @@
     },
     {
       "path": "verification.json",
-      "bytes": 57546,
-      "sha256": "b9e192697ab9f0f2011cccc3527783e5aa0b4a61b3242945a4931059485fa8ba"
+      "bytes": 58066,
+      "sha256": "13f01ec371bce79a94f65a6c5dd7ca94cb0d8ea21f06da5313b671dabb271f2b"
     }
   ],
   "currentChainStateVerified": false,

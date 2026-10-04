@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="terms" android:shortcutShortLabel="@string/terms_shortcut" android:icon="@drawable/numina_icon">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="xyz.numinalabs.app" android:targetClass="xyz.numinalabs.app.NuminaLauncherActivity" android:data="https://numinalabs.xyz/terms" />
+    </shortcut>
+    <shortcut android:shortcutId="privacy" android:shortcutShortLabel="@string/privacy_shortcut" android:icon="@drawable/numina_icon">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="xyz.numinalabs.app" android:targetClass="xyz.numinalabs.app.NuminaLauncherActivity" android:data="https://numinalabs.xyz/privacy" />
+    </shortcut>
+    <shortcut android:shortcutId="coverage" android:shortcutShortLabel="@string/coverage_shortcut" android:icon="@drawable/numina_icon">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="xyz.numinalabs.app" android:targetClass="xyz.numinalabs.app.NuminaLauncherActivity" android:data="https://numinalabs.xyz/compliance" />
+    </shortcut>
+</shortcuts>

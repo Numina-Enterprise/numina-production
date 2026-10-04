@@ -1,0 +1,71 @@
+{
+  "schema": "numina.legal-companion.v1",
+  "identity": "NUMINA",
+  "applicationVersion": "4.0.0",
+  "recordRevision": "numina-global-2026-10-04",
+  "scope": "policy_and_coverage_evidence_not_operating_authorization",
+  "canonicalOrigin": "https://numinalabs.xyz",
+  "terms": "https://numinalabs.xyz/terms",
+  "privacy": "https://numinalabs.xyz/privacy",
+  "softwareLicenses": "https://numinalabs.xyz/software-licenses",
+  "coverage": "https://numinalabs.xyz/compliance",
+  "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
+  "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+  "financialActivation": false,
+  "globalLegalApproval": false,
+  "distributionScope": "maintained_source_companion_not_installed_binary",
+  "legalApproval": false,
+  "installedBinaryCoverageVerified": false,
+  "snapshots": [
+    {
+      "path": "legal-policy.json",
+      "bytes": 5992,
+      "sha256": "37337c19e73b3969cebca9ef5c4ba53ddcf446022b15e2209ef48fc7e8574f67"
+    },
+    {
+      "path": "compliance-coverage.json",
+      "bytes": 56482,
+      "sha256": "8a07e5759aeaf266a055530bc8e44363123862ac57e2a7b59082f8b2f20f3b12"
+    },
+    {
+      "path": "country-readiness.json",
+      "bytes": 169643,
+      "sha256": "5603e7ad51519d9cc1ddfe1d8424f4746ac7a834758234d472f642b5c210e1c8"
+    },
+    {
+      "path": "software-licenses.json",
+      "bytes": 236570,
+      "sha256": "9c32d205d092e301bc127969652b97d5024e993def4406e55aa51ae3bdda0986"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.txt",
+      "bytes": 216665,
+      "sha256": "1a9bbd4a4b6ba950cd8dec747be4d98eb9058184996c6478ea252a7c434657a0"
+    },
+    {
+      "path": "terms.html",
+      "bytes": 18479,
+      "sha256": "babb5716c7df87044a4a65d6be7ea2b06422abb73cd3c026d5b50bef559b1868"
+    },
+    {
+      "path": "privacy.html",
+      "bytes": 22627,
+      "sha256": "abf9999f86b02a0ee773146248f5b7cc605344832a09af39dc53c094023d2cf9"
+    },
+    {
+      "path": "software-licenses.html",
+      "bytes": 10028,
+      "sha256": "9729238f37b4b93804d8b3bbbe6016445fe7c5a1d3a94fbaa7926fd6841a8355"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 1503,
+      "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
+    },
+    {
+      "path": "NOTICE.md",
+      "bytes": 2515,
+      "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
+    }
+  ]
+}

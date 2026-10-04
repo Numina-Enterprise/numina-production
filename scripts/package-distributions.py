@@ -36,6 +36,7 @@ def package(source, name, prefix, paths):
                 raise RuntimeError('Archive source mismatch: '+name)
     return {'file':target.name,'bytes':target.stat().st_size,'sha256':sha(target.read_bytes())}
 
+subprocess.run(['node','scripts/package-legal-companions.mjs'],cwd=root,check=True)
 record = plugin = None
 if not options.native_only:
     subprocess.run(['node','integrations/numina/scripts/package-distribution.js'],cwd=root,check=True)

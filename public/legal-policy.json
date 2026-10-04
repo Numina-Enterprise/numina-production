@@ -63,19 +63,19 @@
   ],
   "primary_guidance": [
     {
-      "title": "European Commission \u2014 data-rights requests",
+      "title": "European Commission — data-rights requests",
       "url": "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/dealing-requests-individuals_en"
     },
     {
-      "title": "ICO \u2014 subject access (updated July 2026)",
+      "title": "ICO — subject access (updated July 2026)",
       "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/subject-access-requests/a-guide-to-subject-access/"
     },
     {
-      "title": "ICO \u2014 privacy complaints requirements (in force June 2026)",
+      "title": "ICO — privacy complaints requirements (in force June 2026)",
       "url": "https://ico.org.uk/for-organisations/how-to-deal-with-data-protection-complaints/"
     },
     {
-      "title": "FTC \u2014 Protecting personal information",
+      "title": "FTC — Protecting personal information",
       "url": "https://www.ftc.gov/business-guidance/resources/protecting-personal-information-guide-business"
     },
     {
@@ -83,23 +83,23 @@
       "url": "https://www.legis.iowa.gov/docs/code/2026/715D.pdf"
     },
     {
-      "title": "California Attorney General \u2014 CCPA",
+      "title": "California Attorney General — CCPA",
       "url": "https://oag.ca.gov/privacy/ccpa"
     },
     {
-      "title": "European Commission \u2014 GDPR principles",
+      "title": "European Commission — GDPR principles",
       "url": "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/principles-gdpr_en"
     },
     {
-      "title": "European Commission \u2014 GDPR application",
+      "title": "European Commission — GDPR application",
       "url": "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/application-gdpr_en"
     },
     {
-      "title": "European Commission \u2014 international transfers",
+      "title": "European Commission — international transfers",
       "url": "https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/rules-international-data-transfers_en"
     },
     {
-      "title": "Copyright Office \u2014 AI copyrightability report",
+      "title": "Copyright Office — AI copyrightability report",
       "url": "https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf"
     }
   ],
@@ -123,5 +123,10 @@
       "public/ownership.json"
     ],
     "financial_policy": "src/nusd-http.js existing operator policy, not edited"
-  }
+  },
+  "global_coverage_url": "/compliance",
+  "global_coverage_record": "/compliance-coverage.json",
+  "country_readiness_record": "/country-readiness.json",
+  "global_coverage_revision": "numina-global-2026-10-04",
+  "native_license_declarations": "software-licenses.json native_and_build_declarations; actual resolved native, binary, platform-account and live OS evidence remains separate."
 }

@@ -77,3 +77,7 @@ Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks c
 ## Procurement usage
 
 Procurement is disabled by default (`procurement_usage: false`, `automaticPurchasing: false`). The current policy at https://numinalabs.xyz/procurement-policy.js permits only a projection of explicit direct-partnership requests with matching owner or owner-delegated signed approval, budget reservation, and provider access. Completed usage requires an exact signed provider receipt. Historical statements and usage flags do not authorize purchases. The evaluator performs no execution; manual provider workflows must revalidate authority and claim budget atomically.
+
+## Terms, privacy, licenses and legal coverage
+
+Read [Terms](https://numinalabs.xyz/terms), [Privacy](https://numinalabs.xyz/privacy), [software licenses](https://numinalabs.xyz/software-licenses) and [global legal coverage](https://numinalabs.xyz/compliance). The public [coverage manifest](https://numinalabs.xyz/api/app/v1/legal-manifest) and [country inventory](https://numinalabs.xyz/api/app/v1/country-readiness) identify the shared review record. `legal/manifest.json` binds the included policy, coverage and notice snapshots by file hash. Countries and territories listed for intake are not approved deployments. These source companions do not establish native compilation, installation, privacy-flow review, marketplace acceptance or financial activation; the actual distributed binary and activity require their own evidence.
