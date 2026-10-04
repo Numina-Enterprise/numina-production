@@ -27,7 +27,6 @@ jobs:
     env:
       EXPECTED_SHA: ${{ github.sha }}
       EVIDENCE_RECORD: release-evidence/rc27-repair-${{ github.run_id }}-${{ github.run_attempt }}.json
-      EVIDENCE_DIR: ${{ runner.temp }}/rc27-repair-evidence
     steps:
       - name: Require approved hosted execution
         env:
@@ -36,7 +35,8 @@ jobs:
           [[ "$RUNNER_ENVIRONMENT" == 'github-hosted' ]]
           [[ "$RUNNER_OS" == 'Linux' && "$RUNNER_ARCH" == 'X64' ]]
           [[ "$GITHUB_REPOSITORY" == 'skott34-dot/numina-production' ]]
-          mkdir -p "$EVIDENCE_DIR"
+          mkdir -p "$RUNNER_TEMP/rc27-repair-evidence"
+          echo "EVIDENCE_DIR=$RUNNER_TEMP/rc27-repair-evidence" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
