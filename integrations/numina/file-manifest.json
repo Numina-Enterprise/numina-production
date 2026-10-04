@@ -1468,8 +1468,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 14314,
-      "sha256": "8543b60757d1272593646156f652669e8c16a693723f07d0123d1d994dec8aff"
+      "bytes": 14423,
+      "sha256": "8312c98bbf9a6700e4f2112085c123875499ac56b80fb49d4822adaee3ea02dc"
     },
     {
       "path": "src/client.js",
@@ -1539,7 +1539,7 @@
     {
       "path": "verification.json",
       "bytes": 61210,
-      "sha256": "7f43dbf7333df4a7c017e0d73651458ee1bcdaf6507e48bb92f16bb244ef8c53"
+      "sha256": "9948367c8d6b0348cd96879da32786232216345f0754f82a627f014883885195"
     }
   ],
   "currentChainStateVerified": false,

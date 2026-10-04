@@ -11,10 +11,12 @@ export const privateArtifactPaths=[
  'downloads/NUMINA-FINAL-MANIFEST.json','downloads/nusd/treasury-settlement-receipt.json',
  'downloads/numina-integration-kit-v4.0.0.zip','downloads/integration-manifest.json',
  'downloads/integration-kit-v4.0.0-record.json',
- 'downloads/Stripe-Deposit-Workflow.md','downloads/Numina-Metadata-Alignment-v4.md'
+ 'downloads/Stripe-Deposit-Workflow.md','downloads/Numina-Metadata-Alignment-v4.md',
+ // Retain the signed historical archive exactly; its nested source contains private provider bindings.
+ 'downloads/provenance/run-34717406980/numina-site-v2.0.0.tar.gz'
 ];
 export function privateArtifactRecords(){
- const records=Object.fromEntries(privateArtifactPaths.map(file=>['/'+file,{body:readFileSync('dist/client/'+file).toString('base64'),type:file.endsWith('.zip')?'application/zip':file.endsWith('.json')?'application/json':'text/markdown; charset=utf-8'}]));
+ const records=Object.fromEntries(privateArtifactPaths.map(file=>['/'+file,{body:readFileSync('dist/client/'+file).toString('base64'),type:file.endsWith('.tar.gz')?'application/gzip':file.endsWith('.zip')?'application/zip':file.endsWith('.json')?'application/json':'text/markdown; charset=utf-8'}]));
  records['/api/control/v1/private-assets/treasury-proof.js']={body:readFileSync('public/treasury-proof.js').toString('base64'),type:'text/javascript; charset=utf-8'};
  const preparation=readFileSync('public/treasury-preparation.js','utf8').replace("'./http-client.js'","'/http-client.js'").replace("'./treasury-adjustment.js'","'/treasury-adjustment.js'").replace("'./treasury-proof.js'","'/api/control/v1/private-assets/treasury-proof.js'");
  records['/api/control/v1/private-assets/treasury-preparation.js']={body:Buffer.from(preparation).toString('base64'),type:'text/javascript; charset=utf-8'};

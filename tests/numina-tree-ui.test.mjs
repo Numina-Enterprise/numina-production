@@ -1,3 +1,4 @@
+import {MANIFEST_ROUTES,alignedApplication} from '../public/manifest-surface.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -17,7 +18,7 @@ function harness(api){
  const elements=new Map(),events={},calls=[];
  const get=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
  let generation=0,controller=new AbortController();const scope={get generation(){return generation;},get signal(){return controller.signal;},isCurrent:g=>g===generation,reset(){generation++;controller.abort();controller=new AbortController();}};
- const context=vm.createContext({document:{getElementById:get,createElement:()=>new Element(),addEventListener:(name,handler)=>events[name]=handler},window:{addEventListener(){}},crypto:{randomUUID:()=>String(calls.length)},FormData:class{constructor(form){this.values={...form.values};}get(key){return this.values[key];}},createViewScope:()=>scope,requestJson:(path,options)=>{calls.push({path,options});return api(path,options);}});
+ const context=vm.createContext({MANIFEST_ROUTES,alignedApplication,document:{getElementById:get,createElement:()=>new Element(),addEventListener:(name,handler)=>events[name]=handler},window:{addEventListener(){}},crypto:{randomUUID:()=>String(calls.length)},FormData:class{constructor(form){this.values={...form.values};}get(key){return this.values[key];}},createViewScope:()=>scope,requestJson:(path,options)=>{calls.push({path,options});return api(path,options);}});
  vm.runInContext(source.replace(/^import .*;\n/gm,''),context);
  return {get,events,calls};
 }
@@ -30,7 +31,7 @@ test('owner access loss during state read cancels assignment and clears draft',a
 });
 test('stale public response cannot reopen private task reads after access loss',async()=>{
  const publicRead=deferred();const h=harness(()=>publicRead.promise);h.events['numina-owner-access-lost']();publicRead.resolve(publicTree);await tick();
- assert.equal(h.calls.length,1);assert.equal(h.get('tree-task-form').hidden,true);
+ assert.deepEqual(h.calls.map(call=>call.path).sort(),[MANIFEST_ROUTES.manifest,MANIFEST_ROUTES.release,'/api/control/v2/tree'].sort());assert.equal(h.calls.filter(call=>call.path.endsWith('/tasks')).length,0);assert.equal(h.get('tree-task-form').hidden,true);
 });
 test('submitted assignment preserves form values captured before awaiting revision',async()=>{
  const state=deferred();const h=harness(path=>path.endsWith('/state')?state.promise:Promise.resolve(path.endsWith('/tasks')?{tasks:[]}:publicTree));await tick();

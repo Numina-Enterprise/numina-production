@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION as model} from '../public/treasury-connection-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_RECORDED_TREASURY_VALUES,NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION as model} from '../public/treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {alignTreasuryAccounts,NUMINA_FUNDABLE_TARGETS} from '../src/treasury-alignment.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 const read=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
 
-test('website targets and owner API preserve the one live NUSD projection',()=>{
+test('website leaves current values unknown while owner API preserves the supplied NUSD projection',()=>{
   const projection={unit:'NUSD',balance:'500000000000000',transaction_requests:[]};
   const treasury={revision:142,head:'67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368',projection};
   const before=structuredClone(treasury),result=alignTreasuryAccounts(treasury,{accounts:[]});
@@ -18,9 +18,9 @@ test('website targets and owner API preserve the one live NUSD projection',()=>{
   assert.equal(model.aggregateModeledValue,null);
   assert.equal(model.softwareBalanceModel.bankUsd.current,null);
   assert.equal(model.softwareBalanceModel.stripeUsdc.available,null);
-  assert.equal(model.softwareBalanceModel.nativeNusd.current,projection.balance);
+  assert.equal(model.softwareBalanceModel.nativeNusd.current,null);
   assert.equal(model.softwareBalanceModel.nativeNusd.available,null);
-  assert.equal(model.softwareBalanceModel.aggregate.current,projection.balance);
+  assert.equal(model.softwareBalanceModel.aggregate.current,null);
   assert.equal(model.historicalAggregateModeledValue,'1500000000000000');
   assert.equal(result.canonicalTreasury.accounting.balanceCount,1);
   assert.equal(result.fundableTargets.externalBalancesAggregated,false);
@@ -32,13 +32,13 @@ test('website targets and owner API preserve the one live NUSD projection',()=>{
 
 test('current treasury metadata distinguishes journal balance from historical targets',()=>{
   const canonical=structuredClone(NUMINA_CANONICAL_TREASURY_VALUES);
-  assert.equal(canonical.status,'JOURNAL_SNAPSHOT');
+  assert.equal(canonical.status,'CURRENT_STATE_UNAVAILABLE');
   assert.equal(canonical.canonical,false);
   assert.equal(canonical.components.USD.current,null);
   assert.equal(canonical.components.USDC.available,null);
-  assert.equal(canonical.components.NUSD.current,'500000000000000');
+  assert.equal(canonical.components.NUSD.current,null);
   assert.equal(canonical.components.NUSD.available,null);
-  assert.equal(canonical.aggregate.current,'500000000000000');
+  assert.equal(canonical.aggregate.current,null);
   assert.equal(canonical.aggregate.modeledTarget,'1500000000000000');
   assert.equal(canonical.settlementStatus,'UNVERIFIED');
   assert.equal(canonical.settlementReceiptId,null);
@@ -50,11 +50,16 @@ test('current treasury metadata distinguishes journal balance from historical ta
   }
   for(const path of [
     'config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json','config/numina-architecture.json',
-    'public/final-build.json','docs/NUMINA-FINAL-BUILD.json','public/business-core.json','package.json'
+    'public/business-core.json','package.json'
   ]){
     assert.deepEqual(JSON.parse(read(path)).canonicalTreasuryValues,canonical,path);
   }
   assert.deepEqual(NUSD_CONTRACT_RECORD.canonicalTreasuryValues,canonical);
+  assert.deepEqual(canonical.observation,NUMINA_RECORDED_TREASURY_VALUES.observation);
+  assert.equal(NUMINA_RECORDED_TREASURY_VALUES.observation.projection.balance,'500000000000000');
+  assert.equal(NUMINA_RECORDED_TREASURY_VALUES.observation.snapshotIsLive,false);
+  for(const path of ['public/final-build.json','docs/NUMINA-FINAL-BUILD.json'])assert.deepEqual(JSON.parse(read(path)).canonicalTreasuryValues,NUMINA_RECORDED_TREASURY_VALUES,path);
+
 });
 
 test('current settlement summary binds the superseding validation without relabeling authorization as execution',()=>{

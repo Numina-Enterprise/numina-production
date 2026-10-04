@@ -24,6 +24,12 @@ const root=fileURLToPath(new URL('../',import.meta.url));process.chdir(root);
 assert.deepEqual(checkActiveProvenance({rootDir:root}).errors,[],'Active provenance source gate');
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const json=f=>JSON.parse(readFileSync(f,'utf8'));
+const buildClock=json('config/build-clock.json');
+assert.equal(buildClock.schema,'numina.reproducible-build-clock.v1');
+assert.ok(Number.isSafeInteger(buildClock.sourceDateEpoch)&&buildClock.sourceDateEpoch>=0);
+assert.equal(new Date(buildClock.sourceDateEpoch*1000).toISOString(),new Date(buildClock.timestamp).toISOString());
+assert.ok(process.env.SOURCE_DATE_EPOCH===undefined||process.env.SOURCE_DATE_EPOCH===String(buildClock.sourceDateEpoch),'Build clock must match the committed source epoch');
+process.env.SOURCE_DATE_EPOCH=String(buildClock.sourceDateEpoch);
 const baseline=json('reference/frontier-baseline-release.json');
 const activeProvenancePolicy=json('config/active-provenance-policy.v1.json');
 for(const file of ['config/numina-state-reconciliation.v1.json','public/state-reconciliation.json','runtime/vercel-production/state-reconciliation.json'])assert.deepEqual(json(file),NUMINA_STATE_RECONCILIATION,'State reconciliation mirror: '+file);
@@ -299,6 +305,14 @@ worker=worker.replace(depositHeaderBefore,depositHeaderAfter);
 substitutions.push({source:'treasury-deposit#verification-header',before:depositHeaderBefore,after:depositHeaderAfter});
 // Update the mutable NUSD status views without altering the adopted
 // redemption policy or its digest in the retained runtime.
+const evidenceRouteBefore="   if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));";
+const evidenceRouteAfter="   if(path===NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE)return finish(await existingTokenEvidenceHttp(req,env));\n"+evidenceRouteBefore;
+assert.equal(worker.split(evidenceRouteBefore).length,2,'Unique read-only evidence route boundary');
+worker=worker.replace(evidenceRouteBefore,evidenceRouteAfter);substitutions.push({source:'src/worker.js#existing-token-evidence',before:evidenceRouteBefore,after:evidenceRouteAfter});
+const evidenceModuleBefore='async function nusdHttp(req){';
+const evidenceModuleAfter=compile(readFileSync('src/nusd-existing-token-evidence.js','utf8'))+'\n'+evidenceModuleBefore;
+assert.equal(worker.split(evidenceModuleBefore).length,2,'Unique NUSD module boundary');
+worker=worker.replace(evidenceModuleBefore,evidenceModuleAfter);substitutions.push({source:'src/nusd-existing-token-evidence.js',before:evidenceModuleBefore,after:evidenceModuleAfter});
 const nusdSource=compile(readFileSync('src/nusd-http.js','utf8'));
 const nusdSections=[
  ['nusd-mint-workflow.js.txt','const constructorMintEvidence=','const NUSD_CONVERSION_WORKFLOW='],
@@ -458,6 +472,9 @@ const hashes=new Set();for(const name of presentation){const html=readFileSync('
 headers=headers.replace(/script-src ([^;]+)/,(_,tokens)=>'script-src '+[...new Set([...tokens.trim().split(/\s+/),...hashes])].join(' '));writeFileSync('dist/client/_headers',headers);writeFileSync('dist/client/_redirects',redirects+'\n');
 const sourceAlignment=json('dist/client/source-alignment.json');
 sourceAlignment.stateReconciliation=NUMINA_STATE_RECONCILIATION;
+sourceAlignment.buildClock=buildClock;
+sourceAlignment.security.sha256=hash(readFileSync('dist/client/downloads/Numina-Security.md'));
+sourceAlignment.security.surfacesSha256=hash(readFileSync('dist/client/security-surfaces.json'));
 sourceAlignment.procurement_usage=false;sourceAlignment.procurement=NUMINA_LAYERS.procurement;
 sourceAlignment.requiredArchitecture.procurement_usage=false;
 const currentInputs=new Set(['config/numina-state-reconciliation.v1.json','public/state-reconciliation.js','runtime/vercel-production/state-reconciliation.json',...overlays.map(x=>x[0]),...modules,'src/nusd-http.js','reference/settlement-metadata-bases/nusd-mint-workflow.js.txt','reference/settlement-metadata-bases/nusd-policy.js.txt','package.json','config/numina-architecture.json','config/numina-manifest.v2.json','config/treasury-aggregate-settlement-1500t.v1.json','integrations/numina/package.json','integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/src/treasury-proof.js','scripts/nusd-contract-record.mjs','scripts/build-frontier-settlement.mjs','scripts/apply-numina-manifest-metadata.mjs','scripts/write-settlement-validation.mjs','scripts/align-nusd-release-metadata.mjs','scripts/generate-metadata-alignment.mjs','scripts/release-manifest.mjs','runtime/vercel-production/lib/numina-manifest.js','runtime/vercel-production/lib/deployment-estimate.mjs','scripts/package-current-integration.py','integrations/numina/scripts/package-distribution.js']);
@@ -470,6 +487,7 @@ currentInputs.add(migrationJournalBase);
 currentInputs.add('src/control-http.js');
 for(const file of ['src/public-privacy.js','src/publication-http.js','scripts/public-asset-privacy.mjs','public/journal-summary.json'])currentInputs.add(file);
 for(const file of ['scripts/production-pair.mjs','reference/settlement-metadata-bases/sites-mcp.js.txt','src/connections-http.js','src/legal-coverage.js','public/legal-discovery.js','public/country-codes.js','scripts/package-distributions.py','scripts/package-legal-companions.mjs','integrations/numina/scripts/legal-distribution.js','integrations/numina/src/legal-discovery.js'])currentInputs.add(file);
+for(const file of ['config/build-clock.json','src/nusd-existing-token-evidence.js','scripts/package-ios-source.py'])currentInputs.add(file);
 currentInputs.add('src/app-core.js');
 currentInputs.add('src/app-http.js');
 currentInputs.add('runtime/nusd/development/local-chain.mjs');

@@ -6,8 +6,11 @@ test('primary host exposes the same model and protects owner records',async()=>{
   const value=await model.json();
   assert.equal(value.aggregateModeledValue,null);
   assert.equal(value.canonicalTreasuryValues.aggregate.modeledTarget,'1500000000000000');
-  assert.equal(value.canonicalTreasuryValues.status,'JOURNAL_SNAPSHOT');
+  assert.equal(value.canonicalTreasuryValues.status,'CURRENT_STATE_UNAVAILABLE');
   assert.equal(value.canonicalTreasuryValues.canonical,false);
+  assert.equal(value.canonicalTreasuryValues.aggregate.current,null);
+  assert.equal(value.canonicalTreasuryValues.currentState.current,null);
+  assert.equal(value.canonicalTreasuryValues.observation.snapshotIsLive,false);
   const env={NUMINA_CONTROL_OWNER:'owner'};
   for(const name of ['bank-route','submissions']){
     const req=new Request('https://numinalabs.xyz/api/treasury/v1/'+name);

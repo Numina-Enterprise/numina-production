@@ -25,7 +25,7 @@ test('restricted evidence and exact private verifier cannot bypass owner authent
   const response=await built.fetch(request(path,true),env);assert.equal(response.status,200,path);assert.equal(response.headers.get('CDN-Cache-Control'),'no-store');
  }
  const response=await built.fetch(request('/api/control/v1/private-assets/treasury-proof.js',true),env);assert.deepEqual(Buffer.from(await response.arrayBuffer()),read('public/treasury-proof.js'));
- for(const [route,file] of [['/final-build.json','public/final-build.json'],['/final-manifest.json','public/final-manifest.json'],['/downloads/numina-integration-kit-v4.0.0.zip','docs/numina-integration-kit-v4.0.0.zip']]){const response=await built.fetch(request(route,true),env);assert.equal(sha(Buffer.from(await response.arrayBuffer())),sha(read(file)));}
+ for(const [route,file] of [['/final-build.json','public/final-build.json'],['/final-manifest.json','public/final-manifest.json'],['/downloads/numina-integration-kit-v4.0.0.zip','docs/numina-integration-kit-v4.0.0.zip'],['/downloads/provenance/run-34717406980/numina-site-v2.0.0.tar.gz','docs/provenance/run-34717406980/numina-site-v2.0.0.tar.gz']]){const response=await built.fetch(request(route,true),env);assert.equal(sha(Buffer.from(await response.arrayBuffer())),sha(read(file)));}
  assert.equal((await built.fetch(request('/api/control/v1/journal?after=0'),env)).status,401);
 });
 
@@ -66,4 +66,21 @@ test('public preparation facade captures intent before loading, preserves drafts
  const client=context.create(),input={amount:'10'},pending=client.prepare(input);input.amount='999';gateResolve();
  assert.equal(await pending,draft);assert.equal(seen.amount,'10');await client.submit(draft);assert.equal(submitted,draft);
  allowed=false;await assert.rejects(client.submit(draft),error=>error.status===401);assert.equal(calls,3);
+});
+
+test('historical provenance TAR is independently pinned and private across canonical, encoded and range requests',async t=>{
+ const env=await fixture(t),route='/downloads/provenance/run-34717406980/numina-site-v2.0.0.tar.gz';
+ const original=read('docs/provenance/run-34717406980/numina-site-v2.0.0.tar.gz');
+ assert.equal(sha(original),'daa688cd91a3a792531ee09f56129dbb8412f3c4516bc6d0da3a6d748c4e13d9');
+ assert.equal(existsSync(new URL('../dist/client'+route,import.meta.url)),false);
+ for(const method of ['GET','HEAD']){
+  const response=await built.fetch(new Request('https://numina.test'+route,{method,headers:{Range:'bytes=0-63'}}),env);
+  assert.equal(response.status,401);assert.match(response.headers.get('Cache-Control'),/private.*no-store/);
+ }
+ const reviewer=await built.fetch(request(route,true),{...env,NUMINA_REVIEW_SESSION:true});assert.equal(reviewer.status,403);
+ const other=await built.fetch(new Request('https://numina.test'+route,{headers:{'oai-authenticated-user-id':'other','oai-authenticated-user-email':'other@example.test'}}),env);assert.equal(other.status,403);
+ for(const suffix of [route+'?download=1',route+'/',route.replace('provenance/','provenance%2F'),route.replace('numina-site','%6eumina-site')]){
+  const response=await built.fetch(request(suffix),env);assert.ok([401,404].includes(response.status),suffix+' '+response.status);assert.notEqual(sha(Buffer.from(await response.arrayBuffer())),sha(original));
+ }
+ const response=await built.fetch(request(route,true),env);assert.equal(response.status,200);assert.equal(response.headers.get('Content-Type'),'application/gzip');assert.match(response.headers.get('Cache-Control'),/private.*no-store/);assert.equal(response.headers.get('CDN-Cache-Control'),'no-store');assert.deepEqual(Buffer.from(await response.arrayBuffer()),original);
 });

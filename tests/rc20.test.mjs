@@ -119,7 +119,7 @@ test('packaged homepage links current runtime verification and preserves the con
   const build=readFileSync(new URL('../dist/client/build.html',import.meta.url),'utf8');
   assert.match(build,/runtime-release-ui[.]js/);
 
-  assert.match(build,/data-conformance>Checking…/);
+  assert.match(build,/data-conformance>Not checked/);
 
   assert.match(home,/href="\/control"/);
 

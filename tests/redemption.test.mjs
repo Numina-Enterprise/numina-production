@@ -80,7 +80,7 @@ test('versioned endpoint selects exact records and rejects unknown policy identi
 test('published copy separates effective operator terms from unavailable redemption',()=>{
  const page=readFileSync(new URL('../public/redemption.html',import.meta.url),'utf8');
  const economy=readFileSync(new URL('../public/economy.html',import.meta.url),'utf8');
- for(const text of ['Effective operator terms · redemption not active.',NUSD_REDEMPTION_POLICY.policy_id,NUSD_REDEMPTION_POLICY.effective_at,NUSD_REDEMPTION_POLICY.terms_digest.value])assert.ok(page.includes(text),text);
+ for(const text of ['Recorded NUSD issuance · current redemption availability unconfirmed.',NUSD_REDEMPTION_POLICY.policy_id,NUSD_REDEMPTION_POLICY.effective_at,NUSD_REDEMPTION_POLICY.terms_digest.value])assert.ok(page.includes(text),text);
  assert.ok(page.includes('No holder agreement or acceptance is established by this policy adoption.'));
  assert.ok(economy.includes('This policy adoption does not activate holder agreements or redemption'));
  assert.doesNotMatch(page,/Proposed terms|HOLDER TERMS \/ PROPOSED|under the proposed terms/);

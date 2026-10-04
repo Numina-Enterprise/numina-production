@@ -189,7 +189,7 @@ test('reconciliation preserves each captured provider status without aggregating
   assert.equal(r.nativeSettlement.currentJournalProjection.revision,4);
   assert.equal(r.nativeSettlement.historicalReceipt.id,'numina:treasury:settlement:2026-09-19:v1');
   assert.equal(r.nativeSettlement.historicalReceipt.currentJournalConfirmed,false);
-  assert.equal(r.nativeSettlement.canonicalTreasuryValues.aggregate.current,'500000000000000');
+  assert.equal(r.nativeSettlement.canonicalTreasuryValues.aggregate.current,null);
   r.records.stripe.currencies.usdc.balances.available.verification.status='CHANGED';
   assert.equal(payload.records.providerBalances.currencies.usdc.balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
   assert.deepEqual(payload.source.providerObservation,input.providerObservation);

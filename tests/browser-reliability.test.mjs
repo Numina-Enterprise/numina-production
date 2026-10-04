@@ -158,3 +158,16 @@ test('static Numina workspace entries reuse the session before reading private A
   try{await settled();assert.deepEqual(h.redirects,['https://personal-space-m7q9.skott34.chatgpt.site/'+(kind==='app'?'app?service=audit#service-work':'control#native-treasury-panel')]);assert.equal(calls,0);}finally{h.close();}
  }
 });
+
+
+test('anonymous entry invites sign-in without implying an expired session and scopes service health',async()=>{
+ const h=harness('app',appFetch(path=>path.endsWith('/session')?response({error:'SIGN_IN_REQUIRED'},401):null));
+ try{await settled();assert.equal(h.get('app-notice').textContent,'Sign in to load your requests.');assert.equal(h.get('app-health').textContent,'Service requests available');assert.equal(h.get('request-fields').disabled,true);assert.equal(h.get('checkout-button').hidden,true);}finally{h.close();}
+ const html=readFileSync(new URL('../public/app.html',import.meta.url),'utf8');
+ assert.match(html,/<span id="app-health" role="status" aria-live="polite" aria-atomic="true">/);
+});
+
+test('previously authenticated sessions retain a specific expiration notice after access loss',async()=>{
+ let expired=false;const h=harness('app',appFetch(path=>expired&&path.includes('/orders?')?response({error:'SIGN_IN_REQUIRED'},401):null));
+ try{await settled();assert.ok(h.subject.session);expired=true;await assert.rejects(h.subject.loadOrders());assert.equal(h.get('app-notice').textContent,'Your session expired. Sign in again to load your current records.');assert.equal(h.subject.session,null);}finally{h.close();}
+});
