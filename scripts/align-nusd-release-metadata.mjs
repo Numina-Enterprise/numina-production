@@ -51,6 +51,7 @@ export function alignNusdReleaseMetadata(record){
     Object.assign(record.native_treasury_alignment,{
       status:'CURRENT_STATE_UNAVAILABLE',verificationScope:'AUTHENTICATED_CURRENT_RECORD_REQUIRED',currentState:structuredClone(values.currentState),
       historicalJournalObservation:structuredClone(values.observation),
+      targetAmount:null,historicalTargetAmount:values.observation.projection.balance,
       aggregation:native.aggregation,modeledAllocationsAdditive:false,
       aggregateModeledValue:null,historicalAggregateModeledValue:native.historicalAggregateModeledValue,
       settlementStatus:values.settlementStatus,mintStatus:values.mintStatus,
