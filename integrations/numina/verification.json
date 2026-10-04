@@ -106,6 +106,7 @@
     "coverage": "https://numinalabs.xyz/compliance",
     "coverageManifest": "https://numinalabs.xyz/api/app/v1/legal-manifest",
     "countryReadiness": "https://numinalabs.xyz/api/app/v1/country-readiness",
+    "charitableRelationship": "https://numinalabs.xyz/charitable-relationship.json",
     "financialActivation": false,
     "legalApproval": false,
     "sourceCompanion": true,
@@ -511,7 +512,7 @@
     "identity": "NUMINA",
     "canonical": true
   },
-  "packagedAtUtc": "2026-10-04T06:12:16.334Z",
+  "packagedAtUtc": "2026-10-04T06:24:30.511Z",
   "package": {
     "name": "@numina/nusd-integration",
     "version": "4.0.0",

@@ -1,0 +1,70 @@
+{
+  "schema": "numina.charitable-relationship.v1",
+  "identity": "NUMINA",
+  "application_version": "4.0.0",
+  "record_revision": "numina-charitable-relationship-2026-10-04",
+  "policy_revision": "numina-workspace-2026-10-04",
+  "coverage_revision": "numina-global-2026-10-04",
+  "reviewed_on": "2026-10-04",
+  "operational_context": "LIVE_OPERATION_RECONCILIATION",
+  "relationship_status": "LIVE_DAF_OWNER_CONFIRMED_PUBLIC_PROFILE_AND_OPERATING_STATEMENT_VERIFIED",
+  "commercial_operator": {
+    "legal_name": "SK CONSULTING LLC",
+    "jurisdiction": "Iowa, United States",
+    "role": "Owner-designated Numina commercial software and services operator, distinct from the Foundation and its component fund"
+  },
+  "charitable_component": {
+    "owner_preferred_display_name": "Kott Family Fund for Emerging Technology and STEM in Education",
+    "formal_foundation_profile_name": "Kott Family Fund for STEM & Emerging Technology in Education in Honor of Gary D. Jewel",
+    "name_scope": "The preferred display name is an alias. No legal or Foundation fund rename has been performed.",
+    "administrator": "Community Foundation of the Fox River Valley",
+    "structure": "Foundation component donor-advised fund",
+    "established_year_on_official_profile": 2025,
+    "founder_and_fund_advisor_on_official_profile": "Samuel (Sam) J. Kott",
+    "mission_scope": "Educational access and enrichment through STEM, emerging technology, artificial intelligence and digital education, with the official profile identifying West Aurora Schools and related education programs",
+    "asset_and_distribution_control": "The Foundation controls charitable assets and distribution decisions; fund-advisor recommendations are advisory."
+  },
+  "giving": {
+    "official_profile_url": "https://www.cffrv.org/profile/kott-family-fund-for-stem-emerging-technology-in-education-in-honor-of-gary-d-jewel/",
+    "official_foundation_give_now_url": "https://cffrv.fcsuite.com/erp/donate/create/fund?funit_id=6517",
+    "payment_recipient_and_processor_scope": "Gifts use the Foundation's external giving process and its applicable terms, privacy and acknowledgments.",
+    "numina_commercial_checkout_accepts_charitable_gifts": false,
+    "commercial_services_separate": true,
+    "tax_acknowledgment_issuer": "Foundation, through its applicable donor-services process; no Numina tax receipt is promised",
+    "automatic_venture_revenue_pledge_or_percentage": false
+  },
+  "public_relationship_text": "Charity is a connective purpose of Numina's work in STEM and emerging technology in education. Sam Kott advises the existing Kott Family Fund at the Community Foundation of the Fox River Valley. Charitable contributions go directly to the Foundation through its official fund giving page; the Foundation controls fund assets and distribution decisions. Numina's commercial services and payments remain separate.",
+  "evidence": [
+    {
+      "kind": "OFFICIAL_FOUNDATION_PUBLIC_PROFILE",
+      "url": "https://www.cffrv.org/profile/kott-family-fund-for-stem-emerging-technology-in-education-in-honor-of-gary-d-jewel/",
+      "observed_on": "2026-10-04",
+      "scope": "Formal fund name, establishment year, Sam Kott founder/advisor, educational purpose and official Give Now route"
+    },
+    {
+      "kind": "ORIGINAL_PROVIDER_OPERATING_STATEMENT_REVIEWED",
+      "statement_period": "2026-08-01 to 2026-08-31",
+      "provider_message_date": "2026-09-14",
+      "scope": "Original named-fund statement visually verified; private statement amounts, advisors and account details are excluded"
+    },
+    {
+      "kind": "OWNER_CONFIRMATION",
+      "observed_on": "2026-10-04",
+      "scope": "Live verified DAF and preferred display name; charity remains a major connective component of Numina's venture purpose"
+    }
+  ],
+  "primary_guidance": [
+    "https://www.irs.gov/charities-non-profits/charitable-organizations/donor-advised-funds",
+    "https://www.cffrv.org/fund-advisor-faqs/"
+  ],
+  "scope_limits": {
+    "numina_or_llc_tax_exempt_status_inferred": false,
+    "foundation_owns_numina_or_affiliate_agreement_inferred": false,
+    "foundation_endorses_numina_services_inferred": false,
+    "numina_controls_foundation_assets": false,
+    "executed_related_party_grant_or_service_agreement_inferred": false,
+    "fundraising_or_country_clearance_inferred": false,
+    "donation_deductibility_for_every_donor_inferred": false,
+    "new_entity_filing_rename_signature_or_fund_movement_performed": false
+  }
+}
