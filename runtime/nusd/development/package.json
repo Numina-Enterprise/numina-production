@@ -4,14 +4,16 @@
   "private": true,
   "license": "BSD-3-Clause",
   "type": "module",
-  "engines": { "node": "24.x" },
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "compile": "node compile.mjs",
     "test": "node --test ../../../tests/nusd-contract*.mjs ../../../tests/nusd-conversion.test.mjs"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "5.4.0",
-    "ethers": "6.15.0",
+    "ethers": "6.17.0",
     "ganache": "7.9.2",
     "solc": "0.8.37"
   }
