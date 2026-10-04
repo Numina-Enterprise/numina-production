@@ -103,11 +103,18 @@ const overlays=[
  ['public/build.html','client/build.html'],
  ['public/platform.html','client/platform.html'],
  ['public/privacy.html','client/privacy.html'],
+ ['public/terms.html','client/terms.html'],
+ ['public/software-licenses.html','client/software-licenses.html'],
+ ['public/software-licenses.json','client/software-licenses.json'],
+ ['public/THIRD-PARTY-NOTICES.txt','client/THIRD-PARTY-NOTICES.txt'],
+ ['public/legal-policy.json','client/legal-policy.json'],
  ['public/authority.html','client/authority.html'],
  ['public/financial-institutions.html','client/financial-institutions.html'],
  ['public/core.html','client/core.html'],
  ['public/numina4-pages.css','client/numina4-pages.css'],
  ['public/app.html','client/app.html'],
+ ['public/app-entry.js','client/app-entry.js'],
+ ['public/app-ui.js','client/app-ui.js'],
  ['public/motion.css','client/motion.css'],
  ['public/numina4-ui.js','client/numina4-ui.js'],
  ['public/numina4-core.webp','client/numina4-core.webp'],
@@ -307,6 +314,31 @@ const treeBranchEnd=treeReducer.indexOf("  }else if(command.type==='frontier.pri
 assert.ok(treeBranchStart>=0&&treeBranchEnd>treeBranchStart,'Structured room reducer boundaries');
 treeEdits.push(["  if(command.type==='frontier.principal'){",treeReducer.slice(treeBranchStart,treeBranchEnd)+"  }else if(command.type==='frontier.principal'){"]);
 for(const [before,after] of treeEdits){assert.equal(worker.split(before).length,2,'Unique tree insertion: '+before);worker=worker.replace(before,after);substitutions.push({source:'numina-tree#runtime',before,after});}
+// New workspace policy acceptance is request-bound. Cached privacy-only clients
+// cannot be stamped as accepting newly introduced Terms; old rows remain intact.
+const legalCore=compile(readFileSync('src/app-core.js','utf8'));
+const legalDeclarations=['APP_CONSENT_VERSION','APP_LEGAL_POLICY'].map(name=>{
+  const declaration=legalCore.match(new RegExp('^const '+name+'=[^\\r\\n]+','m'))?.[0];
+  assert.ok(declaration,'Workspace policy declaration: '+name);return declaration;
+}).join('\n')+'\n';
+const appVersionBefore="const APP_VERSION='4.0.0';";
+const appVersionAfter=legalDeclarations+appVersionBefore;
+assert.equal(worker.split(appVersionBefore).length,2,'Unique application version declaration');
+worker=worker.replace(appVersionBefore,appVersionAfter);substitutions.push({source:'workspace-policy#declarations',before:appVersionBefore,after:appVersionAfter});
+const intakeStart=worker.indexOf('function appIntake(input){'),intakeEnd=worker.indexOf('function appPaymentSummary(',intakeStart);
+const newIntakeStart=legalCore.indexOf('function appIntake(input){'),newIntakeEnd=legalCore.indexOf('function appPaymentSummary(',newIntakeStart);
+assert.ok(intakeStart>=0&&intakeEnd>intakeStart&&newIntakeStart>=0&&newIntakeEnd>newIntakeStart,'Workspace intake policy boundaries');
+const intakeBefore=worker.slice(intakeStart,intakeEnd),intakeAfter=legalCore.slice(newIntakeStart,newIntakeEnd);
+assert.equal(worker.split(intakeBefore).length,2,'Unique workspace intake policy');
+worker=worker.replace(intakeBefore,intakeAfter);substitutions.push({source:'workspace-policy#intake',before:intakeBefore,after:intakeAfter});
+for(const [before,after]of [
+ ["return appResponse({denomination_policy:NUMINA_LAYERS.denomination_policy","return appResponse({legalPolicy:APP_LEGAL_POLICY,denomination_policy:NUMINA_LAYERS.denomination_policy"],
+ ["payloadHash,APP_VERSION,actor.id)","payloadHash,body.consentVersion,actor.id)"]
+]){assert.equal(worker.split(before).length,2,'Unique workspace acceptance insertion');worker=worker.replace(before,after);substitutions.push({source:'workspace-policy#acceptance',before,after});}
+const legalRouteBefore="if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path))";
+const legalRouteAfter="const legalPages={'/terms':'/terms.html','/terms/':'/terms.html','/privacy':'/privacy.html','/privacy/':'/privacy.html','/software-licenses':'/software-licenses.html','/software-licenses/':'/software-licenses.html'};\n   if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));\n   "+legalRouteBefore;
+assert.equal(worker.split(legalRouteBefore).length,2,'Unique maintained legal-page routing boundary');
+worker=worker.replace(legalRouteBefore,legalRouteAfter);substitutions.push({source:'workspace-policy#legal-routes',before:legalRouteBefore,after:legalRouteAfter});
 // Correct the retained policy address literal outside the metadata modules.
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
@@ -348,6 +380,10 @@ currentInputs.add('src/frontier.js');
 for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
 currentInputs.add(migrationJournalBase);
 currentInputs.add('src/control-http.js');
+currentInputs.add('src/app-core.js');
+currentInputs.add('src/app-http.js');
+currentInputs.add('runtime/nusd/development/local-chain.mjs');
+currentInputs.add('runtime/nusd/development/README.md');
 const captured=new Map(sourceAlignment.sourceInputs.map(x=>[x.path,x]));
 const currentIosInputs=iosInputSnapshot(root);
 for(const file of [...softwareReleaseInputs,'scripts/check-software-release.mjs',...currentIosInputs.inputs.map(x=>x.path)])currentInputs.add(file);

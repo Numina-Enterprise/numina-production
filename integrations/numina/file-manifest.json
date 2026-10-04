@@ -1363,7 +1363,7 @@
     {
       "path": "verification.json",
       "bytes": 57546,
-      "sha256": "2f219bc349bac5fca07025eebdb20c3d186058d6120c937986fb89e87003d5f0"
+      "sha256": "b9e192697ab9f0f2011cccc3527783e5aa0b4a61b3242945a4931059485fa8ba"
     }
   ],
   "currentChainStateVerified": false,

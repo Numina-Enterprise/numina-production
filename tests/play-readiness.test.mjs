@@ -89,7 +89,7 @@ test('public deletion request path works without account or storage and keeps se
     NUMINA_TELEMETRY_LOGS:'false',
     get DB(){throw Error('Deletion instructions must not require account storage');},
     ASSETS:{fetch(req){
-      assert.equal(new URL(req.url).pathname,'/privacy');
+      assert.equal(new URL(req.url).pathname,'/privacy.html');
       return new Response(readFileSync(resolve(root,'public/privacy.html')),{headers:{'Content-Type':'text/html'}});
     }}
   });

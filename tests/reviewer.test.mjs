@@ -1,3 +1,4 @@
+import {APP_CONSENT_VERSION} from '../src/app-core.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -8,7 +9,7 @@ import {bootstrapControl,readControl} from '../src/control-store.js';
 import {reviewerHttp,reviewerContext,REVIEW_USER,REVIEW_SUBJECT,REVIEW_EMAIL} from '../src/reviewer.js';
 const origin='https://numina.test',password='fixture-only-review-password-not-used-in-production',now=1900000000;
 function request(path,{cookie,body,method=body?'POST':'GET',headers={}}={}){return new Request(origin+path,{method,headers:{Origin:origin,...(body?{'Content-Type':'application/json'}:{}),...(cookie?{Cookie:cookie}:{}),...headers},...(body?{body:JSON.stringify(body)}:{})});}
-const intake=()=>({idempotencyKey:crypto.randomUUID(),service:'diagnostic_enterprise',title:'Reviewer access verification',brief:'A test request to verify the production customer workflow without buying a service.',successCriteria:'Create, read, reach checkout and cancel this account-owned request.',country:'US',consent:true});
+const intake=()=>({idempotencyKey:crypto.randomUUID(),service:'diagnostic_enterprise',title:'Reviewer access verification',brief:'A test request to verify the production customer workflow without buying a service.',successCriteria:'Create, read, reach checkout and cancel this account-owned request.',country:'US',consent:true,consentVersion:APP_CONSENT_VERSION});
 async function fixture(t){
  const db=database();t.after(()=>db.close());
  for(const file of ['0001_useful_black_crow','0002_chief_rachel_grey','0003_google_play_reviewer']){
