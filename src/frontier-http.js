@@ -100,7 +100,7 @@ async function frontierDiscovery(req,env){
   if(msg.params.name==='numina_connections')data=await readConnectionManifest(req,env);
   else if(msg.params.name==='numina_architecture')data=NUMINA_LAYERS;
   else if(msg.params.name==='numina_capabilities')data={denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,legal:NUMINA_LEGAL_DISCOVERY,externalExecution:false,privateControl:'/api/control/v2/mcp',treasury:'/api/control/v1/treasury'};
-  else {const row=await readControl(env.DB);data={schema:'numina.public-head.v1',revision:row.revision,head:row.head_hash,manifestHash:row.state_hash,journalContinuity:row.eventCount===row.revision+1,scope:'internal journal',financialVerification:false};}
+  else {const row=await readControl(env.DB);data={schema:'numina.public-head.v1',revision:row.revision,head:row.head_hash,manifestHash:row.manifest_hash,journalContinuity:row.eventCount===row.revision+1,scope:'internal journal',financialVerification:false};}
   return result({content:[{type:'text',text:JSON.stringify(data)}],isError:false});
 }
 export async function frontierHttp(req,env){
@@ -117,7 +117,7 @@ export async function frontierHttp(req,env){
     if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
     if(path==='/api/control/v2/head'&&req.method==='GET'){
       const row=await readControl(env.DB);
-      return frontierResponse({schema:'numina.public-head.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',rootHash:await controlHash('NUMINA'),revision:row.revision,head:row.head_hash,manifestHash:row.state_hash,eventCount:row.eventCount,journalContinuity:row.eventCount===row.revision+1,scope:'Numina canonical internal journal',blockchainConnection:'/v2/network/status',blockchainAnchorVerified:false});
+      return frontierResponse({schema:'numina.public-head.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',rootHash:await controlHash('NUMINA'),revision:row.revision,head:row.head_hash,manifestHash:row.manifest_hash,eventCount:row.eventCount,journalContinuity:row.eventCount===row.revision+1,scope:'Numina canonical internal journal',blockchainConnection:'/v2/network/status',blockchainAnchorVerified:false});
     }
     if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
       const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);

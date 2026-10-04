@@ -9,7 +9,7 @@ export const TREASURY_PROVIDER_ROUTES='/api/control/v2/treasury/provider-routes'
 // verify reserves, submit funds, or turn a native receipt into provider evidence.
 const NATIVE_USDC_MODEL=Object.freeze({
   identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,
-  metadataAuthority:'NUMINA',nativeEvidenceStatus:'JOURNAL_SNAPSHOT',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
+  metadataAuthority:'NUMINA',nativeEvidenceStatus:'CURRENT_STATE_UNAVAILABLE',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',
   sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',canonicalSource:'NUMINA',squareRoot:'NUMINA',updateDirection:'NUMINA_NATIVE_TREASURY_JOURNAL_TO_CURRENT_VIEWS',singular:NUMINA_NATIVE_TREASURY_SYNC.singular,canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,
   treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,
   holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,

@@ -4,9 +4,8 @@
   "identity": "NUMINA",
   "mechanics": {
     "repository": {
-      "full_name": "skott34-dot/numina-production",
-      "branch": "main",
-      "count": 1
+      "identity": "NUMINA",
+      "source": "/NUMINA"
     },
     "artifact": {
       "build_id": "49b4f3e5e454bac7492073c22562ebd2b2b0bc805eca111525895e33cb3fa715",
@@ -39,8 +38,8 @@
     "build_model": {
       "identity": "NUMINA",
       "singular": true,
-      "canonical_source": "github",
-      "canonical_repository": "skott34-dot/numina-production",
+      "canonical_source": "NUMINA",
+      "canonical_repository": "NUMINA",
       "canonical_branch": "main",
       "all_builds_are_numina": true,
       "non_numina_builds_allowed": false,
@@ -86,7 +85,7 @@
     "schema": "numina.canonical-treasury-values.v1",
     "identity": "NUMINA",
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "status": "JOURNAL_SNAPSHOT",
+    "status": "CURRENT_STATE_UNAVAILABLE",
     "canonical": false,
     "singular": true,
     "observation": {
@@ -256,10 +255,11 @@
         "modeledTarget": "500000000000000"
       },
       "NUSD": {
-        "current": "500000000000000",
+        "current": null,
         "available": null,
         "unit": "NUSD",
-        "observationRevision": 142
+        "observationRevision": 142,
+        "modeledTarget": "500000000000000"
       }
     },
     "componentLocations": {
@@ -282,13 +282,13 @@
       }
     },
     "aggregate": {
-      "current": "500000000000000",
+      "current": null,
       "unit": "NUSD",
-      "scope": "JOURNAL_PROJECTION",
+      "scope": "CURRENT_STATE_UNAVAILABLE",
       "observationRevision": 142,
       "modeledTarget": "1500000000000000"
     },
-    "mintStatus": "PREPARED_IN_JOURNAL",
+    "mintStatus": "UNVERIFIED",
     "mintedNusd": null,
     "burnedNusd": null,
     "mintReceipt": null,
@@ -406,7 +406,21 @@
     "providerObservationsCanonical": false,
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
-    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS",
+    "currentState": {
+      "status": "UNAVAILABLE",
+      "current": null,
+      "snapshotIsLive": false,
+      "reason": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "historicalObservationDate": "2026-09-25",
+      "historicalObservationRevision": 142
+    },
+    "historicalMintStatus": "PREPARED_IN_JOURNAL",
+    "historicalJournalProjection": {
+      "balance": "500000000000000",
+      "unit": "NUSD"
+    }
   },
   "treasuryJournalObservation": {
     "schema": "numina.treasury.journal-observation.v1",

@@ -3,12 +3,14 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash,webcrypto} from 'node:crypto';
 import vm from 'node:vm';
-import {createRuntimeReleaseUI,RUNTIME_ENDPOINTS} from '../public/runtime-release-ui.js';
+import {createRuntimeReleaseUI,createManifestReleaseUI,RUNTIME_ENDPOINTS} from '../public/runtime-release-ui.js';
+import {MANIFEST_ROUTES,alignedApplication} from '../public/manifest-surface.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 
 const read=path=>readFileSync(new URL('../'+path,import.meta.url));
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
-const application={schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64)};
+const application={identity:'NUMINA',manifest:'NUMINA',singular:true,release_channel:'production',frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}},runtime_dependency:{identity:'NUMINA',singular:true,version:'1.9.0-rc26',release:'core-v1.8+prod-v1.9.0-rc26'},schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64)};
+const canonical={schema:'numina.manifest.v2',singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:application.build_id},runtime:application.runtime_dependency}};
 const applicationBytes=JSON.stringify(application,null,3)+'\n';
 const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;});return {promise,resolve};};
 const tick=()=>new Promise(resolve=>setTimeout(resolve,10));
@@ -31,10 +33,10 @@ function dom(){
 }
 function applicationUI(view,fetcher,{crypto=webcrypto,timeoutMs=12000}={}){
   const blobs=[],revoked=[];
-  const context=vm.createContext({document:view.document,window:view.window,fetch:fetcher,crypto,TextDecoder,Uint8Array,AbortController,Blob,navigator:{},
+  const context=vm.createContext({document:view.document,window:view.window,fetch:(path,options)=>path===MANIFEST_ROUTES.manifest?Promise.resolve(Response.json(canonical)):fetcher(path,options),MANIFEST_ROUTES,alignedApplication,crypto,TextDecoder,Uint8Array,AbortController,Blob,navigator:{},
     URL:{createObjectURL(blob){blobs.push(blob);return 'blob:test-'+blobs.length;},revokeObjectURL(url){revoked.push(url);}},
     setTimeout(fn){return setTimeout(fn,timeoutMs);},clearTimeout});
-  const script=read('public/application-release-ui.js').toString().replace(/^export /gm,'');
+  const script=read('public/application-release-ui.js').toString().replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
   vm.runInContext(script.replace(/void refreshApplicationRelease\(\);\s*$/,'globalThis.applicationUI={refresh:refreshApplicationRelease,ready:refreshApplicationRelease()};'),context);
   return {...context.applicationUI,blobs,revoked};
 }
@@ -49,12 +51,12 @@ test('received application inventory and a failed runtime endpoint have distinct
   view.node('[data-network-connection]').textContent='Application node connected when checked';
   const fetcher=async(path,options)=>{
     calls.push(path);assert.equal(options.credentials,'omit');assert.equal(options.cache,'no-store');assert.equal(options.redirect,'error');
-    return path==='/v4/release/manifest'?new Response(applicationBytes):new Response('',{status:503});
+    return path===MANIFEST_ROUTES.inventory?new Response(applicationBytes):new Response('',{status:503});
   };
   const app=applicationUI(view,fetcher),runtime=runtimeUI(view,fetcher);
   try{
     await Promise.all([app.ready,runtime.refresh()]);
-    assert.equal(view.text('[data-application-state]'),'Application release 4.0.0 manifest received · fingerprint calculated');
+    assert.equal(view.text('[data-application-state]'),'Application release 4.0.0 matches the canonical manifest · fingerprint calculated');
     assert.equal(view.text('[data-application-manifest-sha]'),digest(applicationBytes));
     assert.equal(await app.blobs[0].text(),applicationBytes);
     assert.equal(view.text('[data-runtime-release-summary]'),'Runtime manifest unavailable');
@@ -64,7 +66,7 @@ test('received application inventory and a failed runtime endpoint have distinct
     assert.doesNotMatch(view.text('[data-runtime-release-detail]'),/No current release manifest|binding is not verified/);
     assert.match(view.text('[data-application-provenance-status]'),/^Not verified/);
     assert.equal(view.text('[data-network-connection]'),'Application node connected when checked');
-    assert.deepEqual(new Set(calls),new Set(['/v4/release/manifest',...Object.values(RUNTIME_ENDPOINTS)]));
+    assert.deepEqual(new Set(calls),new Set([MANIFEST_ROUTES.inventory,...Object.values(RUNTIME_ENDPOINTS)]));
   }finally{runtime.destroy();view.window.emit('pagehide');}
 });
 
@@ -72,7 +74,7 @@ test('fingerprint failure retains the received manifest without inventing signat
   for(const crypto of [{}, {subtle:{digest:async()=>{throw Error('unavailable');}}}, {subtle:{digest:()=>new Promise(()=>{})}}]){
     const view=dom(),app=applicationUI(view,async()=>new Response(applicationBytes),{crypto,timeoutMs:30});
     await app.ready;
-    assert.equal(view.text('[data-application-state]'),'Application release 4.0.0 manifest received · fingerprint unavailable');
+    assert.equal(view.text('[data-application-state]'),'Application release 4.0.0 matches the canonical manifest · fingerprint unavailable');
     assert.equal(view.text('[data-application-build]'),application.build_id);
     assert.equal(view.text('[data-application-manifest-sha]'),'Unavailable');
     assert.equal(view.node('[data-application-download]').disabled,false);
@@ -170,4 +172,22 @@ test('production build ships current release UI and verification sources with ma
     assert.equal(source.sourceInputs.find(item=>item.path==='public/'+file)?.sha256,digest(bytes),file);
     assert.equal(release.artifacts.find(item=>item.path==='client/'+file)?.sha256,digest(bytes),file);
   }
+});
+
+test('current manifest view binds app, control and RC26 identities without claiming a signature',async()=>{
+ const view=dom(),calls=[];
+ const bodies={
+  [MANIFEST_ROUTES.manifest]:canonical,
+  [MANIFEST_ROUTES.release]:application,
+  [MANIFEST_ROUTES.capabilities]:{schema:'numina.frontier.v2',identity:'NUMINA',version:'4.0.0'},
+  [MANIFEST_ROUTES.health]:{identity:'NUMINA',root:'NUMINA',version:'1.0.0',status:'degraded',revision:0,eventCount:0,checks:{storage:true,manifestIntegrity:false,evidenceHead:false,journalContinuity:false,authorityConfigured:true}}
+ };
+ const ui=createManifestReleaseUI({document:view.document,window:view.window,fetch:async(path,options)=>{calls.push(path);assert.equal(options.credentials,'omit');return Response.json(bodies[path],{status:path===MANIFEST_ROUTES.health?503:200});}});
+ try{await ui.refresh();assert.match(view.text('[data-runtime-release-summary]'),/^Manifest aligned/);assert.equal(view.text('[data-readiness]'),'Control degraded');assert.equal(view.text('[data-signature-status]'),'No current signature check');assert.ok(calls.every(path=>!path.startsWith('/v1/')));assert.equal(view.downloads[0].disabled,false);assert.ok(view.downloads.slice(1).every(button=>button.disabled));}finally{ui.destroy();}
+});
+
+test('current manifest view rejects mismatched inventories and clears evidence on pagehide',async()=>{
+ const view=dom();
+ const ui=createManifestReleaseUI({document:view.document,window:view.window,fetch:async path=>Response.json(path===MANIFEST_ROUTES.manifest?canonical:path===MANIFEST_ROUTES.release?{...application,build_id:'f'.repeat(64)}:{})});
+ try{await ui.refresh();assert.match(view.text('[data-runtime-release-summary]'),/^Needs attention/);assert.equal(view.text('[data-supply-status]'),'Application identity not aligned');view.window.emit('pagehide');assert.equal(view.text('[data-runtime-release-summary]'),'Unavailable');assert.ok(view.downloads.every(button=>button.disabled));}finally{ui.destroy();}
 });

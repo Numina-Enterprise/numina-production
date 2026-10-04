@@ -127,3 +127,7 @@ body.motion-site{background:var(--bg);color:var(--text)}
 .v4-facts dt{font-weight:600;font-size:15px}.v4-facts dd{margin:0;color:var(--muted);font-size:16px;line-height:1.75}
 .v4-detail-note{border-left:2px solid var(--cyan);padding-left:18px}.v4-steps strong{color:var(--text)}
 @media(max-width:760px){.v4-process{grid-template-columns:1fr;gap:12px}.v4-facts>div{grid-template-columns:1fr;gap:8px}.numina-v4 .frontier-hero-copy h1{font-size:2.8rem}.numina-v4 .frontier-hero-layout{min-height:0}}
+/* Keep the shared skip destination accessible above the sticky navigation. */
+.motion-site .skip:focus{z-index:100}
+.motion-site .site-footer .age-requirement{grid-column:1/-1;margin:0;font-size:12px;line-height:1.7}
+@media(min-width:761px) and (max-width:1150px){.motion-site .site-footer{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}.motion-site .site-footer .footer-intro{grid-column:1/-1}}

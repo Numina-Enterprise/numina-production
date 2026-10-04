@@ -24,9 +24,9 @@
     "read_interface": "readTreasury()",
     "write_interface": "writeTreasury(event)",
     "unit": "NUSD",
-    "projection": "500000000000000",
+    "projection": null,
     "authority": "NUMINA",
-    "verification": "JOURNAL_SNAPSHOT",
+    "verification": "CURRENT_STATE_UNAVAILABLE",
     "system_of_record": "NUMINA",
     "scope": "Numina-native",
     "route": "/api/control/v1/treasury",
@@ -52,8 +52,53 @@
     "aggregate_modeled_value": null,
     "aggregate_modeled_unit": "NUSD",
     "external_balances_aggregated": false,
-    "verificationScope": "JOURNAL_CONTINUITY_AT_OBSERVATION",
-    "providerBalancesVerified": false
+    "verificationScope": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+    "providerBalancesVerified": false,
+    "historicalJournalObservation": {
+      "schema": "numina.treasury.journal-observation.v1",
+      "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+      "asOfDate": "2026-09-25",
+      "observedRevision": 142,
+      "observedHead": "67b45a040374d944f42f26830c4a9142e26fa194d5149b7cfad2604aef351368",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "snapshotIsLive": false,
+      "projection": {
+        "balance": "500000000000000",
+        "unit": "NUSD"
+      },
+      "requests": [
+        {
+          "kind": "mint_request",
+          "amount": "1500000000000000",
+          "unit": "NUSD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        },
+        {
+          "kind": "bank_transaction_request",
+          "amount_minor": "50000000000000000",
+          "currency": "USD",
+          "status": "PREPARED",
+          "submission_performed": false,
+          "receipt": null
+        }
+      ],
+      "baseUsdcTransferRequest": null,
+      "baseUsdcTransactionHash": null,
+      "providerReceipt": null,
+      "externalProviderSubmissionStatus": "UNVERIFIED",
+      "externalProviderSettlementStatus": "UNVERIFIED"
+    },
+    "currentState": {
+      "status": "UNAVAILABLE",
+      "current": null,
+      "snapshotIsLive": false,
+      "reason": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "historicalObservationDate": "2026-09-25",
+      "historicalObservationRevision": 142
+    }
   },
   "mint_event": null,
   "pendingRuntimeMigration": null,
@@ -93,7 +138,7 @@
     "schema": "numina.canonical-treasury-values.v1",
     "identity": "NUMINA",
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "status": "JOURNAL_SNAPSHOT",
+    "status": "CURRENT_STATE_UNAVAILABLE",
     "canonical": false,
     "singular": true,
     "observation": {
@@ -263,10 +308,11 @@
         "modeledTarget": "500000000000000"
       },
       "NUSD": {
-        "current": "500000000000000",
+        "current": null,
         "available": null,
         "unit": "NUSD",
-        "observationRevision": 142
+        "observationRevision": 142,
+        "modeledTarget": "500000000000000"
       }
     },
     "componentLocations": {
@@ -289,13 +335,13 @@
       }
     },
     "aggregate": {
-      "current": "500000000000000",
+      "current": null,
       "unit": "NUSD",
-      "scope": "JOURNAL_PROJECTION",
+      "scope": "CURRENT_STATE_UNAVAILABLE",
       "observationRevision": 142,
       "modeledTarget": "1500000000000000"
     },
-    "mintStatus": "PREPARED_IN_JOURNAL",
+    "mintStatus": "UNVERIFIED",
     "mintedNusd": null,
     "burnedNusd": null,
     "mintReceipt": null,
@@ -413,7 +459,21 @@
     "providerObservationsCanonical": false,
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
-    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS",
+    "currentState": {
+      "status": "UNAVAILABLE",
+      "current": null,
+      "snapshotIsLive": false,
+      "reason": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "historicalObservationDate": "2026-09-25",
+      "historicalObservationRevision": 142
+    },
+    "historicalMintStatus": "PREPARED_IN_JOURNAL",
+    "historicalJournalProjection": {
+      "balance": "500000000000000",
+      "unit": "NUSD"
+    }
   },
   "treasuryJournalObservation": {
     "schema": "numina.treasury.journal-observation.v1",
@@ -717,17 +777,8 @@
       "contractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
     }
   },
-  "mintStatus": "PREPARED_IN_JOURNAL",
-  "mint_request": {
-    "kind": "mint_request",
-    "amount": "1500000000000000",
-    "unit": "NUSD",
-    "status": "PREPARED",
-    "submission_performed": false,
-    "receipt": null,
-    "observedRevision": 142,
-    "snapshotIsLive": false
-  },
+  "mintStatus": "UNVERIFIED",
+  "mint_request": null,
   "activeProvenancePolicy": {
     "schema": "numina.active-provenance-policy.v1",
     "identity": "NUMINA",
@@ -743,5 +794,15 @@
     "softwareAmountConflictsOverwritten": false,
     "rewritePerformed": false,
     "providerConfirmationRequiresIndependentEvidence": true
+  },
+  "historical_mint_request": {
+    "kind": "mint_request",
+    "amount": "1500000000000000",
+    "unit": "NUSD",
+    "status": "PREPARED",
+    "submission_performed": false,
+    "receipt": null,
+    "observedRevision": 142,
+    "snapshotIsLive": false
   }
 }

@@ -44,6 +44,7 @@ export function createMetadataAlignment(){
     sourceOfTruth:'NUMINA',softwareSourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',
     authoritativeCurrentTreasuryRoute:'/api/control/v1/treasury',
     canonicalConstructorMint:mint,
+    currentTreasuryState:structuredClone(NUMINA_CANONICAL_TREASURY_VALUES.currentState),
     journalObservation:structuredClone(NUMINA_TREASURY_JOURNAL_OBSERVATION),
     baseUsdcDestination:structuredClone(NUMINA_BASE_USDC_DESTINATION),
     authorizedDepositIntent:structuredClone(NUMINA_AUTHORIZED_BASE_USDC_DEPOSIT_INTENT),
@@ -59,7 +60,9 @@ export function createMetadataAlignment(){
       three500TAllocations:{scope:'HISTORICAL_ALLOCATION_STATEMENTS',summedIntoCurrentJournal:false,providerBalancesInferred:false},
       precedence:'Use the authenticated native journal for current software state, the retained constructor receipt for the dated mint, and provider records for their own balances and settlement. Prior review, model, build and attestation claims keep their original scope.'
     },
-    currentViews:['/api/nusd/v1/mint-workflow','/api/nusd/v1/status','/api/nusd/v1/contracts','/downloads/application-release-v4.json','/source-alignment.json','/final-build.json','/final-manifest.json','/business-core.json','/current-environments.json'],
+    currentViews:['/api/nusd/v1/mint-workflow','/api/nusd/v1/status','/api/nusd/v1/contracts','/downloads/application-release-v4.json','/source-alignment.json','/business-core.json'],
+    frozenReleaseRecords:['/final-build.json','/final-manifest.json','/current-environments.json'],
+    frozenReleaseRecordsAreCurrentState:false,
     retainedInventory:{roots,retainedFiles,extensions:['json','jsonl'],recordCount:records.length,records},
     executionEffects:{journalWrite:false,tokenIssuance:false,conversion:false,externalDeposit:false,reconciliation:false},
     documentation:'/downloads/Numina-Metadata-Alignment-v4.md'

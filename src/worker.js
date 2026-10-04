@@ -1,4 +1,5 @@
 import {legalCoverageHttp} from './legal-coverage.js';
+import {workspaceSessionTarget} from '../public/workspace-session.js';
 import {sitesMcpHttp} from './sites-mcp.js';
 import {financialEvidenceHttp} from './financial-evidence.js';
 import {transferReceiptsHttp,TRANSFER_RECEIPTS_ROUTE} from './transfer-receipts.js';
@@ -33,6 +34,8 @@ export default {
   try{
    const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mcp)return finish(mcp);
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   const workspaceTarget=workspaceSessionTarget(req.url,req.method);
+   if(workspaceTarget)return finish(new Response(null,{status:307,headers:{Location:workspaceTarget,'Cache-Control':'no-store'}}));
    if(path==='/favicon.ico'){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));
