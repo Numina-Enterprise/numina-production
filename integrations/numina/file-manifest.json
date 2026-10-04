@@ -1374,12 +1374,12 @@
     {
       "path": "legal/manifest.json",
       "bytes": 2792,
-      "sha256": "1502ee9239d82a8b0c5bb115e43ba26e21ee60101982265976ccbc99884cecfc"
+      "sha256": "984118eb69339c6e350e47c8d04b5d76a54758b9e61dc6da2d2504bd91f66db0"
     },
     {
       "path": "legal/privacy.html",
-      "bytes": 23021,
-      "sha256": "87b99f4dc0f6b4db20571bc3fa27ae845ebedbca35d2425a87be81c7a8124af2"
+      "bytes": 23475,
+      "sha256": "326f18d3c79f958910e15362022506409cd226b4f17c613b91af92b5677f8fb6"
     },
     {
       "path": "legal/software-licenses.html",
@@ -1539,7 +1539,7 @@
     {
       "path": "verification.json",
       "bytes": 61210,
-      "sha256": "4193e95beea6b32d57a521d16eb54c217e4188c39f051a13ac4b29ae31373716"
+      "sha256": "7f43dbf7333df4a7c017e0d73651458ee1bcdaf6507e48bb92f16bb244ef8c53"
     }
   ],
   "currentChainStateVerified": false,

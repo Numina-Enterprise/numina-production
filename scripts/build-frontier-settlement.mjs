@@ -1,4 +1,6 @@
 import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
+import {publicMetadata} from '../src/public-privacy.js';
+import {privateArtifactRecords,projectPublicAssets} from './public-asset-privacy.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -415,6 +417,17 @@ const sessionRouteAfter=sessionRouteSource+'\n   '+sessionRouteBefore;
 assert.equal(worker.split(sessionRouteBefore).length,2,'Unique Numina session route');
 worker=worker.replace(sessionRouteBefore,sessionRouteAfter);substitutions.push({source:'src/worker.js#workspace-session',before:sessionRouteBefore,after:sessionRouteAfter});
 // Correct the retained policy address literal outside the metadata modules.
+// Raw evidence is kept in the authenticated worker, outside the static bundle.
+const privateRecords=privateArtifactRecords();
+const privacyPreambleBefore=worker.slice(0,worker.indexOf('\n')+1);
+const privacyPreambleAfter=compile(readFileSync('src/public-privacy.js','utf8'))+compile(readFileSync('src/publication-http.js','utf8'))+'const NUMINA_PRIVATE_ARTIFACTS='+JSON.stringify(privateRecords)+';\n'+privacyPreambleBefore;
+worker=worker.replace(privacyPreambleBefore,privacyPreambleAfter);substitutions.push({source:'src/publication-http.js#private-artifacts',before:privacyPreambleBefore,after:privacyPreambleAfter});
+const privacyRouteBefore='   const legal=await legalCoverageHttp(req,env);if(legal)return finish(legal);';
+const privacyRouteAfter='   const publication=await publicationHttp(req,env,NUMINA_PRIVATE_ARTIFACTS);if(publication)return finish(publication);\n'+privacyRouteBefore;
+assert.equal(worker.split(privacyRouteBefore).length,2);worker=worker.replace(privacyRouteBefore,privacyRouteAfter);substitutions.push({source:'src/publication-http.js#routing',before:privacyRouteBefore,after:privacyRouteAfter});
+for(const [before,after]of [['canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,canonicalTreasuryRoute:', 'canonicalTreasuryValues:publicMetadata(NUMINA_CANONICAL_TREASURY_VALUES),canonicalTreasuryRoute:'],['providerRouting:NUSD_PROVIDER_ROUTING,mcp:', 'providerRouting:publicMetadata(NUSD_PROVIDER_ROUTING),mcp:']]){
+ assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/public-privacy.js#public-api',before,after});
+}
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
 assert.equal(stripeUsdcAddress,json('runtime/nusd/treasury-settlement-receipt.json').components.find(item=>item.settledUnit==='USDC').usdcAddress);
@@ -455,6 +468,7 @@ currentInputs.add('src/frontier.js');
 for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
 currentInputs.add(migrationJournalBase);
 currentInputs.add('src/control-http.js');
+for(const file of ['src/public-privacy.js','src/publication-http.js','scripts/public-asset-privacy.mjs','public/journal-summary.json'])currentInputs.add(file);
 for(const file of ['scripts/production-pair.mjs','reference/settlement-metadata-bases/sites-mcp.js.txt','src/connections-http.js','src/legal-coverage.js','public/legal-discovery.js','public/country-codes.js','scripts/package-distributions.py','scripts/package-legal-companions.mjs','integrations/numina/scripts/legal-distribution.js','integrations/numina/src/legal-discovery.js'])currentInputs.add(file);
 currentInputs.add('src/app-core.js');
 currentInputs.add('src/app-http.js');
@@ -527,6 +541,8 @@ assert.equal(json('dist/client/downloads/nusd/treasury-settlement-receipt-valida
 // The byte-pinned FINAL artifact retains its dated projection; it is not current state.
 assert.deepEqual(json('dist/client/final-build.json').canonicalTreasuryValues.observation,values.observation);
 assert.equal(values.aggregate.current,null);
+projectPublicAssets();
+copyFileSync('public/journal-summary.json','dist/client/journal-summary.json');
 const aliases=['release.json','application-release-v2.json','application-release-v3.json','application-release-v4.json'].map(n=>'client/downloads/'+n),excluded=new Set(aliases);
 const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=relative?relative+'/'+n:n,a=path.join(dir,n);return statSync(a).isDirectory()?collect(a,p):excluded.has(p)?[]:[{path:p,sha256:hash(readFileSync(a))}];});
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0),buildId=hash(artifacts.map(x=>x.sha256+'  '+x.path+'\n').join(''));
@@ -568,17 +584,21 @@ assert.equal(iosSource?.sourceInputsSha256,iosInputs.sha256,'Current iOS source 
 assert.equal(hash(readFileSync('docs/'+iosSource.file)),iosSource.sha256,'Current iOS source archive bytes');
 release.distribution.native_candidates={...release.distribution.native_candidates,record:'/downloads/native-package-record-v4.json',previous_release:nativeRecord.previousRelease,application_version:nativeRecord.applicationVersion,hosted_workspace:nativeRecord.hostedWorkspace,android:nativeRecord.android,ios:{...nativeRecord.ios,current_source:{buildNumber:iosSource.sourceBuildNumber,sourceInputsSha256:iosInputs.sha256},source_archive_current:true},source_archives:nativeRecord.sourceArchives.map(item=>({...item,url:'/downloads/'+item.file,authoritative:false,currentSourceMatch:item.platform==='ios'?true:null})),source_authority:'checked-in mobile/ios source and ios-release identity',store_publication_verified:false};
 release.treasury_client_verification=treasuryClientVerificationManifest(hash(readFileSync('public/treasury-proof.js')));
-release.distribution.integration_kit.manifest_sha256=hash(readFileSync('dist/client/downloads/integration-manifest.json'));
+release.distribution.integration_kit.manifest_sha256=hash(Buffer.from(privateRecords['/downloads/integration-manifest.json'].body,'base64'));
 const integrationArchive=json('docs/integration-kit-v4.0.0-record.json');
 Object.assign(release.distribution.integration_kit,{archive_snapshot_sha256:integrationArchive.sha256,archive_snapshot_bytes:integrationArchive.bytes,archive_snapshot_authoritative:true,archive_manifest_matches_current:true,archive_record:'/downloads/integration-kit-v4.0.0-record.json'});
 release.build_id=buildId;release.workerSha256=hash(worker);release.artifacts=artifacts;
 alignNusdReleaseMetadata(release);
-for(const f of aliases)writeFileSync('dist/'+f,JSON.stringify(release,null,2)+'\n');
+release.publicJournalSummary='/journal-summary.json';
+release.distribution.integration_kit.access='authenticated_owner';
+release.treasury_client_verification.verifier.sha256=hash(readFileSync('dist/client/treasury-proof.js'));
+release.treasury_client_verification.privateAccountVerifier={path:'/api/control/v1/private-assets/treasury-proof.js',sha256:hash(readFileSync('public/treasury-proof.js')),access:'authenticated_owner'};
+for(const f of aliases)writeFileSync('dist/'+f,JSON.stringify(publicMetadata(release),null,2)+'\n');
 assert.deepEqual(checkActiveProvenance({rootDir:root}).errors,[],'Active provenance generated release gate');
 execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});
 // A release cannot complete with divergent current manifests, asset hashes or
 // a stale shared page shell. These checks use only this build and local fixtures.
-execFileSync(process.execPath,['--test','tests/current-manifest-alignment.test.mjs'],{stdio:'inherit'});
+execFileSync(process.execPath,['--test','tests/current-manifest-alignment.test.mjs','tests/publication-privacy.test.mjs'],{stdio:'inherit'});
 for(const target of ['dist/server/index.js',...artifacts.filter(x=>/\.(?:js|json|html|md)$/.test(x.path)).map(x=>'dist/'+x.path),...aliases.map(x=>'dist/'+x)])assert.ok(!readFileSync(target,'utf8').includes('0x735bd8'),'Stale Stripe address in '+target);
 const report={stripeUsdcDepositAddress:stripeUsdcAddress,retainedRuntimeAddressCorrections:addressCorrections.length,identity:'NUMINA',historicalReceiptId:receipt.id,aggregateNusd:values.aggregate.current,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,componentCount:3,buildId,workerSha256:hash(worker),baselineBuildId:baseline.build_id,retainedClientAssets:retained,overlaidClientAssets:allowed.size,runtimeModules:substitutions.map(item=>item.source),unrelatedRuntimeBytesPreserved:true,homepageUnchanged:false,externalProviderMutations:false};
 mkdirSync('work',{recursive:true});writeFileSync('work/frontier-build-verification.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
