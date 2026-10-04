@@ -134,7 +134,7 @@ export function createNusdContractRecord(read=readFileSync) {
     mintReceipt.chainReceipt?.contractAddress?.toLowerCase()!==receipt.token.receipt.contractAddress?.toLowerCase()||
     mintReceipt.chainReceipt?.status!=='0x1')throw Error('NUSD mint receipt binding mismatch');
   return {entries,mintReceipt,record:{
-    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',metadataAuthority:'NUMINA',nativeEvidenceStatus:'JOURNAL_SNAPSHOT',status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
+    schema:'numina.nusd.contract-record.v1',modelIdentity:'NUMINA',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,canonicalSource:'NUMINA',sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',metadataAuthority:'NUMINA',nativeEvidenceStatus:'CURRENT_STATE_UNAVAILABLE',currentTreasuryState:NUMINA_CANONICAL_TREASURY_VALUES.currentState,status:'DEPLOYED_VERIFIED',contractsInitiated:true,initiatedOn:'2026-09-18',
     url:'/api/nusd/v1/contracts',native_treasury:'/api/control/v1/treasury',
     contracts:entries.map(entry=>entry.descriptor),
     mint_receipt:{schema:mintReceipt.schema,status:mintReceipt.status,path:'/downloads/nusd/mint-receipt.json',transactionHash:mintReceipt.transactionHash,tokenAddress:mintReceipt.tokenAddress,blockNumber:mintReceipt.blockNumber,receiptStatus:mintReceipt.receiptStatus,finalConfirmations:mintReceipt.finalConfirmations,amountNusd:mintReceipt.amountNusd,baseUnits:mintReceipt.baseUnits,burnedNusd:mintReceipt.burnedNusd},

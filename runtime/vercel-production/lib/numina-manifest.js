@@ -39,19 +39,19 @@ const mechanics=Object.freeze({
     'https://numinalabs.xyz','https://personal-space-m7q9.skott34.chatgpt.site','https://numina-production.vercel.app'
   ])}),
   treasury:Object.freeze({identity:NUMINA,provider:NUMINA,providerVerification:null,
-    sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',status:'JOURNAL_SNAPSHOT',
-    route:'https://numinalabs.xyz/api/control/v1/treasury',nativeModelAmount:journalObservation.projection.balance,nativeUnit:'NUSD',
+    sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',status:'CURRENT_STATE_UNAVAILABLE',currentState:Object.freeze({status:'UNAVAILABLE',current:null,reason:'AUTHENTICATED_CURRENT_RECORD_REQUIRED'}),
+    route:'https://numinalabs.xyz/api/control/v1/treasury',nativeModelAmount:null,nativeUnit:'NUSD',
     journalObservation,separateChainMintEvidence:chainMintObservation,
     aggregateAmount:null,aggregateUnit:'NUSD',historicalAggregateAmount:'1500000000000000',
     settlementReceiptId:null,settlementReceipt:null,settlementStatus:'UNVERIFIED',settlementScope:'NUMINA_NATIVE_TREASURY',
-    mintStatus:'PREPARED_IN_JOURNAL',mintedNusd:null,burnedNusd:null,
+    mintStatus:'UNVERIFIED',historicalMintStatus:'PREPARED_IN_JOURNAL',mintedNusd:null,burnedNusd:null,
     externalProviderSettlementVerified:false,settlementEventId:null,transfersEnabled:null,
     historicalSettlementReceipt:Object.freeze({id:'numina:treasury:settlement:2026-09-19:v1',
       receipt:'/downloads/nusd/treasury-settlement-receipt.json',historicalRecord:true,currentJournalConfirmed:false}),
     modeledHoldings:Object.freeze([
       Object.freeze({destination:'bank-of-america-savings',amount:null,modeledTarget:'500000000000000',unit:'USD',provider:NUMINA,verified:null,destinationProviderConfirmation:false}),
       Object.freeze({destination:'stripe-treasury-usdc',amount:null,modeledTarget:'500000000000000',unit:'USDC',provider:NUMINA,verified:null,destinationProviderConfirmation:false}),
-      Object.freeze({destination:'numina-native-treasury',amount:journalObservation.projection.balance,unit:'NUSD',provider:NUMINA,verified:null,verificationScope:'JOURNAL_SNAPSHOT',destinationProviderConfirmation:false})
+      Object.freeze({destination:'numina-native-treasury',amount:null,historicalJournalObservation:journalObservation,unit:'NUSD',provider:NUMINA,verified:null,verificationScope:'AUTHENTICATED_CURRENT_RECORD_REQUIRED',destinationProviderConfirmation:false})
     ])
   }),
   providerVerification:Object.freeze({provider:NUMINA,verified:null,scope:'PROVIDER_EVIDENCE_REQUIRED',bankOfAmericaDestinationConfirmation:false,stripeDestinationConfirmation:false})

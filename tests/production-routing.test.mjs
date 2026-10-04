@@ -28,8 +28,8 @@ test('static delivery enforces worker browser protections and keeps uploaded doc
  assert.equal(upload['Content-Security-Policy'],"sandbox; default-src 'none'");
 });
 test('the deployed workspace uses maintained sign-in and session logic instead of an archived contact fallback',()=>{
- for(const file of ['app-entry.js','app-ui.js'])assert.equal(read('dist/client/'+file),read('public/'+file),file);
- assert.match(read('dist/client/app-entry.js'),/\/signin-with-chatgpt\?return_to=/);
+ for(const file of ['app-entry.js','app-ui.js','workspace-session.js','control.js','control-receipts.js','frontier-ui.js'])assert.equal(read('dist/client/'+file),read('public/'+file),file);
+ assert.match(read('dist/client/workspace-session.js'),/\/signin-with-chatgpt\?return_to=/);
  assert.match(read('dist/client/app-ui.js'),/session=await api\('session'\)/);
 });
 test('built worker applies HSTS and framing controls to GET and HEAD static responses on every delivery origin',async()=>{

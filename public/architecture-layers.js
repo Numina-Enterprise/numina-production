@@ -4,7 +4,7 @@ import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
 // Numina's five functional architecture layers resolve to one finalized singular build. The public frontier is a finalized-build projection; legacy journal/storage code is not required for public readiness.
 export const NUMINA_LAYERS = Object.freeze({
-  schema:'numina.architecture-layers.v1',classification:'architecture',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',metadataNamespace:'NUMINA',metadataScope:Object.freeze(['historical','current','canonical']),nativeEvidenceStatus:'FINAL',
+  schema:'numina.architecture-layers.v1',classification:'architecture',identity:'NUMINA',manifest:'NUMINA',manifestEqualsNumina:true,numinaEqualsManifest:true,metadataAuthority:'NUMINA',metadataNamespace:'NUMINA',metadataScope:Object.freeze(['historical','current','canonical']),nativeEvidenceStatus:'CURRENT_STATE_UNAVAILABLE',
   stateReconciliation:NUMINA_STATE_RECONCILIATION,
   rootCount:1,lineageCount:1,productionEnvironmentCount:1,
   denomination_policy:NUMINA_DENOMINATION_POLICY,
@@ -14,7 +14,8 @@ export const NUMINA_LAYERS = Object.freeze({
   database:{identity:'NUMINA',transactionAuthority:'NUMINA',journal:'NUMINA',storage:'NUMINA',revisionModel:'NUMINA',evidenceHead:'NUMINA',sharedAcrossLayers:true},
   treasury:{
     canonicalTreasuryValues:NUMINA_NATIVE_TREASURY_SYNC.canonicalTreasuryValues,
-    journalObservation:NUMINA_NATIVE_TREASURY_SYNC.journalObservation,
+    historicalJournalObservation:NUMINA_NATIVE_TREASURY_SYNC.journalObservation,
+    currentState:NUMINA_NATIVE_TREASURY_SYNC.currentState,
     authoritativeCurrentRoute:'/api/control/v1/treasury',
     identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:'NUMINA_NATIVE_TREASURY',
     softwareIdentity:'NUMINA',softwareExternal:false,
@@ -36,7 +37,7 @@ export const NUMINA_LAYERS = Object.freeze({
   },
   nusd:{
     identity:'NUMINA',provider:'NUMINA',status:'CURRENT_CHAIN_STATE_UNVERIFIED',live:null,
-    settlementStatus:'UNVERIFIED',currentJournalMintStatus:'PREPARED',
+    settlementStatus:'UNVERIFIED',currentJournalMintStatus:'UNVERIFIED',historicalJournalMintStatus:'PREPARED',
     mintedNusd:null,burnedNusd:null,nativeBackingVerified:null,
     historicalSettlementReceipt:NUMINA_NATIVE_TREASURY_SYNC.singularSettlementReceipt,
     separateChainMintEvidence:NUMINA_NATIVE_TREASURY_SYNC.separateChainMintEvidence,
@@ -49,11 +50,11 @@ export const NUMINA_LAYERS = Object.freeze({
     receipt:'/downloads/nusd/deployment-receipt.json',externalBackingClaimed:false
   },
   layers:[
-    {id:'L1',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/head','/readyz','/v2/network/status']},
+    {id:'L1',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/head','/api/control/v1/health','/api/nusd/v1/status']},
     {id:'L2',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/manifest','/final-build.json']},
     {id:'L3',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/architecture','/business-core.json']},
     {id:'L4',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/discovery-mcp','/.well-known/agent-card.json']},
-    {id:'L5',name:'NUMINA',capabilities:['NUMINA'],routes:['/v1/frontier/readiness','/v1/release/manifest','/downloads/nusd/deployment-receipt.json']}
+    {id:'L5',name:'NUMINA',capabilities:['NUMINA'],routes:['/api/control/v2/manifest','/api/control/v1/manifest','/downloads/nusd/deployment-receipt.json']}
   ],
   authoritativeHead:'/api/control/v2/head',controlManifestRoute:'/api/control/v1/manifest',legacyProjectionRoute:'/api/control/v2/state',
   approvals:'NUMINA'

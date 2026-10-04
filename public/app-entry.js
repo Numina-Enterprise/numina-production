@@ -1,13 +1,12 @@
 import {COUNTRY_CODES} from './country-codes.js';
+import {workspaceSignInUrl} from './workspace-session.js';
 export function selectService(offers,href){
  const entry=new URL(href),requested=entry.searchParams.get('service');
  const current=({diagnostic:'diagnostic_enterprise',audit:'audit_enterprise'})[requested]??requested;
  const chosen=typeof current==='string'&&Object.hasOwn(offers,current)?current:Object.keys(offers)[0];
  const allowedAnchors=new Set(['#main','#request-form','#service-work','#runtime-release-title','#linux-runtime-build','#app-network-title','#native-treasury-panel','#stripe-treasury-panel','#app-treasury-title']);
  const anchor=allowedAnchors.has(entry.hash)?entry.hash:'#request-form';
- const signInPath='/signin-with-chatgpt?return_to='+encodeURIComponent('/app?service='+encodeURIComponent(chosen)+anchor);
- const signInOrigin=['numinalabs.xyz','www.numinalabs.xyz'].includes(entry.hostname)?'https://personal-space-m7q9.skott34.chatgpt.site':'';
- return {chosen,signInUrl:signInOrigin+signInPath};
+ return {chosen,signInUrl:workspaceSignInUrl(href,'/app?service='+encodeURIComponent(chosen)+anchor)};
 }
 export function offerLabel(offer){
  return offer.requestOnly?offer.name+' · NUSD scope review':offer.name+' · '+new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(offer.amount/100);

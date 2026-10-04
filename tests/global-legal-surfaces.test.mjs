@@ -171,7 +171,7 @@ test('built workspace persists scoped foreign intake but cannot issue a checkout
  const db=database();
  try{
   for(const name of ['0001_useful_black_crow.sql','0002_chief_rachel_grey.sql'])for(const statement of read('drizzle/'+name).split('--> statement-breakpoint').map(value=>value.trim()).filter(Boolean))await db.prepare(statement).run();
-  const env={DB:db,NUMINA_CONTROL_OWNER:'email:owner@example.test',NUMINA_STRIPE_WEBHOOK_SECRET:'whsec_local_fixture_only',NUMINA_TELEMETRY_LOGS:'false'};
+  const env={DB:db,NUMINA_CONTROL_OWNER:'email:owner@example.test',NUMINA_STRIPE_WEBHOOK_SECRET:'whsec_local_fixture_only',NUMINA_STRIPE_TREASURY_ACCOUNT:'acct_localfixtureonly',NUMINA_TELEMETRY_LOGS:'false'};
   const call=(path,body)=>built.fetch(new Request('https://numina.test/api/app/v1/'+path,{method:'POST',headers:{Origin:'https://numina.test','Content-Type':'application/json','oai-authenticated-user-id':'customer','oai-authenticated-user-email':'customer@example.test'},body:JSON.stringify(body)}),env);
   const invalid=await call('orders',{...intake,idempotencyKey:crypto.randomUUID(),country:'ZZ'});assert.equal(invalid.status,400);assert.equal((await db.prepare('SELECT COUNT(*) AS n FROM numina_service_orders').first()).n,0);
   const created=await call('orders',{...intake,idempotencyKey:crypto.randomUUID(),country:'FR'});assert.equal(created.status,201);const {order}=await created.json();

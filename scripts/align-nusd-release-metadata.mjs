@@ -7,6 +7,8 @@ export function alignNusdReleaseMetadata(record){
   const observation={historicalRecord:true,observedAt:mint.observedAt,currentChainStateVerified:false};
   record.sourceOfTruth='NUMINA_NATIVE_TREASURY_JOURNAL';
   record.authoritativeCurrentTreasuryRoute=values.authoritativeCurrentRoute;
+  record.currentTreasuryState=structuredClone(values.currentState);
+  record.historicalJournalObservation=structuredClone(values.observation);
   record.metadataAlignment='/metadata-alignment.json';
   record.baseUsdcDestination=structuredClone(destination);
   record.authorizedDepositIntent=structuredClone(depositIntent);
@@ -47,6 +49,8 @@ export function alignNusdReleaseMetadata(record){
   record.scope={...record.scope,nusd_issuance_verified_in_current_state:false,contract_deployment_verified_in_current_state:false};
   if(record.native_treasury_alignment){
     Object.assign(record.native_treasury_alignment,{
+      status:'CURRENT_STATE_UNAVAILABLE',verificationScope:'AUTHENTICATED_CURRENT_RECORD_REQUIRED',currentState:structuredClone(values.currentState),
+      historicalJournalObservation:structuredClone(values.observation),
       aggregation:native.aggregation,modeledAllocationsAdditive:false,
       aggregateModeledValue:null,historicalAggregateModeledValue:native.historicalAggregateModeledValue,
       settlementStatus:values.settlementStatus,mintStatus:values.mintStatus,

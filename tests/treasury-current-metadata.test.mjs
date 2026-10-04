@@ -11,8 +11,7 @@ const json=path=>JSON.parse(read(path));
 const currentFiles=[
   'package.json','config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json',
   'config/numina-architecture.json',
-  'public/business-core.json','public/current-environments.json','public/final-build.json',
-  'public/final-manifest.json','docs/NUMINA-FINAL-BUILD.json','docs/NUMINA-FINAL-MANIFEST.json',
+  'public/business-core.json','public/current-environments.json',
   'integrations/numina/package.json','integrations/numina/distribution.json',
   'integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
@@ -54,8 +53,10 @@ test('constructor mint metadata identifies block 51725 independently of settleme
   }
   assert.deepEqual(NUSD_POLICY.asset_verification.constructorMintEvidence,evidence);
   assert.deepEqual(NUSD_MINT_WORKFLOW.execution.constructorMintEvidence,evidence);
-  assert.equal(values.aggregate.current,observation.projection.balance);
-  assert.equal(values.mintStatus,'PREPARED_IN_JOURNAL');
+  assert.equal(values.aggregate.current,null);
+  assert.equal(values.observation.projection.balance,observation.projection.balance);
+  assert.equal(values.historicalMintStatus,'PREPARED_IN_JOURNAL');
+  assert.equal(values.mintStatus,'UNVERIFIED');
   assert.equal(values.settlementStatus,'UNVERIFIED');
   assert.equal(observation.baseUsdcTransferRequest,null);
 });
@@ -82,20 +83,25 @@ test('maintained metadata stays anchored to the dated journal observation, witho
     visit(data);
     assert.ok(views.length>0,`${path}: canonical values projection exists`);
     for(const view of views){
-      assert.equal(view.status,'JOURNAL_SNAPSHOT',`${path}: dated scope`);
+      assert.equal(view.status,'CURRENT_STATE_UNAVAILABLE',`${path}: current scope`);
+      assert.equal(view.currentState.current,null);
+      assert.equal(view.currentState.reason,'AUTHENTICATED_CURRENT_RECORD_REQUIRED');
       assert.equal(view.canonical,false,`${path}: live source retained`);
       assert.deepEqual(view.observation,observation,`${path}: nested anchor`);
       assert.equal(view.components.USD.current,null,`${path}: USD current`);
       assert.equal(view.components.USD.available,null,`${path}: USD available`);
       assert.equal(view.components.USDC.current,null,`${path}: USDC current`);
       assert.equal(view.components.USDC.available,null,`${path}: USDC available`);
-      assert.equal(view.components.NUSD.current,'500000000000000',`${path}: NUSD projection`);
+      assert.equal(view.components.NUSD.current,null,`${path}: current NUSD unavailable`);
+      assert.equal(view.observation.projection.balance,'500000000000000',`${path}: dated NUSD projection`);
       assert.equal(view.components.NUSD.available,null,`${path}: NUSD spendability`);
       assert.equal(view.settlementStatus,'UNVERIFIED',`${path}: current settlement`);
       assert.equal(view.settlementReceiptId,null,`${path}: current receipt`);
       assert.equal(view.historicalSettlementReceipt.historicalRecord,true,`${path}: retained receipt scope`);
     }
   }
+  // The frozen FINAL records remain dated evidence, not mutable current views.
+  for(const path of ['public/final-build.json','public/final-manifest.json','docs/NUMINA-FINAL-BUILD.json','docs/NUMINA-FINAL-MANIFEST.json']){const archived=json(path);assert.equal(archived.canonicalTreasuryValues.status,'JOURNAL_SNAPSHOT');assert.deepEqual(archived.canonicalTreasuryValues.observation,observation);}
   const build=json('public/final-build.json');
   assert.equal(build.nusd.status,'JOURNAL_SNAPSHOT');
   assert.equal(build.nusd.currentChainState,'UNVERIFIED');
@@ -144,7 +150,9 @@ test('packaged integration keeps current journal claims separate from dated chai
   for(const path of ['integrations/numina/verification.json','integrations/numina/distribution.json','integrations/numina/file-manifest.json']){
     const data=json(path),alignment=data.treasuryAlignment,contracts=data.nusdContracts;
     assert.deepEqual(data.treasuryJournalObservation,observation,`${path}: journal observation`);
-    assert.equal(alignment.status,'JOURNAL_SNAPSHOT',`${path}: treasury status`);
+    assert.equal(alignment.status,'CURRENT_STATE_UNAVAILABLE',`${path}: treasury status`);
+    assert.equal(alignment.targetAmount,null);
+    assert.deepEqual(alignment.historicalJournalObservation,observation);
     assert.equal(alignment.aggregateModeledValue,null,`${path}: current aggregate`);
     assert.equal(alignment.historicalAggregateModeledValue,'1500000000000000',`${path}: historical target`);
     assert.equal(alignment.submissionPerformed,false,`${path}: journal submission`);
@@ -164,5 +172,6 @@ test('packaged integration keeps current journal claims separate from dated chai
   assert.equal(verification.journalMintPerformed,false);
   assert.equal(verification.transferPerformed,null);
   assert.equal(verification.baseUsdcTransferRecordedInJournal,false);
-  assert.equal(verification.mintStatus,'PREPARED_IN_JOURNAL');
+  assert.equal(verification.mintStatus,'UNVERIFIED');
+  assert.equal(verification.historicalMintStatus,'PREPARED_IN_JOURNAL');
 });

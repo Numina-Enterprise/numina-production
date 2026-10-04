@@ -9,7 +9,7 @@ import {NUMINA_CANONICAL_TREASURY_VALUES as values,NUMINA_TREASURY_JOURNAL_OBSER
 const root=fileURLToPath(new URL('../',import.meta.url));
 const activePaths=[
   'package.json','config/numina-metadata-overrides.v1.json','config/numina-manifest.v2.json',
-  'config/numina-architecture.json','public/business-core.json','integrations/numina/package.json',
+  'config/numina-architecture.json','public/business-core.json','public/current-environments.json','integrations/numina/package.json',
   'integrations/numina/distribution.json','integrations/numina/verification.json','integrations/numina/file-manifest.json'
 ];
 const preservedPaths=[
@@ -38,7 +38,7 @@ function fixture(t){
     NUSD:{unit:'NUSD',current:'500000000000000',available:'500000000000000'}
   },aggregate:{unit:'NUSD',current:'1500000000000000'}};
   for(const name of activePaths)write(name,JSON.stringify({
-    name:'isolated-metadata-fixture',type:'module',version:'4.0.0',
+    name:'isolated-metadata-fixture',type:'module',version:'4.0.0',mechanics:{repository:{},build_model:{}},
     canonicalTreasuryValues:stale,transfersEnabled:true,provider_verification:false,
     numina:{canonicalTreasuryValues:stale,transfersEnabled:true,provider_verification:false},
     bankProviderObservation:{providerBalanceVerified:false,providerTransactionVerified:false,externalSettlementVerified:false,providerBalancesChanged:false},
@@ -55,7 +55,7 @@ function fixture(t){
 test('metadata synchronization updates active snapshots without rewriting financial evidence or source modules',t=>{
   const f=fixture(t),protectedBytes=f.bytes(preservedPaths),initialBytes=f.bytes(activePaths);
   const staleCheck=f.run('--check');assert.equal(staleCheck.status,1,staleCheck.stderr);
-  assert.equal(JSON.parse(staleCheck.stdout).consistent,false);
+  assert.ok(staleCheck.stdout,staleCheck.stderr);assert.equal(JSON.parse(staleCheck.stdout).consistent,false);
   f.unchanged(initialBytes);f.unchanged(protectedBytes);
   const update=f.run();assert.equal(update.status,0,update.stderr);
   const report=JSON.parse(update.stdout);

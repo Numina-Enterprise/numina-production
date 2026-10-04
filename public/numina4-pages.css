@@ -30,3 +30,23 @@ body.v4-subpage{--bg:#080a09;--panel:#101310;--panel2:#171b16;--text:#f1f3ec;--m
 .v4-subpage .section{padding-block:58px}.v4-subpage .section h2{font-size:clamp(1.7rem,2.5vw,2.6rem);line-height:1.25}
 .v4-subpage .section-content>p{max-width:78ch;font-size:16px;line-height:1.85}
 @media(max-width:760px){.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:2.3rem}.v4-subpage .section{padding-block:40px}}
+/* One shared footer and consistent content bounds across maintained pages. */
+.v4-subpage .site-footer{padding-block:48px 32px;gap:36px;grid-template-columns:1.15fr 1fr 1fr 1.1fr}
+.v4-subpage .site-footer>div{min-width:0}
+.v4-subpage .site-footer .age-requirement{grid-column:1/-1;margin:0;font-size:12px;line-height:1.7;color:var(--muted)}
+.v4-subpage .site-footer a{overflow-wrap:anywhere}
+.v4-subpage :is(.page-intro,.section-heading,.content-section,.legal-section,.panel){color:var(--text)}
+.v4-subpage :is(img,svg,video){max-width:100%}
+@media(max-width:1000px){.v4-subpage .site-footer{grid-template-columns:repeat(2,minmax(0,1fr))}.v4-subpage .site-footer .footer-intro{grid-column:1/-1}}
+@media(max-width:480px){.v4-subpage .site-footer{grid-template-columns:1fr;gap:28px}.v4-subpage .site-footer .footer-intro{grid-column:auto}}
+.v4-subpage :is(.app-title,.control-hero,.financial-workspace,.reviewer-wrap,.simulation-intro)>h1{font-size:clamp(2.3rem,3.6vw,3.9rem);font-weight:500;letter-spacing:-.035em;line-height:1.18;max-width:980px}
+.v4-subpage :is(.grid>article,.receipt-panel,.simulation-total,.simulation-accounts>article,.simulation-controls,.simulation-history,.company-simulation,.foundation-card,.program-card,.operate-tier,.value-note){background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;box-shadow:none}
+.v4-subpage .about-hero~.section{width:min(1440px,calc(100% - 96px));margin-inline:auto}
+.v4-subpage .site-footer .footer-intro .footer-name{color:var(--text);font-weight:600}
+@media(max-width:760px){.v4-subpage .about-hero~.section{width:calc(100% - 40px)}}
+.v4-subpage .site-wrap main>section{margin-inline:auto}
+.v4-subpage .site-wrap main>section:not(.wrap){width:min(1440px,calc(100% - 96px))}
+.v4-subpage .site-wrap main>.grid{gap:24px;margin-block:36px}
+.v4-subpage .grid>article{padding:28px;min-width:0}
+.v4-subpage .grid>article :is(h2,h3){font-size:clamp(1.4rem,2.1vw,2rem);line-height:1.25;letter-spacing:-.035em}
+@media(max-width:760px){.v4-subpage .site-wrap main>section:not(.wrap){width:calc(100% - 40px)}.v4-subpage .grid>article{padding:24px}}

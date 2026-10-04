@@ -52,6 +52,15 @@
     "providerSettlementVerified": false,
     "externalDepositVerified": false
   },
+  "currentTreasuryState": {
+    "status": "UNAVAILABLE",
+    "current": null,
+    "snapshotIsLive": false,
+    "reason": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+    "authoritativeCurrentRoute": "/api/control/v1/treasury",
+    "historicalObservationDate": "2026-09-25",
+    "historicalObservationRevision": 142
+  },
   "journalObservation": {
     "schema": "numina.treasury.journal-observation.v1",
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
@@ -417,11 +426,14 @@
     "/api/nusd/v1/contracts",
     "/downloads/application-release-v4.json",
     "/source-alignment.json",
+    "/business-core.json"
+  ],
+  "frozenReleaseRecords": [
     "/final-build.json",
     "/final-manifest.json",
-    "/business-core.json",
     "/current-environments.json"
   ],
+  "frozenReleaseRecordsAreCurrentState": false,
   "retainedInventory": {
     "roots": [
       "release-evidence",

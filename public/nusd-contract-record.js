@@ -10,7 +10,16 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "canonicalSource": "NUMINA",
   "sourceOfTruth": "NUMINA_NATIVE_TREASURY_JOURNAL",
   "metadataAuthority": "NUMINA",
-  "nativeEvidenceStatus": "JOURNAL_SNAPSHOT",
+  "nativeEvidenceStatus": "CURRENT_STATE_UNAVAILABLE",
+  "currentTreasuryState": {
+    "status": "UNAVAILABLE",
+    "current": null,
+    "snapshotIsLive": false,
+    "reason": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+    "authoritativeCurrentRoute": "/api/control/v1/treasury",
+    "historicalObservationDate": "2026-09-25",
+    "historicalObservationRevision": 142
+  },
   "status": "DEPLOYED_VERIFIED",
   "contractsInitiated": true,
   "initiatedOn": "2026-09-18",
@@ -463,7 +472,7 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "schema": "numina.canonical-treasury-values.v1",
     "identity": "NUMINA",
     "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
-    "status": "JOURNAL_SNAPSHOT",
+    "status": "CURRENT_STATE_UNAVAILABLE",
     "canonical": false,
     "singular": true,
     "observation": {
@@ -633,10 +642,11 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
         "modeledTarget": "500000000000000"
       },
       "NUSD": {
-        "current": "500000000000000",
+        "current": null,
         "available": null,
         "unit": "NUSD",
-        "observationRevision": 142
+        "observationRevision": 142,
+        "modeledTarget": "500000000000000"
       }
     },
     "componentLocations": {
@@ -659,13 +669,13 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
       }
     },
     "aggregate": {
-      "current": "500000000000000",
+      "current": null,
       "unit": "NUSD",
-      "scope": "JOURNAL_PROJECTION",
+      "scope": "CURRENT_STATE_UNAVAILABLE",
       "observationRevision": 142,
       "modeledTarget": "1500000000000000"
     },
-    "mintStatus": "PREPARED_IN_JOURNAL",
+    "mintStatus": "UNVERIFIED",
     "mintedNusd": null,
     "burnedNusd": null,
     "mintReceipt": null,
@@ -783,7 +793,21 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "providerObservationsCanonical": false,
     "providerObservationsSourceScoped": true,
     "providerObservationsAggregated": false,
-    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS"
+    "evidenceBoundary": "CANONICAL_SOFTWARE_TREASURY_SEPARATE_FROM_PROVIDER_OBSERVATIONS",
+    "currentState": {
+      "status": "UNAVAILABLE",
+      "current": null,
+      "snapshotIsLive": false,
+      "reason": "AUTHENTICATED_CURRENT_RECORD_REQUIRED",
+      "authoritativeCurrentRoute": "/api/control/v1/treasury",
+      "historicalObservationDate": "2026-09-25",
+      "historicalObservationRevision": 142
+    },
+    "historicalMintStatus": "PREPARED_IN_JOURNAL",
+    "historicalJournalProjection": {
+      "balance": "500000000000000",
+      "unit": "NUSD"
+    }
   },
   "treasuryJournalObservation": {
     "schema": "numina.treasury.journal-observation.v1",

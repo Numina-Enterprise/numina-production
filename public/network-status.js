@@ -44,10 +44,13 @@ export function nodeConnectionPresentation(data){
  };
 }
 
-export async function loadNodeConnections(panels,read=()=>requestJson('/v2/network/status')){
+export async function loadNodeConnections(panels,read){
  const token={};
  const update=(panel,name,text)=>{if(connectionLoads.get(panel)!==token)return;const target=panel.querySelector(`[data-network-${name}]`);if(target)target.textContent=text;};
  for(const panel of panels){connectionLoads.set(panel,token);update(panel,'connection','Checking application node connection…');for(const key of ['connection-detail','connection-observed'])update(panel,key,'');}
+ // Sites has no supported current node-observation route. An explicitly supplied
+ // authenticated observation can still use the strict historical contract below.
+ if(!read){for(const panel of panels){update(panel,'connection','Current node connection is not verified.');update(panel,'connection-detail','The compatibility endpoint is retired; no current provider observation is available.');update(panel,'connection-observed','The network record above is dated evidence, not a live connection check.');}return;}
  try{const view=nodeConnectionPresentation(await read());for(const panel of panels)for(const [key,value]of Object.entries(view))update(panel,key,value);}
  catch{for(const panel of panels){update(panel,'connection','Application node connection unavailable. Reload to check again.');for(const key of ['connection-detail','connection-observed'])update(panel,key,'');}}
 }

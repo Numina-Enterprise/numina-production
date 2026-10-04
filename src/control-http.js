@@ -90,18 +90,24 @@ async function readApplicationRelease(req,env){
     const response=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:'GET'}));
     if(!response.ok)return null;
     const value=await response.json();
-    return value?.root===NUMINA&&value?.identity===NUMINA?value:null;
+    return value?.schema==='numina.application-release.v2'&&value.schema_version===2&&value.singular===true&&
+      value.identity===NUMINA&&value.manifest===NUMINA&&value.product==='Numina'&&
+      value.version===NUMINA_LAYERS.distribution.applicationVersion&&value.release==='numina-v'+value.version&&
+      /^[a-f0-9]{64}$/.test(value.build_id||'')&&value.runtime_dependency?.identity===NUMINA&&
+      typeof value.runtime_dependency.version==='string'&&typeof value.runtime_dependency.release==='string'?value:null;
   }catch{return null;}
 }
 async function controlNuminaManifest(req,env){
   const application=await readApplicationRelease(req,env);
   return numinaRootProjection({
     version:CONTROL_VERSION,
-    core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
-    authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
+    // Identity aliases are supplied by numinaRootProjection. Repeating them here
+    // would overwrite the explicit mechanics objects below with identity strings.
+    applicationVersion:application?.version??null,
+    applicationRelease:application?.release??null,
     deployed:true,
     mechanics:{
-      repository:{full_name:GITHUB_OIDC_REPOSITORY,branch:'main'},
+      repository:{identity:NUMINA,source:'/NUMINA'},
       runtime:{version:application?.runtime_dependency?.version??null,release:application?.runtime_dependency?.release??null},
       artifact:{build_id:application?.build_id??null},
       authentication:{primary:'github-actions-oidc',issuer:GITHUB_OIDC_ISSUER,audience:GITHUB_OIDC_AUDIENCE,bounded_bearer_fallback:true,sites_identity:true},

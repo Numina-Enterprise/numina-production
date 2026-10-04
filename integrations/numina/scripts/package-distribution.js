@@ -19,7 +19,11 @@ const treasuryJournalObservation=metadata.treasuryJournalObservation;
 const authoritativeCurrentTreasuryRoute=metadata.authoritativeCurrentTreasuryRoute;
 const metadataAlignment=metadata.metadataAlignment;
 const activeProvenancePolicy=metadata.activeProvenancePolicy;
-if(canonicalTreasuryValues?.status!=='JOURNAL_SNAPSHOT'||canonicalTreasuryValues.canonical!==false||
+if(canonicalTreasuryValues?.status!=='CURRENT_STATE_UNAVAILABLE'||canonicalTreasuryValues.canonical!==false||
+   canonicalTreasuryValues.currentState?.status!=='UNAVAILABLE'||canonicalTreasuryValues.currentState?.current!==null||
+   canonicalTreasuryValues.currentState?.reason!=='AUTHENTICATED_CURRENT_RECORD_REQUIRED'||
+   canonicalTreasuryValues.mintStatus!=='UNVERIFIED'||canonicalTreasuryValues.historicalMintStatus!=='PREPARED_IN_JOURNAL'||
+   canonicalTreasuryValues.components?.NUSD?.current!==null||canonicalTreasuryValues.aggregate?.current!==null||
    treasuryJournalObservation?.schema!=='numina.treasury.journal-observation.v1'||
    treasuryJournalObservation.snapshotIsLive!==false||
    treasuryJournalObservation.observedRevision!==canonicalTreasuryValues.observation?.observedRevision||
@@ -30,7 +34,7 @@ if(canonicalTreasuryValues?.status!=='JOURNAL_SNAPSHOT'||canonicalTreasuryValues
    treasuryJournalObservation.baseUsdcTransferRequest!==null||treasuryJournalObservation.baseUsdcTransactionHash!==null||
    metadataAlignment?.record!=='/metadata-alignment.json'||metadataAlignment.constructorMintBlock!=='51725'||
    metadataAlignment.settlementContractDeploymentBlock!=='51726')
-  throw Error('Current integration treasury metadata must match the dated journal observation');
+  throw Error('Integration treasury metadata must leave current state unavailable and preserve the dated journal observation');
 const historicalSettlementReceipt=canonicalTreasuryValues.historicalSettlementReceipt;
 if(historicalSettlementReceipt?.historicalRecord!==true||historicalSettlementReceipt.currentJournalConfirmed!==false)
   throw Error('Retained settlement receipt must be labeled historical');
@@ -52,11 +56,11 @@ const treasuryAlignment={
  externalProviderSubmissionStatus:'UNVERIFIED',externalProviderSettlementStatus:'UNVERIFIED',
  baseUsdcTransferRequest:null,baseUsdcTransactionHash:null,providerReceipt:null,
  ...singularIdentities,schema:'numina.treasury.alignment.v2',planSchema:'numina.treasury.alignment-plan.v2',
- status:'JOURNAL_SNAPSHOT',snapshotIsLive:false,modelIdentity:'NUMINA',modelAligned:true,
+ status:'CURRENT_STATE_UNAVAILABLE',currentState:canonicalTreasuryValues.currentState,historicalJournalObservation:treasuryJournalObservation,snapshotIsLive:false,modelIdentity:'NUMINA',modelAligned:true,
  externalEvidenceStatus:'PENDING_PROVIDER_EVIDENCE',targetAmount:canonicalTreasuryValues.components.NUSD.current,
  aggregateModeledValue:null,historicalAggregateModeledValue:canonicalTreasuryValues.aggregate.modeledTarget,
  aggregateModeledUnit:null,aggregation:'ONE_JOURNAL_NUSD_PROJECTION_WITH_HISTORICAL_ALLOCATION_TARGETS',
- verifiedModeledValue:null,verificationScope:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT',designatedRoleCount:3,
+ verifiedModeledValue:null,verificationScope:'AUTHENTICATED_CURRENT_RECORD_REQUIRED',designatedRoleCount:3,
  accountViewSchema:'numina.treasury.account-view.v2',treasuryIdentity:'NUMINA',transportVerificationChannel:'NUMINA',
  separateRoles:true,singularIdentity:true,historicalProjectionSchema:'numina.treasury.projection.v1',
  providerRoleBalancesAdditive:false,modeledRoleValuesAdditive:false,treasuryCount:1,accountCount:1,
@@ -66,6 +70,7 @@ const nusdContracts={
  schema:'numina.nusd.contract-lifecycle.v1',modelIdentity:'NUMINA',identity:'NUMINA',
  sourceOfTruth:'NUMINA_NATIVE_TREASURY_JOURNAL',treasuryJournalObservation,
  status:'JOURNAL_SNAPSHOT_WITH_DATED_CHAIN_EVIDENCE',snapshotIsLive:false,
+ journalObservationScope:'DATED_JOURNAL_OBSERVATION',journalObservedAt:treasuryJournalObservation.asOfDate,journalObservedRevision:treasuryJournalObservation.observedRevision,currentState:canonicalTreasuryValues.currentState,
  journalMintStatus:'PREPARED',journalMintRequestAmount:treasuryJournalObservation.requests.find(request=>request.kind==='mint_request')?.amount??null,
  journalMintReceipt:null,journalMintPerformed:false,currentChainOperationalState:'UNVERIFIED',currentPaused:null,
  nativeBackingVerified:null,externalBackingVerified:false,providerSubmissionStatus:'UNVERIFIED',
@@ -91,7 +96,7 @@ const verification={stateReconciliation:NUMINA_STATE_RECONCILIATION,
  schemaGenerationPerformed:true,dependenciesAdded:0,typeScriptCompilerChecked:false,
  liveProviderAcceptanceVerified:false,productionEndpointCheckPerformed:false,remoteMcpHosted:false,
  providerInstallationPerformed:false,registryPublicationPerformed:false,appStoreSubmissionPerformed:false,
- nusdActivated:null,mintStatus:'PREPARED_IN_JOURNAL',mintSuccessReported:null,mintVerified:null,mintPerformed:null,
+ nusdActivated:null,mintStatus:canonicalTreasuryValues.mintStatus,historicalMintStatus:canonicalTreasuryValues.historicalMintStatus,mintSuccessReported:null,mintVerified:null,mintPerformed:null,
  journalMintPerformed:false,transferPerformed:null,baseUsdcTransferRecordedInJournal:false,
  settlementConnected:false,externalBackingVerified:false,
  externalProviderSubmissionStatus:'UNVERIFIED',externalProviderSettlementStatus:'UNVERIFIED',

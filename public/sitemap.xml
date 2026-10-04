@@ -1,1 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.numinalabs.xyz/about</loc></url><url><loc>https://www.numinalabs.xyz/authority</loc></url><url><loc>https://www.numinalabs.xyz/blockchain</loc></url><url><loc>https://www.numinalabs.xyz/build</loc></url><url><loc>https://www.numinalabs.xyz/contact</loc></url><url><loc>https://www.numinalabs.xyz/control</loc></url><url><loc>https://www.numinalabs.xyz/core</loc></url><url><loc>https://www.numinalabs.xyz/economy</loc></url><url><loc>https://www.numinalabs.xyz/</loc></url><url><loc>https://www.numinalabs.xyz/labs</loc></url><url><loc>https://www.numinalabs.xyz/ownership</loc></url><url><loc>https://www.numinalabs.xyz/platform</loc></url><url><loc>https://www.numinalabs.xyz/services</loc></url><url><loc>https://www.numinalabs.xyz/status</loc></url><url><loc>https://www.numinalabs.xyz/app</loc></url><url><loc>https://www.numinalabs.xyz/privacy</loc></url><url><loc>https://www.numinalabs.xyz/integrations</loc></url><url><loc>https://numinalabs.xyz/redemption</loc></url><url><loc>https://numinalabs.xyz/frontier</loc></url><url><loc>https://numinalabs.xyz/control-room</loc></url><url><loc>https://numinalabs.xyz/financial-services</loc></url><url><loc>https://numinalabs.xyz/terms</loc></url><url><loc>https://numinalabs.xyz/software-licenses</loc></url><url><loc>https://numinalabs.xyz/compliance</loc></url></urlset>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://numinalabs.xyz/</loc></url>
+  <url><loc>https://numinalabs.xyz/about</loc></url>
+  <url><loc>https://numinalabs.xyz/app</loc></url>
+  <url><loc>https://numinalabs.xyz/authority</loc></url>
+  <url><loc>https://numinalabs.xyz/blockchain</loc></url>
+  <url><loc>https://numinalabs.xyz/build</loc></url>
+  <url><loc>https://numinalabs.xyz/compliance</loc></url>
+  <url><loc>https://numinalabs.xyz/connections</loc></url>
+  <url><loc>https://numinalabs.xyz/contact</loc></url>
+  <url><loc>https://numinalabs.xyz/control</loc></url>
+  <url><loc>https://numinalabs.xyz/core</loc></url>
+  <url><loc>https://numinalabs.xyz/deployment-readiness</loc></url>
+  <url><loc>https://numinalabs.xyz/economy</loc></url>
+  <url><loc>https://numinalabs.xyz/financial-services</loc></url>
+  <url><loc>https://numinalabs.xyz/frontier</loc></url>
+  <url><loc>https://numinalabs.xyz/integrations</loc></url>
+  <url><loc>https://numinalabs.xyz/labs</loc></url>
+  <url><loc>https://numinalabs.xyz/ownership</loc></url>
+  <url><loc>https://numinalabs.xyz/platform</loc></url>
+  <url><loc>https://numinalabs.xyz/privacy</loc></url>
+  <url><loc>https://numinalabs.xyz/provenance</loc></url>
+  <url><loc>https://numinalabs.xyz/redemption</loc></url>
+  <url><loc>https://numinalabs.xyz/security</loc></url>
+  <url><loc>https://numinalabs.xyz/services</loc></url>
+  <url><loc>https://numinalabs.xyz/software-licenses</loc></url>
+  <url><loc>https://numinalabs.xyz/status</loc></url>
+  <url><loc>https://numinalabs.xyz/terms</loc></url>
+  <url><loc>https://numinalabs.xyz/transfer-receipts</loc></url>
+  <url><loc>https://numinalabs.xyz/treasury</loc></url>
+  <url><loc>https://numinalabs.xyz/treasury-simulation</loc></url>
+  <url><loc>https://numinalabs.xyz/wallet-signing</loc></url>
+</urlset>

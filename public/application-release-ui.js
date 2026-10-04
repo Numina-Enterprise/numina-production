@@ -1,3 +1,4 @@
+import {MANIFEST_ROUTES,alignedApplication} from './manifest-surface.js';
 // The builder pin is reviewed site policy, never taken from a returned bundle.
 export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  sourceRepository:'skott34-dot/numina-production',
@@ -11,7 +12,9 @@ export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  oidcIssuer:'https://token.actions.githubusercontent.com'
 });
 
-const MANIFEST_PATH='/v4/release/manifest';
+// Fingerprints and attestation commands apply to the complete inventory bytes.
+// /v4/release/manifest is a sanitized public projection of this inventory.
+const MANIFEST_PATH='/downloads/application-release-v4.json';
 const MAX_MANIFEST_BYTES=1024*1024;
 const all=selector=>document.querySelectorAll(selector);
 const set=(selector,value)=>all(selector).forEach(element=>{element.textContent=value;});
@@ -113,24 +116,25 @@ async function refreshApplicationRelease(){
  clearApplicationEvidence();
  set('[data-application-build]','Loading…');
  set('[data-application-manifest-sha]','Loading…');
- let timer,manifestReceived=false;
+ let timer,manifestReceived=false,receivedVersion=null;
  const deadline=new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Deadline exceeded'));},12000);});
  try{
   const {data,bytes}=await Promise.race([
    deadline,
    (async()=>{
-    const response=await fetch(MANIFEST_PATH,{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal,headers:{Accept:'application/json'}});
-    if(!response.ok||response.redirected)throw Error('Release response unavailable');
+    const [response,canonicalResponse]=await Promise.all([MANIFEST_PATH,MANIFEST_ROUTES.manifest].map(path=>fetch(path,{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal,headers:{Accept:'application/json'}})));
+    if(!response.ok||response.redirected||!canonicalResponse.ok||canonicalResponse.redirected)throw Error('Release response unavailable');
     const bytes=await readManifestBytes(response);
     const data=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
-    if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='4.0.0'||data.product!=='Numina'||data.release!=='numina-v4.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
+    const manifest=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(await readManifestBytes(canonicalResponse)));
+    alignedApplication(manifest,data);
     return {data,bytes};
    })()
   ]);
   if(generation!==requestGeneration||controller.signal.aborted)return;
-  manifestReceived=true;
-  set('[data-application-state]','Application release 4.0.0 manifest received · calculating fingerprint…');
-  set('[data-application-version]','4.0.0');
+  manifestReceived=true;receivedVersion=data.version;
+  set('[data-application-state]','Application release '+data.version+' matches the canonical manifest · calculating fingerprint…');
+  set('[data-application-version]',data.version);
   renderReleaseRequirements(data);
   set('[data-application-build]',data.build_id);
   set('[data-application-hash-note]','Manifest received; fingerprint calculation is in progress.');
@@ -156,11 +160,11 @@ async function refreshApplicationRelease(){
   all('[data-application-attestation-lookup]').forEach(link=>{
    link.href=lookup;link.removeAttribute('aria-disabled');link.removeAttribute('tabindex');
   });
-  set('[data-application-state]','Application release 4.0.0 manifest received · fingerprint calculated');
+  set('[data-application-state]','Application release '+receivedVersion+' matches the canonical manifest · fingerprint calculated');
  }catch{
   if(generation!==requestGeneration)return;
   if(manifestReceived){
-   set('[data-application-state]','Application release 4.0.0 manifest received · fingerprint unavailable');
+   set('[data-application-state]','Application release '+receivedVersion+' matches the canonical manifest · fingerprint unavailable');
    set('[data-application-manifest-sha]','Unavailable');
    set('[data-application-hash-note]','The manifest was received, but its fingerprint could not be calculated during this refresh.');
    set('[data-application-provenance-status]','Not verified in this browser. Download the received manifest to verify its signature and builder identity independently.');

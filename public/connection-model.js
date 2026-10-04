@@ -13,7 +13,7 @@ export const CONNECTION_TARGETS = Object.freeze({
   'integration-kit':{name:'Integration kit',entry:'/integrations',path:'/downloads/integration-kit-v4.0.0-record.json',kind:'integration'},
   android:{name:'Android',entry:'/downloads/native-package-record-v4.json',path:'/downloads/native-package-record-v4.json',kind:'native'},
   ios:{name:'iOS',entry:'/downloads/native-package-record-v4.json',path:'/downloads/native-package-record-v4.json',kind:'native'},
-  'runtime-verifier':{name:'Core runtime',entry:'/core',path:'/v1/status',kind:'runtime'},
+  'runtime-verifier':{name:'Canonical manifest',entry:'/core',path:'/api/control/v1/manifest',kind:'manifest'},
   treasury:{name:'Canonical treasury',entry:'/api/control/v1/treasury',path:'/api/control/v1/treasury',kind:'treasury'},
   'provider-observations':{name:'Provider account',entry:'/api/control/v1/stripe-treasury',path:'/api/control/v1/stripe-treasury',kind:'provider'},
   'provider-routes':{name:'Provider routes',entry:'/api/control/v2/treasury/provider-routes',path:'/api/control/v2/treasury/provider-routes',kind:'provider-routes'},
@@ -44,7 +44,7 @@ function connectionClassification(target,value){
     case 'a2a':if(value?.protocolVersion==='0.3.0'&&value.name==='Numina Control')return ['available','Discovery available','The agent card responds. No agent message or operation was sent.'];break;
     case 'integration':if(schema==='numina.integration.archive.v2'&&value.version==='4.0.0'&&/^[a-f0-9]{64}$/.test(value.sha256))return ['available','Package record available','Distribution metadata responds. Installation in another product is not checked.'];break;
     case 'native':if(schema==='numina.native-package.v1'&&value.proposedPackageIdentity==='xyz.numinalabs.app')return ['available','Package record available','The existing package record responds. Device installation and store approval are separate.'];break;
-    case 'runtime':if([value?.production_version,value?.release,value?.state?.release].some(version=>['1.9.0-rc26','core-v1.8+prod-v1.9.0-rc26'].includes(version)))return ['available','Runtime responding','The pinned runtime status responds. Review its signed evidence in Build & trust.'];break;
+    case 'manifest':if(schema==='numina.manifest.v2'&&value.singular===true&&value.identity==='NUMINA'&&value.repository==='NUMINA'&&value.mechanics?.repository?.identity==='NUMINA'&&value.mechanics.repository.source==='/NUMINA'&&/^[a-f0-9]{64}$/.test(value.mechanics?.artifact?.build_id||'')&&typeof value.applicationVersion==='string'&&typeof value.mechanics?.runtime?.version==='string')return ['available','Manifest responding','The canonical Numina manifest reports its application build and runtime dependency. This read does not verify a runtime signature.'];break;
     case 'treasury':if(schema==='numina.treasury.v1')return value.status==='READY'?['available','Read connection working','The authorized canonical treasury read succeeded. No financial movement was requested.']:['attention','Not initialized','The canonical treasury reports that initialization is incomplete.'];break;
     case 'provider':if(schema==='numina.stripe.treasury.v1'&&value.connection==='read_only')return ['available','Provider read working','The authorized provider observation succeeded. No balances are included in this report.'];break;
     case 'provider-routes':if(schema==='numina.treasury.provider-routes.v1'&&value.connection==='read_only')return ['available','Route observation available','The authorized route observation responds. This check does not verify funding, provider acceptance or settlement.'];break;
@@ -88,4 +88,3 @@ export async function checkConnection(id,{origin,fetchImpl=fetch,signal,timeoutM
 export function connectionReport(results,origin){
   return {schema:'numina.connection-observations.v1',system:'Numina',rootCount:1,origin:new URL(origin).origin,recordedAt:new Date().toISOString(),scope:'Browser-session read checks; unsigned observations, not independent assurance or financial execution evidence.',financialOperationsPerformed:false,credentialsCollected:false,results:results.map(item=>({id:item.id,name:item.name,path:item.path,state:item.state,label:item.label,message:item.message,checkedAt:item.checkedAt,durationMs:item.durationMs,httpStatus:item.httpStatus}))};
 }
-

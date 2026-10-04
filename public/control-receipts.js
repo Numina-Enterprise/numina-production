@@ -8,15 +8,15 @@ export function clearControlReceipt(container){container.querySelector('#'+RECEI
 
 export function renderControlReceipt(container,snapshot,request){
   clearControlReceipt(container);
-  if(!['complete','authority-scoped'].includes(snapshot?.projection)||!Number.isSafeInteger(snapshot.revision)||
+  if(!['complete','authority-scoped'].includes(snapshot?.scope)||!Number.isSafeInteger(snapshot.revision)||
     !request||request.execution?.state!=='committed'||request.execution.recordId!==request.id||
     request.route!==INTERNAL_ADAPTER||request.verifiedOutcome?.scope!==INTERNAL_ADAPTER||
     request.verifiedOutcome.externalExecution!==false||!text(request.verifiedOutcome.evidenceId)||
     !Array.isArray(request.evidence)||!request.evidence.includes(request.verifiedOutcome.evidenceId)||
-    !Array.isArray(snapshot.state?.evidence)||!Array.isArray(snapshot.state?.records))return;
+    !Array.isArray(snapshot.content?.evidence)||!Array.isArray(snapshot.content?.records))return;
 
-  const nodes=snapshot.state.evidence.filter(node=>node?.id===request.verifiedOutcome.evidenceId);
-  const records=snapshot.state.records.filter(record=>record?.requestId===request.id);
+  const nodes=snapshot.content.evidence.filter(node=>node?.id===request.verifiedOutcome.evidenceId);
+  const records=snapshot.content.records.filter(record=>record?.requestId===request.id);
   if(nodes.length!==1||records.length!==1)return;
   const node=nodes[0],record=records[0];
   if(node.kind!=='execution'||node.requestId!==request.id||node.adapter!==INTERNAL_ADAPTER||

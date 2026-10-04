@@ -51,6 +51,8 @@ finally{unlinkSync(baselineArchivePath);}
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/workspace-session.js','client/workspace-session.js'],
+ ['public/control-receipts.js','client/control-receipts.js'],
  // Current licensing accompanies preserved runtime and contract artifact bytes.
  ['public/LICENSE.md','client/LICENSE.md'],
  ['public/NOTICE.md','client/NOTICE.md'],
@@ -72,6 +74,9 @@ const overlays=[
  // Release status must ship the reviewed UI and its matching verification model.
  ['public/application-release-ui.js','client/application-release-ui.js'],
  ['public/runtime-release-ui.js','client/runtime-release-ui.js'],
+ ['public/manifest-surface.js','client/manifest-surface.js'],
+ ['public/control-room.js','client/control-room.js'],
+ ['public/connection-model.js','client/connection-model.js'],
  ['public/runtime-release-model.js','client/runtime-release-model.js'],
  ['public/runtime-contract.js','client/runtime-contract.js'],
  // Provider observations must ship the reviewed display, including its strict amount helper.
@@ -87,6 +92,8 @@ const overlays=[
  ['public/developers.html','client/developers.html'],
  ['public/partners.html','client/partners.html'],
  ['public/wallet-signing.html','client/wallet-signing.html'],
+ ['public/wallet-execution-ui.js','client/wallet-execution-ui.js'],
+ ['public/receipt-intake-ui.js','client/receipt-intake-ui.js'],
  ['public/connections.html','client/connections.html'],
  ['public/mena.html','client/mena.html'],
  ['public/500.html','client/500.html'],
@@ -117,6 +124,11 @@ const overlays=[
  ['public/charitable-relationship.json','client/charitable-relationship.json'],
  ['public/legal-discovery.js','client/legal-discovery.js'],
  ['public/sitemap.xml','client/sitemap.xml'],
+ ['public/robots.txt','client/robots.txt'],
+ ['public/app-sw.js','client/app-sw.js'],
+ ['public/app-install.js','client/app-install.js'],
+ ['docs/Numina-Security.md','client/downloads/Numina-Security.md'],
+ ['docs/history/Numina-Security-2026-09-15.md','client/downloads/history/Numina-Security-2026-09-15.md'],
  ['public/country-codes.js','client/country-codes.js'],
  ['public/compliance.html','client/compliance.html'],
  ['public/compliance-coverage.json','client/compliance-coverage.json'],
@@ -196,7 +208,7 @@ const overlays=[
  ['docs/numina-os-4.0.0-ios-source.zip','client/downloads/numina-os-4.0.0-ios-source.zip'],
  ['integrations/numina/file-manifest.json','client/downloads/integration-manifest.json'],
 ];
-for(const [source,target]of overlays)copyFileSync(source,'dist/'+target);
+for(const [source,target]of overlays){mkdirSync(path.dirname('dist/'+target),{recursive:true});copyFileSync(source,'dist/'+target);}
 const modules=['public/treasury-connection-model.js','public/nusd-contract-record.js','public/architecture-layers.js','public/owner-approval.js','src/treasury-alignment.js','src/native-treasury.js','src/bank-route-model.js','src/stripe-treasury.js','src/treasury-evidence.js'];
 const original=Buffer.from(readFileSync('reference/live-server-index.js.b64','utf8').trim(),'base64').toString();
 assert.equal(hash(original),baseline.workerSha256);
@@ -220,12 +232,26 @@ const controlBefore="adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',"
 const controlAfter='stateReconciliation:NUMINA_STATE_RECONCILIATION,'+controlBefore;
 assert.equal(worker.split(controlBefore).length,2,'Unique v1 control manifest');
 worker=worker.replace(controlBefore,controlAfter);substitutions.push({source:'src/control-http.js#state-reconciliation',before:controlBefore,after:controlAfter});
+// Correct only the current manifest reader and caller. Keep retained production
+// authentication, signed RC26 handlers and all unrelated worker bytes intact.
+const applicationReaderBefore=worker.slice(worker.indexOf('async function readApplicationRelease(req,env){'),worker.indexOf('async function controlNuminaManifest(req,env){'));
+const controlSource=readFileSync('src/control-http.js','utf8').replace(/\r\n/g,'\n');
+const applicationReaderAfter=controlSource.slice(controlSource.indexOf('async function readApplicationRelease(req,env){'),controlSource.indexOf('async function controlNuminaManifest(req,env){'));
+assert.ok(applicationReaderBefore.length>100&&applicationReaderAfter.length>100,'Application inventory reader boundaries');
+assert.equal(worker.split(applicationReaderBefore).length,2,'Unique application inventory reader');
+worker=worker.replace(applicationReaderBefore,applicationReaderAfter);substitutions.push({source:'src/control-http.js#application-reader',before:applicationReaderBefore,after:applicationReaderAfter});
+const identityAliasesBefore='    core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,\n    authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,\n';
+const identityAliasesAfter='    applicationVersion:application?.version??null,\n    applicationRelease:application?.release??null,\n';
+assert.equal(worker.split(identityAliasesBefore).length,2,'Unique canonical manifest mechanics aliases');
+worker=worker.replace(identityAliasesBefore,identityAliasesAfter);substitutions.push({source:'src/control-http.js#manifest-mechanics',before:identityAliasesBefore,after:identityAliasesAfter});
 const capabilityLines=worker.split('\n').filter(line=>line.includes('providers:FRONTIER_PROVIDERS,'));
 assert.equal(capabilityLines.length,2,'Manifest and discovery capability readbacks');
 for(const before of capabilityLines){const after=before.replace('providers:FRONTIER_PROVIDERS,','providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,legal:NUMINA_LEGAL_DISCOVERY,');assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/frontier-http.js#capabilities',before,after});}
 const headBefore=worker.split('\n').find(line=>line.includes("scope:'NUMINA finalized singular build projection'"));
 assert.ok(headBefore,'Public projection scope');
-const headAfter=headBefore.replace("scope:'NUMINA finalized singular build projection'","scope:'NUMINA finalized singular build projection',rootHashScope:'public_identity_projection_not_control_genesis',recordedControlGenesisRoot:NUMINA_STATE_RECONCILIATION.roots.recordedControlGenesisRoot,currentJournalRootVerified:false");
+const headAfter=headBefore.replace("scope:'NUMINA finalized singular build projection'","scope:'NUMINA finalized singular build projection',rootHashScope:'public_identity_projection_not_control_genesis',recordedControlGenesisRoot:NUMINA_STATE_RECONCILIATION.roots.recordedControlGenesisRoot,currentJournalRootVerified:false")
+  .replace("readiness:'/v1/frontier/readiness'","readiness:'/api/control/v1/health'")
+  .replace("blockchainConnection:'/v2/network/status'","blockchainConnection:null,blockchainConnectionStatus:'CURRENT_OBSERVATION_UNAVAILABLE',networkEvidence:'/api/nusd/v1/status'");
 worker=worker.replace(headBefore,headAfter);substitutions.push({source:'src/frontier-http.js#projection-scope',before:headBefore,after:headAfter});
 for(const source of modules){
   const before=readFileSync('reference/settlement-metadata-bases/'+path.basename(source)+'.txt','utf8');
@@ -345,6 +371,19 @@ const legalDeclarations=['APP_CONSENT_VERSION','APP_LEGAL_POLICY'].map(name=>{
   assert.ok(declaration,'Workspace policy declaration: '+name);return declaration;
 }).join('\n')+'\n';
 const appVersionBefore="const APP_VERSION='4.0.0';";
+// The retained webhook is account-bound. Use the same prerequisite for health
+// and checkout availability, preserving its stronger signature/account checks.
+const paymentSource=readFileSync('src/app-http.js','utf8').replace(/\r\n/g,'\n');
+const paymentHelper=compile(paymentSource.slice(paymentSource.indexOf('export function appPaymentConfirmationConfigured('),paymentSource.indexOf('function appResponse(')));
+assert.ok(paymentHelper.startsWith('function appPaymentConfirmationConfigured('),'Payment configuration helper boundary');
+const paymentAnchor='function appResponse(value,status=200,headers={})';
+assert.equal(worker.split(paymentAnchor).length,2,'Unique payment configuration insertion');
+worker=worker.replace(paymentAnchor,paymentHelper+paymentAnchor);substitutions.push({source:'src/app-http.js#payment-configuration',before:paymentAnchor,after:paymentHelper+paymentAnchor});
+for(const [before,after]of [
+ ["if(!secret||typeof expectedAccount!=='string'||!/^acct_[A-Za-z0-9]{8,100}$/.test(expectedAccount))appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);","if(!appPaymentConfirmationConfigured(secret,expectedAccount))appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);"],
+ ["paymentConfirmation:env.NUMINA_STRIPE_WEBHOOK_SECRET?'configured':'not_configured'","paymentConfirmation:appPaymentConfirmationConfigured(env.NUMINA_STRIPE_WEBHOOK_SECRET,env.NUMINA_STRIPE_TREASURY_ACCOUNT)?'configured':'not_configured'"],
+ ["if(!env.NUMINA_STRIPE_WEBHOOK_SECRET)appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);","if(!appPaymentConfirmationConfigured(env.NUMINA_STRIPE_WEBHOOK_SECRET,env.NUMINA_STRIPE_TREASURY_ACCOUNT))appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);"]
+]){assert.equal(worker.split(before).length,2,'Unique hosted checkout configuration gate');worker=worker.replace(before,after);substitutions.push({source:'src/app-http.js#hosted-checkout-gate',before,after});}
 const legalShared=compile(readFileSync('public/country-codes.js','utf8'))+compile(readFileSync('public/legal-discovery.js','utf8'));
 const appVersionAfter=legalShared+legalDeclarations+appVersionBefore;
 assert.equal(worker.split(appVersionBefore).length,2,'Unique application version declaration');
@@ -365,6 +404,16 @@ const legalRouteBefore="if(['/frontier','/frontier/','/control-room','/control-r
 const legalRouteAfter="const legalPages={'/compliance':'/compliance.html','/compliance/':'/compliance.html','/terms':'/terms.html','/terms/':'/terms.html','/privacy':'/privacy.html','/privacy/':'/privacy.html','/software-licenses':'/software-licenses.html','/software-licenses/':'/software-licenses.html'};\n   if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));\n   "+legalRouteBefore;
 assert.equal(worker.split(legalRouteBefore).length,2,'Unique maintained legal-page routing boundary');
 worker=worker.replace(legalRouteBefore,legalRouteAfter);substitutions.push({source:'workspace-policy#legal-routes',before:legalRouteBefore,after:legalRouteAfter});
+// All interactive Numina pages share the verified browser-session origin.
+const sessionDeclarations=compile(readFileSync('public/workspace-session.js','utf8'));
+const sessionPreambleBefore=worker.slice(0,worker.indexOf('\n')+1),sessionPreambleAfter=sessionDeclarations+sessionPreambleBefore;
+assert.equal(worker.split(sessionPreambleBefore).length,2,'Unique Numina session preamble');
+worker=worker.replace(sessionPreambleBefore,sessionPreambleAfter);substitutions.push({source:'public/workspace-session.js',before:sessionPreambleBefore,after:sessionPreambleAfter});
+const sessionRouteBefore=legalRouteAfter;
+const sessionRouteSource=readFileSync('src/worker.js','utf8').match(/   const workspaceTarget=workspaceSessionTarget\(req.url,req.method\);\n   if\(workspaceTarget\)[^\n]+/)[0];
+const sessionRouteAfter=sessionRouteSource+'\n   '+sessionRouteBefore;
+assert.equal(worker.split(sessionRouteBefore).length,2,'Unique Numina session route');
+worker=worker.replace(sessionRouteBefore,sessionRouteAfter);substitutions.push({source:'src/worker.js#workspace-session',before:sessionRouteBefore,after:sessionRouteAfter});
 // Correct the retained policy address literal outside the metadata modules.
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
@@ -441,28 +490,30 @@ const historicalSoftwareAlignment=architecture.software_alignment;
 const preparedMint=values.observation.requests.find(request=>request.kind==='mint_request');
 assert.equal(preparedMint?.status,'PREPARED','Observed native mint request');
 Object.assign(architecture.treasury,{
-  verification:'JOURNAL_SNAPSHOT',
-  verificationScope:'JOURNAL_CONTINUITY_AT_OBSERVATION',
+  verification:'CURRENT_STATE_UNAVAILABLE',
+  verificationScope:'AUTHENTICATED_CURRENT_RECORD_REQUIRED',
   provider_verification:null,
   providerBalancesVerified:false,
   modeled_role_values_additive:false,
   aggregate_modeled_value:null,
   historical_aggregate_modeled_value:'1500000000000000',
   software_values:{USD:null,USDC:null,NUSD:values.components.NUSD.current,aggregateNUSD:values.aggregate.current},
-  software_values_scope:'JOURNAL_SNAPSHOT',
+  software_values_scope:'CURRENT_STATE_UNAVAILABLE',
+  projection:null,currentState:values.currentState,historicalJournalObservation:values.observation,
   software_transfer:null,
   historical_software_transfer:historicalTransfer?{...historicalTransfer,historicalRecord:true,currentJournalConfirmed:false}:null,
   canonicalValues:values
 });
 architecture.mint_event=null;
-architecture.mint_request={...preparedMint,observedRevision:values.observation.observedRevision,snapshotIsLive:false};
+architecture.mint_request=null;
+architecture.historical_mint_request={...preparedMint,observedRevision:values.observation.observedRevision,snapshotIsLive:false};
 architecture.mintStatus=values.mintStatus;
 const confirmedConstructorMint=values.separateChainMintEvidence;
 architecture.historical_mint_event={...historicalMintEvent,status:'HISTORICAL_CHAIN_RECEIPT',historicalRecord:true,currentChainStateVerified:false,observedAt:confirmedConstructorMint.observedAt,journalMintConfirmed:false,chain_id:confirmedConstructorMint.chainId,contract_address:confirmedConstructorMint.tokenAddress,transaction_hash:confirmedConstructorMint.transactionHash,block_number:confirmedConstructorMint.blockNumber,receipt_status:confirmedConstructorMint.receiptStatus,amount_nusd:confirmedConstructorMint.amountNusd,decimals:confirmedConstructorMint.decimals,base_units:confirmedConstructorMint.baseUnits,mint_receipt:confirmedConstructorMint.download,settlement_contract_deployment:confirmedConstructorMint.settlementContractDeployment};
 architecture.numinaMetadata.canonicalTreasuryValues=values;
 architecture.numinaMetadata.canonicalTreasuryValueStatus=values.status;
-architecture.numinaMetadata.nativeEvidenceStatus='JOURNAL_SNAPSHOT';
-architecture.numinaMetadata.manifestStatus='JOURNAL_SNAPSHOT';
+architecture.numinaMetadata.nativeEvidenceStatus='CURRENT_STATE_UNAVAILABLE';
+architecture.numinaMetadata.manifestStatus='CURRENT_STATE_UNAVAILABLE';
 architecture.numinaMetadata.provider_verification=null;
 architecture.numinaMetadata.transfersEnabled=null;
 architecture.provider_verification=null;
@@ -473,11 +524,23 @@ writeFileSync('dist/client/source-alignment.json',JSON.stringify(sourceAlignment
 const allowed=new Set([...overlays.map(x=>x[1]),'client/source-alignment.json']);let retained=0;for(const x of baselineClient)if(!allowed.has(x.path)){assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Unrelated published asset changed: '+x.path);retained++;}
 assert.equal(json('dist/client/downloads/nusd/treasury-settlement-receipt.json').id,receipt.validatedReceiptId);
 assert.equal(json('dist/client/downloads/nusd/treasury-settlement-receipt-validation.json').id,receipt.id);
-assert.equal(json('dist/client/final-build.json').canonicalTreasuryValues.aggregate.current,values.aggregate.current);
+// The byte-pinned FINAL artifact retains its dated projection; it is not current state.
+assert.deepEqual(json('dist/client/final-build.json').canonicalTreasuryValues.observation,values.observation);
+assert.equal(values.aggregate.current,null);
 const aliases=['release.json','application-release-v2.json','application-release-v3.json','application-release-v4.json'].map(n=>'client/downloads/'+n),excluded=new Set(aliases);
 const collect=(dir='dist',relative='')=>readdirSync(dir).flatMap(n=>{const p=relative?relative+'/'+n:n,a=path.join(dir,n);return statSync(a).isDirectory()?collect(a,p):excluded.has(p)?[]:[{path:p,sha256:hash(readFileSync(a))}];});
 const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0),buildId=hash(artifacts.map(x=>x.sha256+'  '+x.path+'\n').join(''));
 const release=structuredClone(baseline);
+// Current descriptor fingerprints must identify the shipped overlays. The
+// baseline and signed historical records remain byte-for-byte preserved.
+const artifactHashes=new Map(artifacts.map(item=>[item.path,item.sha256]));
+const currentBindings=[release.security,...Object.values(release.owner_wallet_execution.modules),...Object.values(release.receipt_observation_intake.modules),...Object.values(release.evidence_handoff.modules)];
+for(const binding of currentBindings){
+ const pathname=binding.path??binding.url??binding.controlModel;
+ const artifactPath='client'+pathname;
+ assert.ok(artifactHashes.has(artifactPath),'Current release binding asset: '+pathname);
+ binding.sha256=artifactHashes.get(artifactPath);
+}
 release.stateReconciliation=NUMINA_STATE_RECONCILIATION;
 release.procurement_usage=false;release.procurement=NUMINA_LAYERS.procurement;
 release.software_release_alignment=softwareReleaseAlignment;
@@ -497,7 +560,7 @@ release.compatibility.additive_migrations=[...new Set([...release.compatibility.
 release.owner_approval={...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:hash(readFileSync('public/owner-approval.js'))};
 release.canonicalTreasuryValues=values;release.contract_record=NUSD_CONTRACT_RECORD;
 release.softwareTreasury={identity:'NUMINA',singular:true,...structuredClone(connection.softwareBalanceModel)};
-release.native_treasury_alignment={...release.native_treasury_alignment,status:'JOURNAL_SNAPSHOT',settlementReceiptValidation:structuredClone(receipt),historicalSettlementReceipt:{id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,status:'HISTORICAL_OWNER_ASSERTION',historicalRecord:true,currentJournalConfirmed:false},settlementStatus:values.settlementStatus??'UNVERIFIED',settlementScope:values.sourceOfRecord,mintStatus:values.mintStatus,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,aggregateModeledValue:null,historicalAggregateModeledValue:'1500000000000000',modeledAllocationsAdditive:false,verificationScope:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT'};
+release.native_treasury_alignment={...release.native_treasury_alignment,status:'CURRENT_STATE_UNAVAILABLE',currentState:values.currentState,historicalJournalObservation:values.observation,settlementReceiptValidation:structuredClone(receipt),historicalSettlementReceipt:{id:receipt.validatedReceiptId,path:receipt.historicalReceiptPath,download:receipt.historicalReceiptDownload,status:'HISTORICAL_OWNER_ASSERTION',historicalRecord:true,currentJournalConfirmed:false},settlementStatus:values.settlementStatus??'UNVERIFIED',settlementScope:values.sourceOfRecord,mintStatus:values.mintStatus,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,aggregateModeledValue:null,historicalAggregateModeledValue:'1500000000000000',modeledAllocationsAdditive:false,verificationScope:'NUMINA_NATIVE_TREASURY_JOURNAL_SNAPSHOT'};
 delete release.native_treasury_alignment.singularSettlementReceipt;
 const nativeRecord=json('docs/native-package-record-v4.json'),iosInputs=iosInputSnapshot(root);
 const iosSource=nativeRecord.sourceArchives.find(item=>item.platform==='ios');
@@ -513,6 +576,9 @@ alignNusdReleaseMetadata(release);
 for(const f of aliases)writeFileSync('dist/'+f,JSON.stringify(release,null,2)+'\n');
 assert.deepEqual(checkActiveProvenance({rootDir:root}).errors,[],'Active provenance generated release gate');
 execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});
+// A release cannot complete with divergent current manifests, asset hashes or
+// a stale shared page shell. These checks use only this build and local fixtures.
+execFileSync(process.execPath,['--test','tests/manifest-alignment.test.mjs'],{stdio:'inherit'});
 for(const target of ['dist/server/index.js',...artifacts.filter(x=>/\.(?:js|json|html|md)$/.test(x.path)).map(x=>'dist/'+x.path),...aliases.map(x=>'dist/'+x)])assert.ok(!readFileSync(target,'utf8').includes('0x735bd8'),'Stale Stripe address in '+target);
 const report={stripeUsdcDepositAddress:stripeUsdcAddress,retainedRuntimeAddressCorrections:addressCorrections.length,identity:'NUMINA',historicalReceiptId:receipt.id,aggregateNusd:values.aggregate.current,mintedNusd:values.mintedNusd,burnedNusd:values.burnedNusd,componentCount:3,buildId,workerSha256:hash(worker),baselineBuildId:baseline.build_id,retainedClientAssets:retained,overlaidClientAssets:allowed.size,runtimeModules:substitutions.map(item=>item.source),unrelatedRuntimeBytesPreserved:true,homepageUnchanged:false,externalProviderMutations:false};
 mkdirSync('work',{recursive:true});writeFileSync('work/frontier-build-verification.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
