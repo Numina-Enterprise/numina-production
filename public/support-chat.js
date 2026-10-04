@@ -23,7 +23,6 @@ if (!document.querySelector('#numina-support-launcher')) {
   const topics = dialog.querySelector('.support-chat-topics');
   let knowledge;
   let loading;
-  let previousFocus;
   let conversationVersion = 0;
   function message(text, role, sources = []) {
     const item = document.createElement('article');
@@ -101,7 +100,6 @@ if (!document.querySelector('#numina-support-launcher')) {
     if (dialog.open) input.focus();
   }
   launcher.addEventListener('click', () => {
-    previousFocus = document.activeElement;
     dialog.showModal();
     launcher.setAttribute('aria-expanded', 'true');
     if (!log.childElementCount) greet();
@@ -109,7 +107,7 @@ if (!document.querySelector('#numina-support-launcher')) {
     input.focus();
   });
   dialog.querySelector('.support-chat-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => {launcher.setAttribute('aria-expanded','false');previousFocus?.focus();});
+  dialog.addEventListener('close', () => {launcher.setAttribute('aria-expanded','false');launcher.focus();});
   dialog.querySelector('form').addEventListener('submit', event => {event.preventDefault();ask(input.value);});
   retry.addEventListener('click', loadKnowledge);
   dialog.querySelector('.support-chat-clear').addEventListener('click', () => {conversationVersion++;input.value='';log.replaceChildren();greet();input.focus();});

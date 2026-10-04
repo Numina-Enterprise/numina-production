@@ -203,6 +203,20 @@ test('closing while an answer is loading preserves launcher focus after completi
   assert.equal(h.timers.size, 0);
 });
 
+test('mouse activation without browser button focus returns focus to the launcher on close and Escape', async () => {
+  for (const closeWithButton of [true, false]) {
+    const h = harness();
+    h.document.activeElement = h.document.body;
+    await h.launcher.emit('click');
+    assert.strictEqual(h.document.activeElement, h.input);
+    if (closeWithButton) await h.close();
+    else await h.dialog.close();
+    assert.strictEqual(h.document.activeElement, h.launcher);
+    assert.equal(h.launcher.getAttribute('aria-expanded'), 'false');
+    await settled();
+  }
+});
+
 test('visitor text, topic text and FAQ answers use text rendering rather than HTML', async () => {
   const payload = '<img src=x onerror=alert(1)>', data = structuredClone(knowledge);
   data.faq.find(entry => entry.id === 'assessment-cost').answer = `Literal answer: ${payload}`;
