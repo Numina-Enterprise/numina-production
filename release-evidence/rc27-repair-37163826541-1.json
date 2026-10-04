@@ -1,0 +1,73 @@
+{
+  "sourceSha": "20cdc916dbe9e39a8a498d7cc9782ddf27f6705b",
+  "runId": "37163826541",
+  "runAttempt": "1",
+  "runnerEnvironment": "github-hosted",
+  "runnerName": "GitHub Actions 1000004575",
+  "runnerOS": "Linux",
+  "runnerArch": "X64",
+  "imageOS": "ubuntu24",
+  "imageVersion": "20260927.320.1",
+  "node": "v26.10.0",
+  "python": "Python 3.12.3",
+  "schema": "numina.rc27.repair-evidence.v1",
+  "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/37163826541",
+  "repairBranch": "repair/canonical-downstream-37163826541",
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0
+  },
+  "regression": {
+    "command": "npm test",
+    "exitCode": 0,
+    "tests": 913,
+    "pass": 913,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "inventories": [
+    {
+      "path": "public/runtime-contract.js",
+      "sha256": "c7c46b7dd6a8589474e01a5377c23d55b5d876531f144f172ae56813ff98653d"
+    },
+    {
+      "path": "integrations/numina/distribution.json",
+      "sha256": "a8ea129fd22e10e2907ebabf3ca25dc083d22583a2495386cd87e8ff12ba7187"
+    },
+    {
+      "path": "integrations/numina/verification.json",
+      "sha256": "47bbd262ed52bbde367b15c3317203f79092d57bda56af3f81933c9e6abed91b"
+    },
+    {
+      "path": "integrations/numina/file-manifest.json",
+      "sha256": "ed7e9a1f4922f7f54fa2b8a4025bcef8f4634824b5609e300a5b262450939c02"
+    },
+    {
+      "path": "docs/native-package-record-v4.json",
+      "sha256": "0d6efab5e86d7c973e081be277e902ec676c135f7653adc943fbe46065dee114"
+    },
+    {
+      "path": "docs/numina-os-4.0.0-ios-source.zip",
+      "sha256": "ec9a44ebec2e351b9b7c271d25441b125243f18057fa9fa9321bbe1f9de9c0f6"
+    },
+    {
+      "path": "runtime/vercel-production/public/downloads/native-package-record-v4.json",
+      "sha256": "0d6efab5e86d7c973e081be277e902ec676c135f7653adc943fbe46065dee114"
+    },
+    {
+      "path": "runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip",
+      "sha256": "ec9a44ebec2e351b9b7c271d25441b125243f18057fa9fa9321bbe1f9de9c0f6"
+    }
+  ],
+  "logs": [
+    {
+      "name": "build.log",
+      "sha256": "600242e48b34cb48dfced147b777d9d8de8f670a93035bc98190f9b3475c3f3d"
+    },
+    {
+      "name": "tests.log",
+      "sha256": "8e6e5596052952f73d21ffc3900973f14f61317210e09c7a069566c16d8de103"
+    }
+  ]
+}
