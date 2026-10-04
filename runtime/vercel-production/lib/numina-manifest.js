@@ -1,6 +1,7 @@
 'use strict';
 
 const {RELEASE_IDENTITY}=require('./numina');
+const finalManifestReference=require('../final-manifest-reference.json');
 const mintReceipt=require('../../nusd/mint-receipt.json');
 const deploymentReceipt=require('../../nusd/deployment-receipt.json');
 const NUMINA='NUMINA';
@@ -56,7 +57,7 @@ const mechanics=Object.freeze({
   }),
   providerVerification:Object.freeze({provider:NUMINA,verified:null,scope:'PROVIDER_EVIDENCE_REQUIRED',bankOfAmericaDestinationConfirmation:false,stripeDestinationConfirmation:false})
 });
-const NUMINA_MANIFEST=Object.freeze({stateReconciliation,
+const NUMINA_MANIFEST=Object.freeze({stateReconciliation,finalManifestReference,
   schema:'numina.manifest.v2',singular:true,identity:NUMINA,root:NUMINA,manifest:NUMINA,authority:NUMINA,
   source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,authenticated:true,verified:true,deployment:NUMINA,deployed:true,
   productionSource:NUMINA,vocabulary,release:RELEASE_IDENTITY,

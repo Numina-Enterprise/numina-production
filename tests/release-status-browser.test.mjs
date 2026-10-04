@@ -1,3 +1,4 @@
+import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -9,8 +10,8 @@ import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 
 const read=path=>readFileSync(new URL('../'+path,import.meta.url));
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
-const application={identity:'NUMINA',manifest:'NUMINA',singular:true,release_channel:'production',frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}},runtime_dependency:{identity:'NUMINA',singular:true,version:'1.9.0-rc26',release:'core-v1.8+prod-v1.9.0-rc26'},schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64)};
-const canonical={schema:'numina.manifest.v2',singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:application.build_id},runtime:application.runtime_dependency}};
+const application={identity:'NUMINA',manifest:'NUMINA',singular:true,release_channel:'production',frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}},runtime_dependency:{identity:'NUMINA',singular:true,version:'1.9.0-rc26',release:'core-v1.8+prod-v1.9.0-rc26'},schema:'numina.application-release.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64)};
+const canonical={schema:'numina.manifest.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:application.build_id},runtime:application.runtime_dependency}};
 const applicationBytes=JSON.stringify(application,null,3)+'\n';
 const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;});return {promise,resolve};};
 const tick=()=>new Promise(resolve=>setTimeout(resolve,10));

@@ -1,3 +1,4 @@
+import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
 import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {NUSD_CONTRACT_RECORD} from '../public/nusd-contract-record.js';
 import {NUSD_MINT_WORKFLOW,NUSD_CONVERSION_WORKFLOW,NUSD_APPROVED_REVIEW,NUSD_SIMULATION} from '../src/nusd-http.js';
@@ -54,7 +55,7 @@ const artifacts=collect().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0);
 const root=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
 const releaseEvidence=JSON.parse(readFileSync('docs/release-evidence-2026-09-13.json'));
 const singularSettlementValidation=JSON.parse(readFileSync('release-evidence/numina-singular-treasury-settlement-validation-2026-09-26.json'));
-const record={stateReconciliation:NUMINA_STATE_RECONCILIATION,
+const record={stateReconciliation:NUMINA_STATE_RECONCILIATION,finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,
  owner_approval:{...NUMINA_OWNER_APPROVAL,source:'/owner-approval.js',sha256:digest(readFileSync('public/owner-approval.js'))},
  approval_handoff:{archive:'/downloads/Numina-1500T-Approval-Handoff.zip',sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff.zip')),record:'/downloads/Numina-1500T-Approval-Handoff-Package-Record.json',record_sha256:digest(readFileSync('docs/Numina-1500T-Approval-Handoff-Package-Record.json')),status:'EVIDENCE_HANDOFF_PREPARED',scope:'Original dated evidence intake; owner authorization is recorded separately in owner_approval and does not manufacture signatures, review findings or receipts'},
  denomination_policy:NUMINA_DENOMINATION_POLICY,

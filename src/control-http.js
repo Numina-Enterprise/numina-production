@@ -1,3 +1,4 @@
+import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
 import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_DELIVERY_SURFACES,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from './numina-root.js';
@@ -105,6 +106,7 @@ async function controlNuminaManifest(req,env){
     // would overwrite the explicit mechanics objects below with identity strings.
     applicationVersion:application?.version??null,
     applicationRelease:application?.release??null,
+    finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,
     deployed:true,
     mechanics:{
       repository:{identity:NUMINA,source:'/NUMINA'},
