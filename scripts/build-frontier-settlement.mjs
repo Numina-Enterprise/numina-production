@@ -449,6 +449,11 @@ assert.equal(worker.split(privacyRouteBefore).length,2);worker=worker.replace(pr
 for(const [before,after]of [['canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,canonicalTreasuryRoute:', 'canonicalTreasuryValues:publicMetadata(NUMINA_CANONICAL_TREASURY_VALUES),canonicalTreasuryRoute:'],['providerRouting:NUSD_PROVIDER_ROUTING,mcp:', 'providerRouting:publicMetadata(NUSD_PROVIDER_ROUTING),mcp:']]){
  assert.equal(worker.split(before).length,2);worker=worker.replace(before,after);substitutions.push({source:'src/public-privacy.js#public-api',before,after});
 }
+const discoveryArchitectureBefore="else if(msg.params.name==='numina_architecture')data=NUMINA_LAYERS;";
+const discoveryArchitectureAfter="else if(msg.params.name==='numina_architecture')data=publicMetadata(NUMINA_LAYERS);";
+assert.equal(frontierSource.split(discoveryArchitectureAfter).length,2,'Source discovery architecture privacy projection');
+assert.equal(worker.split(discoveryArchitectureBefore).length,2,'Unique retained discovery architecture payload');
+worker=worker.replace(discoveryArchitectureBefore,discoveryArchitectureAfter);substitutions.push({source:'src/frontier-http.js#discovery-architecture-privacy',before:discoveryArchitectureBefore,after:discoveryArchitectureAfter});
 // Their exact offsets are recorded so preservation can still be proved.
 const stripeUsdcAddress=connection.nativeLocationBindings.stripeUsdc.usdcAddress;
 assert.equal(stripeUsdcAddress,json('runtime/nusd/treasury-settlement-receipt.json').components.find(item=>item.settledUnit==='USDC').usdcAddress);
