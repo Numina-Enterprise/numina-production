@@ -1,6 +1,7 @@
 // Public metadata is a projection. Original evidence and owner operations retain
 // their exact private source records and authentication requirements.
 const privateMetadataKeys = new Set([
+  'operationsInbox',
   'accountLast4','linkedAccountLast4','providerAccountLast4','achRoutingNumber','routingReference',
   'stripeAccount','financialAccount','financialAddress','linkedFinancialAccount','linkedStripeAccount',
   'destinationFinancialAccount','destinationFinancialAddress','destination_financial_account','destination_financial_address',

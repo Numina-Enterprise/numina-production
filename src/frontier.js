@@ -1,3 +1,4 @@
+import {reduceOperationsInbox,assertOperationsCapacity} from './operations-inbox.js';
 import {stable,controlHash,controlError,authorizeControl,normalizeRecord} from './control.js';
 import {NUMINA_TREASURY_POLICIES} from './treasury-policy.js';
 import {reduceTreeTask} from './numina-tree.js';
@@ -52,6 +53,8 @@ export async function reduceFrontier(state,command,actor,now){
     frontierAssert(operation!=='assign'||tasks.length<100,'STATE_CAPACITY',409);
     result=reduceTreeTask(tasks,{type:'tree.'+operation,data:taskData},actor,now,state.root);
     result.eventId=command.id;
+  }else if(command.type==='frontier.operations_notice'){
+    owner();const reduced=reduceOperationsInbox(f.operationsInbox,command,actor,now,state.root);f.operationsInbox=reduced.inbox;assertOperationsCapacity(state);result=reduced.result;
   }else if(command.type==='frontier.principal'){
     owner();frontierExact(data,['id','name','credentialSha256']);
     frontierAssert(/^agent:[A-Za-z0-9_-]{1,80}$/.test(data.id)&&frontierText(data.name)&&/^[a-f0-9]{64}$/.test(data.credentialSha256),'INVALID_PRINCIPAL',400);
