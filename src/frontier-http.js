@@ -99,7 +99,7 @@ async function frontierDiscovery(req,env){
   if(!Object.hasOwn(names,msg.params?.name??'')||!msg.params.arguments||Array.isArray(msg.params.arguments)||typeof msg.params.arguments!=='object'||Object.keys(msg.params.arguments).length)return error(-32602,'Expected a listed tool and empty arguments');
   let data;
   if(msg.params.name==='numina_connections')data=await readConnectionManifest(req,env);
-  else if(msg.params.name==='numina_architecture')data=NUMINA_LAYERS;
+  else if(msg.params.name==='numina_architecture')data=publicMetadata(NUMINA_LAYERS);
   else if(msg.params.name==='numina_capabilities')data={denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,legal:NUMINA_LEGAL_DISCOVERY,externalExecution:false,privateControl:'/api/control/v2/mcp',treasury:'/api/control/v1/treasury'};
   else {const row=await readControl(env.DB);data={schema:'numina.public-head.v1',revision:row.revision,head:row.head_hash,manifestHash:row.manifest_hash,journalContinuity:row.eventCount===row.revision+1,scope:'internal journal',financialVerification:false};}
   return result({content:[{type:'text',text:JSON.stringify(data)}],isError:false});
