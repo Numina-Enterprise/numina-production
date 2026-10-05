@@ -61,6 +61,9 @@ finally{unlinkSync(baselineArchivePath);}
 const baselineClient=baseline.artifacts.filter(x=>x.path.startsWith('client/')&&!['client/_headers','client/_redirects'].includes(x.path));
 for(const x of baselineClient)assert.equal(hash(readFileSync('dist/'+x.path)),x.sha256,'Baseline asset: '+x.path);
 const overlays=[
+ ['public/operations-client.js','client/operations-client.js'],
+ ['public/operations-ui.js','client/operations-ui.js'],
+ ['public/operations-inbox.css','client/operations-inbox.css'],
  ['public/workspace-session.js','client/workspace-session.js'],
  ['public/control-receipts.js','client/control-receipts.js'],
  // Current licensing accompanies preserved runtime and contract artifact bytes.
@@ -368,23 +371,28 @@ assert.equal(worker.split(mcpRouteBefore).length,2,'Unique hosted MCP route inse
 worker=worker.replace(mcpRouteBefore,mcpRouteAfter);
 substitutions.push({source:'src/sites-mcp.js#route',before:mcpRouteBefore,after:mcpRouteAfter});
 // Add structured rooms and owner-only journaled assignments to the retained runtime.
-const treeSource=compile(readFileSync('src/numina-tree.js','utf8'));
+const treeSource=compile(readFileSync('src/numina-tree.js','utf8'))+'\n'+compile(readFileSync('src/operations-inbox.js','utf8'));
 const treeEntrypoint='export default {';
 const treeEntrypointAfter=treeSource+'\n'+treeEntrypoint;
 assert.equal(worker.split(treeEntrypoint).length,2);
 worker=worker.replace(treeEntrypoint,treeEntrypointAfter);
 substitutions.push({source:'src/numina-tree.js',before:treeEntrypoint,after:treeEntrypointAfter});
 const treeEdits=[
- ["const frontierRoutes={","const frontierRoutes={'tree/tasks':'room_task',"],
+ ["const frontierRoutes={","const frontierRoutes={'operations/notices':'operations_notice','tree/tasks':'room_task',"],
  ["    if(path==='/api/control/v2/architecture'","    if(path==='/api/control/v2/tree'&&req.method==='GET')return frontierResponse(numinaTree());\n    if(path==='/api/control/v2/architecture'"],
  ["    if(route==='state'&&req.method==='GET'){","    if(route==='tree/tasks'&&req.method==='GET'){frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);return frontierResponse({revision:row.revision,head:row.head_hash,...readRoomTasks(row.manifest)});}\n    if(route==='state'&&req.method==='GET'){"],
- ["f.accounts=[];delete f.treasuryPolicies;","f.accounts=[];delete f.roomTasks;delete f.treasuryPolicies;"]
+ ["f.accounts=[];delete f.treasuryPolicies;","f.accounts=[];delete f.roomTasks;delete f.operationsInbox;delete f.treasuryPolicies;"]
 ];
 const treeReducer=compile(readFileSync('src/frontier.js','utf8'));
 const treeBranchStart=treeReducer.indexOf("  if(command.type==='frontier.room_task'){");
 const treeBranchEnd=treeReducer.indexOf("  }else if(command.type==='frontier.principal'){",treeBranchStart);
 assert.ok(treeBranchStart>=0&&treeBranchEnd>treeBranchStart,'Structured room reducer boundaries');
 treeEdits.push(["  if(command.type==='frontier.principal'){",treeReducer.slice(treeBranchStart,treeBranchEnd)+"  }else if(command.type==='frontier.principal'){"]);
+const operationsRouteStart=frontierSource.indexOf("    if(route==='operations/notices'){");
+const operationsRouteEnd=frontierSource.indexOf("    if(route==='tree/tasks'",operationsRouteStart);
+assert.ok(operationsRouteStart>=0&&operationsRouteEnd>operationsRouteStart,'Private operations route boundaries');
+treeEdits.push(["    const route=path.slice('/api/control/v2/'.length);","    const route=path.slice('/api/control/v2/'.length);\n"+frontierSource.slice(operationsRouteStart,operationsRouteEnd)]);
+treeEdits.push(["  // Commands can contain credential digests;","  if(event.type==='frontier.operations_notice')frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);\n  // Commands can contain credential digests;"]);
 for(const [before,after] of treeEdits){assert.equal(worker.split(before).length,2,'Unique tree insertion: '+before);worker=worker.replace(before,after);substitutions.push({source:'numina-tree#runtime',before,after});}
 // New workspace policy acceptance is request-bound. Cached privacy-only clients
 // cannot be stamped as accepting newly introduced Terms; old rows remain intact.
@@ -493,6 +501,7 @@ const currentInputs=new Set(['config/numina-state-reconciliation.v1.json','publi
 for(const file of ['src/frontier-http.js','reference/settlement-metadata-bases/treasury-policy-route.js.txt'])currentInputs.add(file);
 currentInputs.add('src/sites-mcp.js');
 currentInputs.add('src/numina-tree.js');
+currentInputs.add('src/operations-inbox.js');
 currentInputs.add('src/frontier.js');
 for(const file of [...depositModules,'src/stripe-treasury.js','src/treasury-connection-http.js','src/treasury-submission.js','src/worker.js','drizzle/0006_treasury_deposit_instructions.sql','drizzle/meta/0006_snapshot.json','db/schema.ts','docs/Stripe-Deposit-Workflow.md'])currentInputs.add(file);
 currentInputs.add(migrationJournalBase);

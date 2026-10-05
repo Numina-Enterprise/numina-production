@@ -1,3 +1,4 @@
+import {operationsInboxView} from './operations-inbox.js';
 import {publicMetadata} from './public-privacy.js';
 import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
 import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
@@ -15,7 +16,7 @@ import {alignTreasuryAccounts} from './treasury-alignment.js';
 import {readTreasuryEvidence,TREASURY_EVIDENCE_ROUTE} from './treasury-evidence.js';
 import {readStripeProviderRoutes,TREASURY_PROVIDER_ROUTES,NUSD_PROVIDER_ROUTING} from './stripe-treasury.js';
 
-const frontierRoutes={'tree/tasks':'room_task',principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
+const frontierRoutes={'operations/notices':'operations_notice','tree/tasks':'room_task',principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
 const frontierToolNames={numina_request:'requests',numina_prepare:'prepare',numina_execute:'execute'};
 const frontierTools=[{name:'numina_provider_routes',description:'Read current owner-only Stripe crypto destination observations. No NUSD token acceptance, funding or settlement is established.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:true}},{name:'numina_treasury_evidence',description:'Owner-only signed snapshot of native treasury proof, fresh Stripe observation and supporting document references. No bank funding or money movement is established.',inputSchema:{type:'object',properties:{},additionalProperties:false}},{name:'numina_policy_decision',description:'Read a current policy decision for your registered request. This does not execute it.',inputSchema:{type:'object',properties:{requestId:{type:'string'}},required:['requestId'],additionalProperties:false}},...Object.keys(frontierToolNames).map(name=>({name,description:name==='numina_execute'?'Commit a permitted internal record through the canonical journal. External execution is unavailable.':name==='numina_prepare'?'Prepare a provider handoff; no external submission.':'Register a request under existing delegated authority and a server policy.',inputSchema:{type:'object',properties:{id:{type:'string'},expectedRevision:{type:'integer'},data:{type:'object'}},required:['id','expectedRevision','data'],additionalProperties:false}}))];
 function frontierResponse(value,status=200){return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Authorization, Cookie'}});}
@@ -40,6 +41,7 @@ export async function frontierReceipt(db,eventId,actor,env){
   const row=await readControl(db),event=row.journalEvents.find(e=>e.id===eventId);
   frontierAssert(event&&event.type.startsWith('frontier.'),'RECEIPT_NOT_FOUND',404);
   frontierAssert(actor===row.manifest.root||event.actor===actor,'AUTHORITY_DENIED',403);
+  if(event.type==='frontier.operations_notice')frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
   // Commands can contain credential digests; export only hashes and the recorded result.
   return frontierSign({scope:'Numina internal journal',root:row.manifest.root,eventId:event.id,revision:event.revision,at:event.at,actor:event.actor,type:event.type,commandHash:event.commandHash,previousHead:event.previous,eventHash:await controlHash(event),manifestHash:event.manifestHash??event.stateHash,result:event.result,externalReceipt:null},env);
 }
@@ -145,6 +147,11 @@ export async function frontierHttp(req,env){
     if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_REQUIRED',403);
     if(['/api/control/v2/mcp','/api/control/v2/a2a'].includes(path))return req.method==='POST'?frontierRpc(req,env,actor):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     const route=path.slice('/api/control/v2/'.length);
+    if(route==='operations/notices'){
+      frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
+      frontierAssert(new URL(req.url).search==='','INVALID_NOTICE_PARAMETERS',400);
+      if(req.method==='GET')return frontierResponse({revision:row.revision,head:row.head_hash,...operationsInboxView(row.manifest,now)});
+    }
     if(route==='tree/tasks'&&req.method==='GET'){
       frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
       return frontierResponse({revision:row.revision,head:row.head_hash,...readRoomTasks(row.manifest)});
@@ -163,7 +170,7 @@ export async function frontierHttp(req,env){
     }
     if(route==='state'&&req.method==='GET'){
       const f=structuredClone(frontierState(row.manifest));for(const p of f.principals)delete p.credentialSha256;
-      if(actor!==row.manifest.root){f.principals=f.principals.filter(p=>p.id===actor);f.requests=f.requests.filter(r=>r.Principal===actor);f.approvals=f.approvals.filter(a=>f.requests.some(r=>r.id===a.requestId));f.accounts=[];delete f.roomTasks;delete f.treasuryPolicies;delete f.fundingPlan;delete f.fundingDeclaration;const ids=new Set(f.requests.map(r=>r.policyId));f.policies=f.policies.filter(p=>ids.has(p.id));}
+      if(actor!==row.manifest.root){f.principals=f.principals.filter(p=>p.id===actor);f.requests=f.requests.filter(r=>r.Principal===actor);f.approvals=f.approvals.filter(a=>f.requests.some(r=>r.id===a.requestId));f.accounts=[];delete f.roomTasks;delete f.operationsInbox;delete f.treasuryPolicies;delete f.fundingPlan;delete f.fundingDeclaration;const ids=new Set(f.requests.map(r=>r.policyId));f.policies=f.policies.filter(p=>ids.has(p.id));}
       return frontierResponse({root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',revision:row.revision,head:row.head_hash,content:f,compatibility:{route:'/api/control/v2/state',role:'legacy_route_only'}});
     }
     if(route==='decisions'&&req.method==='POST'){const body=await controlBody(req);frontierExact(body,['requestId']);const request=frontierRequest(row.manifest,body.requestId,actor);return frontierResponse(await frontierDecision(row.manifest,request,now));}
