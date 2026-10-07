@@ -1258,8 +1258,8 @@
     },
     {
       "path": "examples/NVIDIA.md",
-      "bytes": 6496,
-      "sha256": "9dcfe012c31f8c18772ba615feb40db6d79d35187fd24aced18b9535f5236b71"
+      "bytes": 6977,
+      "sha256": "17af5bc735dafa4ce283251f54fb2e2dc2e492ea93448f355ccc791da700f3dc"
     },
     {
       "path": "examples/mcp-host.example.json",
@@ -1273,8 +1273,8 @@
     },
     {
       "path": "examples/nvidia-nim.mjs",
-      "bytes": 2047,
-      "sha256": "94167f4685f77338be286fac87187ec2f6dcbfc081ba66698ccb43e1202a0eb2"
+      "bytes": 2067,
+      "sha256": "a1d693af665cc898c7e8b00a7b7bd96fcce204428adb7e7b41d319a46bb22ba0"
     },
     {
       "path": "examples/nvidia-provider-policy.json",
@@ -1283,8 +1283,8 @@
     },
     {
       "path": "examples/provider-roundtrips.mjs",
-      "bytes": 3336,
-      "sha256": "77cac820a30183335c62cd5013d4244f9d894496ac8576c63d1ff058f6cf6ca3"
+      "bytes": 4049,
+      "sha256": "d2c5f745dd04d930a86982862aa2e9f10c1bf99e4ac1011b2f48b161d9f87008"
     },
     {
       "path": "examples/quantum-measurement.mjs",
@@ -1313,8 +1313,8 @@
     },
     {
       "path": "examples/verify-nvidia-nim.mjs",
-      "bytes": 5351,
-      "sha256": "fff60201da4689caffe2d2125b690f87704090a16745353bfa8a9ae853c54354"
+      "bytes": 5549,
+      "sha256": "e0f390db94c8073d99630e72db86eb8835368fdf42d9519cba869ca36d32b037"
     },
     {
       "path": "history/0.2.0/VALIDATION.md",

@@ -28,7 +28,7 @@ export async function verifyNvidiaNim({endpoint,model,apiKey,fetchImpl=globalThi
  if(record.providerConnectivityVerified){
   record.modelToolRoundTripVerified=await check('numina-discovery-round-trip',async()=>{
    let requests=0,toolResultCount=0;
-   const response=await nvidiaNimRoundTrip({endpoint:base,model:record.model,messages:[{role:'user',content:'Call numina_application_release to read the current Numina release, then summarize the returned version.'}],maxTokens:256,numinaFetch,
+   const response=await nvidiaNimRoundTrip({endpoint:base,model:record.model,messages:[{role:'user',content:'Call numina_application_release once. Report the application version and build ID if present. Label missing fields “not reported.” State that this server-reported record does not independently prove deployment or financial backing. Use at most four bullets.'}],toolNames:['numina_application_release'],maxTokens:256,numinaFetch,
     createProvider:()=>({chat:{completions:{create:async body=>{
      requests++;
      if(requests===2){const results=body.messages.filter(item=>item.role==='tool');if(results.length!==1)throw Error('NIM_TOOL_RESULT_INVALID');let result;try{result=JSON.parse(results[0].content);}catch{throw Error('NIM_TOOL_RESULT_INVALID');}if(result?.error||result?.execution_succeeded===false)throw Error('NIM_TOOL_RESULT_FAILED');toolResultCount=results.length;}
