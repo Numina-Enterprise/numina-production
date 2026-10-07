@@ -59,5 +59,36 @@ jobs:
           git clean -fdx
           test -z "$(git status --porcelain --untracked-files=normal)"
       - name: Publish Numina
+        id: sites_source
         shell: bash
         run: npm run publish:source -- sites
+      - name: Verify Sites source publication
+        if: always()
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFileSync,readFileSync,readdirSync} from 'node:fs';
+          let report;
+          try {
+            const files=readdirSync('.openai/publishing').filter(name=>/^sites-[a-f0-9-]+\.json$/.test(name));
+            if(files.length===1)report=JSON.parse(readFileSync('.openai/publishing/'+files[0],'utf8'));
+          } catch {}
+          const expected=process.env.GITHUB_SHA;
+          const verified=/^[a-f0-9]{40}$/.test(expected||'')
+            && report?.schema==='numina.publishing-telemetry.v1'
+            && report.target==='sites'
+            && report.host==='git.chatgpt-team.site'
+            && report.branch==='refs/heads/main'
+            && report.sourcePushVerified===true
+            && report.sourceCommit===expected
+            && report.remoteCommit===expected
+            && report.failure==='none'
+            && ['source_push_verified','source_reconciled_after_ambiguous_push'].includes(report.status)
+            && report.deploymentStarted===false;
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+            `Sites source push verified: ${verified?'yes':'no'}\n\nDeployment requires a separate matching provider receipt.\n`);
+          if(!verified){
+            console.error('::error::Sites source publication is not verified for the triggering revision.');
+            process.exitCode=1;
+          }
+          NODE
