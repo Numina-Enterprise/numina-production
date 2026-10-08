@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import worker from '../src/worker.js';
 const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8');
-const routes=['/app','/frontier','/economy','/services','/integrations','/build','/control','/labs'];
+const routes=['/platform','/app','/frontier','/economy','/services','/integrations','/build','/control','/labs','/contact'];
 const mainRoutes=['/platform','/services','/integrations','/build','/app'];
 const mainCurrent=new Set(['platform.html','services.html','integrations.html','build.html','app.html']);
-const mobileCurrent=new Set(['frontier.html','economy.html','services.html','integrations.html','build.html','app.html','control.html','labs.html']);
+const mobileCurrent=new Set(['platform.html','contact.html','frontier.html','economy.html','services.html','integrations.html','build.html','app.html','control.html','labs.html']);
 
 test('every website page shares the Numina design and complete primary navigation',()=>{
   for(const file of readdirSync(new URL('../public/',import.meta.url)).filter(name=>name.endsWith('.html'))){

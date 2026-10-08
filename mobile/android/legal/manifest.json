@@ -55,18 +55,18 @@
     },
     {
       "path": "terms.html",
-      "bytes": 18873,
-      "sha256": "cde83a8bb47ec9cb82815bbb7a986299fea0ce680535e483cb937e76a2aaeb6c"
+      "bytes": 19002,
+      "sha256": "900a4a2a04c12aaa0b98d1ff4156da6b65da2cc228ee72e3bc90ff5c26572954"
     },
     {
       "path": "privacy.html",
-      "bytes": 23475,
-      "sha256": "326f18d3c79f958910e15362022506409cd226b4f17c613b91af92b5677f8fb6"
+      "bytes": 23604,
+      "sha256": "a46d22c22eac521ec31b3eb00a300387e293b19f06ac8cc6533b0bbd727a7878"
     },
     {
       "path": "software-licenses.html",
-      "bytes": 10422,
-      "sha256": "e4f38754f88ea419aed48a0a65419fd58e2445ad698391f924f4a01c008c0f88"
+      "bytes": 10543,
+      "sha256": "20e9df8a39bf328dc05bebb003baa04f95f5dcafd547f1525a52b530a5cf4336"
     },
     {
       "path": "LICENSE.md",
