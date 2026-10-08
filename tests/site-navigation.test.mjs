@@ -3,15 +3,15 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import worker from '../src/worker.js';
 const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8');
-const routes=['/platform','/services','/developers','/trust','/labs','/contact','/government','/financial-institutions','/partners','/app'];
-const mainRoutes=['/platform','/services','/developers','/trust','/labs','/contact'];
-const mainCurrent=new Set(['platform.html','services.html','developers.html','trust.html','labs.html','contact.html']);
-const mobileCurrent=new Set([...mainCurrent,'government.html','financial-institutions.html','partners.html','app.html']);
+const routes=['/platform','/government','/financial-institutions','/partners','/services','/developers','/trust','/labs','/contact','/app'];
+const mainRoutes=['/platform','/government','/financial-institutions','/partners','/uk-eu','/mena','/apac','/services','/developers','/trust','/labs'];
+const mainCurrent=new Set(['platform.html','services.html','developers.html','trust.html','labs.html','government.html','financial-institutions.html','partners.html','uk-eu.html','mena.html','apac.html']);
+const mobileCurrent=new Set(['platform.html','services.html','developers.html','trust.html','labs.html','government.html','financial-institutions.html','partners.html','contact.html','app.html']);
 
 test('every website page shares the Numina design and complete primary navigation',()=>{
   for(const file of readdirSync(new URL('../public/',import.meta.url)).filter(name=>name.endsWith('.html'))){
     const html=read(file),header=html.match(/<header\b[^>]*>(.*?)<\/header>/s)?.[1];
-    assert.ok(header,file);assert.match(header,/Intelligence in Motion/,file);assert.match(html,/href="\/motion.css"/,file);
+    assert.ok(header,file);assert.match(header,/>NUMINA<.*>LABS</,file);assert.match(html,/href="\/enterprise-site\.css\?v=20261008"/,file);
     for(const label of ['Main navigation','Mobile navigation']){
       const nav=header.match(new RegExp('<nav[^>]*aria-label="'+label+'"[^>]*>(.*?)</nav>','s'))?.[1];
       const landing=['index.html','frontier.html'].includes(file);

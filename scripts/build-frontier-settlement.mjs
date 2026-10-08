@@ -158,6 +158,7 @@ const overlays=[
  ['public/app-entry.js','client/app-entry.js'],
  ['public/app-ui.js','client/app-ui.js'],
  ['public/motion.css','client/motion.css'],
+ ['public/enterprise-site.css','client/enterprise-site.css'],
  ['public/numina4-ui.js','client/numina4-ui.js'],
  ['public/site-navigation.js','client/site-navigation.js'],
  ['public/numina4-core.webp','client/numina4-core.webp'],

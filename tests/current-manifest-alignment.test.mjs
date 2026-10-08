@@ -35,7 +35,7 @@ test('all 42 maintained pages ship the shared shell and accessible main destinat
  const root=new URL('../public/',import.meta.url),pages=readdirSync(root).filter(name=>name.endsWith('.html')&&name!=='pricing.html');assert.equal(pages.length,42);
  const footer=read('public/services.html').toString().match(/<footer\b[\s\S]*?<\/footer>/)[0];
  for(const name of pages){const source=read('public/'+name).toString(),html=read('dist/client/'+name).toString();assert.deepEqual(html,source,name+' source overlay');assert.equal((html.match(/<h1\b/g)||[]).length,1,name+' heading');assert.match(html,/<main\b[^>]*id="main"/,name+' main');assert.match(html,/class="skip" href="#main"/,name+' skip');assert.equal(html.match(/<footer\b[\s\S]*?<\/footer>/)[0],footer,name+' footer');
-  if(!['index.html','frontier.html'].includes(name)){const styles=[...html.split('</head>')[0].matchAll(/<link\b[^>]*href="([^\"]+\.css[^\"]*)"[^>]*>/g)].map(m=>m[1]);assert.match(styles.at(-1),/^\/numina4-pages\.css/,name+' theme precedence');}
+  if(!['index.html','frontier.html'].includes(name)){const styles=[...html.split('</head>')[0].matchAll(/<link\b[^>]*href="([^\"]+\.css[^\"]*)"[^>]*>/g)].map(m=>m[1]);assert.match(styles.at(-1),/^\/enterprise-site\.css/,name+' theme precedence');}
   for(const canonical of html.matchAll(/<link\b[^>]*rel="canonical"[^>]*href="([^"]+)"/g))assert.equal(new URL(canonical[1]).origin,'https://numinalabs.xyz',name+' active canonical origin');
  }
 });
