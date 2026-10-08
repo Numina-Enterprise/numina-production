@@ -129,5 +129,24 @@ body.motion-site{background:var(--bg);color:var(--text)}
 @media(max-width:760px){.v4-process{grid-template-columns:1fr;gap:12px}.v4-facts>div{grid-template-columns:1fr;gap:8px}.numina-v4 .frontier-hero-copy h1{font-size:2.8rem}.numina-v4 .frontier-hero-layout{min-height:0}}
 /* Keep the shared skip destination accessible above the sticky navigation. */
 .motion-site .skip:focus{z-index:100}
+.motion-site{color-scheme:dark}
+.motion-site :is(a,button,input,select,textarea,summary):focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+.motion-site :is(main,.section-content,.frontier-hero-copy,.site-footer>div){min-width:0}
+.motion-site :is(h1,h2,h3,p,dd,.button,.text-link){overflow-wrap:anywhere}
+.motion-site .button{white-space:normal;text-align:center;line-height:1.5}
+.motion-site .mobile-menu nav{max-height:min(70vh,36rem);max-height:min(70dvh,36rem);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.motion-site .mobile-menu summary span{display:inline-block;transition:transform .2s}
+.motion-site .mobile-menu[open] summary span{transform:rotate(45deg)}
+.motion-site .mobile-menu nav a{min-height:44px}
+.motion-site .motion-footer :is(h2,a){line-height:1.7}
+.motion-site .motion-footer a:hover{text-decoration:underline;text-underline-offset:4px}
+.v4-hero-footnote{flex-wrap:wrap;gap:10px 24px;line-height:1.8}
+.v4-art figcaption{flex-wrap:wrap;line-height:1.7}
+.numina-v4 #core-release-status{font-size:.875rem;line-height:1.7}
+.numina-v4 .v4-index a:focus-visible{outline-offset:-4px}
+@media(min-width:1060px){.motion-site .motion-header .desktop-nav{display:flex;gap:clamp(16px,2vw,30px)}.motion-site .motion-header .mobile-menu{display:none}}
+@media(max-width:1059px){.motion-site .motion-header .desktop-nav{display:none}.motion-site .motion-header .mobile-menu{display:block}}
+@media(max-width:700px){.numina-v4 .frontier-hero-copy h1{font-size:clamp(2.05rem,7.8vw,3.4rem);line-height:1.15}.numina-v4 .frontier-hero-copy .actions{align-items:stretch}.numina-v4 .frontier-hero-copy .actions .button{flex:1 1 160px}.v4-art{height:clamp(230px,70vw,320px)}.v4-hero-footnote{letter-spacing:.07em;gap:8px 18px}.v4-art figcaption span:last-child{display:none}}
+@media(prefers-reduced-motion:reduce){.motion-site *,.motion-site *::before,.motion-site *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .motion-site .site-footer .age-requirement{grid-column:1/-1;margin:0;font-size:12px;line-height:1.7}
 @media(min-width:761px) and (max-width:1150px){.motion-site .site-footer{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}.motion-site .site-footer .footer-intro{grid-column:1/-1}}

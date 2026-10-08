@@ -159,6 +159,7 @@ const overlays=[
  ['public/app-ui.js','client/app-ui.js'],
  ['public/motion.css','client/motion.css'],
  ['public/numina4-ui.js','client/numina4-ui.js'],
+ ['public/site-navigation.js','client/site-navigation.js'],
  ['public/numina4-core.webp','client/numina4-core.webp'],
  ['public/numina-tree.css','client/numina-tree.css'],
  ['public/numina-tree-ui.js','client/numina-tree-ui.js'],

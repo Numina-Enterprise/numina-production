@@ -45,6 +45,13 @@ body.v4-subpage{--bg:#080a09;--panel:#101310;--panel2:#171b16;--text:#f1f3ec;--m
 .v4-subpage .site-footer .footer-intro .footer-name{color:var(--text);font-weight:600}
 @media(max-width:760px){.v4-subpage .about-hero~.section{width:calc(100% - 40px)}}
 .v4-subpage .site-wrap main>section{margin-inline:auto}
+.v4-subpage main.wrap>:is(.page-hero,.hero,.about-hero,.wrap){width:100%;margin-inline:0}
+.v4-subpage .site-wrap main>:is(.page-hero,.hero) :is(.wrap){width:100%}
+.v4-subpage :is(.manifest-list,.runtime-capabilities) dd{min-width:0;overflow-wrap:anywhere}
+.v4-subpage .section-navigation a{min-height:44px;display:inline-flex;align-items:center}
+.v4-subpage .site-footer h2{font-size:.875rem;line-height:1.6;letter-spacing:0}
+.v4-subpage .site-footer a{font-size:.875rem;line-height:1.7}
+@media(max-width:480px){.v4-subpage :is(.page-hero,.hero,.about-hero,.readiness-heading) h1{font-size:clamp(2rem,8vw,2.6rem);line-height:1.18}.v4-subpage :is(.hero-bottom,.actions){min-width:0}.v4-subpage .actions .button{max-width:100%}}
 .v4-subpage .site-wrap main>section:not(.wrap){width:min(1440px,calc(100% - 96px))}
 .v4-subpage .site-wrap main>.grid{gap:24px;margin-block:36px}
 .v4-subpage .grid>article{padding:28px;min-width:0}
