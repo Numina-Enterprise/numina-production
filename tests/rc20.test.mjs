@@ -114,7 +114,9 @@ test('packaged homepage links current runtime verification and preserves the con
 
   const control=readFileSync(new URL('../dist/client/control.html',import.meta.url),'utf8');
 
-  assert.match(home,/frontier-ui[.]js/);
+  assert.doesNotMatch(home,/frontier-ui[.]js/);
+  assert.match(home,/href="\/frontier"/);
+  assert.doesNotMatch(home,/id="tree-task-form"/);
   assert.match(home,/href="\/build"/);
   const build=readFileSync(new URL('../dist/client/build.html',import.meta.url),'utf8');
   assert.match(build,/runtime-release-ui[.]js/);

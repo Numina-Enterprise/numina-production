@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import worker from '../src/worker.js';
 const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8');
-const routes=['/platform','/app','/frontier','/economy','/services','/integrations','/build','/control','/labs','/contact'];
-const mainRoutes=['/platform','/services','/integrations','/build','/app'];
-const mainCurrent=new Set(['platform.html','services.html','integrations.html','build.html','app.html']);
-const mobileCurrent=new Set(['platform.html','contact.html','frontier.html','economy.html','services.html','integrations.html','build.html','app.html','control.html','labs.html']);
+const routes=['/platform','/services','/developers','/trust','/labs','/contact','/government','/financial-institutions','/partners','/app'];
+const mainRoutes=['/platform','/services','/developers','/trust','/labs','/contact'];
+const mainCurrent=new Set(['platform.html','services.html','developers.html','trust.html','labs.html','contact.html']);
+const mobileCurrent=new Set([...mainCurrent,'government.html','financial-institutions.html','partners.html','app.html']);
 
 test('every website page shares the Numina design and complete primary navigation',()=>{
   for(const file of readdirSync(new URL('../public/',import.meta.url)).filter(name=>name.endsWith('.html'))){
@@ -15,7 +15,7 @@ test('every website page shares the Numina design and complete primary navigatio
     for(const label of ['Main navigation','Mobile navigation']){
       const nav=header.match(new RegExp('<nav[^>]*aria-label="'+label+'"[^>]*>(.*?)</nav>','s'))?.[1];
       const landing=['index.html','frontier.html'].includes(file);
-      const expected=label==='Main navigation'?(landing?['#platform',...mainRoutes.slice(1)]:mainRoutes):routes;
+      const expected=label==='Main navigation'?mainRoutes:routes;
       assert.ok(nav,file+' '+label);assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),expected,file);
       const currentPages=label==='Main navigation'?mainCurrent:mobileCurrent;
       assert.equal([...nav.matchAll(/aria-current="page"/g)].length,Number(currentPages.has(file)),file+' '+label);

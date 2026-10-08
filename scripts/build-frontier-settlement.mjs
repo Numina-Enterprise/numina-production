@@ -436,6 +436,11 @@ const legalRouteBefore="if(['/frontier','/frontier/','/control-room','/control-r
 const legalRouteAfter="const legalPages={'/compliance':'/compliance.html','/compliance/':'/compliance.html','/terms':'/terms.html','/terms/':'/terms.html','/privacy':'/privacy.html','/privacy/':'/privacy.html','/software-licenses':'/software-licenses.html','/software-licenses/':'/software-licenses.html'};\n   if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));\n   "+legalRouteBefore;
 assert.equal(worker.split(legalRouteBefore).length,2,'Unique maintained legal-page routing boundary');
 worker=worker.replace(legalRouteBefore,legalRouteAfter);substitutions.push({source:'workspace-policy#legal-routes',before:legalRouteBefore,after:legalRouteAfter});
+// The enterprise platform overview is public; workspace entry remains on /app.
+const platformRouteBefore="if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));";
+const platformRouteAfter=readFileSync('src/worker.js','utf8').split('\n').find(line=>line.includes("if(['/platform','/platform/','/platform.html'].includes(path))")).trim();
+assert.equal(worker.split(platformRouteBefore).length,2,'Unique public platform route');
+worker=worker.replace(platformRouteBefore,platformRouteAfter);substitutions.push({source:'src/worker.js#enterprise-platform',before:platformRouteBefore,after:platformRouteAfter});
 // All interactive Numina pages share the verified browser-session origin.
 const sessionDeclarations=compile(readFileSync('public/workspace-session.js','utf8'));
 const sessionPreambleBefore=worker.slice(0,worker.indexOf('\n')+1),sessionPreambleAfter=sessionDeclarations+sessionPreambleBefore;

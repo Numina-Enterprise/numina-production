@@ -80,7 +80,7 @@
     },
     "hostPublicationVerified": false,
     "sourceBuildNumber": 6,
-    "sourceInputsSha256": "154e5eeeaa1ac27012b3070c30851ab0936677704a1480a28f3c669cbc79744a",
+    "sourceInputsSha256": "392b160ce8b1bdfe0d5df293dd634dad708d6d7b14e12caf62f4beb185ab27d6",
     "signingInputMatchesCurrentSource": false,
     "sourceAlignmentScope": "current_source_package_not_native_build",
     "sourceCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
@@ -105,20 +105,20 @@
     {
       "platform": "android",
       "file": "numina-os-4.0.0-android-source.zip",
-      "bytes": 144988,
-      "sha256": "f7d975e0d2c4a77a3f4c3cb150878e94f6622c22919d712481fd9a35c3e74ba6",
+      "bytes": 145498,
+      "sha256": "3b1c551c95fba7be54a806941fcb42fcad07d8a71c648f0a2325e213368fcfb9",
       "kind": "source_archive",
       "installable": false
     },
     {
       "platform": "ios",
       "file": "numina-os-4.0.0-ios-source.zip",
-      "bytes": 187784,
-      "sha256": "e62af5524075d3b3103ad44d708eedb323d11a08ef8aba08a11ba4992a27b674",
+      "bytes": 188296,
+      "sha256": "a4bcbfe762b1915187160baf23a32870322d802dffb988a0688e994410bef0e9",
       "kind": "source_archive",
       "installable": false,
       "sourceBuildNumber": 6,
-      "sourceInputsSha256": "154e5eeeaa1ac27012b3070c30851ab0936677704a1480a28f3c669cbc79744a",
+      "sourceInputsSha256": "392b160ce8b1bdfe0d5df293dd634dad708d6d7b14e12caf62f4beb185ab27d6",
       "sourceTextNormalization": "utf8_lf_binary_unchanged",
       "packagedAtUtc": "2026-10-04T09:02:00+00:00"
     }

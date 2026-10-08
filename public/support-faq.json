@@ -55,7 +55,7 @@
     {
       "id": "delete-account",
       "question": "How do I request account deletion?",
-      "answer": "Email skott34@numinalabs.xyz with the subject “Delete my Numina account”, using the email associated with Numina when possible. The operator will reply with any ownership-verification steps and the request outcome. Some payment or security records may need to be retained; sending an email does not instantly delete records.",
+      "answer": "Email skott34@numinalabs.xyz with the subject “Delete my Numina account”, using the email associated with Numina when possible. Numina will reply with any ownership-verification steps and the request outcome. Some payment or security records may need to be retained; sending an email does not instantly delete records.",
       "source": [
         "https://numinalabs.xyz/privacy#delete-account"
       ]

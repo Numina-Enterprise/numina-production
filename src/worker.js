@@ -63,7 +63,7 @@ export default {
    if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));
    if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path))return finish(await env.ASSETS.fetch(new Request(new URL('/frontier.html',req.url),req)));
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));
-   if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));
+   if(['/platform','/platform/','/platform.html'].includes(path))return finish(await env.ASSETS.fetch(new Request(new URL('/platform.html',req.url),req)));
    if(['/pricing','/pricing/','/pricing.html'].includes(path)){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/services'+url.search+'#pricing'}}));
