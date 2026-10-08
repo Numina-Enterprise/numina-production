@@ -31,7 +31,7 @@ test('both entry pages load support assets and all nine FAQs also work without s
     assert.ok(contact.includes(faq.question), faq.id + ' question');
     assert.ok(contact.includes(faq.answer), faq.id + ' answer');
   }
-  assert.match(read('public/app.html').toString(), /<h1>One core\.<br>One connected workspace\.<\/h1>/);
+  assert.match(read('public/app.html').toString(), /<h1>Scope business work\.<br>Track delivery in one place\.<\/h1>/);
 });
 
 test('descriptive public labels cover canonical layers without replacing their identities', () => {

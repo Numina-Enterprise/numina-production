@@ -11,7 +11,7 @@ if (menu) {
   document.addEventListener('click', event => {
     if (menu.open && !menu.contains(event.target)) menu.open = false;
   });
-  matchMedia('(min-width: 1060px)').addEventListener('change', event => {
+  matchMedia('(min-width: 1281px)').addEventListener('change', event => {
     if (event.matches) menu.open = false;
   });
   menu.addEventListener('focusout', event => {

@@ -57,3 +57,8 @@ body.v4-subpage{--bg:#080a09;--panel:#101310;--panel2:#171b16;--text:#f1f3ec;--m
 .v4-subpage .grid>article{padding:28px;min-width:0}
 .v4-subpage .grid>article :is(h2,h3){font-size:clamp(1.4rem,2.1vw,2rem);line-height:1.25;letter-spacing:-.035em}
 @media(max-width:760px){.v4-subpage .site-wrap main>section:not(.wrap){width:calc(100% - 40px)}.v4-subpage .grid>article{padding:24px}}
+/* Enterprise narrative pages keep one content measure within older page wrappers. */
+.v4-subpage .site-wrap .enterprise-main>section{width:100%;margin-inline:0}
+.v4-subpage .site-wrap .enterprise-main{width:min(1320px,calc(100% - 96px));margin-inline:auto}
+.v4-subpage .enterprise-main .enterprise-section-heading h2{font-size:clamp(1.8rem,2.8vw,2.7rem)}
+@media(max-width:760px){.v4-subpage .site-wrap .enterprise-main{width:calc(100% - 40px)}}

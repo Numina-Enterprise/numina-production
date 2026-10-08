@@ -1,3 +1,8 @@
+// Preserve bookmarked operational links after separating the public home page.
+const legacyOperationAnchors = new Set(["frontier-status", "refresh", "head-state", "canonical-root", "canonical-head", "head-revision", "chain-state", "chain-height", "chain-observed", "account-status", "requests", "treasury", "treasury-status", "treasury-balances", "funding-plan", "accounts", "treasury-actions", "treasury-policy", "providers", "runtime-metrics", "telemetry-status", "telemetry-refresh", "telemetry-values", "subagent-control-room", "tree-refresh", "tree-status", "root-title", "tree-root-values", "rooms-title", "room-count", "tree-rooms", "tasks-title", "task-status", "tree-task-form", "task-room", "tree-tasks", "deployment-readiness"]);
+if (["/", "/index.html"].includes(location.pathname) && legacyOperationAnchors.has(location.hash.slice(1))) {
+  location.replace("/frontier" + location.search + location.hash);
+}
 // Presentation-only behavior. Runtime records and authority stay in their existing modules.
 const controls = document.querySelector('#operations');
 function exposeAnchor() {
