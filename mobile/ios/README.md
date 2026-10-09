@@ -2,17 +2,17 @@
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
-The current source targets bundle version 4.0.0 and build number 6. It now includes native code changes, not only version metadata. These latest changes have not been compiled or signed; earlier unsigned artifacts must not be presented as builds of this source. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v4.json`.
+The current source targets bundle version 4.0.0 and build number 5. It now includes native code changes, not only version metadata. These latest changes have not been compiled or signed; earlier unsigned artifacts must not be presented as builds of this source. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v4.json`.
 
 ## Shared software release binding
 
-The application remains **4.0.0**, with iOS source build **6** and runtime **1.9.0-rc26** / core **1.8.0**. Android's source build counter is 4. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
+The application remains **4.0.0**, with iOS source build **5** and runtime **1.9.0-rc27** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
 
 `node scripts/ios-release.mjs check` verifies the iOS identity against the root application package, required architecture, runtime contract and shared distribution policy. `node scripts/ios-release.mjs sync` regenerates only `Configuration/NuminaRelease.xcconfig`; it does not change the source build counter or create a binary. The generated dependency values are embedded into Info.plist and shown in native diagnostics.
 
 The normal web build checks these bindings before building and records the current iOS input fingerprint in source-alignment.json. Release metadata treats stored iOS source ZIPs as historical snapshots: a stale snapshot is marked non-authoritative instead of replacing or blocking the checked-in current source identity. The source snapshot and existing unsigned binary remain separate artifacts.
 
-The latest recorded unsigned iOS binary is historical build 5 from commit `c6ffbb50d77ff53323b71b7048872637677e6b42` and predates the current source. **Do not sign or submit that older bundle as build 6.** A fresh macOS compile, matching artifact evidence and an updated signing path are still required. No source alignment check establishes native compilation, Apple signing or store acceptance.
+The existing recorded unsigned iOS binary remains build 3 and predates these source changes. **Do not sign or submit that older bundle as build 5.** A fresh macOS compile, matching artifact evidence and an updated signing path are still required. No source alignment check establishes native compilation, Apple signing or store acceptance.
 
 ## Candidate settings
 
@@ -20,7 +20,7 @@ The latest recorded unsigned iOS binary is historical build 5 from commit `c6ffb
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 4.0.0 / 6 |
+| Version / build | 4.0.0 / 5 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
@@ -81,8 +81,4 @@ See `Signing/README.md`. The package preserves the existing CSR and provides tem
 
 ## Procurement usage
 
-Procurement is disabled by default (`procurement_usage: false`). Read https://numinalabs.xyz/api/control/v2/manifest for the current live capability gate and https://numinalabs.xyz/v4/release/manifest for the shared application release. A release manifest or historical owner statement does not authorize a purchase. Each procurement request requires request-bound owner or delegated approval, a signed budget reservation, and signed provider access under the current procurement policy. A completed payment requires its matching provider receipt. The hosted workspace reads the shared release; source packages do not establish native compilation, signing, store publication, or procurement execution. Historical binaries retain their separately recorded build identities.
-
-## Terms, privacy, licenses and legal coverage
-
-Read [Terms](https://numinalabs.xyz/terms), [Privacy](https://numinalabs.xyz/privacy), [software licenses](https://numinalabs.xyz/software-licenses) and [global legal coverage](https://numinalabs.xyz/compliance). The public [coverage manifest](https://numinalabs.xyz/api/app/v1/legal-manifest) and [country inventory](https://numinalabs.xyz/api/app/v1/country-readiness) identify the shared review record. `legal/manifest.json` binds the included policy, coverage and notice snapshots by file hash. Countries and territories listed for intake are not approved deployments. These source companions do not establish native compilation, installation, privacy-flow review, marketplace acceptance or financial activation; the actual distributed binary and activity require their own evidence.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

@@ -1,17 +1,55 @@
-name: Numina production release candidate
+name: Numina GitHub Release
 on:
   workflow_dispatch:
-permissions: {}
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/numina-release.yml'
+      - 'scripts/package-github-release.mjs'
+      - 'scripts/publish-github-release.mjs'
+      - 'scripts/build.mjs'
+      - 'scripts/apply-numina-manifest-metadata.mjs'
+      - 'config/numina-routing.json'
+      - 'scripts/build-trusted-source-release.mjs'
+      - 'runtime/nusd/scripts/prepare-post-freeze-journal.mjs'
+      - 'scripts/check-final-build.mjs'
+      - 'package.json'
+      - 'public/final-build.json'
+      - 'src/**'
+      - 'runtime/vercel-production/**'
+      - 'public/**'
+permissions:
+  contents: write
 concurrency:
-  group: numina-production-release
-  cancel-in-progress: false
+  group: numina-github-release-v4
+  cancel-in-progress: true
 jobs:
-  build-and-attest:
-    permissions:
-      contents: read
-      id-token: write
-      attestations: write
-    # NUMINA provenance workflow in the same canonical repository.
-    uses: ./.github/workflows/numina-site-builder.yml
-    # No secrets: inherit. No inputs. No production deployment is authorized by
-    # a successful build alone; the independent verification policy must pass.
+  publish:
+    name: NUMINA GitHub Release
+    runs-on: ubuntu-24.04 # substrate only; release identity remains NUMINA
+    timeout-minutes: 30
+    steps:
+      - name: NUMINA repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: NUMINA runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: NUMINA pinned test dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+      - name: NUMINA build
+        run: npm run build
+      - name: NUMINA suite
+        run: npm test
+      - name: Package canonical NUMINA release
+        run: npm run release:numina
+      - name: Publish canonical GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/publish-github-release.mjs

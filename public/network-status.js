@@ -3,12 +3,13 @@ import {requestJson} from './http-client.js';
 // The provider observation has a fixed date. Loading it never turns it into a live health check.
 export function networkPresentation(data){
  const n=data?.network_policy;
- const receipt=n?.status==='historical_authenticated_rpc_observation'&&n.evidence_type==='authenticated_json_rpc_transaction_receipt_and_state_readback'&&n.authenticated_rpc_verified===true&&n.currentNodeStatusVerified===false;
- if(data?.schema!=='numina.nusd.status.v1'||!receipt||!/^\d+$/.test(n.chain_id)||!Number.isFinite(Date.parse(n.observed_at))||!Number.isSafeInteger(n.validator_count)||n.validator_count<1)throw new Error('Network record unavailable');
+ const dashboard=n?.status==='provider_reported_live'&&n.evidence_type==='authenticated_provider_dashboard_observation';
+ const receipt=n?.status==='authenticated_provider_live'&&n.evidence_type==='authenticated_json_rpc_transaction_receipt_and_state_readback'&&n.authenticated_rpc_verified===true;
+ if(data?.schema!=='numina.nusd.status.v1'||!(dashboard||receipt)||!/^\d+$/.test(n.chain_id)||!Number.isFinite(Date.parse(n.observed_at))||!Number.isSafeInteger(n.validator_count)||n.validator_count<1)throw new Error('Network record unavailable');
  return {
-  summary:`${n.name} · ${n.validator_count} validators in the recorded network configuration`,
+  summary:`${n.name} · ${n.validator_count} validators ${dashboard?'running when observed':'in the recorded network configuration'}`,
   detail:`Chain ${n.chain_id} · ${n.protocol} · ${n.region}`,
-  observed:`${n.provider} authenticated RPC receipt and state observation: ${new Date(n.observed_at).toISOString().replace('T',' ').replace('Z',' UTC')}. This is a dated record, not continuous monitoring.`,
+  observed:`${n.provider} ${dashboard?'dashboard observation':'authenticated RPC receipt and state observation'}: ${new Date(n.observed_at).toISOString().replace('T',' ').replace('Z',' UTC')}. This is a dated record, not continuous monitoring.`,
   asset:data.asset?.contract?'See the NUSD status record for contract and activation details.':'No NUSD contract address is reported in this application record. Read current NUSD status for issuance, transfer and settlement capabilities.'
  };
 }
@@ -44,13 +45,10 @@ export function nodeConnectionPresentation(data){
  };
 }
 
-export async function loadNodeConnections(panels,read){
+export async function loadNodeConnections(panels,read=()=>requestJson('/v2/network/status')){
  const token={};
  const update=(panel,name,text)=>{if(connectionLoads.get(panel)!==token)return;const target=panel.querySelector(`[data-network-${name}]`);if(target)target.textContent=text;};
  for(const panel of panels){connectionLoads.set(panel,token);update(panel,'connection','Checking application node connection…');for(const key of ['connection-detail','connection-observed'])update(panel,key,'');}
- // Sites has no supported current node-observation route. An explicitly supplied
- // authenticated observation can still use the strict historical contract below.
- if(!read){for(const panel of panels){update(panel,'connection','Current node connection is not verified.');update(panel,'connection-detail','The compatibility endpoint is retired; no current provider observation is available.');update(panel,'connection-observed','The network record above is dated evidence, not a live connection check.');}return;}
  try{const view=nodeConnectionPresentation(await read());for(const panel of panels)for(const [key,value]of Object.entries(view))update(panel,key,value);}
  catch{for(const panel of panels){update(panel,'connection','Application node connection unavailable. Reload to check again.');for(const key of ['connection-detail','connection-observed'])update(panel,key,'');}}
 }

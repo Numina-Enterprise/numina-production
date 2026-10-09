@@ -1,27 +1,10 @@
 # NUSD contract source and settlement
 
-The application publishes the compiled contract records at `/api/nusd/v1/contracts`, including exact source and artifact hashes. Numina's retained September 18, 2026 receipts record the `NuminaUSD` constructor mint at block `51725` and the separate `NuminaSettlement` deployment at block `51726`. Conversion and redemption retain their own deployment and execution status.
-
-## Confirmed constructor mint
-
-| Field | Retained Numina receipt |
-| --- | --- |
-| Mint/deployment block | `51725` |
-| Transaction | `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b` |
-| NUSD contract | `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` |
-| Chain ID | `962421430` |
-| Receipt status | `0x1` |
-| Constructor issuance | `1,500,000,000,000,000.00 NUSD` |
-| Decimals | `18` |
-| Base units | `1500000000000000000000000000000000` |
-
-The [mint receipt](/downloads/nusd/mint-receipt.json) and [deployment verification](/downloads/nusd/deployment-verification.json) retain the original evidence. The [settlement-contract deployment receipt](/downloads/nusd/deployment-receipt.json) records transaction `0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b` at block `51726`. That transaction deployed the settlement contract; completion of a settlement operation requires its own record. Current chain state has not been reverified by this documentation update.
-
-The Numina Native Treasury journal at `/api/control/v1/treasury` remains the software source of truth. The September 25, 2026 revision-142 observation records a separate 500T NUSD projection and a `PREPARED` mint request. Current account references use `/api/control/v2/treasury/accounts`. [Minting metadata and evidence scope](/downloads/NUSD-Minting-v4.md) explain these records together.
+The application publishes the compiled `NuminaUSD` token and `NuminaSettlement` contract records at `/api/nusd/v1/contracts`. Each record identifies exact downloadable source and artifact hashes. Deployment addresses and transaction receipts remain empty until confirmed on the intended chain.
 
 ## Token
 
-The deployed token record uses 18 decimal places, a configured supply cap, separate administrator, issuer, minter and pauser roles, and an initial pause. Issuance authorizations specify a recipient, amount, expiry and one-use reference. Ordinary ERC20 transfers use existing token balances. Retained six-decimal, uncapped review artifacts describe earlier proposals and local tests; they are historical inputs with their original hashes.
+The retained token uses six decimal places, a configured supply cap, separate administrator, issuer, minter and pauser roles, and an initial pause. Issuance authorizations specify a recipient, amount, expiry and one-use reference. Ordinary ERC20 transfers use existing token balances.
 
 The existing native treasury still contains one 500T NUSD model projection. Publishing or deploying contract code does not change that projection or automatically issue tokens from it. Initial token issuance and the supply cap require explicit deployment inputs.
 

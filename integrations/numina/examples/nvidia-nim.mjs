@@ -11,7 +11,7 @@ export function nimEndpoint(value){
 
 // The host supplies its configured SDK factory; credentials stay in its closure.
 // At most two model requests and one validated, read-only Numina tool batch.
-export async function nvidiaNimRoundTrip({createProvider,endpoint,model,messages,maxTokens=512,toolNames,numinaFetch=globalThis.fetch}){
+export async function nvidiaNimRoundTrip({createProvider,endpoint,model,messages,maxTokens=512,numinaFetch=globalThis.fetch}){
  const baseURL=nimEndpoint(endpoint);
  if(typeof model!=='string'||!model.trim()||model.length>256||/[\u0000-\u001f]/.test(model))throw Error('NVIDIA_NIM_MODEL_REQUIRED');
  if(typeof createProvider!=='function')throw Error('NVIDIA_NIM_CLIENT_FACTORY_REQUIRED');
@@ -19,10 +19,10 @@ export async function nvidiaNimRoundTrip({createProvider,endpoint,model,messages
  if(!Array.isArray(messages)||!messages.length||messages.length>32||bytes>65536)throw Error('NVIDIA_NIM_MESSAGES_INVALID');
  if(!Number.isSafeInteger(maxTokens)||maxTokens<1||maxTokens>4096)throw Error('NVIDIA_NIM_TOKEN_LIMIT_INVALID');
  const numina=new NuminaClient({baseUrl:NUMINA_ORIGIN,fetch:numinaFetch});
- // Checks the application shape and shared rc26 identity; no signature claim.
+ // Checks the application shape and shared rc27 identity; no signature claim.
  await numina.release({});
  const client=createProvider({baseURL,maxRetries:0,timeout:15000});
  if(typeof client?.chat?.completions?.create!=='function')throw Error('NVIDIA_NIM_CLIENT_INVALID');
  const provider={chat:{completions:{create:request=>client.chat.completions.create({...request,max_tokens:maxTokens,stream:false})}}};
- return openAIChatRoundTrip({provider,numina,model:model.trim(),messages,toolNames});
+ return openAIChatRoundTrip({provider,numina,model:model.trim(),messages});
 }

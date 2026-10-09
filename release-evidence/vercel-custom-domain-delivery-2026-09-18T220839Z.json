@@ -102,5 +102,24 @@
     "externalSettlementClaimed": false,
     "providerSettlementReceipts": []
   },
-  "scope": "Factual delivery observation only. The exact canonical main commit 2566532e08ff800149d432376dd03a3246cfb99b was observed READY on the connected Vercel production project and all four required custom-domain endpoints returned HTTP 200. GitHub Actions still failed before runner allocation, no new signed mobile artifacts or store submission receipts were produced, and VENGEANCE remained offline."
+  "scope": "Factual delivery observation only. The exact canonical main commit 2566532e08ff800149d432376dd03a3246cfb99b was observed READY on the connected Vercel production project and all four required custom-domain endpoints returned HTTP 200. GitHub Actions still failed before runner allocation, no new signed mobile artifacts or store submission receipts were produced, and VENGEANCE remained offline.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

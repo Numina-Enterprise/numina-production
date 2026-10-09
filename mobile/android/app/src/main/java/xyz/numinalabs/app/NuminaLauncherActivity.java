@@ -16,9 +16,7 @@ public final class NuminaLauncherActivity extends LauncherActivity {
                 || uri.getUserInfo() != null
                 || (uri.getPort() != -1 && uri.getPort() != 443)) return null;
         String path = uri.getPath();
-        if (path == null || !(path.equals("/app") || path.startsWith("/app/")
-                || path.equals("/terms") || path.equals("/privacy")
-                || path.equals("/software-licenses") || path.equals("/compliance"))) return null;
+        if (path == null || !(path.equals("/app") || path.startsWith("/app/"))) return null;
         return uri;
     }
 

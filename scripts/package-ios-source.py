@@ -1,6 +1,6 @@
 # Package current iOS sources; no compilation, signing, or publication.
 from pathlib import Path
-import datetime, hashlib, io, json, os, subprocess, zipfile
+import datetime, hashlib, io, json, subprocess, zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -50,7 +50,7 @@ def main():
         raise RuntimeError('Source changed while packaging')
     record_path = ROOT / ('docs/native-package-record-v' + version.split('.')[0] + '.json')
     record = json.loads(record_path.read_text(encoding='utf-8'))
-    timestamp = (datetime.datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']), datetime.timezone.utc) if 'SOURCE_DATE_EPOCH' in os.environ else datetime.datetime.now(datetime.timezone.utc)).isoformat()
+    timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     item = {'platform': 'ios', 'file': prefix + '-source.zip', 'bytes': len(archive),
             'sha256': hashlib.sha256(archive).hexdigest(), 'kind': 'source_archive', 'installable': False,
             'sourceBuildNumber': before['buildNumber'], 'sourceInputsSha256': before['sourceInputs']['sha256'],

@@ -1,0 +1,91 @@
+{
+  "schema": "numina.software-metadata-alignment.v1",
+  "identity": "NUMINA",
+  "softwareExternal": false,
+  "treasury": {
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
+  },
+  "bankTransfer": {
+    "id": "numina-bofa-3486-2026-08-31-8000750550",
+    "established": true,
+    "establishedStatus": "ESTABLISHED",
+    "status": "COMPLETED",
+    "cleared": true,
+    "clearingStatus": "CLEARED",
+    "clearedDate": "2026-08-31",
+    "amount": "500000000000000",
+    "unit": "USD",
+    "confirmation": "8000750550",
+    "verified": true,
+    "verification": "NUMINA_MANIFEST_VERIFIED",
+    "verificationAuthority": "NUMINA",
+    "verificationScope": "NUMINA_MANIFEST",
+    "providerVerified": true,
+    "providerVerificationSource": "LINKED_BANK_OF_AMERICA_TRANSACTION_FEED",
+    "providerTransactionId": "EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw",
+    "providerInstitution": "Bank of America",
+    "providerOfficialName": "Business Advantage Sav",
+    "providerAccountLast4": "3486",
+    "providerBalanceSnapshotObserved": true,
+    "providerBalanceSnapshotCurrent": "500000000000000",
+    "providerBalanceSnapshotAvailable": "500000000000000",
+    "providerBalanceSnapshotUnit": "USD",
+    "providerBalanceSnapshotSource": "LINKED_BANK_OF_AMERICA_ACCOUNT_FEED",
+    "providerBalanceSnapshotFreshness": "unknown",
+    "providerBalanceSourceReportedAt": null,
+    "providerBalanceRecordUpdatedAt": "2026-09-20T18:46:26.336453Z",
+    "providerDisplayEvidence": "NUMINA_SOURCE_SCOPED_OBSERVATION",
+    "providerDisplayEvidenceScope": "PROVIDER_LINKED_TRANSACTION_AND_NUMINA_SOURCE_SCOPED_OBSERVATION"
+  },
+  "verificationBoundary": {
+    "authority": "NUMINA",
+    "scope": "NUMINA_SOFTWARE_MODEL_AND_LINKED_BANK_OF_AMERICA_PROVIDER_TRANSACTION",
+    "providerVerified": true
+  },
+  "surfaces": [
+    "treasury-model",
+    "bank-route",
+    "architecture",
+    "manifest-v2",
+    "runtime-manifest",
+    "application-release",
+    "architecture-layers",
+    "native-treasury-api",
+    "account-alignment"
+  ],
+  "providerBalanceObservation": {
+    "institution": "Bank of America",
+    "officialName": "Business Advantage Sav",
+    "accountLast4": "3486",
+    "current": "500000000000000",
+    "available": "500000000000000",
+    "unit": "USD",
+    "observedVia": "LINKED_BANK_OF_AMERICA_ACCOUNT_FEED",
+    "snapshotVerifiedAgainstLinkedFeed": true,
+    "sourceReportedTimestamp": null,
+    "freshness": "unknown",
+    "recordUpdatedAt": "2026-09-20T18:46:26.336453Z"
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

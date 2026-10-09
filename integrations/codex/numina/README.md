@@ -14,20 +14,16 @@ The public source package can be installed through a Codex marketplace. This arc
 
 No native-store or third-party marketplace publication is implied by this package. Numina's architecture layers share one canonical control journal. Production account connections and approvals retain their own actual status.
 
-Release alignment: Numina 4.0.0 / rc26 singularity. The signed core-to-root binding is at https://numinalabs.xyz/v1/release/core-binding. The preserved 1.8.0 frozen core retains its original identity. The public MCP tools remain read-only. Evidence revocation uses the separate owner-authenticated POST /v1/evidence/revoke and retains stored artifacts.
+Release alignment: Numina 4.0.0 / rc27 singularity. The signed core-to-root binding is at https://numinalabs.xyz/v1/release/core-binding. The preserved 1.8.0 frozen core retains its original identity. The public MCP tools remain read-only. Evidence revocation uses the separate owner-authenticated POST /v1/evidence/revoke and retains stored artifacts.
 
-Website and OS: Intelligence in motion. One core, one root, five architecture layers. The current application release is available at https://numinalabs.xyz/v4/release/manifest.
+Website and OS: Intelligence in motion. One core, one root, seven final frontier layers. The current application release is available at https://numinalabs.xyz/v4/release/manifest.
 
 Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.
 
 ## Procurement usage
 
-Procurement is disabled by default (`procurement_usage: false`, `automaticPurchasing: false`). The current policy at https://numinalabs.xyz/procurement-policy.js permits only a projection of explicit direct-partnership requests with matching owner or owner-delegated signed approval, budget reservation, and provider access. Completed usage requires an exact signed provider receipt. Historical statements and usage flags do not authorize purchases. The evaluator performs no execution; manual provider workflows must revalidate authority and claim budget atomically.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.
 
 ## Shared denomination policy
 
 Read `denomination_policy` from the live `numina_architecture` or `numina_capabilities` response. Numina declares **1 NUSD = 1 USDC = 1 USD** across L1–L5 and the hosted application. This is one native balance with declared equivalent values; keep provider balances, asset identity and execution status as reported. A declaration does not establish external reserves or a completed conversion.
-
-## Terms, privacy, licenses and legal coverage
-
-Read [Terms](https://numinalabs.xyz/terms), [Privacy](https://numinalabs.xyz/privacy), [software licenses](https://numinalabs.xyz/software-licenses) and [global legal coverage](https://numinalabs.xyz/compliance). The public [coverage manifest](https://numinalabs.xyz/api/app/v1/legal-manifest) and [country inventory](https://numinalabs.xyz/api/app/v1/country-readiness) identify the shared review record. `legal/manifest.json` binds the included policy, coverage and notice snapshots by file hash. Countries and territories listed for intake are not approved deployments. These source companions do not establish native compilation, installation, privacy-flow review, marketplace acceptance or financial activation; the actual distributed binary and activity require their own evidence.

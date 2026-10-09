@@ -108,3 +108,5 @@ export async function resolveRpcAuthorization({endpoint,directInputs=[],pairs=[]
   }
   throw Error('NUMINA_RPC_AUTHENTICATION_FAILED');
 }
+
+// Authorized production deployment trigger; no runtime behavior change.

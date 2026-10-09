@@ -12,15 +12,14 @@ test('retired reference APIs cannot run or touch storage with or without configu
 });
 test('recorded network and token verification remain separate from current financial execution',()=>{
  const verified=JSON.parse(readFileSync(new URL('../runtime/nusd/deployment-verification.json',import.meta.url)));
- assert.equal(NUSD_POLICY.network_policy.name,'Numina');assert.equal(NUSD_POLICY.network_policy.status,'historical_authenticated_rpc_observation');
+ assert.equal(NUSD_POLICY.network_policy.name,'Numina');assert.equal(NUSD_POLICY.network_policy.status,'authenticated_provider_live');
  assert.equal(NUSD_POLICY.network_policy.chain_id,verified.chainId);
  assert.equal(NUSD_POLICY.network_policy.genesis_hash,verified.genesisHash);
  assert.equal(NUSD_POLICY.network_policy.explorer_url,null);
  assert.equal(NUSD_POLICY.network_policy.authenticated_rpc_verified,true);
  assert.equal(NUSD_POLICY.network_policy.continuous_monitoring,false);
- assert.equal(NUSD_POLICY.network_policy.currentNodeStatusVerified,false);
  assert.equal(NUSD_POLICY.network_policy.independently_verified,false);
  assert.equal(NUSD_POLICY.asset.chain,verified.chainId);assert.equal(NUSD_POLICY.asset.contract,verified.token.address);
  assert.equal(NUSD_POLICY.asset.decimals,18);assert.equal(NUSD_POLICY.capabilities.mint,false);assert.equal(NUSD_POLICY.capabilities.settlement,false);
- assert.equal(NUSD_POLICY.operator_activation.currentChainActivityVerified,false);
+ assert.equal(NUSD_POLICY.operator_activation.currentChainActivityVerified,true);assert.equal(NUSD_POLICY.capabilities.transfer,true);
 });

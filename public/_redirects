@@ -1,7 +1,6 @@
 # Permanent redirects for legacy page links. Domain redirects require Worker or edge configuration.
 /index.html / 301
 /about.html /about 301
-/authority.html /authority 301
 /blockchain.html /blockchain 301
 /platform.html /platform 301
 /pricing.html /pricing 301
@@ -16,6 +15,3 @@
 /economy.html /economy 301
 
 /ownership.html /ownership 301
-/terms.html /terms 301
-/software-licenses.html /software-licenses 301
-/compliance.html /compliance 301

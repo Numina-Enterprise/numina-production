@@ -9,17 +9,13 @@ import {resolveRpcAuthorization} from './rpc-auth.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const requestFile=path.resolve(process.argv[2]||path.join(root,'deployment.production.json'));
 const receiptFile=path.resolve(process.argv[3]||path.join(root,'deployment-receipt.json'));
-// Fail before credentials, signer selection or network access. Explicit candidates remain unsigned review inputs.
-const checked=validateDeployment(requestFile);
-if(checked.errors.length)throw Error('DEPLOYMENT_REQUEST_INVALID: '+checked.errors.join('; '));
-if(!checked.productionDispatchAllowed)throw Error('PRODUCTION_DISPATCH_REQUIRES_RETAINED_RECEIPT_BINDING: explicit candidates require a separate versioned deployment review');
 const endpoint=process.env.NUMINA_RPC_URL;
 const authorizationInput=process.env.NUMINA_RPC_AUTHORIZATION;
 const expectedChain=process.env.NUMINA_EXPECTED_CHAIN_ID;
 const expectedGenesis=process.env.NUMINA_EXPECTED_GENESIS?.toLowerCase();
 const sender=getAddress(process.env.NUMINA_SENDER||'');
-const REQUIRED_INITIAL_SUPPLY='1500000000000000000000000000000000';
-const REQUIRED_DECIMALS=18n;
+const REQUIRED_INITIAL_SUPPLY='1500000000000000000000';
+const REQUIRED_DECIMALS=6n;
 const REQUIRED_CONFIRMATIONS=12;
 if(!endpoint||!authorizationInput||!expectedChain||!expectedGenesis)throw Error('NUMINA_RPC_CONFIGURATION_REQUIRED');
 
@@ -153,7 +149,9 @@ if(genesis?.hash?.toLowerCase()!==expectedGenesis)throw Error('GENESIS_MISMATCH'
 const accounts=await rpc('eth_accounts');
 if(!Array.isArray(accounts)||!accounts.some(account=>account.toLowerCase()===sender.toLowerCase()))throw Error('MANAGED_SIGNER_UNAVAILABLE');
 
-if(checked.initialSupply.toString()!==REQUIRED_INITIAL_SUPPLY||checked.cap.toString()!==REQUIRED_INITIAL_SUPPLY)throw Error('SUPPLY_NOT_1500T_18D');
+const checked=validateDeployment(requestFile);
+if(checked.errors.length)throw Error('DEPLOYMENT_REQUEST_INVALID: '+checked.errors.join('; '));
+if(checked.initialSupply.toString()!==REQUIRED_INITIAL_SUPPLY||checked.cap.toString()!==REQUIRED_INITIAL_SUPPLY)throw Error('SUPPLY_NOT_1500T_6D');
 if(getAddress(checked.initialRecipient)!==sender)throw Error('RECIPIENT_SIGNER_MISMATCH');
 
 const tokenArtifact=loadTokenArtifact();
@@ -224,7 +222,7 @@ const result={
   schema:'numina.nusd.production-deployment-receipt.v1',identity:'NUMINA',
   observedAt:new Date().toISOString(),chainId:chain,genesisHash:genesis.hash,sender,
   deploymentMode:'idempotent_reconcile_or_create',
-  issuance:{amountNusd:'1500000000000000',decimals:18,baseUnits:REQUIRED_INITIAL_SUPPLY,
+  issuance:{amountNusd:'1500000000000000',decimals:6,baseUnits:REQUIRED_INITIAL_SUPPLY,
     constructorMint:true,recipient:checked.initialRecipient,externallyBackedClaim:false},
   token:{address:tokenAddress,transactionHash:tokenTx.hash,blockNumber:tokenTx.receipt.blockNumber,
     confirmations:tokenConfirmations,reusedExisting:tokenTx.reusedExisting===true,

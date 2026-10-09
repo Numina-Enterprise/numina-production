@@ -1,7 +1,6 @@
 'use strict';
 
 const legacy=require('../lib/numina');
-const authority=require('../lib/owner-authority');
 const {submitArc}=require('../lib/provider-submitter');
 
 function body(req){if(req.body&&typeof req.body==='object')return req.body;try{return JSON.parse(req.body||'{}')}catch{return {};}}
@@ -10,7 +9,7 @@ function respond(res,status,value){res.statusCode=status;res.setHeader('content-
 module.exports=async function executionSubmit(req,res){
   if(req.method!=='POST'){res.setHeader('allow','POST');return respond(res,405,{error:'METHOD_NOT_ALLOWED'});}
   try{
-    const controls=authority.controls(legacy.controls());
+    const controls=legacy.ownerControls(legacy.controls());
     const result=await submitArc({body:body(req),verifyEnvelope:legacy.verifyEnvelope,sign:legacy.sign,controls});
     return respond(res,200,result);
   }catch(error){

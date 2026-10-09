@@ -157,7 +157,7 @@ def main():
     require(tree_digest == manifest.get("build_id") == policy["application_build_id"], "Application artifact tree mismatch")
     require(files["server/index.js"]["sha256"] == manifest.get("workerSha256"), "Worker digest mismatch")
     require(json.loads(files[".openai/hosting.json"]["bytes"])["project_id"] == policy["project_id"], "Wrong deployment project")
-    require(policy.get("runtime_version") == "1.9.0-rc26", "Explicit reviewed runtime version required")
+    require(policy.get("runtime_version") == "1.9.0-rc27", "Explicit reviewed runtime version required")
     require(manifest.get("runtime_dependency", {}).get("version") == policy["runtime_version"], "Runtime composition differs from policy")
     result = {
         "schema": "numina.provenance-gate-result.v1",

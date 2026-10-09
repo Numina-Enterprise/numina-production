@@ -1,11 +1,5 @@
 # Numina 500T simulation
 
-## Historical simulation scope
-
-The simulation retains the September 16, 2026 **500T, six-decimal review model**. The confirmed token has separate Numina chain evidence: **1,500T NUSD at 18 decimals**, constructor mint block `51725`, chain `962421430`, receipt `0x1`, transaction `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b`, contract `0x491c1DF1b5CA77AF797f052c2310ca17039C931b`. The settlement-contract deployment is a separate transaction at block `51726`.
-
-The [mint receipt](/downloads/nusd/mint-receipt.json) and [current minting guide](/downloads/NUSD-Minting-v4.md) identify that September 18, 2026 observation. The Numina Native Treasury journal remains the software source of truth. Simulation quantities and local-test results retain their original scope and do not replace the confirmed mint or current balances.
-
 Open **https://numinalabs.xyz/treasury-simulation**. The descriptor is `GET /api/nusd/v1/simulation`; it also passes through the existing Numina gateway. This is a browser-only allocation model. Reload or reset to start again.
 
 The starting amount is **500,000,000,000,000 NUSD**, represented exactly as `500000000000000000000` base units with six decimals. It begins in the simulated native bucket. The simulated Stripe and bank buckets begin at zero. All three together always total 500T; the amount is counted once.

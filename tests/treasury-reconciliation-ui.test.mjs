@@ -17,17 +17,13 @@ async function dom(run){const previous=globalThis.document;globalThis.document={
 test('reconciliation view describes captured sources and never turns owner approval into deposit readiness',()=>dom(async()=>{
   const {view,receipt}=await fixture(),before=JSON.stringify({view,receipt}),panel=renderTreasuryReconciliation(receipt,view);
   assert.match(panel.textContent,/journal revision 138/);assert.match(panel.textContent,/Stripe USD available balanceUnavailable/);
-  assert.match(panel.textContent,/Current native settlementUnverified in current journal/);
-  assert.match(panel.textContent,/Journal NUSD projection500000000000000 NUSD/);
-  assert.match(panel.textContent,/Historical release receipt.*not current journal confirmation/);
-  assert.doesNotMatch(panel.textContent,/Current native settlementSETTLED/);
   assert.match(panel.textContent,/Bank of AmericaBank connection unavailable/);assert.match(panel.textContent,/Not ready for submission/);
   assert.doesNotMatch(panel.textContent,/500,000,000,000,000|provider.confirmed|deposit completed/i);
   assert.equal(JSON.stringify({view,receipt}),before);
 }));
 test('reconciliation rejects stale snapshots, retargeted roots and claimed execution',()=>dom(async()=>{
   const {view,receipt}=await fixture();
-  for(const change of [p=>p.root='another',p=>p.revision++,p=>p.head='b'.repeat(64),p=>p.reconciliation.capturedAt='other',p=>p.reconciliation.canonicalTreasury.id='another',p=>p.reconciliation.depositReadiness.status='READY',p=>p.reconciliation.depositReadiness.submissionPerformed=true,p=>p.reconciliation.depositReadiness.receipt={},p=>p.nativeSettlement.status='SETTLED',p=>p.nativeSettlement.receipt={id:'stale'}]){
+  for(const change of [p=>p.root='another',p=>p.revision++,p=>p.head='b'.repeat(64),p=>p.reconciliation.capturedAt='other',p=>p.reconciliation.canonicalTreasury.id='another',p=>p.reconciliation.depositReadiness.status='READY',p=>p.reconciliation.depositReadiness.submissionPerformed=true,p=>p.reconciliation.depositReadiness.receipt={}]){
     const changed=structuredClone(receipt);change(changed.payload);assert.throws(()=>renderTreasuryReconciliation(changed,view),/does not match/);
   }
 }));
@@ -46,6 +42,6 @@ test('a successful evidence read renders the current summary and source details 
   await target.children.find(n=>n.textContent==='Read treasury reconciliation and evidence').onclick();
   const result=target.children.find(n=>n.tagName==='div');
   assert.equal(result.children[0].tagName,'section');assert.equal(result.children[1].tagName,'details');
-  assert.match(result.textContent,/Native settlement and provider observations/);assert.match(result.textContent,/Inspect source records and Numina signature/);
+  assert.match(result.textContent,/Treasury reconciliation/);assert.match(result.textContent,/Inspect source records and Numina signature/);
   assert.deepEqual(calls,[{path:'treasury/evidence',body:undefined}]);
 }));

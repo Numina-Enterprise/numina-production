@@ -25,15 +25,11 @@ export function validateArguments(name,input){
   }else fail('UNKNOWN_TOOL');
   return input;
 }
-function publicAuthorizationPolicy(value){
-  return object(value)&&Object.keys(value).length===4&&value.authorizedBy==='NUMINA'&&
-    ['executionAuthorized','journalAppendAuthorized','settlementAuthorized'].every(key=>typeof value[key]==='boolean');
-}
 function sanitize(value,token,depth=0){
   if(depth>25)fail('INVALID_SERVER_RESPONSE');
   if(typeof value==='string')return token?value.split(token).join('[redacted]'):value;
   if(Array.isArray(value))return value.map(v=>sanitize(v,token,depth+1));
-  if(object(value))return Object.fromEntries(Object.entries(value).filter(([k,v])=>!FORBIDDEN.test(k)||(k==='authorization'&&publicAuthorizationPolicy(v))).map(([k,v])=>[token?k.split(token).join('[redacted]'):k,sanitize(v,token,depth+1)]));
+  if(object(value))return Object.fromEntries(Object.entries(value).filter(([k])=>!FORBIDDEN.test(k)).map(([k,v])=>[token?k.split(token).join('[redacted]'):k,sanitize(v,token,depth+1)]));
   return value;
 }
 
@@ -113,7 +109,7 @@ export class NuminaClient {
       !object(data.runtime_dependency)||!text(data.runtime_dependency.version,1,128))fail('INVALID_SERVER_RESPONSE');
     if(data.runtime_dependency.version!==EXPECTED_RELEASE.production_version || data.runtime_dependency.release!==EXPECTED_RELEASE.release)fail('RUNTIME_RELEASE_MISMATCH');
     if(data.version!=='4.0.0'||data.release!=='numina-v4.0.0')fail('APPLICATION_RELEASE_MISMATCH');
-    // Preserve application identity and require the shared rc26 runtime target.
+    // Preserve application identity and require the shared rc27 runtime target.
     // Schema recognition is not signature, artifact, deployment or reserve verification.
     return this.#wrap(data);
   }

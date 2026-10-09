@@ -1,8 +1,4 @@
-import {COUNTRY_CODES} from '../public/country-codes.js';
-import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
 export const APP_VERSION='4.0.0';
-export const APP_CONSENT_VERSION='numina-workspace-2026-10-04';
-export const APP_LEGAL_POLICY={revision:APP_CONSENT_VERSION,terms:'/terms',privacy:'/privacy',coverage:NUMINA_LEGAL_DISCOVERY.coverage,coverageManifest:NUMINA_LEGAL_DISCOVERY.coverageManifest,countryReadiness:NUMINA_LEGAL_DISCOVERY.countryReadiness,coverageRevision:NUMINA_LEGAL_DISCOVERY.recordRevision,scope:'workspace-request',marketingConsentIncluded:false,optionalAiProcessingConsentIncluded:false,paidSowAccepted:false,financialExecutionAuthorized:false,providerAccessGranted:false};
 export const APP_OFFERS={
  diagnostic_enterprise:{name:'Operational Agent Diagnostic',amount:500000,currency:'usd',paymentLink:'plink_1UFKjOQdJat0efmTjZUbX8v7',url:'https://book.stripe.com/28E6oJgte52Q5YC31HcbC09',description:'60–90 minutes focused on one authorized workflow, an opportunity map, dependencies, risks and a recommended next step.'},
  audit_enterprise:{name:'Agentic Systems & Operations Audit',amount:2500000,currency:'usd',paymentLink:'plink_1UFKjlQdJat0efmTGO6ppg0d',url:'https://book.stripe.com/cNi8wRfpadzm1Im9q5cbC0a',description:'A fixed-scope assessment, prioritized opportunities, control requirements and implementation roadmap.'},
@@ -16,10 +12,9 @@ export function appFail(code,status=400){throw Object.assign(new Error(code),{co
 export async function appDigest(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(x=>x.toString(16).padStart(2,'0')).join('');}
 export function appText(value,min,max){if(typeof value!=='string'||value.trim().length<min||value.trim().length>max||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value))appFail('INVALID_INPUT');return value.trim();}
 export function appIntake(input){
- if(!input||Array.isArray(input)||Object.keys(input).some(k=>!['idempotencyKey','service','title','brief','successCriteria','country','consent','consentVersion'].includes(k)))appFail('INVALID_INPUT');
- if(!/^[a-f0-9-]{36}$/.test(input.idempotencyKey)||(!Object.hasOwn(APP_OFFERS,input.service)||APP_OFFERS[input.service].retired)||!COUNTRY_CODES.includes(input.country)||input.consent!==true)appFail('INVALID_INPUT');
- if(input.consentVersion!==APP_CONSENT_VERSION)appFail('LEGAL_POLICY_REVIEW_REQUIRED',409);
- return {idempotencyKey:input.idempotencyKey,service:input.service,title:appText(input.title,3,120),brief:appText(input.brief,20,4000),successCriteria:appText(input.successCriteria,10,1500),country:input.country,consent:true,consentVersion:APP_CONSENT_VERSION};
+ if(!input||Array.isArray(input)||Object.keys(input).some(k=>!['idempotencyKey','service','title','brief','successCriteria','country','consent'].includes(k)))appFail('INVALID_INPUT');
+ if(!/^[a-f0-9-]{36}$/.test(input.idempotencyKey)||(!Object.hasOwn(APP_OFFERS,input.service)||APP_OFFERS[input.service].retired)||!/^[A-Z]{2}$/.test(input.country)||input.consent!==true)appFail('INVALID_INPUT');
+ return {idempotencyKey:input.idempotencyKey,service:input.service,title:appText(input.title,3,120),brief:appText(input.brief,20,4000),successCriteria:appText(input.successCriteria,10,1500),country:input.country,consent:true};
 }
 export function appPaymentSummary(payments,facts){
  const paid=payments.filter(p=>p.status==='paid');let gross=0,refunded=0,disputed=false;

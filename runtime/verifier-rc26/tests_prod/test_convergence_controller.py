@@ -26,7 +26,7 @@ def base_spec(tmp_path:Path):
         environment="production",
         target="",
         image="numina/verifier:test",
-        namespace="numina",
+        namespace="NUMINA",
         service_name="numina-public-verifier",
         public_url="https://numinalabs.xyz",
         metadata={},

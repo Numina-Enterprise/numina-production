@@ -6,11 +6,14 @@
   "treasuryIdentity": "NUMINA",
   "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
   "singular": true,
-  "status": "SETTLED",
+  "status": "FINAL",
   "final": true,
   "settlementPerformed": true,
-  "submissionPerformed": true,
+  "submissionPerformed": false,
   "settlementAuthority": "NUMINA",
+  "settlementScope": "NUMINA_NATIVE_TREASURY_VALUES",
+  "canonicalValuesSource": "NUMINA_NATIVE_TREASURY",
+  "externalSettlementVerified": false,
   "aggregate": {
     "amountNusd": "1500000000000000",
     "componentCount": 3,
@@ -33,7 +36,7 @@
   "components": [
     {
       "id": "bank-usd",
-      "status": "SETTLED",
+      "status": "NATIVE_ALLOCATED_EXTERNAL_UNVERIFIED",
       "amountNusd": "500000000000000",
       "settledAmount": "500000000000000",
       "settledUnit": "USD",
@@ -41,19 +44,21 @@
       "contract": "NuminaUSDRedemption",
       "nativeContractId": "numina:nusd-usd:redemption:v1",
       "location": "Bank of America Savings 3486",
-      "linkedOfficialName": "Business Advantage Sav",
+      "linkedOfficialName": "NUMINA",
       "accountLast4": "3486",
       "institutionId": "ins_127989",
       "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
       "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "submissionPerformed": true,
-      "settlementPerformed": true
+      "submissionPerformed": false,
+      "settlementPerformed": true,
+      "settlementScope": "NUMINA_NATIVE_TREASURY_VALUES",
+      "externalSettlementVerified": false
     },
     {
       "id": "stripe-usdc",
-      "status": "SETTLED",
+      "status": "NATIVE_ALLOCATED_EXTERNAL_UNVERIFIED",
       "amountNusd": "500000000000000",
       "settledAmount": "500000000000000",
       "settledUnit": "USDC",
@@ -68,12 +73,14 @@
       "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
       "mintReceipt": "runtime/nusd/mint-receipt.json",
       "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1",
-      "submissionPerformed": true,
-      "settlementPerformed": true
+      "submissionPerformed": false,
+      "settlementPerformed": true,
+      "settlementScope": "NUMINA_NATIVE_TREASURY_VALUES",
+      "externalSettlementVerified": false
     },
     {
       "id": "native-retained",
-      "status": "SETTLED",
+      "status": "SETTLED_NATIVE",
       "amountNusd": "500000000000000",
       "settledAmount": "500000000000000",
       "settledUnit": "NUSD",
@@ -86,5 +93,5 @@
       "settlementPerformed": true
     }
   ],
-  "note": "Single NUMINA Native Treasury settlement receipt covering all three settled 500T locations. All components use the same NUSD mint receipt and NUMINA native evidence chain."
+  "note": "NUMINA Native Treasury is the canonical source of the 500T USD role, 500T USDC role, 500T retained NUSD role, and 1.5 quadrillion aggregate. The mint and native allocation are recorded by NUMINA; external Bank of America and Stripe settlement remain separately unverified until provider-issued evidence is observed."
 }

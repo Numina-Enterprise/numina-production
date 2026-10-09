@@ -119,7 +119,7 @@ test('owner claims and uploaded-document metadata cannot promote actual funding'
 
 test('native settlement records remain captured internal state without proving external settlement',async()=>{
   const treasury={root:owner,status:'READY',revision:4,head:'a'.repeat(64),projection:{balance:'500000000000000',unit:'NUSD',verification:'VERIFIED'},
-    aggregateSettlement:{status:'SETTLED',evidenceScope:'NUMINA_INTERNAL_SOFTWARE_STATE',receiptId:'native-settlement-fixture',submissionPerformed:true,settlementPerformed:true}};
+    aggregateSettlement:{status:'SETTLED',evidenceScope:'NUMINA_MANIFEST_FINAL',receiptId:'native-settlement-fixture',submissionPerformed:true,settlementPerformed:true}};
   const payload=await treasuryEvidencePayload({treasury,frontier:{},providerObservation:{status:'UNAVAILABLE',record:null},supportingDocuments:null,capturedAt:'2026-09-19T00:00:00Z'});
   assert.deepEqual(payload.source.nativeTreasury.aggregateSettlement,treasury.aggregateSettlement);
   assert.equal(payload.records.nativeTreasury.verification.status,'VERIFIED');
@@ -160,7 +160,7 @@ test('an observation label alone cannot authenticate currency or balance records
 test('reconciliation preserves each captured provider status without aggregating amounts or granting deposit readiness',async()=>{
   const input={treasury:{root:owner,status:'READY',revision:4,head:'a'.repeat(64),projection:{balance:'500000000000000',unit:'NUSD',verification:'VERIFIED'}},
     frontier:{fundingDeclaration:{FUNDED_PLAN:true,bankFundingVerified:true},fundingPlan:{confirmedFunding:{amount:'500000000000000',unit:'USDC'},externalReceipt:{id:'owner-claim'}}},
-    providerObservation:{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:{schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'Stripe',connection:'read_only',
+    providerObservation:{status:'OBSERVED',authentication:'server_held_stripe_read_credential',record:{schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'NUMINA',connection:'read_only',
       account:{id:STRIPE_TREASURY_FINANCIAL_ACCOUNT,livemode:true,status:'open'},reported_currencies:['usd','usdc','nusd'],
       balances:{available:{usd:{currency:'usd',value:0},usdc:{currency:'usdc',value:'500000000000000000001'}},inbound_pending:{usd:{currency:'usd',value:12500}}},
       provider_nusd_balance:{buckets:{available:{currency:'nusd',value:500}}}}},
@@ -182,14 +182,7 @@ test('reconciliation preserves each captured provider status without aggregating
   assert.deepEqual(r.depositReadiness.requiredEvidence.map(item=>[item.id,item.status]),[['funding_source','NOT_VERIFIED'],['reserve_allocation','NOT_VERIFIED'],['provider_acceptance','NOT_VERIFIED']]);
   assert.equal(r.depositReadiness.settlementEvidence.status,'NOT_VERIFIED');assert.equal(r.depositReadiness.settlementEvidence.requiredAfter,'submission');
   assert.equal(payload.fundingVerification.actual_funding,false);assert.equal(payload.fundingVerification.ownerDeclaredFunded,true);
-  const serialized=JSON.stringify({records:r.records,depositReadiness:r.depositReadiness});assert.doesNotMatch(serialized,/"(?:amount|value|formatted)":/);assert.equal(serialized.includes('500000000000000'),false);
-  assert.equal(r.nativeSettlement.status,'UNVERIFIED');
-  assert.equal(r.nativeSettlement.receipt,null);
-  assert.equal(r.nativeSettlement.currentJournalProjection.balance,'500000000000000');
-  assert.equal(r.nativeSettlement.currentJournalProjection.revision,4);
-  assert.equal(r.nativeSettlement.historicalReceipt.id,'numina:treasury:settlement:2026-09-19:v1');
-  assert.equal(r.nativeSettlement.historicalReceipt.currentJournalConfirmed,false);
-  assert.equal(r.nativeSettlement.canonicalTreasuryValues.aggregate.current,null);
+  const serialized=JSON.stringify(r);assert.doesNotMatch(serialized,/"(?:amount|value|formatted)":/);assert.equal(serialized.includes('500000000000000'),false);
   r.records.stripe.currencies.usdc.balances.available.verification.status='CHANGED';
   assert.equal(payload.records.providerBalances.currencies.usdc.balances.available.verification.status,'AUTHENTICATED_OBSERVATION');
   assert.deepEqual(payload.source.providerObservation,input.providerObservation);

@@ -1,6 +1,6 @@
 # Numina iOS signing handoff
 
-Prepared for application 4.0.0, iOS source build 6, runtime 1.9.0-rc26, core 1.8.0.
+Prepared for application 4.0.0, iOS source build 5, runtime 1.9.0-rc27, core 1.8.0.
 These documents configure a future signing operation. They are not an Apple certificate, a provisioning profile, a signed IPA, or an App Store receipt.
 
 ## Included documents
@@ -27,7 +27,7 @@ Export the Apple-issued certificate together with its matching private key as pa
 
 ## Fresh build requirement
 
-The latest tracked unsigned bundle is historical build 5 from commit `c6ffbb50d77ff53323b71b7048872637677e6b42` and cannot represent current build 6. The signing script now rejects stale or uncompiled current-source inputs. Create and validate a fresh Xcode archive of the committed source before signing or exporting. Do not alter an old Info.plist to manufacture a current release.
+The tracked unsigned bundle is historical build 3 and cannot represent current build 5. The signing script now rejects stale or uncompiled current-source inputs. Create and validate a fresh Xcode archive of the committed source before signing or exporting. Do not alter an old Info.plist to manufacture a current release.
 
 Use Xcode 26 or later with iOS SDK 26 or later for the current App Store Connect upload requirement. The app deployment target remains iOS 15. A current SDK requirement does not itself require dropping support for iOS 15.
 

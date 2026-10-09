@@ -1,6 +1,3 @@
-import {legalCoverageHttp} from './legal-coverage.js';
-import {workspaceSessionTarget} from '../public/workspace-session.js';
-import {sitesMcpHttp} from './sites-mcp.js';
 import {financialEvidenceHttp} from './financial-evidence.js';
 import {transferReceiptsHttp,TRANSFER_RECEIPTS_ROUTE} from './transfer-receipts.js';
 import {treasuryConnectionHttp} from './treasury-connection-http.js';
@@ -12,7 +9,6 @@ import {routeRc20} from './rc20.js';
 import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
 import {nusdHttp} from './nusd-http.js';
-import {existingTokenEvidenceHttp,NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE} from './nusd-existing-token-evidence.js';
 import {frontierHttp} from './frontier-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
@@ -30,19 +26,14 @@ export default {
   const url=new URL(req.url),path=url.pathname;
   const span=path==='/api/ops/v1/telemetry'?{requestId:crypto.randomUUID(),finish(){}}:numinaWebTelemetry.begin({path,method:req.method,log:env.NUMINA_TELEMETRY_LOGS!=='false'});
   const requestId=span.requestId;let status=200;
-  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/')||path==='/api/treasury/v1/submissions')headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
+  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
-   const mcp=await sitesMcpHttp(req,env,frontierHttp);if(mcp)return finish(mcp);
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
-   const workspaceTarget=workspaceSessionTarget(req.url,req.method);
-   if(workspaceTarget)return finish(new Response(null,{status:307,headers:{Location:workspaceTarget,'Cache-Control':'no-store'}}));
    if(path==='/favicon.ico'){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));
    }
-   const legal=await legalCoverageHttp(req,env);if(legal)return finish(legal);
    if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));
-   if(path===NUSD_EXISTING_TOKEN_EVIDENCE_ROUTE)return finish(await existingTokenEvidenceHttp(req,env));
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
    if(path.startsWith('/api/')){
     const review=await reviewerContext(req,env);
@@ -57,13 +48,11 @@ export default {
    if(path==='/api/ops/v1/telemetry')return finish(await telemetryHttp(req,env));
    if(path.startsWith('/api/ops/v1/quantum/'))return finish(await quantumHttp(req,env));
    // Retired public test surfaces stay closed even if an environment is misconfigured.
-   if(path.startsWith('/api/v0.1/')||['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path))return finish(response({error:'REFERENCE_RUNTIME_RETIRED',message:'Use the production workspace, internal authority controls or release documentation.',workspace:'/app',documentation:'/core'},410));
+   if(path.startsWith('/api/v0.1/')||['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path))return finish(response({error:'REFERENCE_RUNTIME_RETIRED',message:'Use the production workspace, internal controls or release documentation.',workspace:'/app',documentation:'/core'},410));
    if(path.startsWith('/api/control/v2/')||path==='/.well-known/agent-card.json')return finish(await frontierHttp(req,env));
-   const legalPages={'/compliance':'/compliance.html','/compliance/':'/compliance.html','/terms':'/terms.html','/terms/':'/terms.html','/privacy':'/privacy.html','/privacy/':'/privacy.html','/software-licenses':'/software-licenses.html','/software-licenses/':'/software-licenses.html'};
-   if(legalPages[path])return finish(await env.ASSETS.fetch(new Request(new URL(legalPages[path],req.url),req)));
    if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path))return finish(await env.ASSETS.fetch(new Request(new URL('/frontier.html',req.url),req)));
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));
-   if(['/platform','/platform/','/platform.html'].includes(path))return finish(await env.ASSETS.fetch(new Request(new URL('/platform.html',req.url),req)));
+   if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));
    if(['/pricing','/pricing/','/pricing.html'].includes(path)){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/services'+url.search+'#pricing'}}));
@@ -73,11 +62,8 @@ export default {
     const artifact=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:req.method}));
     const headers=new Headers(artifact.headers);headers.set('Cache-Control','no-store');return finish(new Response(artifact.body,{status:artifact.status,headers}));
    }
-   const runtime=await routeRuntime(req);if(runtime)return finish(runtime);
-   if(path.startsWith('/v1/archive/rc20/')){
-    const legacyUrl=new URL(req.url);legacyUrl.pathname='/v1/'+path.slice('/v1/archive/rc20/'.length);
-    const legacy=await routeRc20(new Request(legacyUrl,req),env);if(legacy){const headers=new Headers(legacy.headers);headers.set('X-Numina-Release-Context','historical-rc20');return finish(new Response(legacy.body,{status:legacy.status,headers}));}
-   }
+   const runtime=await routeRuntime(req,fetch,12000,env);if(runtime)return finish(runtime);
+   if(path.startsWith('/v1/archive/rc20/'))return finish(response({error:'RC20_RUNTIME_RETIRED',message:'Historical rc20 runtime evidence is retained in repository artifacts; no legacy upstream runtime is active.'},410,{'X-Numina-Release-Context':'historical-rc20'}));
    const rc20=await routeRc20(req,env);if(rc20)return finish(rc20);
    if(path.startsWith('/api/control/'))return finish(await controlHttp(req,env));
    if(path==='/api/core/v1.8/manifest'&&req.method==='GET')return finish(response(CORE_MANIFEST));

@@ -7,7 +7,7 @@ import {ERC20Capped} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20C
 import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import {AccessControlDefaultAdminRules} from "@openzeppelin/contracts/access/extensions/AccessControlDefaultAdminRules.sol";
 
-/// @title Numina USD — an unissued contract candidate, not evidence of USD reserves.
+/// @title Numina USD â€” an unissued contract candidate, not evidence of USD reserves.
 /// @notice Explicit constructor issuance up to the cap. Starts paused after issuance.
 /// No oracle, fiat redemption, bridge, or upgrade proxy.
 /// @dev Custom code has not received an independent security audit. A reserve reference is only
@@ -74,9 +74,9 @@ contract NuminaUSD is ERC20, ERC20Burnable, ERC20Capped, ERC20Pausable, AccessCo
         _pause();
     }
 
-    /// @notice Amounts use 18 decimal places: 1 NUSD = 1,000,000,000,000,000,000 base units.
+    /// @notice Amounts use 6 decimal places: 1 NUSD = 1,000,000 base units.
     /// @dev This denomination does not establish a USD price or redemption right.
-    function decimals() public pure override returns (uint8) { return 18; }
+    function decimals() public pure override returns (uint8) { return 6; }
 
     /// @notice An issuer authorizes a bounded issuance after its independent off-chain checks.
     /// @dev Never include personal data or a bank account number in the public reference.

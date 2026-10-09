@@ -152,7 +152,7 @@ def test_reference_backend_cannot_satisfy_production_threshold(tmp_path):
     artifact,digest,sbom=release(tmp_path)
     spec=DeploySpec(
         "dep","docker",str(artifact),digest,"public-verifier","production",
-        "numina-public","numina/verifier:test","numina",
+        "numina-public","numina/verifier:test","NUMINA",
         "numina-public-verifier","https://numinalabs.xyz",
         {"sbom_path":str(sbom)}
     )
@@ -191,7 +191,7 @@ def test_provider_not_called_if_native_attestation_missing(tmp_path):
     artifact,digest,sbom=release(tmp_path)
     spec=DeploySpec(
         "dep","docker",str(artifact),digest,"public-verifier","production",
-        "numina-public","numina/verifier:test","numina",
+        "numina-public","numina/verifier:test","NUMINA",
         "numina-public-verifier","https://numinalabs.xyz",
         {"sbom_path":str(sbom)}
     )

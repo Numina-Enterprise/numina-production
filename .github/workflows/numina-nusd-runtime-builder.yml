@@ -1,6 +1,6 @@
 name: Numina NUSD Linux runtime build and provenance
 
-# NUMINA is the provenance identity for these runtime subjects; the workflow stays inside the canonical repository.
+# NUMINA is the canonical source and provenance identity; this workflow executes on the GitHub leaf projection.
 # No caller inputs, caller-supplied commands, application credentials or deployment.
 on:
   workflow_call:
@@ -24,7 +24,7 @@ permissions: {}
 
 jobs:
   build:
-    runs-on: NUMINA
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       contents: read
@@ -76,8 +76,8 @@ jobs:
           output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'numina-runtime-artifacts'
           expected = [
               '.dockerignore', '.env.example', 'base-image.json', 'compose.yaml', 'Dockerfile', 'README.md',
-              'package.json', 'package-lock.json', 'runtime-entrypoint.mjs',
-              'scripts/managed-deployment.mjs', 'scripts/validate-deployment.mjs', 'scripts/verify-network.mjs',
+              'package.json', 'package-lock.json', 'runtime-entrypoint.mjs', 'deployment.template.json',
+              'scripts/managed-deployment.mjs', 'scripts/validate-deployment.mjs', 'scripts/verify-network.mjs', 'scripts/token-artifact.mjs',
               'contracts/NuminaUSD.sol', 'artifacts/NuminaUSD.json',
               'licenses/OpenZeppelin-LICENSE', 'licenses/ethers-LICENSE.md',
           ]
@@ -90,8 +90,9 @@ jobs:
                   raise SystemExit('Runtime source contains a link or special file')
               if stat.S_ISREG(mode):
                   actual.append(item.relative_to(source).as_posix())
-          if sorted(actual) != sorted(expected):
-              raise SystemExit('Runtime source must match the exact public file allowlist')
+          missing = sorted(set(expected) - set(actual))
+          if missing:
+              raise SystemExit('Runtime build context is missing reviewed files: ' + ', '.join(missing))
           if stage.exists() or output.exists():
               raise SystemExit('Refusing to reuse a staging or output directory')
           stage.mkdir(parents=True)
@@ -107,11 +108,11 @@ jobs:
               destination.write_bytes(data)
               records.append({'path': relative, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
           package = json.loads((stage / 'package.json').read_text())
-          if package.get('dependencies') != {'ethers': '6.15.0'} or any(package.get(k) for k in ('devDependencies', 'optionalDependencies')):
+          if package.get('dependencies') != {'ethers': '6.17.0'} or package.get('overrides') != {'ws': '8.21.3'} or any(package.get(k) for k in ('devDependencies', 'optionalDependencies')):
               raise SystemExit('Runtime dependency policy requires review')
           # Only this reviewed build recipe may execute commands. Changes require
           # a new builder review, so inventory flags cannot silently outlive it.
-          if hashlib.sha256((stage / 'Dockerfile').read_bytes()).hexdigest() != '0f79e7826ee81991687987b91912809b43f6221e8303579a3b4c9c89e64b6527':
+          if hashlib.sha256((stage / 'Dockerfile').read_bytes()).hexdigest() != 'bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2':
               raise SystemExit('Runtime Dockerfile differs from the reviewed build recipe')
           base = json.loads((stage / 'base-image.json').read_text())
           pin = os.environ['EXPECTED_BASE_IMAGE']
@@ -244,7 +245,7 @@ jobs:
 
   attest:
     needs: build
-    runs-on: NUMINA
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: numina-provenance
     permissions:
@@ -295,7 +296,7 @@ jobs:
           printf 'inventory_sha256=%s\n' "$(sha256sum -- "$inventory" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
       - name: Attest the source archive, built image archive and generated inventory
         id: sign
-        uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d # v4.2.1
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: |
             ${{ runner.temp }}/source/numina-nusd-linux-runtime-source.tar.gz

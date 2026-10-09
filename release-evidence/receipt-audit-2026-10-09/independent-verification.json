@@ -1,0 +1,35 @@
+{
+  "schema": "numina.receipt-audit-independent-readback.v1",
+  "checked_at": "2026-10-09T11:41:16.498952+00:00",
+  "audit_report_sha256": "3f94a4866cb3e44339744119d6d7c6f8c45cbb2398c66e87d81364e8ca18a651",
+  "tool": "Python cryptography Ed25519PublicKey.verify",
+  "python_version": "3.12.14",
+  "cryptography_version": "50.0.0",
+  "signature_checks": [
+    {
+      "path": "docs/runtime-pin-reconciliation-2026-09-15.json",
+      "canonical_signed_body_sha256": "698c5319b71b4566be0e71eac603bd2b6fab6dabf6a6dfba42a0ed2450dee21c",
+      "signature_valid": true,
+      "tamper_rejected": true,
+      "original_preserved": true
+    },
+    {
+      "path": "docs/runtime-pin-reconciliation-2026-09-16.json",
+      "canonical_signed_body_sha256": "8e2cf0bd4a88ea9def763f7d182f94f42fd89c6f41ac467a0d7b15fbad2d071c",
+      "signature_valid": true,
+      "tamper_rejected": true,
+      "original_preserved": true
+    },
+    {
+      "path": "release-evidence/frontier-readiness-19c445b.json",
+      "canonical_signed_body_sha256": "53397f3b9a545006b4b1bf72a7b0088163565c361d469cd93fb9d1167d7681d9",
+      "signature_valid": true,
+      "tamper_rejected": true,
+      "original_preserved": true
+    }
+  ],
+  "audit_findings_correctly_preserved": true,
+  "provider_cross_record_binding_verified": true,
+  "source_artifact_bytes_unchanged": true,
+  "new_signature_issued": false
+}

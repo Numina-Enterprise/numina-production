@@ -15,7 +15,7 @@ function render(){
     document.querySelector(`[data-meter="${name}"]`).style.width=Number(BigInt(amount)*10000n/BigInt(state.totalBaseUnits))/100+'%';
   }
   const conserved=Object.values(state.balances).reduce((sum,amount)=>sum+BigInt(amount),0n)===BigInt(state.totalBaseUnits);
-  document.querySelector('#simulation-invariant').textContent=conserved?'✓ Total reconciled':'Total mismatch';
+  document.querySelector('#simulation-reconciliation').textContent=conserved?'✓ Total reconciled':'Total mismatch';
   const events=document.querySelector('#simulation-events');events.replaceChildren();
   if(!state.events.length){const item=document.createElement('li');item.textContent='No simulated transfers yet.';events.append(item);}
   for(const event of [...state.events].reverse()){

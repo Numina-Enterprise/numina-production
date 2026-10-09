@@ -1,6 +1,0 @@
-{
-  "schema": "numina.reproducible-build-clock.v1",
-  "sourceDateEpoch": 1791104520,
-  "timestamp": "2026-10-04T09:02:00Z",
-  "scope": "Reproducible package metadata clock, not execution, deployment, settlement or verification evidence"
-}

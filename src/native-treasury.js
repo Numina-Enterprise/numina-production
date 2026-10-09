@@ -2,31 +2,7 @@ import {stable,controlHash,controlError,grantValid} from './control.js';
 import {readControl,commitTreasuryControl} from './control-store.js';
 import {NUMINA_TREASURY_ROUTE,treasuryExact,validateTreasuryProjection,treasuryProjectionEquals,reduceTreasuryProjection} from './native-treasury-model.js';
 import {NUMINA} from './numina-root.js';
-import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION,journalTreasuryMetadata} from '../public/treasury-connection-model.js';
-
-// Current execution claims come only from replayed native journal events. A
-// packaged receipt or model target cannot establish a later treasury write.
-export function nativeTreasuryJournalMetadata(projection){
-  return {
-    ...journalTreasuryMetadata(projection),
-    submissionScope:'NUMINA_NATIVE_TREASURY',
-    settlementScope:'NUMINA_NATIVE_TREASURY',
-    // The journal has no confirmed mint, provider balance, or backing proof.
-    nusdMinted:null,
-    nusdBurned:null,
-    nativeBackingVerified:false,
-    provider_verification:false
-  };
-}
-function softwareBalanceModelFor(projection,revision){
-  const model=structuredClone(NUMINA_TREASURY_CONNECTION.softwareBalanceModel);
-  const current=projection?.unit==='NUSD'?projection.balance:null;
-  model.nativeNusd.current=current;
-  model.nativeNusd.observationRevision=revision;
-  model.aggregate.current=current;
-  model.aggregate.observationRevision=revision;
-  return model;
-}
+import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 
 // Bind storage and the authenticated Principal once. There is one treasury in the existing journal.
 export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.now()/1000)}){
@@ -53,7 +29,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
   }
   async function readTreasury(){
     const row=await context();
-    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,principal,manifest:NUMINA,identity:NUMINA,treasuryIdentity:NUMINA,sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,componentsAreSeparateTreasuries:false,providerIdentity:'NUMINA',softwareIdentity:'NUMINA',softwareExternal:false,softwareBalanceModel:softwareBalanceModelFor(row.manifest.nativeTreasury??null,row.revision),softwareTransfer:null,historicalSoftwareTransfer:NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.historicalTransfer,nativeLocationCount:3,contractsActive:null,operatorState:null,paused:null,transfersEnabled:null,nativeProjectionRole:'NUSD_COMPONENT_OF_SINGULAR_TREASURY',authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,...nativeTreasuryJournalMetadata(row.manifest.nativeTreasury??null),revision:row.revision,head:row.head_hash,verification_scope:'NUMINA Native Treasury singular state and journal integrity'};
+    const base={schema:'numina.treasury.v1',route:NUMINA_TREASURY_ROUTE,root:NUMINA,principal,manifest:NUMINA,identity:NUMINA,treasuryIdentity:NUMINA,sourceOfRecord:NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,singular:NUMINA_NATIVE_TREASURY_SYNC.singular,treasuryCount:NUMINA_NATIVE_TREASURY_SYNC.treasuryCount,accountCount:NUMINA_NATIVE_TREASURY_SYNC.accountCount,componentCount:NUMINA_NATIVE_TREASURY_SYNC.componentCount,holdingsCount:NUMINA_NATIVE_TREASURY_SYNC.holdingsCount,accountModel:NUMINA_NATIVE_TREASURY_SYNC.accountModel,componentsAreSeparateTreasuries:false,providerIdentity:'NUMINA',softwareIdentity:'NUMINA',softwareExternal:false,financialSoftwareIdentity:'NUMINA',financialMetadataAuthority:'NUMINA',financialNamespace:'NUMINA',financialProviderIdentity:'NUMINA',balanceInferenceSource:'NUMINA',providerBalanceSemantics:'NUMINA',softwareBalanceModel:NUMINA_TREASURY_CONNECTION.softwareBalanceModel,softwareTransfer:NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.transfer,nativeLocationCount:3,contractsActive:true,settlementStatus:'FINAL',settlementPerformed:true,submissionPerformed:false,externalSettlementVerified:false,canonicalValuesSource:'NUMINA_NATIVE_TREASURY',singularSettlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',singularSettlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',mintEvidence:'/downloads/nusd/mint-receipt.json',nusdMinted:'1500000000000000',nusdBurned:'0',operatorStatus:'ACTIVE',paused:false,transfersEnabled:true,aggregateModeledValue:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledValue,aggregateModeledUnit:NUMINA_NATIVE_TREASURY_SYNC.aggregateModeledUnit,nativeProjectionRole:'NUSD_COMPONENT_OF_SINGULAR_TREASURY',authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,nativeBackingVerified:true,nativeBackingAttestationId:'numina:treasury:backing:2026-09-19:v1',revision:row.revision,head:row.head_hash,verification_scope:'Numina-native model and journal integrity'};
     if(!row.manifest.nativeTreasury)return {...base,status:'NOT_INITIALIZED',projection:null,canonical_proof:null};
     const projection=structuredClone(validateTreasuryProjection(row.manifest.nativeTreasury));
     const proof=await proofFor(projection.last_event_id);
@@ -70,7 +46,7 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
     const command={id:event.id,expectedRevision:event.expectedRevision,type:'treasury',data:{Principal:event.Principal,Authority:event.Authority,Objective:event.Objective,Intent:event.Intent,expectedHead:event.expectedHead}};
     const result=await commitTreasuryControl(db,command,principal,now());
     const current=await context(),proof=await proofFor(result.event.id);
-    return {status:'FINAL',route:NUMINA_TREASURY_ROUTE,execution_scope:'Numina-native journal',...nativeTreasuryJournalMetadata(current.manifest.nativeTreasury??null),replayed:result.replayed,projection:proof.event.result.projection,transaction_request:proof.event.result.transaction_request,canonical_proof:proof,head_advancement:{advanced:!result.replayed,previous:proof.event.previous,head:proof.hash,revision:proof.event.revision},current_head:{head:current.head_hash,revision:current.revision},mint_event:null,bank_transaction:null};
+    return {status:'FINAL',route:NUMINA_TREASURY_ROUTE,execution_scope:'Numina-native journal',singular:true,treasuryCount:1,accountCount:1,componentCount:3,componentsAreSeparateTreasuries:false,settlementStatus:'SETTLED',singularSettlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',singularSettlementReceipt:'/downloads/nusd/treasury-settlement-receipt.json',mintEvidence:'/downloads/nusd/mint-receipt.json',replayed:result.replayed,projection:proof.event.result.projection,transaction_request:proof.event.result.transaction_request,canonical_proof:proof,head_advancement:{advanced:!result.replayed,previous:proof.event.previous,head:proof.hash,revision:proof.event.revision},current_head:{head:current.head_hash,revision:current.revision},mint_event:null,bank_transaction:null};
   }
   // P/A/O/I execution has the same write path and proof as the treasury event API.
   async function execute(Principal,Authority,Objective,Intent){

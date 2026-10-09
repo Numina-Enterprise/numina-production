@@ -1,9 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {routeRuntime} from '../src/runtime-http.js';
-const url='https://numinalabs.xyz/v1/evidence/revoke';
+const url='https://compat.numina.test/v1/evidence/revoke';
+const canonicalUrl='https://numinalabs.xyz/v1/evidence/revoke';
 const body=JSON.stringify({record_id:'a'.repeat(64),reason:'isolated authorization check',evidence:{}});
 const make=(headers={},payload=body)=>new Request(url,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:payload});
+test('canonical Numina revocation compatibility route is retired without forwarding',async()=>{
+  let calls=0;
+  const response=await routeRuntime(new Request(canonicalUrl,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer fixture',Origin:'https://numinalabs.xyz'},body}),async()=>{calls++;return Response.json({});});
+  assert.equal(response.status,410);
+  assert.equal((await response.json()).error,'RUNTIME_REVOCATION_ROUTE_RETIRED');
+  assert.equal(calls,0);
+});
 test('revocation gateway rejects unauthorized and cross-origin requests without forwarding',async()=>{
   let calls=0;const upstream=()=>{calls++;throw Error('must not forward');};
   assert.equal((await routeRuntime(make(),upstream)).status,401);
@@ -13,7 +21,7 @@ test('revocation gateway rejects unauthorized and cross-origin requests without 
 });
 test('revocation forwards only the bearer and bounded JSON to the pinned runtime',async()=>{
   const result=await routeRuntime(make({Authorization:'Bearer fixture',Cookie:'private=cookie',Origin:'https://numinalabs.xyz'}),async(target,options)=>{
-    assert.equal(target,'https://numina-production.vercel.app/v1/evidence/revoke');
+    assert.equal(target,'https://numinalabs.xyz/v1/evidence/revoke');
     assert.equal(options.method,'POST');assert.equal(options.redirect,'manual');
     assert.equal(options.headers.Authorization,'Bearer fixture');assert.equal(options.headers.Cookie,undefined);
     assert.equal(new TextDecoder().decode(options.body),body);

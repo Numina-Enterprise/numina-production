@@ -13,7 +13,7 @@ const expectedChain=process.env.NUMINA_EXPECTED_CHAIN_ID;
 const expectedGenesis=process.env.NUMINA_EXPECTED_GENESIS?.toLowerCase();
 const sender=getAddress(process.env.NUMINA_SENDER||'');
 const recipient=getAddress(process.env.NUMINA_RECIPIENT||sender);
-const expectedSupply='1500000000000000000000000000000000';
+const expectedSupply='1500000000000000000000';
 const expectedPolicy=(process.env.NUMINA_ISSUER_POLICY_SHA256||'').toLowerCase();
 if(!endpoint||!authorizationInput||!expectedChain||!expectedGenesis||!expectedPolicy)throw Error('NUMINA_VERIFICATION_CONFIGURATION_REQUIRED');
 
@@ -114,7 +114,7 @@ for(const candidate of creations){
     const [paused]=await call(address,tokenIface,'paused');
     const [balance]=await call(address,tokenIface,'balanceOf',[recipient]);
     const [policy]=await call(address,tokenIface,'issuerPolicyHash');
-    if(decimals===18n&&supply.toString()===expectedSupply&&cap.toString()===expectedSupply&&paused===true&&
+    if(decimals===6n&&supply.toString()===expectedSupply&&cap.toString()===expectedSupply&&paused===true&&
        balance.toString()===expectedSupply&&policy.toLowerCase()==='0x'+expectedPolicy){
       token={address,transactionHash:candidate.tx.hash,blockNumber:candidate.receipt.blockNumber,
         decimals:Number(decimals),totalSupply:supply.toString(),cap:cap.toString(),recipientBalance:balance.toString(),
@@ -145,7 +145,7 @@ const confirmations=block=>Number(latest-BigInt(block)+1n);
 const result={
   schema:'numina.nusd.production-verification.v1',identity:'NUMINA',verifiedAt:new Date().toISOString(),
   chainId:chain,genesisHash:genesis.hash,sender,recipient,
-  issuance:{amountNusd:'1500000000000000',decimals:18,baseUnits:expectedSupply,constructorMint:true,externallyBackedClaim:false},
+  issuance:{amountNusd:'1500000000000000',decimals:6,baseUnits:expectedSupply,constructorMint:true,externallyBackedClaim:false},
   token:{...token,confirmations:confirmations(token.blockNumber),artifactSha256:TOKEN_ARTIFACT_SHA256,sourceSha256:tokenArtifact.sourceSha256},
   settlement:{...settlement,confirmations:confirmations(settlement.blockNumber)},
   externalSettlement:{usd:false,usdc:false,bankReceipt:null,providerReceipt:null},

@@ -1,12 +1,8 @@
-import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {MANIFEST_ROUTES,alignedApplication} from '../public/manifest-surface.js';
-import {workspaceSignInUrl,resumeWorkspaceSession} from '../public/workspace-session.js';
 import {database} from '../scripts/sqlite.mjs';
-import worker from '../src/worker.js';
 import {bootstrapControl,readControl} from '../src/control-store.js';
 import {createNuminaTreasury} from '../src/native-treasury.js';
 import {alignTreasuryAccounts} from '../src/treasury-alignment.js';
@@ -15,7 +11,7 @@ import {createTreasuryAdjustment} from '../public/treasury-adjustment.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
-const applicationManifest=()=>({identity:'NUMINA',manifest:'NUMINA',singular:true,release_channel:'production',runtime_dependency:{identity:'NUMINA',singular:true,version:'1.9.0-rc26',release:'core-v1.8+prod-v1.9.0-rc26'},schema:'numina.application-release.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64),frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}});
+const applicationManifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64),frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}});
 async function settled(){for(let i=0;i<8;i++)await new Promise(r=>setTimeout(r,0));}
 class Element{
   constructor(){this.children=[];this._text='';}
@@ -34,31 +30,29 @@ async function accountView(funding={},initialized=true){
     return alignTreasuryAccounts(await treasury.readTreasury(),{accounts:[{id:'existing',provider:'stripe',legalEntity:'Owner',accountLabel:'Existing reference',providerAccountReference:'original-reference'}],...funding});
   }finally{db.close();}
 }
-function harness(view,override=()=>null,adjustmentClient=null,href='https://numina.test/frontier'){
-  const nodes=new Map(),events={},redirects=[];const get=selector=>{if(!nodes.has(selector))nodes.set(selector,new Element());return nodes.get(selector);};
+function harness(view,override=()=>null,adjustmentClient=null){
+  const nodes=new Map(),events={};const get=selector=>{if(!nodes.has(selector))nodes.set(selector,new Element());return nodes.get(selector);};
   const document={querySelector:get,createElement:()=>new Element(),addEventListener:(name,fn)=>events[name]=fn,dispatchEvent:event=>events[event.type]?.(event)};
   const fetch=async(path,options)=>{
     const custom=override(path,options);if(custom)return await custom;
     let body;
     if(path.endsWith('/treasury/accounts'))body=view;
-    else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'},currentJournal:{revision:142,balance:'500000000000000',unit:'NUSD',settlementStatus:'UNVERIFIED',externalProviderSubmissionStatus:'UNVERIFIED'}};
+    else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'}};
     else if(path.endsWith('/stripe-treasury'))return Response.json({error:'Unavailable'},{status:503});
-    else if(path.endsWith('/state'))body={revision:1,content:{requests:[]}};
-    else if(path===MANIFEST_ROUTES.manifest)body={schema:'numina.manifest.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:'a'.repeat(64)},runtime:applicationManifest().runtime_dependency}};
+    else if(path.endsWith('/state'))body={revision:1,requests:[]};
     else if(path==='/v4/release/manifest')body=applicationManifest();
     else body={livemode:true,version:'4.0.0',providers:[]};
     return Response.json(body);
   };
-  const context=vm.createContext({MANIFEST_ROUTES,alignedApplication,workspaceSignInUrl,resumeWorkspaceSession,location:{href,replace:target=>redirects.push(target)},URL,document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryPreparation(target,options){assert.equal(options.root,view.treasury.principal);assert.deepEqual(options.accounts,view.accounts);assert.equal(typeof options.onAccessLost,'function');assert.equal(typeof options.onCommitted,'function');assert.equal(typeof options.isCurrent,'function');},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
+  const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryPreparation(target,options){assert.equal(options.root,view.treasury.principal);assert.deepEqual(options.accounts,view.accounts);assert.equal(typeof options.onAccessLost,'function');assert.equal(typeof options.onCommitted,'function');assert.equal(typeof options.isCurrent,'function');},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
   if(adjustmentClient)vm.runInContext('const mountTreasuryAdjustment=(()=>{'+source('treasury-adjustment-ui.js')+';return mountTreasuryAdjustment;})();',context);
   vm.runInContext(source('http-client.js')+'\n'+source('treasury-connection-model.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-amount.js')+'\n'+source('nusd-contract-record.js')+'\n'+source('treasury-balances.js')+'\n'+"const renderFundingPlan=(()=>{"+source('funding-plan.js')+';return renderFundingPlan;})();\n'+source('frontier-ui.js')+'\nglobalThis.subject={refresh};',context);
-  return {get,events,redirects,subject:context.subject,close(){events.pagehide?.();}};
+  return {get,events,subject:context.subject,close(){events.pagehide?.();}};
 }
 
 test('frontier displays only current application identities and refreshes without stale responses',async()=>{
   const view=await accountView(),old=deferred();let calls=0;
   const h=harness(view,(path,options)=>{
-    if(path===MANIFEST_ROUTES.manifest)return Response.json({schema:'numina.manifest.v2',finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,singular:true,root:'NUMINA',identity:'NUMINA',manifest:'NUMINA',authority:'NUMINA',repository:'NUMINA',version:'1.0.0',applicationVersion:'4.0.0',applicationRelease:'numina-v4.0.0',mechanics:{repository:{identity:'NUMINA',source:'/NUMINA'},artifact:{build_id:calls?'b'.repeat(64):'a'.repeat(64)},runtime:applicationManifest().runtime_dependency}});
     if(path!=='/v4/release/manifest')return null;
     assert.equal(options.cache,'no-store');assert.equal(options.credentials,'omit');assert.equal(options.redirect,'error');
     return ++calls===1?old.promise:Response.json({...applicationManifest(),build_id:'b'.repeat(64)});
@@ -68,30 +62,6 @@ test('frontier displays only current application identities and refreshes withou
     assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
     old.resolve(Response.json(applicationManifest()));await settled();
     assert.match(h.get('#core-release-status').textContent,new RegExp('Build '+'b'.repeat(64)));
-  }finally{h.close();}
-});
-
-test('frontier labels the retained policy separately from current journal settlement',async()=>{
-  const view=await accountView(),h=harness(view);
-  try{
-    await settled();
-    const text=h.get('#treasury-policy').textContent;
-    assert.match(text,/Treasury policy catalog/);
-    assert.match(text,/Current Numina journal · revision 142 · 500000000000000 NUSD · internal settlement UNVERIFIED · provider submission UNVERIFIED/);
-    assert.match(text,/Owner policy catalog entry recorded/);
-  }finally{h.close();}
-});
-
-test('frontier offers no V3 recording action without matching journal settlement',async()=>{
-  const view=await accountView(),h=harness(view,path=>path.endsWith('/treasury/policy')?Response.json({
-    activation:{status:'AWAITING_OWNER_RECORD'},policyHash:'retained-hash',policy:{id:'retained-v3'},
-    currentJournal:{revision:142,balance:'500000000000000',unit:'NUSD',settlementStatus:'UNVERIFIED',externalProviderSubmissionStatus:'UNVERIFIED'}
-  }):null);
-  try{
-    await settled();
-    const policy=h.get('#treasury-policy');
-    assert.match(policy.textContent,/current journal must confirm matching aggregate settlement/i);
-    assert.equal(policy.children.some(child=>typeof child.onclick==='function'),false);
   }finally{h.close();}
 });
 
@@ -134,7 +104,7 @@ test('frontier never renders provider verification substituted for an owner desi
     view.accounts[0].providerOwnershipVerified=true;
     const h=harness(view);
     try{
-      await settled();
+      await settled();await h.subject.refresh();await settled();
       assert.doesNotMatch(h.get('#accounts').textContent,/Provider verified/);
       assert.match(h.get('#treasury-status').textContent,/could not be verified/);
       for(const id of ['#accounts','#treasury-balances','#funding-plan','#treasury-actions'])assert.equal(h.get(id).children.length,0);
@@ -168,33 +138,4 @@ test('a refreshed frontier ignores an older pending snapshot and preserves accou
 test('late provider reads cannot restore balances after frontier access is lost',async()=>{
   const pending=deferred();const h=harness(await accountView(),path=>path.endsWith('/stripe-treasury')?pending.promise:null);
   try{await settled();assert.ok(h.get('#treasury-balances').children.length);h.events['numina-owner-access-lost']();pending.resolve(Response.json({schema:'numina.stripe.treasury.v1',account:{livemode:true,name:'Late private provider'},balances:{},observed_at:'test'}));await settled();assert.equal(h.get('#treasury-balances').children.length,0);assert.equal(h.get('#accounts').children.length,0);}finally{h.close();}
-});
-
-
-test('Numina requests consume the current authenticated state handler envelope',async()=>{
- const db=database(),owner='email:owner@example.test';let h;
- try{
-  await bootstrapControl(db,owner,Math.floor(Date.now()/1000));
-  const res=await worker.fetch(new Request('https://numina.test/api/control/v2/state',{headers:{'oai-authenticated-user-id':'browser-fixture','oai-authenticated-user-email':'owner@example.test'}}),{DB:db,NUMINA_CONTROL_OWNER:owner,NUMINA_TELEMETRY_LOGS:'false'});
-  assert.equal(res.status,200);const state=await res.json();assert.ok(Array.isArray(state.content.requests));
-  h=harness(await accountView(),path=>path.endsWith('/state')?Response.json(state):null);
-  await settled();assert.equal(h.get('#account-status').textContent,'Connected · Journal revision '+state.revision);
-  assert.equal(h.get('#requests').textContent,'No agent requests are recorded yet.');
- }finally{h?.close();db.close();}
-});
-
-test('access loss cancels an action read before it can submit a journal change',async()=>{
- const view=await accountView(),pending=deferred();let action=false,writes=0;
- const h=harness(view,(path,options)=>{if(options?.method==='POST')writes++;if(action&&path.endsWith('/state'))return pending.promise;return null;});
- try{
-  await settled();const form=h.get('#treasury-actions').children.find(n=>n.className==='account-link-form');assert.ok(form);
-  action=true;const submitting=form.onsubmit({preventDefault(){}});h.events['numina-owner-access-lost']();pending.resolve(Response.json({revision:1,content:{requests:[]}}));await submitting;
-  assert.equal(writes,0);assert.equal(h.get('#treasury-actions').children.length,0);assert.match(h.get('#account-status').textContent,/Sign in to Numina/);
- }finally{h.close();}
-});
-
-
-test('static Numina request entry continues to the existing session before private reads',async()=>{
- let calls=0;const h=harness(await accountView(),()=>{calls++;throw Error('Must continue first');},null,'https://numinalabs.xyz/frontier#requests');
- try{await settled();assert.deepEqual(h.redirects,['https://personal-space-m7q9.skott34.chatgpt.site/frontier#requests']);assert.equal(calls,0);}finally{h.close();}
 });

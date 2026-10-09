@@ -1,0 +1,15 @@
+name: Historical Numina RC26 verifier provenance
+on:
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: historical-numina-rc26-verifier-provenance
+  cancel-in-progress: false
+jobs:
+  build-and-attest:
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    uses: skott34-dot/numina-builder/.github/workflows/numina-rc26-verifier-builder.yml@f85e9428fa8bf0371931429479f31b0348ead454
+    # Source archive provenance only; no caller inputs, secrets or deployment.

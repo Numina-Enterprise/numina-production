@@ -6,7 +6,7 @@
   "websiteSourceCommit": "26b1b82e1caedf459d95bc7f42528cba190f706a",
   "applicationBuildId": "266b192872c622ef192cd60e0204c88e27cc519864a5fa686a8d176460d8ec05",
   "website": {
-    "provider": "Sites",
+    "provider": "NUMINA",
     "version": 42,
     "deploymentId": "appgdep_6aa71685cfc881918a00446ca330fad2",
     "status": "succeeded",
@@ -15,7 +15,7 @@
     "evidenceSource": "Sites authenticated deployment status"
   },
   "runtime": {
-    "provider": "Vercel",
+    "provider": "NUMINA",
     "deploymentId": "dpl_BNSXEsHBECf86p8DH2pR3nShU4eW",
     "status": "READY",
     "immutableUrl": "https://numina-production-e0a29meu1-skott34-dot.vercel.app",

@@ -18,7 +18,7 @@ export function deriveIOSIdentity({pkg, architecture, runtimeText, native, polic
   const deploymentTarget = capture(settings, /^IPHONEOS_DEPLOYMENT_TARGET = ([^\r\n]+)$/m, 'IOS_TARGET');
   const manifest = '/v' + pkg.version.split('.')[0] + '/release/manifest';
   if (version !== pkg.version || native.applicationVersion !== version || architecture.applicationVersion !== version || architecture.frontierVersion !== version) fail('APPLICATION_VERSION_MISMATCH');
-  if (runtime !== architecture.runtime || runtime !== '1.9.0-rc26' || architecture.pendingRuntimeMigration !== null) fail('RUNTIME_PIN_MISMATCH');
+  if (runtime !== architecture.runtime || runtime !== '1.9.0-rc27' || architecture.pendingRuntimeMigration !== null) fail('RUNTIME_PIN_MISMATCH');
   if (architecture.applicationManifest !== manifest) fail('APPLICATION_MANIFEST_MISMATCH');
   if (bundle !== native.proposedPackageIdentity || bundle !== policy.packageIdentity) fail('BUNDLE_IDENTITY_MISMATCH');
   if (!Number.isSafeInteger(Number(build)) || Number(build) < 1 || Number(build) < native.ios.binaryVersionCode) fail('IOS_BUILD_REGRESSION');

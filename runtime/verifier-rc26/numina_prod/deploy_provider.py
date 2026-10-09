@@ -28,7 +28,7 @@ class DeploySpec:
     environment: str = "production"
     target: str = ""
     image: str = ""
-    namespace: str = "numina"
+    namespace: str = "NUMINA"
     service_name: str = "numina-public-verifier"
     public_url: str | None = None
     metadata: dict | None = None

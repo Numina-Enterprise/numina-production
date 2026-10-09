@@ -3,12 +3,5 @@
   "version": "4.0.0",
   "private": true,
   "license": "BSD-3-Clause",
-  "author": "Numina · SK Consulting LLC",
-  "numinaStateReconciliation": {
-    "schema": "numina.state-reconciliation.v1",
-    "route": "/api/control/v2/state-reconciliation",
-    "download": "/state-reconciliation.json",
-    "classification": "scoped_state_reconciliation",
-    "applicationVersion": "4.0.0"
-  }
+  "author": "Numina \u00b7 SK Consulting LLC"
 }

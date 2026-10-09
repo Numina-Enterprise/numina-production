@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 const root=new URL('../drizzle/',import.meta.url),read=p=>fs.readFileSync(new URL(p,root),'utf8');
 test('append-only deployment-intent migration applies to the existing schema without modifying existing tables',()=>{
  const db=new DatabaseSync(':memory:');try{
-  const journal=JSON.parse(read('meta/_journal.json'));assert.ok(journal.entries.length>=6);const wallet=journal.entries.find(entry=>entry.tag==='0004_wallet_deployment_intents');assert.ok(wallet);
+  const journal=JSON.parse(read('meta/_journal.json'));assert.equal(journal.entries.length,6);const wallet=journal.entries.find(entry=>entry.tag==='0004_wallet_deployment_intents');assert.ok(wallet);
   for(const migration of journal.entries.filter(entry=>entry.idx<wallet.idx))db.exec(read(migration.tag+'.sql'));
   const before=db.prepare("SELECT name,sql FROM sqlite_master WHERE type='table' ORDER BY name").all();
   db.exec(read('0004_wallet_deployment_intents.sql'));

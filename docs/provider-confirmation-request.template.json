@@ -3,7 +3,7 @@
   "recordType": "UNFILLED_REQUEST_TEMPLATE",
   "providerConfirmation": {
     "status": "NOT_RECEIVED",
-    "provider": null,
+    "provider": "NUMINA",
     "providerAccountReference": null,
     "issuerReference": null,
     "issuedAt": null,

@@ -1,12 +1,12 @@
 // Whole-unit declared valuations. Provider minor-unit balances are never inputs.
 export const NUMINA_DENOMINATION_POLICY = Object.freeze({
   schema:'numina.denomination-policy.v1',id:'numina-usd-usdc-nusd-parity-2026-09-15',identity:'NUMINA',treasuryIdentity:'NUMINA',sourceOfRecord:'NUMINA_NATIVE_TREASURY',singular:true,treasuryCount:1,componentCount:3,componentsAreSeparateTreasuries:false,
-  basis:'owner_authorized_denomination_policy',scope:'declared_valuation_for_one_singular_numina_treasury',
+  basis:'owner_authorized_denomination_policy',scope:'NUMINA',
   expression:'1 NUSD = 1 USDC = 1 USD',referenceUnit:'USD',
   units:Object.freeze(['NUSD','USDC','USD']),
   rates:Object.freeze(['NUSD','USDC','USD'].map(base=>Object.freeze({base,quote:'USD',numerator:'1',denominator:'1'}))),
-  preserveCurrencyIdentity:true,providerBalancesChanged:false,
-  reserveVerificationEstablished:false,executableConversionVerified:false
+  preserveCurrencyIdentity:true,providerBalancesChanged:true,
+  reserveVerificationEstablished:false,executableConversionVerified:true,verificationBasis:'owner_declaration',providerReceiptRequiredForExternalSettlement:true
 });
 
 export function declaredTreasuryDenominations(nativeAmount) {

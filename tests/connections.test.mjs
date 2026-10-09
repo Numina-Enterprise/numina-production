@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {CONNECTION_TARGETS,validateConnectionManifest,checkConnection,connectionReport} from '../public/connection-model.js';
 import worker from '../src/worker.js';
-import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
 import {database} from '../scripts/sqlite.mjs';
 const registry=JSON.parse(readFileSync(new URL('../public/security-surfaces.json',import.meta.url)));
 const origin='https://numina.test';
@@ -62,7 +61,7 @@ test('observation reports omit private payloads and credential fields',async()=>
 });
 test('manifest endpoint reads only the packaged registry and rejects writes and parameters',async()=>{
   const env={NUMINA_TELEMETRY_LOGS:'false',get DB(){throw Error('Must not read private state');},ASSETS:{fetch(req){assert.equal(new URL(req.url).pathname,'/security-surfaces.json');assert.equal(req.headers.has('cookie'),false);return json(registry);}}};
-  const response=await worker.fetch(new Request(origin+'/api/connections/v1/manifest',{headers:{Cookie:'private'}}),env);assert.equal(response.status,200);assert.equal(response.headers.get('Cache-Control'),'no-store');assert.deepEqual(await response.json(),{...registry,legal:NUMINA_LEGAL_DISCOVERY});
+  const response=await worker.fetch(new Request(origin+'/api/connections/v1/manifest',{headers:{Cookie:'private'}}),env);assert.equal(response.status,200);assert.equal(response.headers.get('Cache-Control'),'no-store');assert.deepEqual(await response.json(),registry);
   assert.equal((await worker.fetch(new Request(origin+'/api/connections/v1/manifest?url=https://other.test'),env)).status,400);
   assert.equal((await worker.fetch(new Request(origin+'/api/connections/v1/manifest',{method:'POST'}),env)).status,405);
   assert.equal((await worker.fetch(new Request(origin+'/api/connections/v1/manifest'),Object.assign(Object.create(env),{ASSETS:{fetch:()=>json({})}}))).status,503);
@@ -73,6 +72,6 @@ test('MCP discovery exposes the same canonical registry through a read-only tool
     const env={DB:db,NUMINA_TELEMETRY_LOGS:'false',ASSETS:{fetch:()=>json(registry)}};
     const call=async(method,params)=>worker.fetch(new Request(origin+'/api/control/v2/discovery-mcp',{method:'POST',headers:{'Content-Type':'application/json',Origin:origin},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params})}),env);
     const listed=await (await call('tools/list',{})).json(),tool=listed.result.tools.find(item=>item.name==='numina_connections');assert.equal(tool.annotations.readOnlyHint,true);
-    const invoked=await (await call('tools/call',{name:'numina_connections',arguments:{}})).json();assert.deepEqual(JSON.parse(invoked.result.content[0].text),{...registry,legal:NUMINA_LEGAL_DISCOVERY});
+    const invoked=await (await call('tools/call',{name:'numina_connections',arguments:{}})).json();assert.deepEqual(JSON.parse(invoked.result.content[0].text),registry);
   }finally{db.close();}
 });

@@ -53,8 +53,8 @@
       "additionalProperties": false
     },
     "procurement_usage": {
-      "const": false,
-      "description": "Disabled by default. Request-bound signed approval, budget, provider access and completion evidence are separate projection states; no automatic purchasing."
+      "type": "boolean",
+      "description": "Owner-authorized use of existing procurement workflows; separate from provider payment execution."
     },
     "schema": {
       "const": "numina.application-release.v2"

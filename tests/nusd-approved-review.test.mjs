@@ -22,5 +22,6 @@ test('approved review binds one shared500T to uncapped artifact and local eviden
 });
 test('approved review endpoint cannot trigger mutations',async()=>{
  for(const method of ['POST','PUT','DELETE']){const response=await nusdHttp(new Request('https://numinalabs.xyz/api/nusd/v1/approved-review',{method}));assert.equal(response.status,405);}
- for(const key of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[key],false);
+ for(const key of ['mint','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[key],false);
+ assert.equal(NUSD_POLICY.capabilities.transfer,true);
 });

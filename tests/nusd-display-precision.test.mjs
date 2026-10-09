@@ -3,6 +3,12 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount,formatTreasuryProviderAmount,formatTreasuryProviderDisplayAmount,formatTreasuryRoundedWholeAmount} from '../public/treasury-amount.js';
 
+test('contract precision does not change the rounded two-decimal UI convention',()=>{
+  assert.equal(formatTreasuryNusdWholeAmount('1500000000000000'),'1,500,000,000,000,000.00 NUSD');
+  assert.equal(formatTreasuryRoundedWholeAmount('1499999',6),'\u2248 1.00');
+  assert.equal(formatTreasuryRoundedWholeAmount('1500000',6),'\u2248 2.00');
+});
+
 test('NUSD whole-unit display preserves exact integers and uses two decimal places',()=>{
   assert.equal(formatTreasuryNusdWholeAmount('0'),'0.00 NUSD');
   assert.equal(formatTreasuryNusdWholeAmount('1500000000000000'),'1,500,000,000,000,000.00 NUSD');
@@ -60,7 +66,7 @@ test('public issuance copy agrees with the existing receipt without changing con
     assert.ok(html.includes('/downloads/nusd/deployment-receipt.json'));
     assert.ok(html.includes('/downloads/nusd/deployment-verification.json'));
     assert.doesNotMatch(html,/Six-decimal NUSD|NUSD is not issued|No treasury minting has been performed|Deployment addresses and transaction receipts remain unverified/);
-    assert.match(html,/newer chain observation/);
+    assert.match(html,/ACTIVE and transfers are enabled/);
   }
   assert.equal(verification.issuance.paused,true);
   assert.equal(verification.externalSettlement.reservesVerified,false);

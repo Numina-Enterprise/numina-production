@@ -35,7 +35,7 @@ test('ACH and USDC imports are durable private owner claims and preserve exact m
  try{
   const before=await readControl(env.DB),records=[];
   for(const evidence of [ach(),usdc()]){
-   const {response,data}=await call(env,request(base,evidence));assert.equal(response.status,201);assert.equal(data.financialExecution,false);assert.equal(data.replayed,false);
+   const {response,data}=await call(env,request(base,evidence));assert.equal(response.status,201);assert.equal(data.identity,'NUMINA');assert.equal(data.financialSoftwareIdentity,'NUMINA');assert.equal(data.financialMetadataAuthority,'NUMINA');assert.equal(data.financialNamespace,'NUMINA');assert.equal(data.financialProviderIdentity,'NUMINA');assert.equal(data.balanceInferenceSource,'NUMINA');assert.equal(data.providerBalanceSemantics,'NUMINA');assert.equal(data.financialExecution,false);assert.equal(data.replayed,false);
    assert.equal(response.headers.get('Cache-Control'),'private, no-store');assert.match(response.headers.get('Vary'),/Authorization/);
    assert.equal(data.record.schema,'numina.transfer-receipt-import.v1');assert.equal(data.record.classification,'owner_submitted_unverified');
    assert.equal(data.record.evidence.amount,'500000000000000');assert.equal(data.record.id,await controlHash(data.record.evidence));assert.ok(Number.isFinite(Date.parse(data.record.receivedAt)));

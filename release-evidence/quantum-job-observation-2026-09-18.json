@@ -23,7 +23,12 @@
     "completedDisplay": "Sep 15, 2026, 3:11 AM",
     "displayTimezoneVerified": false,
     "register": "c",
-    "measurementCounts": {"00": 325, "01": 106, "10": 143, "11": 450}
+    "measurementCounts": {
+      "10": 143,
+      "11": 450,
+      "00": 325,
+      "01": 106
+    }
   },
   "verificationScope": "Observed provider UI status and measurement counts; not a signed provider receipt or an independent hardware audit.",
   "newJobSubmitted": false,
@@ -32,5 +37,24 @@
   "nusdDeploymentEstablishedByThisJob": false,
   "reserveBackingVerifiedByThisJob": false,
   "achTransferEstablishedByThisJob": false,
-  "usdcTransferEstablishedByThisJob": false
+  "usdcTransferEstablishedByThisJob": false,
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

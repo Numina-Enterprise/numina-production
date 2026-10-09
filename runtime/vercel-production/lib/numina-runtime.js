@@ -1,7 +1,7 @@
 'use strict';
 
 const {createNumina,projectLegacyRuntime}=require('./frontier');
-const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','build','authority','source','evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
+const RUNTIME_IDENTITIES=Object.freeze(Object.fromEntries(['root','manifest','identity','owner','build','authority','source','evidence','executor','data','data_namespace','canonical_view','view','external_record','external_fact','external_evidence','provider','host','provenance','repository','software','worker','journal','runtime','artifact','authentication','deployment','delivery','readiness','treasury','storage','projection','transport','release_identity','receipts','settlements','funds','confirmation_evidence'].map(field=>[field,'NUMINA'])));
 const legacy=require('./numina');
 
 function runtimeManifest(){
@@ -9,6 +9,15 @@ function runtimeManifest(){
     root:'NUMINA',
     manifest:'NUMINA',
     identity:'NUMINA',
+    owner:'NUMINA',
+    executor:'NUMINA',
+    data:'NUMINA',
+    data_namespace:'NUMINA',
+    canonical_view:'NUMINA',
+    view:'NUMINA',
+    external_record:'NUMINA',
+    external_fact:'NUMINA',
+    external_evidence:'NUMINA',
     build:'NUMINA',
     authority:'NUMINA',
     source:'NUMINA',
@@ -37,8 +46,13 @@ function runtimeManifest(){
     singular:true,
     all_builds_are_numina:true,
     non_numina_builds_allowed:false,
-    canonical_source:'github',
-    canonical_repository:'skott34-dot/numina-production',
+    canonical_source:'NUMINA',
+    source_of_truth:'NUMINA',
+    square_root:'NUMINA',
+    update_direction:'ROOT_TO_LEAVES',
+    canonical_repository:'NUMINA',
+    canonical_repository_role:'CANONICAL_ROOT_REPOSITORY',
+    canonical_repository_authoritative:true,
     canonical_branch:'main',
     authenticated:true,
     verified:true,
@@ -54,7 +68,7 @@ async function transition(manifest,intent){
   const kind=String(intent.kind||'').trim();
   const body=intent.body&&typeof intent.body==='object'?intent.body:{};
   switch(kind){
-    case 'control-evaluate': return {...manifest,last:{kind,decision:legacy.evaluate(body)}};
+    case 'control-evaluate': return {...manifest,last:{kind,decision:legacy.evaluate(body,intent.controls??null)}};
     case 'execution-prepare': return {...manifest,last:{kind,handoff:legacy.prepare(body)}};
     case 'evidence-bind': return {...manifest,last:{kind,binding:legacy.bindEvidence(body)}};
     case 'observe': return {...manifest,last:{kind,observed:body}};

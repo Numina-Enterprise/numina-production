@@ -1,15 +1,15 @@
 'use strict';
 
-const {sign,PROVIDERS,RELEASE_IDENTITY}=require('../lib/numina');
-const authority=require('../lib/owner-authority');
+const legacy=require('../lib/numina');
+const {sign,PROVIDERS,RELEASE_IDENTITY}=legacy;
 const {NUMINA_MANIFEST}=require('../lib/numina-manifest');
 const {project}=require('../lib/numina-projection');
 const {observeProvider,SUPPORTED_READ_ONLY_PROVIDERS}=require('../lib/provider-observations');
-const PARTNERSHIP_STATUS=authority.OWNER_AUTHORIZATION.partnership_status;
+const PARTNERSHIP_STATUS=legacy.OWNER_AUTHORIZATION.partnership_status;
 
 function respond(res,status,value){res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.setHeader('cache-control','no-store');res.end(JSON.stringify(value));}
 function catalog(){
-  const executionManifest=authority.executionManifest();
+  const executionManifest=legacy.executionManifest();
   const payload={
     schema:'numina.execution-provider-catalog.v1',
     release:RELEASE_IDENTITY.production_version,
@@ -57,7 +57,7 @@ async function observationSet(){
 
 module.exports=async function(req,res){
   if(req.method!=='GET'){res.setHeader('allow','GET');return respond(res,405,{error:'METHOD_NOT_ALLOWED'});}
-  const url=new URL(req.url,'https://numina-production.vercel.app');
+  const url=new URL(req.url,'https://numinalabs.xyz');
   const mode=String(url.searchParams.get('mode')||'catalog').trim().toLowerCase();
   if(mode==='catalog')return respond(res,200,catalog());
   try{

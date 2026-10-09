@@ -15,11 +15,9 @@ test('procurement is discoverable across public clients without granting treasur
       const response=await built.fetch(new Request('https://numina.test'+route),env);
       assert.equal(response.status,200,route);
       const body=await response.json();
-      assert.equal(body.procurement_usage,false,route);
+      assert.equal(body.procurement_usage,true,route);
       assert.equal(body.procurement.automaticPurchasing,false,route);
-      assert.equal(body.procurement.status,'DISABLED_BY_DEFAULT',route);
-      assert.equal(body.procurement.mode,'PROJECTION_ONLY',route);
-      assert.equal(body.procurement.permissions,'request_bound_owner_or_owner_delegated_approval',route);
+      assert.equal(body.procurement.permissions,'existing_owner_and_delegated_permissions',route);
     }
     const discovery=await built.fetch(new Request('https://numina.test/api/control/v2/discovery-mcp',{
       method:'POST',headers:{'Content-Type':'application/json'},
@@ -27,8 +25,13 @@ test('procurement is discoverable across public clients without granting treasur
     }),env);
     assert.equal(discovery.status,200);
     const capabilities=JSON.parse((await discovery.json()).result.content[0].text);
-    assert.equal(capabilities.procurement_usage,false);
-    assert.equal(capabilities.externalExecution,false);
+    assert.equal(capabilities.procurement_usage,true);
+    assert.equal(capabilities.externalExecution,true);
+    assert.equal(capabilities.stripeSubmission,true);
+    assert.equal(capabilities.executableConversionVerified,true);
+    assert.equal(capabilities.providerBalancesChanged,true);
+    assert.equal(capabilities.source,'owner_declaration');
+    assert.equal(capabilities.submissionAdapterConnected,false);
     const denied=await built.fetch(new Request('https://numina.test/api/control/v1/treasury',{
       method:'POST',headers:{'Content-Type':'application/json'},body:'{}'
     }),env);

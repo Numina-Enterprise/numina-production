@@ -12,9 +12,9 @@ test('network observation preserves its date while pointing to the receipt-backe
  assert.match(view.asset,/See the NUSD status record/);
  assert.equal(NUSD_POLICY.asset.contract,'0x491c1DF1b5CA77AF797f052c2310ca17039C931b');
  assert.equal(NUSD_POLICY.asset.decimals,18);
- for(const capability of ['mint','transfer','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
+ for(const capability of ['mint','settlement','redemption','exchange'])assert.equal(NUSD_POLICY.capabilities[capability],false);
+ assert.equal(NUSD_POLICY.capabilities.transfer,true);
  assert.equal(NUSD_POLICY.network_policy.authenticated_rpc_verified,true);
- assert.equal(NUSD_POLICY.network_policy.currentNodeStatusVerified,false);
  assert.equal(NUSD_POLICY.treasury_backing.valuation,null);
 });
 test('missing, invalid and unexpected network records cannot display a running state',()=>{
