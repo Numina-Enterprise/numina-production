@@ -44,3 +44,6 @@ release-evidence/numina-bofa-ach-instruction-2026-09-19.json -text
 # Preserve original receipt audit snapshots, signatures and checksums.
 release-evidence/receipt-audit-2026-10-09/** -text
 docs/Receipt-Audit-2026-10-09.md -text
+
+# Preserve final public point checks and authenticated publication observations.
+release-evidence/deployment-2026-10-09/** -text
