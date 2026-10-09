@@ -1,0 +1,42 @@
+{
+  "observed_at": "2026-10-09T11:36:10.204Z",
+  "source": "Authenticated Sites connector readback by primary auditor",
+  "deployment": {
+    "id": "appgdep_6ac7895a86988191a154ac75d0a85b87",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "title": "Numina Labs",
+    "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_b56a776689b08191931abb9bd307809f",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+    "has_mcp": true,
+    "screenshot_asset_pointer": "sediment://file_00000000481481f7998e5875e3c0058d",
+    "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+    "failure_message": null,
+    "env_set_revision": 14,
+    "updated_at": "2026-10-08T12:16:24.203432+00:00"
+  },
+  "version": {
+    "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_b56a776689b08191931abb9bd307809f",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "version_number": 160,
+    "source": {
+      "commit_sha": "037ac3dba3bf4691a2aae009205d373ae0b0ebbe"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_000000002fd0820eae2f83bdcda0b840",
+      "content_hash": "sha256:f01756b52f568a4ef550ae89142d448360f70f54c332041bc897da8793f8c41b",
+      "size_bytes": 49141760,
+      "file_count": 379
+    },
+    "deployment_id": "appgdep_6ac7895a86988191a154ac75d0a85b87"
+  },
+  "is_signed_ed25519_receipt": false,
+  "archive_bytes_independently_hashed": false,
+  "limitations": [
+    "No Ed25519 envelope in Sites metadata",
+    "API does not expose a separate current live version ID",
+    "No HTTP runtime/health observation performed"
+  ]
+}

@@ -1,0 +1,379 @@
+{
+  "schema": "numina.receipt-audit.v1",
+  "checked_at": "2026-10-09T11:40:35.872Z",
+  "audit_status": "completed_with_findings",
+  "scope": "Public Ed25519 release/readiness evidence and stored deployment records in the checked Numina repository, plus authenticated Sites deployment metadata.",
+  "trust_anchor": {
+    "source": "public/runtime-contract.js",
+    "agreeing_source": "runtime/verifier-rc27/deploy/vercel/entrypoint.py",
+    "algorithm": "Ed25519",
+    "key_id": "3a2fe594a7e10458ae89683f",
+    "raw_public_key_base64": "UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=",
+    "raw_public_key_sha256": "3a2fe594a7e10458ae89683fdda0291af282690825be3062ef7ac2721137deff",
+    "openssh_public_representation_fingerprint": "SHA256:SX1kLMVocoZEblbGF2MSx7Rl/3kYvIpUuQM9CQ1bUJU",
+    "scoped_role": "Repository-pinned Numina runtime receipt verification key",
+    "registry_approval_verified": false,
+    "limitation": "The separate public-key registry was unavailable. This fingerprint is a public representation of the repository runtime pin, not proof of registration, ownership or another signing role."
+  },
+  "inventory": {
+    "repository_root": "/workspace/numina-production",
+    "roots": [
+      "docs",
+      "release-evidence",
+      "public",
+      "runtime",
+      "config"
+    ],
+    "parsed_json_count": 192,
+    "parse_errors": [],
+    "excluded_directory_names": [
+      "node_modules",
+      "archive",
+      "vendor",
+      "fixtures",
+      ".git"
+    ],
+    "excluded_directory_count": 3,
+    "complete_ed25519_envelope_count": 3,
+    "incomplete_summary_count": 5,
+    "signed_deployment_receipt_count": 0,
+    "saved_sshsig_found_in_workspace_inventory": false
+  },
+  "cryptographic_checks": {
+    "node_version": "v24.19.0",
+    "verifier": "node:crypto Ed25519; existing repository Node and WebCrypto verifiers",
+    "framing": "UTF-8 canonical JSON of {artifact_type,key_id,payload} with sorted object keys and compact separators",
+    "all_signatures_verified": true,
+    "all_tamper_checks_rejected": true
+  },
+  "verified_envelopes": [
+    {
+      "path": "docs/runtime-pin-reconciliation-2026-09-15.json",
+      "json_pointer": "/attestation",
+      "artifact_sha256": "39dc3d085783c959a186e37b74381dde18cc7f020b61506f763d0de6a9ad4037",
+      "byte_count": 5103,
+      "artifact_type": "NUMINA_RELEASE_ATTESTATION",
+      "key_id": "3a2fe594a7e10458ae89683f",
+      "signature_base64": "AH9NKf5sx7oNbMfE7j/b2IoKKTIIfEjIXD9NFWFuwEc+xJZg3ZXcEM1fj60gUBq9Fr6gR5sZW2Qn/+9B22dkDw==",
+      "format": "Numina canonical JSON Ed25519 envelope",
+      "signed_domain": "NUMINA_RELEASE_ATTESTATION",
+      "canonical_signed_body_sha256": "698c5319b71b4566be0e71eac603bd2b6fab6dabf6a6dfba42a0ed2450dee21c",
+      "canonical_signed_body_byte_count": 3192,
+      "canonical_payload_sha256": "14043ec5a244d5df5697f57fb4b202a757b23c56f7150ac452c976ae21673c30",
+      "verified_against_repository_pin": true,
+      "existing_node_verifier_passed": true,
+      "existing_webcrypto_verifier_passed": true,
+      "tamper_rejected": true,
+      "document_observed_at": "2026-09-15T08:02:21.917Z",
+      "signed_claims": {
+        "schema": null,
+        "runtime_version": "1.9.0-rc26",
+        "release": "core-v1.8+prod-v1.9.0-rc26",
+        "observed_at": null,
+        "generated_at": 1789459341,
+        "deployed": null,
+        "ready": null,
+        "deployment_id": null,
+        "source_commit": null,
+        "application_version": null,
+        "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      },
+      "current_repository_runtime_version_matches": false,
+      "establishes_current_deployment": false,
+      "limitation": "This verifies the stored signed statement. Current target state and truth of its assertions require separate matching evidence."
+    },
+    {
+      "path": "docs/runtime-pin-reconciliation-2026-09-16.json",
+      "json_pointer": "/attestation",
+      "artifact_sha256": "d94e8c0041fa14a7df9e134157951112bbf8343775faa500dd39d22659cd7814",
+      "byte_count": 5103,
+      "artifact_type": "NUMINA_RELEASE_ATTESTATION",
+      "key_id": "3a2fe594a7e10458ae89683f",
+      "signature_base64": "0gKamJXBAAWt6PPLPNTEQktfftAqjpvvxxokXZtuz/501GcXnIllejLppLsbgNfyXZ753Jqrolyq+T5OacShDQ==",
+      "format": "Numina canonical JSON Ed25519 envelope",
+      "signed_domain": "NUMINA_RELEASE_ATTESTATION",
+      "canonical_signed_body_sha256": "8e2cf0bd4a88ea9def763f7d182f94f42fd89c6f41ac467a0d7b15fbad2d071c",
+      "canonical_signed_body_byte_count": 3192,
+      "canonical_payload_sha256": "cf8a2e166efed5194a6695dcd6ab36c1fd1f7ef8dd8129e0ee310ef95b268edc",
+      "verified_against_repository_pin": true,
+      "existing_node_verifier_passed": true,
+      "existing_webcrypto_verifier_passed": true,
+      "tamper_rejected": true,
+      "document_observed_at": "2026-09-16T00:48:00.723Z",
+      "signed_claims": {
+        "schema": null,
+        "runtime_version": "1.9.0-rc26",
+        "release": "core-v1.8+prod-v1.9.0-rc26",
+        "observed_at": null,
+        "generated_at": 1789519679,
+        "deployed": null,
+        "ready": null,
+        "deployment_id": null,
+        "source_commit": null,
+        "application_version": null,
+        "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      },
+      "current_repository_runtime_version_matches": false,
+      "establishes_current_deployment": false,
+      "limitation": "This verifies the stored signed statement. Current target state and truth of its assertions require separate matching evidence."
+    },
+    {
+      "path": "release-evidence/frontier-readiness-19c445b.json",
+      "json_pointer": "/receipt",
+      "artifact_sha256": "e83c7f037f5a2e196af910463d067f2e765850fb51bc655ec2bec744cc2e56bd",
+      "byte_count": 7034,
+      "artifact_type": "NUMINA_FRONTIER_READINESS",
+      "key_id": "3a2fe594a7e10458ae89683f",
+      "signature_base64": "eX8j+AxglnUtiAoGKnMokwnQdlgFC0pfBnob8VkmBT0UeD9jUkEHho6NJ33GEbjYeeP40QseyMyLd6+EnFlfDw==",
+      "format": "Numina canonical JSON Ed25519 envelope",
+      "signed_domain": "NUMINA_FRONTIER_READINESS",
+      "canonical_signed_body_sha256": "53397f3b9a545006b4b1bf72a7b0088163565c361d469cd93fb9d1167d7681d9",
+      "canonical_signed_body_byte_count": 4435,
+      "canonical_payload_sha256": "7f7971d77c659f7ba490ee1a0fc8aca2ba866b2022147ac47d8e03dc81351c2d",
+      "verified_against_repository_pin": true,
+      "existing_node_verifier_passed": true,
+      "existing_webcrypto_verifier_passed": true,
+      "tamper_rejected": true,
+      "document_observed_at": "2026-09-20T07:55:53.642Z",
+      "signed_claims": {
+        "schema": "numina.frontier-readiness.v3",
+        "runtime_version": "1.9.0-rc26",
+        "release": "core-v1.8+prod-v1.9.0-rc26",
+        "observed_at": "2026-09-20T07:55:52.796Z",
+        "generated_at": null,
+        "deployed": true,
+        "ready": true,
+        "deployment_id": "dpl_5kVERo7Vasy99Q9smxZNdf91eNaC",
+        "source_commit": "19c445bd88680a2a11ec07a1a87e925be7d71ab5",
+        "application_version": "4.0.0",
+        "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f"
+      },
+      "current_repository_runtime_version_matches": false,
+      "establishes_current_deployment": false,
+      "limitation": "This verifies the stored signed statement. Current target state and truth of its assertions require separate matching evidence."
+    }
+  ],
+  "incomplete_evidence": [
+    {
+      "path": "docs/release-evidence-2026-09-13.json",
+      "json_pointer": "/fundingPlan/signatureVerification",
+      "artifact_sha256": "4bd61b43ac6d2d52cbcbe71e39515339190cf3c9a69d643da0974992e40572ae",
+      "byte_count": 2122,
+      "document_observed_at": "2026-09-13T21:37:13.729Z",
+      "reported_type": null,
+      "reported_key_id": "183665864a9642b4316a9dcb5cb1e559f5f10f9972d1253fff403439349fa9cf",
+      "status": "incomplete_evidence",
+      "limitation": "The complete signed body and signature envelope are unavailable; cryptographic verification cannot be performed."
+    },
+    {
+      "path": "release-evidence/delivery-observation-2026-09-20T100639Z.json",
+      "json_pointer": "/vercel/provenanceReceipt",
+      "artifact_sha256": "8f3e56b8ed79ec2714cb41fe9a538c52e871aba6aadd49e9024e1c6e206115c2",
+      "byte_count": 8166,
+      "document_observed_at": "2026-09-20T10:06:39.4878450Z",
+      "reported_type": "NUMINA_TRANSPORT_OBSERVATION",
+      "reported_key_id": "3a2fe594a7e10458ae89683f",
+      "status": "incomplete_evidence",
+      "limitation": "The complete signed body and signature envelope are unavailable; cryptographic verification cannot be performed."
+    },
+    {
+      "path": "release-evidence/delivery-observation-2026-09-20T161507Z.json",
+      "json_pointer": "/vercel/provenanceReceipt",
+      "artifact_sha256": "ddcdd52a4b0b5581bb3d685e498870b17296a38bd4050d6cbe05fdbcb2b805ae",
+      "byte_count": 4709,
+      "document_observed_at": "2026-09-20T16:15:07Z",
+      "reported_type": "NUMINA_TRANSPORT_OBSERVATION",
+      "reported_key_id": "3a2fe594a7e10458ae89683f",
+      "status": "incomplete_evidence",
+      "limitation": "The complete signed body and signature envelope are unavailable; cryptographic verification cannot be performed."
+    },
+    {
+      "path": "release-evidence/external-delivery-observation-2026-09-20T220949Z.json",
+      "json_pointer": "/vercel",
+      "artifact_sha256": "859ba045f3dc9b5c18b28c055760859ce495d5ed2107dbe2d02268a3057c006d",
+      "byte_count": 5134,
+      "document_observed_at": "2026-09-20T22:09:49Z",
+      "reported_type": null,
+      "reported_key_id": null,
+      "status": "incomplete_evidence",
+      "limitation": "The complete signed body and signature envelope are unavailable; cryptographic verification cannot be performed."
+    },
+    {
+      "path": "release-evidence/seven-plane-frontier-2026-09-20T181250Z.json",
+      "json_pointer": "/planes/4/productionEvidence",
+      "artifact_sha256": "ae4f464f0a2b363155b98a93e5046c48123dfd7af1c1a927a2ce29fa4c2afa48",
+      "byte_count": 7029,
+      "document_observed_at": "2026-09-20T18:12:50Z",
+      "reported_type": null,
+      "reported_key_id": null,
+      "status": "incomplete_evidence",
+      "limitation": "The complete signed body and signature envelope are unavailable; cryptographic verification cannot be performed."
+    }
+  ],
+  "unsigned_deployment_records": [
+    {
+      "path": "docs/rc26-production-deployment.json",
+      "artifact_sha256": "64bbbb48f4cf8b8dadbb1b7530f142e10acab9a6ad8883de6485fa162cf7182a",
+      "byte_count": 4377,
+      "schema": "numina.rc26.production-deployment.v1",
+      "status": "not_an_ed25519_envelope",
+      "deployment_id": "dpl_CZn5UMq3fcBYcEZ8j5yLRmDc6874",
+      "recorded_runtime_version": "1.9.0-rc26",
+      "recorded_observation_at": null,
+      "recorded_chain_id": null,
+      "recorded_finality": null,
+      "limitation": "Historical deployment/chain observation with no complete Ed25519 envelope. Chain finality is not rechecked by this audit."
+    },
+    {
+      "path": "docs/nusd/deployment-receipt.json",
+      "artifact_sha256": "d44b863bd9a0a68fe06f69a8439c2fa01204e4ada1c93e0fb29936731728427a",
+      "byte_count": 3726,
+      "schema": "numina.nusd.production-deployment-receipt.v1",
+      "status": "not_an_ed25519_envelope",
+      "deployment_id": null,
+      "recorded_runtime_version": null,
+      "recorded_observation_at": "2026-09-18T15:35:24.884Z",
+      "recorded_chain_id": "962421430",
+      "recorded_finality": "FINAL",
+      "limitation": "Historical deployment/chain observation with no complete Ed25519 envelope. Chain finality is not rechecked by this audit."
+    },
+    {
+      "path": "runtime/nusd/deployment-receipt.json",
+      "artifact_sha256": "6d7d2a3c3f4ee9fe2b95f02a5abf000626bd2e66735bedb0ab78f81883b86e53",
+      "byte_count": 3812,
+      "schema": "numina.nusd.production-deployment-receipt.v1",
+      "status": "not_an_ed25519_envelope",
+      "deployment_id": null,
+      "recorded_runtime_version": null,
+      "recorded_observation_at": "2026-09-18T15:35:24.884Z",
+      "recorded_chain_id": "962421430",
+      "recorded_finality": "FINAL",
+      "limitation": "Historical deployment/chain observation with no complete Ed25519 envelope. Chain finality is not rechecked by this audit."
+    }
+  ],
+  "nusd_receipt_mirrors_identical": false,
+  "nusd_receipt_differences": [
+    {
+      "json_pointer": "/externalSettlement/canonicalReceipt",
+      "docs_present": false,
+      "runtime_present": true,
+      "docs_value": null,
+      "runtime_value": "runtime/nusd/settlement-receipt.json"
+    },
+    {
+      "json_pointer": "/externalSettlement/declared",
+      "docs_present": false,
+      "runtime_present": true,
+      "docs_value": null,
+      "runtime_value": true
+    }
+  ],
+  "linked_settlement_evidence": {
+    "path": "runtime/nusd/settlement-receipt.json",
+    "artifact_sha256": "45fb33a5e9a21900ed4116714f3823d83b4626a91a01b40e1b6ebb045f38fc16",
+    "schema": "numina.settlement-receipt.v1",
+    "classification": "native_declaration",
+    "reported_settlement": {
+      "declared": true,
+      "externallyVerified": false,
+      "usdVerified": false,
+      "usdcVerified": false,
+      "reservesVerified": false,
+      "bankReceipt": null,
+      "providerReceipt": null,
+      "providerSettlementReceipts": []
+    },
+    "limitation": "This unsigned native declaration explicitly reports external settlement and reserves unverified; it is not independent bank/provider proof."
+  },
+  "fresh_provider_observation": {
+    "observed_at": "2026-10-09T11:36:10.204Z",
+    "source": "Authenticated Sites connector readback by primary auditor",
+    "deployment": {
+      "id": "appgdep_6ac7895a86988191a154ac75d0a85b87",
+      "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+      "title": "Numina Labs",
+      "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_b56a776689b08191931abb9bd307809f",
+      "type": "publish",
+      "status": "succeeded",
+      "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+      "has_mcp": true,
+      "screenshot_asset_pointer": "sediment://file_00000000481481f7998e5875e3c0058d",
+      "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+      "failure_message": null,
+      "env_set_revision": 14,
+      "updated_at": "2026-10-08T12:16:24.203432+00:00"
+    },
+    "version": {
+      "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_b56a776689b08191931abb9bd307809f",
+      "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+      "version_number": 160,
+      "source": {
+        "commit_sha": "037ac3dba3bf4691a2aae009205d373ae0b0ebbe"
+      },
+      "archive_storage": {
+        "archive_format": "tar",
+        "sediment_file_id": "file_000000002fd0820eae2f83bdcda0b840",
+        "content_hash": "sha256:f01756b52f568a4ef550ae89142d448360f70f54c332041bc897da8793f8c41b",
+        "size_bytes": 49141760,
+        "file_count": 379
+      },
+      "deployment_id": "appgdep_6ac7895a86988191a154ac75d0a85b87"
+    },
+    "is_signed_ed25519_receipt": false,
+    "archive_bytes_independently_hashed": false,
+    "limitations": [
+      "No Ed25519 envelope in Sites metadata",
+      "API does not expose a separate current live version ID",
+      "No HTTP runtime/health observation performed"
+    ],
+    "cross_record_binding_passed": true
+  },
+  "deployment_receipt_status": "missing_from_checked_public_evidence",
+  "current_signed_runtime_state": "not_observed",
+  "signing_custody": {
+    "operational_signature_issued": false,
+    "key_generated_or_rotated": false,
+    "private_key_access_checked": false,
+    "persistence_verified": false,
+    "state": "unknown",
+    "limitation": "This public verification audit does not test private-key custody or availability. No signing secrets were configured in the current managed environment observation."
+  },
+  "unresolved_gaps": [
+    {
+      "condition": "Consistent nUSD deployment receipt copies",
+      "owner": "owner unassigned",
+      "missing": "Runtime copy adds externalSettlement.declared and externalSettlement.canonicalReceipt; documentation copy lacks those fields.",
+      "closure": "Reconcile the retained receipt variants against authoritative matching settlement evidence, preserving both original hashes and their histories."
+    },
+    {
+      "condition": "Ed25519 receipt for the intended deployment",
+      "owner": "owner unassigned",
+      "missing": "A complete signed receipt matching the target publication source, artifact digest, deployment ID and environment.",
+      "closure": "Retrieve the existing signed envelope and verify its pinned signature and exact binding to Sites version 160, if that is the intended target."
+    },
+    {
+      "condition": "Current runtime evidence",
+      "owner": "owner unassigned",
+      "missing": "A fresh signed runtime response; current managed HTTP policy does not include numinalabs.xyz.",
+      "closure": "Read and verify current target evidence through supported authorized access, preserving the configured proxy."
+    },
+    {
+      "condition": "Separate registered signing identity continuity",
+      "owner": "owner unassigned",
+      "missing": "preserve-public-signing-workflow references/public-key-registry.json and references/signing-status.md could not be read.",
+      "closure": "Restore access to the registry and historical records, then compare fingerprints and receipt signing roles."
+    }
+  ],
+  "limitations": [
+    "Provider-reported archive digest was not independently recomputed from archive bytes.",
+    "Sites exposes no separate current live version ID; latest saved version 160 has a succeeded publication.",
+    "Unsigned wrappers and verification summaries are outside the signature coverage unless present in the canonical signed payload.",
+    "No deployment, publication, financial operation, signer replacement or private-key export was performed."
+  ],
+  "next_verifiable_step": "Obtain the existing complete signed deployment envelope for Sites version 160 (or identify the intended deployment), then verify its signature and source/artifact/deployment binding.",
+  "audit_program": {
+    "path": "run-receipt-audit.mjs",
+    "sha256": "69dc1d53b6c8fd7d6935d78a2f700ed28454167af1a79078cc2cb4637a050f5d",
+    "exit_code_policy": "Exit 1 for failed signature/tamper/binding checks, parse errors, or unequal nUSD receipt copies. A completed audit may retain findings."
+  }
+}

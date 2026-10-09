@@ -1,0 +1,131 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "observedAt": "2026-09-20T22:09:49Z",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "canonicalSourceSha": "4feca86289eb8ee989834d44b7bb5a315157ae50",
+  "sourceProtected": true,
+  "securityPatch": {
+    "runtimeDependencyCommit": "25686588bd5909b0233b8a5ae99bd5ba942f1196",
+    "ethers": "6.17.0",
+    "wsOverride": "8.21.3",
+    "canonicalValidationAtPatch": "921/921"
+  },
+  "github": {
+    "numina": {
+      "runId": 35540534901,
+      "conclusion": "success",
+      "artifactId": 10613839660,
+      "artifactDigest": "sha256:3f81cbab6e4e767ae8e79a6c4c0ec611003cfd0ee35533049a63f9aba21ae6fb",
+      "artifactBytes": 39838388
+    },
+    "providerObservationVerification": {
+      "runId": 35540534873,
+      "conclusion": "success"
+    },
+    "immutableWorkflowVerification": {
+      "runId": 35540534860,
+      "conclusion": "success"
+    },
+    "runtimeProvenance": {
+      "lastRunId": 35540469250,
+      "lastRunHeadSha": "a83b36688812e85b60b8ddb73c2ab93ee83be035",
+      "protectedSourceGatePassed": true,
+      "buildContextScopeFixMergedAs": "a83b36688812e85b60b8ddb73c2ab93ee83be035",
+      "dockerfileDigestPinFixedOnMainAs": "4feca86289eb8ee989834d44b7bb5a315157ae50",
+      "reviewedDockerfileSha256": "bc3a0106fff1fd4ded14c827cb5a2898df41ecf798c5c4ea6c29b52faa4ccfb2",
+      "freshRunOnCurrentHeadObserved": false,
+      "sourceImageInventoryAttestationProduced": false
+    }
+  },
+  "vercel": {
+    "deploymentId": "dpl_6VTtH5yGpdg5HpQhTkrdj5xNGuF5",
+    "buildId": "bld_7xjnwk2qi",
+    "state": "READY",
+    "transportUrl": "https://numina-production-4z8n4dqwv-numina-167f7fe7.vercel.app",
+    "canonicalAlias": "https://numinalabs.xyz",
+    "sourceSha": "4feca86289eb8ee989834d44b7bb5a315157ae50",
+    "applicationBuildId": "db2adbb87c33d1512f106bf874af39c419edea8b693c1d441aebb6bf49f2dcb6",
+    "frontierReady": true,
+    "frontierDeployed": true,
+    "frontierReceiptAlgorithm": "Ed25519",
+    "receipts": [
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "sha256": "749f37c12c52254c5593ea5edf9e6d1fab3c42b193fa13f6b1bfcb712d37a020"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70",
+        "chainId": "962421430",
+        "finality": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "sha256": "f43442a694a0b686a023c3325c3c23eda700cf217f661e16012ddae1ff860180",
+        "operatorStatus": "active_operator_confirmed",
+        "assetVerificationStatus": "verified_deployed_paused"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b",
+        "status": "FINAL",
+        "productionReady": true,
+        "signed": true,
+        "broadcast": true,
+        "minted": true
+      }
+    ]
+  },
+  "native": {
+    "sourceCurrentThroughSha": "6d04f6b1943aa195d7ec1a38c48fa58595b5657a",
+    "mobileSourceChangedAfterThatSha": false,
+    "android": {
+      "artifactId": 10614245754,
+      "artifactDigest": "sha256:94c7f9a20a6379b90e91417221bb9df941897b67de00d8480f0891480935adbf",
+      "apkSha256": "f19370be880065d2800b938ecc0f16f6fb48711071f55687c036ecffd4ad594c",
+      "aabSha256": "c959a3f2f61382468af6f8cd30a43c75ba3cf78cfbf938f6b06fa360aba5776f",
+      "signatureVerification": true,
+      "storeSubmitted": false
+    },
+    "ios": {
+      "compiledArtifactId": 10614210591,
+      "compiledArtifactDigest": "sha256:602529a00e619aa036766564eab65cf90d61b0ff3e7ac53999e08fb768ead68d",
+      "compiled": true,
+      "signed": false,
+      "storeSubmitted": false,
+      "blocker": "Apple distribution signing inputs are not configured."
+    }
+  },
+  "remainingBlockers": [
+    "A fresh workflow_dispatch of the NUSD runtime image/provenance workflow is still required on the current protected main head to produce source, image, inventory and Sigstore attestation receipts.",
+    "Sites publication still requires the existing git.chatgpt-team.site publishing identity/permission.",
+    "Apple distribution signing inputs remain unset, so no signed iOS artifact or App Store receipt exists.",
+    "No Google Play or App Store provider submission receipt exists; store submission remains unclaimed."
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

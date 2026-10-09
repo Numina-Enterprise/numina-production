@@ -1,0 +1,49 @@
+{
+  "schema": "numina.release-evidence.v1",
+  "observedAt": "2026-09-13T21:37:13.729Z",
+  "scope": "Recorded software publication and canonical Numina journal evidence",
+  "sourceCommit": "dd012e2a1a798994db75850652a77083331866da",
+  "websiteSourceCommit": "26b1b82e1caedf459d95bc7f42528cba190f706a",
+  "applicationBuildId": "266b192872c622ef192cd60e0204c88e27cc519864a5fa686a8d176460d8ec05",
+  "website": {
+    "provider": "NUMINA",
+    "version": 42,
+    "deploymentId": "appgdep_6aa71685cfc881918a00446ca330fad2",
+    "status": "succeeded",
+    "publishedAt": "2026-09-13T21:33:05.663343Z",
+    "url": "https://numinalabs.xyz",
+    "evidenceSource": "Sites authenticated deployment status"
+  },
+  "runtime": {
+    "provider": "NUMINA",
+    "deploymentId": "dpl_BNSXEsHBECf86p8DH2pR3nShU4eW",
+    "status": "READY",
+    "immutableUrl": "https://numina-production-e0a29meu1-skott34-dot.vercel.app",
+    "url": "https://numina-production.vercel.app",
+    "signedDeclaration": "/v1/release/attestation",
+    "evidenceSource": "Vercel production deployment result and verified runtime declaration"
+  },
+  "fundingPlan": {
+    "id": "numina-canonical-funding-v1",
+    "eventId": "1e7adc30-7108-4009-ba50-4316d580dd14",
+    "revision": 134,
+    "eventHash": "47b84c882b9f24dadcbd12bcd609e1044a203ed6267c1124607a59d4a9dac342",
+    "stateHash": "ae35c0ab39e65b9316c16dbdb0e1d88f246168523ac33df124f986346b58f287",
+    "receipt": "/api/control/v2/receipts/1e7adc30-7108-4009-ba50-4316d580dd14",
+    "access": "owner_authenticated",
+    "recordType": "internal_funding_plan",
+    "status": "FUNDING_PLAN_RECORDED",
+    "settlementEstablished": false,
+    "signatureVerification": {
+      "status": "verified_against_published_key",
+      "keyId": "183665864a9642b4316a9dcb5cb1e559f5f10f9972d1253fff403439349fa9cf",
+      "algorithm": "Ed25519",
+      "verifiedAt": "2026-09-13T21:45:02.793Z",
+      "scope": "Numina internal journal"
+    }
+  },
+  "nativePackageRecord": "/downloads/native-package-record-v3.json",
+  "nusdContractDeploymentReceipt": null,
+  "nusdSettlementReceipt": null,
+  "financialExecutionEstablished": false
+}
