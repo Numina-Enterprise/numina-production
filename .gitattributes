@@ -40,3 +40,7 @@ docs/Numina-Requested-Asset-Fee.json -text
 docs/NUMINA-FINAL-BUILD.json -text
 docs/native-package-record-v4.json -text
 release-evidence/numina-bofa-ach-instruction-2026-09-19.json -text
+
+# Preserve original receipt audit snapshots, signatures and checksums.
+release-evidence/receipt-audit-2026-10-09/** -text
+docs/Receipt-Audit-2026-10-09.md -text
