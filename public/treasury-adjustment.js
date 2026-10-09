@@ -82,7 +82,7 @@ export function createTreasuryAdjustment({
         data: {Principal: draft.event.Principal, Authority: draft.event.Authority, Objective: draft.event.Objective,
           Intent: draft.event.Intent, expectedHead: draft.event.expectedHead}};
       const expectedProjection = {...snapshot.projection, balance: draft.afterBalance, last_event_id: draft.event.id};
-      valid = response.status === 'FINAL' && response.route === 'numina.treasury.v1' && response.execution_scope === 'Numina-native journal'
+      valid = response.status === 'FINAL' && response.settlementStatus === 'UNVERIFIED' && response.route === 'numina.treasury.v1' && response.execution_scope === 'Numina-native journal'
         && typeof response.replayed === 'boolean' && response.transaction_request === null && response.mint_event === null && response.bank_transaction === null
         && event?.type === 'treasury' && event.id === draft.event.id && event.actor === snapshot.principal
         && event.revision === snapshot.revision + 1 && event.previous === snapshot.head && event.result?.transaction_request === null
@@ -92,7 +92,7 @@ export function createTreasuryAdjustment({
         && advancement.head === response.canonical_proof.hash && advancement.revision === event.revision
         && hash(current?.head) && revision(current.revision) && current.revision >= event.revision
         && (current.revision !== event.revision || current.head === response.canonical_proof.hash)
-        && await verifyTreasuryRecord({schema: 'numina.treasury.v1', route: response.route, root: 'NUMINA', principal: snapshot.principal, manifest: 'NUMINA', identity: 'NUMINA', authority: 'NUMINA', source: 'NUMINA', evidence: 'NUMINA', provider: 'NUMINA', provider_verification: true,
+        && await verifyTreasuryRecord({...snapshot, route: response.route, provider_verification: false,
           status: 'READY', revision: event.revision, head: response.canonical_proof.hash,
           projection: response.projection, canonical_proof: response.canonical_proof,
           verification_scope: snapshot.verification_scope});

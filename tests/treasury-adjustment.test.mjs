@@ -51,6 +51,7 @@ test('500T to 1500T commits the reviewed native adjustment with preserved reques
   assert.equal(draft.canonicalBody, stable(draft.event));
   const result = await client.submit(draft);
   assert.equal(result.status, 'FINAL');
+  assert.equal(result.settlementStatus, 'UNVERIFIED');
   assert.equal(result.projection.balance, draft.afterBalance);
   assert.deepEqual(result.projection.transaction_requests, before.projection.transaction_requests);
   for (const field of ['transaction_request', 'mint_event', 'bank_transaction']) assert.equal(result[field], null);
@@ -178,6 +179,7 @@ test('submission binds response command, balance, requests, authority and head e
     ['not FINAL', r => { r.status = 'READY'; }],
     ['wrong route', r => { r.route = 'other'; }],
     ['external execution scope', r => { r.execution_scope = 'provider'; }],
+    ['fabricated provider settlement', r => { r.settlementStatus = 'SETTLED'; }],
     ['invalid replay flag', r => { r.replayed = 'false'; }],
     ['transaction request', r => { r.transaction_request = {}; }],
     ['mint event', r => { r.mint_event = {}; }],

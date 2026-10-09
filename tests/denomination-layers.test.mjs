@@ -68,6 +68,10 @@ test('hosted app and mobile treasury panel align the aggregate, allocations and 
     assert.match(details,/Journal\/model comparisonMatches the 500T owner-designated NUSD component; the owner-designated aggregate is 1,500T/);
     assert.match(details,/Recorded minted NUSD supply1,500,000,000,000,000\.00 NUSD/);
     assert.match(get('native-treasury-message').textContent,/1,500T owner-designated aggregate/);
+    assert.match(get('native-treasury-message').textContent,/owner-designated model targets/);
+    assert.doesNotMatch(get('native-treasury-message').textContent,/COMPLETED|CLEARED|8000750550/);
+    assert.match(details,/Bank modeled transfer target500,000,000,000,000\.00 USD/);
+    assert.doesNotMatch(details,/Transfer status|Cleared date|Confirmation8000750550/);
     assert.deepEqual(await treasury.readTreasury(),record);
     const latest=await readControl(db);
     await treasury.writeTreasury({id:'mobile-aggregate',expectedRevision:latest.revision,expectedHead:latest.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.project',Intent:{operation:'ADJUST_PROJECTION',delta:'1000000000000000',reason:'Isolated aggregate journal fixture'}});

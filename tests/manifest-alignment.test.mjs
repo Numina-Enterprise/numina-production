@@ -7,6 +7,7 @@ import {WALLET_EXECUTION_POLICY} from '../public/wallet-execution-policy.js';
 import {NUMINA_OWNER_APPROVAL} from '../public/owner-approval.js';
 import {walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
+import {NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
@@ -44,7 +45,9 @@ test('root release manifest binds the owner workflow, additive migration and act
  assert.equal(binding.attempt_storage.migration_sha256,digest(bytes('drizzle/0004_wallet_deployment_intents.sql')));assert.equal(binding.attempt_storage.native_journal_modified,false);
  assert.equal(release.compatibility.data_migration_required,true);assert.deepEqual(release.compatibility.additive_migrations,['0004_wallet_deployment_intents','0005_numina_manifest_control']);
  assert.deepEqual(binding.evidence,{signature:null,transaction_hash:null,receipt:null,mint_verified:false,provider_deposit_verified:false,reserves_verified:false});
- for(const [name,flag] of Object.entries(release.scope))assert.equal(flag,name==='nusd_issuance_verified_in_current_state'||name==='contract_deployment_verified_in_current_state',name);
+ for(const [name,flag] of Object.entries(release.scope))assert.equal(flag,name==='historical_constructor_issuance_receipt_verified'||name==='historical_contract_deployment_receipt_verified',name);
+ assert.equal(release.scope.nusd_issuance_verified_in_current_state,false);
+ assert.equal(release.scope.contract_deployment_verified_in_current_state,false);
 });
 
 test('application manifest aliases contain the same current release bytes',()=>{
@@ -61,7 +64,9 @@ test('application manifest aliases contain the same current release bytes',()=>{
   assert.equal(release.provider_verification,true);
   assert.equal(release.softwareExternal,false);
   assert.equal(release.softwareIdentity,'NUMINA');
-  assert.deepEqual(release.softwareTreasury,{identity:'NUMINA',singular:true,bankUsd:{current:'500000000000000',available:'500000000000000',unit:'USD'},stripeUsdc:{current:'500000000000000',available:'500000000000000',unit:'USDC'},nativeNusd:{current:'500000000000000',available:'500000000000000',unit:'NUSD'},aggregate:{current:'1500000000000000',unit:'NUSD'}});
+  assert.deepEqual(release.softwareTreasury,{identity:'NUMINA',singular:true,...NUMINA_TREASURY_CONNECTION.softwareBalanceModel});
+  assert.equal(release.provider_verification_scope,'SIGNED_RUNTIME_RELEASE_IDENTITY_ONLY');assert.equal(release.financial_provider_verification,false);assert.equal(release.financial_execution_ready,false);
+  for(const key of ['bankUsd','stripeUsdc','nativeNusd']){assert.equal(release.softwareTreasury[key].current,null);assert.equal(release.softwareTreasury[key].available,null);assert.equal(release.softwareTreasury[key].modeledValue,'500000000000000');}
   const nativeModel=release.native_treasury_alignment;
   assert.equal(nativeModel.aggregation,'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES');
   assert.equal(nativeModel.treasuryCount,1);assert.equal(nativeModel.accountCount,1);assert.equal(nativeModel.holdingsCount,3);

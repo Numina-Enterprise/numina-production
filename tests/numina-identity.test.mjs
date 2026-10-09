@@ -26,7 +26,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(pkg.scripts['release:numina'],'node scripts/package-numina-release.mjs');
   assert.equal(pkg.numina.finalBuildManifest.role,'NUMINA');
   assert.equal(pkg.numina.finalBuildManifest.synchronization,'NUMINA');
-  assert.equal(pkg.transfersEnabled,true);assert.equal(pkg.numina.transfersEnabled,true);assert.equal(pkg.numinaMetadata.transfersEnabled,true);
+  assert.equal(pkg.transfersEnabled,null);assert.equal(pkg.numina.transfersEnabled,null);assert.equal(pkg.numinaMetadata.transfersEnabled,null);
   const finalBuildUrl=new URL('../public/final-build.json',import.meta.url);
   const finalBuildBytes=readFileSync(finalBuildUrl);
   const finalBuildSha256=createHash('sha256').update(finalBuildBytes).digest('hex');
@@ -194,10 +194,10 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(NUMINA_LAYERS.treasury.accountCount,1);
   assert.equal(NUMINA_LAYERS.treasury.holdingsCount,3);
   assert.equal(NUMINA_LAYERS.treasury.providerIdentity,'NUMINA');
-  assert.equal(NUMINA_LAYERS.treasury.contractsActive,true);
-  assert.equal(NUMINA_LAYERS.nusd.status,'ACTIVE');
-  assert.equal(NUMINA_LAYERS.nusd.paused,false);assert.equal(NUMINA_LAYERS.nusd.transfersEnabled,true);
-  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.version,3);
+  assert.equal(NUMINA_LAYERS.treasury.contractsActive,null);
+  assert.equal(NUMINA_LAYERS.nusd.status,'OWNER_DECLARED_ACTIVE');
+  assert.equal(NUMINA_LAYERS.nusd.paused,null);assert.equal(NUMINA_LAYERS.nusd.transfersEnabled,null);assert.equal(NUMINA_LAYERS.nusd.live,null);assert.equal(NUMINA_LAYERS.nusd.nativeBackingVerified,false);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.version,4);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.singular,true);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.treasuryCount,1);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.componentCount,3);
@@ -206,7 +206,7 @@ test('NUMINA is the canonical active identity',()=>{
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.accountCount,1);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.holdingsCount,3);
   assert.equal(NUMINA_TREASURY_CURRENT_POLICY.providerIdentity,'NUMINA');
-  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.contractsActive,true);
+  assert.equal(NUMINA_TREASURY_CURRENT_POLICY.treasuryModel.contractsActive,null);
   assert.equal(NUMINA_OWNER_APPROVAL.requestSha256,'b55cf6c460c0d69ea29645a6bfcfee03b88a4ed2b77b2e3f44ed53ea325956c4');
   assert.equal(NUMINA_OWNER_APPROVAL.issuerPolicySha256,'2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5');
   assert.equal(WALLET_EXECUTION_POLICY.decimals,18);
