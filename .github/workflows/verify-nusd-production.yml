@@ -1,4 +1,4 @@
-name: Verify NUSD Production
+name: Observe NUSD Current State
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/verify-nusd-production.yml'
       - 'runtime/nusd/scripts/verify-production.mjs'
+      - 'runtime/nusd/scripts/observe-current.mjs'
       - 'runtime/nusd/scripts/rpc-auth.mjs'
   workflow_run:
     workflows: ['Deploy NUSD contracts to NUMINA chain']
@@ -13,7 +14,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -37,35 +38,26 @@ jobs:
       KALEIDO_APP_PASSWORD: ${{ secrets.KALEIDO_APP_PASSWORD }}
       KALEIDO_USERNAME: ${{ secrets.KALEIDO_USERNAME }}
       KALEIDO_PASSWORD: ${{ secrets.KALEIDO_PASSWORD }}
-      NUMINA_KALEIDO_API_KEY: ${{ secrets.NUMINA_KALEIDO_API_KEY }}
-      KALEIDO_API_KEY: ${{ secrets.KALEIDO_API_KEY }}
-      NUMINA_EXPECTED_CHAIN_ID: '962421430'
-      NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
-      NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
-      NUMINA_RECIPIENT: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
-      NUMINA_ISSUER_POLICY_SHA256: '2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '26'
+          node-version-file: .nvmrc
       - name: Install locked NUSD runtime dependencies
         working-directory: runtime/nusd
         run: npm ci --ignore-scripts
-      - name: Verify production deployment from chain state
+      - name: Check read-only observation boundaries
+        run: node --test tests/nusd-current-observation.test.mjs
+      - name: Observe current state without changing chain or historical receipts
         working-directory: runtime/nusd
-        run: node scripts/verify-production.mjs deployment-verification.json
-      - name: Commit durable NUMINA verification
-        shell: bash
-        run: |
-          git config user.name "NUMINA"
-          git config user.email "actions@users.noreply.github.com"
-          git add runtime/nusd/deployment-verification.json
-          if git diff --cached --quiet; then
-            echo "Verification already current."
-          else
-            git commit -m "Record verified NUSD production deployment"
-            git push origin HEAD:main
-          fi
+        run: node scripts/verify-production.mjs > "$RUNNER_TEMP/nusd-current-observation.json"
+      - name: Retain observation or access blocker
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: NUSD-CURRENT-OBSERVATION
+          path: ${{ runner.temp }}/nusd-current-observation.json
+          if-no-files-found: error

@@ -16,7 +16,7 @@ test('private bank configuration does not turn routing or native settlement into
     assert.equal(route.treasuryIdentity,'NUMINA');
     assert.equal(route.financialSoftwareIdentity,'NUMINA');assert.equal(route.financialMetadataAuthority,'NUMINA');assert.equal(route.financialNamespace,'NUMINA');assert.equal(route.financialProviderIdentity,'NUMINA');
     assert.equal(route.balanceInferenceSource,'NUMINA');assert.equal(route.providerBalanceSemantics,'NUMINA');
-    assert.deepEqual(route.inferredProviderBalance,{current:'500000000000000',available:'500000000000000',unit:'USD',balanceClass:'NUMINA',inferenceSource:'NUMINA'});
+    assert.deepEqual(route.inferredProviderBalance,{current:null,modeledValue:'500000000000000',available:null,unit:'USD',balanceClass:'NUMINA',inferenceSource:'NUMINA'});
     assert.equal(route.providerBalance,null);
     assert.equal(route.achExecutionScope.treasuryIdentity,'NUMINA NATIVE TREASURY');
     assert.equal(route.achExecutionScope.endpointIdentity,'SK Consulting LLC');
@@ -28,7 +28,9 @@ test('private bank configuration does not turn routing or native settlement into
     assert.equal(route.settlementStatus,'UNVERIFIED');
     assert.equal(route.achTraceNumber,null);
     assert.equal(route.providerConfirmationId,null);
-    assert.equal(route.nativeSettlementEvidenceScope,'NUMINA_MANIFEST_FINAL');
+    assert.equal(route.nativeSettlementEvidenceScope,'NUMINA_OWNER_DESIGNATED_MODEL');
+    assert.equal(route.backingVerified,false);
+    assert.equal(route.softwareBalance.transfer.providerCleared,false);
   }
 });
 
