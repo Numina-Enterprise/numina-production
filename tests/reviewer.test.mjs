@@ -1,4 +1,3 @@
-import {APP_CONSENT_VERSION} from '../src/app-core.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -9,7 +8,7 @@ import {bootstrapControl,readControl} from '../src/control-store.js';
 import {reviewerHttp,reviewerContext,REVIEW_USER,REVIEW_SUBJECT,REVIEW_EMAIL} from '../src/reviewer.js';
 const origin='https://numina.test',password='fixture-only-review-password-not-used-in-production',now=1900000000;
 function request(path,{cookie,body,method=body?'POST':'GET',headers={}}={}){return new Request(origin+path,{method,headers:{Origin:origin,...(body?{'Content-Type':'application/json'}:{}),...(cookie?{Cookie:cookie}:{}),...headers},...(body?{body:JSON.stringify(body)}:{})});}
-const intake=()=>({idempotencyKey:crypto.randomUUID(),service:'diagnostic_enterprise',title:'Reviewer access verification',brief:'A test request to verify the production customer workflow without buying a service.',successCriteria:'Create, read, reach checkout and cancel this account-owned request.',country:'US',consent:true,consentVersion:APP_CONSENT_VERSION});
+const intake=()=>({idempotencyKey:crypto.randomUUID(),service:'diagnostic_enterprise',title:'Reviewer access verification',brief:'A test request to verify the production customer workflow without buying a service.',successCriteria:'Create, read, reach checkout and cancel this account-owned request.',country:'US',consent:true});
 async function fixture(t){
  const db=database();t.after(()=>db.close());
  for(const file of ['0001_useful_black_crow','0002_chief_rachel_grey','0003_google_play_reviewer']){
@@ -17,7 +16,7 @@ async function fixture(t){
   for(const statement of sql.split(';').map(s=>s.trim()).filter(Boolean))await db.prepare(statement).run();
  }
  await bootstrapControl(db,'email:production-owner@example.test',now);
- const env={DB:db,ASSETS:{fetch(){return new Response('Not found',{status:404});}},NUMINA_TELEMETRY_LOGS:'false',NUMINA_REVIEW_ENABLED:'true',NUMINA_REVIEW_RECORD_SCOPE:'own',NUMINA_REVIEW_PASSWORD_SHA256:await appDigest(password),NUMINA_REVIEW_SESSION_KEY:'a'.repeat(64),NUMINA_CONTROL_OWNER:'email:production-owner@example.test',NUMINA_CONTROL_API_KEY_SHA256:await appDigest('production-secret'),NUMINA_STRIPE_WEBHOOK_SECRET:'production-webhook-secret',NUMINA_STRIPE_TREASURY_ACCOUNT:'acct_localfixtureonly',NUMINA_STRIPE_TREASURY_READ_KEY:'production-read-secret'};
+ const env={DB:db,ASSETS:{fetch(){return new Response('Not found',{status:404});}},NUMINA_TELEMETRY_LOGS:'false',NUMINA_REVIEW_ENABLED:'true',NUMINA_REVIEW_RECORD_SCOPE:'own',NUMINA_REVIEW_PASSWORD_SHA256:await appDigest(password),NUMINA_REVIEW_SESSION_KEY:'a'.repeat(64),NUMINA_CONTROL_OWNER:'email:production-owner@example.test',NUMINA_CONTROL_API_KEY_SHA256:await appDigest('production-secret'),NUMINA_STRIPE_WEBHOOK_SECRET:'production-webhook-secret',NUMINA_STRIPE_TREASURY_READ_KEY:'production-read-secret'};
  const login=(at=now)=>reviewerHttp(request('/api/reviewer/v1/login',{body:{username:REVIEW_USER,password}}),env,at);
  return {db,env,login};
 }

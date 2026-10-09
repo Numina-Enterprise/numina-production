@@ -13,15 +13,15 @@ export function createEstimateHandler({observe = observeDeploymentEstimate} = {}
     response.once('finish', () => span.finish(response.statusCode));
     response.once('close', () => span.finish(response.statusCode, {aborted: !response.writableFinished}));
     response.setHeader('Content-Type', 'application/json; charset=utf-8');
-    for (const name of ['Cache-Control', 'CDN-Cache-Control', 'Vercel-CDN-Cache-Control']) response.setHeader(name, 'no-store');
+    for (const name of ['Cache-Control', 'CDN-Cache-Control']) response.setHeader(name, 'no-store');
     response.setHeader('X-Content-Type-Options', 'nosniff');
     response.setHeader('Referrer-Policy', 'no-referrer');
     response.setHeader('Allow', 'GET');
     const reject = (status, code) => { response.statusCode = status; response.end(request.method === 'HEAD' ? undefined : JSON.stringify({schema, status: 'unavailable', error: {code}})); };
     if (request.method !== 'GET') return reject(405, 'METHOD_NOT_ALLOWED');
-    // This read-only endpoint consumes no caller input. Vercel's rewrite/function
-    // transport can decorate the internal URL and request object, so treating
-    // transport metadata as caller input causes false rejections. Ignore all
+    // This read-only endpoint consumes no caller input. Hosting transports may
+    // decorate the internal URL and request object, so treating transport metadata
+    // as caller input causes false rejections. Ignore all
     // query/body/framing data and derive the response only from the observation.
     try {
       // Coalesce simultaneous public reads; never retain a completed estimate.

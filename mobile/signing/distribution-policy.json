@@ -6,7 +6,9 @@
     "L2",
     "L3",
     "L4",
-    "L5"
+    "L5",
+    "L6",
+    "L7"
   ],
   "packageIdentity": "xyz.numinalabs.app",
   "rootIdentity": "/identity.json",
@@ -29,14 +31,9 @@
       "provider": "NUMINA",
       "origin": "https://numinalabs.xyz",
       "role": "public_origin"
-    },
-    {
-      "provider": "Vercel",
-      "origin": "https://numina-production.vercel.app",
-      "role": "legacy_transport_substrate"
     }
   ],
-  "scope": "One shared distribution policy across five architecture layers. An Apple Team ID is issued by Apple and is separate from the Numina authority root.",
+  "scope": "One shared final frontier distribution policy across L1-L7. An Apple Team ID is issued by Apple and is separate from the Numina identity.",
   "distributionTeam": {
     "name": "Numina",
     "authority": "NUMINA",
@@ -53,5 +50,18 @@
     "token": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
     "settlement": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"
   },
-  "publicOrigin": "https://numinalabs.xyz"
+  "publicOrigin": "https://numinalabs.xyz",
+  "frontierEnvironment": "FRONTIER",
+  "layerEnvironments": {
+    "L1": "FRONTIER",
+    "L2": "FRONTIER",
+    "L3": "FRONTIER",
+    "L4": "FRONTIER",
+    "L5": "FRONTIER",
+    "L6": "FRONTIER",
+    "L7": "FRONTIER"
+  },
+  "finalManifest": "/final-manifest.json",
+  "frontierOnly": true,
+  "futureAdvancementAllowed": true
 }

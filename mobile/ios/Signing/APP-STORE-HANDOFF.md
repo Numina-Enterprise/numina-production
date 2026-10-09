@@ -6,9 +6,9 @@ Status: preparation only; no app record, upload, review approval, or commercial 
 | --- | --- |
 | Organization | SK Consulting LLC; user reported Developer registration complete. Verify actual Apple membership and seller identity. |
 | Bundle | Proposed `xyz.numinalabs.app`; confirm against the actual Apple app record. |
-| Release | Source 4.0.0 build 6. Check Apple build history before upload; do not reuse an uploaded build number. |
-| Runtime | Dependency 1.9.0-rc26, core 1.8.0; not an Apple review status. |
-| Archive | Fresh macOS archive and validation are outstanding. Historical unsigned build 5 is not current source. |
+| Release | Source 4.0.0 build 5. Check Apple build history before upload; do not reuse an uploaded build number. |
+| Runtime | Dependency 1.9.0-rc27, core 1.8.0; not an Apple review status. |
+| Archive | Fresh macOS archive and validation are outstanding. Historical unsigned build 3 is not current source. |
 | Authentication | Hosted sign-in continues in the browser; returning a signed-in session to WKWebView is not implemented. Explain the real behavior to reviewers. |
 | Privacy | Audit native and hosted data flows, including providers. Complete accurate privacy disclosures; do not infer no collection from no native analytics SDK. |
 | Account deletion | Review and implement the applicable in-app deletion flow where account creation is offered. |

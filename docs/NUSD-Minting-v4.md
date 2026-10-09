@@ -24,26 +24,8 @@ A chain observation or matching signature does not establish token receipt capab
 
 Use the [provider confirmation request](/downloads/Provider-Confirmation-Request-v4.md) to collect actual provider balance, allocation and settlement evidence. Owner approval and provider confirmation are recorded separately.
 
-The Numina Native Treasury journal is the software source of truth. The account references remain at `/api/control/v2/treasury/accounts`, and the native journal uses only `/api/control/v1/treasury`. `PREPARE_MINT` records a `PREPARED` request and leaves the native NUSD balance unchanged. It updates the projection's request list and last event ID. Its journal proof confirms that internal record; it is not an on-chain mint receipt.
+The account references remain at `/api/control/v2/treasury/accounts`, and the native journal uses only `/api/control/v1/treasury`. `PREPARE_MINT` records a `PREPARED` request and leaves the native NUSD projection unchanged. Its journal proof confirms that internal record; it is not an on-chain mint receipt.
 
-The existing NUSD native projection, Stripe USDC destination and Bank of America USD account retain their own units and destination references. The declared 1:1 policy does not change a provider balance or make a bank account an EVM address. Treasury writes, token issuance, conversion and external deposits each carry their own execution status and supporting records. Publishing this metadata update does not execute those operations.
+The existing NUSD native projection, Stripe USDC destination and Bank of America USD account retain their own units and destination references. The declared 1:1 policy does not change a provider balance or make a bank account an EVM address. This release performs no treasury write, token issuance, conversion or external deposit.
 
 Current implementation metadata is available at `/api/nusd/v1/mint-workflow`, in `/api/nusd/v1/status`, and in the current application release manifest. The application reports implemented minting separately from confirmed execution.
-
-## Confirmed NUSD constructor mint
-
-Numina's retained [mint receipt](/downloads/nusd/mint-receipt.json) and [deployment verification](/downloads/nusd/deployment-verification.json) record the confirmed constructor mint at **block 51,725**, observed on September 18, 2026.
-
-| Field | Retained receipt value |
-| --- | --- |
-| Mint/deployment block | `51725` |
-| Transaction | `0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b` |
-| NUSD contract | `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` |
-| Chain ID | `962421430` |
-| Receipt status | `0x1` |
-| Constructor issuance | `1,500,000,000,000,000.00 NUSD` (18 decimals) |
-| Recipient | `0x1a45671AE2ee3E52264116151924FAAcb80Fc02E` |
-
-The [settlement contract deployment](/downloads/nusd/deployment-receipt.json) is a separate transaction at block `51726`: `0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b`. That deployment record confirms creation of the settlement contract.
-
-These retained chain records establish the constructor issuance at that observation. Current software balances and requests continue to follow the native journal; the mint receipt does not itself change its NUSD projection. The journal snapshot at revision `142` records a `500,000,000,000,000 NUSD` balance and a separate `PREPARED` mint request. Provider balance, allocation, conversion and external deposit completion require their matching provider and transaction records. Current chain state has not been reverified by this metadata publication.

@@ -14,7 +14,7 @@ module.exports=async function supplyChain(req,res){
   const r=legacy.RELEASE_IDENTITY;
   const evidence={
     valid:true,
-    verification_basis:'pinned rc26 release contract',
+    verification_basis:'pinned rc27 release contract',
     release:r.release,
     production_files_root:r.production_files_root,
     spdx_sbom_sha256:r.spdx_sbom_sha256,

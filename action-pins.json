@@ -28,9 +28,9 @@
     },
     {
       "repository": "actions/attest",
-      "version": "v4.2.1",
-      "sha": "508db95dd578ae2727ebd6217d5ba78e4fbda05d",
-      "source": "https://github.com/actions/attest/commit/508db95dd578ae2727ebd6217d5ba78e4fbda05d"
+      "version": "v4.2.2",
+      "sha": "1e69f48acb82d1966a394da916b4c1698aa569d6",
+      "source": "https://github.com/actions/attest/commit/1e69f48acb82d1966a394da916b4c1698aa569d6"
     }
   ],
   "node": {
@@ -42,5 +42,19 @@
   "builder_workflow_commit": null,
   "hosted_run": null,
   "provenance_identity": "NUMINA",
-  "canonical_repository": "skott34-dot/numina-production"
+  "canonical_repository": "skott34-dot/numina-production",
+  "reference_policy": {
+    "external_actions": "full_40_character_commit_sha_required",
+    "external_reusable_workflows": "full_40_character_commit_sha_required",
+    "local_reusable_workflows": "same_commit_path_only",
+    "hosted_linux_runner": "ubuntu-24.04",
+    "floating_ubuntu_latest": "denied"
+  },
+  "reusable_workflows": [
+    {
+      "workflow": "skott34-dot/numina-builder/.github/workflows/numina-rc26-verifier-builder.yml",
+      "sha": "f85e9428fa8bf0371931429479f31b0348ead454",
+      "source": "https://github.com/skott34-dot/numina-builder/blob/f85e9428fa8bf0371931429479f31b0348ead454/.github/workflows/numina-rc26-verifier-builder.yml"
+    }
+  ]
 }

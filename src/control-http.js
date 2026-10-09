@@ -1,5 +1,3 @@
-import {NUMINA_FINAL_MANIFEST_REFERENCE} from '../public/final-manifest-reference.js';
-import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA,NUMINA_MANIFEST_SCHEMA,NUMINA_DELIVERY_SURFACES,NUMINA_PROVIDER_VERIFICATION,numinaRootProjection} from './numina-root.js';
 import {NUMINA_TREASURY_INITIAL_BALANCE} from './native-treasury-model.js';
@@ -28,6 +26,10 @@ export const GITHUB_OIDC_OWNER_ID='269050000';
 export const GITHUB_OIDC_REF='refs/heads/main';
 export const GITHUB_OIDC_ENVIRONMENT='production';
 export const GITHUB_OIDC_WORKFLOW_REF='skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main';
+export const GITHUB_OIDC_WORKFLOW_REFS=Object.freeze([
+  GITHUB_OIDC_WORKFLOW_REF,
+  'skott34-dot/numina-production/.github/workflows/deploy-nusd-contracts.yml@refs/heads/main'
+]);
 let githubOidcCache={at:0,keys:null};
 function decodeB64Url(value){const normalized=value.replace(/-/g,'+').replace(/_/g,'/');const padded=normalized+'='.repeat((4-normalized.length%4)%4);const raw=atob(padded);return Uint8Array.from(raw,c=>c.charCodeAt(0));}
 function decodeJwtJson(value){return JSON.parse(new TextDecoder().decode(decodeB64Url(value)));}
@@ -48,7 +50,7 @@ export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.fl
     const audience=Array.isArray(claims.aud)?claims.aud:[claims.aud];
     if(claims.iss!==GITHUB_OIDC_ISSUER||!audience.includes(GITHUB_OIDC_AUDIENCE))return false;
     if(String(claims.repository_id)!==GITHUB_OIDC_REPOSITORY_ID||claims.repository!==GITHUB_OIDC_REPOSITORY||String(claims.repository_owner_id)!==GITHUB_OIDC_OWNER_ID)return false;
-    if(claims.ref!==GITHUB_OIDC_REF||claims.environment!==GITHUB_OIDC_ENVIRONMENT||claims.workflow_ref!==GITHUB_OIDC_WORKFLOW_REF)return false;
+    if(claims.ref!==GITHUB_OIDC_REF||claims.environment!==GITHUB_OIDC_ENVIRONMENT||!GITHUB_OIDC_WORKFLOW_REFS.includes(claims.workflow_ref))return false;
     if(!['workflow_dispatch','push'].includes(claims.event_name)||claims.runner_environment!=='github-hosted')return false;
     if(typeof claims.exp!=='number'||typeof claims.iat!=='number'||claims.exp<now-30||claims.iat>now+30||claims.iat<now-900)return false;
     if(typeof claims.nbf==='number'&&claims.nbf>now+30)return false;
@@ -91,25 +93,18 @@ async function readApplicationRelease(req,env){
     const response=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:'GET'}));
     if(!response.ok)return null;
     const value=await response.json();
-    return value?.schema==='numina.application-release.v2'&&value.schema_version===2&&value.singular===true&&
-      value.identity===NUMINA&&value.manifest===NUMINA&&value.product==='Numina'&&
-      value.version===NUMINA_LAYERS.distribution.applicationVersion&&value.release==='numina-v'+value.version&&
-      /^[a-f0-9]{64}$/.test(value.build_id||'')&&value.runtime_dependency?.identity===NUMINA&&
-      typeof value.runtime_dependency.version==='string'&&typeof value.runtime_dependency.release==='string'?value:null;
+    return value?.root===NUMINA&&value?.identity===NUMINA?value:null;
   }catch{return null;}
 }
 async function controlNuminaManifest(req,env){
   const application=await readApplicationRelease(req,env);
   return numinaRootProjection({
     version:CONTROL_VERSION,
-    // Identity aliases are supplied by numinaRootProjection. Repeating them here
-    // would overwrite the explicit mechanics objects below with identity strings.
-    applicationVersion:application?.version??null,
-    applicationRelease:application?.release??null,
-    finalManifestReference:NUMINA_FINAL_MANIFEST_REFERENCE,
+    core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
+    authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
     deployed:true,
     mechanics:{
-      repository:{identity:NUMINA,source:'/NUMINA'},
+      repository:{full_name:GITHUB_OIDC_REPOSITORY,branch:'main'},
       runtime:{version:application?.runtime_dependency?.version??null,release:application?.runtime_dependency?.release??null},
       artifact:{build_id:application?.build_id??null},
       authentication:{primary:'github-actions-oidc',issuer:GITHUB_OIDC_ISSUER,audience:GITHUB_OIDC_AUDIENCE,bounded_bearer_fallback:true,sites_identity:true},
@@ -118,7 +113,7 @@ async function controlNuminaManifest(req,env){
     provider_verification:NUMINA_PROVIDER_VERIFICATION,
     denomination_policy:NUMINA_LAYERS.denomination_policy,
     procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,
-    stateReconciliation:NUMINA_STATE_RECONCILIATION,adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',
+    adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',
     verificationScope:'NUMINA',financialVerification:false,externalExecution:false
   });
 }

@@ -7,24 +7,32 @@ on:
       - '.github/workflows/**'
       - 'config/numina-runners.json'
       - 'scripts/check-runner-policy.mjs'
+      - 'action-pins.json'
+      - 'release-evidence/nusd-runtime-provenance-dispatch.json'
+      - 'release-evidence/treasury-write-dispatch.json'
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/**'
       - 'config/numina-runners.json'
       - 'scripts/check-runner-policy.mjs'
+      - 'action-pins.json'
+      - 'release-evidence/nusd-runtime-provenance-dispatch.json'
+      - 'release-evidence/treasury-write-dispatch.json'
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   verify:
-    runs-on: NUMINA
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
 
       - name: Enforce NUMINA runner policy
         run: node scripts/check-runner-policy.mjs
@@ -33,31 +41,181 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import json
           import re
 
           workflow_dir = Path('.github/workflows')
           sha_ref = re.compile(r'^.+@[0-9a-fA-F]{40}$')
           uses_line = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)')
+          pin_manifest = json.loads(Path('action-pins.json').read_text(encoding='utf-8'))
+          approved_actions = {
+              item['repository']: item['sha'].lower()
+              for item in pin_manifest['actions']
+          }
+          approved_reusable = {
+              item['workflow']: item['sha'].lower()
+              for item in pin_manifest.get('reusable_workflows', [])
+          }
           failures = []
-          checked = []
+          checked_actions = []
+          checked_reusable = []
+          checked_local_reusable = []
 
           for path in sorted(workflow_dir.glob('*.y*ml')):
-              for line_number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), start=1):
+              text = path.read_text(encoding='utf-8')
+              critical = (
+                  'secrets.' in text
+                  or re.search(r'^\s*pull_request:', text, re.MULTILINE)
+                  or re.search(r'^\s+(?:id-token|attestations):\s*write\s*$', text, re.MULTILINE)
+              )
+              for line_number, line in enumerate(text.splitlines(), start=1):
                   match = uses_line.match(line)
                   if not match:
                       continue
                   reference = match.group(1).strip('"\'')
                   if reference.startswith('./'):
+                      if reference.startswith('./.github/workflows/'):
+                          local_path = Path(reference[2:])
+                          checked_local_reusable.append((str(path), line_number, reference))
+                          if not local_path.is_file() or local_path.suffix not in {'.yml', '.yaml'}:
+                              failures.append((str(path), line_number, reference, 'local reusable workflow path missing'))
                       continue
-                  checked.append((str(path), line_number, reference))
+                  is_reusable = '/.github/workflows/' in reference.split('@', 1)[0]
                   if not sha_ref.fullmatch(reference):
-                      failures.append((str(path), line_number, reference))
+                      failures.append((str(path), line_number, reference, 'mutable reusable workflow reference' if is_reusable else 'mutable action reference'))
+                      continue
+                  target, sha = reference.rsplit('@', 1)
+                  if is_reusable:
+                      checked_reusable.append((str(path), line_number, reference))
+                      if target in approved_reusable and sha.lower() != approved_reusable[target]:
+                          failures.append((str(path), line_number, reference, 'not the reviewed reusable-workflow pin'))
+                  else:
+                      checked_actions.append((str(path), line_number, reference))
+                      if critical and target in approved_actions and sha.lower() != approved_actions[target]:
+                          failures.append((str(path), line_number, reference, 'not the reviewed canonical action pin'))
 
           if failures:
-              for path, line_number, reference in failures:
-                  print(f'UNPINNED {path}:{line_number}: {reference}')
-              raise SystemExit(f'{len(failures)} mutable workflow dependency reference(s) found')
+              for path, line_number, reference, reason in failures:
+                  print(f'WORKFLOW_PIN_FAILURE {path}:{line_number}: {reference} ({reason})')
+              raise SystemExit(f'{len(failures)} workflow dependency pin violation(s) found')
 
-          print(f'Validated {len(checked)} immutable external workflow dependency reference(s).')
+          print(f'Validated {len(checked_actions)} immutable external action reference(s), {len(checked_reusable)} immutable remote reusable-workflow reference(s), and {len(checked_local_reusable)} same-commit local reusable-workflow reference(s).')
           PY
 
+
+      - name: Dispatch protected NUSD runtime provenance on explicit marker
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.ref_protected }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          API_URL: ${{ github.api_url }}
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          MARKER: release-evidence/nusd-runtime-provenance-dispatch.json
+        run: |
+          set -euo pipefail
+          [[ "$REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$REPOSITORY_ID" == '1367647143' ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+
+          if ! git diff --name-only "$SOURCE_SHA^1" "$SOURCE_SHA" | grep -Fxq "$MARKER"; then
+            printf 'No NUSD runtime dispatch marker changed in this protected-main commit.\n'
+            exit 0
+          fi
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          marker = json.loads(Path('release-evidence/nusd-runtime-provenance-dispatch.json').read_text())
+          expected = {
+              'schema': 'numina.nusd.runtime-provenance-dispatch.v1',
+              'authorization': 'NUMINA',
+              'targetWorkflow': 'numina-nusd-runtime.yml',
+              'targetRef': 'main',
+              'sourceProtectedRequired': True,
+              'providerExecutionAuthorized': False,
+          }
+          for key, value in expected.items():
+              if marker.get(key) != value:
+                  raise SystemExit(f'Invalid NUSD runtime dispatch marker field: {key}')
+          PY
+
+          response_file="$RUNNER_TEMP/nusd-runtime-dispatch-response.json"
+          http_code="$(curl --silent --show-error             --output "$response_file"             --write-out '%{http_code}'             --request POST             --header 'Accept: application/vnd.github+json'             --header "Authorization: Bearer $GITHUB_TOKEN"             --header 'X-GitHub-Api-Version: 2022-11-28'             "$API_URL/repos/$REPOSITORY/actions/workflows/numina-nusd-runtime.yml/dispatches"             --data '{"ref":"main"}')"
+
+          if [[ "$http_code" != '204' ]]; then
+            cat "$response_file" >&2
+            exit 1
+          fi
+          printf 'Dispatched numina-nusd-runtime.yml on protected main.\n'
+
+
+      - name: Dispatch protected NUMINA treasury writes on explicit marker
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.ref_protected }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          API_URL: ${{ github.api_url }}
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+          SOURCE_SHA: ${{ github.sha }}
+          MARKER: release-evidence/treasury-write-dispatch.json
+        run: |
+          set -euo pipefail
+          [[ "$REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$REPOSITORY_ID" == '1367647143' ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+
+          if ! git diff --name-only "$SOURCE_SHA^1" "$SOURCE_SHA" | grep -Fxq "$MARKER"; then
+            printf 'No treasury write dispatch marker changed in this protected-main commit.\n'
+            exit 0
+          fi
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          marker = json.loads(Path('release-evidence/treasury-write-dispatch.json').read_text())
+          expected = {
+              'schema': 'numina.treasury.write-dispatch.v1',
+              'authorization': 'NUMINA',
+              'targetRef': 'main',
+              'sourceProtectedRequired': True,
+              'softwareTreasuryWriteAuthorized': True,
+              'providerExecutionAuthorized': False,
+              'externalFundsMovementAuthorized': False,
+          }
+          for key, value in expected.items():
+              if marker.get(key) != value:
+                  raise SystemExit(f'Invalid NUMINA treasury dispatch marker field: {key}')
+          if marker.get('targetWorkflows') != [
+              'align-native-treasury-500t.yml',
+              'initiate-treasury-aggregate-model.yml',
+          ]:
+              raise SystemExit('Invalid NUMINA treasury target workflow set')
+          if marker.get('treasuryModel') != {
+              'USD': '500000000000000',
+              'USDC': '500000000000000',
+              'NUSD': '500000000000000',
+              'aggregateNUSD': '1500000000000000',
+          }:
+              raise SystemExit('Invalid NUMINA treasury model in dispatch marker')
+          PY
+
+          for workflow in align-native-treasury-500t.yml initiate-treasury-aggregate-model.yml; do
+            response_file="$RUNNER_TEMP/${workflow%.yml}-dispatch-response.json"
+            http_code="$(curl --silent --show-error \
+              --output "$response_file" \
+              --write-out '%{http_code}' \
+              --request POST \
+              --header 'Accept: application/vnd.github+json' \
+              --header "Authorization: Bearer $GITHUB_TOKEN" \
+              --header 'X-GitHub-Api-Version: 2022-11-28' \
+              "$API_URL/repos/$REPOSITORY/actions/workflows/$workflow/dispatches" \
+              --data '{"ref":"main"}')"
+            if [[ "$http_code" != '204' ]]; then
+              cat "$response_file" >&2
+              exit 1
+            fi
+            printf 'Dispatched %s on protected main.\n' "$workflow"
+          done

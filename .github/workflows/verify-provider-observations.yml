@@ -7,31 +7,41 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '.github/**'
 
 permissions:
   contents: read
-  id-token: write
 
 concurrency:
-  group: verify-provider-observations
+  group: verify-provider-observations-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
     timeout-minutes: 9
+    # Release assets are the durable path; no Actions write or OIDC permission is needed.
+    permissions:
+      contents: write
     env:
+      NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
       NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_PROVIDER_RECORD_PATH: provider-evidence/neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}.json
-      NUMINA_PROVIDER_INGEST_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_ingest_provider_evidence
-      NUMINA_TRUSTED_RELEASE_URL: https://ep-wild-mud-au2cn33z.apirest.c-10.us-east-1.aws.neon.tech/numina/rest/v1/rpc/numina_mark_trusted_production_release
+      NUMINA_PROVIDER_RECORD_PATH: provider-evidence/native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-source-release-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_PUBLICATION_RECEIPT_PATH: provider-evidence/publication-receipt-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_TRUSTED_PUBLICATION_RECEIPT_PATH: provider-evidence/trusted-publication-receipt-${{ github.run_id }}-${{ github.run_attempt }}.json
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
           persist-credentials: false
+      - name: Verify hosted runner and exact triggering source
+        shell: bash
+        run: |
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf 'source_commit=%s\nrunner_environment=%s\nrunner_name=%s\n' "$GITHUB_SHA" "$RUNNER_ENVIRONMENT" "$RUNNER_NAME"
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
@@ -39,96 +49,84 @@ jobs:
         run: node --test tests/provider-observations.test.mjs
       - name: Verify governed Arc provider submitter contract
         run: node --test tests/provider-submitter.test.mjs
-      - name: Verify durable evidence ingress rejects bypasses
-        run: |
-          set -euo pipefail
-          base="${NUMINA_PROVIDER_INGEST_URL%/rpc/numina_ingest_provider_evidence}"
-          noauth_code="$(curl --silent --show-error --output /tmp/numina-noauth.json --write-out '%{http_code}' --request POST --header 'Content-Type: application/json' --data '{"manifest":{}}' "${NUMINA_PROVIDER_INGEST_URL}")"
-          if [[ "${noauth_code}" =~ ^2 ]]; then cat /tmp/numina-noauth.json; exit 1; fi
-          wrong_oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence-negative")"
-          wrong_oidc_token="$(OIDC_JSON="$wrong_oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          wrong_audience_code="$(curl --silent --show-error --output /tmp/numina-wrong-aud.json --write-out '%{http_code}' --request POST --header "Authorization: Bearer ${wrong_oidc_token}" --header 'Content-Type: application/json' --data '{"manifest":{}}' "${NUMINA_PROVIDER_INGEST_URL}")"
-          if [[ "${wrong_audience_code}" =~ ^2 ]]; then cat /tmp/numina-wrong-aud.json; exit 1; fi
-          valid_oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
-          valid_oidc_token="$(OIDC_JSON="$valid_oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          direct_table_code="$(curl --silent --show-error --output /tmp/numina-direct-table.json --write-out '%{http_code}' --header "Authorization: Bearer ${valid_oidc_token}" --header 'Accept: application/json' "${base}/numina_evidence_records?select=record_id&limit=1")"
-          if [[ "${direct_table_code}" =~ ^2 ]]; then cat /tmp/numina-direct-table.json; exit 1; fi
-          echo "Ingress boundary held: no-auth=${noauth_code}, wrong-audience=${wrong_audience_code}, direct-table=${direct_table_code}"
-      - name: Wait for pushed commit and verify live provider observations
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
-        run: |
-          attempts=24
-          for attempt in $(seq 1 "$attempts"); do
-            echo "Provider observation attempt ${attempt}/${attempts} for ${NUMINA_EXPECTED_GIT_SHA}"
-            if node scripts/smoke-provider-observations.mjs; then exit 0; fi
-            if [ "$attempt" -eq "$attempts" ]; then exit 1; fi
-            sleep 10
-          done
-      - name: Verify current live provider observations
-        if: github.event_name != 'push'
+      - name: Verify evidence persistence failure contracts
+        run: node --test tests/provider-evidence-record.test.mjs tests/github-evidence-release.test.mjs
+      - name: Observe current providers from GitHub-bound source
+        id: observe
         run: node scripts/smoke-provider-observations.mjs
-      - name: Archive signed provider evidence
+      - name: Archive provider evidence
         id: archive
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: numina-provider-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.NUMINA_PROVIDER_EVIDENCE_PATH }}
           if-no-files-found: error
-          retention-days: 90
+          retention-days: 7
           compression-level: 0
-      - name: Build canonical Neon-ready evidence record
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+      - name: Build canonical NUMINA-native evidence record
+        id: record
+        # Explicitly depend on valid observations, never on optional Actions storage.
+        if: ${{ !cancelled() && steps.observe.outcome == 'success' }}
         env:
+          NUMINA_ARCHIVE_OUTCOME: ${{ steps.archive.outcome }}
           NUMINA_ARCHIVE_ARTIFACT_NAME: numina-provider-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           NUMINA_ARCHIVE_ARTIFACT_ID: ${{ steps.archive.outputs.artifact-id }}
           NUMINA_ARCHIVE_ARTIFACT_DIGEST: ${{ steps.archive.outputs.artifact-digest }}
         run: node scripts/build-provider-evidence-record.mjs
-      - name: Archive canonical Neon-ready evidence record
-        if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+      - name: Archive canonical NUMINA-native evidence record
+        id: record_archive
+        if: ${{ !cancelled() && steps.record.outcome == 'success' }}
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: numina-neon-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}
+          name: numina-native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.NUMINA_PROVIDER_RECORD_PATH }}
           if-no-files-found: error
-          retention-days: 90
+          retention-days: 7
           compression-level: 0
-      - name: Persist and verify canonical provider evidence
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
-          oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          payload="$(RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node -e "const fs=require('fs');const manifest=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));process.stdout.write(JSON.stringify({manifest}))")"
-          response="$(curl --silent --show-error --request POST --header "Authorization: Bearer ${oidc_token}" --header 'Content-Type: application/json' --header 'Accept: application/json' --data-binary "$payload" "${NUMINA_PROVIDER_INGEST_URL}")"
-          RESPONSE="$response" RECORD_PATH="$NUMINA_PROVIDER_RECORD_PATH" node <<'NODE'
-          const fs=require('fs'),expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));let observed;try{observed=JSON.parse(process.env.RESPONSE);}catch{process.exit(1);}function fail(m){console.error(m,observed);process.exit(1);}if(observed.code||observed.error)fail('provider evidence ingest rejected request');if(observed.committed!==true||observed.read_back!==true)fail('durable provider evidence commit/readback failed');if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('durable provider evidence identity mismatch');if(observed.git_commit_sha!==expected.artifact_json.source_commit||observed.deployment_id!==expected.artifact_json.transport.observation.deployment_id)fail('durable provider evidence provenance mismatch');if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('durable provider status mismatch');if(observed.archive_digest!==expected.artifact_json.archive.digest)fail('durable provider archive digest mismatch');if(observed.external_execution_performed!==false||observed.partnership_status!=='asserted'||observed.credentialed!==false)fail('durable provider boundary mismatch');console.log(JSON.stringify(observed,null,2));
-          NODE
-      - name: Verify signed runtime readiness and durable evidence before trusting release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: node scripts/check-runtime.mjs
-      - name: Build trusted production release gate
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Publish and read back canonical provider evidence from GitHub Release
+        id: publication
+        # All supported main events, including schedule and workflow_dispatch, publish.
+        if: ${{ !cancelled() && steps.record.outcome == 'success' }}
         env:
-          NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
-        run: node scripts/build-trusted-production-release.mjs
-      - name: Archive trusted production release gate
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node scripts/publish-github-evidence.mjs "$NUMINA_PROVIDER_EVIDENCE_PATH" "$NUMINA_PROVIDER_RECORD_PATH" | tee "$NUMINA_PUBLICATION_RECEIPT_PATH"
+      - name: Verify current Numina source before trusting release
+        id: source
+        if: steps.publication.outcome == 'success' && github.event_name != 'schedule'
+        shell: bash
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+          npm run build
+          npm test
+          echo "NUMINA_ROOT_VERIFIED=true" >> "$GITHUB_ENV"
+      - name: Build trusted source release gate
+        id: trusted
+        if: steps.source.outcome == 'success'
+        run: node scripts/build-trusted-source-release.mjs
+      - name: Archive trusted source release gate
+        id: trusted_archive
+        if: steps.trusted.outcome == 'success'
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: numina-trusted-production-release-${{ github.run_id }}-${{ github.run_attempt }}
+          name: numina-trusted-source-release-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.NUMINA_TRUSTED_RELEASE_PATH }}
           if-no-files-found: error
-          retention-days: 90
+          retention-days: 7
           compression-level: 0
-      - name: Persist and verify trusted production release gate
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          oidc_json="$(curl --fail --silent --show-error -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=numina-provider-evidence")"
-          oidc_token="$(OIDC_JSON="$oidc_json" node -e "const x=JSON.parse(process.env.OIDC_JSON);if(!x.value)process.exit(2);process.stdout.write(x.value)")"
-          payload="$(RECORD_PATH="$NUMINA_TRUSTED_RELEASE_PATH" node -e "const fs=require('fs');const manifest=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));process.stdout.write(JSON.stringify({manifest}))")"
-          response="$(curl --silent --show-error --request POST --header "Authorization: Bearer ${oidc_token}" --header 'Content-Type: application/json' --header 'Accept: application/json' --data-binary "$payload" "${NUMINA_TRUSTED_RELEASE_URL}")"
-          RESPONSE="$response" RECORD_PATH="$NUMINA_TRUSTED_RELEASE_PATH" node <<'NODE'
-          const fs=require('fs'),expected=JSON.parse(fs.readFileSync(process.env.RECORD_PATH,'utf8'));let observed;try{observed=JSON.parse(process.env.RESPONSE);}catch{process.exit(1);}function fail(m){console.error(m,observed);process.exit(1);}if(observed.code||observed.error)fail('trusted release ingest rejected request');if(observed.committed!==true||observed.read_back!==true)fail('trusted release commit/readback failed');if(observed.record_id!==expected.record_id||observed.artifact_root!==expected.artifact_root)fail('trusted release record mismatch');if(observed.git_commit_sha!==expected.artifact_json.source_commit||observed.deployment_id!==expected.artifact_json.transport.observation.deployment_id)fail('trusted release provenance mismatch');if(observed.provider_evidence_record_id!==expected.artifact_json.provider_evidence.record_id||observed.provider_artifact_root!==expected.artifact_json.provider_evidence.artifact_root||observed.archive_digest!==expected.artifact_json.provider_evidence.archive_digest)fail('trusted release provider binding mismatch');if(observed.provider_status!=='HEALTHY'||observed.circle_message!=='pong'||observed.arc_chain_id!==5042002)fail('trusted release provider status mismatch');if(observed.external_execution_performed!==false||observed.partnership_status!=='asserted'||observed.credentialed!==false||observed.execution_authorization_bounded!==true||observed.live_submission_enabled!==true||observed.live_submission_provider!=='arc'||observed.owner_authorization_required!==true||observed.pre_signed_payload_required!==true)fail('trusted release bounded execution mismatch');console.log(JSON.stringify(observed,null,2));
-          NODE
+      - name: Publish and read back trusted source release from GitHub Release
+        id: trusted_publication
+        if: ${{ !cancelled() && steps.trusted.outcome == 'success' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node scripts/publish-github-evidence.mjs "$NUMINA_TRUSTED_RELEASE_PATH" | tee "$NUMINA_TRUSTED_PUBLICATION_RECEIPT_PATH"
+      - name: Report evidence persistence receipts
+        if: always()
+        env:
+          EVIDENCE_STEPS: ${{ toJSON(steps) }}
+        run: node scripts/report-provider-evidence.mjs

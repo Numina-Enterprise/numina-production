@@ -2,7 +2,7 @@
 
 Business, integration and support inquiries: [skott34@numinalabs.xyz](mailto:skott34@numinalabs.xyz). Scope work through [Numina services](https://numinalabs.xyz/services) and track accepted requests in [Numina OS](https://numinalabs.xyz/app#service-work).
 
-JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 4.0** through [its application manifest](https://numinalabs.xyz/v4/release/manifest). The application and kit have separate artifact identities. The application's **rc26 runtime dependency** and historical rc20 evidence retain their original versions.
+JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 4.0** through [its application manifest](https://numinalabs.xyz/v4/release/manifest). The application and kit have separate artifact identities. The application's **rc27 runtime dependency** and historical rc20 evidence retain their original versions.
 
 This archive is an integration deliverable. It does not install itself into provider accounts, create a hosted MCP endpoint or establish compatibility with every LLM.
 
@@ -50,7 +50,7 @@ The low-level `openAIChatTools()` and `openAIResponsesTools()` retain their earl
 
 The `numina_runtime_build` tool reads `execution_runtime_build` from the existing application manifest. It preserves source and builder revisions, artifact hashes, proof links and financial-status source labels. Revision `root-readiness-v2.0.0` also includes `nusd_transaction_receipts` and `nusd_activation_readiness` when the root manifest supplies them. Missing fields stay omitted. These are server-reported records, with no independent receipt or readiness verification by the client; a recorded claim or empty slot does not prove deployment, backing or settlement.
 
-The runtime-build tool performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc26 control-plane runtime and separately built Linux execution image retain their separate identities. Discovery does not install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
+The runtime-build tool performs no independent signature check and does not follow evidence links or read external financial accounts. `numina_read_treasury` reads the owner-authenticated Numina-native projection. The application, rc27 control-plane runtime and separately built Linux execution image retain their separate identities. Discovery does not install the kit in provider products, enable transactions or change a financial status. See [EVIDENCE.md](EVIDENCE.md) for the recorded runtime build and verification procedure.
 
 ## Provider route observations
 
@@ -60,7 +60,7 @@ Public network and runtime-build discovery retain the optional `provider_routing
 
 ## NVIDIA NIM
 
-The host adapter in [examples/nvidia-nim.mjs](examples/nvidia-nim.mjs) uses the existing Chat Completions protocol and the shared rc26 identity. [NVIDIA setup](examples/NVIDIA.md) includes Windows/WSL container bootstrap stages and the Numina GeForce RTX provider policy. Device enrollment, model compatibility, registry access, live inference and public-service entitlement require separate verification; the downloadable configuration does not establish them.
+The host adapter in [examples/nvidia-nim.mjs](examples/nvidia-nim.mjs) uses the existing Chat Completions protocol and the shared rc27 identity. [NVIDIA setup](examples/NVIDIA.md) includes Windows/WSL container bootstrap stages and the Numina GeForce RTX provider policy. Device enrollment, model compatibility, registry access, live inference and public-service entitlement require separate verification; the downloadable configuration does not establish them.
 
 ## Package status
 
@@ -68,7 +68,7 @@ Packaging does not run tests; validation runs separately in the repository test 
 
 See [COMPATIBILITY.md](COMPATIBILITY.md) for supported formats and official references, [API-CONTRACT.md](API-CONTRACT.md) for exact routes, and [SECURITY.md](SECURITY.md) for credential and activation boundaries. No account installation, registry publication, provider API call, new token or financial transaction was performed by this package update.
 
-## rc26 singularity alignment
+## rc27 singularity alignment
 
 The signed core/root binding is available at `/v1/release/core-binding`. Owner-authenticated evidence revocation is restored at `POST /v1/evidence/revoke`; it marks an existing record revoked while retaining its artifact and first signed revocation receipt. This kit does not invoke that route automatically.
 
@@ -76,8 +76,4 @@ Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks c
 
 ## Procurement usage
 
-Procurement is disabled by default (`procurement_usage: false`, `automaticPurchasing: false`). The current policy at https://numinalabs.xyz/procurement-policy.js permits only a projection of explicit direct-partnership requests with matching owner or owner-delegated signed approval, budget reservation, and provider access. Completed usage requires an exact signed provider receipt. Historical statements and usage flags do not authorize purchases. The evaluator performs no execution; manual provider workflows must revalidate authority and claim budget atomically.
-
-## Terms, privacy, licenses and legal coverage
-
-Read [Terms](https://numinalabs.xyz/terms), [Privacy](https://numinalabs.xyz/privacy), [software licenses](https://numinalabs.xyz/software-licenses) and [global legal coverage](https://numinalabs.xyz/compliance). The public [coverage manifest](https://numinalabs.xyz/api/app/v1/legal-manifest) and [country inventory](https://numinalabs.xyz/api/app/v1/country-readiness) identify the shared review record. `legal/manifest.json` binds the included policy, coverage and notice snapshots by file hash. Countries and territories listed for intake are not approved deployments. These source companions do not establish native compilation, installation, privacy-flow review, marketplace acceptance or financial activation; the actual distributed binary and activity require their own evidence.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

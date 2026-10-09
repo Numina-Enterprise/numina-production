@@ -1,10 +1,9 @@
-import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
 import {validateConnectionManifest} from '../public/connection-model.js';
 
 export async function readConnectionManifest(req,env){
   const response=await env.ASSETS.fetch(new Request(new URL('/security-surfaces.json',req.url),{method:'GET'}));
   if(!response.ok)throw Error('CONNECTION_MANIFEST_UNAVAILABLE');
-  return {...validateConnectionManifest(await response.json()),legal:NUMINA_LEGAL_DISCOVERY};
+  return validateConnectionManifest(await response.json());
 }
 export async function connectionsHttp(req,env){
   const headers={'Content-Type':'application/json','Cache-Control':'no-store'};

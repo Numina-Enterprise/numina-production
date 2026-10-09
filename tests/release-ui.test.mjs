@@ -41,7 +41,7 @@ function renderApplicationRequirements(data){
   const nodes=new Map();
   const element=()=>({textContent:'',children:[],replaceChildren(...children){this.children=children;}});
   const document={querySelectorAll(selector){if(!nodes.has(selector))nodes.set(selector,element());return [nodes.get(selector)];},createElement:element};
-  const script=readFileSync(new URL('../public/application-release-ui.js',import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
+  const script=readFileSync(new URL('../public/application-release-ui.js',import.meta.url),'utf8').replace(/^export /gm,'');
   const context=vm.createContext({document});
   vm.runInContext(script.slice(0,script.indexOf('async function refreshApplicationRelease(){'))+'\nglobalThis.render=renderReleaseRequirements;',context);
   context.render(data);
@@ -71,6 +71,6 @@ test('application release UI handles absent and partial historical publication e
   assert.equal(absent('[data-application-funding-record]'),'No historical funding-plan record included');
   const partial=renderApplicationRequirements({recorded_release_evidence:{website:{status:'succeeded',version:42}}});
   assert.match(partial('[data-application-production-record]'),/^Historical publication record/);
-  assert.match(partial('[data-application-production-record]'),/Vercel Not reported/);
+  assert.match(partial('[data-application-production-record]'),/Runtime Not reported/);
   assert.doesNotMatch(partial('[data-application-production-record]'),/undefined/);
 });

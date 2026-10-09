@@ -159,7 +159,7 @@
   ],
   "connections": {
     "workspace": "/connections",
-    "manifest": "/api/connections/v1/manifest",
+    "manifest": "NUMINA",
     "mode": "browser_session_read_checks",
     "automaticFinancialOperations": false,
     "reportIncludesPrivateResponseBodies": false

@@ -17,7 +17,7 @@ The icon is the current application icon. The feature graphic extends existing N
 
 1. Enable **Allow access to file URLs** in the ChatGPT Chrome extension's Details page if using its supported file chooser. The owner must change this setting; automated access to Chrome settings was blocked. Alternatively, the owner can upload these files directly in Console.
 2. Open the existing Numina app's English (United States) default listing. Add the icon, feature graphic and both phone screenshots to their corresponding fields, then save the listing. Retain the existing 18+ notice and accurate descriptions.
-3. Compile and sign current 4.0.0/code 4 source with the existing upload identity, verify its artifact hash and version against the release record, and check existing Play build history before uploading it to the existing Alpha draft. The [recorded signed 4.0.0/code 3 AAB](../../../docs/numina-4.0.0-upload-signed.aab) is historical; its original hash remains pinned in the manifest. Preserve the package and signing identity.
+3. Open the existing Alpha draft and upload [the signed 4.0.0/code 3 AAB](../../../docs/numina-4.0.0-upload-signed.aab). Its hash is pinned in the manifest. Preserve the existing package and signing identity.
 4. Wait for Play processing and record actual SDK, signature, bundle and listing validation results. Do not infer acceptance from a local hash check.
 5. Resolve all declarations and review errors with supporting evidence before submitting. Store approval, publication and device testing require their own observed results.
 

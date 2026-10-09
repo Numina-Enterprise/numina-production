@@ -17,8 +17,8 @@
   "adminDelaySeconds": 86400,
   "issuer": {
     "legalEntity": "SK Consulting LLC",
-    "approvedPolicyFile": "policies/issuer-policy-1500t-18d.json",
-    "policySha256": "2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5"
+    "approvedPolicyFile": "policies/issuer-policy-1500t-6d.json",
+    "policySha256": "fae9787b5a9890b7c7aa668ab0c989a1224d1d37692cd1aecf4de98841c2d6d2"
   },
   "reviewRecords": {
     "independentSecurityAudit": "Outstanding: independent security audit not completed; owner authorized deployment with this risk recorded.",

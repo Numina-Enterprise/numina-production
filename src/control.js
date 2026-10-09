@@ -1,6 +1,6 @@
 // NUMINA manifest reducer mechanics. No separate state identity, network effects, or device-local authority.
 import {reduceTreasuryProjection} from './native-treasury-model.js';
-import {reduceFrontier,frontierState} from './frontier.js';
+import {reduceFrontier,frontierManifestView} from './frontier.js';
 export const CONTROL_VERSION = '1.0.0';
 export const CONTROL_SCOPES = ['request.create','evidence.attest','evidence.resolve','record.write','authority.delegate'];
 export const CONTROL_ADAPTER = {id:'internal.record.v1',version:1,action:'record.write',externalExecution:false};
@@ -100,7 +100,7 @@ export async function reduceControl(current,command,actor,revision,now) {
   }else if(command.type==='delegate'){
     controlExact(data,['id','parent','subject','scopes','resourcePrefix','expiresAt']);const parent=manifest.grants.find(g=>g.id===data.parent);
     demand(parent&&parent.subject===actor&&grantValid(manifest,parent,now)&&parent.scopes.includes('authority.delegate'),'AUTHORITY_DENIED',403);
-    demand(textField(data.id,100)&&!manifest.grants.some(g=>g.id===data.id),'GRANT_ID_CONFLICT');demand(textField(data.subject,254)&&(/^email:[^\s@]+@[^\s@]+$/.test(data.subject)||frontierState(manifest).principals.some(p=>p.id===data.subject&&!p.revoked)),'INVALID_SUBJECT');
+    demand(textField(data.id,100)&&!manifest.grants.some(g=>g.id===data.id),'GRANT_ID_CONFLICT');demand(textField(data.subject,254)&&(/^email:[^\s@]+@[^\s@]+$/.test(data.subject)||frontierManifestView(manifest).principals.some(p=>p.id===data.subject&&!p.revoked)),'INVALID_SUBJECT');
     demand(Array.isArray(data.scopes)&&data.scopes.length>0&&new Set(data.scopes).size===data.scopes.length&&data.scopes.every(s=>parent.scopes.includes(s)),'AUTHORITY_BROADENING');
     demand(textField(data.resourcePrefix,160)&&prefixWithin(data.resourcePrefix,parent.resourcePrefix),'AUTHORITY_BROADENING');
     demand(Number.isSafeInteger(data.expiresAt)&&data.expiresAt>now&&data.expiresAt<=parent.expiresAt&&data.expiresAt<=now+2592000,'AUTHORITY_BROADENING');

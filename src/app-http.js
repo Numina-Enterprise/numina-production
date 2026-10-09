@@ -1,8 +1,5 @@
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
-import {APP_VERSION,APP_LEGAL_POLICY,APP_OFFERS,appFail,appDigest,appText,appIntake,appPaymentSummary,appTransition,appVerifyStripe} from './app-core.js';
-export function appPaymentConfirmationConfigured(secret,expectedAccount){
- return typeof secret==='string'&&secret.length>0&&typeof expectedAccount==='string'&&/^acct_[A-Za-z0-9]{8,100}$/.test(expectedAccount);
-}
+import {APP_VERSION,APP_OFFERS,appFail,appDigest,appText,appIntake,appPaymentSummary,appTransition,appVerifyStripe} from './app-core.js';
 function appResponse(value,status=200,headers={}){return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Vary':'Cookie','X-Numina-App-Version':APP_VERSION,...headers}});}
 async function appReadRaw(req,max=16384){
  if(req.headers.get('content-type')?.split(';')[0].trim()!=='application/json'||req.headers.has('content-encoding'))appFail('JSON_REQUIRED',415);
@@ -21,9 +18,7 @@ async function appOrder(db,id,actor){const row=await db.prepare('SELECT * FROM n
 async function appOrderPayment(db,id){const payments=(await db.prepare('SELECT * FROM numina_app_payments WHERE order_id=? ORDER BY session_id').bind(id).all()).results;const facts=(await db.prepare('SELECT f.* FROM numina_app_payment_facts f JOIN numina_app_payments p ON p.payment_intent=f.payment_intent WHERE p.order_id=?').bind(id).all()).results;return appPaymentSummary(payments,facts);}
 async function appOrderView(db,row,actor){return {isOwner:row.owner_subject===actor.id,id:row.id,title:row.title,service:row.service,requestOnly:!!APP_OFFERS[row.service]?.requestOnly,brief:row.brief,successCriteria:row.success_criteria,country:row.country,status:row.status,revision:row.revision,createdAt:row.created_at,updatedAt:row.updated_at,customerEmail:row.owner_email,payment:APP_OFFERS[row.service]?.requestOnly?{status:'not_available',gross:null,refunded:null,netBeforeFees:null,currency:'nusd',duplicatePayment:false,disputed:false,confirmedBy:null}:await appOrderPayment(db,row.id)};}
 async function appWebhook(req,env){
- if(!appPaymentConfirmationConfigured(env.NUMINA_STRIPE_WEBHOOK_SECRET,env.NUMINA_STRIPE_TREASURY_ACCOUNT))appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);
  const raw=await appReadRaw(req,262144),event=await appVerifyStripe(raw,req.headers.get('stripe-signature'),env.NUMINA_STRIPE_WEBHOOK_SECRET);const obj=event.data.object,hash=await appDigest(raw),now=Math.floor(Date.now()/1000);
- if(event.account&&event.account!==env.NUMINA_STRIPE_TREASURY_ACCOUNT)appFail('WRONG_STRIPE_ACCOUNT');
  const existing=await env.DB.prepare('SELECT body_hash FROM numina_app_webhook_events WHERE id=?').bind(event.id).first();if(existing){if(existing.body_hash!==hash)appFail('EVENT_ID_CONFLICT',409);return appResponse({received:true,replayed:true});}
  const statements=[];let matched=false;
  if(['checkout.session.completed','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed','checkout.session.expired'].includes(event.type)){
@@ -57,8 +52,8 @@ export async function appHttp(req,env){
  try{
   if(path==='/api/app/v1/stripe-webhook'){if(req.method!=='POST')return appResponse({error:'METHOD_NOT_ALLOWED'},405,{Allow:'POST'});return await appWebhook(req,env);}
   if(!['GET','POST'].includes(req.method))return appResponse({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, POST'});
-  if(path==='/api/app/v1/health'&&req.method==='GET'){const row=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders WHERE id=?').bind('__readiness__').first();return appResponse({status:row?'ready':'unavailable',storage:'D1',version:APP_VERSION,paymentConfirmation:appPaymentConfirmationConfigured(env.NUMINA_STRIPE_WEBHOOK_SECRET,env.NUMINA_STRIPE_TREASURY_ACCOUNT)?'configured':'not_configured',stablecoinExecution:false});}
-  if(path==='/api/app/v1/catalog'&&req.method==='GET')return appResponse({legalPolicy:APP_LEGAL_POLICY,denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,offers:Object.fromEntries(Object.entries(APP_OFFERS).filter(([,offer])=>!offer.retired)),operator:'SK Consulting LLC',initialCheckoutCountry:'US',internationalRequests:'review_before_checkout',internationalCheckout:'unavailable_pending_country_activity_approval',countryApprovalEvidenceImplemented:false,scopeTerms:'Payment reserves the service. Scope, scheduling, authorized access and confidentiality must be confirmed before work begins. Production implementation and third-party costs are excluded unless separately agreed. If Numina cannot accept the engagement, payment will be refunded.'});
+  if(path==='/api/app/v1/health'&&req.method==='GET'){const row=await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders WHERE id=?').bind('__readiness__').first();return appResponse({status:row?'ready':'unavailable',storage:'D1',version:APP_VERSION,paymentConfirmation:env.NUMINA_STRIPE_WEBHOOK_SECRET?'configured':'not_configured',stablecoinExecution:false});}
+  if(path==='/api/app/v1/catalog'&&req.method==='GET')return appResponse({denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,offers:Object.fromEntries(Object.entries(APP_OFFERS).filter(([,offer])=>!offer.retired)),operator:'SK Consulting LLC',initialCheckoutCountry:'US',internationalRequests:'review_before_checkout',scopeTerms:'Payment reserves the service. Scope, scheduling, authorized access and confidentiality must be confirmed before work begins. Production implementation and third-party costs are excluded unless separately agreed. If Numina cannot accept the engagement, payment will be refunded.'});
   const actor=await appActor(req,env);
   if(path==='/api/app/v1/session'&&req.method==='GET')return appResponse({email:actor.email,operator:actor.operator,...(actor.reviewer?{reviewer:true,scope:'production-own-records'}:{})});
   await appRate(env.DB,await appDigest(actor.id+':'+req.method),req.method==='POST'?40:120,now);
@@ -69,7 +64,7 @@ export async function appHttp(req,env){
    const old=await env.DB.prepare('SELECT * FROM numina_service_orders WHERE owner_subject=? AND mutation_id=?').bind(actor.id,body.idempotencyKey).first();if(old){if(old.payload_hash!==payloadHash)appFail('IDEMPOTENCY_CONFLICT',409);return appResponse({order:await appOrderView(env.DB,old,actor),replayed:true});}
    if(count.n>=50)appFail('OPEN_REQUEST_LIMIT',429);
    const id='n_'+crypto.randomUUID();await env.DB.batch([
-    env.DB.prepare("INSERT INTO numina_service_orders (id,owner_subject,owner_email,service,title,brief,success_criteria,country,status,revision,created_at,updated_at,mutation_id,payload_hash,consent_version) SELECT ?,?,?,?,?,?,?,?,'submitted',0,?,?,?,?,? WHERE (SELECT COUNT(*) FROM numina_service_orders WHERE owner_subject=? AND status NOT IN ('complete','cancelled','declined'))<50 ON CONFLICT(owner_subject,mutation_id) DO NOTHING").bind(id,actor.id,actor.email,body.service,body.title,body.brief,body.successCriteria,body.country,now,now,body.idempotencyKey,payloadHash,body.consentVersion,actor.id),
+    env.DB.prepare("INSERT INTO numina_service_orders (id,owner_subject,owner_email,service,title,brief,success_criteria,country,status,revision,created_at,updated_at,mutation_id,payload_hash,consent_version) SELECT ?,?,?,?,?,?,?,?,'submitted',0,?,?,?,?,? WHERE (SELECT COUNT(*) FROM numina_service_orders WHERE owner_subject=? AND status NOT IN ('complete','cancelled','declined'))<50 ON CONFLICT(owner_subject,mutation_id) DO NOTHING").bind(id,actor.id,actor.email,body.service,body.title,body.brief,body.successCriteria,body.country,now,now,body.idempotencyKey,payloadHash,APP_VERSION,actor.id),
     env.DB.prepare("INSERT INTO numina_service_order_events (id,order_id,actor,action,note,revision,created_at,mutation_id,command_hash) SELECT ?,id,?,'submitted','Request submitted for scope review.',0,?,?,? FROM numina_service_orders WHERE id=? ON CONFLICT(order_id,revision) DO NOTHING").bind(crypto.randomUUID(),actor.id,now,body.idempotencyKey,payloadHash,id)
    ]);const row=await env.DB.prepare('SELECT * FROM numina_service_orders WHERE owner_subject=? AND mutation_id=?').bind(actor.id,body.idempotencyKey).first();if(!row)appFail('OPEN_REQUEST_LIMIT',429);if(row.payload_hash!==payloadHash)appFail('IDEMPOTENCY_CONFLICT',409);return appResponse({order:await appOrderView(env.DB,row,actor)},201);
   }
@@ -85,11 +80,9 @@ export async function appHttp(req,env){
   if(operation==='checkout'&&req.method==='POST'){
    if(actor.id!==row.owner_subject)appFail('CUSTOMER_CHECKOUT_ONLY',403);
    if(APP_OFFERS[row.service]?.requestOnly)appFail('NUSD_NOT_ACTIVATED',409);
-   if(!appPaymentConfirmationConfigured(env.NUMINA_STRIPE_WEBHOOK_SECRET,env.NUMINA_STRIPE_TREASURY_ACCOUNT))appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);
+   if(!env.NUMINA_STRIPE_WEBHOOK_SECRET)appFail('PAYMENT_CONFIRMATION_UNAVAILABLE',503);
    const payment=await appOrderPayment(env.DB,row.id);if(!['submitted','scoped'].includes(row.status)||payment.status!=='unconfirmed')appFail('CHECKOUT_REVIEW_REQUIRED',409);
-   // Scope review does not constitute country/activity legal clearance.
-   // A server-owned approval workflow is not implemented; foreign checkout stays closed.
-   if(row.country!=='US')appFail('COUNTRY_REVIEW_REQUIRED',409);
+   if(row.country!=='US'&&row.status!=='scoped')appFail('COUNTRY_REVIEW_REQUIRED',409);
    const target=new URL(APP_OFFERS[row.service].url);target.searchParams.set('client_reference_id',row.id);return appResponse({url:target.href,orderId:row.id});
   }
   if(operation==='actions'&&req.method==='POST'){

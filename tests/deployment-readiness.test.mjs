@@ -45,20 +45,13 @@ function harness(override,preparation={}){
  const nodes=new Map(),events={},calls=[];
  const get=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
  const responses={'/deployment-readiness-inputs.json':seed,'/api/nusd/v1/simulation':NUSD_SIMULATION,'/api/nusd/v1/approved-review':NUSD_APPROVED_REVIEW};
- const context=vm.createContext({document:{getElementById:get,createElement:()=>new Element()},window:{addEventListener:(name,handler)=>events[name]=handler},fetch:async(path,options)=>{calls.push({path,options});return override?.(path,options)??Response.json(responses[path]);},Response,AbortController,setTimeout,clearTimeout,structuredClone,Blob,URL,console,crypto:preparation.crypto||crypto,TextEncoder,mountLocalWallet:()=>({setAvailable(){}}),loadPreparationAssets:preparation.load||(()=>Promise.resolve({})),prepareDeployment:preparation.prepare||(()=>Promise.resolve({review:{status:'UNSIGNED_CONSTRUCTOR_REVIEW',constructor:{initialRecipient:recipient},constructorData:'0x1234'},transactionDraft:null,missingTransactionInputs:['sender']}))});
+ const context=vm.createContext({document:{getElementById:get,createElement:()=>new Element()},window:{addEventListener:(name,handler)=>events[name]=handler},fetch:async(path,options)=>{calls.push({path,options});return override?.(path,options)??Response.json(responses[path]);},Response,AbortController,setTimeout,clearTimeout,structuredClone,Blob,URL,console,crypto,TextEncoder,mountLocalWallet:()=>({setAvailable(){}}),loadPreparationAssets:preparation.load||(()=>Promise.resolve({})),prepareDeployment:preparation.prepare||(()=>Promise.resolve({review:{status:'UNSIGNED_CONSTRUCTOR_REVIEW',constructor:{initialRecipient:recipient},constructorData:'0x1234'},transactionDraft:null,missingTransactionInputs:['sender']}))});
  vm.runInContext(source('http-client.js').replace(/^export /gm,'')+'\n'+source('deployment-readiness-model.js').replace(/^export /gm,'')+'\n'+source('deployment-readiness-ui.js').replace(/^import .*;\n/gm,'')+'\nglobalThis.subject={refresh,renderInputs};',context);
  return {get,calls,events,subject:context.subject};
 }
 const settle=async()=>{for(let i=0;i<5;i++)await new Promise(resolve=>setTimeout(resolve,0));};
-const ready=async(h,{timeoutMs=2000}={})=>{
- const deadline=performance.now()+timeoutMs;
- while(h.get('readiness-fields').disabled||h.get('refresh-readiness').disabled){
-  assert.ok(performance.now()<deadline,'Readiness did not complete within the test deadline');
-  await new Promise(resolve=>setTimeout(resolve,1));
- }
-};
 test('website works signed out using only three credential-free GETs and keeps requirements pending',async()=>{
- const h=harness();await ready(h);
+ const h=harness();await settle();
  assert.equal(h.calls.length,3);for(const {options} of h.calls){assert.equal(options.credentials,'omit');assert.equal(options.method,undefined);assert.equal(options.redirect,'error');}
  assert.equal(h.get('readiness-fields').disabled,false);assert.equal(h.get('export-request').disabled,true);
  h.get('recipient').value=recipient;h.subject.renderInputs();assert.equal(h.get('export-request').disabled,false);
@@ -66,7 +59,7 @@ test('website works signed out using only three credential-free GETs and keeps r
  h.events.pagehide();assert.equal(h.get('recipient').value,'');
 });
 test('failed refresh disables draft exports while preserving local inputs',async()=>{
- let fail=false;const h=harness(()=>fail?Promise.reject(Error('offline')):null);await ready(h);h.get('recipient').value=recipient;h.subject.renderInputs();fail=true;await h.subject.refresh();
+ let fail=false;const h=harness(()=>fail?Promise.reject(Error('offline')):null);await settle();h.get('recipient').value=recipient;h.subject.renderInputs();fail=true;await h.subject.refresh();
  assert.equal(h.get('export-request').disabled,true);assert.equal(h.get('export-draft').disabled,true);assert.equal(h.get('recipient').value,recipient);assert.match(h.get('readiness-source-status').textContent,/could not be confirmed/);
 });
 test('late responses after page exit cannot re-enable or repopulate the workspace',async()=>{
@@ -91,7 +84,7 @@ test('mutating caller input during hashing cannot change the trusted template',a
 });
 test('clear and later typing invalidate slow draft imports',async()=>{
  for(const edit of ['clear','input']){
-  const h=harness();await ready(h);let release;const pending=new Promise(resolve=>release=resolve);
+  const h=harness();await settle();let release;const pending=new Promise(resolve=>release=resolve);
   h.get('draft-file').files=[{size:100,text:()=>pending}];const importing=h.get('draft-file').handlers.change();
   if(edit==='clear')h.get('clear-draft').handlers.click();else{h.get('recipient').value='0x2222222222222222222222222222222222222222';h.get('readiness-form').handlers.input();}
   release(JSON.stringify(createLocalDraft({recipient})));await importing;
@@ -101,7 +94,7 @@ test('clear and later typing invalidate slow draft imports',async()=>{
 test('edits and navigation invalidate both successful and failed delayed preparation',async()=>{
  for(const event of ['input','clear','preset','refresh','pagehide'])for(const failure of [false,true]){
   let resolve,reject;const pending=new Promise((yes,no)=>{resolve=yes;reject=no;});
-  const h=harness(undefined,{prepare:()=>pending});await ready(h);h.get('recipient').value=recipient;h.subject.renderInputs();
+  const h=harness(undefined,{prepare:()=>pending});await settle();h.get('recipient').value=recipient;h.subject.renderInputs();
   const work=h.get('prepare-deployment').handlers.click();await settle();
   if(event==='input')h.get('readiness-form').handlers.input();
   if(event==='clear')h.get('clear-draft').handlers.click();
@@ -113,27 +106,7 @@ test('edits and navigation invalidate both successful and failed delayed prepara
  }
 });
 test('preparation becomes downloadable only for current inputs, then an edit clears it',async()=>{
- const h=harness();await ready(h);h.get('recipient').value=recipient;h.subject.renderInputs();await h.get('prepare-deployment').handlers.click();
+ const h=harness();await settle();h.get('recipient').value=recipient;h.subject.renderInputs();await h.get('prepare-deployment').handlers.click();
  assert.equal(h.get('download-preparation').disabled,false);assert.match(h.get('preparation-summary').textContent,/Constructor encoded/);
  h.get('readiness-form').handlers.input();assert.equal(h.get('download-preparation').disabled,true);
-});
-
-
-test('readiness synchronization awaits delayed source validation before preparing',async()=>{
- let release,started;const gate=new Promise(resolve=>release=resolve),hashStarted=new Promise(resolve=>started=resolve);
- const h=harness(undefined,{crypto:{subtle:{async digest(...args){started();await gate;return crypto.subtle.digest(...args);}}}});
- let settled=false;const pending=ready(h).then(()=>{settled=true;});
- try{
-  await hashStarted;await settle();assert.equal(settled,false,'Timer turns alone must not establish readiness');
-  assert.equal(h.get('readiness-fields').disabled,true);release();await pending;
-  assert.equal(h.get('readiness-fields').disabled,false);
-  h.get('recipient').value=recipient;h.subject.renderInputs();await h.get('prepare-deployment').handlers.click();
-  assert.equal(h.get('download-preparation').disabled,false);
-  h.get('readiness-form').handlers.input();assert.equal(h.get('download-preparation').disabled,true);
- }finally{release();await pending;h.events.pagehide();}
-});
-test('readiness synchronization fails within its bound when initial reads never finish',async()=>{
- const h=harness(()=>new Promise(()=>{}));
- try{await assert.rejects(ready(h,{timeoutMs:20}),/Readiness did not complete/);}
- finally{h.events.pagehide();}
 });

@@ -25,19 +25,12 @@ entrypoint+='from numina_telemetry import NuminaTelemetryASGI\napp=NuminaTelemet
 (destination/'api/index.py').write_text(entrypoint,encoding='utf-8')
 shutil.copyfile(repo/'runtime/vercel-production/numina_telemetry.py',destination/'numina_telemetry.py')
 shutil.copytree(repo/'runtime/vercel-production/lib',destination/'lib',ignore=shutil.ignore_patterns('numina.js'))
-vercel_config=json.loads((source/'deploy/vercel/vercel.json').read_text())
 application_version=json.loads((repo/'package.json').read_text(encoding='utf-8'))['version']
 application_major=application_version.split('.')[0]
 canonical_paths=['/api/control/v1/:path*','/api/app/v1/:path*','/api/ops/v1/:path*','/api/nusd/v1/:path*','/source-alignment.json','/telemetry-metrics.json','/downloads/:path*']
 canonical_paths += ['/v'+major+'/release/manifest' for major in dict.fromkeys(['2','3',application_major])]
-# All application and treasury records belong to the existing Sites journal.
-# The retained verifier still serves its own /v1 runtime identity and receipts.
-vercel_config['rewrites']=[{'source':path,'destination':'https://numinalabs.xyz'+path} for path in canonical_paths]+vercel_config['rewrites']
-vercel_config['rewrites'].insert(0,{'source':'/v2/network/deployment-estimate','destination':'/api/deployment-estimate'})
-# Business, blockchain and treasury pages share the canonical production service.
-for path in ['/contact','/services','/app','/integrations','/privacy','/ownership','/blockchain','/economy','/redemption','/wallet-signing','/wallet-signing.html','/deployment-readiness']:
-    vercel_config.setdefault('redirects',[]).append({'source':path,'destination':'https://numinalabs.xyz'+path,'permanent':False})
-(destination/'vercel.json').write_text(json.dumps(vercel_config,indent=2)+'\n',encoding='utf-8')
+(destination/'config').mkdir()
+shutil.copyfile(repo/'config/numina-routing.json',destination/'config/numina-routing.json')
 shutil.copyfile(source/'deploy/vercel/requirements.lock.txt',destination/'requirements.txt')
 shutil.copyfile(repo/'runtime/vercel-production/api/node-connection.mjs',destination/'api/node-connection.mjs')
 shutil.copyfile(repo/'runtime/vercel-production/api/deployment-estimate.mjs',destination/'api/deployment-estimate.mjs')
@@ -46,10 +39,7 @@ public_assets=repo/'runtime/vercel-production/public'
 if public_assets.exists():shutil.copytree(public_assets,destination/'public')
 (destination/'.python-version').write_text('3.12\n',encoding='utf-8')
 (destination/'package.json').write_text(json.dumps({'name':'numina-production','version':json.loads((repo/'runtime/vercel-production/package.json').read_text())['version'],'private':True,'type':'module'})+'\n',encoding='utf-8')
-project_link=repo/'runtime/vercel-production/.vercel/project.json'
-if project_link.exists():
-    (destination/'.vercel').mkdir()
-    shutil.copyfile(project_link,destination/'.vercel/project.json')
+project_link_exists=False
 
 sys.path.insert(0,str(runtime))
 from numina_prod.frozen import verify_frozen_core
@@ -66,7 +56,7 @@ origin={'schema':'numina.historical-evidence-origin.v1','source':'fixtures/publi
 
 from numina_prod.config import Settings
 from numina_prod.release import build_identity,release_descriptor
-settings=Settings(environment='production',role='public-verifier',release='core-v1.8+prod-v1.9.0-rc26',data_dir=Path('/tmp/numina'),signing_key_file=None,allow_ephemeral_key=False,require_frozen_core=True,public_url='https://numina-production.vercel.app',database_url=None,real_funds_enabled=False,employer_ip_enabled=False,trusted_hosts=('numina-production.vercel.app',),arc_verification_enabled=False,evidence_require_durable=True)
+settings=Settings(environment='production',role='public-verifier',release='core-v1.8+prod-v1.9.0-rc26',data_dir=Path('/tmp/numina'),signing_key_file=None,allow_ephemeral_key=False,require_frozen_core=True,public_url='https://numinalabs.xyz',database_url=None,real_funds_enabled=False,employer_ip_enabled=False,trusted_hosts=('numinalabs.xyz','www.numinalabs.xyz'),arc_verification_enabled=False,evidence_require_durable=True)
 identity=build_identity(settings)
 entries=[]
 for path in sorted(destination.rglob('*')):
@@ -85,4 +75,4 @@ check=verify_supply_chain_artifacts(build_id=identity['build_id'],production_fil
 if not check['valid']:raise SystemExit('Source inventory binding failed')
 descriptor=release_descriptor(settings)
 (artifacts/'assembled-release.json').write_text(json.dumps(descriptor,indent=2,sort_keys=True)+'\n',encoding='utf-8')
-print(json.dumps({'directory':str(destination),'build':descriptor,'frozenFiles':frozen.checked,'sourceFiles':len(entries),'newTestsRun':False,'projectLinked':project_link.exists(),'telemetryWrapperIncluded':True,'canonicalApplicationRoutes':canonical_paths},indent=2))
+print(json.dumps({'directory':str(destination),'build':descriptor,'frozenFiles':frozen.checked,'sourceFiles':len(entries),'newTestsRun':False,'projectLinked':project_link_exists,'telemetryWrapperIncluded':True,'canonicalApplicationRoutes':canonical_paths},indent=2))

@@ -1,0 +1,62 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "numina-production",
+  "main": "./dist/server/index.js",
+  "compatibility_date": "2026-09-18",
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [
+    {
+      "pattern": "numinalabs.xyz/v2/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/v2/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "numinalabs.xyz/v3/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/v3/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "numinalabs.xyz/v4/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/v4/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "numinalabs.xyz/*",
+      "zone_name": "numinalabs.xyz"
+    },
+    {
+      "pattern": "www.numinalabs.xyz/*",
+      "zone_name": "numinalabs.xyz"
+    }
+  ],
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*",
+      "/.well-known/*",
+      "/v1/*",
+      "/v2/*",
+      "/v3/*",
+      "/v4/*",
+      "/readyz",
+      "/control-room*",
+      "/pricing*",
+      "/platform*",
+      "/favicon.ico",
+      "/robots.txt"
+    ],
+    "not_found_handling": "404-page",
+    "html_handling": "drop-trailing-slash"
+  }
+}

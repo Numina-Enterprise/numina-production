@@ -1,14 +1,9 @@
-import {operationsInboxView} from './operations-inbox.js';
-import {publicMetadata} from './public-privacy.js';
-import {NUMINA_LEGAL_DISCOVERY} from '../public/legal-discovery.js';
-import {NUMINA_STATE_RECONCILIATION} from '../public/state-reconciliation.js';
-import {numinaTree,readRoomTasks} from './numina-tree.js';
 import {readConnectionManifest} from './connections-http.js';
 import {stable,controlHash,controlError,grantValid} from './control.js';
 import {readControl,commitControl} from './control-store.js';
 import {controlActor,controlBody} from './control-http.js';
 import {createNuminaTreasury} from './native-treasury.js';
-import {FRONTIER_VERSION,FRONTIER_PROVIDERS,frontierState,frontierRequest,frontierDecision,frontierAssert,frontierExact,frontierSign} from './frontier.js';
+import {FRONTIER_VERSION,FRONTIER_PROVIDERS,NUMINA_OWNER_DECLARED_STATE,frontierManifestView,frontierRequest,frontierDecision,frontierAssert,frontierExact,frontierSign} from './frontier.js';
 import {rateLimit} from './store.js';
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {NUMINA_TREASURY_CURRENT_POLICY} from './treasury-policy.js';
@@ -16,10 +11,15 @@ import {alignTreasuryAccounts} from './treasury-alignment.js';
 import {readTreasuryEvidence,TREASURY_EVIDENCE_ROUTE} from './treasury-evidence.js';
 import {readStripeProviderRoutes,TREASURY_PROVIDER_ROUTES,NUSD_PROVIDER_ROUTING} from './stripe-treasury.js';
 
-const frontierRoutes={'operations/notices':'operations_notice','tree/tasks':'room_task',principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
+const frontierRoutes={principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
 const frontierToolNames={numina_request:'requests',numina_prepare:'prepare',numina_execute:'execute'};
 const frontierTools=[{name:'numina_provider_routes',description:'Read current owner-only Stripe crypto destination observations. No NUSD token acceptance, funding or settlement is established.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:true}},{name:'numina_treasury_evidence',description:'Owner-only signed snapshot of native treasury proof, fresh Stripe observation and supporting document references. No bank funding or money movement is established.',inputSchema:{type:'object',properties:{},additionalProperties:false}},{name:'numina_policy_decision',description:'Read a current policy decision for your registered request. This does not execute it.',inputSchema:{type:'object',properties:{requestId:{type:'string'}},required:['requestId'],additionalProperties:false}},...Object.keys(frontierToolNames).map(name=>({name,description:name==='numina_execute'?'Commit a permitted internal record through the canonical journal. External execution is unavailable.':name==='numina_prepare'?'Prepare a provider handoff; no external submission.':'Register a request under existing delegated authority and a server policy.',inputSchema:{type:'object',properties:{id:{type:'string'},expectedRevision:{type:'integer'},data:{type:'object'}},required:['id','expectedRevision','data'],additionalProperties:false}}))];
 function frontierResponse(value,status=200){return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Authorization, Cookie'}});}
+async function frontierPublicHead(){
+  const projection={schema:'numina.public-head.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',finalized:true,applicationVersion:FRONTIER_VERSION,finalBuild:'/final-build.json',readiness:'/v1/frontier/readiness',architecture:'/api/control/v2/architecture',blockchainConnection:'/v2/network/status',blockchainAnchorVerified:false,revision:null,eventCount:null,journalContinuity:null,scope:'NUMINA finalized singular build projection'};
+  const projectionHash=await controlHash(projection);
+  return {...projection,rootHash:await controlHash('NUMINA'),head:projectionHash,manifestHash:projectionHash};
+}
 async function frontierJson(req){
   // Bound transport input before parsing; JSON-RPC does not require canonical wire JSON.
   if(req.headers.get('content-type')?.split(';')[0]!=='application/json'||req.headers.has('content-encoding'))controlError('JSON_REQUIRED',415);
@@ -32,7 +32,7 @@ async function frontierJson(req){
 async function frontierActor(req,env,row){
   const bearer=req.headers.get('authorization');
   if(bearer?.startsWith('Bearer ')){
-    const hash=await controlHash(bearer.slice(7)),p=frontierState(row.manifest).principals.find(p=>!p.revoked&&p.credentialSha256===hash);
+    const hash=await controlHash(bearer.slice(7)),p=frontierManifestView(row.manifest).principals.find(p=>!p.revoked&&p.credentialSha256===hash);
     if(p)return p.id;
   }
   return controlActor(req,env);
@@ -41,7 +41,6 @@ export async function frontierReceipt(db,eventId,actor,env){
   const row=await readControl(db),event=row.journalEvents.find(e=>e.id===eventId);
   frontierAssert(event&&event.type.startsWith('frontier.'),'RECEIPT_NOT_FOUND',404);
   frontierAssert(actor===row.manifest.root||event.actor===actor,'AUTHORITY_DENIED',403);
-  if(event.type==='frontier.operations_notice')frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
   // Commands can contain credential digests; export only hashes and the recorded result.
   return frontierSign({scope:'Numina internal journal',root:row.manifest.root,eventId:event.id,revision:event.revision,at:event.at,actor:event.actor,type:event.type,commandHash:event.commandHash,previousHead:event.previous,eventHash:await controlHash(event),manifestHash:event.manifestHash??event.stateHash,result:event.result,externalReceipt:null},env);
 }
@@ -51,7 +50,7 @@ async function frontierMutate(route,body,actor,env){
   if(route==='treasury/accounts'){
     frontierExact(body.data,['id','provider','legalEntity','accountLabel','providerAccountReference']);
     const current=await readControl(env.DB);frontierAssert(actor===current.manifest.root,'OWNER_REQUIRED',403);
-    const existing=frontierState(current.manifest).accounts.find(a=>!a.supersededBy&&['provider','legalEntity','accountLabel','providerAccountReference'].every(k=>a[k]===body.data[k]));
+    const existing=frontierManifestView(current.manifest).accounts.find(a=>!a.supersededBy&&['provider','legalEntity','accountLabel','providerAccountReference'].every(k=>a[k]===body.data[k]));
     if(existing&&existing.id!==body.data.id)return {status:'REFERENCE_ALREADY_EXISTS',id:existing.id,journalCommit:false,receipt:null};
   }
   // Verify persistent signing configuration before committing any frontier operation.
@@ -95,67 +94,44 @@ async function frontierDiscovery(req,env){
   if(version&&version!=='2025-11-25')return error(-32602,'Supported MCP protocol version: 2025-11-25');
   if(msg.method==='initialize')return result({protocolVersion:'2025-11-25',capabilities:{tools:{listChanged:false}},serverInfo:{name:'numina-discovery',version:FRONTIER_VERSION}});
   if(msg.method==='ping')return result({});
-  const names={numina_connections:'Discover the canonical Numina surface inventory and live-check workspace; no private records or financial operations.',numina_architecture:'Read Numina L1 through L5 architecture layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the current public journal head and revision; does not read private records.'};
+  const names={numina_connections:'Discover the canonical Numina surface inventory and live-check workspace; no private records or financial operations.',numina_architecture:'Read Numina L1 through L7 final frontier layers.',numina_capabilities:'Read current production capability flags and provider availability.',numina_head:'Read the finalized singular build head; no mutable state or private records.'};
   if(msg.method==='tools/list')return result({tools:Object.entries(names).map(([name,description])=>({name,description,inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false}}))});
   if(msg.method!=='tools/call')return error(-32601,'Method not found');
   if(!Object.hasOwn(names,msg.params?.name??'')||!msg.params.arguments||Array.isArray(msg.params.arguments)||typeof msg.params.arguments!=='object'||Object.keys(msg.params.arguments).length)return error(-32602,'Expected a listed tool and empty arguments');
   let data;
   if(msg.params.name==='numina_connections')data=await readConnectionManifest(req,env);
-  else if(msg.params.name==='numina_architecture')data=publicMetadata(NUMINA_LAYERS);
-  else if(msg.params.name==='numina_capabilities')data={denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,legal:NUMINA_LEGAL_DISCOVERY,externalExecution:false,privateControl:'/api/control/v2/mcp',treasury:'/api/control/v1/treasury'};
-  else {const row=await readControl(env.DB);data={schema:'numina.public-head.v1',revision:row.revision,head:row.head_hash,manifestHash:row.manifest_hash,journalContinuity:row.eventCount===row.revision+1,scope:'internal journal',financialVerification:false};}
+  else if(msg.params.name==='numina_architecture')data=NUMINA_LAYERS;
+  else if(msg.params.name==='numina_capabilities')data={denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,...NUMINA_OWNER_DECLARED_STATE,privateControl:'/api/control/v2/mcp',treasury:'/api/control/v1/treasury'};
+  else data=await frontierPublicHead();
   return result({content:[{type:'text',text:JSON.stringify(data)}],isError:false});
 }
 export async function frontierHttp(req,env){
   const path=new URL(req.url).pathname;
-  if(path==='/api/control/v2/state-reconciliation'&&req.method==='GET')return frontierResponse(NUMINA_STATE_RECONCILIATION);
   try{
-    if(path==='/api/control/v2/tree'&&req.method==='GET')return frontierResponse(numinaTree());
-    if(path==='/api/control/v2/architecture'&&req.method==='GET')return frontierResponse(publicMetadata(NUMINA_LAYERS));
+    if(path==='/api/control/v2/architecture'&&req.method==='GET')return frontierResponse(NUMINA_LAYERS);
     if(path==='/.well-known/agent-card.json')return frontierResponse({protocolVersion:'0.3.0',name:'Numina',description:'Delegated requests, policy decisions and internal records.',url:new URL('/api/control/v2/a2a',req.url).href,version:FRONTIER_VERSION,preferredTransport:'JSONRPC',capabilities:{streaming:false,pushNotifications:false},defaultInputModes:['application/json'],defaultOutputModes:['application/json'],skills:[{id:'governed-actions',name:'Governed actions',description:'Send one data part containing tool and arguments. Human approvals are recorded separately by the owner.',tags:['policy','provenance']}],securitySchemes:{bearer:{type:'http',scheme:'bearer'}},security:[{bearer:[]}]});
-    if(path==='/api/control/v2/manifest'&&req.method==='GET')return frontierResponse({schema:'numina.frontier.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,core:'NUMINA',worker:'NUMINA',journal:'NUMINA',runtime:'NUMINA',artifact:'NUMINA',authentication:'NUMINA',delivery:'NUMINA',readiness:'NUMINA',security:{connections:'/connections',connectionManifest:'/api/connections/v1/manifest',documentation:'/security',surfaces:'/security-surfaces.json',controlModel:'/downloads/Numina-Security.md'},denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',architecture:'/api/control/v2/architecture',businessCore:'/business-core.json',fundingPlan:'/api/control/v2/treasury/funding',discoveryMcp:'/api/control/v2/discovery-mcp',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,stateReconciliation:NUMINA_STATE_RECONCILIATION,legal:NUMINA_LEGAL_DISCOVERY,treasury:'/api/control/v1/treasury',treasuryPolicy:'/api/control/v2/treasury/policy',providerRouting:publicMetadata(NUSD_PROVIDER_ROUTING),mcp:{url:'/api/control/v2/mcp',protocolVersion:'2025-11-25'},a2a:{url:'/api/control/v2/a2a',protocolVersion:'0.3.0'},externalExecution:false});
+    if(path==='/api/control/v2/manifest'&&req.method==='GET')return frontierResponse({schema:'numina.frontier.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,core:'NUMINA',worker:'NUMINA',journal:'NUMINA',runtime:'NUMINA',artifact:'NUMINA',authentication:'NUMINA',delivery:'NUMINA',readiness:'NUMINA',authoritativeHead:'/api/control/v2/head',security:{connections:'/connections',connectionManifest:'/api/connections/v1/manifest',documentation:'/security',surfaces:'/security-surfaces.json',controlModel:'/downloads/Numina-Security.md'},denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',architecture:'/api/control/v2/architecture',businessCore:'/business-core.json',fundingPlan:'/api/control/v2/treasury/funding',discoveryMcp:'/api/control/v2/discovery-mcp',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,treasury:'/api/control/v1/treasury',treasuryPolicy:'/api/control/v2/treasury/policy',providerRouting:NUSD_PROVIDER_ROUTING,mcp:{url:'/api/control/v2/mcp',protocolVersion:'2025-11-25'},a2a:{url:'/api/control/v2/a2a',protocolVersion:'0.3.0'},...NUMINA_OWNER_DECLARED_STATE});
     if(path==='/api/control/v2/keys'&&req.method==='GET'){const jwk=JSON.parse(env.NUMINA_RECEIPT_PUBLIC_JWK);return frontierResponse({keys:[{kty:'OKP',crv:'Ed25519',x:jwk.x,kid:await controlHash({crv:jwk.crv,kty:jwk.kty,x:jwk.x})}]});}
     if(!['GET','POST'].includes(req.method))return frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
-    const now=Math.floor(Date.now()/1000),bucket=await controlHash('frontier:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
-    if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
-    if(path==='/api/control/v2/head'&&req.method==='GET'){
-      const row=await readControl(env.DB);
-      return frontierResponse({schema:'numina.public-head.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',rootHash:await controlHash('NUMINA'),revision:row.revision,head:row.head_hash,manifestHash:row.manifest_hash,eventCount:row.eventCount,journalContinuity:row.eventCount===row.revision+1,scope:'Numina canonical internal journal',blockchainConnection:'/v2/network/status',blockchainAnchorVerified:false});
-    }
-    if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
-      const row=await readControl(env.DB),record=frontierState(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
-      const currentRecorded=record?.id===policy.id&&record.hash===policyHash;
-      const journal=await createNuminaTreasury({db:env.DB,principal:row.manifest.root,root:row.manifest.root}).readTreasury();
-      frontierAssert(journal.revision===row.revision&&journal.head===row.head_hash,'TREASURY_SNAPSHOT_CHANGED',409);
-      return frontierResponse({
-        schema:'numina.treasury.policy-view.v1',
-        policy:{id:policy.id,version:policy.version,scope:'RETAINED_POLICY_CATALOG'},
-        policyHash,policyHashScope:'retainedPolicy',retainedPolicy:policy,
-        currentJournal:{sourceOfTruth:'/api/control/v1/treasury',revision:journal.revision,head:journal.head,status:journal.status,balance:journal.journalProjectionBalance,unit:journal.journalProjectionUnit,settlementStatus:journal.settlementStatus,submissionPerformed:journal.submissionPerformed,settlementPerformed:journal.settlementPerformed,externalProviderSubmissionStatus:journal.externalProviderSubmissionStatus,externalProviderSettlementStatus:journal.externalProviderSettlementStatus},
-        activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',scope:'POLICY_RECORD_ONLY',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',scope:'POLICY_RECORD_ONLY',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},
-        revision:row.revision,head:row.head_hash
-      });
-    }
+    if(path==='/api/control/v2/head'&&req.method==='GET')return frontierResponse(await frontierPublicHead());
     if(path==='/api/control/v2/discovery-mcp'){
       if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
       return req.method==='POST'?frontierDiscovery(req,env):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     }
+    const now=Math.floor(Date.now()/1000),bucket=await controlHash('frontier:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
+    if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
+    if(path==='/api/control/v2/treasury/policy'&&req.method==='GET'){
+      const row=await readControl(env.DB),record=frontierManifestView(row.manifest).treasuryPolicies?.at(-1),policy=NUMINA_TREASURY_CURRENT_POLICY,policyHash=await controlHash(policy);
+      const currentRecorded=record?.id===policy.id&&record.hash===policyHash;
+      return frontierResponse({policy,policyHash,activation:currentRecorded?{status:'OWNER_POLICY_RECORDED',policyId:record.id,policyHash:record.hash,eventId:record.eventId,recordedAt:record.recordedAt}:{status:'AWAITING_OWNER_RECORD',priorPolicyId:record?.id??null,priorPolicyHash:record?.hash??null},revision:row.revision});
+    }
     const row=await readControl(env.DB);frontierAssert(row.manifest.root===env.NUMINA_CONTROL_OWNER,'ROOT_CONFIGURATION_MISMATCH',503);
     const actor=await frontierActor(req,env,row);
-    frontierAssert(actor===row.manifest.root||frontierState(row.manifest).principals.some(p=>p.id===actor&&!p.revoked),'AUTHORITY_DENIED',403);
+    frontierAssert(actor===row.manifest.root||frontierManifestView(row.manifest).principals.some(p=>p.id===actor&&!p.revoked),'AUTHORITY_DENIED',403);
     if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
     if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_REQUIRED',403);
     if(['/api/control/v2/mcp','/api/control/v2/a2a'].includes(path))return req.method==='POST'?frontierRpc(req,env,actor):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     const route=path.slice('/api/control/v2/'.length);
-    if(route==='operations/notices'){
-      frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
-      frontierAssert(new URL(req.url).search==='','INVALID_NOTICE_PARAMETERS',400);
-      if(req.method==='GET')return frontierResponse({revision:row.revision,head:row.head_hash,...operationsInboxView(row.manifest,now)});
-    }
-    if(route==='tree/tasks'&&req.method==='GET'){
-      frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
-      return frontierResponse({revision:row.revision,head:row.head_hash,...readRoomTasks(row.manifest)});
-    }
     if(route==='runtime-access'&&req.method==='GET'){
       frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
       frontierAssert(req.headers.get('authorization')?.startsWith('Bearer '),'BEARER_REQUIRED',401);
@@ -167,11 +143,6 @@ export async function frontierHttp(req,env){
       const requests=body.requestIds.map(id=>frontierRequest(row.manifest,id,actor));
       const decisions=await Promise.all(requests.map(async request=>({requestId:request.id,...await frontierDecision(row.manifest,request,now)})));
       return frontierResponse({revision:row.revision,head:row.head_hash,observedAt:now,decisions});
-    }
-    if(route==='state'&&req.method==='GET'){
-      const f=structuredClone(frontierState(row.manifest));for(const p of f.principals)delete p.credentialSha256;
-      if(actor!==row.manifest.root){f.principals=f.principals.filter(p=>p.id===actor);f.requests=f.requests.filter(r=>r.Principal===actor);f.approvals=f.approvals.filter(a=>f.requests.some(r=>r.id===a.requestId));f.accounts=[];delete f.roomTasks;delete f.operationsInbox;delete f.treasuryPolicies;delete f.fundingPlan;delete f.fundingDeclaration;const ids=new Set(f.requests.map(r=>r.policyId));f.policies=f.policies.filter(p=>ids.has(p.id));}
-      return frontierResponse({root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',revision:row.revision,head:row.head_hash,content:f,compatibility:{route:'/api/control/v2/state',role:'legacy_route_only'}});
     }
     if(route==='decisions'&&req.method==='POST'){const body=await controlBody(req);frontierExact(body,['requestId']);const request=frontierRequest(row.manifest,body.requestId,actor);return frontierResponse(await frontierDecision(row.manifest,request,now));}
     if(route.startsWith('receipts/')&&req.method==='GET')return frontierResponse(await frontierReceipt(env.DB,route.slice(9),actor,env));
@@ -191,7 +162,7 @@ export async function frontierHttp(req,env){
       frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);
       const treasury=await createNuminaTreasury({db:env.DB,principal:actor,root:row.manifest.root}).readTreasury();
       frontierAssert(treasury.revision===row.revision&&treasury.head===row.head_hash,'TREASURY_SNAPSHOT_CHANGED',409);
-      return frontierResponse(alignTreasuryAccounts(treasury,frontierState(row.manifest)));
+      return frontierResponse(alignTreasuryAccounts(treasury,frontierManifestView(row.manifest)));
     }
     if(Object.hasOwn(frontierRoutes,route)&&req.method==='POST')return frontierResponse(await frontierMutate(route,await controlBody(req),actor,env));
     return frontierResponse({error:'NOT_FOUND'},404);

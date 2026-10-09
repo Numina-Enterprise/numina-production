@@ -1,13 +1,10 @@
 {
   "name": "numina-nusd-managed-runtime-candidate",
-  "version": "4.0.0",
+  "version": "0.0.0",
   "private": true,
   "license": "BSD-3-Clause",
   "type": "module",
-  "engines": {
-    "node": "24.x"
-  },
-  "dependencies": {
-    "ethers": "6.17.0"
-  }
+  "engines": { "node": "24.x" },
+  "dependencies": { "ethers": "6.17.0" },
+  "overrides": { "ws": "8.21.3" }
 }

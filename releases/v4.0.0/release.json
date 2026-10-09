@@ -1,0 +1,12 @@
+{
+    "schema":  "numina.repository-release.v1",
+    "identity":  "NUMINA",
+    "version":  "4.0.0",
+    "tag":  "v4.0.0",
+    "sourceCommit":  "c57106e8bafd8078873b777587f748da6be86a32",
+    "archive":  "releases/v4.0.0/numina-release-v4.0.0.tar.gz",
+    "sha256":  "b030d88b9ab41d0c958686356c37f6989abb9c1d225174bd8f5e5c2d838c8722",
+    "bytes":  39718035,
+    "publication":  "canonical_repository_asset",
+    "githubReleaseObjectRequired":  false
+}

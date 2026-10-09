@@ -1,4 +1,5 @@
-name: Build and publish Numina
+name: Build and verify Numina Sites source
+# This workflow verifies source publication only. Deployment requires a separate provider receipt.
 
 on:
   workflow_dispatch:
@@ -8,14 +9,18 @@ on:
       - '.github/workflows/publish-sites-control-source.yml'
       - '.openai/hosting.json'
       - 'config/numina-manifest.v2.json'
+      - 'config/numina-routing.json'
       - 'config/numina-production-bound-state.v1.json'
       - 'src/**'
       - 'public/**'
+      - 'tests/**'
       - 'drizzle/**'
       - 'scripts/build.mjs'
       - 'scripts/release-manifest.mjs'
       - 'scripts/package.mjs'
       - 'scripts/publish-with-telemetry.mjs'
+      - 'scripts/build-trusted-source-release.mjs'
+      - 'runtime/nusd/scripts/prepare-post-freeze-journal.mjs'
       - 'package.json'
       - '.nvmrc'
 
@@ -24,33 +29,39 @@ permissions:
 
 concurrency:
   group: numina-singular-build
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   numina:
     name: numina
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
+
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version-file: .nvmrc
           check-latest: false
+
       - name: Install pinned test dependencies
         run: |
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+
       - name: Build Numina
         run: npm run build
+
       - name: Verify Numina before publication
         run: npm test
+
       - name: Package Numina
         run: node scripts/package.mjs "$RUNNER_TEMP/numina.tgz"
+
       - name: Restore exact committed source for publication
         shell: bash
         run: |
@@ -58,37 +69,73 @@ jobs:
           git reset --hard HEAD
           git clean -fdx
           test -z "$(git status --porcelain --untracked-files=normal)"
-      - name: Publish Numina
+
+      - name: Verify singular GitHub publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          local_sha="$(git rev-parse HEAD)"
+          origin_url="$(git remote get-url origin)"
+          test "$origin_url" = "https://github.com/skott34-dot/numina-production"
+          test "$local_sha" = "$GITHUB_SHA"
+          printf 'NUMINA source verified at %s\n' "$local_sha"
+
+      - name: Upload validated NUMINA package
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: NUMINA-VALIDATED-PACKAGE
+          path: ${{ runner.temp }}/numina.tgz
+          if-no-files-found: error
+
+      - name: Publish Numina Sites mirror
         id: sites_source
         shell: bash
         run: npm run publish:source -- sites
-      - name: Verify Sites source publication
+
+      - name: Verify Sites source publication result
         if: always()
         shell: bash
         run: |
           node --input-type=module <<'NODE'
           import {appendFileSync,readFileSync,readdirSync} from 'node:fs';
+          const directory = '.openai/publishing';
           let report;
           try {
-            const files=readdirSync('.openai/publishing').filter(name=>/^sites-[a-f0-9-]+\.json$/.test(name));
-            if(files.length===1)report=JSON.parse(readFileSync('.openai/publishing/'+files[0],'utf8'));
+            const files = readdirSync(directory).filter(name => /^sites-[a-f0-9-]+\.json$/.test(name));
+            if (files.length === 1) report = JSON.parse(readFileSync(directory + '/' + files[0], 'utf8'));
           } catch {}
-          const expected=process.env.GITHUB_SHA;
-          const verified=/^[a-f0-9]{40}$/.test(expected||'')
-            && report?.schema==='numina.publishing-telemetry.v1'
-            && report.target==='sites'
-            && report.host==='git.chatgpt-team.site'
-            && report.branch==='refs/heads/main'
-            && report.sourcePushVerified===true
-            && report.sourceCommit===expected
-            && report.remoteCommit===expected
-            && report.failure==='none'
+          const expected = process.env.GITHUB_SHA;
+          const verified = /^[a-f0-9]{40}$/.test(expected || '')
+            && report?.schema === 'numina.publishing-telemetry.v1'
+            && report.target === 'sites'
+            && report.host === 'git.chatgpt-team.site'
+            && report.branch === 'refs/heads/main'
+            && report.sourcePushVerified === true
+            && report.sourceCommit === expected
+            && report.remoteCommit === expected
+            && report.failure === 'none'
             && ['source_push_verified','source_reconciled_after_ambiguous_push'].includes(report.status)
-            && report.deploymentStarted===false;
-          appendFileSync(process.env.GITHUB_STEP_SUMMARY,
-            `Sites source push verified: ${verified?'yes':'no'}\n\nDeployment requires a separate matching provider receipt.\n`);
-          if(!verified){
-            console.error('::error::Sites source publication is not verified for the triggering revision.');
-            process.exitCode=1;
+            && report.deploymentStarted === false;
+          const summary = [
+            '### Sites source publication',
+            'Source push verified: **' + (verified ? 'yes' : 'no') + '**',
+            'Deployment: **not performed by this workflow**; a separate matching provider receipt is required.',
+            'Artifact upload status is independent of Sites authentication and source verification.',
+            ''
+          ].join('\n\n');
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+          if (!verified) {
+            console.error('::error::Sites source publication is unverified for the exact triggering revision. Inspect the sanitized publishing telemetry; restore authorized repository access before retrying.');
+            process.exitCode = 1;
           }
           NODE
+
+      - name: Upload Sites publishing telemetry
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: NUMINA-SITES-PUBLISHING-TELEMETRY
+          path: .openai/publishing/sites-*.json
+          if-no-files-found: warn

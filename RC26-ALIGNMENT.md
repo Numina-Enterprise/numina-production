@@ -16,7 +16,7 @@ The treasury portion is implemented locally in `src/native-treasury-model.js` an
 
 ## Deployment blockers observed 2026-09-13
 
-The authorized Vercel project is `skott34-dot/numina-production`. Its latest rc26 preview is `dpl_eq8nPnSpa3UcHVGCpj6Po2n8Locr`; production currently responds as rc22. The preview's remote bootstrap artifact URL returns 404 because its Neon function failed to load its `postgres` dependency.
+Historical hosted-deployment records include an rc26 preview (`dpl_eq8nPnSpa3UcHVGCpj6Po2n8Locr`) and an earlier production response at rc22. Those provider-specific observations are archival only. Current authority is GitHub `main`; neither the former hosting project nor Neon participates in the active Numina runtime.
 
 The rc26 runtime ZIP recovered from the artifact database matches its bootstrap SHA-256, `b2bf4dae99f8897457c2581d839bffcced2f84030c49a0f782dc69003e2695af`. It contains only a partial runtime: `numina_prod/evidence_store_postgres.py`, imported by the configured durable store, is absent; the site files and rc26 release tests are absent. Its `config.py` also differs from the production manifest bundled inside that ZIP. The older stored archive has a mismatching SHA-256 and fails gzip CRC validation.
 

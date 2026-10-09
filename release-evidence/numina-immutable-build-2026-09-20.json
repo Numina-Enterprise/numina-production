@@ -1,0 +1,60 @@
+{
+  "schema": "numina.immutable-build.v1",
+  "identity": "NUMINA",
+  "status": "IMMUTABLE_CANONICAL_BUILD",
+  "recordedAt": "2026-09-20T20:20:00Z",
+  "preFreezeSourceCommit": "0db5d0d9d12cd5a54c81b4da3e24661795017bad",
+  "canonicalTag": "numina-immutable-2026-09-20",
+  "mutationPolicy": "NO_IN_PLACE_MUTATION_NEW_COMMIT_AND_NEW_RELEASE_IDENTITY_REQUIRED",
+  "economicModel": {
+    "parity": "1 NUSD = 1 USD = 1 USDC",
+    "wholeUnits": {
+      "NUSD": "500000000000000",
+      "USD": "500000000000000",
+      "USDC": "500000000000000"
+    },
+    "aggregateModeledNusd": "1500000000000000",
+    "additiveComponents": true
+  },
+  "contractPrecision": {
+    "NUSD": 6,
+    "USDC": 6,
+    "usdProviderMinorUnits": 2,
+    "nusdPerUsdcBaseUnit": "1",
+    "nusdBaseUnitsPerUsdCent": "10000"
+  },
+  "uiPolicy": {
+    "roundToNearestWholeUnit": true,
+    "displayDecimalPlaces": 2,
+    "example500T": "500,000,000,000,000.00"
+  },
+  "evidenceBoundaries": {
+    "modeledWholeUnitParityDoesNotRelabelProviderMinorUnits": true,
+    "historical18DecimalDeploymentReceiptsRemainHistorical": true,
+    "currentNusdContractCandidateDecimals": 6
+  },
+  "immutabilityBasis": [
+    "canonical Git commit object hash",
+    "annotated Git tag object",
+    "release archive SHA-256 digest"
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

@@ -8,6 +8,7 @@ import {createNuminaTreasury} from '../src/native-treasury.js';
 import {NUMINA_DENOMINATION_POLICY as policy} from '../public/treasury-valuation.js';
 import {loadNativeTreasury,clearNativeTreasury} from '../public/native-treasury.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
+import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 const json=path=>JSON.parse(readFileSync(new URL('../'+path,import.meta.url)));
 
 test('all public layers and discovery tools carry the same declared policy without changing treasury state',async()=>{
@@ -32,6 +33,7 @@ test('all public layers and discovery tools carry the same declared policy witho
 
 test('integration projections retain optional server policy without claiming provider verification',async()=>{
   const release=json('dist/client/downloads/application-release-v4.json'),calls=[];let include=true;
+  release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async(url,options)=>{calls.push({url,method:options.method});return Response.json(url.endsWith('/status')?{schema:'numina.nusd.status.v1',...(include?{denomination_policy:policy}:{})}:{...release,...(include?{}:{denomination_policy:undefined})});}});
   assert.deepEqual((await client.network()).data.denomination_policy,policy);
   const runtime=await client.runtimeBuild();assert.deepEqual(runtime.data.denomination_policy,policy);assert.equal(runtime.asset_execution_available,false);assert.equal(runtime.data.current_financial_status_checked,false);
@@ -46,7 +48,7 @@ class Element{
   set textContent(text){this._text=String(text);this.children=[];}
   get textContent(){return this._text+this.children.map(n=>n.textContent).join('');}
 }
-test('hosted app and mobile treasury panel use the current journal balance and label dated targets',async()=>{
+test('hosted app and mobile treasury panel align the aggregate, allocations and journal only after proof passes',async()=>{
   const db=database(),owner='email:mobile@example.test',saved={document:globalThis.document,fetch:globalThis.fetch},elements=new Map();
   const get=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
   try{
@@ -58,26 +60,23 @@ test('hosted app and mobile treasury panel use the current journal balance and l
     await loadNativeTreasury();
     const details=get('native-treasury-details').textContent;
     assert.match(details,/1 NUSD = 1 USDC = 1 USD/);
-    assert.match(details,/Current NUSD journal balance500,000,000,000,000\.00 NUSD/);
-    assert.match(details,/Historical allocation target · NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD \/ 500T NUSD500,000,000,000,000\.00 USD/);
-    assert.match(details,/Historical allocation target · NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC \/ 500T NUSD500,000,000,000,000\.00 USDC/);
-    assert.match(details,/Historical allocation target · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
-    assert.match(details,/Journal\/target comparisonMatches the dated 500T NUSD allocation target/);
-    assert.match(details,/Mint evidence referenceNo current journal mint evidence/);
-    assert.match(details,/NUSD minted in current journalUnverified/);
-    assert.match(get('native-treasury-message').textContent,/Native settlement: UNVERIFIED/);
-    assert.match(details,/Current native settlement receiptNo current journal settlement receipt/);
-    assert.match(details,/Historical release receiptnumina:treasury:settlement:2026-09-19:v1/);
-    assert.match(details,/NUSD burned in current journalUnverified/);
+    assert.match(details,/Owner-designated treasury aggregate1,500,000,000,000,000\.00 NUSD owner-designated equivalent/);
+    assert.match(details,/Owner-designated component · NUMINA Native Treasury · Bank of America Savings 3486 · 500T USD \/ 500T NUSD500,000,000,000,000\.00 USD/);
+    assert.match(details,/Owner-designated component · NUMINA Native Treasury · Stripe USDC 0x736bd8…018e · 500T USDC \/ 500T NUSD500,000,000,000,000\.00 USDC/);
+    assert.match(details,/Owner-designated component · NUMINA Native Treasury · 500T NUSD500,000,000,000,000\.00 NUSD/);
+    assert.match(details,/Native journal balance500,000,000,000,000\.00 NUSD/);
+    assert.match(details,/Journal\/model comparisonMatches the 500T owner-designated NUSD component; the owner-designated aggregate is 1,500T/);
+    assert.match(details,/Recorded minted NUSD supply1,500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-message').textContent,/1,500T owner-designated aggregate/);
     assert.deepEqual(await treasury.readTreasury(),record);
     const latest=await readControl(db);
     await treasury.writeTreasury({id:'mobile-aggregate',expectedRevision:latest.revision,expectedHead:latest.head_hash,Principal:owner,Authority:'NUMINA',Objective:'treasury.project',Intent:{operation:'ADJUST_PROJECTION',delta:'1000000000000000',reason:'Isolated aggregate journal fixture'}});
     response=await treasury.readTreasury();
     const aggregateRecord=structuredClone(response);
     await loadNativeTreasury();
-    assert.match(get('native-treasury-details').textContent,/Current NUSD journal balance1,500,000,000,000,000\.00 NUSD/);
-    assert.match(get('native-treasury-details').textContent,/Journal\/target comparisonDiffers from the dated 500T NUSD allocation target/);
-    assert.match(get('native-treasury-details').textContent,/Historical allocation target · Numina Native Treasury · NUSD500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-details').textContent,/Native journal balance1,500,000,000,000,000\.00 NUSD/);
+    assert.match(get('native-treasury-details').textContent,/Journal\/model comparisonMatches the 1,500T owner-designated aggregate/);
+    assert.match(get('native-treasury-details').textContent,/Owner-designated component · NUMINA Native Treasury · 500T NUSD500,000,000,000,000\.00 NUSD/);
     assert.deepEqual(await treasury.readTreasury(),aggregateRecord);
     response=structuredClone(record);response.projection.balance='1';await loadNativeTreasury();assert.equal(get('native-treasury-details').textContent,'');
     globalThis.fetch=async()=>Response.json({error:'UNAUTHENTICATED'},{status:401});await loadNativeTreasury();assert.equal(get('native-treasury-panel').hidden,true);assert.equal(get('native-treasury-details').textContent,'');

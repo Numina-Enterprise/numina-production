@@ -49,5 +49,24 @@
   "providerSubmissionVerified": false,
   "networkSubmissionVerified": false,
   "bankSettlementVerified": false,
-  "evidenceScope": "Internal authorized instruction only; no provider or ACH network execution evidence recorded."
+  "evidenceScope": "Internal authorized instruction only; no provider or ACH network execution evidence recorded.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
 }

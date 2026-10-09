@@ -5,7 +5,7 @@ function save(value,name,doc,win){
  const a=doc.createElement('a');a.href=url;a.download=name;doc.body.append(a);a.click();a.remove();
  win.setTimeout(()=>win.URL.revokeObjectURL(url),1000);
 }
-const messages={RECEIPT_REQUIRED:'Paste or select the public observation JSON first.',RECEIPT_TOO_LARGE:'Use an observation file no larger than 2 MiB.',RECEIPT_JSON_INVALID:'The input is not valid JSON. Keep the original and check its format.',RECEIPT_STRUCTURE_INVALID:'Use the observation structure shown in the required-fields template.',RECEIPT_SCHEMA_UNSUPPORTED:'Use the required-fields template to structure the actual observations. A receipt or review report alone is not sufficient.',RECEIPT_PROFILE_MISMATCH:'This checker covers the historical 6-decimal unsigned proposal only. It does not validate or invalidate the recorded September 18 18-decimal mint.',PRIVATE_MATERIAL_NOT_ACCEPTED:'Wallet or secret material is not accepted. It has been cleared; select public transaction observations only.'};
+const messages={RECEIPT_REQUIRED:'Paste or select the public observation JSON first.',RECEIPT_TOO_LARGE:'Use an observation file no larger than 2 MiB.',RECEIPT_JSON_INVALID:'The input is not valid JSON. Keep the original and check its format.',RECEIPT_STRUCTURE_INVALID:'Use the observation structure shown in the required-fields template.',RECEIPT_SCHEMA_UNSUPPORTED:'Use the required-fields template to structure the actual observations. A receipt or review report alone is not sufficient.',RECEIPT_PROFILE_MISMATCH:'This checker covers the pinned 1,500T constructor mint only. Do not use a different amount, policy or later mint operation.',PRIVATE_MATERIAL_NOT_ACCEPTED:'Wallet or secret material is not accepted. It has been cleared; select public transaction observations only.'};
 
 export function mountReceiptIntake({doc=document,win=window,review=reviewReceiptText,download=save}={}){
  const $=id=>doc.getElementById('receipt-intake-'+id),input=$('text'),file=$('file');
@@ -34,8 +34,8 @@ export function mountReceiptIntake({doc=document,win=window,review=reviewReceipt
    const checked=await review(text);if(!alive||generation!==token)return;record=checked;
    $('result').textContent=JSON.stringify(checked,null,2);
    $('status').textContent=checked.result.valid
-    ?'Supplied observations are consistent with the historical 6-decimal proposal and treasury recipient. This does not verify the separate recorded 18-decimal deployment. This local check does not independently authenticate the chain or establish USD/USDC settlement.'
-    :'Historical proposal checks did not pass: '+checked.result.errors.join(', ')+'. This result does not invalidate the separate September 18 mint receipt.';
+    ?'Supplied observations are consistent with the pinned 1,500T NUSD deployment and treasury recipient. This local check does not independently authenticate the chain or establish USD/USDC settlement.'
+    :'Receipt checks did not pass: '+checked.result.errors.join(', ')+'. No confirmed mint has been recorded by this checker.';
   }catch(error){if(alive&&generation===token){if(error.code==='PRIVATE_MATERIAL_NOT_ACCEPTED')input.value='';$('status').textContent=messages[error.code]||'The observations could not be checked. Keep the original for review.';}}
   finally{if(alive&&generation===token){busy=false;render();}}
  };

@@ -88,5 +88,24 @@
     "id": "numina:treasury:settlement:2026-09-19:v1",
     "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
     "download": "/downloads/nusd/treasury-settlement-receipt.json"
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
   }
 }

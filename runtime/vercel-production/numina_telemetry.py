@@ -1,5 +1,5 @@
 # Copyright © 2026 SK Consulting LLC. Numina™. See OWNERSHIP.md.
-"""ASGI deployment wrapper. Does not modify rc26 or retain request contents."""
+"""ASGI deployment wrapper. Does not modify rc27 or retain request contents."""
 import datetime
 import json
 import os
@@ -58,7 +58,7 @@ class NuminaTelemetryASGI:
             if os.getenv("NUMINA_TELEMETRY_LOGS") != "false":
                 try:
                     self.emit({"schema": "numina.http-request.v1", "event": "http_request",
-                        "service": "numina-verifier", "version": "4.0.0", "runtimeVersion": "1.9.0-rc26",
+                        "service": "numina-verifier", "version": "4.0.0", "runtimeVersion": "1.9.0-rc27",
                         "instanceId": self.instance_id, "requestId": request_id,
                         "observedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
                         "route": route_label(scope.get("path", "/")),

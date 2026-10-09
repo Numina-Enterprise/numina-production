@@ -1,6 +1,6 @@
 """Package maintained Numina sources without running application tests."""
 from pathlib import Path
-import argparse, datetime, hashlib, json, os, subprocess, zipfile
+import argparse, datetime, hashlib, json, subprocess, zipfile
 
 root = Path(__file__).resolve().parent.parent
 read = lambda p: json.loads(p.read_text(encoding='utf-8'))
@@ -8,7 +8,7 @@ write = lambda p, value: p.write_text(json.dumps(value, indent=2)+'\n', encoding
 sha = lambda data: hashlib.sha256(data).hexdigest()
 version = read(root/'package.json')['version']
 major = version.split('.')[0]
-now = (datetime.datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']), datetime.timezone.utc) if 'SOURCE_DATE_EPOCH' in os.environ else datetime.datetime.now(datetime.timezone.utc)).isoformat()
+now = datetime.datetime.now(datetime.timezone.utc).isoformat()
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--native-only', action='store_true', help='Refresh native source archives without rebuilding integration distributions.')
 options = parser.parse_args()
@@ -36,7 +36,6 @@ def package(source, name, prefix, paths):
                 raise RuntimeError('Archive source mismatch: '+name)
     return {'file':target.name,'bytes':target.stat().st_size,'sha256':sha(target.read_bytes())}
 
-subprocess.run(['node','scripts/package-legal-companions.mjs'],cwd=root,check=True)
 record = plugin = None
 if not options.native_only:
     subprocess.run(['node','integrations/numina/scripts/package-distribution.js'],cwd=root,check=True)
@@ -61,8 +60,6 @@ write(root/f'docs/native-package-record-v{major}.json',native)
 mirror = root/'runtime/vercel-production/public/downloads'
 if mirror.exists():
     (mirror/f'native-package-record-v{major}.json').write_bytes((root/f'docs/native-package-record-v{major}.json').read_bytes())
-    for item in native['sourceArchives']:
-        (mirror/item['file']).write_bytes((root/'docs'/item['file']).read_bytes())
 # Refresh the iOS-specific source fingerprint after general source packaging.
 subprocess.run([__import__('sys').executable,'scripts/package-ios-source.py'],cwd=root,check=True)
 native = read(root/f'docs/native-package-record-v{major}.json')

@@ -1,5 +1,7 @@
 import {readFileSync} from 'node:fs';
 import legacyStatus from '../runtime/vercel-production/api/status.js';
+import legacyRuntime from '../runtime/vercel-production/lib/numina.js';
+import projectionModule from '../runtime/vercel-production/lib/numina-projection.js';
 import {NUSD_POLICY} from '../src/nusd-http.js';
 import {readPrivateBankRoute} from '../src/bank-route-config.js';
 import {treasurySubmissionHttp} from '../src/treasury-submission.js';
@@ -24,6 +26,21 @@ export default async function handler(req,res){
   const mode=url.searchParams.get('mode');
   if(!mode)return legacyStatus(req,res);
   if(mode==='treasury-submissions')return treasurySubmissionHttp(req,res);
+  if(mode==='control-manifest'){
+    if(req.method!=='GET'){res.statusCode=405;res.setHeader('allow','GET');return res.end(JSON.stringify({error:'METHOD_NOT_ALLOWED'}));}
+    const credentialedProviderSubmitterAvailable=Boolean(process.env.NUMINA_PROVIDER_SUBMISSION_TOKEN);
+    const controls=legacyRuntime.ownerControls(legacyRuntime.controls());
+    const manifest=projectionModule.project('control-manifest',{
+      schema:'numina.control-manifest.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',
+      release:legacyRuntime.RELEASE_IDENTITY.production_version,controls,
+      funds:legacyRuntime.fundsManifest(),
+      execution:legacyRuntime.executionManifest({credentialedProviderSubmitterAvailable}),
+      partnership:legacyRuntime.partnershipManifest(),
+      external_execution_performed:false,external_funds_moved:false
+    });
+    const receipt=legacyRuntime.sign(manifest,'NUMINA_CONTROL_MANIFEST');
+    return writeJson(req,res,{manifest,receipt,compatibility:{route:'/v1/control/state',role:'legacy_route_only'}});
+  }
   if(req.method!=='GET'){
     res.statusCode=405;
     res.setHeader('content-type','application/json; charset=utf-8');

@@ -1,4 +1,3 @@
-import {MANIFEST_ROUTES,alignedApplication} from './manifest-surface.js';
 // The builder pin is reviewed site policy, never taken from a returned bundle.
 export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  sourceRepository:'skott34-dot/numina-production',
@@ -12,15 +11,13 @@ export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  oidcIssuer:'https://token.actions.githubusercontent.com'
 });
 
-// Fingerprints and attestation commands apply to the complete inventory bytes.
-// /v4/release/manifest is a sanitized public projection of this inventory.
-const MANIFEST_PATH='/downloads/application-release-v4.json';
+const MANIFEST_PATH='/v4/release/manifest';
 const MAX_MANIFEST_BYTES=1024*1024;
 const all=selector=>document.querySelectorAll(selector);
 const set=(selector,value)=>all(selector).forEach(element=>{element.textContent=value;});
 let requestGeneration=0,activeController,downloadUrl=null,verificationCommand='';
 
-function clearApplicationEvidence(message='Loading application release manifest…'){
+function clearApplicationEvidence(message='Loading deployed release…'){
  if(downloadUrl){URL.revokeObjectURL(downloadUrl);downloadUrl=null;}
  verificationCommand='';
  set('[data-application-state]',message);
@@ -85,7 +82,7 @@ function renderReleaseRequirements(data){
  const evidence=data.recorded_release_evidence;
  const text=value=>typeof value==='string'&&value.length<=800?value.replaceAll('_',' '):'Not reported';
  // This retained record predates the current inventory, including in legacy manifests.
- set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Historical publication record · Sites version '+evidence.website.version+' · Vercel '+text(evidence.runtime?.status)+' · Source '+text(evidence.sourceCommit)+'. This record does not verify deployment of the current build.':'No historical publication record included');
+ set('[data-application-production-record]',evidence?.website?.status==='succeeded'?'Historical publication record · Sites version '+evidence.website.version+' · Runtime '+text(evidence.runtime?.status)+' · Source '+text(evidence.sourceCommit)+'. This record does not verify deployment of the current build.':'No historical publication record included');
  set('[data-application-funding-record]',evidence?.fundingPlan?.status==='FUNDING_PLAN_RECORDED'?'Historical funding-plan record · Numina journal revision '+evidence.fundingPlan.revision+' · Event '+text(evidence.fundingPlan.eventId):'No historical funding-plan record included');
  const receiptText=receipt=>{
   if(!receipt||typeof receipt!=='object')return 'Not reported in this release';
@@ -116,59 +113,45 @@ async function refreshApplicationRelease(){
  clearApplicationEvidence();
  set('[data-application-build]','Loading…');
  set('[data-application-manifest-sha]','Loading…');
- let timer,manifestReceived=false,receivedVersion=null;
- const deadline=new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Deadline exceeded'));},12000);});
+ let timer;
  try{
-  const {data,bytes}=await Promise.race([
-   deadline,
+  const {data,bytes,digest}=await Promise.race([
+   new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Deadline exceeded'));},12000);}),
    (async()=>{
-    const [response,canonicalResponse]=await Promise.all([MANIFEST_PATH,MANIFEST_ROUTES.manifest].map(path=>fetch(path,{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal,headers:{Accept:'application/json'}})));
-    if(!response.ok||response.redirected||!canonicalResponse.ok||canonicalResponse.redirected)throw Error('Release response unavailable');
+    const response=await fetch(MANIFEST_PATH,{cache:'no-store',credentials:'omit',redirect:'error',signal:controller.signal,headers:{Accept:'application/json'}});
+    if(!response.ok||response.redirected)throw Error('Release response unavailable');
     const bytes=await readManifestBytes(response);
     const data=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
-    const manifest=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(await readManifestBytes(canonicalResponse)));
-    alignedApplication(manifest,data);
-    return {data,bytes};
+    if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='4.0.0'||data.product!=='Numina'||data.release!=='numina-v4.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
+    // Hash the response body itself. JSON.stringify(data) would change the signed bytes.
+    const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),byte=>byte.toString(16).padStart(2,'0')).join('');
+    return {data,bytes,digest};
    })()
   ]);
   if(generation!==requestGeneration||controller.signal.aborted)return;
-  manifestReceived=true;receivedVersion=data.version;
-  set('[data-application-state]','Application release '+data.version+' matches the canonical manifest · calculating fingerprint…');
-  set('[data-application-version]',data.version);
+  set('[data-application-version]','4.0.0');
   renderReleaseRequirements(data);
   set('[data-application-build]',data.build_id);
-  set('[data-application-hash-note]','Manifest received; fingerprint calculation is in progress.');
+  set('[data-application-manifest-sha]',digest);
+  set('[data-application-hash-note]','Calculated from the exact manifest response downloaded during this refresh. This fingerprint alone does not verify a signature.');
   const generated=data.assurance?.builder_signed_provenance;
   set('[data-application-generation-metadata]',generated===false
    ?'The inventory generator did not create builder-signed provenance. A later detached attestation can sign these unchanged bytes.'
    :generated===true?'This inventory reports builder-signed provenance at generation time. That report has not been independently verified here.'
     :'The inventory does not report a generation-time builder-signing result.');
+  const lookup='https://api.github.com/repos/'+APPLICATION_PROVENANCE_POLICY.sourceRepository+'/attestations/sha256:'+digest+'?predicate_type=provenance';
+  all('[data-application-attestation-lookup]').forEach(link=>{
+   link.href=lookup;link.removeAttribute('aria-disabled');link.removeAttribute('tabindex');
+  });
   downloadUrl=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
   all('[data-application-download]').forEach(button=>{button.disabled=false;});
   verificationCommand=commandForPolicy();
   set('[data-application-verification-command]',verificationCommand||'The reviewed builder revision has not been configured yet. A pinned verification command will appear when it is available.');
   all('[data-application-copy-command]').forEach(button=>{button.disabled=!verificationCommand;});
   set('[data-application-provenance-status]','Not verified in this browser. Look up statements for this fingerprint, then verify the signature and builder identity.');
-  // Fingerprinting is a separate check; failure does not erase a received manifest.
-  // Hash the response body itself. JSON.stringify(data) would change the signed bytes.
-  const digestBytes=await Promise.race([crypto.subtle.digest('SHA-256',bytes),deadline]);
-  if(generation!==requestGeneration||controller.signal.aborted)return;
-  const digest=Array.from(new Uint8Array(digestBytes),byte=>byte.toString(16).padStart(2,'0')).join('');
-  set('[data-application-manifest-sha]',digest);
-  set('[data-application-hash-note]','Calculated from the exact manifest response downloaded during this refresh. This fingerprint alone does not verify a signature.');
-  const lookup='https://api.github.com/repos/'+APPLICATION_PROVENANCE_POLICY.sourceRepository+'/attestations/sha256:'+digest+'?predicate_type=provenance';
-  all('[data-application-attestation-lookup]').forEach(link=>{
-   link.href=lookup;link.removeAttribute('aria-disabled');link.removeAttribute('tabindex');
-  });
-  set('[data-application-state]','Application release '+receivedVersion+' matches the canonical manifest · fingerprint calculated');
+  set('[data-application-state]','Release 4.0.0 manifest received · fingerprint calculated');
  }catch{
-  if(generation!==requestGeneration)return;
-  if(manifestReceived){
-   set('[data-application-state]','Application release '+receivedVersion+' matches the canonical manifest · fingerprint unavailable');
-   set('[data-application-manifest-sha]','Unavailable');
-   set('[data-application-hash-note]','The manifest was received, but its fingerprint could not be calculated during this refresh.');
-   set('[data-application-provenance-status]','Not verified in this browser. Download the received manifest to verify its signature and builder identity independently.');
-  }else clearApplicationEvidence('Application release manifest could not be loaded');
+  if(generation===requestGeneration)clearApplicationEvidence('Current release response unavailable');
  }finally{clearTimeout(timer);if(activeController===controller)activeController=null;}
 }
 

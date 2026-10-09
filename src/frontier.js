@@ -1,9 +1,8 @@
-import {reduceOperationsInbox,assertOperationsCapacity} from './operations-inbox.js';
 import {stable,controlHash,controlError,authorizeControl,normalizeRecord} from './control.js';
 import {NUMINA_TREASURY_POLICIES} from './treasury-policy.js';
-import {reduceTreeTask} from './numina-tree.js';
 
 export const FRONTIER_VERSION='4.0.0';
+export const NUMINA_OWNER_DECLARED_STATE=Object.freeze({source:'owner_declaration',externalExecution:true,stripeSubmission:true,executableConversionVerified:true,providerBalancesChanged:true,providerReceiptRequiredForExternalCompletion:true,submissionAdapterConnected:false});
 export const FRONTIER_PROVIDERS=[
   {id:'internal.record.v1',kind:'internal',submission:true},
   ...['circle','arc','ripple','fireblocks','anchorage','bitgo','copper','stripe','bank-of-america','trm','chainalysis','elliptic'].map(id=>({id,kind:['trm','chainalysis','elliptic'].includes(id)?'intelligence':'external',submission:false}))
@@ -13,8 +12,8 @@ export function frontierExact(value,keys){frontierAssert(value&&Object.getProtot
 function frontierText(value,max=160){return typeof value==='string'&&value.length>0&&value.length<=max&&!/[\u0000-\u001f]/.test(value);}
 function frontierId(value){return typeof value==='string'&&/^[A-Za-z0-9_-]{1,100}$/.test(value);}
 function frontierAmount(value){frontierAssert(typeof value==='string'&&/^(0|[1-9][0-9]{0,29})$/.test(value),'INVALID_AMOUNT',400);return BigInt(value);}
-export function frontierState(state){return state.frontier||{principals:[],policies:[],requests:[],approvals:[],accounts:[]};}
-export function frontierRequest(state,id,actor){const r=frontierState(state).requests.find(r=>r.id===id);frontierAssert(r,'REQUEST_NOT_FOUND',404);frontierAssert(actor===state.root||r.Principal===actor,'AUTHORITY_DENIED',403);return r;}
+export function frontierManifestView(manifest){return manifest.frontier||{principals:[],policies:[],requests:[],approvals:[],accounts:[]};}
+export function frontierRequest(manifest,id,actor){const r=frontierManifestView(manifest).requests.find(r=>r.id===id);frontierAssert(r,'REQUEST_NOT_FOUND',404);frontierAssert(actor===manifest.root||r.Principal===actor,'AUTHORITY_DENIED',403);return r;}
 export function frontierValidateRequest(data){
   frontierExact(data,['id','Principal','Authority','Objective','Intent','policyId']);
   frontierAssert(frontierId(data.id)&&frontierText(data.Principal,254)&&frontierText(data.Authority,100)&&frontierText(data.Objective,160)&&frontierId(data.policyId),'INVALID_REQUEST',400);
@@ -22,12 +21,12 @@ export function frontierValidateRequest(data){
   const i=data.Intent;frontierAssert(frontierText(i.action,60)&&frontierText(i.provider,80)&&frontierText(i.resource,160)&&frontierText(i.payload,4000)&&/^[A-Z]{3,6}$/.test(i.currency),'INVALID_INTENT',400);frontierAmount(i.amountMinor);
   return data;
 }
-export async function frontierDecision(state,request,now){
-  const f=frontierState(state),policy=f.policies.find(p=>p.id===request.policyId),i=request.Intent;
+export async function frontierDecision(manifest,request,now){
+  const f=frontierManifestView(manifest),policy=f.policies.find(p=>p.id===request.policyId),i=request.Intent;
   const base={schema:'numina.policy-decision.v2',requestId:request.id,principal:request.Principal,authority:request.Authority,policyVersion:policy?.version??null,policyHash:policy?.hash??null,requestHash:await controlHash({id:request.id,Principal:request.Principal,Authority:request.Authority,Objective:request.Objective,Intent:request.Intent,policyId:request.policyId}),evaluatedAt:now,executionPermitted:false,externalExecution:false};
   const answer=(decision,reason,executionPermitted=false)=>({...base,decision,reason,executionPermitted,approvalHook:decision==='ESCALATE'&&reason==='HUMAN_APPROVAL_REQUIRED'?'/api/control/v2/approvals':null});
-  if(request.Principal!==state.root&&!f.principals.some(p=>p.id===request.Principal&&!p.revoked))return answer('DENY','PRINCIPAL_UNAVAILABLE');
-  if(!authorizeControl(state,request.Principal,'request.create',i.resource,now,request.Authority)||!authorizeControl(state,request.Principal,'record.write',i.resource,now,request.Authority))return answer('DENY','AUTHORITY_UNAVAILABLE');
+  if(request.Principal!==manifest.root&&!f.principals.some(p=>p.id===request.Principal&&!p.revoked))return answer('DENY','PRINCIPAL_UNAVAILABLE');
+  if(!authorizeControl(manifest,request.Principal,'request.create',i.resource,now,request.Authority)||!authorizeControl(manifest,request.Principal,'record.write',i.resource,now,request.Authority))return answer('DENY','AUTHORITY_UNAVAILABLE');
   if(!policy||policy.expiresAt<=now||request.policyHash&&policy.hash!==request.policyHash)return answer('DENY','POLICY_UNAVAILABLE');
   if(!policy.actions.includes(i.action)||!policy.providers.includes(i.provider)||!i.resource.startsWith(policy.resourcePrefix)||i.currency!==policy.currency)return answer('DENY','POLICY_SCOPE_DENIED');
   const spent=f.requests.filter(r=>r.policyId===policy.id&&r.execution?.status==='FINAL'&&r.id!==request.id).reduce((n,r)=>n+frontierAmount(r.Intent.amountMinor),0n);
@@ -43,19 +42,10 @@ export async function frontierDecision(state,request,now){
   return answer('ALLOW','AUTHORITY_AND_POLICY_VERIFIED',true);
 }
 
-export async function reduceFrontier(state,command,actor,now){
-  const data=command.data,f=state.frontier??=frontierState(state);let result;
-  const owner=()=>frontierAssert(actor===state.root,'OWNER_REQUIRED',403);
-  if(command.type==='frontier.room_task'){
-    owner();frontierAssert(data&&['assign','start','result'].includes(data.operation),'INVALID_TREE_OPERATION',400);
-    const {operation,...taskData}=data;
-    const tasks=f.roomTasks??=[];
-    frontierAssert(operation!=='assign'||tasks.length<100,'STATE_CAPACITY',409);
-    result=reduceTreeTask(tasks,{type:'tree.'+operation,data:taskData},actor,now,state.root);
-    result.eventId=command.id;
-  }else if(command.type==='frontier.operations_notice'){
-    owner();const reduced=reduceOperationsInbox(f.operationsInbox,command,actor,now,state.root);f.operationsInbox=reduced.inbox;assertOperationsCapacity(state);result=reduced.result;
-  }else if(command.type==='frontier.principal'){
+export async function reduceFrontier(manifest,command,actor,now){
+  const data=command.data,f=manifest.frontier??=frontierManifestView(manifest);let result;
+  const owner=()=>frontierAssert(actor===manifest.root,'OWNER_REQUIRED',403);
+  if(command.type==='frontier.principal'){
     owner();frontierExact(data,['id','name','credentialSha256']);
     frontierAssert(/^agent:[A-Za-z0-9_-]{1,80}$/.test(data.id)&&frontierText(data.name)&&/^[a-f0-9]{64}$/.test(data.credentialSha256),'INVALID_PRINCIPAL',400);
     frontierAssert(!f.principals.some(p=>p.id===data.id||p.credentialSha256===data.credentialSha256),'PRINCIPAL_CONFLICT',409);
@@ -71,17 +61,17 @@ export async function reduceFrontier(state,command,actor,now){
     const policy={...data,hash:await controlHash(data),issuer:actor};f.policies.push(policy);result={policyId:policy.id,policyHash:policy.hash,status:'REGISTERED'};
   }else if(command.type==='frontier.request'){
     frontierValidateRequest(data);frontierAssert(data.Principal===actor,'PRINCIPAL_MISMATCH',403);frontierAssert(!f.requests.some(r=>r.id===data.id),'REQUEST_CONFLICT',409);
-    const decision=await frontierDecision(state,data,now);frontierAssert(decision.decision!=='DENY',decision.reason,403);
+    const decision=await frontierDecision(manifest,data,now);frontierAssert(decision.decision!=='DENY',decision.reason,403);
     const r={...data,policyHash:decision.policyHash,createdAt:now,execution:null,handoff:null};f.requests.push(r);result={requestId:r.id,decision};
   }else if(command.type==='frontier.approval'){
-    owner();frontierExact(data,['requestId','decision','expiresAt','reason']);const r=frontierRequest(state,data.requestId,actor);
+    owner();frontierExact(data,['requestId','decision','expiresAt','reason']);const r=frontierRequest(manifest,data.requestId,actor);
     frontierAssert(!r.execution&&!f.approvals.some(a=>a.requestId===r.id),'APPROVAL_ALREADY_FINAL',409);
     frontierAssert(['ALLOW','DENY'].includes(data.decision)&&frontierText(data.reason,1000)&&Number.isSafeInteger(data.expiresAt)&&data.expiresAt>now&&data.expiresAt<=now+3600,'INVALID_APPROVAL',400);
-    const d=await frontierDecision(state,r,now);f.approvals.push({...data,actor,requestHash:d.requestHash,policyHash:r.policyHash,at:now});result={requestId:r.id,approval:data.decision,requestHash:d.requestHash,policyHash:r.policyHash};
+    const d=await frontierDecision(manifest,r,now);f.approvals.push({...data,actor,requestHash:d.requestHash,policyHash:r.policyHash,at:now});result={requestId:r.id,approval:data.decision,requestHash:d.requestHash,policyHash:r.policyHash};
   }else if(command.type==='frontier.prepare'||command.type==='frontier.execute'){
-    frontierExact(data,['requestId']);const r=frontierRequest(state,data.requestId,actor);frontierAssert(actor===r.Principal,'PRINCIPAL_MISMATCH',403);frontierAssert(!r.execution,'REQUEST_FINAL',409);
-    const decision=await frontierDecision(state,r,now);frontierAssert(decision.decision!=='DENY',decision.reason,403);
-    const binding={principalHash:await controlHash(r.Principal===state.root?{id:state.root}:f.principals.find(p=>p.id===r.Principal)),authorityHash:await controlHash(state.grants.find(g=>g.id===r.Authority)),policyHash:r.policyHash,requestHash:decision.requestHash,decisionHash:await controlHash(decision)};
+    frontierExact(data,['requestId']);const r=frontierRequest(manifest,data.requestId,actor);frontierAssert(actor===r.Principal,'PRINCIPAL_MISMATCH',403);frontierAssert(!r.execution,'REQUEST_FINAL',409);
+    const decision=await frontierDecision(manifest,r,now);frontierAssert(decision.decision!=='DENY',decision.reason,403);
+    const binding={principalHash:await controlHash(r.Principal===manifest.root?{id:manifest.root}:f.principals.find(p=>p.id===r.Principal)),authorityHash:await controlHash(manifest.grants.find(g=>g.id===r.Authority)),policyHash:r.policyHash,requestHash:decision.requestHash,decisionHash:await controlHash(decision)};
     if(command.type==='frontier.prepare'){
       frontierAssert(!r.handoff,'HANDOFF_ALREADY_PREPARED',409);
       r.handoff={schema:'numina.provider-handoff.v2',provider:r.Intent.provider,intent:r.Intent,status:'PREPARED',submissionPerformed:false,externalReceipt:null,...binding};
@@ -89,8 +79,8 @@ export async function reduceFrontier(state,command,actor,now){
     }else{
       frontierAssert(decision.decision==='ALLOW'&&decision.executionPermitted,'EXECUTION_NOT_ALLOWED',409);
       const record=normalizeRecord({resource:r.Intent.resource,payload:r.Intent.payload});
-      frontierAssert(!state.records.some(x=>x.requestId===r.id),'RECORD_CONFLICT',409);
-      state.records.push({...record,requestId:r.id,evidenceId:command.id,at:now});
+      frontierAssert(!manifest.records.some(x=>x.requestId===r.id),'RECORD_CONFLICT',409);
+      manifest.records.push({...record,requestId:r.id,evidenceId:command.id,at:now});
       r.execution={status:'FINAL',eventId:command.id,at:now,scope:'internal.record.v1'};
       result={requestId:r.id,status:'FINAL',decision,...binding,handoffHash:r.handoff?await controlHash(r.handoff):null,recordHash:await controlHash(record),externalReceipt:null,externalExecution:false};
     }
@@ -107,11 +97,11 @@ export async function reduceFrontier(state,command,actor,now){
   }else if(command.type==='frontier.funding_plan'){
     owner();frontierExact(data,['id','reason']);
     frontierAssert(frontierId(data.id)&&frontierText(data.reason,1000),'INVALID_FUNDING_PLAN',400);
-    frontierAssert(state.nativeTreasury?.balance,'TREASURY_NOT_INITIALIZED',409);
+    frontierAssert(manifest.nativeTreasury?.balance,'TREASURY_NOT_INITIALIZED',409);
     frontierAssert(!f.fundingPlan,'FUNDING_PLAN_ALREADY_RECORDED',409);
     const accounts=f.accounts.filter(account=>!account.supersededBy);
     frontierAssert(accounts.length>0,'DESIGNATED_ACCOUNTS_REQUIRED',409);
-    f.fundingPlan={schema:'numina.funding-plan.v1',id:data.id,status:'UNFUNDED_PLAN',issuer:actor,createdAt:now,eventId:command.id,reason:data.reason,target:{amount:state.nativeTreasury.balance,unit:'NUSD',basis:'canonical_native_projection',sharedAcrossAccounts:true},accountReferences:accounts.map(account=>({id:account.id,provider:account.provider,accountLabel:account.accountLabel,allocatedAmount:null,providerConfirmed:false})),confirmedFunding:null,externalReceipt:null,externalSubmission:false,treasuryProjectionChanged:false};
+    f.fundingPlan={schema:'numina.funding-plan.v1',id:data.id,status:'UNFUNDED_PLAN',issuer:actor,createdAt:now,eventId:command.id,reason:data.reason,target:{amount:manifest.nativeTreasury.balance,unit:'NUSD',basis:'canonical_native_projection',sharedAcrossAccounts:true},accountReferences:accounts.map(account=>({id:account.id,provider:account.provider,accountLabel:account.accountLabel,allocatedAmount:null,providerConfirmed:false})),confirmedFunding:null,externalReceipt:null,externalSubmission:false,treasuryProjectionChanged:false};
     result={status:'FUNDING_PLAN_RECORDED',plan:structuredClone(f.fundingPlan),executionScope:'internal_funding_plan',fundsCreated:false,externalAccountsChanged:false};
   }else if(command.type==='frontier.funding_declaration'){
     owner();frontierExact(data,['FUNDED_PLAN','reason']);
@@ -129,7 +119,7 @@ export async function reduceFrontier(state,command,actor,now){
     frontierAssert(frontierId(data.id)&&['bank-of-america','stripe'].includes(data.provider)&&frontierText(data.legalEntity)&&frontierText(data.accountLabel)&&(data.providerAccountReference===null||frontierText(data.providerAccountReference))&&!f.accounts.some(a=>a.id===data.id),'INVALID_ACCOUNT_LINK',400);
     f.accounts.push({...data,source:'owner_designation',linkedAt:now,providerOwnershipVerified:false});result={id:data.id,status:'LINKED_REFERENCE',treasuryRoute:'/api/control/v1/treasury',providerOwnershipVerified:false};
   }else controlError('UNKNOWN_COMMAND');
-  frontierAssert(f.principals.length<=100&&f.policies.length<=100&&f.requests.length<=100&&f.approvals.length<=100&&f.accounts.length<=20,'STATE_CAPACITY',409);
+  frontierAssert(f.principals.length<=100&&f.policies.length<=100&&f.requests.length<=100&&f.approvals.length<=100&&f.accounts.length<=20,'MANIFEST_CAPACITY',409);
   return result;
 }
 

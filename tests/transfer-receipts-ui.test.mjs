@@ -19,7 +19,7 @@ test('production worker dispatches receipt routes and anonymous reads fail befor
 test('page is accessible and does not invent payment references or client settlement controls',()=>{
  const page=readFileSync(new URL('../public/transfer-receipts.html',import.meta.url),'utf8');
  const code=readFileSync(new URL('../public/transfer-receipts.js',import.meta.url),'utf8');
- assert.match(page,/Import evidence only/);assert.match(page,/Numina owner authentication is required/);
+ assert.match(page,/Import evidence only/);assert.match(page,/Owner authentication is required/);
  assert.match(page,/blockchain transaction hash/);assert.match(page,/six token decimals/);assert.match(page,/role="status"/);
  assert.doesNotMatch(page,/<script[^>]*>[^<]+<\/script>/);assert.doesNotMatch(code,/innerHTML|eth_send|eth_sign|sendRawTransaction/);
  assert.match(code,/pagehide/);assert.match(code,/scope.reset/);assert.match(code,/scope.isCurrent/);

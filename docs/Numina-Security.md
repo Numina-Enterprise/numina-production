@@ -1,12 +1,9 @@
 # Numina: singular security and financial control model
 
-**Current documentation alignment:** October 4, 2026  
-**Original review date:** September 15, 2026  
+**Document date:** September 15, 2026  
 **Operator:** SK Consulting LLC, Iowa, USA  
 **System:** Numina, package `xyz.numinalabs.app`, hosted application 4.0.0  
 **Maintained public copy:** https://numinalabs.xyz/downloads/Numina-Security.md
-
-The [unchanged September 15 guide](https://numinalabs.xyz/downloads/history/Numina-Security-2026-09-15.md) retains its original implementation and test observations. Current release identity comes from the [canonical Numina manifest](https://numinalabs.xyz/api/control/v1/manifest). This documentation update does not establish a new test result or production acceptance.
 
 ## 1. Purpose and evidence status
 
@@ -14,7 +11,7 @@ Numina is one connected system: one canonical authority, one Numina-native treas
 
 This document describes the reviewed implementation, its threats and the operational requirements needed to support that ambition. **Implemented** means a control is visible in source and, where listed, exercised by automated tests. **Observed** refers to a dated service or Console observation. **Required / unverified** identifies evidence still needed. A documented requirement is not proof it has been implemented or independently assessed.
 
-The maintained application is 4.0.0. Exact native artifact versions, hashes and historical compilation scope are listed in the [native package record](https://numinalabs.xyz/downloads/native-package-record-v4.json); a retained candidate is not evidence of current store publication. A wrapper signature does not freeze the hosted pages it opens. Hosting updates, native builds and Play publication each have their own evidence.
+The maintained app source is 4.0.0; the Play candidate remains the previously signed 3.0.0 / code 2 Android bundle. A wrapper signature does not freeze the hosted pages it opens. Hosting updates, native builds and Play publication each have their own evidence.
 
 No independent penetration test, smart-contract audit, reserve audit, SOC 2 examination, ISO certification, regulator authorization or complete OWASP/NIST assessment is established by this document. Historical signed artifacts retain their exact assessment scope.
 
@@ -58,7 +55,7 @@ Principal boundaries:
 | Browser protections | CSP, HSTS, no sniffing, frame restrictions, and denied camera/microphone/geolocation in `src/worker.js`. | Confirm effective headers on live static and dynamic responses, including provider-managed routes. |
 | Android | Registered package retained; source target API 36; source permission allowlist is INTERNET; cleartext and backup disabled. | Inspect merged AAB permissions, Play validation, installed-device behavior and domain association. |
 | Private documents | Owner access, file type/signature and size checks, content hashes, no-store responses, sandboxed rendering. Receipts remain `owner_uploaded_unverified`. | Malware-scanning coverage and independent issuer/document verification remain unverified. |
-| Data minimization | Telemetry uses route groups, counters, timing/status and random request identifiers, excluding bodies and account/treasury values. The maintained service worker clears older Numina app caches and fetches current resources without an offline fallback. | Hosting/provider log retention and downstream data flows require confirmation. |
+| Data minimization | Telemetry uses route groups, counters, timing/status and random request identifiers, excluding bodies and account/treasury values. Private API data is excluded from the service-worker cache allowlist. | Hosting/provider log retention and downstream data flows require confirmation. |
 | Release identity | Source alignment checks, retained signed-build records and candidate hash checks; Windows checkout rules preserve compared bytes. | Exact deployed revision and archive, signing custody and independent verification must be recorded for each release. |
 
 ## 4. Threat model
@@ -85,7 +82,7 @@ Principal boundaries:
 | Owner treasury/provider records and uploaded documents | Restricted evidence and reconciliation. Uploaded documents are not automatically authenticated by the issuer. |
 | Abuse-prevention counters | Control access uses a day-bucketed hash derived from connecting IP; service-request limits use a hash derived from account ID and request method. These are pseudonymous identifiers, not proof of anonymization. |
 | Application diagnostics | Grouped route, method, status, duration, counters and random request ID. Infrastructure providers may maintain additional logs under their own settings. |
-| Public app shell | The maintained service worker clears older Numina app caches and fetches current resources without an offline fallback. Private API/payment responses are not stored for offline use. |
+| Public app shell | The service worker caches listed public assets; private API/payment responses are outside that allowlist. |
 
 The public [privacy notice](https://numinalabs.xyz/privacy) is the user-facing record. The app exposes [Delete account](https://numinalabs.xyz/privacy#delete-account), available without reinstalling or signing in, using the existing support channel. Request scope includes associated personal data and provider-held data processed for Numina. The operator must verify ownership, explain lawful retention exceptions and communicate the outcome. A successful navigation test does not verify actual deletion fulfillment.
 
@@ -162,8 +159,6 @@ Observed September 15, 2026 on production version 76: reviewer sign-in succeeded
 ## 10. Incident response and continuity runbook
 
 This is the operating procedure to exercise and evidence; a completed drill or staffed response SLA is not yet documented.
-
-Current-process telemetry does not establish continuous security monitoring, alert delivery or a staffed on-call response. The operator must record alert routing, actual human coverage and a backup contact, and retain a successful alert-to-human exercise before claiming operational coverage.
 
 1. **Receive and classify:** record UTC time, reporter, affected component, observed behavior, affected accounts/assets and confidence. Keep private details out of public issues.
 2. **Contain:** an authorized operator suspends the affected capability, revokes compromised access or uses a tested pause control. Preserve the canonical journal and uncertain transactions for reconciliation.

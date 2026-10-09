@@ -84,7 +84,7 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
     func back() { if webView.canGoBack { failure = nil; webView.goBack() } }
 
     func openBrowserWorkspace() {
-        openExternal(AppConfiguration.browserWorkspaceURL)
+        openExternal(AppConfiguration.startURL)
     }
 
     func openExternal(_ url: URL) {

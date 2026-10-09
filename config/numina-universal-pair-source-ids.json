@@ -1,0 +1,19 @@
+{
+  "schema": "numina.universal-pair-source-ids.v1",
+  "identity": "NUMINA",
+  "status": "FINAL",
+  "sourceIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+  ],
+  "sourceIdSources": [
+    "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1"
+  ],
+  "matrix": "1x2",
+  "environments": [
+    "FRONTIER"
+  ],
+  "currentPushEnvironment": "FRONTIER",
+  "futureAdvancementAllowed": true,
+  "sourceCount": 1,
+  "bindingCount": 2
+}

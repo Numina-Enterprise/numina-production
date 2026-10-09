@@ -1,8 +1,5 @@
 // One recorded owner authorization shared by all Numina runtime release records.
 export const NUMINA_OWNER_APPROVAL=Object.freeze({
-  procurementStatementScope: "HISTORICAL_OWNER_STATEMENTS_NOT_REQUEST_AUTHORIZATION",
-  currentProcurementPolicy: "/procurement-policy.js",
-  procurementDefault: "DISABLED_BY_DEFAULT",
   "schema": "numina.owner-approval.v1",
   "id": "numina-singular-owner-approval-2026-09-16",
   "status": "OWNER_APPROVAL_RECORDED",

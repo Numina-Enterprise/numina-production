@@ -1,4 +1,5 @@
-import {FINANCIAL_SERVICES,FINANCIAL_DOCUMENT_KINDS,validateFinancialEvidence,assessFinancialEvidence} from '../public/financial-model.js';
+import {NUMINA_FINANCIAL_SOFTWARE_METADATA,FINANCIAL_SERVICES,FINANCIAL_DOCUMENT_KINDS,validateFinancialEvidence,assessFinancialEvidence} from '../public/financial-model.js';
+import {NUMINA_CANONICAL_TREASURY_VALUES} from '../public/treasury-connection-model.js';
 import {controlActor,controlBody} from './control-http.js';
 import {controlHash,controlError,stable} from './control.js';
 import {readControl} from './control-store.js';
@@ -6,8 +7,8 @@ import {rateLimit} from './store.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 
 const financialBase='/api/financial/v1';
-function financialResponse(body,status=200){return Response.json(body,{status,headers:{'Cache-Control':'private, no-store','Vary':'Cookie, Authorization'}});}
-export function financialManifest(){return {schema:'numina.financial-evidence.v1',workspace:'/financial-services',package:'xyz.numinalabs.app',services:FINANCIAL_SERVICES,documentKinds:FINANCIAL_DOCUMENT_KINDS,functions:['private_document_upload','register_evidence','list_evidence','check_document_coverage','export_review_packet'],documentStorage:'/api/control/v1/treasury-documents',evidence:'/api/financial/v1/evidence',reviewPacket:'/api/financial/v1/review-packet',security:'/security',documentation:'/downloads/Numina-Financial-Services.md',templates:'/downloads/Numina-Financial-Document-Templates.md',approvalEvidence:'/downloads/Numina-Financial-Approval-Evidence.md',classification:'evidence_management_only',financialExecution:false,licensingVerified:false};}
+function financialResponse(body,status=200){return Response.json({...NUMINA_FINANCIAL_SOFTWARE_METADATA,...body},{status,headers:{'Cache-Control':'private, no-store','Vary':'Cookie, Authorization'}});}
+export function financialManifest(){return {...NUMINA_FINANCIAL_SOFTWARE_METADATA,schema:'numina.financial-evidence.v1',workspace:'/financial-services',package:'xyz.numinalabs.app',services:FINANCIAL_SERVICES,documentKinds:FINANCIAL_DOCUMENT_KINDS,functions:['private_document_upload','register_evidence','list_evidence','check_document_coverage','export_review_packet'],documentStorage:'/api/control/v1/treasury-documents',evidence:'/api/financial/v1/evidence',reviewPacket:'/api/financial/v1/review-packet',security:'/security',documentation:'/downloads/Numina-Financial-Services.md',templates:'/downloads/Numina-Financial-Document-Templates.md',approvalEvidence:'/downloads/Numina-Financial-Approval-Evidence.md',classification:'evidence_management_only',canonicalTreasuryValues:NUMINA_CANONICAL_TREASURY_VALUES,canonicalTreasuryRoute:'/api/treasury/v1/model',providerObservationTreatment:'NUMINA',financialExecution:false,licensingVerified:false};}
 async function financialReadRecord(bucket,key,prefix){
   const object=await bucket.get(key);if(!object||object.size>20000)controlError('EVIDENCE_RECORD_UNAVAILABLE',503);
   let record;try{record=JSON.parse(await new Response(object.body).text());}catch{controlError('EVIDENCE_RECORD_UNAVAILABLE',503);}

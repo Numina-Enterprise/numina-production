@@ -2,7 +2,7 @@
 
 This is a concrete Android Gradle project for the existing Numina workspace at https://numinalabs.xyz/app. It uses Google's Android Browser Helper 2.7.3 to launch a Trusted Web Activity, with the normal browser fallback. It does not embed a WebView, signing key, billing SDK, custody wallet or token transaction mechanism. The hosted application's current access and payment rules still apply.
 
-**Current Android source: 4.0.0, version code 4; a matching compiled and signed artifact is not recorded.** The historical 4.0.0/code 3 APK and upload AAB were compiled, signed and signature-verified in build [34947973846](https://github.com/skott34-dot/numina-production/actions/runs/34947973846) from source `cd28af207f39fe8ba010ef83eafbd832448ffbbf`. Those binaries retain their exact bytes, identities and original provenance. See `../../docs/native-package-record-v4.json` and `../../docs/android-signed-build-record-v4.json`. Device installation and Play release submission are not established by this build record.
+**Current Android release: 4.0.0, version code 3. The APK and upload AAB were compiled, signed and signature-verified in build [34947973846](https://github.com/skott34-dot/numina-production/actions/runs/34947973846) from source `cd28af207f39fe8ba010ef83eafbd832448ffbbf`.** The Android source and signing workflow are unchanged in merged release `c6ffbb50d77ff53323b71b7048872637677e6b42`. See `../../docs/native-package-record-v4.json` and `../../docs/android-signed-build-record-v4.json`. Device installation and Play release submission are not established by this build record.
 
 **Prior binary status: Android 3.0.0 APK and AAB compiled and signed successfully in hosted build 34785067667, completed 2026-09-13 at 21:53:32 UTC.** Signature checks passed. Neither artifact was installed on a device or submitted to a store. No tests were run. Exact binaries and their source commit are recorded in `../../docs/native-package-record-v3.json`.
 
@@ -11,7 +11,7 @@ Historical local attempt, superseded by the successful hosted build: the initial
 | Field | Candidate value |
 | --- | --- |
 | Native display version | 4.0.0 |
-| Native source build/version code | 4 |
+| Native build/version code | 3 |
 | Proposed package ID | xyz.numinalabs.app |
 | Minimum Android SDK | 23 |
 | Compile / target SDK | 36 |
@@ -19,7 +19,7 @@ Historical local attempt, superseded by the successful hosted build: the initial
 | Gradle / JDK | 8.13 / 17 |
 | Browser integration | com.google.androidbrowserhelper:androidbrowserhelper:2.7.3 |
 
-Google Play Console confirms the package `xyz.numinalabs.app`; Samsung registration remains unverified. Future updates must preserve this identity and use an acceptable increasing version code. The application release 4.0.0 uses the separately pinned rc26 verifier runtime.
+Google Play Console confirms the package `xyz.numinalabs.app`; Samsung registration remains unverified. Future updates must preserve this identity and use an acceptable increasing version code. The application release 4.0.0 uses the separately pinned rc27 verifier runtime.
 
 ## Build the release artifacts
 
@@ -31,11 +31,11 @@ gradle --no-daemon :app:bundleRelease :app:assembleRelease
 
 These are build tasks, not a test command. No Gradle wrapper JAR is included because it was not generated or downloaded here. The expected output paths, **not existing files**, are `app/build/outputs/bundle/release/app-release.aab` and `app/build/outputs/apk/release/app-release-unsigned.apk`. The project deliberately has no release signing configuration. An unsigned APK is not installable, and the AAB must be signed appropriately before upload. Use the owner's actual keystore/signing arrangement through Android Studio's signed-bundle workflow; do not use a debug key or an invented identity for production.
 
-Digital Asset Links are published for the actual release certificate identified in `assetlinks.configuration.json`. The Google Play-issued app-signing fingerprint is also included, as observed in the authenticated console on September 14, 2026. This configuration record describes the published statement; it is not itself the Digital Asset Links response. Without valid association, the browser displays its normal Custom Tab interface. No browser verification bypass is included. The launcher accepts only HTTPS `/app` paths and exact `/terms`, `/privacy`, `/software-licenses` and `/compliance` pages on `numinalabs.xyz`. Three source-defined launcher shortcuts expose Terms, Privacy and legal coverage; other explicit launch URLs fall back to the workspace home. These source changes require a fresh compiled, signed and device-verified binary.
+Digital Asset Links are published for the actual release certificate identified in `assetlinks.configuration.json`. The Google Play-issued app-signing fingerprint is also included, as observed in the authenticated console on September 14, 2026. This configuration record describes the published statement; it is not itself the Digital Asset Links response. Without valid association, the browser displays its normal Custom Tab interface. No browser verification bypass is included. The launcher accepts only HTTPS `/app` paths on `numinalabs.xyz`; other explicit launch URLs fall back to the workspace home.
 
 ## Remaining release work
 
-Compile and sign the current 4.0.0/code 4 source with the existing release/upload identities before treating it as the current Play release candidate. The recorded signed code 3 AAB is historical and retains its original build provenance. Check existing Play uploads before using code 4; preserve the package and signing identities and use an acceptable increasing version code. Complete publisher identity review and the remaining device/store review steps. Domain association uses the published `/.well-known/assetlinks.json` and actual signing certificate; store app-signing identities require their own association. No native authentication, device behavior or store acceptance has been verified. The browser supplies the existing sign-in context; the source route `/signin-with-chatgpt?return_to=...` is not a new native OAuth integration. Consulting checkout, digital-service billing classification, privacy/deletion disclosures, accessibility and account review access remain store-specific checks. This candidate must not be presented as a token wallet or as enabling NUSD execution.
+Use the recorded signed 4.0.0 upload AAB for the Play release candidate. It opens the current hosted workspace and retains its exact original build provenance. Check existing Play uploads before selecting version code 3; any subsequent native update must preserve the package and signing identities and use an acceptable increasing version code. Complete publisher identity review and the remaining device/store review steps. Domain association uses the published `/.well-known/assetlinks.json` and actual signing certificate; store app-signing identities require their own association. No native authentication, device behavior or store acceptance has been verified. The browser supplies the existing sign-in context; the source route `/signin-with-chatgpt?return_to=...` is not a new native OAuth integration. Consulting checkout, digital-service billing classification, privacy/deletion disclosures, accessibility and account review access remain store-specific checks. This candidate must not be presented as a token wallet or as enabling NUSD execution.
 
 The browser dependency is Apache-2.0 licensed; it is referenced as a Maven dependency, not vendored. Its resolved transitive dependencies and notices must be included in the actual native build inventory. The copied Numina icon retains the source application's unresolved ownership status; this package does not certify IP title.
 
@@ -45,10 +45,4 @@ Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks c
 
 ## Procurement usage
 
-Procurement is disabled by default (`procurement_usage: false`). Read https://numinalabs.xyz/api/control/v2/manifest for the current live capability gate and https://numinalabs.xyz/v4/release/manifest for the shared application release. A release manifest or historical owner statement does not authorize a purchase. Each procurement request requires request-bound owner or delegated approval, a signed budget reservation, and signed provider access under the current procurement policy. A completed payment requires its matching provider receipt. The hosted workspace reads the shared release; source packages do not establish native compilation, signing, store publication, or procurement execution. Historical binaries retain their separately recorded build identities.
-
-## Shared legal evidence and browser sign-in
-
-[Terms](https://numinalabs.xyz/terms), [Privacy](https://numinalabs.xyz/privacy), [software licenses](https://numinalabs.xyz/software-licenses) and [legal/country coverage](https://numinalabs.xyz/compliance) apply within their stated scopes. `legal/` contains matching policy and coverage snapshots with file hashes. A country entry is not permission to deploy or transact. The declared Maven helper is not a complete resolved native dependency inventory; compile the actual dependency graph and provide its required licenses/notices before distribution.
-
-The xyz web workspace uses a fixed hosted-origin browser sign-in fallback. No additional origin is added to Android's trusted associations. Per [Chrome's origin rules](https://developer.chrome.com/docs/android/trusted-web-activity/multi-origin), navigation outside the verified origin displays normal Custom Tab UI. The [static shortcut implementation](https://developer.android.com/develop/ui/compose/system/shortcuts/creating-shortcuts) uses explicit intents to this app's launcher. Validate shortcut resolution, browser continuation, account deletion, associated domains and permissions on a signed device build; desktop browser evidence does not establish these native outcomes.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

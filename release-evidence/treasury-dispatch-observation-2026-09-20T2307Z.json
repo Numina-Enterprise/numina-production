@@ -1,0 +1,81 @@
+{
+  "schema": "numina.treasury.dispatch-observation.v1",
+  "observedAt": "2026-09-20T23:07:32Z",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "sourceProtected": true,
+  "sourceSha": "9158994b5f26a108b72e27f6c408217ea47e423a",
+  "dispatcher": {
+    "workflow": "verify-workflow-pins.yml",
+    "runId": 35543656344,
+    "conclusion": "success",
+    "immutableDependencyVerification": "success",
+    "treasuryDispatchStep": "success"
+  },
+  "treasuryModel": {
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
+  },
+  "runs": {
+    "nativeAlignment": {
+      "workflow": "align-native-treasury-500t.yml",
+      "runId": 35543661331,
+      "event": "workflow_dispatch",
+      "status": "pending",
+      "conclusion": null,
+      "jobsCreated": 0,
+      "pendingDeployments": 0,
+      "writeExecuted": false,
+      "readBackObserved": false
+    },
+    "aggregateModel": {
+      "workflow": "initiate-treasury-aggregate-model.yml",
+      "runId": 35543662435,
+      "event": "workflow_dispatch",
+      "status": "pending",
+      "conclusion": null,
+      "jobsCreated": 0,
+      "pendingDeployments": 0,
+      "writeExecuted": false,
+      "readBackObserved": false
+    }
+  },
+  "trustedRelease": {
+    "recordId": "trusted-numina-9158994b5f26-20260920T230726Z",
+    "artifactRoot": "7ca7105e0a686788348390f08d0d67e6bfbf38289ac3af1350d6f5b559c9318e",
+    "committed": true,
+    "readBack": true,
+    "providerEvidenceRecordId": "provider-observation-9158994b5f26-20260920T230721Z",
+    "providerArtifactRoot": "ba93b3df6ad4fe09f43112ff01d22489c9eb9d072606611e4647d86ef664be07"
+  },
+  "boundaries": {
+    "providerExecutionAuthorized": false,
+    "externalFundsMovementAuthorized": false,
+    "bankTransferPerformed": false,
+    "providerSettlementPerformed": false,
+    "chainTransferPerformed": false,
+    "providerBalanceOverridePerformed": false
+  },
+  "nextGate": "GitHub must create jobs for the two pending workflow_dispatch runs before any NUMINA journal write/read-back can be observed.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

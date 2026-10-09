@@ -1,6 +1,6 @@
 # NVIDIA NIM host integration
 
-The adapter uses NIM's OpenAI-compatible Chat Completions API. It checks the Numina application and rc26 identity before requesting a model response, exposes the existing discovery tools, and validates the entire bounded tool batch before execution. It creates no new root, journal or treasury. A model response is not a FINAL receipt or proof of hardware deployment.
+The adapter uses NIM's OpenAI-compatible Chat Completions API. It checks the Numina application and rc27 identity before requesting a model response, exposes the existing discovery tools, and validates the entire bounded tool batch before execution. It creates no new root, journal or treasury. A model response is not a FINAL receipt or proof of hardware deployment.
 
 Use an already configured host SDK:
 
@@ -10,12 +10,9 @@ const response=await nvidiaNimRoundTrip({
   endpoint:process.env.NUMINA_NIM_BASE_URL,
   model:process.env.NUMINA_NIM_MODEL,
   createProvider:options=>new OpenAI({...options,apiKey:process.env.NVIDIA_API_KEY}),
-  messages:[{role:'user',content:'Call numina_application_release once. Report the application version and build ID if present. Label missing fields “not reported.” State that this server-reported record does not independently prove deployment or financial backing. Use at most four bullets.'}],
-  toolNames:['numina_application_release']
+  messages:[{role:'user',content:'Read the current Numina release.'}]
 });
 ```
-
-The release example exposes only its required discovery tool. The host can select other read-only discovery tools for other tasks; a call to a tool absent from the selected menu is rejected before dispatch.
 
 The host supplies `OpenAI` and its credentials; the kit installs no SDK. Numina requests always use `https://numinalabs.xyz`. Remote NIM endpoints require HTTPS; HTTP is limited to loopback development. The host is responsible for honoring the supplied request timeout and retry limit. The helper makes at most two model calls and one discovery batch of at most eight calls.
 

@@ -43,13 +43,6 @@
       "when": 1789696700000,
       "tag": "0005_numina_manifest_control",
       "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1790899200000,
-      "tag": "0006_treasury_deposit_instructions",
-      "breakpoints": true
     }
   ]
 }

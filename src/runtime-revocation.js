@@ -32,8 +32,10 @@ async function revocationBoundedBytes(stream,maximum,signal){
 }
 
 export async function routeRuntimeRevocation(request,upstreamFetch=fetch){
-  if(new URL(request.url).pathname!==revocationPath)return null;
+  const requestUrl=new URL(request.url);
+  if(requestUrl.pathname!==revocationPath)return null;
   if(request.method!=='POST')return new Response(null,{status:405,headers:{...revocationHeaders,Allow:'POST'}});
+  if(requestUrl.origin===new URL(RUNTIME_ORIGIN).origin)return revocationError(410,'RUNTIME_REVOCATION_ROUTE_RETIRED');
   const bearer=request.headers.get('authorization')??'';
   if(!/^Bearer [^\s]{1,4096}$/.test(bearer))return revocationError(401,'OWNER_BEARER_REQUIRED');
   const origin=request.headers.get('origin');

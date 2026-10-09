@@ -9,7 +9,7 @@
       "signal": "traffic",
       "field": "window.requestsPerSecond",
       "unit": "requests_per_second",
-      "action": "size_stateless_capacity"
+      "action": "size_compute_capacity"
     },
     {
       "signal": "latency",
@@ -66,8 +66,20 @@
     "script": "scripts/publish-with-telemetry.mjs",
     "reportDirectory": ".openai/publishing/",
     "servedByOwnerEndpoint": false,
-    "metrics": ["metrics.gitCommands", "metrics.gitFailures", "metrics.pushAttempts", "metrics.retries", "metrics.totalDurationMs"],
-    "perCommand": ["steps[].stage", "steps[].exitCode", "steps[].durationMs", "steps[].failure", "steps[].timedOut"],
+    "metrics": [
+      "metrics.gitCommands",
+      "metrics.gitFailures",
+      "metrics.pushAttempts",
+      "metrics.retries",
+      "metrics.totalDurationMs"
+    ],
+    "perCommand": [
+      "steps[].stage",
+      "steps[].exitCode",
+      "steps[].durationMs",
+      "steps[].failure",
+      "steps[].timedOut"
+    ],
     "maximumPushAttempts": 2,
     "sourcePushRequiresMatchingRemoteCommit": true,
     "sourcePushEstablishesDeployment": false
@@ -80,12 +92,21 @@
     "endpoint": "/api/ops/v1/quantum/measure",
     "hardwareConnected": false,
     "ibm": {
-      "provider": "ibm_quantum",
+      "provider": "NUMINA",
       "configurationField": "quantum.ibm",
       "connectionEndpoint": "/api/ops/v1/quantum/ibm/connection",
       "access": "authenticated_owner",
       "scope": "authenticated_backend_discovery",
-      "observations": ["observedAt", "providerApiAuthenticated", "connected", "selectedBackend", "backends", "durationMs", "failedStage", "providerHttpStatus"],
+      "observations": [
+        "observedAt",
+        "providerApiAuthenticated",
+        "connected",
+        "selectedBackend",
+        "backends",
+        "durationMs",
+        "failedStage",
+        "providerHttpStatus"
+      ],
       "jobSubmissionEnabled": false,
       "treasuryWrites": false
     },
@@ -94,14 +115,50 @@
       "field": "quantum.workload",
       "scope": "current_process_only",
       "metrics": [
-        {"signal": "active_jobs", "field": "activeJobs", "action": "compare_with_limits.concurrentPerProcess"},
-        {"signal": "minute_admissions", "field": "admittedThisMinute", "action": "compare_with_limits.requestsPerMinutePerProcess"},
-        {"signal": "concurrency_rejections", "field": "window.concurrencyLimited", "action": "review_stateless_compute_capacity"},
-        {"signal": "rate_rejections", "field": "window.rateLimited", "action": "review_quantum_request_rate_policy"},
-        {"signal": "service_failures", "field": "window.failureRate", "action": "investigate_quantum_failures"},
-        {"signal": "completed_work", "fields": ["window.completedQubits", "window.completedGates", "window.completedShots"], "action": "compare_workload_size_before_changing_capacity"},
-        {"signal": "compute_latency", "field": "window.computeHistogram", "action": "merge_bucket_counts_before_computing_fleet_percentiles"},
-        {"signal": "logging_failures", "field": "loggingFailures", "action": "repair_log_pipeline"}
+        {
+          "signal": "active_jobs",
+          "field": "activeJobs",
+          "action": "compare_with_limits.concurrentPerProcess"
+        },
+        {
+          "signal": "minute_admissions",
+          "field": "admittedThisMinute",
+          "action": "compare_with_limits.requestsPerMinutePerProcess"
+        },
+        {
+          "signal": "concurrency_rejections",
+          "field": "window.concurrencyLimited",
+          "action": "review_compute_capacity"
+        },
+        {
+          "signal": "rate_rejections",
+          "field": "window.rateLimited",
+          "action": "review_quantum_request_rate_policy"
+        },
+        {
+          "signal": "service_failures",
+          "field": "window.failureRate",
+          "action": "investigate_quantum_failures"
+        },
+        {
+          "signal": "completed_work",
+          "fields": [
+            "window.completedQubits",
+            "window.completedGates",
+            "window.completedShots"
+          ],
+          "action": "compare_workload_size_before_changing_capacity"
+        },
+        {
+          "signal": "compute_latency",
+          "field": "window.computeHistogram",
+          "action": "merge_bucket_counts_before_computing_fleet_percentiles"
+        },
+        {
+          "signal": "logging_failures",
+          "field": "loggingFailures",
+          "action": "repair_log_pipeline"
+        }
       ],
       "minimumCapacitySamples": 20,
       "automaticScalingEnabled": false,

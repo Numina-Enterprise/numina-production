@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
-import {localChain} from '../runtime/nusd/development/local-chain.mjs';
+import ganache from '../runtime/nusd/development/node_modules/ganache/dist/node/core.js';
 import {BrowserProvider,ContractFactory,id,ZeroAddress} from '../runtime/nusd/development/node_modules/ethers/lib.esm/index.js';
 import {loadTokenArtifact,validateTokenArtifact} from '../runtime/nusd/scripts/token-artifact.mjs';
 import {compileSource} from '../runtime/nusd/development/compile.mjs';
@@ -10,7 +10,7 @@ const base=new URL('../runtime/nusd/',import.meta.url),read=path=>fs.readFileSyn
 const token=loadTokenArtifact(),settlement=JSON.parse(read('artifacts/NuminaSettlement.json'));
 const sent=async promise=>(await promise).wait();
 async function fixture(t,{adminDelay=0}={}){
-  const engine=await localChain();
+  const engine=ganache.provider({logging:{quiet:true},chain:{chainId:1337,hardfork:'london'},wallet:{deterministic:true,totalAccounts:8}});
   t.after(()=>engine.disconnect());const provider=new BrowserProvider(engine,undefined,{cacheTimeout:-1});provider.pollingInterval=10;
   const people=await Promise.all(Array.from({length:7},(_,i)=>provider.getSigner(i))),addresses=await Promise.all(people.map(p=>p.getAddress()));
   const [admin,issuer,minter,pauser,payer,recipient,outsider]=people;
@@ -28,7 +28,7 @@ test('retained token artifact pins exact source bytes; settlement rebuild matche
 });
 test('issuance enforces distinct roles, pause, bounded authorization, exact mint and supply cap',async t=>{
   const f=await fixture(t),{coin,addresses,issuer,minter,outsider,pauser}=f;
-  assert.equal(await coin.totalSupply(),0n);assert.equal(await coin.decimals(),18n);assert.equal(await coin.paused(),true);
+  assert.equal(await coin.totalSupply(),0n);assert.equal(await coin.decimals(),6n);assert.equal(await coin.paused(),true);
   await assert.rejects(coin.connect(outsider).unpause());await sent(coin.unpause());
   await assert.rejects(coin.grantRole(await coin.MINTER_ROLE(),addresses[1]));
   await assert.rejects(coin.connect(outsider).authorizeIssuance(id('bad'),addresses[4],1n,2000000000));
