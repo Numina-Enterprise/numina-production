@@ -64,6 +64,16 @@ test('current singular runtime wrappers retain exact signed manifest, status and
   const result=await assess(singularFixtures());
   for(const field of ['manifestMatches','releaseDeclarationVerified','runtimeStatusMatches','supplyIdentityMatches','controlManifestBound'])assert.equal(result[field],true,field);
   assert.deepEqual(result.release,EXPECTED_RELEASE);
+  const treasury=result.manifest.mechanics.treasury;
+  assert.equal(treasury.providerVerification,false);
+  assert.equal(result.manifest.mechanics.providerVerification.verified,false);
+  for(const role of ['bankUsd','stripeUsdc','nativeNusd']){
+    assert.equal(treasury.softwareBalances[role].current,null);
+    assert.equal(treasury.softwareBalances[role].available,null);
+    assert.equal(treasury.softwareBalances[role].modeledValue,'500000000000000');
+  }
+  assert.equal(treasury.softwareBalances.aggregate.current,null);
+  assert.equal(treasury.softwareBalances.aggregate.modeledValue,'1500000000000000');
   assert.equal(result.status.external_execution_performed,false);
   assert.equal(result.status.frozen_core,undefined); // No historical observation is invented by unwrapping.
 });

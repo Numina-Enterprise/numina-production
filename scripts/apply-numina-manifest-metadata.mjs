@@ -1,11 +1,12 @@
 import {readdirSync, readFileSync, writeFileSync, statSync} from 'node:fs';
 import {join, extname, relative} from 'node:path';
 import {NUMINA_CANONICAL_TREASURY_VALUES,NUMINA_CANONICAL_DEPOSITS,NUMINA_CANONICAL_DEPOSIT_RECORDS,NUMINA_CANONICAL_USD_DEPOSIT,NUMINA_CANONICAL_USDC_DEPOSIT,NUMINA_CANONICAL_NUSD_DEPOSIT,NUMINA_SOFTWARE_ALIGNMENT,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
+import {NUMINA_DENOMINATION_POLICY} from '../public/treasury-valuation.js';
 import {NUMINA_TREE,NUMINA_FRONTIER_LAYERS} from '../src/numina-root.js';
 
 const ROOT_URL = new URL('../', import.meta.url);
 const ROOT = decodeURIComponent(ROOT_URL.pathname).replace(/^\/(?:[A-Za-z]:)/, m=>m.slice(1));
-const SELF = 'scripts\\apply-numina-manifest-metadata.mjs';
+const SELF = 'scripts/apply-numina-manifest-metadata.mjs';
 const CANONICAL_TREASURY_VALUES=NUMINA_CANONICAL_TREASURY_VALUES;
 const CANONICAL_USD_DEPOSIT=NUMINA_CANONICAL_USD_DEPOSIT;
 const CANONICAL_USDC_DEPOSIT=NUMINA_CANONICAL_USDC_DEPOSIT;
@@ -22,18 +23,18 @@ const META = Object.freeze({
   financialSoftwareIdentity:'NUMINA', financialMetadataAuthority:'NUMINA', financialNamespace:'NUMINA', financialProviderIdentity:'NUMINA',
   balanceInferenceSource:'NUMINA', providerBalanceSemantics:'NUMINA',
   metadataOverride:'NUMINA', metadataOverridePath:'config/numina-metadata-overrides.v1.json', metadataAppliesTo:'NUMINA', metadataResolution:'NUMINA',
-  canonicalSource:'NUMINA', sourceOfTruth:'NUMINA', owner:'NUMINA', host:'NUMINA', executor:'NUMINA', canonicalView:'NUMINA', allDataBelongsToIdentity:true, externalRecordIdentity:'NUMINA', externalFactIdentity:'NUMINA', externalEvidenceIdentity:'NUMINA', externalRecordsResolveTo:'NUMINA', allIdentityBearingRecordsResolveTo:'NUMINA', rootType:'REPOSITORY', repository:'NUMINA', repositoryBranch:'main', repositoryRole:'CANONICAL_ROOT_REPOSITORY', repositoryAuthoritative:true, repositoryCanonical:true, updateDirection:'NUMINA', runtimeSurfaces:Object.freeze(['website','api','mobile','runtime','receipts','treasury','release_artifacts']), ingestMode:'CANONICAL_REPOSITORY', canonicalizedBy:'NUMINA', authorityTransferred:false, leafInputsAllowed:false, singular:true, transfersEnabled:true, manifestEqualsNumina:true, numinaEqualsManifest:true,
+  canonicalSource:'NUMINA', sourceOfTruth:'NUMINA', owner:'NUMINA', host:'NUMINA', executor:'NUMINA', canonicalView:'NUMINA', allDataBelongsToIdentity:true, externalRecordIdentity:'NUMINA', externalFactIdentity:'NUMINA', externalEvidenceIdentity:'NUMINA', externalRecordsResolveTo:'NUMINA', allIdentityBearingRecordsResolveTo:'NUMINA', rootType:'REPOSITORY', repository:'NUMINA', repositoryBranch:'main', repositoryRole:'CANONICAL_ROOT_REPOSITORY', repositoryAuthoritative:true, repositoryCanonical:true, updateDirection:'NUMINA', runtimeSurfaces:Object.freeze(['website','api','mobile','runtime','receipts','treasury','release_artifacts']), ingestMode:'CANONICAL_REPOSITORY', canonicalizedBy:'NUMINA', authorityTransferred:false, leafInputsAllowed:false, singular:true, transfersEnabled:null, manifestEqualsNumina:true, numinaEqualsManifest:true,
   manifestIsNumina:true, numinaIsManifest:true, numinaIsAllSoftware:true, allSoftwareIsNumina:true,
   singularSoftwareIdentity:true, competingSoftwareIdentityAllowed:false, competingManifestAuthorityAllowed:false, competingMetadataAuthorityAllowed:false,
   manifestStatus:'FINAL', nativeEvidenceStatus:'FINAL',
   scope:'NUMINA',
-  rawEvidenceImmutable:false, sourceScopedObservationsRetained:false,
+  rawEvidenceImmutable:true, sourceScopedObservationsRetained:true,
   canonicalTreasuryValues:CANONICAL_TREASURY_VALUES, canonicalDeposits:CANONICAL_DEPOSITS, canonicalDepositRecords:CANONICAL_DEPOSIT_RECORDS, canonicalRepository:'NUMINA',
-  canonicalTreasuryValueStatus:'VERIFIED', providerObservationTreatment:'NUMINA'
+  canonicalTreasuryValueStatus:'MODEL_RECORDED', providerObservationTreatment:'NUMINA'
 });
 const METADATA_OVERRIDE_PATH='config/numina-metadata-overrides.v1.json';
 const EXISTING_METADATA_OVERRIDE=JSON.parse(readFileSync(join(ROOT,'config/numina-metadata-overrides.v1.json'),'utf8'));
-const METADATA_OVERRIDE=Object.freeze({...EXISTING_METADATA_OVERRIDE,schema:'numina.metadata-overrides.v1',...META,resolution:{all:'NUMINA',treasuryValues:'NUMINA'},canonicalTreasuryPrecedence:'NUMINA',canonicalTreasuryAppliesTo:'NUMINA',providerObservationTreatment:'NUMINA',historicalEvidenceTreatment:'NUMINA',appliesTo:'NUMINA',precedence:'NUMINA',signedEvidenceBytesPreserved:false,hashPinnedArtifactBytesPreserved:false,overwriteMode:'NUMINA',canonicalRepository:'NUMINA'});
+const METADATA_OVERRIDE=Object.freeze({...EXISTING_METADATA_OVERRIDE,schema:'numina.metadata-overrides.v1',...META,resolution:{all:'NUMINA',treasuryValues:'NUMINA'},canonicalTreasuryPrecedence:'NUMINA',canonicalTreasuryAppliesTo:'NUMINA',providerObservationTreatment:'NUMINA',historicalEvidenceTreatment:'NUMINA',appliesTo:'NUMINA',precedence:'NUMINA',signedEvidenceBytesPreserved:true,hashPinnedArtifactBytesPreserved:true,overwriteMode:'NUMINA',canonicalRepository:'NUMINA'});
 const REPLACEMENTS = [
   ['ALL_NUMINA_SOFTWARE_METADATA','NUMINA'],
   ['ALL_NUMINA_SOFTWARE','NUMINA'],
@@ -59,9 +60,15 @@ const REPLACEMENTS = [
 const TEXT_EXTS = new Set(['.json','.js','.mjs','.md','.yml','.yaml','.html']);
 const SKIP = new Set(['.git','node_modules','dist','.next','build','DerivedData','archive','release-evidence','vendor','history','reviews','provenance']);
 const ACTIVE_REWRITE_ROOTS=['config','public','src','api','integrations/numina','runtime/vercel-production','mobile','scripts','docs','tests'];
-const PINNED_METADATA_ARTIFACTS=new Set(['public\\final-build.json','public\\final-manifest.json','docs\\NUMINA-FINAL-BUILD.json','docs\\NUMINA-FINAL-MANIFEST.json']);
+const PINNED_METADATA_ARTIFACTS=new Set(['public/final-build.json','public/final-manifest.json','docs/NUMINA-FINAL-BUILD.json','docs/NUMINA-FINAL-MANIFEST.json']);
 const PINNED_UPDATE_MODE=process.argv.includes('--update-final-artifacts'); // Artifact bytes may evolve; immutable release hash references are preserved separately.
 
+// Financial receipts, deployment observations and adopted policies are historical evidence.
+// Current display metadata must never rewrite their signed or hash-bound bytes.
+function preservedTreasuryEvidence(p){
+  const name=relative(ROOT,p).replaceAll('\\','/');
+  return PINNED_METADATA_ARTIFACTS.has(relative(ROOT,p).replaceAll('\\','/'))||name.startsWith('docs/nusd/')||name.startsWith('docs/approved-reviews/')||name.startsWith('runtime/nusd/policies/')||name==='runtime/nusd/treasury-write-request.json'||name==='config/treasury-aggregate-settlement-1500t.v1.json';
+}
 function walk(dir,out=[]){
   for(const name of readdirSync(dir)){
     if(SKIP.has(name))continue;
@@ -77,7 +84,7 @@ function rewriteTextMetadata(){
     const activeRoot=join(ROOT,rootName);
     if(!statSync(activeRoot,{throwIfNoEntry:false}))continue;
     for(const p of walk(activeRoot)){
-    if(relative(ROOT,p)===SELF||(!PINNED_UPDATE_MODE&&PINNED_METADATA_ARTIFACTS.has(relative(ROOT,p))))continue;
+    if(preservedTreasuryEvidence(p)||relative(ROOT,p).replaceAll('\\','/')===SELF||(!PINNED_UPDATE_MODE&&PINNED_METADATA_ARTIFACTS.has(relative(ROOT,p).replaceAll('\\','/'))))continue;
     let text;try{text=readFileSync(p,'utf8');}catch{continue;}
     let next=text;
     for(const [oldValue,newValue] of REPLACEMENTS)next=next.split(oldValue).join(newValue);
@@ -86,25 +93,19 @@ function rewriteTextMetadata(){
   }
   return changed;
 }
-function normalizeCurrent(value){
-  if(Array.isArray(value)){for(const item of value)normalizeCurrent(item);return;}
-  if(!value||typeof value!=='object')return;
-  for(const key of Object.keys(value)){
-    const current=value[key];
-    if(['providerTransactionId','linkedProviderTransactionId'].includes(key)&&current==='EyE7rrpEajcBKg0Jbj10UQxBjM8NjMHnV51Kw')value[key]='wb9NnY6nO8um9j9JpMJ4U6mgELdaM5he069yq';
-    else if(['providerDisplayedTransactionAmount','observedProviderTransactionAmount'].includes(key))value[key]='12';
-    else if(['providerBalanceSnapshotValue','providerBalanceSnapshotCurrent','providerBalanceSnapshotAvailable','linkedProviderBalanceSnapshot','observedProviderBalance'].includes(key))value[key]='0';
-    else if(key==='providerConfirmation'&&current==='8000750550')value[key]='XXXXX50550';
-    else if(['providerAmountMatchesSoftwareModel','providerAmountMatchesModeledValue','providerBalanceMatchesSoftwareModel','providerBalanceMatchesModeledValue'].includes(key))value[key]=false;
-    normalizeCurrent(value[key]);
-  }
-}
+// Provider facts retain their captured amount, currency, source ID and timestamp.
+// An internal metadata refresh cannot refresh or correct an external observation.
+function normalizeCurrent(value){return value;}
 const NUMINA_IDENTITY_FIELDS=new Set(['systemIdentity','modelIdentity','blockchainIdentity','chainIdentity','networkIdentity','dataIdentity','financeIdentity','treasuryIdentity','repositoryIdentity','softwareIdentity','institutionIdentity','providerIdentity','financialProviderIdentity','providerInstitution','providerOfficialName','linkedOfficialName','evidenceIdentity','evidenceAuthority','transportIdentity','provider','transportProvider','transportService','providerService','routeProvider','runtimeIdentity','core','activeCore']);
 function normalizeMetadataBlocks(value){
   if(!value||typeof value!=='object')return;
   if(Object.isFrozen(value)||value===CANONICAL_TREASURY_VALUES||value===CANONICAL_DEPOSIT_RECORDS||value===CANONICAL_USD_DEPOSIT||value===CANONICAL_USDC_DEPOSIT||value===CANONICAL_NUSD_DEPOSIT||value===NUMINA_TREE)return;
   if(Array.isArray(value)){for(const item of value)normalizeMetadataBlocks(item);return;}
   for(const key of Object.keys(value))if(NUMINA_IDENTITY_FIELDS.has(key))value[key]='NUMINA';
+  if(value.transfersEnabled===true)value.transfersEnabled=null;
+  for(const key of ['canonicalValues','canonicalTreasuryValues'])if(value[key]?.schema===CANONICAL_TREASURY_VALUES.schema)value[key]=structuredClone(CANONICAL_TREASURY_VALUES);
+  if(value.software_treasury?.canonicalValues?.schema===CANONICAL_TREASURY_VALUES.schema)value.software_treasury.bankUsd=structuredClone(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd);
+  if(Object.hasOwn(value,'denomination_policy'))value.denomination_policy=structuredClone(NUMINA_DENOMINATION_POLICY);
   if(Object.hasOwn(value,'nativeLocationBindings')&&value.nativeLocationBindings&&typeof value.nativeLocationBindings==='object')value.nativeLocationBindings=structuredClone(CANONICAL_NATIVE_LOCATION_BINDINGS);
   if(value.schema==='numina.software-alignment.v1'){value.treasuryWrites={...CANONICAL_TREASURY_WRITES};value.treasuryModel=structuredClone(CANONICAL_TREASURY_MODEL);}
   else if(Object.hasOwn(value,'treasuryWrites')&&value.treasuryWrites&&typeof value.treasuryWrites==='object'&&!Array.isArray(value.treasuryWrites)){const merged={...CANONICAL_TREASURY_WRITES,...value.treasuryWrites};delete merged.status;if(Object.hasOwn(CANONICAL_TREASURY_WRITES,'state'))merged.state=CANONICAL_TREASURY_WRITES.state;value.treasuryWrites=merged;}
@@ -132,12 +133,12 @@ function normalizeMetadataBlocks(value){
   if(value.schema==='numina.final-build.contract.v2'){value.identity='NUMINA';value.scope='NUMINA';value.structure='NUMINA';value.appliesTo='NUMINA';value.contract='NUMINA';value.singular=true;value.role='NUMINA';value.synchronization='NUMINA';}
   const carriesCanonicalDeposits=Object.hasOwn(value,'canonicalTreasuryValues')||Object.hasOwn(value,'canonicalDeposits')||Object.hasOwn(value,'canonicalDepositRecords')||Object.hasOwn(value,'canonicalDeposit')||Object.hasOwn(value,'canonicalUsdDeposit')||Object.hasOwn(value,'canonicalUsdcDeposit')||Object.hasOwn(value,'canonicalNusdDeposit')||Object.hasOwn(value,'numinaMetadata');
   if(Object.hasOwn(value,'canonicalTreasuryValues'))value.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES;
-  if(carriesCanonicalDeposits){value.canonicalDeposits=true;value.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS;}
+  if(carriesCanonicalDeposits){value.canonicalDeposits=CANONICAL_DEPOSITS;value.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS;}
   for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete value[key];
   if(value.id===CANONICAL_USD_DEPOSIT.id)Object.assign(value,CANONICAL_USD_DEPOSIT);
   if(value.id===CANONICAL_USDC_DEPOSIT.id)Object.assign(value,CANONICAL_USDC_DEPOSIT);
   if(value.id===CANONICAL_NUSD_DEPOSIT.id)Object.assign(value,CANONICAL_NUSD_DEPOSIT);
-  if(Object.hasOwn(value,'numinaMetadata'))value.numinaMetadata={...META,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,canonicalDeposits:true,canonicalDepositRecords:CANONICAL_DEPOSIT_RECORDS};
+  if(Object.hasOwn(value,'numinaMetadata'))value.numinaMetadata={...META,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,canonicalDeposits:CANONICAL_DEPOSITS,canonicalDepositRecords:CANONICAL_DEPOSIT_RECORDS};
   for(const item of Object.values(value))normalizeMetadataBlocks(item);
 }
 function normalizeAllActiveJsonMetadata(){
@@ -146,7 +147,7 @@ function normalizeAllActiveJsonMetadata(){
     const activeRoot=join(ROOT,rootName);
     if(!statSync(activeRoot,{throwIfNoEntry:false}))continue;
     for(const p of walk(activeRoot)){
-      if(extname(p).toLowerCase()!=='.json'||(!PINNED_UPDATE_MODE&&PINNED_METADATA_ARTIFACTS.has(relative(ROOT,p))))continue;
+      if(preservedTreasuryEvidence(p)||extname(p).toLowerCase()!=='.json'||(!PINNED_UPDATE_MODE&&PINNED_METADATA_ARTIFACTS.has(relative(ROOT,p).replaceAll('\\','/'))))continue;
       let data;try{data=JSON.parse(readFileSync(p,'utf8'));}catch{continue;}
       const before=JSON.stringify(data);
       normalizeMetadataBlocks(data);
@@ -162,10 +163,10 @@ function preserveRoutingSemantics(){
   writeFileSync(path,JSON.stringify(routing,null,2)+'\n');
 }
 function stampJson(path,current=false){
-  const p=join(ROOT,path),data=JSON.parse(readFileSync(p,'utf8'));
+  const p=join(ROOT,path);if(preservedTreasuryEvidence(p))return;const data=JSON.parse(readFileSync(p,'utf8'));
   normalizeMetadataBlocks(data);
-  data.numinaMetadata={...META,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,canonicalDeposits:true,canonicalDepositRecords:CANONICAL_DEPOSIT_RECORDS};
-  data.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES; data.canonicalDeposits=true; data.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS; for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete data[key]; data.canonicalSource='NUMINA'; data.sourceOfTruth='NUMINA';
+  data.numinaMetadata={...META,canonicalTreasuryValues:CANONICAL_TREASURY_VALUES,canonicalDeposits:CANONICAL_DEPOSITS,canonicalDepositRecords:CANONICAL_DEPOSIT_RECORDS};
+  data.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES; data.canonicalDeposits=CANONICAL_DEPOSITS; data.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS; for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete data[key]; data.canonicalSource='NUMINA'; data.sourceOfTruth='NUMINA';
   if(current)normalizeCurrent(data);
   writeFileSync(p,JSON.stringify(data,null,2)+'\n');
 }
@@ -199,7 +200,7 @@ const workspacePackage=JSON.parse(readFileSync(packagePath,'utf8'));
 normalizeMetadataBlocks(workspacePackage);
 workspacePackage.numinaMetadata={...META};
 workspacePackage.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES;
-workspacePackage.canonicalDeposits=true;
+workspacePackage.canonicalDeposits=CANONICAL_DEPOSITS;
 workspacePackage.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS;
 for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete workspacePackage[key];
 workspacePackage.numinaTree=NUMINA_TREE;
@@ -208,7 +209,7 @@ workspacePackage.sourceOfTruth='NUMINA';
 workspacePackage.numina=workspacePackage.numina??{};
 workspacePackage.numina.metadata={...META};
 workspacePackage.numina.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES;
-workspacePackage.numina.canonicalDeposits=true;
+workspacePackage.numina.canonicalDeposits=CANONICAL_DEPOSITS;
 workspacePackage.numina.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS;
 for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete workspacePackage.numina[key];
 delete workspacePackage.numina.tree;
@@ -217,10 +218,10 @@ const historicalIndexed=indexReleaseEvidence();
 
 const manifestPath=join(ROOT,'config/numina-manifest.v2.json');
 const manifest=JSON.parse(readFileSync(manifestPath,'utf8'));
-manifest.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES; manifest.canonicalDeposits=true; manifest.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS; for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete manifest[key]; delete manifest.numinaTree; delete manifest.numina_tree; manifest.canonicalSource='NUMINA'; manifest.sourceOfTruth='NUMINA';
+manifest.canonicalTreasuryValues=CANONICAL_TREASURY_VALUES; manifest.canonicalDeposits=CANONICAL_DEPOSITS; manifest.canonicalDepositRecords=CANONICAL_DEPOSIT_RECORDS; for(const key of ['canonicalDeposit','canonicalUsdDeposit','canonicalUsdcDeposit','canonicalNusdDeposit'])delete manifest[key]; delete manifest.numinaTree; delete manifest.numina_tree; manifest.canonicalSource='NUMINA'; manifest.sourceOfTruth='NUMINA';
 Object.assign(manifest,{
   manifest:'NUMINA',self:'NUMINA',software_identity:'NUMINA',all_software:'NUMINA',manifest_equals_numina:true,numina_equals_manifest:true,
-  manifest_is_numina:true,numina_is_manifest:true,numina_is_all_software:true,all_software_is_numina:true,singular_software_identity:true,transfersEnabled:true,
+  manifest_is_numina:true,numina_is_manifest:true,numina_is_all_software:true,all_software_is_numina:true,singular_software_identity:true,transfersEnabled:null,
   competing_software_identity_allowed:false,competing_manifest_authority_allowed:false,competing_metadata_authority_allowed:false,
   metadata_authority:'NUMINA',metadata_namespace:'NUMINA',
   metadata_scope:'NUMINA',metadata_override_manifest:METADATA_OVERRIDE_PATH,metadata_resolution:'AUTHORITATIVE_NUMINA_OVERLAY',metadata_applies_to:'NUMINA',

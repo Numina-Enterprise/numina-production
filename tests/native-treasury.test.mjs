@@ -88,7 +88,7 @@ test('account views share one checked balance without changing stored references
       v=>v.accounts[1].sharedNativeTreasury.revision++,v=>v.accounts[0].sharedNativeTreasury.providerBalance=true,
       v=>v.nativeValuation.denominations[1].amount='1',v=>v.nativeValuation.denominations[1].unit='USD',
       v=>v.nativeValuation.denominations[1].rate.numerator='2',v=>v.nativeValuation.denominations.push({...v.nativeValuation.denominations[0]}),
-      v=>v.nativeValuation.denominations[1].providerBalance=true,v=>v.nativeValuation.amount='1',v=>v.nativeValuation.executableConversionVerified=false,
+      v=>v.nativeValuation.denominations[1].providerBalance=true,v=>v.nativeValuation.amount='1',v=>v.nativeValuation.executableConversionVerified=true,
       v=>v.nativeFundingView.head='a'.repeat(64),v=>v.nativeFundingView.nativeTarget.unit='USD',
       v=>v.nativeFundingView.status='FUNDED_PLAN',v=>v.nativeFundingView.statusBasis='native_owner_declaration',
       v=>v.nativeFundingView.ownerDeclaredFunded=true,v=>v.nativeFundingView.ownerDeclarationEventId='unrelated',
@@ -363,7 +363,7 @@ test('HTTP exposes one treasury write route, checks owner and origin, and redire
     const event=await command(db);
     assert.equal((await worker.fetch(req('treasury',event,{'oai-authenticated-user-id':'test','oai-authenticated-user-email':'owner@example.test',Origin:'https://wrong.test'}),env)).status,403);
     const result=await worker.fetch(req('treasury',event),env);assert.equal(result.status,200);assert.equal((await result.json()).status,'FINAL');
-    const read=await worker.fetch(req('treasury'),env);assert.equal(read.headers.get('Cache-Control'),'private, no-store');const readBody=await read.json();assert.equal(readBody.projection.balance,'500000000000000');assert.equal(readBody.softwareTransfer.status,'COMPLETED');assert.equal(readBody.softwareTransfer.clearingStatus,'CLEARED');assert.equal(readBody.softwareTransfer.clearedDate,'2026-08-31');assert.equal(readBody.softwareTransfer.amount,'500000000000000');assert.equal(readBody.softwareTransfer.confirmation,'8000750550');
+    const read=await worker.fetch(req('treasury'),env);assert.equal(read.headers.get('Cache-Control'),'private, no-store');const readBody=await read.json();assert.equal(readBody.projection.balance,'500000000000000');assert.equal(readBody.softwareTransfer.status,'MODEL_RECORDED');assert.equal(readBody.softwareTransfer.clearingStatus,'UNVERIFIED');assert.equal(readBody.softwareTransfer.cleared,false);assert.equal(readBody.softwareTransfer.clearedDate,'2026-08-31');assert.equal(readBody.softwareTransfer.amount,'500000000000000');assert.equal(readBody.softwareTransfer.confirmation,'8000750550');
     const legacy=await worker.fetch(req('treasury-attestation'),env);assert.equal(legacy.status,308);assert.equal(legacy.headers.get('Location'),'/api/control/v1/treasury');
     const alternate=await worker.fetch(req('commands',{id:'wrong-route',expectedRevision:1,type:'treasury',data:{}}),env);assert.equal(alternate.status,409);assert.equal((await alternate.json()).error,'CANONICAL_TREASURY_ROUTE_REQUIRED');
     const providerBefore=readFileSync(new URL('../src/stripe-treasury.js',import.meta.url),'utf8');assert.equal(providerBefore.includes('createNuminaTreasury'),false);

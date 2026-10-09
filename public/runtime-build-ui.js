@@ -83,7 +83,8 @@ export function contractSourcePresentation(record) {
     const contracts=record.contracts,issuance=record.issuance;
     if(record.schema!=='numina.nusd.contract-record.v1'||record.url!=='/api/nusd/v1/contracts'||record.native_treasury!=='/api/control/v1/treasury'||
       !Array.isArray(contracts)||contracts.map(contract=>contract.name).join(',')!=='NuminaUSD,NuminaSettlement,NuminaUSDCConversion,NuminaUSDRedemption'||
-      record.financial_execution?.issuance!==true||record.financial_execution?.transfer!==true||!['nusd_settlement','usd_redemption','usdc_conversion','external_deposits'].every(name=>record.financial_execution[name]===false)||
+      record.financial_execution?.issuance!==true||record.financial_execution?.transfer!==false||!['nusd_settlement','usd_redemption','usdc_conversion','external_deposits'].every(name=>record.financial_execution[name]===false)||
+      record.transfersEnabled!==null||issuance?.currentOperationalState!=='UNKNOWN'||issuance.paused!==null||issuance.transfersEnabled!==null||
       issuance?.decimals!==18||issuance.constructorMint!==true||issuance.externallyBackedClaim!==false||
       !/^(0|[1-9][0-9]{0,77})$/.test(issuance.amountNusd)||!/^\d+$/.test(issuance.baseUnits)||
       BigInt(issuance.amountNusd)*10n**18n!==BigInt(issuance.baseUnits)||!Number.isFinite(Date.parse(issuance.verifiedAt))||
@@ -92,7 +93,7 @@ export function contractSourcePresentation(record) {
       const contract=contracts[i],deployment=contract.deployment;
       if(contract.verification?.source_hash_matches_artifact!==true||!short(contract.compiler?.version)||contract.compiler.settings?.evmVersion!=='london')throw Error('Contract source record unavailable');
       if(i<2){
-        if(!['DEPLOYED_VERIFIED_ACTIVE','DEPLOYED_VERIFIED'].includes(contract.status)||contract.verification.chain_receipt_verified!==true||
+        if(contract.status!=='DEPLOYED_VERIFIED'||contract.verification.chain_receipt_verified!==true||
           deployment?.status!=='verified'||deployment.lifecycle!=='FINAL'||deployment.submission_performed!==true||deployment.expected_chain_id!=='962421430'||
           !/^0x[0-9a-fA-F]{40}$/.test(deployment.contract_address)||!/^0x[0-9a-fA-F]{64}$/.test(deployment.transaction_hash)||
           deployment.receipt?.status!=='0x1'||deployment.receipt.record!=='runtime/nusd/deployment-receipt.json')throw Error('Contract source record unavailable');
@@ -101,13 +102,13 @@ export function contractSourcePresentation(record) {
         // or evidence that the bank or USDC destination accepted a transaction.
         if(contract.verification.chain_receipt_verified!==false||deployment?.submission_performed!==false||
           deployment.contract_address!==null||deployment.transaction_hash!==null||deployment.receipt!==null)throw Error('Contract source record unavailable');
-        if(deployment.status==='native_active'){
+        if(deployment.status==='native_declared_unverified'){
           const unit=i===2?'USDC':'USD',nativeId=i===2?'numina:nusd-usdc:conversion:v1':'numina:nusd-usd:redemption:v1';
-          if(contract.status!=='ACTIVE_SIGNED_1_TO_1_VERIFIED'||deployment.lifecycle!=='ACTIVE'||
-            contract.verification.native_activation_verified!==true||contract.verification.signed_1_to_1_backing_verified!==true||
+          if(contract.status!=='DECLARED_1_TO_1_UNVERIFIED'||deployment.lifecycle!=='DECLARED'||
+            contract.verification.native_activation_verified!==false||contract.verification.signed_1_to_1_backing_verified!==false||
             deployment.verification_scope!=='NUMINA_NATIVE_TREASURY'||deployment.external_provider_verified!==false||
             deployment.native_contract_id!==nativeId||deployment.native_attestation_id!==record.native_activation?.backing_attestation_id||
-            deployment.ratio!=='1:1'||deployment.backing_verified!==true||deployment.native_unit!==unit||
+            deployment.ratio!=='1:1'||deployment.backing_verified!==false||deployment.native_unit!==unit||
             !/^(0|[1-9][0-9]{0,77})$/.test(deployment.native_value)||deployment.native_value!==deployment.nusd_equivalent||
             deployment.chain_contract_address_recorded!==false||deployment.chain_transaction_hash_recorded!==false)throw Error('Contract source record unavailable');
         }else if(deployment.status!=='not_verified'||contract.verification.native_activation_verified===true)throw Error('Contract source record unavailable');
@@ -120,8 +121,8 @@ export function contractSourcePresentation(record) {
     if(issuance.transactionHash!==contracts[0].deployment.transaction_hash)throw Error('Contract source record unavailable');
     return {source:'NUSD token and settlement deployed · issuance receipt-verified · 18 decimals',
       'source-scope':'Recorded constructor issuance: '+issuance.amountNusd+' NUSD. Verified at '+issuance.verifiedAt+'.'+
-        (contracts.some(contract=>contract.deployment.status==='native_active')?' Conversion and redemption are ACTIVE in the NUMINA native model; their chain deployment and external provider execution remain unverified.':'')+
-        ' Current transfer availability is ACTIVE; external reserves, conversion and redemption remain separately evidenced.'};
+        (contracts.some(contract=>contract.deployment.status==='native_declared_unverified')?' Conversion and redemption are owner-declared targets; backing, chain deployment and provider execution remain unverified.':'')+
+        ' Current pause and transfer availability are unknown; historical issuance does not establish current execution.'};
   }
   if(record?.schema!=='numina.nusd.contract-record.v1'||record.status!=='compiled_not_deployed'||
     record.url!=='/api/nusd/v1/contracts'||record.native_treasury!=='/api/control/v1/treasury'||
@@ -172,7 +173,7 @@ export function assessFinancialStatus(data) {
     state: 'Current application status received',
     contract: data.asset.contract === null ? (data.contract_record?'No deployed address reported · compiled contract sources available':'No contract address reported') : data.asset.contract,
     identity: data.contract_record?.status==='DEPLOYED_VERIFIED'?'Issued NUSD · deployed contract verified · 18 decimals':data.asset_verification.status.replaceAll('_', ' '),
-    activation: data.operator_activation?.status==='active_verified'?'Active · chain activity verified · transfers enabled':'No verified activation state received',
+    activation: data.operator_activation?.evidenceType==='owner_statement'?'Owner declared active; current chain activity and transfer availability remain unverified':'Current chain activity, pause and transfer availability are unknown',
     purchase: data.operator_activation?.purchaseAvailability==='operator_confirmed'?'Available per operator confirmation · checkout connection not verified':'No token purchase declaration received',
     backing: data.treasury_backing.status.replaceAll('_', ' '),
     pricing: data.service_pricing.status.replaceAll('_', ' '),
@@ -181,7 +182,7 @@ export function assessFinancialStatus(data) {
     ...(mint&&!data.capabilities.mint?{mint:mint.status==='FINAL_MINTED_18D'?'Constructor issuance FINAL · 1,500T NUSD · 18 decimals · no additional mint requested':'Mint state unavailable'}:{}),
     ...source,
     checked: 'Status response fetched ' + new Date().toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC') + '.'+
-      (data.contract_record?.issuance?' Current NUSD status reports transfers enabled; the finalized constructor receipt remains separately bound at '+data.contract_record.issuance.verifiedAt+'.':''),
+      (data.contract_record?.issuance?' Current pause and transfer availability are unknown; the finalized constructor receipt remains separately bound at '+data.contract_record.issuance.verifiedAt+'.':''),
   };
 }
 

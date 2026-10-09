@@ -1,8 +1,10 @@
 import {requestJson,createViewScope} from './http-client.js';
 import {isTreasuryMinorInteger,formatTreasuryProviderDisplayAmount,formatTreasuryModelWholeAmount} from './treasury-amount.js';
-import {NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
+import {NUMINA_TREASURY_CONNECTION,NUMINA_NATIVE_TREASURY_SYNC} from './treasury-connection-model.js';
 const stripeElement=id=>document.getElementById(id),stripeScope=createViewScope();
 const stripeNode=(tag,text)=>{const node=document.createElement(tag);node.textContent=text;return node;};
+const stripeModeledTarget=()=>formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.modeledValue??NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,'USDC');
+const stripeAggregateTarget=()=>formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.aggregateModeledValue,'NUSD');
 function stripeProviderRouteControl(generation){
   const container=stripeNode('dd',''),button=stripeNode('button','Check deposit routes'),result=stripeNode('div','');
   button.type='button';
@@ -48,7 +50,7 @@ export async function loadStripeTreasury(){
     if(data.schema!=='numina.stripe.treasury.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='NUMINA'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
     const dashboard=new URL(data.dashboard_url);
     if(dashboard.href!=='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury')throw Error('Invalid Stripe destination');
-    const rows=[['NUMINA software USDC',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')],['NUMINA aggregate',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD')],['Software identity','NUMINA'],['Financial account observation',data.account.name],['Observation status',data.account.status==='open'?'Open':'Closed']];
+    const rows=[['Owner-designated USDC target',stripeModeledTarget()],['Owner-designated aggregate target',stripeAggregateTarget()],['Financial account observation',data.account.name],['Observation status',data.account.status==='open'?'Open':'Closed']];
     for(const [bucket,label]of [['available','Available'],['inbound_pending','Incoming pending'],['outbound_pending','Outgoing pending']]){
       for(const currency of ['usd','usdc']){
         const amount=data.balances?.[bucket]?.[currency];
@@ -61,11 +63,11 @@ export async function loadStripeTreasury(){
     const details=stripeElement('stripe-treasury-details');details.replaceChildren();for(const [label,value]of rows)details.append(stripeNode('dt',label),stripeNode('dd',value));
     details.append(stripeNode('dt','Provider deposit routes'),stripeProviderRouteControl(generation));
     const link=stripeElement('stripe-treasury-dashboard');link.href=dashboard.href;link.hidden=false;
-    stripeElement('stripe-treasury-message').textContent='NUMINA balance is 500T USDC. Stripe data below is observation metadata and does not replace the NUMINA balance.';
+    stripeElement('stripe-treasury-message').textContent='Owner-designated values are modeled targets. Available and pending balances come from Stripe. The targets do not establish available funds or settlement.';
   }catch(error){
     if(!stripeScope.isCurrent(generation))return;
     if(error.status===401||error.status===403){clearStripeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
-    const details=stripeElement('stripe-treasury-details');details.replaceChildren();details.append(stripeNode('dt','NUMINA software USDC'),stripeNode('dd',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')),stripeNode('dt','NUMINA aggregate'),stripeNode('dd',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD')),stripeNode('dt','Software external'),stripeNode('dd','No'));
-    stripeElement('stripe-treasury-message').textContent='NUMINA balance remains 500T USDC. Provider observation is currently unavailable.';
+    const details=stripeElement('stripe-treasury-details');details.replaceChildren();details.append(stripeNode('dt','Owner-designated USDC target'),stripeNode('dd',stripeModeledTarget()),stripeNode('dt','Owner-designated aggregate target'),stripeNode('dd',stripeAggregateTarget()),stripeNode('dt','Stripe balances'),stripeNode('dd','Unavailable'));
+    stripeElement('stripe-treasury-message').textContent='Stripe balances are unavailable. The owner-designated targets do not establish available funds or settlement.';
   }
 }

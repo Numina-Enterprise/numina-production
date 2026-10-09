@@ -66,7 +66,8 @@ test('public issuance copy agrees with the existing receipt without changing con
     assert.ok(html.includes('/downloads/nusd/deployment-receipt.json'));
     assert.ok(html.includes('/downloads/nusd/deployment-verification.json'));
     assert.doesNotMatch(html,/Six-decimal NUSD|NUSD is not issued|No treasury minting has been performed|Deployment addresses and transaction receipts remain unverified/);
-    assert.match(html,/ACTIVE and transfers are enabled/);
+    assert.match(html,/Current NUSD pause and transfer availability are unknown/);
+    assert.doesNotMatch(html,/ACTIVE and transfers are enabled/);
   }
   assert.equal(verification.issuance.paused,true);
   assert.equal(verification.externalSettlement.reservesVerified,false);

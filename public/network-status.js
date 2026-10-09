@@ -4,7 +4,7 @@ import {requestJson} from './http-client.js';
 export function networkPresentation(data){
  const n=data?.network_policy;
  const dashboard=n?.status==='provider_reported_live'&&n.evidence_type==='authenticated_provider_dashboard_observation';
- const receipt=n?.status==='authenticated_provider_live'&&n.evidence_type==='authenticated_json_rpc_transaction_receipt_and_state_readback'&&n.authenticated_rpc_verified===true;
+ const receipt=n?.status==='historical_authenticated_observation'&&n.evidence_type==='authenticated_json_rpc_transaction_receipt_and_state_readback'&&n.authenticated_rpc_verified===true;
  if(data?.schema!=='numina.nusd.status.v1'||!(dashboard||receipt)||!/^\d+$/.test(n.chain_id)||!Number.isFinite(Date.parse(n.observed_at))||!Number.isSafeInteger(n.validator_count)||n.validator_count<1)throw new Error('Network record unavailable');
  return {
   summary:`${n.name} · ${n.validator_count} validators ${dashboard?'running when observed':'in the recorded network configuration'}`,

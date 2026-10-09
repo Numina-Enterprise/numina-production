@@ -28,5 +28,16 @@ export const NUMINA_TREASURY_POLICY_V3=Object.freeze({
   verification:Object.freeze({nativeTreasury:'verified',backing:'verified_1_to_1',providerIdentity:'NUMINA',contractsActive:true,settlementStatus:'SETTLED',settlementPerformed:true,submissionPerformed:true,singularSettlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',singularSettlementReceipt:'release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json',mintEvidence:'runtime/nusd/mint-receipt.json',evidenceSource:'NUMINA_MINT_AND_NATIVE_EVIDENCE',nusdMinted:'1500000000000000',nusdBurned:'0',nativeAttestationId:'numina:treasury:backing:2026-09-19:v1'}),
   treasuryModel:Object.freeze({identity:'NUMINA',treasuryIdentity:'NUMINA',providerIdentity:'NUMINA',settlementStatus:'SETTLED',singularSettlementReceiptId:'numina:treasury:settlement:2026-09-19:v1',singular:true,treasuryCount:1,accountCount:1,componentCount:3,holdingsCount:3,balanceCount:1,accountModel:'ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS',componentsAreSeparateTreasuries:false,aggregation:'ONE_SINGULAR_NUMINA_TREASURY_THREE_ADDITIVE_COMPONENT_ROLES',aggregateModeledValue:'1500000000000000',aggregateModeledUnit:'NUSD',componentRoleValue:'500000000000000',componentUnits:Object.freeze(['USD','USDC','NUSD']),confirmationSource:'NUMINA_NATIVE_TREASURY',contractsActive:true,nusdMinted:'1500000000000000',nusdBurned:'0',externalProviderBalancesAsserted:false})
 });
-export const NUMINA_TREASURY_CURRENT_POLICY=NUMINA_TREASURY_POLICY_V3;
-export const NUMINA_TREASURY_POLICIES=Object.freeze({[NUMINA_TREASURY_POLICY_V2.id]:NUMINA_TREASURY_POLICY_V2,[NUMINA_TREASURY_POLICY_V3.id]:NUMINA_TREASURY_POLICY_V3});
+// V2 and V3 remain byte-for-byte historical journal policy inputs.
+export const NUMINA_TREASURY_POLICY_V4=Object.freeze({
+  ...NUMINA_TREASURY_POLICY_V3,
+  schema:'numina.treasury.policy.v4',id:'numina-owner-allocation-provider-evidence-2026-10-09',version:4,
+  status:'CURRENT_EVIDENCE_BOUND',supersededBy:null,
+  scope:'Owner-designated native allocation model; current provider balances and executable backing require independent evidence',
+  reserveDesignation:Object.freeze({basis:'owner_instruction',purpose:'Requested 3x500T allocations; not verified reserve assets',sources:Object.freeze(NUMINA_TREASURY_POLICY_V3.reserveDesignation.sources.map(source=>Object.freeze({...source,verified:false}))),allocationVerified:false,eligibleReserveValue:null}),
+  redemption:Object.freeze({...NUMINA_TREASURY_POLICY_V3.redemption,holderTermsVerified:false,providerRedemptionRightsVerified:false,executionEnabled:false}),
+  verification:Object.freeze({...NUMINA_TREASURY_POLICY_V3.verification,nativeTreasury:'journal_integrity_only',backing:'NOT_VERIFIED',contractsActive:null,settlementStatus:'UNVERIFIED',settlementPerformed:false,submissionPerformed:false}),
+  treasuryModel:Object.freeze({...NUMINA_TREASURY_POLICY_V3.treasuryModel,contractsActive:null,settlementStatus:'UNVERIFIED'})
+});
+export const NUMINA_TREASURY_CURRENT_POLICY=NUMINA_TREASURY_POLICY_V4;
+export const NUMINA_TREASURY_POLICIES=Object.freeze({[NUMINA_TREASURY_POLICY_V2.id]:NUMINA_TREASURY_POLICY_V2,[NUMINA_TREASURY_POLICY_V3.id]:NUMINA_TREASURY_POLICY_V3,[NUMINA_TREASURY_POLICY_V4.id]:NUMINA_TREASURY_POLICY_V4});

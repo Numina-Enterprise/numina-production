@@ -100,12 +100,12 @@ for(const status of [401,403])test('Numina route HTTP '+status+' still clears ow
 test('Stripe Treasury renders confirmed zero balances separately from an omitted currency',async()=>{
  const fixture=stripeFixture();fixture.balances.inbound_pending.usdc=null;
  const h=harness(async()=>response(fixture));
- try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Software external'],'No');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/Stripe data below is observation metadata and does not replace the NUMINA balance/);}finally{h.close();}
+ try{await h.subject.loadStripeTreasury();const rows=values(h);assert.equal(rows['Observed Available USD'],'$0.00');assert.equal(rows['Observed Available USDC'],'0.00 USDC');assert.equal(rows['Observed Incoming pending USDC'],'Not provided by Stripe');assert.equal(rows['Software external'],'No');assert.equal(h.get('stripe-treasury-dashboard').href,dashboard);assert.match(h.get('stripe-treasury-message').textContent,/modeled targets.*balances come from Stripe/);}finally{h.close();}
 });
 
 test('Stripe Treasury connection failure never substitutes zero or retains an old balance link',async()=>{
  let unavailable=false;const h=harness(async()=>unavailable?response({error:'STRIPE_TREASURY_NOT_CONNECTED'},503):response(stripeFixture()));
- try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Observed Available USD'],'$0.00');unavailable=true;await h.subject.loadStripeTreasury();assert.equal(values(h)['NUMINA software USDC'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.match(h.get('stripe-treasury-message').textContent,/Provider observation is currently unavailable/);}finally{h.close();}
+ try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Observed Available USD'],'$0.00');unavailable=true;await h.subject.loadStripeTreasury();assert.equal(values(h)['Owner-designated USDC target'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.match(h.get('stripe-treasury-message').textContent,/Stripe balances are unavailable/);}finally{h.close();}
 });
 
 for(const status of [401,403])test('Stripe Treasury HTTP '+status+' clears prior data and notifies the parent of lost owner access',async()=>{
@@ -132,7 +132,7 @@ test('a newer Stripe Treasury view cannot be overwritten by an older response',a
 test('invalid Stripe execution or balance data cannot be presented as a current balance',async()=>{
  for(const corrupt of [fixture=>fixture.transfer_execution=true,fixture=>fixture.submission_performed=true,fixture=>fixture.settlement_performed=true,fixture=>fixture.receipt={id:'native-receipt'},fixture=>fixture.provider='Stripe',fixture=>delete fixture.transportProvider,fixture=>delete fixture.balances.available.usd]){
   const fixture=stripeFixture();corrupt(fixture);const h=harness(async()=>response(fixture));
-  try{await h.subject.loadStripeTreasury();assert.equal(values(h)['NUMINA software USDC'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.match(h.get('stripe-treasury-message').textContent,/Provider observation is currently unavailable/);}finally{h.close();}
+  try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Owner-designated USDC target'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);assert.match(h.get('stripe-treasury-message').textContent,/Stripe balances are unavailable/);}finally{h.close();}
  }
 });
 
@@ -177,7 +177,7 @@ test('noncanonical or already rounded large amounts cannot populate the Stripe v
  for(const value of ['01','-0','1e20','1.5','9'.repeat(79),9007199254740992]){
   const fixture=stripeFixture();fixture.balances.available.usd.value=value;
   const h=harness(async()=>response(fixture));
-  try{await h.subject.loadStripeTreasury();assert.equal(values(h)['NUMINA software USDC'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);}finally{h.close();}
+  try{await h.subject.loadStripeTreasury();assert.equal(values(h)['Owner-designated USDC target'],'500,000,000,000,000.00 USDC');assert.equal(h.get('stripe-treasury-dashboard').hidden,true);}finally{h.close();}
  }
 });
 
@@ -189,4 +189,28 @@ test('Control Room pagehide clears the real Stripe module, balances and dashboar
   return response({projection:'complete',revision:1,state:{requests:[],evidence:[],grants:[]},decisions:[]});
  },{control:true});
  try{await settled();assert.equal(values(h)['Observed Available USD'],'$0.00');assert.equal(h.get('stripe-treasury-panel').hidden,false);h.fire('pagehide');assertCleared(h);assert.equal(h.get('stripe-treasury-panel').hidden,true);assert.equal(h.get('workspace').hidden,true);}finally{h.close();}
+});
+
+test('Stripe modeled targets never substitute for observed available or pending balances',async()=>{
+ const fixture=stripeFixture();fixture.balances.available.usdc=amount('usdc','12000000');fixture.balances.inbound_pending.usdc=amount('usdc','3000000');fixture.balances.outbound_pending.usdc=amount('usdc','2000000');
+ const h=harness(async()=>response(fixture));
+ try{
+  await h.subject.loadStripeTreasury();const rows=values(h);
+  assert.equal(rows['Owner-designated USDC target'],'500,000,000,000,000.00 USDC');
+  assert.equal(rows['Owner-designated aggregate target'],'1,500,000,000,000,000.00 NUSD');
+  assert.equal(rows['Observed Available USDC'],'12.00 USDC');
+  assert.equal(rows['Observed Incoming pending USDC'],'3.00 USDC');assert.equal(rows['Observed Outgoing pending USDC'],'2.00 USDC');
+  assert.doesNotMatch(h.get('stripe-treasury-message').textContent,/NUMINA balance|remains 500T|does not replace/);
+ }finally{h.close();}
+});
+
+test('an unavailable Stripe read exposes unavailable provider balances without inferred funds',async()=>{
+ const h=harness(async()=>response({error:'STRIPE_TREASURY_UNAVAILABLE'},503));
+ try{
+  await h.subject.loadStripeTreasury();const rows=values(h);
+  assert.equal(rows['Stripe balances'],'Unavailable');
+  assert.equal(rows['Owner-designated USDC target'],'500,000,000,000,000.00 USDC');
+  assert.match(h.get('stripe-treasury-message').textContent,/targets do not establish available funds or settlement/);
+  assert.equal(Object.keys(rows).some(key=>/^Observed /.test(key)),false);
+ }finally{h.close();}
 });

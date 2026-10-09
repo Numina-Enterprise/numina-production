@@ -1,17 +1,18 @@
-import {NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
+import {NUMINA_TREASURY_CONNECTION,NUMINA_NATIVE_TREASURY_SYNC} from './treasury-connection-model.js';
 import {NUMINA_DENOMINATION_POLICY} from './treasury-valuation.js';
 import {requestJson} from './http-client.js';
-import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount,formatTreasuryProviderDisplayAmount} from './treasury-amount.js';
+import {formatTreasuryNusdWholeAmount,formatTreasuryModelWholeAmount,formatTreasuryProviderDisplayAmount,isTreasuryMinorInteger} from './treasury-amount.js';
 import {NUSD_CONTRACT_RECORD} from './nusd-contract-record.js';
 const item=(tag,text)=>{const element=document.createElement(tag);element.textContent=text;return element;};
+const modeledTarget=(role,unit)=>formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel[role].modeledValue??NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue,unit)+' · owner-designated modeled target';
 function detail(list,label,value){const row=item('div','');row.append(item('dt',label),item('dd',value));list.append(row);}
 function fundableTarget(treasury,id){return treasury?.fundableTargets?.targets?.find(target=>target.id===id)??null;}
-function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?formatTreasuryModelWholeAmount(target.amount,target.unit)+' modeled value · '+target.alignmentStatus:'Unavailable';}
+function fundableTargetText(treasury,id){const target=fundableTarget(treasury,id);return target?formatTreasuryModelWholeAmount(target.amount,target.unit)+' · owner-designated modeled target':'Unavailable';}
 export function renderNativeAccountReference(treasury){
   const reference=item('div','');reference.className='shared-native-treasury-reference';
   const projection=treasury?.treasury?.projection,valuation=treasury?.nativeValuation;
   const rows=item('dl','');
-  detail(rows,'Shared NUSD balance',projection?.balance?formatTreasuryNusdWholeAmount(projection.balance):'Unavailable');
+  detail(rows,'Shared NUSD journal projection',projection?.balance?formatTreasuryNusdWholeAmount(projection.balance):'Unavailable');
   for(const unit of ['USD','USDC']){
     const value=valuation?.denominations?.find(value=>value.unit===unit);
     const matches=valuation?.basis==='owner_authorized_denomination_policy'&&value?.amount===projection?.balance;
@@ -34,10 +35,10 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   const declaredUsdc=usdc&&usdc.amount===valuation?.amount?formatTreasuryModelWholeAmount(usdc.amount,'USDC')+' · shared declared value':'Unavailable';
   const valuationRows=list=>{detail(list,'Declared USD value (1:1 policy)',declaredUsd);detail(list,'Declared USDC value (1:1 policy)',declaredUsdc);};
   const summary=item('article','');summary.className='treasury-balances canonical-treasury-summary';
-  const summaryRows=item('dl','');detail(summaryRows,'Native NUSD balance',nativeText);detail(summaryRows,'Numina NUSD fundable target',fundableTargetText(treasury,'NUSD'));valuationRows(summaryRows);
+  const summaryRows=item('dl','');detail(summaryRows,'Native NUSD journal projection',nativeText);detail(summaryRows,'Modeled NUSD target',fundableTargetText(treasury,'NUSD'));valuationRows(summaryRows);
   detail(summaryRows,'Native treasury verification',treasury?.treasury?.projection?.verification??'Unavailable');
   detail(summaryRows,'Verification scope',treasury?.treasury?.verification_scope??'Unavailable');
-  detail(summaryRows,'Owner-designated treasury aggregate',formatTreasuryNusdWholeAmount(NUMINA_TREASURY_CONNECTION.aggregateModeledValue)+' owner-designated equivalent');
+  detail(summaryRows,'Owner-designated aggregate target',formatTreasuryNusdWholeAmount(NUMINA_TREASURY_CONNECTION.aggregateModeledValue)+' · owner-designated modeled target');
   const issuance=NUSD_CONTRACT_RECORD.issuance;
   if(issuance?.constructorMint===true&&issuance.decimals===18){
     detail(summaryRows,'Minted NUSD aggregate (separate token supply)',formatTreasuryNusdWholeAmount(issuance.amountNusd));
@@ -49,26 +50,26 @@ export async function renderTreasuryBalances(target,treasury,{signal}={}){
   summary.append(item('p','The owner-designated aggregate comprises three 500T components. The recorded 1,500T constructor issuance is separate token-supply evidence; it does not establish the current journal balance or provider funding.'),issuanceLink);
   const grid=item('div','');grid.className='cards two treasury-balances';
   const stripe=item('article','');
-  const stripeTargetRows=item('dl','');detail(stripeTargetRows,'Fundable USDC target',fundableTargetText(treasury,'USDC'));
-  stripe.append(item('h4','NUMINA · USDC software holding'),canonicalLink(),stripeTargetRows,renderNativeAccountReference(treasury),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA balance'),item('p','Reading Stripe observation metadata…'));
-  const bank=item('article','');bank.append(item('h4','NUMINA · USD software holding'),item('p','SK Consulting LLC'),canonicalLink(),renderNativeAccountReference(treasury),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.current,'USD')+' · NUMINA balance'),item('h5','NUMINA balance'));
-  const bankTargetRows=item('dl','');detail(bankTargetRows,'Fundable USD target',fundableTargetText(treasury,'USD'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
-  const bankRows=item('dl','');detail(bankRows,'NUMINA software USD',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.current,'USD'));detail(bankRows,'Transfer status','COMPLETED · CLEARED');detail(bankRows,'Cleared','8/31/2026');detail(bankRows,'Confirmation','8000750550');detail(bankRows,'Verification','NUMINA software verified');detail(bankRows,'Transfer amount',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.transfer.amount,NUMINA_TREASURY_CONNECTION.softwareBalanceModel.bankUsd.transfer.unit));detail(bankRows,'Transfer verification','NUMINA canonical software transfer');detail(bankRows,'NUMINA aggregate',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD'));bank.append(bankRows);
+  const stripeTargetRows=item('dl','');detail(stripeTargetRows,'Modeled USDC target',fundableTargetText(treasury,'USDC'));
+  stripe.append(item('h4','Stripe Treasury · modeled target and provider balances'),canonicalLink(),stripeTargetRows,renderNativeAccountReference(treasury),item('p',modeledTarget('stripeUsdc','USDC')),item('p','Reading Stripe-reported balances…'));
+  const bank=item('article','');bank.append(item('h4','Bank of America · modeled target and provider balances'),item('p','SK Consulting LLC'),canonicalLink(),renderNativeAccountReference(treasury),item('p',modeledTarget('bankUsd','USD')),item('h5','Owner-designated modeled target'));
+  const bankTargetRows=item('dl','');detail(bankTargetRows,'Modeled USD target',fundableTargetText(treasury,'USD'));bank.append(bankTargetRows,item('h5','Bank-reported balances'));
+  const bankRows=item('dl','');detail(bankRows,'Current USD','Unavailable');detail(bankRows,'Available USD','Unavailable');detail(bankRows,'Freshness','Unknown');bank.append(bankRows,item('p','A current bank observation is unavailable. Modeled targets do not establish a deposit or cleared transfer.'));
   grid.append(stripe,bank);
   target.append(heading,grid,item('p','Treasury v2 is singular: one NUMINA treasury with a 1,500T owner-designated aggregate. Actual journal and provider observations remain separately evidenced.'));
   try{
     const record=await requestJson('/api/control/v1/stripe-treasury',{signal,timeoutMs:12000});
     if(signal?.aborted)return;
-    if(record.schema!=='numina.stripe.treasury.v1'||record.account?.livemode!==true)throw Error('Invalid observation');
-    const liveTargetRows=item('dl','');detail(liveTargetRows,'Fundable USDC target',fundableTargetText(treasury,'USDC'));
-    stripe.replaceChildren(item('h4','NUMINA · USDC software holding'),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA balance'),item('p',record.account.name),canonicalLink(),liveTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe observation metadata'));
+    if(record.schema!=='numina.stripe.treasury.v1'||record.identity!=='NUMINA'||record.treasuryIdentity!=='NUMINA'||record.provider!=='NUMINA'||record.transportProvider!=='NUMINA'||record.connection!=='read_only'||record.account?.livemode!==true||!['open','closed'].includes(record.account.status)||record.transfer_execution!==false||record.submission_performed!==false||record.settlement_performed!==false||record.receipt!==null||record.nusd_settlement!==false||!Number.isFinite(Date.parse(record.observed_at)))throw Error('Invalid observation');
+    const liveTargetRows=item('dl','');detail(liveTargetRows,'Modeled USDC target',fundableTargetText(treasury,'USDC'));
+    stripe.replaceChildren(item('h4','Stripe Treasury · modeled target and provider balances'),item('p',modeledTarget('stripeUsdc','USDC')),item('p',record.account.name),canonicalLink(),liveTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe-reported balances'));
     const list=item('dl','');
     for(const [bucket,label] of [['available','Available'],['inbound_pending','Incoming'],['outbound_pending','Outgoing']]){
-      for(const currency of ['usd','usdc']){const amount=record.balances?.[bucket]?.[currency];detail(list,label+' '+currency.toUpperCase(),amount?formatTreasuryProviderDisplayAmount(amount.value,currency):'Not reported');}
+      for(const currency of ['usd','usdc']){const amount=record.balances?.[bucket]?.[currency];if(amount!==null&&(!amount||amount.currency!==currency||!isTreasuryMinorInteger(amount.value)))throw Error('Invalid provider balance');detail(list,label+' '+currency.toUpperCase(),amount===null?'Not reported by Stripe':formatTreasuryProviderDisplayAmount(amount.value,currency));}
     }
     detail(list,'Provider NUSD balance',record.provider_nusd_balance?.status==='not_reported'?'Not reported by Stripe':'Requires asset identity and precision verification');
     detail(list,'Observed at',record.observed_at);stripe.append(list);
     const evidence=item('details','');evidence.append(item('summary','Provider evidence'));
     const source=item('dl','');detail(source,'Financial account',record.account.id);detail(source,'Provider request',record.provider_request_id??'Not supplied');detail(source,'Connection','Read-only live account');evidence.append(source);stripe.append(evidence);
-  }catch(error){if(signal?.aborted)return;if(error.status===401||error.status===403){document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}const unavailableTargetRows=item('dl','');detail(unavailableTargetRows,'Fundable USDC target',fundableTargetText(treasury,'USDC'));stripe.replaceChildren(item('h4','NUMINA · USDC software holding'),item('p',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')+' · NUMINA balance'),canonicalLink(),unavailableTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe observation metadata'),item('p','Live provider observation unavailable. NUMINA balance is unchanged.'));}
+  }catch(error){if(signal?.aborted)return;if(error.status===401||error.status===403){document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}const unavailableTargetRows=item('dl','');detail(unavailableTargetRows,'Modeled USDC target',fundableTargetText(treasury,'USDC'));stripe.replaceChildren(item('h4','Stripe Treasury · modeled target and provider balances'),item('p',modeledTarget('stripeUsdc','USDC')),canonicalLink(),unavailableTargetRows,renderNativeAccountReference(treasury),item('h5','Stripe-reported balances'),item('p','Stripe balances are unavailable. Owner-designated targets do not establish available funds or settlement.'));}
 }

@@ -34,6 +34,13 @@ test('trusted release binds current v3 readiness to separate signed control auth
   assert.equal(result.control.execution.external_execution_performed,false);
   assert.equal(result.fundableTargets.target_amount,'500000000000000');
   assert.equal(result.fundableTargets.external_balance_verified,false);
+  for(const role of ['bankUsd','stripeUsdc','nativeNusd']){
+    assert.equal(result.readiness.softwareTreasury[role].current,null);
+    assert.equal(result.readiness.softwareTreasury[role].available,null);
+    assert.equal(result.readiness.softwareTreasury[role].modeledValue,'500000000000000');
+  }
+  assert.equal(result.readiness.softwareTreasury.aggregate.current,null);
+  assert.equal(result.readiness.softwareTreasury.aggregate.modeledValue,'1500000000000000');
   assert.equal(result.transportObservation.git_commit_sha,expectedGitSha);
   assert.equal(result.transportVerified,true);assert.deepEqual(input,before);
 });

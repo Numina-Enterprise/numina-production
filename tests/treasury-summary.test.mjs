@@ -24,13 +24,18 @@ async function render(response,balance='500000000000000'){
     return target;
   }finally{globalThis.document=saved.document;globalThis.fetch=saved.fetch;}
 }
+function providerRecord(usd,usdc){
+  const amount=(currency,value)=>({currency,value});
+  return {schema:'numina.stripe.treasury.v1',identity:'NUMINA',treasuryIdentity:'NUMINA',provider:'NUMINA',transportProvider:'NUMINA',connection:'read_only',account:{livemode:true,status:'open',name:'Provider fixture',id:'fa_fixture'},transfer_execution:false,submission_performed:false,settlement_performed:false,receipt:null,nusd_settlement:false,balances:{available:{usd:amount('usd',usd),usdc:amount('usdc',usdc)},inbound_pending:{usd:null,usdc:null},outbound_pending:{usd:null,usdc:null}},provider_nusd_balance:{status:'not_reported'},observed_at:'2026-09-15T00:00:00Z',provider_request_id:'req_fixture'};
+}
+
 function summaryAndProviders(target){
   const summary=target.children.find(x=>x.className?.includes('canonical-treasury-summary'));
   const providers=target.children.find(x=>x.className==='cards two treasury-balances');
   assert.ok(summary);assert.equal(providers.children.length,2);
   const summaryRows=all(summary).filter(element=>element.tagName==='dd').map(element=>element.textContent);
   assert.ok(summaryRows.includes('500,000,000,000,000.00 NUSD · shared canonical record'));
-  assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD owner-designated equivalent'));
+  assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD · owner-designated modeled target'));
   assert.ok(summaryRows.includes('1,500,000,000,000,000.00 NUSD'));
   assert.match(summary.textContent,/Minted NUSD aggregate \(separate token supply\)/);
   assert.match(summary.textContent,/never added together/);
@@ -47,25 +52,25 @@ function summaryAndProviders(target){
   return {summary,providers};
 }
 test('linked account cards display the shared native balance while preserving provider amounts and precision',async()=>{
-  const target=await render(()=>Response.json({schema:'numina.stripe.treasury.v1',account:{livemode:true,name:'Provider fixture',id:'fa_fixture'},balances:{available:{usd:{value:1234,formatted:'12.34 USD'},usdc:{value:1234567,formatted:'1.234567 USDC'}}},provider_nusd_balance:{status:'not_reported'},observed_at:'2026-09-15T00:00:00Z',provider_request_id:'req_fixture'}));
+  const target=await render(()=>Response.json(providerRecord(1234,1234567)));
   const {providers}=summaryAndProviders(target);
   assert.match(providers.textContent,/≈ \$12\.00/);assert.match(providers.textContent,/≈ 1\.00 USDC/);
   assert.match(providers.textContent,/2026-09-15T00:00:00Z/);assert.match(providers.textContent,/req_fixture/);
-  assert.match(providers.textContent,/500,000,000,000,000\.00 USD/);assert.match(providers.textContent,/Transfer statusCOMPLETED · CLEARED/);assert.match(providers.textContent,/Cleared8\/31\/2026/);assert.match(providers.textContent,/Confirmation8000750550/);assert.match(providers.textContent,/VerificationNUMINA software verified/);
+  assert.match(providers.textContent,/500,000,000,000,000\.00 USD · owner-designated modeled target/);assert.match(providers.textContent,/Current USDUnavailableAvailable USDUnavailableFreshnessUnknown/);assert.doesNotMatch(providers.textContent,/COMPLETED|CLEARED|8000750550|Cleared8\/31\/2026/);
 });
 
 test('all account references follow a changed canonical balance without manufacturing provider funds',async()=>{
-  const target=await render(()=>Response.json({schema:'numina.stripe.treasury.v1',account:{livemode:true,name:'Provider fixture',id:'fa_fixture'},balances:{available:{usd:{value:0,formatted:'0 USD'},usdc:{value:0,formatted:'0 USDC'}}},observed_at:'2026-09-15T00:00:00Z'}),'499999999999999');
+  const target=await render(()=>Response.json(providerRecord(0,0)),'499999999999999');
   const references=all(target).filter(x=>x.className==='shared-native-treasury-reference');assert.equal(references.length,2);
   for(const reference of references)for(const unit of ['NUSD','USD','USDC'])assert.ok(reference.textContent.includes('499,999,999,999,999.00'+' '+unit));
   const values=all(target).filter(element=>element.tagName==='dd').map(element=>element.textContent);
   assert.ok(values.includes('499,999,999,999,999.00 NUSD · shared canonical record'));
-  assert.ok(values.some(value=>value.startsWith('500,000,000,000,000.00 NUSD modeled value')));
+  assert.ok(values.some(value=>value==='500,000,000,000,000.00 NUSD · owner-designated modeled target'));
   assert.match(target.textContent,/\$0\.00/);assert.match(target.textContent,/0\.00 USDC/);
 });
 test('provider read failure keeps the single native summary and reports unavailable balances',async()=>{
   const target=await render(()=>Response.json({error:'Unavailable'},{status:503}));
   const {providers}=summaryAndProviders(target);
-  assert.match(providers.textContent,/Live provider observation unavailable/);
+  assert.match(providers.textContent,/Stripe balances are unavailable/);
   assert.doesNotMatch(providers.textContent,/(?:^|\s)0\.00 (?:USD|USDC)/);
 });

@@ -5,8 +5,8 @@ export const NUMINA_DENOMINATION_POLICY = Object.freeze({
   expression:'1 NUSD = 1 USDC = 1 USD',referenceUnit:'USD',
   units:Object.freeze(['NUSD','USDC','USD']),
   rates:Object.freeze(['NUSD','USDC','USD'].map(base=>Object.freeze({base,quote:'USD',numerator:'1',denominator:'1'}))),
-  preserveCurrencyIdentity:true,providerBalancesChanged:true,
-  reserveVerificationEstablished:false,executableConversionVerified:true,verificationBasis:'owner_declaration',providerReceiptRequiredForExternalSettlement:true
+  preserveCurrencyIdentity:true,providerBalancesChanged:false,
+  reserveVerificationEstablished:false,executableConversionVerified:false,verificationBasis:'owner_declaration',providerReceiptRequiredForExternalSettlement:true
 });
 
 export function declaredTreasuryDenominations(nativeAmount) {

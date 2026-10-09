@@ -46,6 +46,7 @@ test('mint then bank use fresh heads, preserve balance, append exact requests an
   assert.equal(b.transaction_request.amount_minor, '50000000000000000');
   for (const result of [a, b]) {
     assert.equal(result.status, 'FINAL');
+    assert.equal(result.settlementStatus, 'UNVERIFIED');
     assert.equal(result.transaction_request.status, 'PREPARED');
     assert.equal(result.transaction_request.submission_performed, false);
     assert.equal(result.transaction_request.receipt, null);
@@ -125,7 +126,8 @@ test('receipt tampering is rejected even when an altered event digest is recompu
     r => { r.mint_event = {status: 'MINTED'}; },
     r => { r.head_advancement.previous = 'a'.repeat(64); },
     r => { r.current_head.revision = -1; },
-    r => { r.execution_scope = 'provider'; }
+    r => { r.execution_scope = 'provider'; },
+    r => { r.settlementStatus = 'SETTLED'; }
   ];
   for (const mutate of mutations) {
     const forged = structuredClone(real); mutate(forged);
