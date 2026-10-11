@@ -1,0 +1,48 @@
+name: NUMINA evidence gates
+
+on:
+  pull_request:
+    paths:
+      - 'src/schedule-j-evidence.js'
+      - 'src/payment-authorization-gates.js'
+      - 'src/settlement-evidence-gates.js'
+      - 'tests/schedule-j-evidence.test.mjs'
+      - 'tests/payment-authorization-gates.test.mjs'
+      - 'tests/settlement-evidence-gates.test.mjs'
+      - '.github/workflows/numina-evidence-gates.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact triggering revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Use pinned Node 26
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26.11.1'
+          check-latest: false
+          package-manager-cache: false
+      - name: Verify runtime and fail-closed syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --version
+          node --check src/schedule-j-evidence.js
+          node --check src/payment-authorization-gates.js
+          node --check src/settlement-evidence-gates.js
+      - name: Run isolated security and evidence acceptance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test \
+            tests/schedule-j-evidence.test.mjs \
+            tests/payment-authorization-gates.test.mjs \
+            tests/settlement-evidence-gates.test.mjs
