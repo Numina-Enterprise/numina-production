@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-029",
+  "configurationId": "agentforce-029",
+  "team": "signatures",
+  "title": "Read original delivery inventory",
+  "nextBestAction": "Read the retained original signed delivery manifest and all ten source-record entries.",
+  "target": "final-manuscript source-record",
+  "priority": 6,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/signature_delivery_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-029",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "signature_records",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-029.json",
+    "passCondition": "Receipt identifies exact files and missing input observations without replacing the completed package.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "numina.cloud-work-actual-readback-review.v1",
+  "observedAtUtc": "2026-10-11T10:14:49.929464+00:00",
+  "reviewer": "/root/continuous_service_review",
+  "canonicalRoot": "/workspace/numina-production",
+  "checks": {
+    "processAlive": true,
+    "freshHeartbeat": true,
+    "coordinationEnabled": true,
+    "sourceHeadMatches": true,
+    "workingTreeClean": true,
+    "launchSourceMatches": true,
+    "sixActionsObserved": true,
+    "noVisibleFailures": true,
+    "all100AssignmentsObserved": true,
+    "noCompletionClaim": true,
+    "runIdentityMatches": true
+  },
+  "allChecksPassed": true,
+  "canonicalCommit": "ae545f4a3b59cc7151b22b2fef3e873f5fd9d057",
+  "sourceObservationCommit": "ae545f4a3b59cc7151b22b2fef3e873f5fd9d057",
+  "sourceIdentitySha256": "5fa364a68360bef08e8baca010cfce28748819d6e71b77a391aa7f20a6c7f2d0",
+  "scriptSha256": "243b8b280b64275b33176b592dfb21736f0940b7a91e1e71acaa5b255aac1a31",
+  "observationSha256": "ad58d07b9f7aa05bac2b573ef80f0c52c528e2903c23a45ff259a295e9969b0a",
+  "actualState": {
+    "pid": 96880,
+    "runId": "20261011T095815Z-feaa09d3faa0400c9c1aea5e54aef6ef",
+    "state": "running",
+    "heartbeatAtUtc": "2026-10-11T10:14:16.458260+00:00",
+    "heartbeatAgeSeconds": 33.45,
+    "uptimeSeconds": 961.23,
+    "assignedTaskCount": 100,
+    "queueCounts": {
+      "awaiting_executor": 37,
+      "input_observed": 13,
+      "needs_evidence": 50
+    },
+    "tasksCompletedByCoordinator": 0,
+    "modelExecutionEnabled": false,
+    "financialExecutionEnabled": false,
+    "visibleFailures": [],
+    "hostAvailabilityGuaranteed": false
+  },
+  "scopeLimits": [
+    "Read-only live process/source observation; supersedes earlier HEAD readback",
+    "No tests, source edits, restart, signing, or external mutation performed",
+    "Does not establish permanent availability, activated Salesforce agents, or whole-protocol correctness"
+  ]
+}

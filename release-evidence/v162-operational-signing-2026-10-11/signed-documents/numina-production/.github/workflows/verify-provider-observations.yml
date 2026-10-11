@@ -1,0 +1,126 @@
+name: Verify provider observations
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 * * * *'
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-provider-observations-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    # Release assets are the durable path; no Actions write or OIDC permission is needed.
+    permissions:
+      contents: write
+    env:
+      NUMINA_EXPECTED_GIT_SHA: ${{ github.sha }}
+      NUMINA_PROVIDER_EVIDENCE_PATH: provider-evidence/provider-observation-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_PROVIDER_RECORD_PATH: provider-evidence/native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_TRUSTED_RELEASE_PATH: provider-evidence/trusted-source-release-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_PUBLICATION_RECEIPT_PATH: provider-evidence/publication-receipt-${{ github.run_id }}-${{ github.run_attempt }}.json
+      NUMINA_TRUSTED_PUBLICATION_RECEIPT_PATH: provider-evidence/trusted-publication-receipt-${{ github.run_id }}-${{ github.run_attempt }}.json
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify hosted runner and exact triggering source
+        shell: bash
+        run: |
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf 'source_commit=%s\nrunner_environment=%s\nrunner_name=%s\n' "$GITHUB_SHA" "$RUNNER_ENVIRONMENT" "$RUNNER_NAME"
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+      - name: Observe current providers from GitHub-bound source
+        id: observe
+        run: node scripts/smoke-provider-observations.mjs
+      - name: Archive provider evidence
+        id: archive
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: numina-provider-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.NUMINA_PROVIDER_EVIDENCE_PATH }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - name: Build canonical NUMINA-native evidence record
+        id: record
+        # Explicitly depend on valid observations, never on optional Actions storage.
+        if: ${{ !cancelled() && steps.observe.outcome == 'success' }}
+        env:
+          NUMINA_ARCHIVE_OUTCOME: ${{ steps.archive.outcome }}
+          NUMINA_ARCHIVE_ARTIFACT_NAME: numina-provider-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          NUMINA_ARCHIVE_ARTIFACT_ID: ${{ steps.archive.outputs.artifact-id }}
+          NUMINA_ARCHIVE_ARTIFACT_DIGEST: ${{ steps.archive.outputs.artifact-digest }}
+        run: node scripts/build-provider-evidence-record.mjs
+      - name: Archive canonical NUMINA-native evidence record
+        id: record_archive
+        if: ${{ !cancelled() && steps.record.outcome == 'success' }}
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: numina-native-evidence-record-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.NUMINA_PROVIDER_RECORD_PATH }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - name: Publish and read back canonical provider evidence from GitHub Release
+        id: publication
+        # All supported main events, including schedule and workflow_dispatch, publish.
+        if: ${{ !cancelled() && steps.record.outcome == 'success' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node scripts/publish-github-evidence.mjs "$NUMINA_PROVIDER_EVIDENCE_PATH" "$NUMINA_PROVIDER_RECORD_PATH" | tee "$NUMINA_PUBLICATION_RECEIPT_PATH"
+      - name: Verify current Numina source before trusting release
+        id: source
+        if: steps.publication.outcome == 'success' && github.event_name != 'schedule'
+        shell: bash
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+          npm run build
+          node scripts/sync-application-release-pin.mjs
+          echo "NUMINA_ROOT_VERIFIED=true" >> "$GITHUB_ENV"
+      - name: Build trusted source release gate
+        id: trusted
+        if: steps.source.outcome == 'success'
+        run: node scripts/build-trusted-source-release.mjs
+      - name: Archive trusted source release gate
+        id: trusted_archive
+        if: steps.trusted.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: numina-trusted-source-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.NUMINA_TRUSTED_RELEASE_PATH }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - name: Publish and read back trusted source release from GitHub Release
+        id: trusted_publication
+        if: ${{ !cancelled() && steps.trusted.outcome == 'success' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node scripts/publish-github-evidence.mjs "$NUMINA_TRUSTED_RELEASE_PATH" | tee "$NUMINA_TRUSTED_PUBLICATION_RECEIPT_PATH"
+      - name: Report evidence persistence receipts
+        if: always()
+        env:
+          EVIDENCE_STEPS: ${{ toJSON(steps) }}
+        run: node scripts/report-provider-evidence.mjs

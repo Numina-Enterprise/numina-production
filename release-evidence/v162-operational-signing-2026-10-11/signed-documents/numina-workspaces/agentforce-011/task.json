@@ -1,0 +1,57 @@
+{
+  "id": "agentforce-011",
+  "configurationId": "agentforce-011",
+  "team": "engineering",
+  "title": "Connect workspace directory to task records",
+  "nextBestAction": "Map each Agentforce card to its same-ID ledger entry and show the current queue and receipt state.",
+  "target": "public/workspaces-ui.js",
+  "priority": 3,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/engineering_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-011",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "workspace_manifest",
+      "status": "available"
+    },
+    {
+      "id": "task_ledger",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-011.json",
+    "passCondition": "Source/readback receipt shows one mapping per prepared Agentforce ID.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

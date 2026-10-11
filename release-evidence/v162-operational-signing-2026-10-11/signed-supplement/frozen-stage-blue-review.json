@@ -1,0 +1,653 @@
+{
+  "schema": "numina.v162-frozen-stage-blue-review.v1",
+  "observedAtUtc": "2026-10-11T20:26:33.263025+00:00",
+  "unsigned": true,
+  "status": "PASS_EXACT_FROZEN_STAGE",
+  "stage": "/workspace/numina-production/outputs/v162-signed-delivery-2026-10-11/signed-documents",
+  "request": {
+    "bytes": 4181889,
+    "sha256": "47cf7ef6c7bf10f22228ccc3843bab35acc22b042ee9e38da03d310af11d7874"
+  },
+  "inventory": {
+    "bytes": 37389,
+    "sha256": "398c552bc9b3471caf14936c640235195f5f49776be624b4694a75518c058f83",
+    "file_rows": 204
+  },
+  "targets": 206,
+  "expected_signatures_including_new_receipt": 207,
+  "exact_actual_stage_file_count": 207,
+  "all_target_bytes_match_canonical_base64_and_staged_files": true,
+  "literal_checksum_list_exact": true,
+  "proposal_direct_targets_preserved": 173,
+  "byte_identical_aliases_preserved": 17,
+  "all_100_task_record_bytes_preserved": true,
+  "task_record_identities": [
+    {
+      "id": "agentforce-001",
+      "package_path": "numina-workspaces/agentforce-001/task.json",
+      "bytes": 1694,
+      "sha256": "28557c81566dae5eb1fe9c9628f7a88aacfd296cff09208a2d41b1029738ae06"
+    },
+    {
+      "id": "agentforce-002",
+      "package_path": "numina-workspaces/agentforce-002/task.json",
+      "bytes": 1707,
+      "sha256": "9519605f3045f912f044c5b096ee70c078e67d5745e4ae50fa9ac1510259d041"
+    },
+    {
+      "id": "agentforce-003",
+      "package_path": "numina-workspaces/agentforce-003/task.json",
+      "bytes": 1684,
+      "sha256": "131af883f0983e0776da1d4f7108ee4f62d7a544141598ce4eaa8e96805bef8d"
+    },
+    {
+      "id": "agentforce-004",
+      "package_path": "numina-workspaces/agentforce-004/task.json",
+      "bytes": 1707,
+      "sha256": "440fe14241ce334279fdb2222eb68b000207d04bcebc08fe9c9719516ab69bf7"
+    },
+    {
+      "id": "agentforce-005",
+      "package_path": "numina-workspaces/agentforce-005/task.json",
+      "bytes": 1774,
+      "sha256": "ad3993d1484cb63092dc533c535ccbfe4842527b61a3e697477daf7cce29c65f"
+    },
+    {
+      "id": "agentforce-006",
+      "package_path": "numina-workspaces/agentforce-006/task.json",
+      "bytes": 1727,
+      "sha256": "65b171b0c0746a15d894d45100fefddfbef50a75fcd2e1b98b916bf3f12780c1"
+    },
+    {
+      "id": "agentforce-007",
+      "package_path": "numina-workspaces/agentforce-007/task.json",
+      "bytes": 1755,
+      "sha256": "5b643a7bb64ff11d6d5809d1e82cfb4178df97da33597f6c78e3d33b940ad966"
+    },
+    {
+      "id": "agentforce-008",
+      "package_path": "numina-workspaces/agentforce-008/task.json",
+      "bytes": 1785,
+      "sha256": "d3aaae3642388566eff84cc33f3f08b89382d0bd49fb016a3790ec5877e331de"
+    },
+    {
+      "id": "agentforce-009",
+      "package_path": "numina-workspaces/agentforce-009/task.json",
+      "bytes": 1696,
+      "sha256": "55fd051a658bdd7d3d760139580e4fd7c0451b581a4cf8b21547295e98a74f58"
+    },
+    {
+      "id": "agentforce-010",
+      "package_path": "numina-workspaces/agentforce-010/task.json",
+      "bytes": 1726,
+      "sha256": "b821201b1483badee24f2002de71c9521aae42116dde8277a3240efcfed59376"
+    },
+    {
+      "id": "agentforce-011",
+      "package_path": "numina-workspaces/agentforce-011/task.json",
+      "bytes": 1763,
+      "sha256": "37427fef66ad966dd0a1caca47e5790bbc4825ab914b0b10cd9a1731e1e7f6ac"
+    },
+    {
+      "id": "agentforce-012",
+      "package_path": "numina-workspaces/agentforce-012/task.json",
+      "bytes": 1715,
+      "sha256": "d2333bd7b33b49141eafa3642f671437b113f6d935ac92c7a6828bfdc5be1978"
+    },
+    {
+      "id": "agentforce-013",
+      "package_path": "numina-workspaces/agentforce-013/task.json",
+      "bytes": 1688,
+      "sha256": "ad193d329808d039ad588c9d2e6328f3e73f6d058b44b7784a54a6517645a78d"
+    },
+    {
+      "id": "agentforce-014",
+      "package_path": "numina-workspaces/agentforce-014/task.json",
+      "bytes": 1684,
+      "sha256": "a6e55381f7f19fb61f3eeed993315abf046c87811cddea4702e3f5485b67899b"
+    },
+    {
+      "id": "agentforce-015",
+      "package_path": "numina-workspaces/agentforce-015/task.json",
+      "bytes": 1743,
+      "sha256": "b43bbf917c3f1fc2f91c5ca6f5b845bb0e3d43e2041d8b5f16b3d037128b40c9"
+    },
+    {
+      "id": "agentforce-016",
+      "package_path": "numina-workspaces/agentforce-016/task.json",
+      "bytes": 1714,
+      "sha256": "4c6a09dc9fd4cd6f9b5414814ac132172a6a6da6a92e994ddd01c271aaf44c91"
+    },
+    {
+      "id": "agentforce-017",
+      "package_path": "numina-workspaces/agentforce-017/task.json",
+      "bytes": 1695,
+      "sha256": "eefe7369bda16b227b11f84e1c96d084203528460ca81db916470e45f7532e6f"
+    },
+    {
+      "id": "agentforce-018",
+      "package_path": "numina-workspaces/agentforce-018/task.json",
+      "bytes": 1716,
+      "sha256": "81d2c286a362f8878ab7c56d10162018b5b8b380ef348aec52dbb59cd45c561b"
+    },
+    {
+      "id": "agentforce-019",
+      "package_path": "numina-workspaces/agentforce-019/task.json",
+      "bytes": 1721,
+      "sha256": "b75ab89f5a3b85928a2d6cc9b1d207bf66a8024f3bbb195270c967a7a182b265"
+    },
+    {
+      "id": "agentforce-020",
+      "package_path": "numina-workspaces/agentforce-020/task.json",
+      "bytes": 1699,
+      "sha256": "2b9c156131e7f5b6c3aec4913baa50fc829995705edee27f2914f31459cfc159"
+    },
+    {
+      "id": "agentforce-021",
+      "package_path": "numina-workspaces/agentforce-021/task.json",
+      "bytes": 1673,
+      "sha256": "76a0f7434d2a28c14fe3f270f8e31f6f58c53e9520feacb284d5e045f4dd2ef4"
+    },
+    {
+      "id": "agentforce-022",
+      "package_path": "numina-workspaces/agentforce-022/task.json",
+      "bytes": 1708,
+      "sha256": "afaf7fafef9757c12cbe59870b380e9881ac4ff8b9ccfa884064f2783fef6f8f"
+    },
+    {
+      "id": "agentforce-023",
+      "package_path": "numina-workspaces/agentforce-023/task.json",
+      "bytes": 1739,
+      "sha256": "e2ec57f8f5ace7e67f520f9fc25b1a6d3c9b1da1a250b4cb098fb4407861b7ea"
+    },
+    {
+      "id": "agentforce-024",
+      "package_path": "numina-workspaces/agentforce-024/task.json",
+      "bytes": 1723,
+      "sha256": "4c507f1f9b6f5b676b7a477d4e96acfa219fd9168d39515fc8a5bffb1dff2b6d"
+    },
+    {
+      "id": "agentforce-025",
+      "package_path": "numina-workspaces/agentforce-025/task.json",
+      "bytes": 1730,
+      "sha256": "c4ccfad4c367af824245b07da273f03b49544519be7b27266eb60d0ac5825fcc"
+    },
+    {
+      "id": "agentforce-026",
+      "package_path": "numina-workspaces/agentforce-026/task.json",
+      "bytes": 1661,
+      "sha256": "ef474a83dd7e433fa87a45a71a721f9037c7aac834b2e7a24f564e4a0276585a"
+    },
+    {
+      "id": "agentforce-027",
+      "package_path": "numina-workspaces/agentforce-027/task.json",
+      "bytes": 1694,
+      "sha256": "79fc071576671f40f1ca8dcc225b326d64f0edd4586b581c82473849c189683f"
+    },
+    {
+      "id": "agentforce-028",
+      "package_path": "numina-workspaces/agentforce-028/task.json",
+      "bytes": 1704,
+      "sha256": "0e97ea780be85b1172abec4d5f4d18e7e212c7366a63efa08164ff927bb47216"
+    },
+    {
+      "id": "agentforce-029",
+      "package_path": "numina-workspaces/agentforce-029/task.json",
+      "bytes": 1718,
+      "sha256": "32492715dfd5633152bfe6a7d685956d08b874b1ea318e2145a23dc6d9b2fcb0"
+    },
+    {
+      "id": "agentforce-030",
+      "package_path": "numina-workspaces/agentforce-030/task.json",
+      "bytes": 1739,
+      "sha256": "d1867c3ab628332eefd9be17689765f5fa900f5724e07c04b77db443d65d6a25"
+    },
+    {
+      "id": "agentforce-031",
+      "package_path": "numina-workspaces/agentforce-031/task.json",
+      "bytes": 1687,
+      "sha256": "3b1f26d9302964f85349e5c43b6c55298c02a5e85a18bd800c1d431acb050df2"
+    },
+    {
+      "id": "agentforce-032",
+      "package_path": "numina-workspaces/agentforce-032/task.json",
+      "bytes": 1712,
+      "sha256": "6824f33b5a59b8a58f5def02aad31d508a34c6c7a79d535026b14d35add7b029"
+    },
+    {
+      "id": "agentforce-033",
+      "package_path": "numina-workspaces/agentforce-033/task.json",
+      "bytes": 1710,
+      "sha256": "7267d2c0052a60c90358e3e7ef4267f4a7f6fe4fb6c964399110f65136c71126"
+    },
+    {
+      "id": "agentforce-034",
+      "package_path": "numina-workspaces/agentforce-034/task.json",
+      "bytes": 1711,
+      "sha256": "a621f4f708a2f5743c2ffb8696e0cef39244c878ff77666c32934a737011c971"
+    },
+    {
+      "id": "agentforce-035",
+      "package_path": "numina-workspaces/agentforce-035/task.json",
+      "bytes": 1736,
+      "sha256": "bb6fd68319bd2640373dc4a61aeb0a06c41fd3b0a889444c91687797312c500c"
+    },
+    {
+      "id": "agentforce-036",
+      "package_path": "numina-workspaces/agentforce-036/task.json",
+      "bytes": 1727,
+      "sha256": "8e992e91627c3d76c674423edbf8f404b8f8ea44c25599598e2d1ebca3f24e1e"
+    },
+    {
+      "id": "agentforce-037",
+      "package_path": "numina-workspaces/agentforce-037/task.json",
+      "bytes": 1723,
+      "sha256": "a45ae4b032326dd4ef2f6da6fc25f8edfa5a34ccefb54cd3ddc461e704f1148f"
+    },
+    {
+      "id": "agentforce-038",
+      "package_path": "numina-workspaces/agentforce-038/task.json",
+      "bytes": 1732,
+      "sha256": "4d98a01ac80b541f1bdb4b31a0e3f74179baddb3953006985b72f60099765c4e"
+    },
+    {
+      "id": "agentforce-039",
+      "package_path": "numina-workspaces/agentforce-039/task.json",
+      "bytes": 1716,
+      "sha256": "53674fba22090a243173671d5159cc998f32adc23099a7c43da0c12d0310e360"
+    },
+    {
+      "id": "agentforce-040",
+      "package_path": "numina-workspaces/agentforce-040/task.json",
+      "bytes": 1772,
+      "sha256": "84e87245920d35fef59614a6656c27fa64e9141cca472a6e43b52c123172b1a2"
+    },
+    {
+      "id": "agentforce-041",
+      "package_path": "numina-workspaces/agentforce-041/task.json",
+      "bytes": 1723,
+      "sha256": "7c52d4ba4ca6d3cfe973c8b51ef20c68fc40e3d320fad3704fd76f2ee85e4fd0"
+    },
+    {
+      "id": "agentforce-042",
+      "package_path": "numina-workspaces/agentforce-042/task.json",
+      "bytes": 1708,
+      "sha256": "593e671fb73dfec7ba21cf9bec1b98faca7f751948912a402c7fde123f266d7d"
+    },
+    {
+      "id": "agentforce-043",
+      "package_path": "numina-workspaces/agentforce-043/task.json",
+      "bytes": 1774,
+      "sha256": "7ef9a0beeb0412d22af5bae6cc85235a07abe1632a1c605a1f2b0bf7becfa943"
+    },
+    {
+      "id": "agentforce-044",
+      "package_path": "numina-workspaces/agentforce-044/task.json",
+      "bytes": 1746,
+      "sha256": "fd0b98b52ce4235da1d1d81d16fb470958046c2521bb719a43e43893bdf9ea23"
+    },
+    {
+      "id": "agentforce-045",
+      "package_path": "numina-workspaces/agentforce-045/task.json",
+      "bytes": 1711,
+      "sha256": "2d2def5a486a11bbab396878832f4f70059afa4c33a6c48341b301f971e815d7"
+    },
+    {
+      "id": "agentforce-046",
+      "package_path": "numina-workspaces/agentforce-046/task.json",
+      "bytes": 1730,
+      "sha256": "6b7d6a86ad7fee8aa5da16e3e7e05b3e98a1097851126c2b71adc8ed13460329"
+    },
+    {
+      "id": "agentforce-047",
+      "package_path": "numina-workspaces/agentforce-047/task.json",
+      "bytes": 1708,
+      "sha256": "8d18a8b514a0bcc0518b8bca76e1d3399c2253b8e9d40e60e0ebf1ba52f04fea"
+    },
+    {
+      "id": "agentforce-048",
+      "package_path": "numina-workspaces/agentforce-048/task.json",
+      "bytes": 1748,
+      "sha256": "6e7c693db1b8e2a9afa1b7d199c4c40c5f42cf5bcf6b023b96e337c8516a7795"
+    },
+    {
+      "id": "agentforce-049",
+      "package_path": "numina-workspaces/agentforce-049/task.json",
+      "bytes": 1724,
+      "sha256": "baaa9faedffcdaa259a2387904b8642d808c316f2c44a568df717a93f9beef25"
+    },
+    {
+      "id": "agentforce-050",
+      "package_path": "numina-workspaces/agentforce-050/task.json",
+      "bytes": 1718,
+      "sha256": "4486534d5e877d8c1252e44b2403391c02a0cf2546dc3ccd1531706285664794"
+    },
+    {
+      "id": "agentforce-051",
+      "package_path": "numina-workspaces/agentforce-051/task.json",
+      "bytes": 1718,
+      "sha256": "5eeaa1316485a73d00173d381d050a799d40212c31ff8237b190f351158737f8"
+    },
+    {
+      "id": "agentforce-052",
+      "package_path": "numina-workspaces/agentforce-052/task.json",
+      "bytes": 1781,
+      "sha256": "836a9ec0c293cc017ffac0d1966e2f35d53c1349bb7df9874bde7b3fd898bd6b"
+    },
+    {
+      "id": "agentforce-053",
+      "package_path": "numina-workspaces/agentforce-053/task.json",
+      "bytes": 1718,
+      "sha256": "74f0eb839f13a07e3929c1d1101909179b0bd3cebc0f2a120cf7b99b9304671d"
+    },
+    {
+      "id": "agentforce-054",
+      "package_path": "numina-workspaces/agentforce-054/task.json",
+      "bytes": 1728,
+      "sha256": "7de7c4a12a05a64818bfb67607a4ccde1b76d56699fda09db4704cce6e42f43c"
+    },
+    {
+      "id": "agentforce-055",
+      "package_path": "numina-workspaces/agentforce-055/task.json",
+      "bytes": 1774,
+      "sha256": "ffdd4a9616ec21d3b838b178c161aba3e8e582e8dd44536036ab7d5013b9ad06"
+    },
+    {
+      "id": "agentforce-056",
+      "package_path": "numina-workspaces/agentforce-056/task.json",
+      "bytes": 1828,
+      "sha256": "b43bd63de9657ce19ac977a18cbd1c7c155c0426d2bf54276301b384af4385d0"
+    },
+    {
+      "id": "agentforce-057",
+      "package_path": "numina-workspaces/agentforce-057/task.json",
+      "bytes": 1749,
+      "sha256": "bc81cf1e6d66bba067d5d6d321494e26215ade79724409f4d07d1368cb785d36"
+    },
+    {
+      "id": "agentforce-058",
+      "package_path": "numina-workspaces/agentforce-058/task.json",
+      "bytes": 1759,
+      "sha256": "076f6aa4944258eecf66062af529d88045b90902c90586640d41198c0a4a5486"
+    },
+    {
+      "id": "agentforce-059",
+      "package_path": "numina-workspaces/agentforce-059/task.json",
+      "bytes": 1736,
+      "sha256": "e5ca14042366bc637645cc4e21b55c1a2006063207c69634b3670d78b996037c"
+    },
+    {
+      "id": "agentforce-060",
+      "package_path": "numina-workspaces/agentforce-060/task.json",
+      "bytes": 1725,
+      "sha256": "30fa11eb05905fb7652e0bda6dd6db908b9623c148d4ef0a9a304f52cd454818"
+    },
+    {
+      "id": "agentforce-061",
+      "package_path": "numina-workspaces/agentforce-061/task.json",
+      "bytes": 1764,
+      "sha256": "ac80dce8244301fb17b7825323df0ec113db82aa774ae920d5ee9d5ad28a843d"
+    },
+    {
+      "id": "agentforce-062",
+      "package_path": "numina-workspaces/agentforce-062/task.json",
+      "bytes": 1795,
+      "sha256": "fcf0d2940379f62aa6181e338b8456a71e0c797006931510bbacd2b6c8231086"
+    },
+    {
+      "id": "agentforce-063",
+      "package_path": "numina-workspaces/agentforce-063/task.json",
+      "bytes": 1721,
+      "sha256": "713eb9d56a7ffdebe28ad471f4eed2d539a986ba9f57a3d053d7ac60e9e81a67"
+    },
+    {
+      "id": "agentforce-064",
+      "package_path": "numina-workspaces/agentforce-064/task.json",
+      "bytes": 1674,
+      "sha256": "217599b86446f3f11c27c0723dc1411fbab185480507ff16ccbf72e501d14f40"
+    },
+    {
+      "id": "agentforce-065",
+      "package_path": "numina-workspaces/agentforce-065/task.json",
+      "bytes": 1836,
+      "sha256": "cbc41f17473ae9f6d3a08561ebf4816eecb9b37ceca4ee2a0cb64a46dad66c29"
+    },
+    {
+      "id": "agentforce-066",
+      "package_path": "numina-workspaces/agentforce-066/task.json",
+      "bytes": 1752,
+      "sha256": "de853595d58bcdc0044c1ec9923ad0ff22e436dd7d2e5f4ceb6a70548624e8e7"
+    },
+    {
+      "id": "agentforce-067",
+      "package_path": "numina-workspaces/agentforce-067/task.json",
+      "bytes": 1687,
+      "sha256": "0c5bb8f9efd379da96e47921e70c3715c67a583f528bbf95c80a558faeddf284"
+    },
+    {
+      "id": "agentforce-068",
+      "package_path": "numina-workspaces/agentforce-068/task.json",
+      "bytes": 1776,
+      "sha256": "36dcc4eb510709eaf41c2d43014520e11bc86ce116fbdfec87f163e8d8b8ab8c"
+    },
+    {
+      "id": "agentforce-069",
+      "package_path": "numina-workspaces/agentforce-069/task.json",
+      "bytes": 1713,
+      "sha256": "6a07ad3b8dfea7ff7d01d4066616bdb12e88120f6aa650299eabe4e8ae709047"
+    },
+    {
+      "id": "agentforce-070",
+      "package_path": "numina-workspaces/agentforce-070/task.json",
+      "bytes": 1742,
+      "sha256": "51196f5b7ed818fd93b56861bcfd3f89b005e8457272929ab12fa89446f600a8"
+    },
+    {
+      "id": "agentforce-071",
+      "package_path": "numina-workspaces/agentforce-071/task.json",
+      "bytes": 1689,
+      "sha256": "594dbd8d5f4724ad0cdf756a3bc874eebfe5326f9de3cb6fb6529622fc890c26"
+    },
+    {
+      "id": "agentforce-072",
+      "package_path": "numina-workspaces/agentforce-072/task.json",
+      "bytes": 1812,
+      "sha256": "0fb507679cea45a812930d2440ac2a22f2bd987c5903a1d6b6d84b5ccabd5776"
+    },
+    {
+      "id": "agentforce-073",
+      "package_path": "numina-workspaces/agentforce-073/task.json",
+      "bytes": 1815,
+      "sha256": "ee5607f2100da4d512757314254c57c83ab41ba75c38d5e2c55ab9f0c8cd8ce7"
+    },
+    {
+      "id": "agentforce-074",
+      "package_path": "numina-workspaces/agentforce-074/task.json",
+      "bytes": 1723,
+      "sha256": "6890dc0afef144f405524c67ed0842e9d77b96c9797ba19ad3a0517fdcd70727"
+    },
+    {
+      "id": "agentforce-075",
+      "package_path": "numina-workspaces/agentforce-075/task.json",
+      "bytes": 1743,
+      "sha256": "fa92b6aeaea60b5deef917db0dbf083645020d6efb0bce19b0dedde276fd657b"
+    },
+    {
+      "id": "agentforce-076",
+      "package_path": "numina-workspaces/agentforce-076/task.json",
+      "bytes": 1704,
+      "sha256": "60a91bbcd5c5c2838e5e3f3f2f43f23f3cf0dfdf3d0680f1cd25d0d1d2f98cf3"
+    },
+    {
+      "id": "agentforce-077",
+      "package_path": "numina-workspaces/agentforce-077/task.json",
+      "bytes": 1776,
+      "sha256": "951ddd9a7ba2e2a53d6be062113ef5eb26fa6053e2104681d59820d2621e3288"
+    },
+    {
+      "id": "agentforce-078",
+      "package_path": "numina-workspaces/agentforce-078/task.json",
+      "bytes": 1723,
+      "sha256": "8216b3c418332d5948d536e770b41c9759c18c715bf7b46028de6982d644dba0"
+    },
+    {
+      "id": "agentforce-079",
+      "package_path": "numina-workspaces/agentforce-079/task.json",
+      "bytes": 1747,
+      "sha256": "acc26949aa9cde957ec72d9ca4964e46d55256bf4de971ebb171130a0e0699ef"
+    },
+    {
+      "id": "agentforce-080",
+      "package_path": "numina-workspaces/agentforce-080/task.json",
+      "bytes": 1703,
+      "sha256": "6b1f09c21124532effad654637d27f6da539c89732f34f22b2c407305c17fa00"
+    },
+    {
+      "id": "agentforce-081",
+      "package_path": "numina-workspaces/agentforce-081/task.json",
+      "bytes": 1728,
+      "sha256": "3ec88feeba2589814d50c17d9a2c58fbf236aa7e3e7657a87daa9b3fe93af3ac"
+    },
+    {
+      "id": "agentforce-082",
+      "package_path": "numina-workspaces/agentforce-082/task.json",
+      "bytes": 1736,
+      "sha256": "ba436680a5d1d4b539b47698c6ce8ad7f1604712958cf2d7a41e013a608ef131"
+    },
+    {
+      "id": "agentforce-083",
+      "package_path": "numina-workspaces/agentforce-083/task.json",
+      "bytes": 1694,
+      "sha256": "4f186484b37f4ec3e36350cc12be7f4336b3a2da2c1d10e5242364c3a105da59"
+    },
+    {
+      "id": "agentforce-084",
+      "package_path": "numina-workspaces/agentforce-084/task.json",
+      "bytes": 1747,
+      "sha256": "ace9338021cdb97f6debab622f246b52da1b89a7f261806296f86cda0cba4a52"
+    },
+    {
+      "id": "agentforce-085",
+      "package_path": "numina-workspaces/agentforce-085/task.json",
+      "bytes": 1746,
+      "sha256": "e3a005ffe28346eedd70c65097b5e70881f4e15eb951d35b26e751f031b211f0"
+    },
+    {
+      "id": "agentforce-086",
+      "package_path": "numina-workspaces/agentforce-086/task.json",
+      "bytes": 1707,
+      "sha256": "b8b3c27a60a2737e31386d1a4cae60f957f52852f3b93aba502d3216aff2f2d1"
+    },
+    {
+      "id": "agentforce-087",
+      "package_path": "numina-workspaces/agentforce-087/task.json",
+      "bytes": 1750,
+      "sha256": "21a8b1b5134c71f9182ead8f3e4e1ef5fd2935434e38672771314eae9ccd2d08"
+    },
+    {
+      "id": "agentforce-088",
+      "package_path": "numina-workspaces/agentforce-088/task.json",
+      "bytes": 1766,
+      "sha256": "d0c5cc82e75ba9157cc801ce4e3477a3a0e0fed3be467b039d603fd4185d70d9"
+    },
+    {
+      "id": "agentforce-089",
+      "package_path": "numina-workspaces/agentforce-089/task.json",
+      "bytes": 1704,
+      "sha256": "98350285e927716bb03b962efc3208e87ffbc400df191ba1ba5d3664f6c3a505"
+    },
+    {
+      "id": "agentforce-090",
+      "package_path": "numina-workspaces/agentforce-090/task.json",
+      "bytes": 1724,
+      "sha256": "8a5674ee56f7ebaacbdc7a20a0a6baf310015951272b78f28d8ca66def55b295"
+    },
+    {
+      "id": "agentforce-091",
+      "package_path": "numina-workspaces/agentforce-091/task.json",
+      "bytes": 1711,
+      "sha256": "4f5eaf2cd6ca5e3e621a78dc82eb0f3231c2b74a23f40dfe5e89ca91b1cc4ae1"
+    },
+    {
+      "id": "agentforce-092",
+      "package_path": "numina-workspaces/agentforce-092/task.json",
+      "bytes": 1740,
+      "sha256": "ef64fe1db13ddea2aec257b55721d05fd9a7d93cbb26c2b5f8f157c7abefbf66"
+    },
+    {
+      "id": "agentforce-093",
+      "package_path": "numina-workspaces/agentforce-093/task.json",
+      "bytes": 1734,
+      "sha256": "88e3ee79f208c44a89cfa2099e5245d07e423b9e9b38f71bce98fa30acbe68d7"
+    },
+    {
+      "id": "agentforce-094",
+      "package_path": "numina-workspaces/agentforce-094/task.json",
+      "bytes": 1778,
+      "sha256": "afb249ad8d668e4734c733e70484c1edf8be65bd9072811836e30a97fa87d977"
+    },
+    {
+      "id": "agentforce-095",
+      "package_path": "numina-workspaces/agentforce-095/task.json",
+      "bytes": 1742,
+      "sha256": "1916377f8514d29c58cd8b1d5ae9b333c9a0e0125791b343bafffdd82c066678"
+    },
+    {
+      "id": "agentforce-096",
+      "package_path": "numina-workspaces/agentforce-096/task.json",
+      "bytes": 1752,
+      "sha256": "cb522845dce5cbe4c7db36cab96be8f6e0497e6c3e795634a3252a573a44221c"
+    },
+    {
+      "id": "agentforce-097",
+      "package_path": "numina-workspaces/agentforce-097/task.json",
+      "bytes": 1845,
+      "sha256": "74b1e85b797394b546cbfe81e2d9ca26c511daf04ba8e87ca8a034d95637e42d"
+    },
+    {
+      "id": "agentforce-098",
+      "package_path": "numina-workspaces/agentforce-098/task.json",
+      "bytes": 1802,
+      "sha256": "c0adc35cb79826248ff00b83bd976fc80e961d56849ab99632d45ffa6a05c58d"
+    },
+    {
+      "id": "agentforce-099",
+      "package_path": "numina-workspaces/agentforce-099/task.json",
+      "bytes": 1749,
+      "sha256": "470fa60c10aef9d83eeb3c520c13e0a11e00f46dad5f6ca3083bcb334b7be5e7"
+    },
+    {
+      "id": "agentforce-100",
+      "package_path": "numina-workspaces/agentforce-100/task.json",
+      "bytes": 1921,
+      "sha256": "330104e5551d45272b2fbbc0190b5177790faa6a38e957dc2f37eaae7039b3ad"
+    }
+  ],
+  "archive_commitment": {
+    "path": "artifacts/numina-cloud-site-delivery.tar.gz",
+    "bytes": 39983201,
+    "sha256": "7c0276be32c7a830dadb7bdf8f67ff0138c38db422dee949e4314760f1d4b792"
+  },
+  "archive_commitment_regular_members": 366,
+  "artifact_copy_matches_reviewed_archive": true,
+  "private_treasury_or_journal_files_included": false,
+  "new_pdf_or_historical_signature_replacement": false,
+  "outer_verifier_sha256": "064cb32e19520247d10de1f73a1323358ddf21e69fa8bffed6771c2eaf8168e0",
+  "existing_public_verifier_sha256": "ac1c9e2a5bee287012113dc44ae75392d6b3a3b86b7cb5cd188a90546fa518bd",
+  "signer_or_verifier_executed": false,
+  "signatures_not_yet_issued_or_verified_by_this_review": true,
+  "external_gates_retained_open": true,
+  "required_final_outer_zip_scope": [
+    "signed-documents/* exact request/control/receipt/signature closure",
+    "artifacts/numina-cloud-site-delivery.tar.gz"
+  ],
+  "excluded_transport_metadata": [
+    "freeze.json",
+    "request.zlib.b64"
+  ],
+  "retainedLimits": [
+    "This validates actual frozen public signing inputs, not signer custody or cryptographic signatures.",
+    "Provider storage tar hash is reported-only and separate from the reviewed gzip.",
+    "Journal recovery, Salesforce activation, whole-protocol correctness and Independent Stream acceptance remain unestablished."
+  ]
+}

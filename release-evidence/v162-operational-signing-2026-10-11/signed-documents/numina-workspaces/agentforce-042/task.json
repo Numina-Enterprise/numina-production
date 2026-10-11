@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-042",
+  "configurationId": "agentforce-042",
+  "team": "deployment",
+  "title": "Read public architecture descriptor",
+  "nextBestAction": "Read /api/control/v2/architecture and associate its service routes with the selected release.",
+  "target": "/api/control/v2/architecture",
+  "priority": 9,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/blue_team_deployment",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-042",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "publication_receipt",
+      "status": "pending_provider_readback"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-042.json",
+    "passCondition": "Receipt identifies actual returned architecture and missing service declarations.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

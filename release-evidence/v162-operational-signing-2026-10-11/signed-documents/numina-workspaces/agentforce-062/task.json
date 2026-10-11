@@ -1,0 +1,57 @@
+{
+  "id": "agentforce-062",
+  "configurationId": "agentforce-062",
+  "team": "deployment",
+  "title": "Record connected MCP initialization",
+  "nextBestAction": "Read an actual supported connector initialization reply after the canonical adapter is published.",
+  "target": "published /mcp connector",
+  "priority": 13,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/blue_team_deployment",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-062",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "publication_receipt",
+      "status": "pending_provider_readback"
+    },
+    {
+      "id": "connector_protocol",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-062.json",
+    "passCondition": "Receipt identifies connector/run, actual initialize reply and missing OAuth dependency.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

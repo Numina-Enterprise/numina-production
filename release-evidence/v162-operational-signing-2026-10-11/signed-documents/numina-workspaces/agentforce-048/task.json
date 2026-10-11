@@ -1,0 +1,57 @@
+{
+  "id": "agentforce-048",
+  "configurationId": "agentforce-048",
+  "team": "proofs",
+  "title": "Inspect signed frame instantiation",
+  "nextBestAction": "Read exact domain-prefix/message composition and map it to the existing generic framing lemmas.",
+  "target": "FRAME-01",
+  "priority": 10,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-048",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "companion_implementation",
+      "status": "needs_evidence"
+    },
+    {
+      "id": "companion_policy",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-048.json",
+    "passCondition": "Receipt names actual framed-byte source and any unproved instantiation.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

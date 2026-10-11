@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-063",
+  "configurationId": "agentforce-063",
+  "team": "proofs",
+  "title": "Read historical commitment reproduction",
+  "nextBestAction": "Read the retained v156 source/hash-profile reproduction receipt and identify the missing current companion source bridge.",
+  "target": "SOURCE-01",
+  "priority": 13,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-063",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "proof_scope",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-063.json",
+    "passCondition": "Receipt keeps reproduced historical commitments distinct from actual current-source/authority proof.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

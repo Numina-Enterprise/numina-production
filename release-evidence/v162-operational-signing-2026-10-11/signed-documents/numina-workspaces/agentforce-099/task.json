@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-099",
+  "configurationId": "agentforce-099",
+  "team": "signatures",
+  "title": "Read Nano N50 issuer continuity gap",
+  "nextBestAction": "Read dated public metadata about issuer continuity, historical journal import and private main-route binding without key/code changes.",
+  "target": "Nano N50 public evidence identities",
+  "priority": 20,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/signature_delivery_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-099",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "nano_evidence",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-099.json",
+    "passCondition": "Receipt records current missing continuity inputs and historical-record scope only.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-013",
+  "configurationId": "agentforce-013",
+  "team": "proofs",
+  "title": "Recover ParserRefinement source",
+  "nextBestAction": "Read the exact public ParserRefinement.lean source/hash and its import identities when available.",
+  "target": "ParserRefinement.lean",
+  "priority": 3,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-013",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "public_proof_dependencies",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-013.json",
+    "passCondition": "Receipt gives source identity/import closure or exact unavailable dependency.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

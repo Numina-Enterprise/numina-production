@@ -1,0 +1,10 @@
+{
+  "schema": "numina.v162-package-commitment.v1",
+  "package": {
+    "path": "package/numina-v162-signed-package.zip",
+    "bytes": 41776034,
+    "sha256": "676e16a1a90f6927d805516c88d7a767c132ee19af1ffcc83cbc9f1eb61fc99c"
+  },
+  "primary_request_sha256": "47cf7ef6c7bf10f22228ccc3843bab35acc22b042ee9e38da03d310af11d7874",
+  "primary_inventory_sha256": "398c552bc9b3471caf14936c640235195f5f49776be624b4694a75518c058f83"
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "numina.sites-source-projection.v1",
+  "canonicalRoot": "/workspace/numina-production",
+  "canonicalCommit": "ae545f4a3b59cc7151b22b2fef3e873f5fd9d057",
+  "canonicalTree": "c587a8d51ef7730eada9e1c4fac4cc88e88de486",
+  "sitesParentCommit": "76a08b2d54679238416ee87818732ac441c5f933",
+  "reason": "Sites rejected generated distribution archive objects as too large.",
+  "excludedGeneratedDistributions": [
+    {
+      "path": "numina-release-v4.0.0.tar.gz",
+      "bytes": 39783401,
+      "sha256": "72eac28a7736081971003b74cb8808c78d8cff2b05b1b56cea5ac98effc1f9d7",
+      "preservedInCanonicalTree": true,
+      "webBuildInput": false
+    },
+    {
+      "path": "releases/v4.0.0/numina-release-v4.0.0.tar.gz",
+      "bytes": 39718035,
+      "sha256": "b030d88b9ab41d0c958686356c37f6989abb9c1d225174bd8f5e5c2d838c8722",
+      "preservedInCanonicalTree": true,
+      "webBuildInput": false
+    }
+  ],
+  "signedEvidenceModified": false,
+  "canonicalHistoryRewritten": false,
+  "forcePushAllowed": false,
+  "scope": "Canonical web sources and retained signed evidence, with two unused generated archives omitted from the Sites source transport.",
+  "sitesCommit": "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb",
+  "sitesTree": "f0e5411733a908f9211270eaec51be3c7b676044",
+  "worktree": "/workspace/numina-publish-cloud-2026-10-11",
+  "sourceChanges": [
+    "D\tnumina-release-v4.0.0.tar.gz",
+    "A\trelease-evidence/sites-source-projection-2026-10-11.json",
+    "D\treleases/v4.0.0/numina-release-v4.0.0.tar.gz"
+  ],
+  "sourceProjectionRecordSha256": "6c835d4da668ac117dd9ed3cf3b6805f3634b70141972617d6e99879296026f7",
+  "originalCanonicalCommit": "51a1147708b6e797bdbfd9bc881b0d13410eb4c3",
+  "rebuiltSourceUpdates": [
+    "integrations/numina/file-manifest.json",
+    "integrations/numina/verification.json",
+    "src/application-release-contract.js"
+  ]
+}

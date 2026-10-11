@@ -1,0 +1,106 @@
+{
+  "schema": "numina.legacy-closure-reference.v1",
+  "observedAtUtc": "2026-10-11T09:32:07.848778+00:00",
+  "classification": "separate_unsigned_reference_note; original_legacy_schema_definition_unavailable",
+  "note": {
+    "path": "/workspace/numina-production/docs/Numina-Legacy-Closure-Reference-2026-10-11.md",
+    "bytes": 4624,
+    "sha256": "36d4d3dff84c00f63cc70727ebbbe0b862d4f6335cb1fa8ba3ad6954f063c5f2"
+  },
+  "finalSignedPdf": {
+    "path": "/workspace/numina-production/outputs/final-manuscript-delivery-2026-10-10/draft-kott-numina-pair-binding-02-final.pdf",
+    "bytes": 808496,
+    "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9"
+  },
+  "retainedSupportingText": {
+    "path": "/workspace/outputs/Numina-Pair-Binding-02-final-signed-package/supporting-output-snapshots/numina-pair-binding-02.txt",
+    "bytes": 302197,
+    "sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2"
+  },
+  "manuscriptReference": {
+    "section": "15.11",
+    "title": "Presence, null, integrity and output comparison",
+    "pages": [
+      36,
+      37
+    ],
+    "specificParagraphPage": 37,
+    "specificParagraph": "Legacy schema missing",
+    "requiredDefinitionInputs": [
+      "exact eight field names",
+      "schema/version",
+      "mandatory check-to-field projection",
+      "field meanings",
+      "required completed evidence",
+      "total projection and preservation proofs"
+    ],
+    "referenceRestored": true,
+    "definitionRecovered": false
+  },
+  "finalLean424Evidence": {
+    "retainedInFinalManuscript": true,
+    "correctedCore": {
+      "namedTheorems": 95,
+      "auditedDeclarations": 239
+    },
+    "pairWireCompilerReceiptSection": "16.6.4",
+    "sourceReceiptIdentityIndex": "Appendix Q/Q.1",
+    "noDowngradeFromLater422Readback": true,
+    "freshRerunPerformed": false
+  },
+  "distinctLean422PublicBundle": {
+    "archive": {
+      "path": "/workspace/numina-production/release-evidence/final-manuscript-delivery-2026-10-10/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    "inspectedPublicMembers": [
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSClosure.lean",
+        "bytes": 3187,
+        "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5"
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSVerification.lean",
+        "bytes": 3536,
+        "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516"
+      }
+    ],
+    "notTheLegacyEightBooleanDefinition": true
+  },
+  "laterEightFindingModel": {
+    "path": "release-evidence/decoded-attribution-closure-2026-10-11/NCPSAttributionClosure.lean",
+    "sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee",
+    "notALegacySchemaRecovery": true
+  },
+  "boundedCanonicalDefinitionSearch": {
+    "roots": [
+      "config",
+      "src",
+      "api",
+      "public",
+      "scripts",
+      "runtime"
+    ],
+    "identifiers": [
+      "ClosureResult",
+      "CompletedLegacyClosureResult"
+    ],
+    "matchingDefinitionObserved": false,
+    "limitation": "Does not prove absence from the author original artifacts or other locations."
+  },
+  "originalEngineeringRetrievalLead": {
+    "libraryId": "libfile_c2887d73285c819197c5674bc2004de3",
+    "recordedArchiveSha256": "08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80",
+    "originalBytesRecoveredByThisReadback": false,
+    "legacySchemaLinkEstablished": false
+  },
+  "journalBoundary": "Operational schema-1 control events and historical Nano N50 records are not equated with formal legacy ClosureResult.",
+  "signedManuscriptEdited": false,
+  "proofsReconstructed": false,
+  "leanRuns": false,
+  "tests": false,
+  "signing": false,
+  "wholeProtocolCorrectnessEstablished": false,
+  "nextVerifiableStep": "Recover the original versioned eight-field schema and mandatory check-to-field projection reference, pin their exact source hashes, and add that source identity to this separate cross-reference note without modifying the signed final PDF."
+}

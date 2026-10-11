@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07080c">
+  <meta name="description" content="Read the actions, dependencies and execution receipts for Numina's 100 prepared Agentforce configurations.">
+  <title>Task ledger — Numina</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="/workspaces.css">
+  <script type="module" src="/task-ledger-ui.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to task ledger</a>
+  <header class="page-header wrap">
+    <a class="brand" href="/" aria-label="Numina home"><strong>NUMINA</strong><span>Intelligence in Motion</span></a>
+    <nav aria-label="Main navigation"><a href="/frontier">Frontier</a><a href="/workspaces.html">Workspaces</a><a href="/task-ledger.html" aria-current="page">Task ledger</a><a href="/integrations">Integrations</a></nav>
+  </header>
+  <main id="main" class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div><span class="eyebrow">ONE ROOT. VISIBLE OUTCOMES.</span><h1 id="page-title">The next action.<br><em>The actual receipt.</em></h1><p class="lead">Every prepared Agentforce configuration has an action assigned to Numina's cloud team. Follow the queue, the evidence it needs and the recorded outcome.</p></div>
+      <div class="hero-note"><span class="status-pill">Cloud team queue</span><p>The 100 configurations share six cloud reviewer roles. Salesforce activation remains a separate state. Completion appears only with a matching recorded receipt.</p><a class="text-link" href="/workspaces.html">Explore the workspace house ↗</a></div>
+    </section>
+    <section class="directory-section" aria-labelledby="ledger-title">
+      <div class="section-heading"><div><span class="eyebrow">EXECUTION LEDGER</span><h2 id="ledger-title">Follow the work.</h2></div><a class="text-link" href="/tasks.json">Read the canonical task records ↗</a></div>
+      <dl class="workspace-metrics"><div><dt>Task records</dt><dd id="task-count">—</dd></div><div><dt>Executing</dt><dd id="executing-count">—</dd></div><div><dt>Completed with receipt</dt><dd id="completed-count">—</dd></div><div><dt>Needs evidence / failed</dt><dd id="attention-count">—</dd></div></dl>
+      <form class="filters" id="task-filters" role="search" aria-label="Find a task">
+        <div class="search-field"><label for="task-search">Search tasks</label><input id="task-search" type="search" placeholder="Action, number or dependency" autocomplete="off" maxlength="160"></div>
+        <div><label for="task-team">Team</label><select id="task-team"><option value="all">All teams</option><option value="engineering">Engineering</option><option value="deployment">Deployment</option><option value="proofs">Proofs</option><option value="signatures">Signatures</option><option value="review">Review</option></select></div>
+        <div><label for="task-state">Status / readiness</label><select id="task-state"><option value="all">All tasks</option><option value="queued">Queued</option><option value="executing">Executing</option><option value="completed">Completed</option><option value="needs_evidence">Needs evidence</option><option value="failed">Failed</option><option value="ready_for_cloud_review">Ready for cloud review</option></select></div>
+        <button class="reset-button" type="reset">Clear filters</button>
+      </form>
+      <p id="task-status" class="directory-status" role="status" aria-live="polite">Reading the task ledger…</p>
+      <div id="task-cards" class="workspace-cards"></div>
+      <p id="task-empty" class="empty-state" hidden>No matching tasks. Try another action, team or status.</p>
+      <button id="task-retry" class="reset-button" type="button" hidden>Read ledger again</button>
+      <noscript><p>The interactive reader needs JavaScript. You can <a class="text-link" href="/tasks.json">read the complete task records</a> directly.</p></noscript>
+    </section>
+  </main>
+  <footer class="wrap"><div><strong>NUMINA</strong><p>Intelligence in Motion.<br>One core. One root.</p></div><nav aria-label="Footer navigation"><a href="/control">Control panel</a><a href="/provenance">Signing evidence</a><a href="/privacy">Privacy</a></nav><p class="footer-note">© 2026 SK Consulting LLC · Iowa, USA.<br>18+ · Adults only.</p></footer>
+</body>
+</html>
