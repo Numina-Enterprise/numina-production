@@ -663,7 +663,20 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
     "chainReceiptBlock": "51725",
     "chainReceiptConfirmations": 25,
     "currentOperationalState": "ACTIVE",
+    "operatingStateEvidence": "operator_native_declaration",
+    "currentChainActivityVerified": false,
+    "currentChainPauseState": null,
+    "historicalChainObservation": {
+      "record": "/downloads/nusd/deployment-verification.json",
+      "observedAt": "2026-09-18T15:35:24.884Z",
+      "chainId": "962421430",
+      "token": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "observedBlock": "51749",
+      "paused": true,
+      "scope": "Retained dated chain observation; not a fresh current-state read"
+    },
     "paused": false,
+    "pauseStateScope": "operator_native_declaration",
     "transfersEnabled": true,
     "mintedNusd": "1500000000000000",
     "burnedNusd": "0"
@@ -671,6 +684,8 @@ export const NUSD_CONTRACT_RECORD=freezeNusdContractRecord({
   "native_activation": {
     "provider": "NUMINA",
     "status": "ACTIVE",
+    "verification_scope": "NUMINA_NATIVE_DECLARATION",
+    "currentChainActivityVerified": false,
     "contracts_active": true,
     "backing_attestation_id": "numina:treasury:backing:2026-09-19:v1",
     "bank_usd": {

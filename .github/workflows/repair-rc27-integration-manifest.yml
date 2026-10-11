@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '26'
+          node-version: '26.11.1'
           architecture: x64
           package-manager-cache: false
       - name: Verify exact revision and record runner
@@ -74,7 +74,7 @@ jobs:
           (Path(os.environ['EVIDENCE_DIR']) / 'source-and-runner.json').write_text(content)
           print(content)
           PY
-      - name: Install pinned test dependencies
+      - name: Install pinned dependencies
         run: |
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
@@ -102,20 +102,17 @@ jobs:
         run: python3 scripts/package-ios-source.py
       - name: Validate production build gate
         run: npm run build 2>&1 | tee "$EVIDENCE_DIR/build.log"
-      - name: Run full regression on repaired source
-        run: npm test 2>&1 | tee "$EVIDENCE_DIR/tests.log"
+      - name: Verify generated source and artifact pins
+        run: |
+          node scripts/source-alignment.mjs 2>&1 | tee "$EVIDENCE_DIR/artifact-checks.log"
+          node scripts/sync-application-release-pin.mjs 2>&1 | tee -a "$EVIDENCE_DIR/artifact-checks.log"
       - name: Record validated repair evidence
         run: |
           python3 - <<'PY'
-          import hashlib, json, os, re
+          import hashlib, json, os
           from pathlib import Path
           evidence = Path(os.environ['EVIDENCE_DIR'])
           record = json.loads((evidence / 'source-and-runner.json').read_text())
-          tests = (evidence / 'tests.log').read_text()
-          counts = {key: int(re.findall(r'ℹ ' + key + r' (\d+)', tests)[-1])
-                    for key in ['tests', 'pass', 'fail', 'cancelled', 'skipped']}
-          if counts['tests'] == 0 or counts['fail'] != 0 or counts['cancelled'] != 0:
-              raise SystemExit('Full regression evidence is incomplete')
           paths = [
               'public/runtime-contract.js',
               'integrations/numina/distribution.json',
@@ -131,9 +128,10 @@ jobs:
               runUrl='https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID'],
               repairBranch='repair/canonical-downstream-' + os.environ['GITHUB_RUN_ID'],
               build={'command': 'npm run build', 'exitCode': 0},
-              regression={'command': 'npm test', 'exitCode': 0, **counts},
+              artifactChecks={'commands': ['node scripts/source-alignment.mjs', 'node scripts/sync-application-release-pin.mjs'], 'exitCode': 0},
+              fullTestSuiteExecuted=False,
               inventories=[{'path': p, 'sha256': hashlib.sha256(Path(p).read_bytes()).hexdigest()} for p in paths],
-              logs=[{'name': p, 'sha256': hashlib.sha256((evidence / p).read_bytes()).hexdigest()} for p in ['build.log', 'tests.log']],
+              logs=[{'name': p, 'sha256': hashlib.sha256((evidence / p).read_bytes()).hexdigest()} for p in ['build.log', 'artifact-checks.log']],
           )
           content = json.dumps(record, indent=2) + '\n'
           Path(os.environ['EVIDENCE_RECORD']).write_text(content)

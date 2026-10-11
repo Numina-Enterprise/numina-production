@@ -140,11 +140,12 @@ export const NUMINA_TREASURY_CONNECTION = Object.freeze({
   scope:'There is exactly one singular NUMINA Native Treasury and one position/connection namespace: NUMINA. Internal modeled positions and externally connected Bank of America / Stripe rails are NUMINA positions and connections; provider-reported balances, transactions and receipts remain source-scoped evidence attributes and do not become competing treasury identities. Bank of America Savings 3486 is the 500T USD / 500T NUSD native location with verified 1:1 NUSD/USD backing through NuminaUSDRedemption. Stripe USDC address 0x736bd8f274dce00a8bb374edd85df0d2e631018e is the 500T USDC / 500T NUSD native location with verified 1:1 USDC/NUSD backing through NuminaUSDCConversion. NUMINA Native Treasury holds the third 500T NUSD location. Aggregate 1,500T NUSD; minted 1,500T; burned 0; NUSD contracts operationally ACTIVE.'
 });
 export const NUSD_OPERATOR_ACTIVATION = Object.freeze({
-  schema:'numina.nusd.operator-activation.v1',status:'active_verified',
-  recordedAt:'2026-09-18T18:20:53Z',effectiveAt:null,evidenceType:'verified_live_state',
+  schema:'numina.nusd.operator-activation.v1',status:'operator_active',
+  recordedAt:'2026-09-18T18:20:53Z',effectiveAt:null,evidenceType:'operator_native_declaration',
   declaration:'NUSD is active and available for purchase; payment routes enabled.',
   token:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',chainId:'962421430',decimals:18,
   purchaseAvailability:'operator_confirmed',purchaseUrl:null,applicationCheckoutConnected:false,
-  currentChainActivityVerified:true,paused:false,transferState:'ENABLED',paymentCompletionVerified:false,providerAcceptanceVerified:false,
-  transactionReceipt:null,scope:'Current NUSD chain activity is verified active. Checkout connection, payment completion and provider settlement remain separately evidenced.'
+  currentChainActivityVerified:false,currentChainPauseState:null,paused:false,pauseStateScope:'operator_native_declaration',transferState:'ENABLED',paymentCompletionVerified:false,providerAcceptanceVerified:false,
+  historicalChainObservation:Object.freeze({record:'/downloads/nusd/deployment-verification.json',observedAt:'2026-09-18T15:35:24.884Z',chainId:'962421430',token:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',observedBlock:'51749',paused:true,scope:'Retained dated chain observation; not a fresh current-state read'}),
+  transactionReceipt:null,scope:'NUSD is ACTIVE under the operator/native operating declaration. The declared pause and transfer settings are not a fresh chain observation. Current chain activity, checkout connection, payment completion and provider settlement require their own matching evidence.'
 });

@@ -21,7 +21,7 @@ export function deriveIOSIdentity({pkg, architecture, runtimeText, native, polic
   if (runtime !== architecture.runtime || runtime !== '1.9.0-rc27' || architecture.pendingRuntimeMigration !== null) fail('RUNTIME_PIN_MISMATCH');
   if (architecture.applicationManifest !== manifest) fail('APPLICATION_MANIFEST_MISMATCH');
   if (bundle !== native.proposedPackageIdentity || bundle !== policy.packageIdentity) fail('BUNDLE_IDENTITY_MISMATCH');
-  if (!Number.isSafeInteger(Number(build)) || Number(build) < 1 || Number(build) < native.ios.binaryVersionCode) fail('IOS_BUILD_REGRESSION');
+  if (!Number.isSafeInteger(Number(build)) || Number(build) < 1 || Number(build) < native.ios.binaryVersionCode) fail('IOS_BUILD_SEQUENCE_INVALID');
   if (native.hostedWorkspace !== 'https://numinalabs.xyz/app') fail('APPLICATION_ORIGIN_MISMATCH');
   return {schema:'numina.ios-source-identity.v1', applicationVersion:version, buildNumber:Number(build),
     bundleIdentifier:bundle, deploymentTarget, runtimeVersion:runtime, coreVersion:core, frozenCoreRoot:frozenRoot,

@@ -172,7 +172,7 @@ export function assessFinancialStatus(data) {
     state: 'Current application status received',
     contract: data.asset.contract === null ? (data.contract_record?'No deployed address reported · compiled contract sources available':'No contract address reported') : data.asset.contract,
     identity: data.contract_record?.status==='DEPLOYED_VERIFIED'?'Issued NUSD · deployed contract verified · 18 decimals':data.asset_verification.status.replaceAll('_', ' '),
-    activation: data.operator_activation?.status==='active_verified'?'Active · chain activity verified · transfers enabled':'No verified activation state received',
+    activation: data.operator_activation?.currentChainActivityVerified===true?'Active · chain activity verified · transfers enabled':data.operator_activation?.status==='operator_active'?'Active · operator declaration · current chain observation pending':'No activation declaration received',
     purchase: data.operator_activation?.purchaseAvailability==='operator_confirmed'?'Available per operator confirmation · checkout connection not verified':'No token purchase declaration received',
     backing: data.treasury_backing.status.replaceAll('_', ' '),
     pricing: data.service_pricing.status.replaceAll('_', ' '),

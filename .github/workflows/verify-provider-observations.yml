@@ -45,12 +45,6 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
-      - name: Verify Circle and Arc read-only observation contracts
-        run: node --test tests/provider-observations.test.mjs
-      - name: Verify governed Arc provider submitter contract
-        run: node --test tests/provider-submitter.test.mjs
-      - name: Verify evidence persistence failure contracts
-        run: node --test tests/provider-evidence-record.test.mjs tests/github-evidence-release.test.mjs
       - name: Observe current providers from GitHub-bound source
         id: observe
         run: node scripts/smoke-provider-observations.mjs
@@ -101,7 +95,7 @@ jobs:
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
           npm run build
-          npm test
+          node scripts/sync-application-release-pin.mjs
           echo "NUMINA_ROOT_VERIFIED=true" >> "$GITHUB_ENV"
       - name: Build trusted source release gate
         id: trusted

@@ -44,9 +44,9 @@ const observationSet={
 assert(observationSet.status==='HEALTHY','provider observation set degraded');
 fresh(observationSet.observed_at,'provider set');
 const byProvider=new Map(observations.map(item=>[item.provider,item])),circle=byProvider.get('circle'),arc=byProvider.get('arc');
-for(const item of [circle,arc]){assert(item?.schema==='numina.provider-observation.v1'&&item.healthy===true&&item.http_status===200,'provider observation invalid');assert(item.credentialed===false&&item.external_execution_performed===false,'provider execution boundary drift');fresh(item.observed_at,item.provider);}
-assert(circle.endpoint==='https://api.circle.com/ping'&&circle.observed?.message==='pong','Circle observation drift');
-assert(arc.endpoint==='https://rpc.testnet.arc.network'&&arc.observed?.chain_id===5042002&&Number.isSafeInteger(arc.observed?.latest_block)&&arc.observed?.currency==='USDC','Arc observation drift');
+for(const item of [circle,arc]){assert(item?.schema==='numina.provider-observation.v1'&&item.healthy===true&&item.http_status===200,'provider observation invalid');assert(item.credentialed===false&&item.external_execution_performed===false,'provider execution boundary mismatch');fresh(item.observed_at,item.provider);}
+assert(circle.endpoint==='https://api.circle.com/ping'&&circle.observed?.message==='pong','Circle observation mismatch');
+assert(arc.endpoint==='https://rpc.testnet.arc.network'&&arc.observed?.chain_id===5042002&&Number.isSafeInteger(arc.observed?.latest_block)&&arc.observed?.currency==='USDC','Arc observation mismatch');
 
 const transportObservation={
   schema:'numina.transport-observation.v2',

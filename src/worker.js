@@ -10,10 +10,11 @@ import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
 import {nusdHttp} from './nusd-http.js';
 import {frontierHttp} from './frontier-http.js';
+import {sitesMcpHttp} from './sites-mcp-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
 import {quantumHttp} from './quantum-http.js';
-const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"true","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
+const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"scoped-source-projection","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-aYEMNzcsae3bOvwUaJFZmEVp6/1k57R95RqDhWRBin4='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
@@ -33,6 +34,7 @@ export default {
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));
    }
+   if(path==='/mcp')return finish(await sitesMcpHttp(req,env,{requestId}));
    if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
    if(path.startsWith('/api/')){
@@ -70,7 +72,12 @@ export default {
    if(path==='/api/core/v1.8/context'&&req.method==='GET')return finish(response(CORE_CONTEXT));
    if(path.startsWith('/api/'))return finish(response({error:'NOT_FOUND'},404));
    return finish(await env.ASSETS.fetch(req));
-  }catch{return finish(response({error:'SERVICE_UNAVAILABLE',requestId},503));}
+  }catch(error){
+   const exceptionTypes=new Set(['Error','TypeError','ReferenceError','RangeError','URIError','SyntaxError','AggregateError']);
+   const publicCodes=new Set(['ROOT_CONFIGURATION_MISMATCH','AUTHORITY_CONFIGURATION_MISSING','AUTHORITY_CONFIGURATION_INVALID','UNAUTHENTICATED','AUTHORITY_DENIED','RATE_LIMITED','DEPENDENCY_UNAVAILABLE','APPLICATION_RELEASE_UNAVAILABLE','APPLICATION_RELEASE_INVALID']);
+   console.error(JSON.stringify({event:'numina_request_failure',requestId,path:path==='/mcp'?'/mcp':path.startsWith('/api/')?path.split('/').slice(0,4).join('/'):'/public',method:['GET','HEAD','POST','PUT','PATCH','DELETE','OPTIONS'].includes(req.method)?req.method:'OTHER',stage:'worker_dispatch',exception:exceptionTypes.has(error?.name)?error.name:'Error',code:publicCodes.has(error?.code)?error.code:'SERVICE_UNAVAILABLE'}));
+   return finish(response({error:'SERVICE_UNAVAILABLE',requestId},503));
+  }
   finally{span.finish(status);}
  }
 };

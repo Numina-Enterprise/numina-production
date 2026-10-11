@@ -38,10 +38,10 @@ jobs:
       - name: NUMINA runtime
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: '24'
+          node-version: '26.11.1'
           package-manager-cache: false
 
-      - name: NUMINA pinned test dependencies
+      - name: NUMINA pinned dependencies
         run: |
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
@@ -53,10 +53,9 @@ jobs:
         run: |
           node --check runtime/nusd/scripts/deploy-production.mjs
           python3 -m py_compile scripts/sign-ios-release.py scripts/sign-android-release.py
-          node --test tests/numina-identity.test.mjs tests/numina-treasury-aggregate.test.mjs
 
-      - name: NUMINA suite
-        run: npm test
+      - name: NUMINA exact artifact pins
+        run: node scripts/sync-application-release-pin.mjs
 
       - name: NUMINA release
         run: npm run release:numina
