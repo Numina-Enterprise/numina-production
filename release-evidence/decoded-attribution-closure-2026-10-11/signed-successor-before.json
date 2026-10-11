@@ -1,0 +1,221 @@
+{
+  "root": "/workspace/numina-production/release-evidence/whole-protocol-review-2026-10-11",
+  "files": {
+    "inventory.json": {
+      "bytes": 4629,
+      "sha256": "e001a9f18cdb02bd42c1f506908a36485e8ae795162848a95fb45deda195a13a"
+    },
+    "README.md": {
+      "bytes": 1935,
+      "sha256": "6e3e83dadf01e94e1b8e514eb694b9030f5362a214318bf68313f4a21f23cf4e"
+    },
+    "NCPS-Lean4-Proofs-2026-10-09.zip": {
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    "operational-signing-receipt.json": {
+      "bytes": 5102,
+      "sha256": "0f32a4cfa9bf0ab60d11a257d366573a5ddf86dea670ea7ccf84a0b9feec7725"
+    },
+    "SHA256SUMS": {
+      "bytes": 2667,
+      "sha256": "dd8f21b6f13b29e605a64a32ed3a1b5cab06b44625a3c5d8ccf8ef015ecc76ad"
+    },
+    "original-delivery-source-record.json": {
+      "bytes": 2752,
+      "sha256": "1cf4c2fe90af6d24229ac227ed26f28cc02c50f70980ffccab2273b3577c1957"
+    },
+    "verify_assessment.py": {
+      "bytes": 3890,
+      "sha256": "8e1859753762b290df4a7160f4935b166eb07ebf744a9e390d314b86b478f27f"
+    },
+    "assessment.json": {
+      "bytes": 22004,
+      "sha256": "187f4e249fc1f9a2360baf1ff90dca5a26d9a9444f7ec84f67b4d73d023b6e36"
+    },
+    "operational-ed25519-public.raw32": {
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+    },
+    "build-numina-correctness-reports.py": {
+      "bytes": 17862,
+      "sha256": "d9938c274370024827c31d0f39263de26926924ac1de60171cf94993ed188c5c"
+    },
+    "reports/probe-runtime-canonicalization.py": {
+      "bytes": 12968,
+      "sha256": "4268c5c03e2cca8e43c6d3a3726bafbc37961d827ba90ee019f3f3ae829e6cdf"
+    },
+    "reports/independent-remote-check.py": {
+      "bytes": 4465,
+      "sha256": "16a104075684c32c21389c68f394cd8de19021cfe80fd1e1888fe4336fbcc8d9"
+    },
+    "reports/independent-proof-review.json": {
+      "bytes": 12749,
+      "sha256": "c9c15d2385aa94117c57cc1ff674a0099cd7fa637880a946fb12b46e6d058b02"
+    },
+    "reports/root-canonicalization-readback.json": {
+      "bytes": 13095,
+      "sha256": "71f37e4ed96709cf6aa88d2eea10ad7c699ed25185921268348b27ffbca0ff1c"
+    },
+    "reports/implementation-conformance-review.json": {
+      "bytes": 13358,
+      "sha256": "585794193a58a03a3d6c1498d80005e9902123f88dc7da90d06ac3a7f5ae3148"
+    },
+    "reports/independent-compiler-check.json": {
+      "bytes": 22974,
+      "sha256": "0212bfb89153b5525c3b7b9eea38766fd4fb5f43e88a0d5206de9c30a44ed5ed"
+    },
+    "reports/NCPSModelClosure-audit.log": {
+      "bytes": 330,
+      "sha256": "793a71cda57131492622d9941d87b01216621dca287e023dfa2f0e450b0eb584"
+    },
+    "reports/agent-reviews-finalized.json": {
+      "bytes": 3775,
+      "sha256": "d090fc92e53beeeb602dc0fae97193f998a0e6a4d192a7d1a5dad219b722d964"
+    },
+    "reports/NCPSModelClosure-verification.json": {
+      "bytes": 772,
+      "sha256": "ff14e73206d01df8c7ad23306d8d756282209ea7313f2f618f9d4e9b1c9ec573"
+    },
+    "reports/appendix-q-recovery.json": {
+      "bytes": 12840,
+      "sha256": "48488df60fa613f54ec3b303c31b60d6a75e353486af697ff55c0f7da4eed4a5"
+    },
+    "reports/v156-source-commitment-verification.json": {
+      "bytes": 2892,
+      "sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2"
+    },
+    "reports/original-pdf-and-package-checksum-readback.json": {
+      "bytes": 2119,
+      "sha256": "6ef157c0e2cec56c9383b5f365d0b559560d8e648ce98020381eb99984f55d0b"
+    },
+    "reports/v156-provider-observation.json": {
+      "bytes": 1940,
+      "sha256": "8a508c380f8a9bf85c072ad4e19032775a1014c6ade4e35e1fb1158dd5da1169"
+    },
+    "reports/whole-protocol-proof-obligations.json": {
+      "bytes": 37512,
+      "sha256": "367f954f3e0316144c204a7f46e338f41570587d3864206aa857e16a3417d7ac"
+    },
+    "reports/implementation-conformance-review.md": {
+      "bytes": 2983,
+      "sha256": "696838afc920bcc550921fb377b539909893e7cca288ebbd626ddb5465394f60"
+    },
+    "reports/verify-original-pdf-and-package-checksum.py": {
+      "bytes": 6465,
+      "sha256": "fbc3904350aa622ac4d2b58a992c6b4e76541e8c456845f76b00abc383d0081a"
+    },
+    "reports/RecoveredTheoremPremises.json": {
+      "bytes": 49651,
+      "sha256": "5e69324c754c59b9139830d4b4c2efc588d3f7d7fec6919a1f3d23f08cc5b304"
+    },
+    "reports/NCPSModelClosure.lean": {
+      "bytes": 2656,
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+    },
+    "signatures/assessment.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "7b0d42ef90d167f4451191506eadc37a037f45bd8a2a3cf574220b05ce9605cf"
+    },
+    "signatures/original-delivery-source-record.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "2f5cca7e367d2de061041a585d800888adaa1c77538c59899ce419571cc294d5"
+    },
+    "signatures/build-numina-correctness-reports.py.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "7284fab7014fccf945151968776c437550c8ba815776dfdd7103c0c1e76020e9"
+    },
+    "signatures/README.md.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "57d43cea2486b6c55c095380b2b69414eef4db152ee33676ded46d9ad2adb5bd"
+    },
+    "signatures/operational-signing-receipt.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "c8b85250de8e5898810621aeba62f9e43d2d5f82949f550f9006a562a7396152"
+    },
+    "signatures/inventory.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "039d420ee93ecd53d56ac805b7873e3c79b06697e2bc2fb466d4aba9f3379234"
+    },
+    "signatures/verify_assessment.py.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "ff9b6e0c9a35a537e55da8770a47e5d623de16b8616213504b0894baa294f1f5"
+    },
+    "signatures/SHA256SUMS.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "aea6b955f079493f0e6cad03bf161702d9b7e223d7d559731641b1ba6aa834c5"
+    },
+    "signatures/reports/v156-source-commitment-verification.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "026114ac623445606db7e9dd37996a13930672d4b04325422370c144a5385202"
+    },
+    "signatures/reports/NCPSModelClosure-audit.log.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "9e9d532d976b6a899d2de24dfb774431a510b52f500b7b34e17b78b255ef54d2"
+    },
+    "signatures/reports/whole-protocol-proof-obligations.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "4751d4f5f1d82375cefe66a8ee5173c222ee9198813fb286820316fb1919d392"
+    },
+    "signatures/reports/independent-proof-review.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "1cab3de26f7e89ed21886bf781f9b401acdd5c6d22f7dcd68b19ca8ad2eaee8e"
+    },
+    "signatures/reports/implementation-conformance-review.md.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "7a7387ea3ad19ecdde41bf17b70ba8a455f2db233873c82ec3835d93f9b51bd3"
+    },
+    "signatures/reports/verify-original-pdf-and-package-checksum.py.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "bffc259ac770ed4edb1d409917ad8fc5a47c100f86e0a757260759bf34243d08"
+    },
+    "signatures/reports/independent-remote-check.py.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "1c3f1329eff810e77a9bac76b5213ad5e7429b3e0dfe0f15c36821f5d7f67876"
+    },
+    "signatures/reports/probe-runtime-canonicalization.py.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "a07a8f1ab3fc1423ac0a6c964d93ee4d1b60b62b9e2a9ee11a50cf59e6be0d45"
+    },
+    "signatures/reports/NCPSModelClosure.lean.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "1c97a961990e8f3a442b90a1f18832ea1147a965c91ca334529cd25440773627"
+    },
+    "signatures/reports/independent-compiler-check.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "034eb3e159a04a2266cfa3e392c255993484f0d3d0da593b09720ad14f2376c1"
+    },
+    "signatures/reports/original-pdf-and-package-checksum-readback.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "b98ce7136354e7d91d524b5e6bde8d3b1b34c1f8cd6a447ef1c42c12f99a4071"
+    },
+    "signatures/reports/appendix-q-recovery.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "14fba8491454be24655a78641392fa2def35d03e821e5461183b72bea754fba3"
+    },
+    "signatures/reports/implementation-conformance-review.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "bb8ac184c763a7eb267e14a51c526fdb4b4b0ec14e9cd1ca5edb8bfe1bc2b2a7"
+    },
+    "signatures/reports/NCPSModelClosure-verification.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "28b902f8f34a258ea28e0938d898cf749cc768dbf3a6df8c79b72279cd8aba68"
+    },
+    "signatures/reports/root-canonicalization-readback.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "881a2a8aa4e3099d2cdbf4cf95aa8341fa947903a8edb5ca1ad3ad67d5d12bef"
+    },
+    "signatures/reports/v156-provider-observation.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "8e9ff7773b3cd2fb1aca48a1457a588a99b1194156668f91365f6b4d9a57f2b6"
+    },
+    "signatures/reports/RecoveredTheoremPremises.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "1145c2140b12aafc1aad461385b1d4a782912991ad4831a0fc32779583a437df"
+    },
+    "signatures/reports/agent-reviews-finalized.json.ed25519.sig64": {
+      "bytes": 64,
+      "sha256": "9bbddf86c38445ca30f23b72f8e33eaa3e3bdee9f3b1b5238262a78ba26d4141"
+    }
+  }
+}
