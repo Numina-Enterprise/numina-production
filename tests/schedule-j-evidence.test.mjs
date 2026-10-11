@@ -73,6 +73,7 @@ test('internal receipts and provider observations never become independent settl
     assert.equal(e.independentlyVerified, false);
     assert.equal(e.reconciliationStatus, 'NOT_RECONCILED');
   }
+  assert.throws(() => recordTreasuryAssertion('PROVIDER_SETTLEMENT', {sourceClass:'INDEPENDENT_VERIFICATION', reference:'self-claimed', recordedAt:time}),/EVIDENCE_PROVENANCE_REQUIRED/);
   assert.throws(() => recordTreasuryAssertion('WRONG', {sourceClass:'INTERNAL_SOFTWARE', reference:'x', recordedAt:time}),/UNKNOWN_ASSERTION_TYPE/);
   assert.throws(() => recordTreasuryAssertion('ONCHAIN_FINALITY', {sourceClass:'CALLER_ASSERTION', reference:'x', recordedAt:time}),/EVIDENCE_PROVENANCE_REQUIRED/);
 });
