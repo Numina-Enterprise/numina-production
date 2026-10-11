@@ -3,6 +3,22 @@
 Status: **development implementation with local tests**; NOT deployed, audited,
 provider-connected, or adopted as a legally applicable regulatory obligation.
 
+## Hosting and execution authority
+
+- **Numina is self-hosted**, per the owner's deployment declaration. GitHub
+  is used here only as a source-code, review and CI evidence surface; it is
+  **not** represented as Numina's production hosting provider.
+- A passing GitHub-hosted test must **never** establish that an implementation
+  is deployed, integrated, operating or independently verified on Numina's
+  self-hosted runtime.
+- Self-hosted production readiness requires separate runtime-access
+  authorization, runtime build/source binding, deployment receipts,
+  independent receipt verification, owner/session authorization and
+  a production-safe negative-test plan.
+- The existing CI runner restriction is separate from self-hosting: do not
+  create or authorize self-hosted GitHub Actions runners to evade repository
+  runner policy. Preserve the sanctioned CI workflow configuration.
+
 ## Source-of-truth boundaries
 
 - NCUA **91 FR 64699**, dated 2026-10-09:
