@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-010",
+  "configurationId": "agentforce-010",
+  "team": "review",
+  "title": "Resolve existing Slack handoff routes",
+  "nextBestAction": "Use the existing Numina root/engineering/product room records and handoff threads for the task summary.",
+  "target": "authorized Slack room routing",
+  "priority": 2,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/slack_room_frontier_report",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-010",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "slack_routing",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-010.json",
+    "passCondition": "Receipt names actual selected room/thread and excludes private room content from public artifacts.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

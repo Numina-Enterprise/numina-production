@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-060",
+  "configurationId": "agentforce-060",
+  "team": "review",
+  "title": "Review NCPS compliance wording",
+  "nextBestAction": "Check proposed status wording against the retained theorem hypotheses and still-open concrete implementation obligations.",
+  "target": "author-only compliance boundaries",
+  "priority": 12,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/red_team_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-060",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "proof_scope",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-060.json",
+    "passCondition": "Receipt avoids a universal correctness/compliance label while required witnesses are missing.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "numina.v162-current-external-gates.v1",
+  "assembled_at_utc": "2026-10-11T20:24:18.256224+00:00",
+  "deployment": {
+    "version": 162,
+    "deployment_id": "appgdep_6acb61aa541c8191ba6b8090bf3f5f9a",
+    "status": "succeeded",
+    "publication_source_commit": "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb"
+  },
+  "journal": {
+    "observed_at_utc": "2026-10-11T20:16:34.201Z",
+    "rows": 143,
+    "contiguous": true,
+    "complete_event_and_command_hashes_verified": 138,
+    "hash_mismatches": 0,
+    "truncated_revisions": [
+      73,
+      134,
+      140,
+      141,
+      142
+    ],
+    "manifest_truncated": true,
+    "full_recovery": false,
+    "mcp_readback": "UNAUTHORIZED; reconnect required",
+    "next_action": "Reconnect the existing Numina MCP app or obtain a supported untruncated owner database export; retain private journal values privately."
+  },
+  "salesforce": {
+    "observed_at_utc": "2026-10-11T20:13:00Z",
+    "connector_state": "DISABLED_BY_ADMIN / NOT_AVAILABLE",
+    "authenticated_agent_or_version_ids": false,
+    "tasks_included": 100,
+    "activated_salesforce_agents": null,
+    "activation_established": false,
+    "next_action": "Workspace administrator restores the approved Salesforce connector; then read authenticated org, agent/version IDs and entitlement before actual activation."
+  },
+  "whole_protocol_correctness_established": false,
+  "proof_scope": "Retained Lean 4.24 manuscript findings and later bounded Lean 4.22 checks remain distinct; 15 concrete whole-protocol obligations remain open. See signed review/protocol-ietf-closure.json.",
+  "independent_stream_acceptance_established": false,
+  "ietf": {
+    "fresh_official_process_guidance_retrieved": true,
+    "fresh_datatracker_read": "bot_blocked",
+    "last_retained_public_observation_at_utc": "2026-10-11T04:06:16.806983+00:00",
+    "last_retained_revision": "01",
+    "last_retained_stream": null,
+    "decision_authority": "Independent Submissions Editor; a local operational signature is not an editorial acceptance receipt."
+  },
+  "signed_manuscript": {
+    "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9",
+    "unchanged": true,
+    "new_paper_edition_created": false
+  },
+  "financial_operations_performed": false,
+  "broad_test_or_mutation_campaigns_performed": false,
+  "signing_boundary": "This new operational signing event authenticates the exact files and existing findings. Original signed:false labels describe their earlier issuance; signatures are retained separately and do not change those original bytes."
+}

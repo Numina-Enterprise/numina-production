@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "wrapper_bytes": 41850197,
+  "wrapper_sha256": "71ddc3b360a60265223ca5489bab25665b768f1994c82b92d3863e4b4cc818b1",
+  "exact_outer_file_count": 31,
+  "primary_package_bytes": 41776034,
+  "primary_package_sha256": "676e16a1a90f6927d805516c88d7a767c132ee19af1ffcc83cbc9f1eb61fc99c",
+  "primary_package_preserved_exactly": true,
+  "package_signature_mode": "Signed SHA-256 commitment; no direct primary-ZIP binary signature",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "supplement_verification": {
+    "status": "PASS",
+    "signatures_verified": 14,
+    "delivered_file_bytes_checked": 14,
+    "request_sha256": "01d4439457149ce8b74802986b1408a33462365e1153a2c31042c1061a38730f",
+    "inventory_sha256": "e7672d7039b1e60a7eda7170a7626e99075ab04040b3a07fbed31bb618076510",
+    "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+    "receipt_sha256": "a1e2aeef18bc08eee989919fbb966c4297fed09e72799e8f82cf25d4ebfb5878",
+    "signed_at_utc": "2026-10-11T20:33:32.956134+00:00",
+    "whole_protocol_correctness_established": false,
+    "independent_stream_acceptance_established": false
+  },
+  "primary_verification": {
+    "status": "PASS",
+    "zip_bytes": 41776034,
+    "zip_sha256": "676e16a1a90f6927d805516c88d7a767c132ee19af1ffcc83cbc9f1eb61fc99c",
+    "exact_outer_file_count": 417,
+    "archive_regular_members_verified": 366,
+    "archive_sha256": "7c0276be32c7a830dadb7bdf8f67ff0138c38db422dee949e4314760f1d4b792",
+    "archive_signature_mode": "Signed SHA-256 commitment; no direct binary signature",
+    "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+    "inner_verification": {
+      "status": "PASS",
+      "signatures_verified": 207,
+      "delivered_file_bytes_checked": 207,
+      "request_sha256": "47cf7ef6c7bf10f22228ccc3843bab35acc22b042ee9e38da03d310af11d7874",
+      "inventory_sha256": "398c552bc9b3471caf14936c640235195f5f49776be624b4694a75518c058f83",
+      "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+      "receipt_sha256": "fc2de478866e84035e9193adcd0b972688d172052ff58d605ac3e5871c10111b",
+      "signed_at_utc": "2026-10-11T20:29:04.905963+00:00",
+      "whole_protocol_correctness_established": false,
+      "independent_stream_acceptance_established": false
+    },
+    "provider_storage_tar_independently_verified": false,
+    "whole_protocol_correctness_established": false,
+    "independent_stream_acceptance_established": false
+  },
+  "provider_storage_tar_independently_verified": false,
+  "whole_protocol_correctness_established": false,
+  "independent_stream_acceptance_established": false,
+  "readback_is_signed_document": false
+}

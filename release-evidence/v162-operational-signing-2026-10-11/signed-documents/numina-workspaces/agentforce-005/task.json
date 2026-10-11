@@ -1,0 +1,57 @@
+{
+  "id": "agentforce-005",
+  "configurationId": "agentforce-005",
+  "team": "review",
+  "title": "Separate prepared configs from active workers",
+  "nextBestAction": "Record100 prepared Agentforce IDs and the six existing cloud reviewer roles as separate quantities.",
+  "target": "workspace/task state",
+  "priority": 1,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/red_team_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-005",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "workspace_manifest",
+      "status": "available"
+    },
+    {
+      "id": "task_ledger",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-005.json",
+    "passCondition": "Receipt contains no Salesforce activation, reserved-capacity or100-running-worker claim.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-034",
+  "configurationId": "agentforce-034",
+  "team": "signatures",
+  "title": "Read literal inner-ZIP checksum text",
+  "nextBestAction": "Read retained checksum-list bytes and member names, preserving two-space/newline framing.",
+  "target": "inner ZIP SHA256SUMS",
+  "priority": 7,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/signature_delivery_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-034",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "signature_records",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-034.json",
+    "passCondition": "Receipt records exact signed text identity and listed membership; no normalized-text substitution.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

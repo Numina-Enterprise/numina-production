@@ -1,0 +1,27 @@
+{
+  "schema": "numina.sites-projection-build-readback.v1",
+  "canonicalCommit": "ae545f4a3b59cc7151b22b2fef3e873f5fd9d057",
+  "sitesCommit": "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb",
+  "regularMemberCount": 366,
+  "matchingPreviousRegularMembers": 359,
+  "changedRegularMembers": [
+    "dist/client/downloads/Numina-Continuous-Cloud-Coordination.md",
+    "dist/client/downloads/application-release-v2.json",
+    "dist/client/downloads/application-release-v3.json",
+    "dist/client/downloads/application-release-v4.json",
+    "dist/client/downloads/integration-manifest.json",
+    "dist/client/downloads/release.json",
+    "dist/client/source-alignment.json"
+  ],
+  "changes": "Updated coordinator document and fresh integration packaging timestamp with derived inventory pins. Worker/client source digests unchanged.",
+  "archive": {
+    "path": "/workspace/numina-production/outputs/sites-source-projection-2026-10-11/numina-cloud-site-delivery.tar.gz",
+    "bytes": 39983201,
+    "sha256": "7c0276be32c7a830dadb7bdf8f67ff0138c38db422dee949e4314760f1d4b792"
+  },
+  "node": "26.11.1",
+  "workerSha256": "0aafd35964ab38d98aaa7f44603d343202dbdcba4320cce65c342d1ebc9d860c",
+  "archiveMatchesRebuiltOutput": true,
+  "sourceClean": true,
+  "newSignaturesIssued": false
+}

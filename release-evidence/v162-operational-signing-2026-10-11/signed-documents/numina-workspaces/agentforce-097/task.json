@@ -1,0 +1,57 @@
+{
+  "id": "agentforce-097",
+  "configurationId": "agentforce-097",
+  "team": "deployment",
+  "title": "Prepare existing Agentforce deployment handoff",
+  "nextBestAction": "Identify the existing agent ID/version, accepted executor and proposed change before an authorized provider action.",
+  "target": "existing Agentforce agent",
+  "priority": 20,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/blue_team_deployment",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-097",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "salesforce_access",
+      "status": "needs_evidence"
+    },
+    {
+      "id": "agentforce_identity",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-097.json",
+    "passCondition": "Receipt names exact agent/target/entitlement/executor or explicit missing dependencies; activation stays unestablished.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

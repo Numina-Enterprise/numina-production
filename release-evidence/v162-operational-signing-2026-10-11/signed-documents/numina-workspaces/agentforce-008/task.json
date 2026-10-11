@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-008",
+  "configurationId": "agentforce-008",
+  "team": "proofs",
+  "title": "Recover public engineering archive reference",
+  "nextBestAction": "Locate exact authorized public source/archive bytes for the recorded engineering packet without substituting a different proof bundle.",
+  "target": "DEPENDENCY-01 engineering archive",
+  "priority": 2,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-008",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "public_proof_dependencies",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-008.json",
+    "passCondition": "Receipt records exact source references and expected 08a2b5c4…11a2a4d80 archive identity or unavailable bytes.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

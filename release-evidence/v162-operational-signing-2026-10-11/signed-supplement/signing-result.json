@@ -1,0 +1,111 @@
+{
+  "schema": "numina.exact-delivery-signing-result.v1",
+  "status": "PASS",
+  "request_sha256": "01d4439457149ce8b74802986b1408a33462365e1153a2c31042c1061a38730f",
+  "inventory_sha256": "e7672d7039b1e60a7eda7170a7626e99075ab04040b3a07fbed31bb618076510",
+  "public_key_base64": "8p7GeYNsaInvh9QbhCv9IjYATBpthNS6wIFMrkWpDCg=",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "receipt_base64": "ewogICJzY2hlbWEiOiAibnVtaW5hLmV4YWN0LWRlbGl2ZXJ5LW9wZXJhdGlvbmFsLXNpZ25pbmctcmVjZWlwdC52MSIsCiAgInNpZ25lZF9hdF91dGMiOiAiMjAyNi0xMC0xMVQyMDozMzozMi45NTYxMzQrMDA6MDAiLAogICJwdXJwb3NlIjogIlNlcGFyYXRlIG9wZXJhdGlvbmFsIHNpZ25hdHVyZSBldmVudCBvdmVyIHRoZSBjb21wbGV0ZWQgdmVyc2lvbiAxNjIgcHJpbWFyeSBaSVAgY2hlY2tzdW0vY29tbWl0bWVudCBhbmQgcHVibGljIHZlcmlmaWNhdGlvbi9taWdyYXRpb24gZm9sbG93LXVwOyBubyBjaGFuZ2UgdG8gZWFybGllciBzaWduZWQgYnl0ZXMuIiwKICAiYWxnb3JpdGhtIjogInB1cmUgRWQyNTUxOSIsCiAgImZyYW1pbmciOiAiRXhhY3QgZnVsbC1maWxlIGJ5dGVzOyBubyBjYW5vbmljYWxpemF0aW9uIG9yIHByZWhhc2giLAogICJwdWJsaWNfa2V5X3NoYTI1NiI6ICJiMjE3Y2M1YmFlMDhhY2JmZGI5ZjhjZDIwZjQyMGYwYmVlMmFlMzlmYjZmMGIxNzhjZTA2MDI4NGM3NmY4ZTlmIiwKICAicmVxdWVzdF9zaGEyNTYiOiAiMDFkNDQzOTQ1NzE0OWNlOGI3NDgwMjk4NmIxNDA4YTMzNDYyMzY1ZTExNTNhMmMzMTA0MmMxMDYxYTM4NzMwZiIsCiAgImludmVudG9yeV9zaGEyNTYiOiAiZTc2NzJkNzAzOWIxZTYwYTdlZGE3MTcwYTc2MjZlOTkwNzVhYjA0MDQwYjNhMDdmYmVkMzFiYjYxODA3NjUxMCIsCiAgIndvcmtmbG93X3NoYTI1NiI6ICIyNTY0OGE3OTg1NTA3NDNmZTI3ODg1MzJlNTZmNDgyM2U0ZDdiNWM5MGQ3ZjUwY2MzMDIzNTI4YzEyMTc1NzA5IiwKICAid2hvbGVfcHJvdG9jb2xfY29ycmVjdG5lc3NfZXN0YWJsaXNoZWQiOiBmYWxzZSwKICAiaW5kZXBlbmRlbnRfc3RyZWFtX2FjY2VwdGFuY2VfZXN0YWJsaXNoZWQiOiBmYWxzZSwKICAiZXhpc3Rpbmdfd29ya2Zsb3dfdW5jaGFuZ2VkIjogdHJ1ZSwKICAia2V5X2dlbmVyYXRlZF9vcl9yb3RhdGVkIjogZmFsc2UsCiAgInByaXZhdGVfa2V5X2V4cG9ydGVkIjogZmFsc2UsCiAgImN1c3RvZHlfbXV0YXRlZCI6IGZhbHNlLAogICJtZW1vcnlfemVyb2l6YXRpb25fZ3VhcmFudGVlZCI6IGZhbHNlLAogICJweXRob25fdmVyc2lvbiI6ICIzLjkuNiAoZGVmYXVsdCwgQXVnIDI1IDIwMjYsIDIxOjI2OjIxKSBcbltDbGFuZyAyMS4wLjAgKGNsYW5nLTIxMDAuMy4zNC4yKV0iLAogICJjcnlwdG9ncmFwaHlfdmVyc2lvbiI6ICI1MC4wLjIiLAogICJkb2N1bWVudHMiOiBbCiAgICB7CiAgICAgICJwYXRoIjogIlJFQURNRS5tZCIsCiAgICAgICJieXRlcyI6IDEzNjIsCiAgICAgICJzaGEyNTYiOiAiMDEwMjk0YjQzOTQ5MmYxN2E0ZTY1NjY4NjIwZjViMTBkZjk4MzA4MWUzMGE0NjI5MDNiZTFjYTE5ZmY5OTE4MCIKICAgIH0sCiAgICB7CiAgICAgICJwYXRoIjogIlNIQTI1NlNVTVMiLAogICAgICAiYnl0ZXMiOiAxMTU4LAogICAgICAic2hhMjU2IjogIjJhNWUxN2EyZGEyYmQxOTA1ZDE3ZDQxYzY5NjRlYmQxZmMyNmYwZGE2MjdhNzg4YjMyZTNlNzRiOTRjOGQ4MWEiCiAgICB9LAogICAgewogICAgICAicGF0aCI6ICJmcm96ZW4tc3RhZ2UtYmx1ZS1yZXZpZXcuanNvbiIsCiAgICAgICJieXRlcyI6IDIzNzY4LAogICAgICAic2hhMjU2IjogIjI2ZGEyZTNkOWVjYmQ5ZDczZjA0OGFkYzg2YjEzMDgxYmNlOWViYWE3NzI0MDZhMDY4MGNhNWUyMjk5Y2NhZGMiCiAgICB9LAogICAgewogICAgICAicGF0aCI6ICJpbnZlbnRvcnkuanNvbiIsCiAgICAgICJieXRlcyI6IDE5ODYsCiAgICAgICJzaGEyNTYiOiAiZTc2NzJkNzAzOWIxZTYwYTdlZGE3MTcwYTc2MjZlOTkwNzVhYjA0MDQwYjNhMDdmYmVkMzFiYjYxODA3NjUxMCIKICAgIH0sCiAgICB7CiAgICAgICJwYXRoIjogIm9wZXJhdGlvbmFsLWVkMjU1MTktcHVibGljLnJhdzMyIiwKICAgICAgImJ5dGVzIjogMzIsCiAgICAgICJzaGEyNTYiOiAiYjIxN2NjNWJhZTA4YWNiZmRiOWY4Y2QyMGY0MjBmMGJlZTJhZTM5ZmI2ZjBiMTc4Y2UwNjAyODRjNzZmOGU5ZiIKICAgIH0sCiAgICB7CiAgICAgICJwYXRoIjogInBhY2thZ2UtY29tbWl0bWVudC5qc29uIiwKICAgICAgImJ5dGVzIjogNDI0LAogICAgICAic2hhMjU2IjogIjg1ZjU5ZThkNWJhNmU4NWJlNWYyZDY4OGUyOGM0NGM5ODkzZDRkMjViZTY1YjRlN2VjMmNmM2VhYjRkMGYxOTAiCiAgICB9LAogICAgewogICAgICAicGF0aCI6ICJwYWNrYWdlLnNoYTI1NiIsCiAgICAgICJieXRlcyI6IDEwNSwKICAgICAgInNoYTI1NiI6ICIwNGJiMWIzZTY1Mjc1ZGJkMTNlMmNlNzA0NTY1OGI2ZWU4NzIxYzJjYzQ1MjJlYTUyMjljYWZlNDkzZjQyM2MyIgogICAgfSwKICAgIHsKICAgICAgInBhdGgiOiAicHJpbWFyeS1wYWNrYWdlLXZlcmlmaWNhdGlvbi5qc29uIiwKICAgICAgImJ5dGVzIjogMTI4OSwKICAgICAgInNoYTI1NiI6ICI5ZTgyOWQzMTY0NDVmYTQ2NDJkYzQ1NWY1NmJlMzRiY2FmOWY3Mjc5M2U5ZmQ1MmQ0MTVhMmRjY2UyOTkwNDM3IgogICAgfSwKICAgIHsKICAgICAgInBhdGgiOiAic2FsZXNmb3JjZS1taWdyYXRpb24taW50ZWdyYXRpb24taGVhbHRoLmpzb24iLAogICAgICAiYnl0ZXMiOiA0MDI3LAogICAgICAic2hhMjU2IjogImUwNDhlN2QxNjhmMTE1ZmY0YzM0M2NmMGM0Zjk3NjJkZjdkODFjNWQ3MzI3MDFlMGM0NGQ0MWU1YmU4MzE1ZDciCiAgICB9LAogICAgewogICAgICAicGF0aCI6ICJ0b29scy9idWlsZC12MTYyLXNpZ25pbmctc3VwcGxlbWVudC5weSIsCiAgICAgICJieXRlcyI6IDYxMDUsCiAgICAgICJzaGEyNTYiOiAiNjlkODdjYmQzMWMwZDdjYTQ2ZTYxM2QyODVmOWMzYTdkYjI5ODhmNTY4YjUwNGIxYzY0MTRkMmE0MzM4YjRhZSIKICAgIH0sCiAgICB7CiAgICAgICJwYXRoIjogInRvb2xzL3ZlcmlmeS1leGFjdC1udW1pbmEtZGVsaXZlcnkucHkiLAogICAgICAiYnl0ZXMiOiAxMzA2MCwKICAgICAgInNoYTI1NiI6ICJhYzFjOWUyYTViZWUyODcwMTIxMTNkYzQ0YWU3NTM5MmQ2YjNhM2I4NmI3Y2I1Y2QxODhhOTA1NDZmYTUxOGJkIgogICAgfSwKICAgIHsKICAgICAgInBhdGgiOiAidG9vbHMvdmVyaWZ5LW51bWluYS12MTYyLWNvbXBsZXRlZC13cmFwcGVyLnB5IiwKICAgICAgImJ5dGVzIjogMTYxMDAsCiAgICAgICJzaGEyNTYiOiAiODU1ZGY2ZTBkYjU3N2FmMDhkM2I0ZWQ3OWMyYWQ3ZGNlY2M3MDRjNTc4ZjVhNzU2MzVlNzFkODA0MDhhMTE0NiIKICAgIH0sCiAgICB7CiAgICAgICJwYXRoIjogInRvb2xzL3ZlcmlmeS1udW1pbmEtdjE2Mi1kZWxpdmVyeS5weSIsCiAgICAgICJieXRlcyI6IDE2MjM2LAogICAgICAic2hhMjU2IjogIjA2NGNiMzJlMTk1MjAyNDdkMTBkZTFmNzNhMTMyMzM1OGRkZjIxZTY5ZmE4YmZmZWQ2NzcxYzJlYWY4MTY4ZTAiCiAgICB9CiAgXQp9Cg==",
+  "new_signatures": 14,
+  "signatures": [
+    {
+      "path": "README.md",
+      "bytes": 1362,
+      "sha256": "010294b439492f17a4e65668620f5b10df983081e30a462903be1ca19ff99180",
+      "signature_base64": "Rw5Gmwc/MRO35P8YyOxSThHbgihcruGe+hEDsw6I/cCMc1Kbzu/m206BHQ3BnIfg7ld/b1WtUjwrZ7DTRXELAQ==",
+      "verified": true
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 1158,
+      "sha256": "2a5e17a2da2bd1905d17d41c6964ebd1fc26f0da627a788b32e3e74b94c8d81a",
+      "signature_base64": "HZT61/j3q2NWUHyP/LC0dcSDFKrtrO+saUQdzX601aUZ/Z+6gmL6v8HqCLBnMvrFXPk3yiC4yLW2ba1P5eJ1Cg==",
+      "verified": true
+    },
+    {
+      "path": "frozen-stage-blue-review.json",
+      "bytes": 23768,
+      "sha256": "26da2e3d9ecbd9d73f048adc86b13081bce9ebaa772406a0680ca5e2299ccadc",
+      "signature_base64": "4gqRImB4GbW2abpsJ1eioWpcEhO7cepvVPJffaMKo7wjlGbdB9pRcWM2/qNnd8XPSiYemBg0g0GRIYwgDGP6CA==",
+      "verified": true
+    },
+    {
+      "path": "inventory.json",
+      "bytes": 1986,
+      "sha256": "e7672d7039b1e60a7eda7170a7626e99075ab04040b3a07fbed31bb618076510",
+      "signature_base64": "lTCowGtZKmbb9hxzm8/uEBk5HXAr3ZeEvYxzhsOSowuTDGPAbR7uen3ubtqhTYqCKxPRMfxTo92xb7tCqAhFDA==",
+      "verified": true
+    },
+    {
+      "path": "operational-ed25519-public.raw32",
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+      "signature_base64": "swKvlnbYjya8YDC2yBB0sauTb+bMHpHY1Te3wMutfMUNgA5KXH+mGUnruizf7knzNzs7IgOcCKLD7OW7s2bHCw==",
+      "verified": true
+    },
+    {
+      "path": "package-commitment.json",
+      "bytes": 424,
+      "sha256": "85f59e8d5ba6e85be5f2d688e28c44c9893d4d25be65b4e7ec2cf3eab4d0f190",
+      "signature_base64": "B1cxcXeV1zPX3DSxQ4RNdKw5/Go1kB/IZ/yqNvfqO8pTMmCE4xaSKwUeMAxs+H6UqpYBEZdXqE1XqFCWngi2AA==",
+      "verified": true
+    },
+    {
+      "path": "package.sha256",
+      "bytes": 105,
+      "sha256": "04bb1b3e65275dbd13e2ce7045658b6ee8721c2cc4522ea5229cafe493f423c2",
+      "signature_base64": "cRQ7haxBmzskOK8vOgWPbHmSIn3Du2z5m22ZZK0P74AKET3GMl73jRwTlyozXm8Leh9tKq0RxNQoS7KpoSciCQ==",
+      "verified": true
+    },
+    {
+      "path": "primary-package-verification.json",
+      "bytes": 1289,
+      "sha256": "9e829d316445fa4642dc455f56be34bcaf9f72793e9fd52d415a2dcce2990437",
+      "signature_base64": "wdN7M1n72vJDcBAQlmkKWl266g5r0F5/iizHDGifa4afFrE/G3fSdbOaAw2/u+EloMx3pNEdX0/VHDC7UqMEDw==",
+      "verified": true
+    },
+    {
+      "path": "salesforce-migration-integration-health.json",
+      "bytes": 4027,
+      "sha256": "e048e7d168f115ff4c343cf0c4f9762df7d81c5d732701e0c44d41e5be8315d7",
+      "signature_base64": "f9VJsaIseUKqd7TLg9yJ96h9g9Dp/A8NmsqwrRCjp5BG2Xg0sDY/Z99mTd9OOjrcrcoFECGzQTZbl5mazIvIBQ==",
+      "verified": true
+    },
+    {
+      "path": "tools/build-v162-signing-supplement.py",
+      "bytes": 6105,
+      "sha256": "69d87cbd31c0d7ca46e613d285f9c3a7db2988f568b504b1c6414d2a4338b4ae",
+      "signature_base64": "poau+umTNxK4EGuge9Gg0H9/Rh+XWK8rDuAZjg84QDiUtrW30k/v4L2qEeuF/17XOp87s+QG9BvkA2slPs3KAg==",
+      "verified": true
+    },
+    {
+      "path": "tools/verify-exact-numina-delivery.py",
+      "bytes": 13060,
+      "sha256": "ac1c9e2a5bee287012113dc44ae75392d6b3a3b86b7cb5cd188a90546fa518bd",
+      "signature_base64": "jbdCRIiil111FiHiJK2njP1WCFUolMzGUUdxbsbhGXKmNVTr6zUEoKc83QtXiPbADAjbkbejSJB3KIIn8vP0AA==",
+      "verified": true
+    },
+    {
+      "path": "tools/verify-numina-v162-completed-wrapper.py",
+      "bytes": 16100,
+      "sha256": "855df6e0db577af08d3b4ed79c2ad7dcecc704c578f5a75635e71d80408a1146",
+      "signature_base64": "FXL+KQGVFepKytK4jMGp2kOnxSYZi2b0Mp9dbTTrfKGs02N46x1a7Wd+SUz9A+5nEDeU6mCXGEQEUtk+QbogCg==",
+      "verified": true
+    },
+    {
+      "path": "tools/verify-numina-v162-delivery.py",
+      "bytes": 16236,
+      "sha256": "064cb32e19520247d10de1f73a1323358ddf21e69fa8bffed6771c2eaf8168e0",
+      "signature_base64": "ZyGPwHhLH/G43SndvtZWxEkE5b6tKdOTgCvvnvVg1FvNVgjJ2n7NnDSVNzK3EYmjcnioW9K0a0876jiCnkt4Bg==",
+      "verified": true
+    },
+    {
+      "path": "operational-signing-receipt.json",
+      "bytes": 3340,
+      "sha256": "a1e2aeef18bc08eee989919fbb966c4297fed09e72799e8f82cf25d4ebfb5878",
+      "signature_base64": "RsGwE3rLkLE6XyS2fNeUdTrc1qe9AUFobIACNo8F2Tn0XL/rck74haCxRAsy35go/lkP6gNd/jv87+vdxrS9Dw==",
+      "verified": true
+    }
+  ],
+  "private_key_exported": false
+}

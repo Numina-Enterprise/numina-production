@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-079",
+  "configurationId": "agentforce-079",
+  "team": "signatures",
+  "title": "Inspect verifier trust pin",
+  "nextBestAction": "Read public verifier source and confirm the trusted public-key hash is pinned independently of its inventory input.",
+  "target": "verify_public_proof.py and verify_assessment.py",
+  "priority": 16,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/signature_delivery_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-079",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "signature_records",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-079.json",
+    "passCondition": "Receipt cites exact hardcoded established-key boundary and file-set/checksum requirements.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

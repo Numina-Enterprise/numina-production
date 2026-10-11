@@ -1,0 +1,1840 @@
+{
+  "schema": "numina.v162-archive-commitment.v1",
+  "archive": {
+    "path": "artifacts/numina-cloud-site-delivery.tar.gz",
+    "bytes": 39983201,
+    "sha256": "7c0276be32c7a830dadb7bdf8f67ff0138c38db422dee949e4314760f1d4b792"
+  },
+  "regular_members": [
+    {
+      "archive_member": "dist/.openai/drizzle/0000_hard_midnight.sql",
+      "bytes": 575,
+      "sha256": "426ebaf13a30177e8be8c91d273685b64f55c2bc680d48e17d591a0afe4ac19d"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/0001_useful_black_crow.sql",
+      "bytes": 2625,
+      "sha256": "bf5b083343cc3484b6a341d2e7211ef33a674eaa769b7b6d7c68b29700ba3765"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/0002_chief_rachel_grey.sql",
+      "bytes": 181,
+      "sha256": "c76617ec10b48c6171675412e49934af3b2041c70195d6155e8f0b2b6d5433fe"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/0003_google_play_reviewer.sql",
+      "bytes": 139,
+      "sha256": "b3cb0fb430d03cf7e30fd4adcad9ac2cd3e915040f253fe5e9c52523696d75da"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/0004_wallet_deployment_intents.sql",
+      "bytes": 221,
+      "sha256": "ebe68cfa03065d7b913a56224750c0e3f01e7e75bf90c97221c3a81bfeb9ddc7"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/0005_numina_manifest_control.sql",
+      "bytes": 292,
+      "sha256": "ec7630f3a19b4cce331fe4e735463ec1b01f05b4f8a77dafff1f84cd643eac9a"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/0000_snapshot.json",
+      "bytes": 3143,
+      "sha256": "34bb14813501599308ac5708b9160766015025781bf0281a028fb9ace1f2d74b"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/0001_snapshot.json",
+      "bytes": 14652,
+      "sha256": "903cee3dea3c5e370d5cfbd6fc34b064dca1070f9ceac97907e8fcc893d8e6df"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/0002_snapshot.json",
+      "bytes": 15057,
+      "sha256": "87e30ab6b40950cb74528790348252d3ec3f5583eb723ebeefb1b049371cfde6"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/0003_snapshot.json",
+      "bytes": 16053,
+      "sha256": "78481c41772ad1fd782763161958efb2557d8ea305d560aec91ec0e34662bedf"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/0004_snapshot.json",
+      "bytes": 17448,
+      "sha256": "e548885c85b4a00ce911119bc7dfb498cebeb1ae8412e8105e00833f9fc5fe11"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/0005_snapshot.json",
+      "bytes": 17494,
+      "sha256": "6e2c64c86189676e41f4a61a40f45943f718390cb968e89c908ed6e871b65973"
+    },
+    {
+      "archive_member": "dist/.openai/drizzle/meta/_journal.json",
+      "bytes": 946,
+      "sha256": "81705296a11305de1e0946b3a54aba736b7cf502474dcad1a85a4643742b65de"
+    },
+    {
+      "archive_member": "dist/.openai/hosting.json",
+      "bytes": 130,
+      "sha256": "cd382c7ac54bde06a1b939d72bb5523273dcc88917728675ff5a628983d9bda3"
+    },
+    {
+      "archive_member": "dist/client/.well-known/assetlinks.json",
+      "bytes": 445,
+      "sha256": "eb7f9ed9437e48aa8656deb42c531140b48dadd208c87865b648d4ced6444835"
+    },
+    {
+      "archive_member": "dist/client/1317faaa99cf1272fa36ee6ba288abf2.txt",
+      "bytes": 33,
+      "sha256": "1f5efa914ce92a9b85cf83ea00ea8ddf564b1fe3c1bd88f69fd49ee67a5b2c15"
+    },
+    {
+      "archive_member": "dist/client/LICENSE.md",
+      "bytes": 1503,
+      "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
+    },
+    {
+      "archive_member": "dist/client/NOTICE.md",
+      "bytes": 2515,
+      "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
+    },
+    {
+      "archive_member": "dist/client/OWNERSHIP.md",
+      "bytes": 1767,
+      "sha256": "a5bc1d30f99dd136be61c573b52091138043b3806ab20f31f800fa613d49d22a"
+    },
+    {
+      "archive_member": "dist/client/_headers",
+      "bytes": 597,
+      "sha256": "2fd5dbfb32fe747182d3838b0b64106130c74bd2d7b7099adc6a2d5c1961abaa"
+    },
+    {
+      "archive_member": "dist/client/_redirects",
+      "bytes": 463,
+      "sha256": "7bbc6cfc9ecec079e1fa1e53937cfc5ed2c86a60ef124ea92d8870669ca04260"
+    },
+    {
+      "archive_member": "dist/client/about.html",
+      "bytes": 10129,
+      "sha256": "3e601f60a254c8c3c530b4925b80fc9ca988241044493d24ca9dd344fa6916f4"
+    },
+    {
+      "archive_member": "dist/client/app-entry.js",
+      "bytes": 1618,
+      "sha256": "e4ed8b42c96a9264aff5bffc61a649f1ba75c0f7277cfbbc165de18656557ed0"
+    },
+    {
+      "archive_member": "dist/client/app-icon-192.png",
+      "bytes": 861,
+      "sha256": "e5cb20d7a1e828ddce541f2ac252fc4362a3ee8c0b2abf1ee0bcdcdc236206b9"
+    },
+    {
+      "archive_member": "dist/client/app-icon-512.png",
+      "bytes": 2628,
+      "sha256": "47ba5aa331ad8e672d501a3530b8c9d5f0068442c6cdfeb99e6e7ad61f6a61e3"
+    },
+    {
+      "archive_member": "dist/client/app-icon.svg",
+      "bytes": 304,
+      "sha256": "9392bd83b6fe68187bd6fa7cab575119dbbd6217ea2bb8bccda5e22eb4aae97e"
+    },
+    {
+      "archive_member": "dist/client/app-install.js",
+      "bytes": 268,
+      "sha256": "df3e866b19ca35a83063970ec8e5d4eb72f19a3054e53ee4bceac47ac4c2aa3c"
+    },
+    {
+      "archive_member": "dist/client/app-sw.js",
+      "bytes": 685,
+      "sha256": "e6c75ca0513b092bebbe893935d63c74303668380dd73e8508e59a6933b11c75"
+    },
+    {
+      "archive_member": "dist/client/app-ui.js",
+      "bytes": 15380,
+      "sha256": "8eb6ae13f7aca05e2359a2069a064af35afea7c5b29d4aeca01a1d683f59273c"
+    },
+    {
+      "archive_member": "dist/client/app.css",
+      "bytes": 8692,
+      "sha256": "60e7d53ef03f159485e97b0be3da1d727fe64881fd61e3bbfdee7283303bbc45"
+    },
+    {
+      "archive_member": "dist/client/app.html",
+      "bytes": 20427,
+      "sha256": "5518f61b2e9bc8cc8b40a3c4682c955b76cf7e49545509673e5727e11b9337ad"
+    },
+    {
+      "archive_member": "dist/client/app.webmanifest",
+      "bytes": 1379,
+      "sha256": "06c574ff34ccd80ef5446148feb2e056591228a03a941dda95679b845f7d73a6"
+    },
+    {
+      "archive_member": "dist/client/application-release-ui.js",
+      "bytes": 11465,
+      "sha256": "60b056bf734f1addbf6d15f85ee6e075372c6157d3e1aabc00d1f6812a54be2d"
+    },
+    {
+      "archive_member": "dist/client/architecture-layers.js",
+      "bytes": 10863,
+      "sha256": "c4bcf4b7066e967386543ce0a4e88047a931b2a791199eb1c18e7e94e58804b1"
+    },
+    {
+      "archive_member": "dist/client/blockchain.html",
+      "bytes": 10757,
+      "sha256": "a4c94aad7a1bba915cf2ed8a830595baa18cd2ec101bcd9159d79a0a04a4547e"
+    },
+    {
+      "archive_member": "dist/client/build.html",
+      "bytes": 25577,
+      "sha256": "2bb32509f4e0c73a03ae29815dd6c15455167ecf666abbae9032f71a894a1608"
+    },
+    {
+      "archive_member": "dist/client/business-core.json",
+      "bytes": 38719,
+      "sha256": "100a8e05d6630191d8fe0cd8235121d143ae69a66d4e66570770b8e0ba304edd"
+    },
+    {
+      "archive_member": "dist/client/company-simulation-model.js",
+      "bytes": 3019,
+      "sha256": "cb1160a9731f549d3dae718bd53941a6602bb4aa28c8e55732627e95a569fb71"
+    },
+    {
+      "archive_member": "dist/client/company-simulation-ui.js",
+      "bytes": 641,
+      "sha256": "09f8c1b2e212b9e6a81b4350ffefe05267b1bef30edb4d5baf7e15f0ca64f5de"
+    },
+    {
+      "archive_member": "dist/client/company-simulation.css",
+      "bytes": 1120,
+      "sha256": "45ec5099eedc08f49ffe04451d65aeccf17145862fdd2d2131c98478795f8407"
+    },
+    {
+      "archive_member": "dist/client/connection-model.js",
+      "bytes": 11935,
+      "sha256": "6608b93c35588df1d18705452da784d7253b596c9a2038bd2370aec90e307442"
+    },
+    {
+      "archive_member": "dist/client/connections-ui.js",
+      "bytes": 3898,
+      "sha256": "01edfa57cf11b7c6cbf844b1946c134f8893bc5e6528b559ad03544059b146cb"
+    },
+    {
+      "archive_member": "dist/client/connections.css",
+      "bytes": 1468,
+      "sha256": "a27b779f1d25aa79896c1a22f24323a70bf93da09dc92347af54bf491b79137b"
+    },
+    {
+      "archive_member": "dist/client/connections.html",
+      "bytes": 5170,
+      "sha256": "acc4b7bc59a77b2fb2bc6a4826c7c79ce443b4713beba4c6039b749183db0e5b"
+    },
+    {
+      "archive_member": "dist/client/contact.html",
+      "bytes": 7730,
+      "sha256": "9da720b3f9aa1217991897d1c073001ad8be08a839ffcbca21d1b04f2a972b6c"
+    },
+    {
+      "archive_member": "dist/client/control-receipts.js",
+      "bytes": 3071,
+      "sha256": "7f9a17156567a64ca85b652ff0fe0cd99deef0452357a1f611c12ae82ccb5ee6"
+    },
+    {
+      "archive_member": "dist/client/control-room.js",
+      "bytes": 1261,
+      "sha256": "03570a240cfc1acfe4afc545725a36834b08205bba633381ec395a77f378b394"
+    },
+    {
+      "archive_member": "dist/client/control.css",
+      "bytes": 4441,
+      "sha256": "69c16fb66a217cef87c762d9c32b6e67136c5ece42916cf524f22d32a8b7310a"
+    },
+    {
+      "archive_member": "dist/client/control.html",
+      "bytes": 18072,
+      "sha256": "463bd175104a0733201553c2f1f8e832291737c92edd3cb7b85c3389be1449fa"
+    },
+    {
+      "archive_member": "dist/client/control.js",
+      "bytes": 9280,
+      "sha256": "b2a9f0c21d3fef8cc39490b288a8bdf576aa0343a7f81e1ca9783a8626529c2a"
+    },
+    {
+      "archive_member": "dist/client/core.html",
+      "bytes": 5750,
+      "sha256": "20325e9338106360f0be361285eef4afe80024ce66f436886cdad25112d81d8e"
+    },
+    {
+      "archive_member": "dist/client/current-environments.json",
+      "bytes": 6859,
+      "sha256": "bd9858da735258076a0a4cd482928464d4977468201682276efc1723955ee570"
+    },
+    {
+      "archive_member": "dist/client/deployment-encoder.js",
+      "bytes": 11079,
+      "sha256": "ed296fa41b27e94a5b967c91fff74a91172ae22d9f0246f68914d4af4d1711d5"
+    },
+    {
+      "archive_member": "dist/client/deployment-readiness-inputs.json",
+      "bytes": 20227,
+      "sha256": "d37f1eaf137a8bfd4603bb4d5f50a9226457a5f6a27dd967dff33a8992f4c0c1"
+    },
+    {
+      "archive_member": "dist/client/deployment-readiness-model.js",
+      "bytes": 5252,
+      "sha256": "e3102404b31c5cfe858e2e8806a2c81dc5d4c2d3d3a92409fcdf8f3ef0c589d4"
+    },
+    {
+      "archive_member": "dist/client/deployment-readiness-ui.js",
+      "bytes": 10578,
+      "sha256": "e4d5ef6466883cb5fb61e49fc97d993caafa7b9d06f556aee1182f33cd663d49"
+    },
+    {
+      "archive_member": "dist/client/deployment-readiness.css",
+      "bytes": 4449,
+      "sha256": "3aea70dd416729bd2c059f5784a32d717a0ecbd0a5404864bdbd99095b0b5e17"
+    },
+    {
+      "archive_member": "dist/client/deployment-readiness.html",
+      "bytes": 12125,
+      "sha256": "3d63f07bc9fb02f6afdc09d5e85677cdeeadbbd9f92882ea719f0fffdbbb879e"
+    },
+    {
+      "archive_member": "dist/client/downloads/Architecture-layers.md",
+      "bytes": 2230,
+      "sha256": "fbdd624890d92e83dbb6be3883449ea0c33d5c6e96f2fb0904379c7e174462ab"
+    },
+    {
+      "archive_member": "dist/client/downloads/Business-core.md",
+      "bytes": 767,
+      "sha256": "e8322839e2f51493e6129f155d8b133277f11b91f91348d09c30a8292248b1f9"
+    },
+    {
+      "archive_member": "dist/client/downloads/Compute-to-Value-Architecture.md",
+      "bytes": 5732,
+      "sha256": "4c6f4274ad9c74e2533d7410badf86bb4d0914c45fb4030e1983cc63e222a820"
+    },
+    {
+      "archive_member": "dist/client/downloads/Control-Plane-v1.md",
+      "bytes": 6641,
+      "sha256": "8ead88170cf100d72d8375736b908d029e0332ecc6ddd7d18bd4ad102269f9f0"
+    },
+    {
+      "archive_member": "dist/client/downloads/Denomination-Policy-v4.md",
+      "bytes": 1338,
+      "sha256": "fa46cc82d534c76b1b5260e3e2bc023d0492091041cd31e029575ce36d773b53"
+    },
+    {
+      "archive_member": "dist/client/downloads/Ed25519-Recovered-Evidence-Update.md",
+      "bytes": 11468,
+      "sha256": "836d0d878224b14a24fce363cae505f7eef74f137990c4b6a5cb5eede3ac96cc"
+    },
+    {
+      "archive_member": "dist/client/downloads/Frontier-v2.md",
+      "bytes": 5662,
+      "sha256": "68d42c03473b5613230c3d0b29695d402e07305aea8fe7da11bb5c6f95a5c8b4"
+    },
+    {
+      "archive_member": "dist/client/downloads/Frozen-Constitution-v0.2.md",
+      "bytes": 1320,
+      "sha256": "38be7b9764e717a4898463f5ce2063252ce8b1e2bc7cb234361ef8b4c8fabe1d"
+    },
+    {
+      "archive_member": "dist/client/downloads/LICENSE.md",
+      "bytes": 1503,
+      "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
+    },
+    {
+      "archive_member": "dist/client/downloads/NOTICE.md",
+      "bytes": 2515,
+      "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUMINA-FINAL-BUILD.json",
+      "bytes": 149468,
+      "sha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUMINA-FINAL-MANIFEST.json",
+      "bytes": 22200,
+      "sha256": "8f68c2b90623f44e9e5afe002349962fb24cf60850dde5386e18cfd9cbbad3e0"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUSD-Contracts-v4.md",
+      "bytes": 3394,
+      "sha256": "827a31ead2f0c5f02c5fa634878bd9cb955f4019476ed5b28ca7d446eb4a46d6"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUSD-Conversion-Contracts.md",
+      "bytes": 13528,
+      "sha256": "d20d3909e6ab36a792832d5ba7dd71ef55259058dd80d2494b3c3aa06e605085"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUSD-Minting-v4.md",
+      "bytes": 4323,
+      "sha256": "f919188a865e85ae2e4fe5ac39e9292a0767d9cbd71772774fe24bfd2b44a64b"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUSD-Provider-Routing.md",
+      "bytes": 3214,
+      "sha256": "3f57c4649271feac2fe9b1fd8f31c32ff2b1821a402571480ce7bc9820e1d37f"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUSD-Redemption-Operator-3.json",
+      "bytes": 6350,
+      "sha256": "07138dca92d98760150bc0fe1183bccb0cb5b859dd653396d37e4bd11a0497e3"
+    },
+    {
+      "archive_member": "dist/client/downloads/NUSD-Redemption-Proposal-2.json",
+      "bytes": 4471,
+      "sha256": "8ad13cc52413d48acfeaf1e5073a183bc25dd815b0e1d9b74fdccbbe52a3b244"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-1500T-Approval-Handoff-Package-Record.json",
+      "bytes": 546,
+      "sha256": "0d2ed919fa5b54b419aa5d0ebb2eee8cf36b88d932cfa2ae0dd5bb12a6d7b2d9"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-1500T-Approval-Handoff.zip",
+      "bytes": 127348,
+      "sha256": "ec3066ee5a32b0111044682c33d0582af069f51a631a88b8a2c2d7fcecf50503"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-500T-Deployment-Handoff.zip",
+      "bytes": 93125,
+      "sha256": "858a8efd985be4b19c9b8a4df90a6d0145b61a0c39354759d5afa83a284a2afd"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-500T-Deployment-Sequence.md",
+      "bytes": 4842,
+      "sha256": "c6a78155f84bc1214e86421996e6999d80a035e3293edefb76a0e663f0e28471"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-500T-Preparation-Tools.zip",
+      "bytes": 116292,
+      "sha256": "9304f2f3e0a72c2a8db857ad0ee3557523eccfac0b61db3d39e33626b40baeea"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-500T-Simulation.md",
+      "bytes": 2235,
+      "sha256": "6c15480592f5d3c7641ff23d136e8061367ae127185ba78c1eb65641df0b0060"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Agentforce-Execution.md",
+      "bytes": 3913,
+      "sha256": "19f9d12c2b79884b777e63a61da05c5b9b95730ec2e96c6c1d5f3cd1dc720be7"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-App-Deployment-Status-2026-09-16.json",
+      "bytes": 4062,
+      "sha256": "4b7d94472eb03fdd9a84e9f6f5534d927df4490eadb612a0126957ad6200df58"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Browser-Deployment-Preparation.md",
+      "bytes": 4788,
+      "sha256": "db8c2c86a9dbafda1ebe4da77f34cf1109dc43eacd3640590ed4a1aa458d89ba"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Continuous-Cloud-Coordination.md",
+      "bytes": 4389,
+      "sha256": "5770eb90c9bcf33ae52d5783e97b26299a8d897549d167973a98e7c7a12bfcf1"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Control-Room-Map.md",
+      "bytes": 1668,
+      "sha256": "df62eafe994f5017cc6da27c2ee98974911ea626c5479938054d33090efa0436"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Financial-Approval-Evidence.md",
+      "bytes": 10326,
+      "sha256": "a3fe9afdca0fc8223869544911d391e6d55d0777c998f737a01475f0b2c1fa62"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Financial-Document-Templates.md",
+      "bytes": 7067,
+      "sha256": "4beef314701e30400d9d2ab93bb8a99694d6f464d00d56d43526f347cd9d1ed9"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Financial-Services.md",
+      "bytes": 10306,
+      "sha256": "c9777a0a1af86cfada76b0abecbb90c5adc0c117525d08ce9d2a7d63971ed0eb"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-IBM-QPU-Evidence-2026-10-11.md",
+      "bytes": 2327,
+      "sha256": "1ac473e2e026d92c302ea1bff613f14d222a8b3133df6c7f3417553ab9f9bd97"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Legacy-Closure-Reference-2026-10-11.md",
+      "bytes": 4624,
+      "sha256": "36d4d3dff84c00f63cc70727ebbbe0b862d4f6335cb1fa8ba3ad6954f063c5f2"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Legacy-Journal-Reference.md",
+      "bytes": 5766,
+      "sha256": "f62c13da397beb06db45cb1990bb3cb90455ba47335a2cfa2ad93810a700fb47"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Local-Wallet.md",
+      "bytes": 2988,
+      "sha256": "c5e44282bc5fc7dd08c5f192d36ac1df9662cd80a8becff18b2e10907d8aaeca"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-NUSD-Approved-500T-Review.zip",
+      "bytes": 89522,
+      "sha256": "410be1b697839d44aa73c4d2c0747e98fda351686ef77277a6d257febbd2bda1"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Node26-Setup.md",
+      "bytes": 2393,
+      "sha256": "f6fa53db2f01d1ebbf3d3a442778d79d1d7b3ab30a2410e467a2641c584cfc71"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Requested-Asset-Fee.json",
+      "bytes": 1200,
+      "sha256": "6f85f454980d8da7332b84305f80f19e19795b2e0294dfb34a75ec84aeda9d60"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Root-Alignment-v3.md",
+      "bytes": 1936,
+      "sha256": "12ffdc0ac85dd6234136640e4e5683225b5e316ae2f2d2231ba0f9ad4f2fad94"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Security.md",
+      "bytes": 27535,
+      "sha256": "cf8da41e72175997fb79ee9710b8b4ce42e9530d8abe48d8efb1b65d5301fc28"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Singular-Release-Integration.md",
+      "bytes": 1267,
+      "sha256": "02d583eeea45598d50ac922109e206fd28498d455b94d878a74df5526f9198d6"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Treasury-Alignment-2026-10-11.md",
+      "bytes": 13990,
+      "sha256": "2ccdd5927a57620dae3c82d2c16b6609b369f28c28825ecaea983218553d3a4a"
+    },
+    {
+      "archive_member": "dist/client/downloads/Numina-Wallet-Signing-Controls.md",
+      "bytes": 12222,
+      "sha256": "1543d8fe0fdbd273b9c37563848749346c3340a7d407f8fedcd652f850f90f2e"
+    },
+    {
+      "archive_member": "dist/client/downloads/OWNERSHIP.md",
+      "bytes": 1767,
+      "sha256": "a5bc1d30f99dd136be61c573b52091138043b3806ab20f31f800fa613d49d22a"
+    },
+    {
+      "archive_member": "dist/client/downloads/Provider-Confirmation-Request-v4.md",
+      "bytes": 3134,
+      "sha256": "72e9e2b00a60df16352a44b373299e8f7ce093b34ab298a78c926110cf84dca3"
+    },
+    {
+      "archive_member": "dist/client/downloads/RC26-Production-v3.md",
+      "bytes": 877,
+      "sha256": "0a6bda740d533525b43663e07b7db2ba78db5878f34ebe5efc8130268376b7a0"
+    },
+    {
+      "archive_member": "dist/client/downloads/RC26-Singularity-v3.md",
+      "bytes": 1808,
+      "sha256": "289674af8a636b0a9847a659b4bd32c8674107541a4fe68bb6abe3016fcb69e4"
+    },
+    {
+      "archive_member": "dist/client/downloads/Receipt-Audit-2026-10-09.md",
+      "bytes": 5374,
+      "sha256": "4423f0239b371d246ec957b3e1ee287aae6dd43bfd5e073a7e618e0a3b4e94c1"
+    },
+    {
+      "archive_member": "dist/client/downloads/Source-Alignment-v3.md",
+      "bytes": 3543,
+      "sha256": "1447a61ad22eba1401751fa0bfee0f6eecbd10274a82ec43c03557c5a0dc7592"
+    },
+    {
+      "archive_member": "dist/client/downloads/Source-Alignment-v4.md",
+      "bytes": 8630,
+      "sha256": "d43a934b3ee6fcf06e2905fd541fb5dac61725c0ad16b5e90daa7b7890aaa8ce"
+    },
+    {
+      "archive_member": "dist/client/downloads/Stripe-Provider-Route-Setup.md",
+      "bytes": 4890,
+      "sha256": "3a9dd1616d0b5481ff747210c31982bd87745ba23740178ddd0eb08561eeaa8e"
+    },
+    {
+      "archive_member": "dist/client/downloads/Telemetry-and-Quantum.md",
+      "bytes": 17318,
+      "sha256": "7c4b41753451a87252bcee20e426fbb51a3b76760a69a79f8c6d9d60b057eb81"
+    },
+    {
+      "archive_member": "dist/client/downloads/Transfer-Receipt-Verification.md",
+      "bytes": 4723,
+      "sha256": "0116c8f54e8dde05bd70a4e56290f69e737609e8efe1c895a85adfdaa2cc0716"
+    },
+    {
+      "archive_member": "dist/client/downloads/Treasury-Evidence-v3.md",
+      "bytes": 2845,
+      "sha256": "dc51b6824418101c086c52c733693046b61d7ea75f02db58cb268031003e4fc2"
+    },
+    {
+      "archive_member": "dist/client/downloads/android-signed-build-record-v2.json",
+      "bytes": 1416,
+      "sha256": "c821e8761cfc2686ce6960bbda70f8608847c75808944b82819b4ff5bdd73b18"
+    },
+    {
+      "archive_member": "dist/client/downloads/android-signed-build-record-v3.json",
+      "bytes": 1416,
+      "sha256": "0be2602fa3522f1f12fdcc2736ee5c0ff8d0ae22bf6327b821e7f97c3c688f18"
+    },
+    {
+      "archive_member": "dist/client/downloads/android-signed-build-record-v4.json",
+      "bytes": 1771,
+      "sha256": "777e8961d35adcf6b8a140f9bd21dcd8a9d486c333fd860919e8c6f3b18c3341"
+    },
+    {
+      "archive_member": "dist/client/downloads/application-release-v2.json",
+      "bytes": 169624,
+      "sha256": "15e61c46129e2789d93a27ca25092cb7648aedf50cb80ad8a70c4475003ba57c"
+    },
+    {
+      "archive_member": "dist/client/downloads/application-release-v3.json",
+      "bytes": 169624,
+      "sha256": "15e61c46129e2789d93a27ca25092cb7648aedf50cb80ad8a70c4475003ba57c"
+    },
+    {
+      "archive_member": "dist/client/downloads/application-release-v4.json",
+      "bytes": 169624,
+      "sha256": "15e61c46129e2789d93a27ca25092cb7648aedf50cb80ad8a70c4475003ba57c"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/README.md",
+      "bytes": 2305,
+      "sha256": "46ad50f5c707b4f5e8b5845b6e64a799dcc3aa78d216963a6b80d4e7f3fbc1b4"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/SECURITY-AND-INTEGRATION.md",
+      "bytes": 2374,
+      "sha256": "bb08ae701b777b2e2d1d54c2158b3ee3206de4a99505ab0ec2cc420a6e6928f7"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/artifacts/NuminaUSD.json",
+      "bytes": 123122,
+      "sha256": "a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/contracts/NuminaUSD.sol",
+      "bytes": 8575,
+      "sha256": "87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/deployment-status.json",
+      "bytes": 1054,
+      "sha256": "29b8adca4fed5d8a7c5dd925ac7d4f703bd4e3d3e934443601c4a6b9b6a8ba63"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/requests/issuance-preparation-policy.json",
+      "bytes": 2506,
+      "sha256": "95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/requests/shared-treasury-reference-plan.json",
+      "bytes": 1634,
+      "sha256": "1182c016fab21677dc09bdf77bd9279e424647a8bded53d1241486f6745ad690"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/review-record.json",
+      "bytes": 2642,
+      "sha256": "1607e94670c80998d03985aac0c7fe3edb908891a9f8c9b86799c1adf31cff3e"
+    },
+    {
+      "archive_member": "dist/client/downloads/approved-reviews/nusd-uncapped-500t/verification/local-test-report.json",
+      "bytes": 2581,
+      "sha256": "1671e49647570a66669361852f802d98c0c3f65bde8633408cd13e0b567efdb2"
+    },
+    {
+      "archive_member": "dist/client/downloads/codex-plugin-v3-record.json",
+      "bytes": 266,
+      "sha256": "807796615931b16ad8cb18e0017f2f4d064b3e74504cc4547d22489ed25efd18"
+    },
+    {
+      "archive_member": "dist/client/downloads/codex-plugin-v4-record.json",
+      "bytes": 266,
+      "sha256": "7ffbf7055bc7cfddd6014017d0318ff1cb1618aa5c53eba442abf2b35e7239fa"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/LICENSE.md",
+      "bytes": 1503,
+      "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NOTICE.md",
+      "bytes": 2515,
+      "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaSettlement.json",
+      "bytes": 22178,
+      "sha256": "2170f88692f99e43f751fc29b32ca0b9bd53c28c33f1350b999238b29cf113e4"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaSettlement.sol",
+      "bytes": 3003,
+      "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaUSD.json",
+      "bytes": 125836,
+      "sha256": "3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaUSD.sol",
+      "bytes": 8562,
+      "sha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaUSDCConversion.json",
+      "bytes": 103728,
+      "sha256": "33f7c1e0e3a81f36bc3b96b6d721b42268abfc2196a000f8be2eb94e038f00f1"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaUSDCConversion.sol",
+      "bytes": 8337,
+      "sha256": "327d2f17de8b2894272189eb27e288589ae8cf231ce6d1b28d3bfeb9e8920104"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaUSDRedemption.json",
+      "bytes": 120024,
+      "sha256": "d8aa89d6a8de8d6dc7e2f07d8163274897f67d30fb3a4b225d10e76c75562a45"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/NuminaUSDRedemption.sol",
+      "bytes": 11527,
+      "sha256": "17a5a1dce327b6239851902382f356c3bb5770843498c41a8213d62b07ef6c1a"
+    },
+    {
+      "archive_member": "dist/client/downloads/contracts/OWNERSHIP.md",
+      "bytes": 1767,
+      "sha256": "a5bc1d30f99dd136be61c573b52091138043b3806ab20f31f800fa613d49d22a"
+    },
+    {
+      "archive_member": "dist/client/downloads/core-v1.8-context.json",
+      "bytes": 316,
+      "sha256": "e44fc45f5d71a4e30fbda616f1bf9162e93e4cf18e0dadb7f0a48be29a2e42b0"
+    },
+    {
+      "archive_member": "dist/client/downloads/core-v1.8-manifest.json",
+      "bytes": 2135,
+      "sha256": "cea8b1ad90b83ce22b306152a5e63b480c76583ce22a87861c6b49bf99d1b444"
+    },
+    {
+      "archive_member": "dist/client/downloads/delivery-observation-2026-09-18.json",
+      "bytes": 3394,
+      "sha256": "008ccd9e66dc89397984a3a5385bf8a28f3214ca9ffbf7696c7b3a1a671ffdb3"
+    },
+    {
+      "archive_member": "dist/client/downloads/distribution-policy.json",
+      "bytes": 1976,
+      "sha256": "79a057baa87492d674e0ad26c66ff0a1da389d01e084a857a0cc7c8b056b4a7f"
+    },
+    {
+      "archive_member": "dist/client/downloads/financial-software-verification.json",
+      "bytes": 2348,
+      "sha256": "01fd9311c5e4d1a57d06b512ffa333a8501a8436fe35ebed709fe822b4ccb58e"
+    },
+    {
+      "archive_member": "dist/client/downloads/integration-kit-v2.0.0-record.json",
+      "bytes": 808,
+      "sha256": "343873c04277848a73b20f7b4193f65b914a6b6991c7693f44c9466ad96d7725"
+    },
+    {
+      "archive_member": "dist/client/downloads/integration-kit-v3.0.0-record.json",
+      "bytes": 776,
+      "sha256": "2c53eaddd48933249f415f4138ce0a0d3af97957da618c2d47f5c01e5dd7b484"
+    },
+    {
+      "archive_member": "dist/client/downloads/integration-kit-v4.0.0-record.json",
+      "bytes": 806,
+      "sha256": "ab266463c5b7aaab0da46e432b856fcdce8db1a8db93e9b4f9ab133c440b1d24"
+    },
+    {
+      "archive_member": "dist/client/downloads/integration-manifest.json",
+      "bytes": 52883,
+      "sha256": "a4eefd0ba031a2f0ca3c84dace0c9c594410611b9d0c66359fbc95eb2c0fca75"
+    },
+    {
+      "archive_member": "dist/client/downloads/ios-build-verification-2026-09-16-c6ffbb5.json",
+      "bytes": 11904,
+      "sha256": "1bd1158f7300a06ffe374e6f7ca40b2be09e10bcc5971efb0961293e019e21a9"
+    },
+    {
+      "archive_member": "dist/client/downloads/native-build-verification-2026-09-15.json",
+      "bytes": 1263,
+      "sha256": "74973ed009e6ada4b6757fc8dcf19e8db3a8b7949512c58fce827ba9de1f225a"
+    },
+    {
+      "archive_member": "dist/client/downloads/native-package-record-v2.json",
+      "bytes": 3238,
+      "sha256": "925677038b63bed24e39a13f584d13cfa4e6ca6dc285fd46082c5b1b02a5b902"
+    },
+    {
+      "archive_member": "dist/client/downloads/native-package-record-v3.json",
+      "bytes": 3976,
+      "sha256": "ce998d908b9d6bef3168fffb453a598e7d2e0ce55a8a9e22545bbe1e1fd26b79"
+    },
+    {
+      "archive_member": "dist/client/downloads/native-package-record-v4-pre-build5.json",
+      "bytes": 5490,
+      "sha256": "2c279abca8748283da334806f969812a8645d43e76c7d0b43730853a7f86fe74"
+    },
+    {
+      "archive_member": "dist/client/downloads/native-package-record-v4.json",
+      "bytes": 6766,
+      "sha256": "7ef8ce5e1242c92b82b8f82b954011729f3f6eeb20eb5a2186e9c04355ec465d"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-2.0.0-ios-unsigned-app.zip",
+      "bytes": 61713,
+      "sha256": "ef3fb547e1b96d2f82743dfae5b2ed0bd425d3850f4b4d867cf348756ad25c7a"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-2.0.0-release-signed.apk",
+      "bytes": 3797876,
+      "sha256": "28811446b378028d0d1f570a0017f9b91635b2939a10685a84c3bc8a73bb7632"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-2.0.0-unsigned.aab",
+      "bytes": 3578797,
+      "sha256": "afafedea630b6a83f30e300f6710cfd1a408ed0a4c54128a20e1b3557262ad44"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-2.0.0-unsigned.apk",
+      "bytes": 3755825,
+      "sha256": "5e8a060d970c2e07ce6cd3fc0f988661c4f7d869c3b9a6c8c075a2074e939c9c"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-2.0.0-upload-signed.aab",
+      "bytes": 3617107,
+      "sha256": "c8d6d48c42495fb466d6a5ddd7f322a8977e363fe404c1ed7f9baa253ab77d21"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-3.0.0-ios-unsigned-app.zip",
+      "bytes": 85852,
+      "sha256": "d2186332922a26a84e8f3e0ee9ee3a55cdd08d60cfcf4f6e46a07fea082e6616"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-3.0.0-release-signed.apk",
+      "bytes": 3797876,
+      "sha256": "7f6455541cb0191efd5e2227f959b9dfb26bb8ccc04e1f21da5e710a281edf8b"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-3.0.0-upload-signed.aab",
+      "bytes": 3617114,
+      "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip",
+      "bytes": 113715,
+      "sha256": "23e953860f7ec71937666a0fe543613bc4762fab4abd9da0fc59def92334425e"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-4.0.0-ios-build5-unsigned-app.zip",
+      "bytes": 113715,
+      "sha256": "b69dc40ecdb84eb5aa38327c1d80e1c5d20a1c4f6d72ebe33b63353188025746"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-4.0.0-ios-unsigned-app.zip",
+      "bytes": 85728,
+      "sha256": "f56e239ec6ffb91f265975211885c8f49eb738344e25721c1ec7f86264d82baa"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-4.0.0-release-signed.apk",
+      "bytes": 3797876,
+      "sha256": "ea6216a7f5fa0b8832841f0ca75ed546a03de48e9052a29745c75b8c4126ea61"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-4.0.0-upload-signed.aab",
+      "bytes": 3617288,
+      "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-500t-preparation-tools-record.json",
+      "bytes": 558,
+      "sha256": "30f5ffb1ea5415c2245586863683c7683b3f2b5b2442b259d48d44861fe2b769"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-android-release.pem",
+      "bytes": 1517,
+      "sha256": "494c627460234ce2a400936be36976610e3af88e2569dce9b08cd486c27c1468"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-android-upload.pem",
+      "bytes": 1517,
+      "sha256": "6982d8c22a2f0f59af0051a3247b6911c688ba46f2036d19e6a1c507533a7d58"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-codex-plugin-2.1.0.zip",
+      "bytes": 911792,
+      "sha256": "c89a22aac631fed5d0ed916ff8c46ea7a91ebdb8ee4d4c8715e06fa70a753c60"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-codex-plugin-2.2.0.zip",
+      "bytes": 911849,
+      "sha256": "e7551f882b4185f336cf6d9a3d34fd307a37c8d5e7c9f4bb8f80a550f1e67954"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-codex-plugin-3.0.0.zip",
+      "bytes": 913160,
+      "sha256": "3c612ffa32d90793f72e10347ffebeb4ddb701976376f12ddd8fa892f865528d"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-codex-plugin-4.0.0.zip",
+      "bytes": 915508,
+      "sha256": "edd65ad3f6e5f0be33dde1f77f45f98061406f2a236e320257ab9ee8a524ef43"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-integration-kit-v2.0.0.zip",
+      "bytes": 61359,
+      "sha256": "5ed6e6a3830672711634c6ce5519fe30edf8bcf21f53877d2e449e9920a36f4f"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-integration-kit-v3.0.0.zip",
+      "bytes": 77448,
+      "sha256": "d5b2be04e8c2a47d028af067e5c67e75ad4b9b1ced87ebe0e9d88935002b0605"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-integration-kit-v4.0.0.zip",
+      "bytes": 93835,
+      "sha256": "a54c77928ab50a1d040c24e9e5f08ec9b96640d20945daaaa58528f214519fe6"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-ios-distribution.csr",
+      "bytes": 980,
+      "sha256": "2bd430bc0bfeca147d345057d0855260431dbe179db98baff50b4c88a2729688"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-nusd-plugin.zip",
+      "bytes": 48396,
+      "sha256": "00c3afcaa69c83da0da699480b082f8eec579192610dd3d844cc74dd658a094b"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-os-2.0.0-android-source.zip",
+      "bytes": 13305,
+      "sha256": "46d0c780fcfbe5d15d22fb31a98b179f455514b994a590ba6bcfc78e2f43537c"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-os-2.0.0-ios-source.zip",
+      "bytes": 12930,
+      "sha256": "de0d7047af5190b30f0b39f42776c922d392a0732960d6f6b616d353c4e31b05"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-os-3.0.0-android-source.zip",
+      "bytes": 10454,
+      "sha256": "490d05da6d371062478dcc12cc8b2474f33b8478f39c69979fa548613926538f"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-os-3.0.0-ios-source.zip",
+      "bytes": 39405,
+      "sha256": "efe375f929e4d1d86dbf6b033c9e55ab1382f9363eda9f0726977b7065fa99f8"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-os-4.0.0-android-source.zip",
+      "bytes": 12690,
+      "sha256": "76bb9a384685798499073147c7267ee8ba1cd3e2d5a674649b4e0dd21c6b9e7f"
+    },
+    {
+      "archive_member": "dist/client/downloads/numina-os-4.0.0-ios-source.zip",
+      "bytes": 55266,
+      "sha256": "a049a7d96334c182f3644ddea182a2f2c336ada81b587fd5d129a1a9dda83f02"
+    },
+    {
+      "archive_member": "dist/client/downloads/nusd/deployment-receipt.json",
+      "bytes": 3726,
+      "sha256": "d44b863bd9a0a68fe06f69a8439c2fa01204e4ada1c93e0fb29936731728427a"
+    },
+    {
+      "archive_member": "dist/client/downloads/nusd/deployment-verification.json",
+      "bytes": 2101,
+      "sha256": "2e1593438d225c473eaeb1029699d1a0d286059242aab6011bd54d388ea66d27"
+    },
+    {
+      "archive_member": "dist/client/downloads/nusd/mint-receipt.json",
+      "bytes": 1533,
+      "sha256": "3dab1a847ba8b0b4a14a92a0b881e5e888af7ffbbab74a9af0e1fe9935bc63ee"
+    },
+    {
+      "archive_member": "dist/client/downloads/nusd/treasury-settlement-receipt.json",
+      "bytes": 4147,
+      "sha256": "7334d78dee023b9cd9a291ebb66a9dd0e3dbc735ed9180712eeed9fabbcbd5c0"
+    },
+    {
+      "archive_member": "dist/client/downloads/primary-host-delivery-2026-09-18.json",
+      "bytes": 3117,
+      "sha256": "af2129f12c68c265c7a216185021a617fb19d72abb7c9646d5dff8a4e3b6c64b"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/NCPSAttributionClosure.lean",
+      "bytes": 8263,
+      "sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/README.md",
+      "bytes": 2339,
+      "sha256": "834896c09c2fa55e2aecb197a45fb772b441c872413eecd533239b6b1ff29277"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/SHA256SUMS",
+      "bytes": 1189,
+      "sha256": "5a0dfb0834bf0d95dd9deea5ac21d695387decb20d986c6241945a190e97f3a0"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/attribution-compiler-verification.json",
+      "bytes": 15173,
+      "sha256": "098a710c2f26c14709adc87a1bc25982bfecbcc11589c334debe832289ff2c01"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/attribution-literal-source.json",
+      "bytes": 1598,
+      "sha256": "0dec8f4ebecff71a1f27c3ddd6bee97f3c0f01cde2f59aabab4eb16b6cf6046f"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/attribution-semantic-review.json",
+      "bytes": 8461,
+      "sha256": "909a0cf36b1fd418be958f3860446d4ee125afbf13b72565c4660908b6ca1247"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/attribution-source-audit-readback.json",
+      "bytes": 4498,
+      "sha256": "673f9d7b621501749cccc7804f5cd503315be6a4b1e900d9508aeb9b0a7497f2"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/decoded-attribution-closure.json",
+      "bytes": 9079,
+      "sha256": "eb79d5f24b6a410ada4286d383f845409ffaa49ae10d0f5dce6b1e718b71e934"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/dependencies/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/dependencies/NCPSModelClosure.lean",
+      "bytes": 2656,
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/independent-fresh-compiler-review.json",
+      "bytes": 37576,
+      "sha256": "b53ef21648862c5aace95c3e991b85ff6769f5ca2a1474affa7edccc9b0e2410"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/operational-ed25519-public.raw32",
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/run-attribution-compiler-check.py",
+      "bytes": 12028,
+      "sha256": "1bca8d1e8fd2f618078f0a6b820ddfba663ae179c130312e4f48e1d81fa8dbb9"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/NCPSAttributionClosure.lean.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "db635f6dc66a37faa661efe5eb2cf68328e95834f36a9040a370f360c2995b8e"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/README.md.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "f0f27ee4bf5376fc2f420f96e5dd4f62125ad91eb7055ffdfdffeff51f96f9e0"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/SHA256SUMS.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "375c553cab9a01df8b4d9d73f15bbf5a47aea244d382801efcb1c9a40496917e"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/attribution-compiler-verification.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "45477c8134bc3c613e12ec9f17521b41a94b1bb9e6392540e8455e2d0fee28df"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/attribution-literal-source.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "b908ef04fc9bb4dda22a8530c12820198c8bc196a0ad93116f77e6e6510e22a7"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/attribution-semantic-review.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "4432367468628fc046c4ff1f85767ea02c0d339ab9d3ff225d1f3c0675474a86"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/attribution-source-audit-readback.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "9226e983b7a0c4d180320070f197f3c4ac29139278f40c86e94fd7358ff0316c"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/decoded-attribution-closure.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "070e650495ef12ec4aef6331a07777f487ec4dd344a63b9225f53d786b287ed1"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/dependencies/NCPSModelClosure.lean.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "1c97a961990e8f3a442b90a1f18832ea1147a965c91ca334529cd25440773627"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/independent-fresh-compiler-review.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "b01d68e5b5c7e653d14206f1d79355e9b7963a0f4012f5250c0d8b35ea81c1d1"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/run-attribution-compiler-check.py.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "289fc8ac4fdf5c5d7ccb5ce36e4638cd6577b5ff9275a98d3dab720e98b7423c"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/signed-successor-before.json.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "8ea63634c07d6c9a7e9ee566ac59d8ab6e4eb6b8422d874eb331e51b43ab6f87"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signatures/verify_public_proof.py.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "b62a292a364e4f961ff36615adc581ca480c4dfc8e52a2d8f225b4263529f1a2"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/signed-successor-before.json",
+      "bytes": 9121,
+      "sha256": "3158949723f9f53ced574ecd0336c9f8917d88ff568070fac1be4c00ed24c09a"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11/verify_public_proof.py",
+      "bytes": 2882,
+      "sha256": "8113fd43283b9a75a1a66977cdf22dbb6fe1a02a0cf0ddecbd48cef3a2c50a82"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/SLSA-BUILD-L3-ASSESSMENT.md",
+      "bytes": 6823,
+      "sha256": "bcecc96757e55ac08ebac902a9a6cdbdbd6f8d4bfcde3fb4f3d4959081e2852f"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/application-release-v2.json",
+      "bytes": 12993,
+      "sha256": "30434a312366a8869b93e9f27b428ee0e5f385c1bd0e8fc877912a98fe97f792"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/approved-policy.json",
+      "bytes": 1277,
+      "sha256": "3c2830cbc1cd16c2d8b136d7b1c77d4de284e4e6372728cbcdb5eb7c61ba30d1"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/artifacts.json",
+      "bytes": 2519,
+      "sha256": "812c92423f9ea13bdfed022ad086caa4b853af84ef9bc54f12e2f4e92986bbf0"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/numina-site-v2.0.0.tar.gz",
+      "bytes": 3131913,
+      "sha256": "daa688cd91a3a792531ee09f56129dbb8412f3c4516bc6d0da3a6d748c4e13d9"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/production-record.json",
+      "bytes": 4123,
+      "sha256": "2647a116260cd417e3b94a4b6e5a1d8f4fd05aa7b29cd884d1660a169975f2af"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/provenance.jsonl",
+      "bytes": 11777,
+      "sha256": "f7884feee62e1262254b5faa076271c83fcb10b1194c3b2e69a26fbb3f1aa470"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/run.json",
+      "bytes": 14694,
+      "sha256": "9fbc991b748c1979e79c3f69b34ecbdf44f9d90c3cfa2474ea1f1a737ceb34a9"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/slsa-build-l3-assessment.json",
+      "bytes": 14954,
+      "sha256": "805fe264a3454687c9822aed9bbba699c2e85e02fa7dd4e9db50a71c48455775"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/run-34717406980/verification-result.json",
+      "bytes": 18946,
+      "sha256": "cdf4831970bd2cd7493b6cb8aa089af509c8c001dba7d71e5bf8f7b402400380"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/RECHECK.md",
+      "bytes": 1866,
+      "sha256": "61835836364e18af9112d59e6d7ae577a8f48ed1b2cee55eefe0615b1442755c"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/completion-record.json",
+      "bytes": 4408,
+      "sha256": "30eca8717baf3fb9657ee8ed903c70011c8f9dca92a5c88fe18bbc193f219b47"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-linux-runtime-image.docker.tar.gz.2026-09-14.verification.json",
+      "bytes": 15717,
+      "sha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-linux-runtime-image.docker.tar.gz.attestation-verification.json",
+      "bytes": 15717,
+      "sha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-linux-runtime-source.tar.gz.2026-09-14.verification.json",
+      "bytes": 15717,
+      "sha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-linux-runtime-source.tar.gz.attestation-verification.json",
+      "bytes": 15717,
+      "sha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-runtime-inventory.json",
+      "bytes": 6357,
+      "sha256": "33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-runtime-inventory.json.2026-09-14.verification.json",
+      "bytes": 15717,
+      "sha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/numina-nusd-runtime-inventory.json.attestation-verification.json",
+      "bytes": 15717,
+      "sha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/provenance.jsonl",
+      "bytes": 12211,
+      "sha256": "a01099e8d7454f7d3a5888dbad8556ba1cefc18d50c3751cbcfcbf7d51dde350"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/release-review.json",
+      "bytes": 9108,
+      "sha256": "f5efc7099246e69abd21cec436f199b54aa0d26dd422db6ed74842315a76911f"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/release-review.md",
+      "bytes": 2844,
+      "sha256": "6b2d03d5830616415f5ac46b1e4bc611e4a7ab519fbf497bcab34d137488caa9"
+    },
+    {
+      "archive_member": "dist/client/downloads/provenance/runtime-34725802271/verification-recheck-2026-09-14.json",
+      "bytes": 3646,
+      "sha256": "e4d663f48e70a88335c6c7de82ad7f916d7501c67ebfad1edd9ba20437d61080"
+    },
+    {
+      "archive_member": "dist/client/downloads/provider-confirmation-request.template.json",
+      "bytes": 1589,
+      "sha256": "37253e415f27b234f7b79c24b6c803bd67b8a3bcf4270ad5673523f56cdce608"
+    },
+    {
+      "archive_member": "dist/client/downloads/rc22-slsa-readiness.json",
+      "bytes": 753,
+      "sha256": "20bb2eb9005a3c38f426b30d49aef00ed33e457c1ecadbee2ec24c6c59a6e031"
+    },
+    {
+      "archive_member": "dist/client/downloads/rc26-core-binding.json",
+      "bytes": 1072,
+      "sha256": "ffa088a003ad807f7ad6b111d821cfe1f35b2440a514ea108bbee532a37f7b6a"
+    },
+    {
+      "archive_member": "dist/client/downloads/rc26-production-deployment.json",
+      "bytes": 4377,
+      "sha256": "64bbbb48f4cf8b8dadbb1b7530f142e10acab9a6ad8883de6485fa162cf7182a"
+    },
+    {
+      "archive_member": "dist/client/downloads/release-evidence-2026-09-13.json",
+      "bytes": 2122,
+      "sha256": "4bd61b43ac6d2d52cbcbe71e39515339190cf3c9a69d643da0974992e40572ae"
+    },
+    {
+      "archive_member": "dist/client/downloads/release-identities.json",
+      "bytes": 3772,
+      "sha256": "0b3c99b4b876439bfa279c75af6a9c65ca014b36a342ef28345ce4a982ae1f29"
+    },
+    {
+      "archive_member": "dist/client/downloads/release.json",
+      "bytes": 169624,
+      "sha256": "15e61c46129e2789d93a27ca25092cb7648aedf50cb80ad8a70c4475003ba57c"
+    },
+    {
+      "archive_member": "dist/client/downloads/runtime-pin-reconciliation-2026-09-15.json",
+      "bytes": 5103,
+      "sha256": "39dc3d085783c959a186e37b74381dde18cc7f020b61506f763d0de6a9ad4037"
+    },
+    {
+      "archive_member": "dist/client/downloads/runtime-pin-reconciliation-2026-09-16.json",
+      "bytes": 5103,
+      "sha256": "d94e8c0041fa14a7df9e134157951112bbf8343775faa500dd39d22659cd7814"
+    },
+    {
+      "archive_member": "dist/client/downloads/treasury-client-alignment.md",
+      "bytes": 7584,
+      "sha256": "f66922d23eb88be30a3e3acec1e25fdb8450da427c1ed689fdb78ae2730a2070"
+    },
+    {
+      "archive_member": "dist/client/downstream-publication.json",
+      "bytes": 949,
+      "sha256": "a2e404e2b99c550666b0888566a1d8d1b24ee1f5214981897ea19648cfcfa185"
+    },
+    {
+      "archive_member": "dist/client/economy.css",
+      "bytes": 4418,
+      "sha256": "c8802f759ba20077f813d5b3f1d0436964ed95d513b7d0ec6f45df6e7351c3c2"
+    },
+    {
+      "archive_member": "dist/client/economy.html",
+      "bytes": 11868,
+      "sha256": "d2fcb0feca4e0f74f12cb582f9fb59cd722b6011d9b48e363763c2abaca71814"
+    },
+    {
+      "archive_member": "dist/client/evidence-handoff-model.js",
+      "bytes": 4242,
+      "sha256": "b0e9d9283b3fb2a786462a4580e645f387780752b419f8f03580a3da6eb64511"
+    },
+    {
+      "archive_member": "dist/client/evidence-handoff-ui.js",
+      "bytes": 3928,
+      "sha256": "17a16cc0df9ed6a431e60713ae07397c63fb039f3068409f63ddf1a47b8092a2"
+    },
+    {
+      "archive_member": "dist/client/favicon.svg",
+      "bytes": 421,
+      "sha256": "a1213748f8780b72a930929c39d0bdc99ea001c95e02d1b747123aa609e250c6"
+    },
+    {
+      "archive_member": "dist/client/final-build.json",
+      "bytes": 149468,
+      "sha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1"
+    },
+    {
+      "archive_member": "dist/client/final-manifest.json",
+      "bytes": 22200,
+      "sha256": "8f68c2b90623f44e9e5afe002349962fb24cf60850dde5386e18cfd9cbbad3e0"
+    },
+    {
+      "archive_member": "dist/client/financial-model.js",
+      "bytes": 5681,
+      "sha256": "1cdd775c54241ae9ea136412ca5f659d0f3b49aba5e22b74d486348a09be6b1a"
+    },
+    {
+      "archive_member": "dist/client/financial-services.html",
+      "bytes": 8769,
+      "sha256": "f36384709a71005182c0c239f68b095684e7f172da7ca9f14896ca88b593d7fc"
+    },
+    {
+      "archive_member": "dist/client/financial-ui.js",
+      "bytes": 7768,
+      "sha256": "5ab9b8e3ae077eb4c290c522849018cf04688b7ac4b03353a78f6a1009e1ebd1"
+    },
+    {
+      "archive_member": "dist/client/financial.css",
+      "bytes": 1913,
+      "sha256": "4067284b1c3cb671ee71eeeb24fc18b03fd592c68354eb80dc8bed9fd81bd891"
+    },
+    {
+      "archive_member": "dist/client/frontier-ui.js",
+      "bytes": 12754,
+      "sha256": "e9738d965178e05b56f794da61147ec63cf53e7244a4c690f927d2e316c4e86f"
+    },
+    {
+      "archive_member": "dist/client/frontier.css",
+      "bytes": 4930,
+      "sha256": "42b468f62d30ca231fe2d2670df6ac7f4d3331897ef1587f6157dfafbc64d427"
+    },
+    {
+      "archive_member": "dist/client/frontier.html",
+      "bytes": 12733,
+      "sha256": "b0d47f517a0395e2c4adb1ebc8f5e271e17a3ba4fe03c12f9160e1eb929cd0b2"
+    },
+    {
+      "archive_member": "dist/client/funding-plan.js",
+      "bytes": 7184,
+      "sha256": "ee1088721bf964e374027ec2828620f2232d9331e11a99673042795a4f94ff82"
+    },
+    {
+      "archive_member": "dist/client/http-client.js",
+      "bytes": 1881,
+      "sha256": "4a84a4017a5434780fef31632affb3134a3042b3f446491ce3034e80ae7b46fa"
+    },
+    {
+      "archive_member": "dist/client/identity.json",
+      "bytes": 3772,
+      "sha256": "0b3c99b4b876439bfa279c75af6a9c65ca014b36a342ef28345ce4a982ae1f29"
+    },
+    {
+      "archive_member": "dist/client/index.html",
+      "bytes": 12733,
+      "sha256": "b0d47f517a0395e2c4adb1ebc8f5e271e17a3ba4fe03c12f9160e1eb929cd0b2"
+    },
+    {
+      "archive_member": "dist/client/integrations.html",
+      "bytes": 10877,
+      "sha256": "15e28086c5ea6939e82838997fb93dbfa63e0ebdea53dcc42adea8fe81125d2b"
+    },
+    {
+      "archive_member": "dist/client/labs.html",
+      "bytes": 7710,
+      "sha256": "a3ef2c6f0310d156af9d0ff8f484437b7b5f8fc0263f79f8dcaeece3c1dd2b0a"
+    },
+    {
+      "archive_member": "dist/client/local-wallet-crypto.js",
+      "bytes": 666,
+      "sha256": "b985f3b89b1fd94fcf9c0ac705a848f2493246333555f9e002b57c51cd9e5bba"
+    },
+    {
+      "archive_member": "dist/client/local-wallet-policy.js",
+      "bytes": 1424,
+      "sha256": "6096ab624c38390200aa7ee70729c58838ac2ac996e8cd7fd71fe532156e0ff8"
+    },
+    {
+      "archive_member": "dist/client/local-wallet-signing-model.js",
+      "bytes": 8509,
+      "sha256": "1a4de1442f50b4474477c0eaa9078e823130160f499f38f5d943e1f70b47a106"
+    },
+    {
+      "archive_member": "dist/client/local-wallet-signing-ui.js",
+      "bytes": 6927,
+      "sha256": "25912b5d744a8661acb366b5423da57705f2d250bf761840e8d58b43ddbdec4b"
+    },
+    {
+      "archive_member": "dist/client/local-wallet-ui.js",
+      "bytes": 4322,
+      "sha256": "54c0d21d86d721a0721b8016278c24533dcd6362094d2b628d93e273c47da932"
+    },
+    {
+      "archive_member": "dist/client/local-wallet-worker.js",
+      "bytes": 573,
+      "sha256": "5689686df72c4db9b2c405180d55a6b64eb8e3a3d5d93a0afd273fd148728256"
+    },
+    {
+      "archive_member": "dist/client/mobile-update-policy.json",
+      "bytes": 1433,
+      "sha256": "437a5a465cc8b8feca6fe0dba1a9dc1cc16039538adacc4138ea5cbec7572e5b"
+    },
+    {
+      "archive_member": "dist/client/motion.css",
+      "bytes": 4868,
+      "sha256": "6bfe1244883e6d0f875f19ef7b3580c94332d1fd6bb6eec9e864158ee8e45731"
+    },
+    {
+      "archive_member": "dist/client/native-treasury.js",
+      "bytes": 4743,
+      "sha256": "aa3e913c2b45aec40f90f2e502809d76adaf267d630112d1f9db0ee60630e4df"
+    },
+    {
+      "archive_member": "dist/client/network-status.js",
+      "bytes": 5748,
+      "sha256": "90a6755681da2fdeb3d9a1ddf082e70e734da6b8118f7a7c560790b8d124f0d3"
+    },
+    {
+      "archive_member": "dist/client/numina-labs-dark-logo.png",
+      "bytes": 921793,
+      "sha256": "73f55c323742f82b0a2fc96d2a7a66912c6b127461e733a72f48ca4999211ce9"
+    },
+    {
+      "archive_member": "dist/client/numina-labs-logo.png",
+      "bytes": 284655,
+      "sha256": "c0f3853af3fa105c95ce6dfbdc501af7f4fb461e6cf63087f34100e8e3226c6e"
+    },
+    {
+      "archive_member": "dist/client/nusd-contract-record.js",
+      "bytes": 27531,
+      "sha256": "5ad9f451c6486133fa256cadc773f07716d82435aa638b804b198ab403fad59e"
+    },
+    {
+      "archive_member": "dist/client/owner-approval.js",
+      "bytes": 2440,
+      "sha256": "5684ff3455f0668c00b3f8dda3ddb5b7ea872c28bff83be3e9c3ebeda5e8c916"
+    },
+    {
+      "archive_member": "dist/client/ownership.html",
+      "bytes": 6636,
+      "sha256": "c77cebdef3190b09998b3a6444bc9d67990e69cb3f9b36d376a3ce16d7c6bcb3"
+    },
+    {
+      "archive_member": "dist/client/ownership.json",
+      "bytes": 1042,
+      "sha256": "bb04441689bf4883a90af78e1b9c7deef0a8f4a6157f468e04d6d52f79d50042"
+    },
+    {
+      "archive_member": "dist/client/payment-architecture.png",
+      "bytes": 1478596,
+      "sha256": "9619654a52c870619c58b13986906a1b064bd54d47fb4f8d6aeacca0136e4e50"
+    },
+    {
+      "archive_member": "dist/client/platform.html",
+      "bytes": 3296,
+      "sha256": "8c5f9c02b481163751e48b17f916651bb8c859c12e3cd0180471a1c7f873455c"
+    },
+    {
+      "archive_member": "dist/client/privacy.html",
+      "bytes": 9469,
+      "sha256": "3f3bc80df835b2473da0a6ab7b61daa41d5c6afbbae01aad5fb4dce047bcc9cc"
+    },
+    {
+      "archive_member": "dist/client/provenance.html",
+      "bytes": 19392,
+      "sha256": "f4f1dcf98a7e1580c4d6da4ef30af743f0503215b1b33c92dac71da859bf9563"
+    },
+    {
+      "archive_member": "dist/client/publication-policy.json",
+      "bytes": 540,
+      "sha256": "d997242e0ec905720ef4fecbe07c6ff8bd55b739457ea0cc448436e3ff1b6c7b"
+    },
+    {
+      "archive_member": "dist/client/receipt-intake-model.js",
+      "bytes": 3453,
+      "sha256": "49de209b933fea7f181e5db9c5e52501ef1ab047c9298bb620b1c580fd947bce"
+    },
+    {
+      "archive_member": "dist/client/receipt-intake-ui.js",
+      "bytes": 4900,
+      "sha256": "c0430b1f9bdc738c84f1d950099e32df8733fedc3fa2d6301dd1cc5299c80eb6"
+    },
+    {
+      "archive_member": "dist/client/redemption.html",
+      "bytes": 13746,
+      "sha256": "2b3556773061ea898617b2d9ac03193ca1e2264bdde62ed954ef4ad3db187f6b"
+    },
+    {
+      "archive_member": "dist/client/reviewer-session-ui.js",
+      "bytes": 1205,
+      "sha256": "e291d07c8499aae952e50cf9d67eff3532f876907fee2f8cf78c29cec2b45063"
+    },
+    {
+      "archive_member": "dist/client/reviewer-ui.js",
+      "bytes": 1118,
+      "sha256": "cf7a20f6ff4d63aa55af6f8f8d4933b8f6e17dd263bf0e26073576a50f91dced"
+    },
+    {
+      "archive_member": "dist/client/reviewer.css",
+      "bytes": 875,
+      "sha256": "0b5977ec9213c293a975c19a2283649fc28faf8da368cd78acaa257993bfa0c6"
+    },
+    {
+      "archive_member": "dist/client/reviewer.html",
+      "bytes": 4818,
+      "sha256": "5105ec1513b85f1d4d548d613b098cddf2fd0eb2c1ff3801fbad484e2dfefa56"
+    },
+    {
+      "archive_member": "dist/client/robots.txt",
+      "bytes": 72,
+      "sha256": "fcf20c36a9aebe4a95115b9dad59c3f6c51c9f240cc3f3d0c18012aa66f5e330"
+    },
+    {
+      "archive_member": "dist/client/runtime-build-ui.js",
+      "bytes": 18895,
+      "sha256": "d347b2787b9a5bb88bc7874c72203d7e70011521be501bc558efcebd38af5743"
+    },
+    {
+      "archive_member": "dist/client/runtime-contract.js",
+      "bytes": 1944,
+      "sha256": "c7c46b7dd6a8589474e01a5377c23d55b5d876531f144f172ae56813ff98653d"
+    },
+    {
+      "archive_member": "dist/client/runtime-release-model.js",
+      "bytes": 9001,
+      "sha256": "79abbabde542da5ff26b7b62f53ee9a20fdebb6febf3093af0627fd03b8cc58f"
+    },
+    {
+      "archive_member": "dist/client/runtime-release-ui.js",
+      "bytes": 12134,
+      "sha256": "bb8ff24f41a23d8923231528e31ae6ebbeb1827529cee8318379893a2f56eb4f"
+    },
+    {
+      "archive_member": "dist/client/sam-kott.jpg",
+      "bytes": 60851,
+      "sha256": "7b5abe326f0b3b19b7dbc028ac43f091fa70cf744775a065cdc7abb5499f8db8"
+    },
+    {
+      "archive_member": "dist/client/schemas/application-release-v2.schema.json",
+      "bytes": 16629,
+      "sha256": "4d0d59ecc70f73be37452a0ac0a3d91fc28c020797526f3cc560e6a2ea82d985"
+    },
+    {
+      "archive_member": "dist/client/security-surfaces.json",
+      "bytes": 5822,
+      "sha256": "af55fb4f779e6d0d4482e65590a73b2b49c7cccfebbe54fc329fc322095ce5fa"
+    },
+    {
+      "archive_member": "dist/client/security.html",
+      "bytes": 6754,
+      "sha256": "f3a9817a75abad8ab271ef03fc4dc842d497dd3183cd1ef56c5c6c99be1fa907"
+    },
+    {
+      "archive_member": "dist/client/services.css",
+      "bytes": 7088,
+      "sha256": "0f7db656977c04b3afb7605411f038a75d0ed24919a97aae6efabfd2fed59beb"
+    },
+    {
+      "archive_member": "dist/client/services.html",
+      "bytes": 18696,
+      "sha256": "d411cbdf7e1d68fe9cfe840977f18be4474eae8480fc77984fd9b4f5f24b4361"
+    },
+    {
+      "archive_member": "dist/client/site-shell.css",
+      "bytes": 9581,
+      "sha256": "76516cefb982a62f293d8bc830b9594fd7a749d403576e83935958880853bf8d"
+    },
+    {
+      "archive_member": "dist/client/site.css",
+      "bytes": 3018,
+      "sha256": "ea08f394a9fadde4e37834d8507c90c4c6553f9ad191b04aa348b4f54253485e"
+    },
+    {
+      "archive_member": "dist/client/sitemap.xml",
+      "bytes": 1221,
+      "sha256": "77846ef847ee31363751054c7435376919b3a00f849e6925613bf543d11d2bf8"
+    },
+    {
+      "archive_member": "dist/client/source-alignment.json",
+      "bytes": 142235,
+      "sha256": "af640b4c1643319f50e29f282d800c84c7bb3b6416b05ed5262cb35fb46548a7"
+    },
+    {
+      "archive_member": "dist/client/spectrum-cover.png",
+      "bytes": 196812,
+      "sha256": "a84daf6ecdae34f014136dc3d59bcefe04c92afdf3059cdbce092369a8a3752e"
+    },
+    {
+      "archive_member": "dist/client/status.html",
+      "bytes": 8965,
+      "sha256": "227e2703222109530218ccbc875c0def7c3712a6e172499fa49f7dfbd9c0c870"
+    },
+    {
+      "archive_member": "dist/client/stripe-treasury.js",
+      "bytes": 8146,
+      "sha256": "08fa2f3b1f9f2c68f33365ffdf55a649820e57d3bc6d5dbad438f71fb9c83e56"
+    },
+    {
+      "archive_member": "dist/client/style.css",
+      "bytes": 8650,
+      "sha256": "06d40aa8254c105d904574b2c7efdd81866caf0aee0f454576c99e13a38783d5"
+    },
+    {
+      "archive_member": "dist/client/task-ledger-ui.js",
+      "bytes": 9422,
+      "sha256": "cc2b4374a9a8be8da9c5aff92c353d8ad444853824ea0de01bee0dab7747a32b"
+    },
+    {
+      "archive_member": "dist/client/task-ledger.html",
+      "bytes": 4428,
+      "sha256": "7d2ee558988a897dc3c00f7c40271c36e9f589627ef056b930862f53e1633e05"
+    },
+    {
+      "archive_member": "dist/client/tasks.json",
+      "bytes": 205407,
+      "sha256": "5152939ef13ec78ce198205a8bcf24e31319576cf37612073c835bd541f09263"
+    },
+    {
+      "archive_member": "dist/client/telemetry-metrics.json",
+      "bytes": 4731,
+      "sha256": "3146fd3e4dfd7ecdf32d530784be0ee38e9688955386c1d8a83cea6d43d830f3"
+    },
+    {
+      "archive_member": "dist/client/telemetry-ui.js",
+      "bytes": 4447,
+      "sha256": "9b4e684075530d30d8c9e3af4883f788d561093db075255f47c61022f6affbe7"
+    },
+    {
+      "archive_member": "dist/client/terminal.css",
+      "bytes": 13153,
+      "sha256": "632c002606f0715d80e0a5395df9ec3666c217e170e9effbacb810ef5184f4a9"
+    },
+    {
+      "archive_member": "dist/client/theme.css",
+      "bytes": 13535,
+      "sha256": "1e38259ae3fee50ee49867993c836f23a5a76cebb6a7c66bb4341827e52794ca"
+    },
+    {
+      "archive_member": "dist/client/transfer-receipts.css",
+      "bytes": 992,
+      "sha256": "34b0e80e5d439b48518e0a76c59877488e352762c731a2ebd932b7aa7bc52d48"
+    },
+    {
+      "archive_member": "dist/client/transfer-receipts.html",
+      "bytes": 5810,
+      "sha256": "3c451a9f39210b36eaf82d936e7179b2c8ff2d9075b057d58450f1bcf4fd6ddb"
+    },
+    {
+      "archive_member": "dist/client/transfer-receipts.js",
+      "bytes": 6887,
+      "sha256": "155c4086a41ae523adfef89faf33aea394dd12f3c9d13f30cb18304db94ad623"
+    },
+    {
+      "archive_member": "dist/client/treasury-adjustment-ui.js",
+      "bytes": 6889,
+      "sha256": "6fb0ae6c598e22381bc27ff6413f47d07cb2408b1360477524bb9b83de6abae0"
+    },
+    {
+      "archive_member": "dist/client/treasury-adjustment.js",
+      "bytes": 6741,
+      "sha256": "8d2794d1f886da2f5efb19474097d3e73ca841b67cb1fdc46221ed4bd1c8e3e2"
+    },
+    {
+      "archive_member": "dist/client/treasury-amount.js",
+      "bytes": 2315,
+      "sha256": "f27c6deefdc87e6f2e79f4cc0f28b2a7363c632f9adb99807759758b658616b1"
+    },
+    {
+      "archive_member": "dist/client/treasury-balances.js",
+      "bytes": 9837,
+      "sha256": "29ef5a4b006000c8e82eb7ba23c6690759c0fe902d23c47ba567b252106aa4fb"
+    },
+    {
+      "archive_member": "dist/client/treasury-connection-model.js",
+      "bytes": 31432,
+      "sha256": "08086df26a06d8932778fbe48b1305d8b827f717b28237f1e4c23379a3ef0b34"
+    },
+    {
+      "archive_member": "dist/client/treasury-connection.css",
+      "bytes": 144,
+      "sha256": "05176a27d7cf6b4d5baf43dc89f0c67606d2464cafc623078b07ba026886c5c4"
+    },
+    {
+      "archive_member": "dist/client/treasury-connection.js",
+      "bytes": 6619,
+      "sha256": "5b7bc482526234587b2f3311580d14e6b7501b491d3048b37156c6fba17e1ac9"
+    },
+    {
+      "archive_member": "dist/client/treasury-documents.js",
+      "bytes": 6902,
+      "sha256": "1a1ddf03900275446f91b7d893bd42371093367e41bfced21cb0349d9e5eaaa3"
+    },
+    {
+      "archive_member": "dist/client/treasury-preparation-ui.js",
+      "bytes": 12450,
+      "sha256": "43273b481cc71e7928ec770994f651547035d697d4e3bcaf491927a8b717d9e5"
+    },
+    {
+      "archive_member": "dist/client/treasury-preparation.js",
+      "bytes": 7144,
+      "sha256": "6644c7dbb2c26db53168e87228e163573de98d8b742f6ac3e7e1a890cbba3733"
+    },
+    {
+      "archive_member": "dist/client/treasury-proof.js",
+      "bytes": 33212,
+      "sha256": "11b4913573bd9aa7dc4c4af5b485430bbd814119675a004a1a3eb22e0a02c6bb"
+    },
+    {
+      "archive_member": "dist/client/treasury-simulation-model.js",
+      "bytes": 6319,
+      "sha256": "910c64b752753455fc55c2898f457f5624d8ef8c6d9945436d6895f0fa85d639"
+    },
+    {
+      "archive_member": "dist/client/treasury-simulation-ui.js",
+      "bytes": 5228,
+      "sha256": "263c23516681e395f5d7e4d5dbbb86543d58b2244ddb763aa90d2f8dd1e0569e"
+    },
+    {
+      "archive_member": "dist/client/treasury-simulation.css",
+      "bytes": 4302,
+      "sha256": "cd056bb2f777c2f3d096514c8098dcaec91141f0e415ef126b457e63159582cd"
+    },
+    {
+      "archive_member": "dist/client/treasury-simulation.html",
+      "bytes": 8880,
+      "sha256": "4c5a55fdc29c17c7a2639165c8ad9f17af4b7ed76dc577163484da984f9619f6"
+    },
+    {
+      "archive_member": "dist/client/treasury-team.json",
+      "bytes": 7815,
+      "sha256": "487ba9e2c816f03b33692d53602e7b8e3809f4916794db8b7b85a4e4b5f2fda8"
+    },
+    {
+      "archive_member": "dist/client/treasury-valuation.js",
+      "bytes": 1289,
+      "sha256": "8da716ff7759c90b62cc8a8a6de5d3df1bb80165c77da3cee48b4ee064d0beb5"
+    },
+    {
+      "archive_member": "dist/client/treasury.html",
+      "bytes": 6821,
+      "sha256": "9d8cb1b817608942ab966cd3cc6ffaa0dc5d89b426e993201d253dd2450121b0"
+    },
+    {
+      "archive_member": "dist/client/vendor/ethers-6.15.0-LICENSES.txt",
+      "bytes": 7498,
+      "sha256": "59e32daa6145ea9145bed0e8a9f59274dc2a430f750325dbf82f6489cd0bfac9"
+    },
+    {
+      "archive_member": "dist/client/vendor/ethers-6.15.0-record.json",
+      "bytes": 467,
+      "sha256": "d0423a3641daa295baebb28c393bf9e4cf80688a67a8a4a46d58c3d438702a27"
+    },
+    {
+      "archive_member": "dist/client/vendor/ethers-6.15.0.min.js",
+      "bytes": 512985,
+      "sha256": "66580dbb32353addbbfd2c1880a29693436c2d41ebdd4bf4a4516b9ad6f5f5ea"
+    },
+    {
+      "archive_member": "dist/client/wallet-execution-model.js",
+      "bytes": 17616,
+      "sha256": "21778dcf8394065b5edd43fa327fd92ece3d2082a918383193d7921d63c93872"
+    },
+    {
+      "archive_member": "dist/client/wallet-execution-policy.js",
+      "bytes": 2832,
+      "sha256": "5a29297fc3d9cd0f096a0b1f9d3398c650f700fcb03f6aba1677f6bc3f5f2944"
+    },
+    {
+      "archive_member": "dist/client/wallet-execution-receipt.js",
+      "bytes": 11654,
+      "sha256": "1e5c40a1ce24809b6de0bc581573661005ca1ae016b9def89687cb96f9043e6f"
+    },
+    {
+      "archive_member": "dist/client/wallet-execution-ui.js",
+      "bytes": 9029,
+      "sha256": "372e71e3c2d2aae9f6b6a5c57fb603fd994a0506d7c582f6b400c3a425d0a6aa"
+    },
+    {
+      "archive_member": "dist/client/wallet-signing-model.js",
+      "bytes": 16213,
+      "sha256": "2e59fc1510e3bff937eeef9f819af7592a166b9e097aa37519d1b5f2a309849a"
+    },
+    {
+      "archive_member": "dist/client/wallet-signing-review.json",
+      "bytes": 24872,
+      "sha256": "ee2aaf226f9f6e843aac8f1d1ad222045db8bb3b83cd5fe23f7f2bc7c217dde8"
+    },
+    {
+      "archive_member": "dist/client/wallet-signing-ui.js",
+      "bytes": 9645,
+      "sha256": "63ed087cc04f37a03250f276054e2566cb9cea6cda8417a88ffb693edb499907"
+    },
+    {
+      "archive_member": "dist/client/wallet-signing.css",
+      "bytes": 2656,
+      "sha256": "e15943ec7860e6234d90d501e0a1adda32e1f0f2161651210ce60d2a87e34c49"
+    },
+    {
+      "archive_member": "dist/client/wallet-signing.html",
+      "bytes": 17547,
+      "sha256": "b9f343ed682558a29d9d28b2d426e1d318351164905ae77106377f874e131fc0"
+    },
+    {
+      "archive_member": "dist/client/workspaces-ui.js",
+      "bytes": 13895,
+      "sha256": "084a05bf463ccf97b1bfcaec6d4a5f47f8a05e7a4c2360f35968e2ac6892bd3b"
+    },
+    {
+      "archive_member": "dist/client/workspaces.css",
+      "bytes": 9164,
+      "sha256": "c68d0d9654740d9b3b7e20e998d5c122b283b37371558f5b3246661cef40608a"
+    },
+    {
+      "archive_member": "dist/client/workspaces.html",
+      "bytes": 6710,
+      "sha256": "cabd3336a8ddc47b66fd621b2466fca7d5d627fc88698a93b56f8d636d263e0e"
+    },
+    {
+      "archive_member": "dist/client/workspaces.json",
+      "bytes": 38914,
+      "sha256": "b933fb0efc56c4b5f83e9fbc1c3a8e62f8850e6cb5be752b94fd4afeeaf5355e"
+    },
+    {
+      "archive_member": "dist/server/index.js",
+      "bytes": 453128,
+      "sha256": "0aafd35964ab38d98aaa7f44603d343202dbdcba4320cce65c342d1ebc9d860c"
+    }
+  ]
+}

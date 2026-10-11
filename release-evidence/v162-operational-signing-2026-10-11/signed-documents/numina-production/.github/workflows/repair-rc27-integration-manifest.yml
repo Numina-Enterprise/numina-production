@@ -1,0 +1,225 @@
+name: Repair rc27 integration manifest
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'integrations/numina/src/runtime-contract.js'
+      - 'integrations/numina/package.json'
+      - 'integrations/numina/scripts/package-distribution.js'
+      - 'config/numina-architecture.json'
+      - '.github/workflows/repair-rc27-integration-manifest.yml'
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  repair-and-validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      EXPECTED_SHA: ${{ github.sha }}
+      EVIDENCE_RECORD: release-evidence/rc27-repair-${{ github.run_id }}-${{ github.run_attempt }}.json
+    steps:
+      - name: Require approved hosted execution
+        env:
+          RUNNER_ENVIRONMENT: ${{ runner.environment }}
+        run: |
+          [[ "$RUNNER_ENVIRONMENT" == 'github-hosted' ]]
+          [[ "$RUNNER_OS" == 'Linux' && "$RUNNER_ARCH" == 'X64' ]]
+          [[ "$GITHUB_REPOSITORY" == 'skott34-dot/numina-production' ]]
+          mkdir -p "$RUNNER_TEMP/rc27-repair-evidence"
+          echo "EVIDENCE_DIR=$RUNNER_TEMP/rc27-repair-evidence" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26.11.1'
+          architecture: x64
+          package-manager-cache: false
+      - name: Verify exact revision and record runner
+        env:
+          RUNNER_ENVIRONMENT: ${{ runner.environment }}
+        run: |
+          [[ "$(git rev-parse HEAD)" == "$EXPECTED_SHA" ]]
+          node -e "if (process.versions.node.split('.')[0] !== '26') process.exit(1)"
+          node scripts/check-runner-policy.mjs
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          record = {
+              'sourceSha': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'runId': os.environ['GITHUB_RUN_ID'],
+              'runAttempt': os.environ['GITHUB_RUN_ATTEMPT'],
+              'runnerEnvironment': os.environ['RUNNER_ENVIRONMENT'],
+              'runnerName': os.environ['RUNNER_NAME'],
+              'runnerOS': os.environ['RUNNER_OS'],
+              'runnerArch': os.environ['RUNNER_ARCH'],
+              'imageOS': os.environ.get('ImageOS'),
+              'imageVersion': os.environ.get('ImageVersion'),
+              'node': subprocess.check_output(['node', '--version'], text=True).strip(),
+              'python': subprocess.check_output(['python3', '--version'], text=True).strip(),
+          }
+          content = json.dumps(record, indent=2) + '\n'
+          (Path(os.environ['EVIDENCE_DIR']) / 'source-and-runner.json').write_text(content)
+          print(content)
+          PY
+      - name: Install pinned dependencies
+        run: |
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+      - name: Align public runtime contract
+        run: cp integrations/numina/src/runtime-contract.js public/runtime-contract.js
+      - name: Align packaged runtime contract inventory
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const manifestPath='integrations/numina/file-manifest.json';
+          const sourcePath='integrations/numina/src/runtime-contract.js';
+          const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+          const bytes=fs.readFileSync(sourcePath);
+          const entry=manifest.files.find(file=>file.path==='src/runtime-contract.js');
+          if(!entry) throw new Error('runtime contract inventory entry missing');
+          entry.bytes=bytes.length;
+          entry.sha256=createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(manifestPath,JSON.stringify(manifest,null,2)+'\n');
+          console.log({bytes:entry.bytes,sha256:entry.sha256});
+          NODE
+      - name: Regenerate packaged integration metadata
+        run: node integrations/numina/scripts/package-distribution.js
+      - name: Repackage current iOS source identity
+        run: python3 scripts/package-ios-source.py
+      - name: Validate production build gate
+        run: npm run build 2>&1 | tee "$EVIDENCE_DIR/build.log"
+      - name: Verify generated source and artifact pins
+        run: |
+          node scripts/source-alignment.mjs 2>&1 | tee "$EVIDENCE_DIR/artifact-checks.log"
+          node scripts/sync-application-release-pin.mjs 2>&1 | tee -a "$EVIDENCE_DIR/artifact-checks.log"
+      - name: Record validated repair evidence
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          evidence = Path(os.environ['EVIDENCE_DIR'])
+          record = json.loads((evidence / 'source-and-runner.json').read_text())
+          paths = [
+              'public/runtime-contract.js',
+              'integrations/numina/distribution.json',
+              'integrations/numina/verification.json',
+              'integrations/numina/file-manifest.json',
+              'docs/native-package-record-v4.json',
+              'docs/numina-os-4.0.0-ios-source.zip',
+              'runtime/vercel-production/public/downloads/native-package-record-v4.json',
+              'runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip',
+          ]
+          record.update(
+              schema='numina.rc27.repair-evidence.v1',
+              runUrl='https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID'],
+              repairBranch='repair/canonical-downstream-' + os.environ['GITHUB_RUN_ID'],
+              build={'command': 'npm run build', 'exitCode': 0},
+              artifactChecks={'commands': ['node scripts/source-alignment.mjs', 'node scripts/sync-application-release-pin.mjs'], 'exitCode': 0},
+              fullTestSuiteExecuted=False,
+              inventories=[{'path': p, 'sha256': hashlib.sha256(Path(p).read_bytes()).hexdigest()} for p in paths],
+              logs=[{'name': p, 'sha256': hashlib.sha256((evidence / p).read_bytes()).hexdigest()} for p in ['build.log', 'artifact-checks.log']],
+          )
+          content = json.dumps(record, indent=2) + '\n'
+          Path(os.environ['EVIDENCE_RECORD']).write_text(content)
+          (evidence / 'validated-repair.json').write_text(content)
+          print(content)
+          PY
+      - name: Commit aligned release inventories
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [[ "$(git rev-parse HEAD)" == "$EXPECTED_SHA" ]]
+          git config user.name 'Numina Release Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            public/runtime-contract.js \
+            integrations/numina/distribution.json \
+            integrations/numina/verification.json \
+            integrations/numina/file-manifest.json \
+            docs/native-package-record-v4.json \
+            docs/numina-os-4.0.0-ios-source.zip \
+            runtime/vercel-production/public/downloads/native-package-record-v4.json \
+            runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip
+          git add "$EVIDENCE_RECORD"
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo 'Release inventories already aligned.' | tee "$EVIDENCE_DIR/repair-result.txt"
+            exit 0
+          fi
+          git diff --cached --stat | tee "$EVIDENCE_DIR/repair-diff.txt"
+          git commit -m 'fix: align RC27 integration and source inventories'
+          repair_branch="repair/canonical-downstream-${GITHUB_RUN_ID}"
+          export REPAIR_BRANCH="$repair_branch"
+          python3 - <<'PY'
+          import base64, json, os, subprocess
+          from pathlib import Path
+          target = 'refs/heads/' + os.environ['REPAIR_BRANCH']
+          env = os.environ.copy()
+          auth = base64.b64encode(('x-access-token:' + env.pop('GH_TOKEN')).encode()).decode()
+          env.update(GIT_CONFIG_COUNT='1',
+                     GIT_CONFIG_KEY_0='http.https://github.com/.extraheader',
+                     GIT_CONFIG_VALUE_0='AUTHORIZATION: basic ' + auth)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:' + target], env=env, check=True)
+          commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          parent = subprocess.check_output(['git', 'rev-parse', 'HEAD^'], text=True).strip()
+          if parent != os.environ['EXPECTED_SHA']:
+              raise SystemExit('Repair parent differs from triggering revision')
+          remote = subprocess.check_output(['git', 'ls-remote', 'origin', target], env=env, text=True)
+          if remote.split()[0] != commit:
+              raise SystemExit('Repair branch readback mismatch')
+          record = {'sourceSha': parent, 'repairBranch': os.environ['REPAIR_BRANCH'],
+                    'repairCommit': commit, 'remoteReadbackVerified': True}
+          content = json.dumps(record, indent=2) + '\n'
+          (Path(os.environ['EVIDENCE_DIR']) / 'repair-branch.json').write_text(content)
+          print(content)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('Repair branch: ' + record['repairBranch'] + '\n\nCommit: ' + commit + '\n')
+          PY
+      - name: Capture generated inventory hashes
+        if: always()
+        run: |
+          git status --short > "$EVIDENCE_DIR/worktree-status.txt"
+          sha256sum \
+            public/runtime-contract.js \
+            integrations/numina/distribution.json \
+            integrations/numina/verification.json \
+            integrations/numina/file-manifest.json \
+            docs/native-package-record-v4.json \
+            docs/numina-os-4.0.0-ios-source.zip \
+            runtime/vercel-production/public/downloads/native-package-record-v4.json \
+            runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip \
+            > "$EVIDENCE_DIR/inventory-sha256.txt"
+      - name: Preserve optional Actions evidence archive
+        id: archive
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: rc27-repair-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rc27-repair-evidence
+          if-no-files-found: error
+          retention-days: 7
+      - name: Report Actions archive outcome
+        if: always()
+        env:
+          ARCHIVE_OUTCOME: ${{ steps.archive.outcome }}
+          ARCHIVE_ID: ${{ steps.archive.outputs.artifact-id }}
+        run: |
+          printf 'Actions archive outcome: %s; artifact ID: %s\n' "$ARCHIVE_OUTCOME" "$ARCHIVE_ID" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$ARCHIVE_OUTCOME" != 'success' ]]; then
+            echo '::warning::Actions archive unavailable. Check the repair-branch receipt and job logs; no Actions archive was confirmed.'
+          fi

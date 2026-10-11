@@ -1,0 +1,505 @@
+{
+  "schema": "numina.protocol-ietf-closure-current-readback.v1",
+  "observedAtUtc": "2026-10-11T20:17:18.344566+00:00",
+  "canonicalRoot": "/workspace/numina-production",
+  "mode": "Read-only retained-source and public official-record review; only separate scratch reports written.",
+  "requestedOutcome": "Establish whole-protocol correctness and Independent Stream acceptance for an exact successor edition.",
+  "outcomeStatus": {
+    "wholeProtocolCorrectness": "not_established_by_available_evidence",
+    "independentStreamAcceptance": "not_established_by_available_evidence",
+    "freshDatatrackerState": "unavailable_due_to_bot_blocked"
+  },
+  "inputIdentities": [
+    {
+      "path": "/workspace/numina-production/outputs/final-manuscript-delivery-2026-10-10/draft-kott-numina-pair-binding-02-final.pdf",
+      "bytes": 808496,
+      "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9"
+    },
+    {
+      "path": "/workspace/numina-production/release-evidence/whole-protocol-review-2026-10-11/reports/whole-protocol-proof-obligations.json",
+      "bytes": 37512,
+      "sha256": "367f954f3e0316144c204a7f46e338f41570587d3864206aa857e16a3417d7ac"
+    },
+    {
+      "path": "/workspace/numina-production/release-evidence/decoded-attribution-closure-2026-10-11/decoded-attribution-closure.json",
+      "bytes": 9079,
+      "sha256": "eb79d5f24b6a410ada4286d383f845409ffaa49ae10d0f5dce6b1e718b71e934"
+    },
+    {
+      "path": "/workspace/numina-production/release-evidence/final-manuscript-delivery-2026-10-10/verification/ietf-independent-stream-verification.json",
+      "bytes": 1360,
+      "sha256": "68a2ba91897b8167a61361ddce935580cef588f60d7dc02a321d68b209746445"
+    },
+    {
+      "path": "/workspace/numina-production/config/numina-legacy-closure-reference.v1.json",
+      "bytes": 4147,
+      "sha256": "0629516d38e01520a14e4f16723a5a06e70c02a063e13409111fb083247e0e68"
+    },
+    {
+      "path": "/workspace/scratch/numina-protocol-ietf-public-sources-2026-10-11.json",
+      "bytes": 14108,
+      "sha256": "19e6e4a6cac9bd8ee018cda5418af536567c166520b2d1b0911be5d808769e86"
+    }
+  ],
+  "signedPaperBoundary": {
+    "pdfSha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9",
+    "pages": 107,
+    "originalPages": 104,
+    "evidenceUpdatePages": [
+      105,
+      106,
+      107
+    ],
+    "keptUnchanged": true,
+    "exactProofSections": [
+      "16.6 pages46\u201349",
+      "AppendixQ/Q.1 pages100\u2013103"
+    ],
+    "retainedLean424": {
+      "correctedCoreTheorems": 95,
+      "correctedCoreAuditedDeclarations": 239,
+      "pairWireNewTheorems": 15,
+      "pairWireAuditedEntries": 119,
+      "pairWireAuditedTheoremEntries": 113,
+      "pairWireTotalSourceTheorems": 162,
+      "moduleCount": 8,
+      "scope": "Existing retained original receipt statements, not a fresh rerun or whole-protocol count."
+    },
+    "historicalMatrix": "Final paper records43partial and3pending whole findings, R08/R37/R46, with0closed whole findings; achieved scoped gates are separately respected.",
+    "successorRule": "Current completed findings should be recorded in a separately identified successor/addendum with exact source hashes; do not silently change the frozen signed paper."
+  },
+  "availablePublicProofSources": [
+    {
+      "path": "/workspace/numina-production/release-evidence/final-manuscript-delivery-2026-10-10/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    {
+      "path": "/workspace/numina-production/release-evidence/whole-protocol-review-2026-10-11/reports/NCPSModelClosure.lean",
+      "bytes": 2656,
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+    },
+    {
+      "path": "/workspace/numina-production/release-evidence/decoded-attribution-closure-2026-10-11/NCPSAttributionClosure.lean",
+      "bytes": 8263,
+      "sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee"
+    },
+    {
+      "path": "/workspace/scratch/numina-whole-protocol/appendix-q-recovered-public/PairWireRecovery.lean",
+      "bytes": 5568,
+      "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae"
+    }
+  ],
+  "boundedProgress": {
+    "baseNamedTheorems": 131,
+    "modelExtensionTheorems": 4,
+    "decodedAttributionTheorems": 12,
+    "compilerForThesePackets": "Lean 4.22.0",
+    "countsAreDifferentScopes": true,
+    "newCompilerExecution": false,
+    "decodedAttributionScope": "Exact fixed decoded map/note/order and eight-finding composition, assuming the seven inherited report findings. No raw-wire, actual-report provenance, implementation refinement or whole-protocol theorem.",
+    "completedHistoricalSourceReproduction": true,
+    "sourceReproductionBoundary": "Historicalpublicfinal-build/final-manifest sorted source-payload projections under original scripts/production-pair.mjs#pairSourceHash; current-environments recordedbinding consistency."
+  },
+  "currentWholeProtocolObligations": [
+    {
+      "id": "SPEC-01",
+      "status": "open",
+      "title": "Pin one complete interpretation and profile",
+      "dependsOn": [],
+      "preciseGoal": "Define the exact specification objects consumed by run: governing source/import closure, closed schema, source/hash-profile registry, signature-policy predicate, trust/revision/private-resolution policy, bounds and lifecycle semantics. Prove all references resolve uniquely to these pinned objects."
+    },
+    {
+      "id": "DEPENDENCY-01",
+      "status": "open",
+      "title": "Recover and verify exact intended Lean dependency closure",
+      "dependsOn": [
+        "SPEC-01"
+      ],
+      "preciseGoal": "Hash-bind every imported source/compiled module, Std/compiler version and axiom audit to the exact proof target; compile the whole graph at trust0; match all declared theorem names to audits; prove final witnesses are from this graph."
+    },
+    {
+      "id": "PARSE-01",
+      "status": "open",
+      "title": "Actual strict intake and closed schema",
+      "dependsOn": [
+        "SPEC-01",
+        "DEPENDENCY-01"
+      ],
+      "preciseGoal": "Prove actual parseStrict/validate soundness and completeness for UTF8, decoded Unicode, duplicate detection before discard, exact nested key sets/types, source-order constraints, revision bounds, predecessor/null rules, approved identifiers and stated limits."
+    },
+    {
+      "id": "ATTRIBUTION-01",
+      "status": "open",
+      "title": "Preserve all eight semantic findings",
+      "dependsOn": [
+        "SPEC-01",
+        "PARSE-01"
+      ],
+      "preciseGoal": "Specify and prove attribution-map validity separately from schema validity, then define a proved mapping from the concrete eight-finding decision record to any abstract gate model; prove no required finding is dropped or silently folded."
+    },
+    {
+      "id": "PAIR-01",
+      "status": "open",
+      "title": "Concrete ordered-pair recovery and association",
+      "dependsOn": [
+        "PARSE-01",
+        "DEPENDENCY-01"
+      ],
+      "preciseGoal": "For actual source A/B input and record construction, prove the source order, identifiers and commitment/attribution fields refer to the same ordered pair. Use an order-preserving representation; prove exact roundtrip/canonical accepted-wire converse."
+    },
+    {
+      "id": "JCS-01",
+      "status": "open",
+      "title": "Exact canonical record bytes",
+      "dependsOn": [
+        "PARSE-01",
+        "PAIR-01"
+      ],
+      "preciseGoal": "Instantiate the actual record codec and prove C=UTF8(JCS(payload)) exactly, canonical roundtrip and uniqueness on allowed payloads, UTF16 key ordering, array/string preservation, number behavior and absence of BOM/trailing newline."
+    },
+    {
+      "id": "FRAME-01",
+      "status": "open_concrete_instantiation",
+      "title": "Exact pure-Ed25519 signed message",
+      "dependsOn": [
+        "JCS-01"
+      ],
+      "preciseGoal": "Prove M=ASCII(NUMINA-PAIR-BINDING/V1)||0x00||C, with the22ASCII-byte literal plus one separator, no extra bytes and pure Ed25519 rather than application prehash/Ed25519ctx."
+    },
+    {
+      "id": "ED25519-01",
+      "status": "open",
+      "title": "Verification acceptance predicate and implementation correspondence",
+      "dependsOn": [
+        "SPEC-01",
+        "FRAME-01"
+      ],
+      "preciseGoal": "Define exact raw-key/signature decoding, canonical scalar/point rules, small-order/subgroup/cofactor handling and signature equation; prove concrete provider/native verifier returns true iff the selected mathematical predicate holds on the exact M."
+    },
+    {
+      "id": "TRUST-01",
+      "status": "open",
+      "title": "Independent key, role and scope authorization",
+      "dependsOn": [
+        "SPEC-01",
+        "ED25519-01"
+      ],
+      "preciseGoal": "Prove accepted key_id matches the raw-key fingerprint under the selected profile and the authenticated trust entry permits exact project/release/source/role at the selected validity/revocation times; reject out-of-scope keys even with valid signatures."
+    },
+    {
+      "id": "SOURCE-01",
+      "status": "open",
+      "title": "Source reproduction and current equality",
+      "dependsOn": [
+        "SPEC-01",
+        "PAIR-01",
+        "JCS-01"
+      ],
+      "preciseGoal": "Prove selected historical normalization/hash computations operate on exact resolved artifacts, compare both ordered commitments, and keep current canonical-source equality as a distinct predicate backed by independently authenticated immutable identity."
+    },
+    {
+      "id": "STATE-01",
+      "status": "open",
+      "title": "Authenticated revision/replay/conflict lifecycle",
+      "dependsOn": [
+        "SPEC-01",
+        "TRUST-01",
+        "SOURCE-01"
+      ],
+      "preciseGoal": "Instantiate current-state authority and transition system; prove predecessor links, monotonic update rules, revocation, same-revision conflict preservation, cache-age rules and stale/rollback/fork rejection; acceptance requires authenticated current binding/revision/payload digest."
+    },
+    {
+      "id": "PRIVATE-01",
+      "status": "open_if_policy_requires",
+      "title": "Authorized private mapping semantics",
+      "dependsOn": [
+        "SPEC-01",
+        "TRUST-01"
+      ],
+      "preciseGoal": "Prove permitted opaque references resolve only through an authenticated authorized mapping/version and missing/denied evidence remains unverified; public input cannot choose arbitrary resolver locations."
+    },
+    {
+      "id": "DECISION-01",
+      "status": "open_concrete_semantics",
+      "title": "Structured verdicts, closure and failure dominance",
+      "dependsOn": [
+        "ATTRIBUTION-01",
+        "ED25519-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "preciseGoal": "Prove null signature yields unsigned pending, malformed/failing signature yields invalid, diagnostic findings remain distinct, failure dominates and unavailable/pending/blocked/crashed/incomplete never yields signed acceptance; every mandatory closure stage is Finished(Pass) for the pinned target."
+    },
+    {
+      "id": "RUNTIME-01",
+      "status": "open",
+      "title": "Actual executable/state refinement and source-to-binary linkage",
+      "dependsOn": [
+        "DEPENDENCY-01",
+        "PARSE-01",
+        "JCS-01",
+        "ED25519-01",
+        "STATE-01",
+        "DECISION-01"
+      ],
+      "preciseGoal": "Construct a refinement/conformance witness for the exact implementation and build; prove wire intake, validation, message construction, cryptography, evidence resolution and decision output agree with the exact specification, and resource failures preserve incomplete outcomes."
+    },
+    {
+      "id": "OPERATIONAL-01",
+      "status": "separate_evidence_open",
+      "title": "Field deployment and reality correspondence",
+      "dependsOn": [
+        "RUNTIME-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "preciseGoal": "Obtain exact deployed source/build/environment/operator identities, actually accepted companion bytes, independent trust/current-state/resolver outputs, observed usage and revocation/recovery/failure receipts for a declared interval."
+    }
+  ],
+  "newAttributionMinimumInputs": [
+    {
+      "id": "ATTR-WIRE-01",
+      "owner": "unassigned",
+      "missing": "Exact intended companion raw-input parser, closed schema, decoded-value representation and projection source/build identity.",
+      "pass_condition": "Kernel-checked or otherwise explicitly justified correspondence proving this view contains exactly the parsed source/people/map/note values, with duplicate-key rejection before collapse and no unknown-member omission used as acceptance evidence.",
+      "reason": "No matching companion implementation was found in the reviewed production source roots. The new view is not a parser."
+    },
+    {
+      "id": "ATTR-REPORT-01",
+      "owner": "unassigned",
+      "missing": "Exact actual eight-finding report construction and acceptance implementation, including provenance and lifecycle metadata.",
+      "pass_condition": "Prove the installed report computation uses this checker or a semantically equivalent pinned implementation, preserves each inherited field, and retains per-check target/evidence/time/reason plus pending, unavailable and failed states."
+    },
+    {
+      "id": "ATTR-POLICY-01",
+      "owner": "unassigned",
+      "missing": "Chosen operational attribution profile and independently authenticated approval/version binding.",
+      "pass_condition": "Bind the exact accepted note/map to the requested project/release/source scope, and handle any versioned replacement through independently approved policy rather than accepting arbitrary schema-valid text."
+    },
+    {
+      "id": "PROTOCOL-REST",
+      "owner": "unassigned",
+      "missing": "Concrete JSON/JCS/Ed25519 correspondence, cryptographic assumptions, independently authenticated trust/current state/private linkage, source/binary/refinement and required original proof-package dependencies.",
+      "pass_condition": "Discharge the remaining exact obligations in the signed whole-protocol assessment against one pinned target. This decoded-attribution theorem cannot substitute for those witnesses."
+    }
+  ],
+  "legacyRecovery": {
+    "archiveLibraryId": "libfile_c2887d73285c819197c5674bc2004de3",
+    "recordedArchiveSha256": "08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80",
+    "currentArchiveBytesRecovered": false,
+    "publicPairWireSourceRecovered": {
+      "path": "/workspace/scratch/numina-whole-protocol/appendix-q-recovered-public/PairWireRecovery.lean",
+      "bytes": 5568,
+      "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae"
+    },
+    "exactRequiredImports": [
+      "ParserRefinement.lean",
+      "PairExtraction.lean"
+    ],
+    "exactLegacySchemaDefinitionRecovered": false,
+    "referenceSection": "15.11 pages36\u201337, Legacy schema missing paragraph page37",
+    "freshBoundedPageReferenceDiscovery": {
+      "querySummaries": [
+        {
+          "query": "08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80",
+          "calls": 2,
+          "items": 6,
+          "cursorExhausted": true,
+          "partial": false,
+          "incompleteReasons": []
+        },
+        {
+          "query": "ActualProfileProjection.lean",
+          "calls": 2,
+          "items": 6,
+          "cursorExhausted": true,
+          "partial": false,
+          "incompleteReasons": []
+        }
+      ],
+      "uniqueCandidatePages": 6,
+      "successfulReadCount": 6,
+      "targetOccurrenceCount": 0,
+      "usableExactReferencesFound": 0,
+      "scopeLimit": "Bounded accessible Page searches and exact literal reads, not exhaustive Library discovery. No Page titles, IDs, contents or private references are published."
+    },
+    "readerLimitation": "Arbitrary ZIP archives cannot be retrieved through the Page reference text reader; a Library ID alone is not a valid observed reference."
+  },
+  "closurePlan": [
+    {
+      "order": 1,
+      "target": "Freeze one exact companion profile and implementation claim",
+      "obligations": [
+        "SPEC-01"
+      ],
+      "requiredInputs": [
+        "Complete governing source/import manifest",
+        "One closed schema and canonical encoder domain",
+        "Selected Ed25519 acceptance predicate and authenticated authority/current-state interfaces",
+        "Actual companion decoder/report source and build identities"
+      ],
+      "receipt": "Versioned public specification packet with exact hashes, governing interpretation and explicit soundness/completeness/refinement claim."
+    },
+    {
+      "order": 2,
+      "target": "Recover the original intended proof imports",
+      "obligations": [
+        "DEPENDENCY-01",
+        "PAIR-01"
+      ],
+      "requiredInputs": [
+        "Exact public ParserRefinement.lean and PairExtraction.lean",
+        "Original Lean 4.24 engineering archive and Appendix Q identities",
+        "Original legacy eight-field schema/projection if that compatibility claim is retained"
+      ],
+      "receipt": "Hash-bound source/import graph matching the original identities. Existing 4.24 findings remain retained; later 4.22 results stay separately identified. A later isolated compiler check can be scoped to this exact graph once authorized."
+    },
+    {
+      "order": 3,
+      "target": "Prove strict raw intake and eight-finding construction",
+      "obligations": [
+        "PARSE-01",
+        "ATTRIBUTION-01",
+        "DECISION-01"
+      ],
+      "requiredInputs": [
+        "Chosen concrete raw decoder before decoded-key collapse",
+        "Closed nested key/type/order/value validation",
+        "Installed decoded-view/report construction with per-check target/evidence/time/reason and incomplete lifecycle states"
+      ],
+      "receipt": "Source-level correspondence from each accepted raw wire to the exact decoded value and report; no duplicate/unknown-key loss or incomplete result can produce acceptance. Compose the completed fixed-attribution lemmas instead of rerunning them."
+    },
+    {
+      "order": 4,
+      "target": "Connect exact canonical bytes, framing and signature policy",
+      "obligations": [
+        "JCS-01",
+        "FRAME-01",
+        "ED25519-01"
+      ],
+      "requiredInputs": [
+        "Concrete bounded JCS semantics/implementation",
+        "Literal ASCII(NUMINA-PAIR-BINDING/V1), zero separator and exact provider preimage",
+        "Raw key/signature decoding, scalar/point/subgroup/cofactor predicate and pinned verifier bridge"
+      ],
+      "receipt": "Exact message equality and verifier acceptance correspondence, with explicitly declared computational assumptions or trusted implementation boundaries. A valid document signature does not replace this companion proof."
+    },
+    {
+      "order": 5,
+      "target": "Connect evidence authority, source and current state",
+      "obligations": [
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "requiredInputs": [
+        "Authenticated key/role/scope and revocation resolver",
+        "Historical normalization/source/hash-profile and current immutable source identities",
+        "Revision/journal transition semantics and authenticated head",
+        "Authorized private mapping evidence if required by policy"
+      ],
+      "receipt": "Concrete semantics proving each finding refers to the same target/context, with initialization/step invariants and explicit absence handling. Preserve completed selected historical v156 commitments."
+    },
+    {
+      "order": 6,
+      "target": "Compose the whole implementation theorem and separate operational evidence",
+      "obligations": [
+        "RUNTIME-01",
+        "OPERATIONAL-01"
+      ],
+      "requiredInputs": [
+        "Every prior proof bridge",
+        "Exact source/binary/toolchain linkage",
+        "Resource/failure semantics",
+        "Actual accepted companion and environment receipts for any field-use claim"
+      ],
+      "receipt": "Composed soundness/completeness/refinement certificate for the exact pinned target; separately dated deployed-environment/readiness/current-state observations. Liveness requires its own stated fairness/progress argument."
+    }
+  ],
+  "ietfStatus": {
+    "freshOfficialProcessSources": [
+      {
+        "url": "https://www.rfc-editor.org/authors/rfc-independent-submissions/",
+        "finalUrl": "https://www.rfc-editor.org/authors/rfc-independent-submissions/",
+        "title": "Independent Submissions | RFC Editor"
+      },
+      {
+        "url": "https://www.rfc-editor.org/authors/ise/ise-checklist",
+        "finalUrl": "https://www.rfc-editor.org/authors/ise/ise-checklist/",
+        "title": "How does one submit a draft for consideration as an independent submission RFC? | RFC Editor"
+      }
+    ],
+    "freshDatatrackerErrors": [
+      {
+        "url": "https://datatracker.ietf.org/doc/draft-kott-numina-pair-binding/",
+        "error": "bot_blocked"
+      },
+      {
+        "url": "https://datatracker.ietf.org/doc/draft-kott-numina-pair-binding/history/",
+        "error": "bot_blocked"
+      },
+      {
+        "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-kott-numina-pair-binding/?format=json",
+        "error": "bot_blocked"
+      },
+      {
+        "url": "https://datatracker.ietf.org/api/v1/doc/document/?name=draft-kott-numina-pair-binding&format=json",
+        "error": "bot_blocked"
+      }
+    ],
+    "lastRetainedDirectPublicObservation": {
+      "checkedAtUtc": "2026-10-11T04:06:16.806983+00:00",
+      "revision": "01",
+      "versions": [
+        "00",
+        "01"
+      ],
+      "documentType": "Active Internet-Draft (individual)",
+      "rfcStream": null,
+      "streamState": "No stream defined",
+      "iesgState": "I-D Exists",
+      "source": "https://datatracker.ietf.org/doc/draft-kott-numina-pair-binding/",
+      "isFreshInThisReview": false
+    },
+    "acceptanceBoundary": "The RFC Editor says the ISE makes the publication decision after editorial/reviewer and applicable IETF conflict-review steps. Draft posting, local proof completion and operational signatures do not establish that decision. No conclusion about unobserved private correspondence.",
+    "nextSteps": [
+      {
+        "order": 1,
+        "action": "Identify and post the exact intended successor Internet-Draft edition, keeping the current frozen PDF separately identified.",
+        "receipt": "Official Datatracker revision and exact posted artifact identities."
+      },
+      {
+        "order": 2,
+        "action": "Complete the existing author-review submission packet with the exact posted filename/category, purpose/audience/significance, related IETF discussion, IANA/IPR statements and independent reviewers.",
+        "receipt": "Author-reviewed template bound to the exact edition; no approval claim."
+      },
+      {
+        "order": 3,
+        "action": "After explicit send/submission authorization, submit that exact template to the ISE and retain its authenticated acknowledgment.",
+        "receipt": "Actual ISE consideration receipt or Datatracker ISE state; acknowledgment is not acceptance."
+      },
+      {
+        "order": 4,
+        "action": "Address commissioned editorial/technical reviews and applicable conflict review, then retain the ISE publication decision and RPC/AUTH48/publication states as separately dated outcomes.",
+        "receipt": "Authoritative ISE decision/official Independent Stream state; no locally manufactured acceptance flag."
+      }
+    ]
+  },
+  "executionPerformed": {
+    "leanRerun": false,
+    "testSuite": false,
+    "mutationCampaign": false,
+    "build": false,
+    "signing": false,
+    "privateKeyAccess": false,
+    "emailOrSubmission": false,
+    "signedSourceChanges": false
+  },
+  "highestValueImmediateStep": "Recover the original public Lean 4.24 parser/extraction source closure and pin the actual companion decoder/eight-finding executable/profile. Then prove the exact raw-wire-to-decoded-view-to-decision bridge, reusing the completed scoped attribution proofs. Independently restore official Datatracker read access and verify the exact publication/ISE state."
+}

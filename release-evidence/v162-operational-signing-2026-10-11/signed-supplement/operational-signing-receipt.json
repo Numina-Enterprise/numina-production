@@ -1,0 +1,87 @@
+{
+  "schema": "numina.exact-delivery-operational-signing-receipt.v1",
+  "signed_at_utc": "2026-10-11T20:33:32.956134+00:00",
+  "purpose": "Separate operational signature event over the completed version 162 primary ZIP checksum/commitment and public verification/migration follow-up; no change to earlier signed bytes.",
+  "algorithm": "pure Ed25519",
+  "framing": "Exact full-file bytes; no canonicalization or prehash",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "request_sha256": "01d4439457149ce8b74802986b1408a33462365e1153a2c31042c1061a38730f",
+  "inventory_sha256": "e7672d7039b1e60a7eda7170a7626e99075ab04040b3a07fbed31bb618076510",
+  "workflow_sha256": "25648a798550743fe2788532e56f4823e4d7b5c90d7f50cc3023528c12175709",
+  "whole_protocol_correctness_established": false,
+  "independent_stream_acceptance_established": false,
+  "existing_workflow_unchanged": true,
+  "key_generated_or_rotated": false,
+  "private_key_exported": false,
+  "custody_mutated": false,
+  "memory_zeroization_guaranteed": false,
+  "python_version": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "cryptography_version": "50.0.2",
+  "documents": [
+    {
+      "path": "README.md",
+      "bytes": 1362,
+      "sha256": "010294b439492f17a4e65668620f5b10df983081e30a462903be1ca19ff99180"
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 1158,
+      "sha256": "2a5e17a2da2bd1905d17d41c6964ebd1fc26f0da627a788b32e3e74b94c8d81a"
+    },
+    {
+      "path": "frozen-stage-blue-review.json",
+      "bytes": 23768,
+      "sha256": "26da2e3d9ecbd9d73f048adc86b13081bce9ebaa772406a0680ca5e2299ccadc"
+    },
+    {
+      "path": "inventory.json",
+      "bytes": 1986,
+      "sha256": "e7672d7039b1e60a7eda7170a7626e99075ab04040b3a07fbed31bb618076510"
+    },
+    {
+      "path": "operational-ed25519-public.raw32",
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+    },
+    {
+      "path": "package-commitment.json",
+      "bytes": 424,
+      "sha256": "85f59e8d5ba6e85be5f2d688e28c44c9893d4d25be65b4e7ec2cf3eab4d0f190"
+    },
+    {
+      "path": "package.sha256",
+      "bytes": 105,
+      "sha256": "04bb1b3e65275dbd13e2ce7045658b6ee8721c2cc4522ea5229cafe493f423c2"
+    },
+    {
+      "path": "primary-package-verification.json",
+      "bytes": 1289,
+      "sha256": "9e829d316445fa4642dc455f56be34bcaf9f72793e9fd52d415a2dcce2990437"
+    },
+    {
+      "path": "salesforce-migration-integration-health.json",
+      "bytes": 4027,
+      "sha256": "e048e7d168f115ff4c343cf0c4f9762df7d81c5d732701e0c44d41e5be8315d7"
+    },
+    {
+      "path": "tools/build-v162-signing-supplement.py",
+      "bytes": 6105,
+      "sha256": "69d87cbd31c0d7ca46e613d285f9c3a7db2988f568b504b1c6414d2a4338b4ae"
+    },
+    {
+      "path": "tools/verify-exact-numina-delivery.py",
+      "bytes": 13060,
+      "sha256": "ac1c9e2a5bee287012113dc44ae75392d6b3a3b86b7cb5cd188a90546fa518bd"
+    },
+    {
+      "path": "tools/verify-numina-v162-completed-wrapper.py",
+      "bytes": 16100,
+      "sha256": "855df6e0db577af08d3b4ed79c2ad7dcecc704c578f5a75635e71d80408a1146"
+    },
+    {
+      "path": "tools/verify-numina-v162-delivery.py",
+      "bytes": 16236,
+      "sha256": "064cb32e19520247d10de1f73a1323358ddf21e69fa8bffed6771c2eaf8168e0"
+    }
+  ]
+}

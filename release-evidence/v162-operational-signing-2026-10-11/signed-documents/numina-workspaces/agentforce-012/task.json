@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-012",
+  "configurationId": "agentforce-012",
+  "team": "deployment",
+  "title": "Inspect project and storage bindings",
+  "nextBestAction": "Compare project, DB, BUCKET and hosting declarations against the canonical configuration.",
+  "target": ".openai_hosting.json and wrangler.jsonc",
+  "priority": 3,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/blue_team_deployment",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-012",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "sites_target",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-012.json",
+    "passCondition": "Receipt records matching bindings or exact differences without changing provider configuration.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

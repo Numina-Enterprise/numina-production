@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-003",
+  "configurationId": "agentforce-003",
+  "team": "proofs",
+  "title": "Pin one companion interpretation",
+  "nextBestAction": "Read governing specification/profile/source imports and distinguish candidate parameters from adopted operational policy.",
+  "target": "SPEC-01",
+  "priority": 1,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-003",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "proof_scope",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-003.json",
+    "passCondition": "Receipt identifies one exact interpretation or precise missing decisions.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

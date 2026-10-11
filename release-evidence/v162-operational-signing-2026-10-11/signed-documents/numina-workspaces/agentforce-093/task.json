@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-093",
+  "configurationId": "agentforce-093",
+  "team": "proofs",
+  "title": "Read bounded theorem assumptions",
+  "nextBestAction": "Read prior131, additional4 and additional12 theorem/audit records as distinct scopes without rerunning Lean.",
+  "target": "retained NCPS compiler/assumption records",
+  "priority": 19,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-093",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "proof_scope",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-093.json",
+    "passCondition": "Receipt states recorded compiler identity, explicit hypotheses and foundational axioms at each scope.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "numina.v162-provider-readback.v1",
+  "observed_at": "2026-10-11T20:21:23.079Z",
+  "source": "Authenticated Sites connector",
+  "deployment": {
+    "id": "appgdep_6acb61aa541c8191ba6b8090bf3f5f9a",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "title": "Numina Labs",
+    "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_6cfe95cdf7908191b4543fb6c6c54fa3",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+    "has_mcp": true,
+    "screenshot_asset_pointer": "sediment://file_000000007b1c81f793b48db3fca12cb9",
+    "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+    "failure_message": null,
+    "env_set_revision": 14,
+    "updated_at": "2026-10-11T10:16:01.205685+00:00"
+  },
+  "version": {
+    "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_6cfe95cdf7908191b4543fb6c6c54fa3",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "version_number": 162,
+    "source": {
+      "commit_sha": "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000e480822fa295ff55bb8fae20",
+      "content_hash": "sha256:ddd80fea0f6a308cdfe6c8316ec230ae37747e0a5a0eba034e5223336714a849",
+      "size_bytes": 45824000,
+      "file_count": 366
+    },
+    "deployment_id": "appgdep_6acb61aa541c8191ba6b8090bf3f5f9a"
+  },
+  "signature_at_observation": false,
+  "provider_archive_bytes_independently_hashed": false
+}
