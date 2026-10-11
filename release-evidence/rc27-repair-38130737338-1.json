@@ -1,0 +1,72 @@
+{
+  "sourceSha": "51a1147708b6e797bdbfd9bc881b0d13410eb4c3",
+  "runId": "38130737338",
+  "runAttempt": "1",
+  "runnerEnvironment": "github-hosted",
+  "runnerName": "GitHub Actions 1000004699",
+  "runnerOS": "Linux",
+  "runnerArch": "X64",
+  "imageOS": "ubuntu24",
+  "imageVersion": "20261004.327.1",
+  "node": "v26.11.1",
+  "python": "Python 3.12.3",
+  "schema": "numina.rc27.repair-evidence.v1",
+  "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/38130737338",
+  "repairBranch": "repair/canonical-downstream-38130737338",
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0
+  },
+  "artifactChecks": {
+    "commands": [
+      "node scripts/source-alignment.mjs",
+      "node scripts/sync-application-release-pin.mjs"
+    ],
+    "exitCode": 0
+  },
+  "fullTestSuiteExecuted": false,
+  "inventories": [
+    {
+      "path": "public/runtime-contract.js",
+      "sha256": "c7c46b7dd6a8589474e01a5377c23d55b5d876531f144f172ae56813ff98653d"
+    },
+    {
+      "path": "integrations/numina/distribution.json",
+      "sha256": "a8ea129fd22e10e2907ebabf3ca25dc083d22583a2495386cd87e8ff12ba7187"
+    },
+    {
+      "path": "integrations/numina/verification.json",
+      "sha256": "50650776b84f73df248dce11a427cc8bb3733349194928797bd5d793242159cd"
+    },
+    {
+      "path": "integrations/numina/file-manifest.json",
+      "sha256": "1ad6b1f4fa49301d3cd4c572126c2347fb2ff4f314b66a91b7cb018b53987c4a"
+    },
+    {
+      "path": "docs/native-package-record-v4.json",
+      "sha256": "ab383f0d7283cf9e8a99a191a7a93a0d8db4ed0bf614acdfa1e1770d89cc580c"
+    },
+    {
+      "path": "docs/numina-os-4.0.0-ios-source.zip",
+      "sha256": "9ab9b8faf1b82417c82f6a6659dda1329c451e5463b22026f31e8d05c5cbe206"
+    },
+    {
+      "path": "runtime/vercel-production/public/downloads/native-package-record-v4.json",
+      "sha256": "ab383f0d7283cf9e8a99a191a7a93a0d8db4ed0bf614acdfa1e1770d89cc580c"
+    },
+    {
+      "path": "runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip",
+      "sha256": "9ab9b8faf1b82417c82f6a6659dda1329c451e5463b22026f31e8d05c5cbe206"
+    }
+  ],
+  "logs": [
+    {
+      "name": "build.log",
+      "sha256": "1c7e38a47cfcc1203cac2082d33d8d66524e1e7b970da2ac7d0380404aa26655"
+    },
+    {
+      "name": "artifact-checks.log",
+      "sha256": "e802aacb5d72dbd384d763f58978899f8ef3d3104cd9ff132c229d7ff4459881"
+    }
+  ]
+}
