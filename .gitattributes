@@ -47,3 +47,9 @@ docs/Receipt-Audit-2026-10-09.md -text
 
 # Preserve final public point checks and authenticated publication observations.
 release-evidence/deployment-2026-10-09/** -text
+
+# Preserve signed evidence bytes and treat detached signatures as binary.
+release-evidence/** -text
+*.ed25519.sig64 binary
+*.raw32 binary
+scripts/build-numina-correctness-reports.py -text

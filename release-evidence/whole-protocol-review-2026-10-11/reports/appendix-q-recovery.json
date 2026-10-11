@@ -1,0 +1,308 @@
+{
+  "schema": "numina.appendix-q.scoped-source-recovery.v1",
+  "scope": "Exact Appendix Q Lean source/dependency recovery; source identities and availability only; no whole-protocol correctness conclusion",
+  "source_identity_reference": "/workspace/scratch/numina-pair-binding-02.txt, Appendix Q/Q.1",
+  "expected_sources": {
+    "PairWireRecovery.lean": {
+      "byte_count": 5568,
+      "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae",
+      "visibility": "public exact signed source",
+      "exact_source_recovered": true
+    },
+    "ParserRefinement.lean": {
+      "byte_count": null,
+      "sha256": null,
+      "visibility": "required direct import; exact identity not in public signed source",
+      "exact_source_recovered": false
+    },
+    "PairExtraction.lean": {
+      "byte_count": null,
+      "sha256": null,
+      "visibility": "required direct import; exact identity not in public signed source",
+      "exact_source_recovered": false
+    },
+    "ActualSchemaKeys.lean": {
+      "byte_count": 14367,
+      "sha256": "a2790bea590086c7903d0d2b92c6c43145b5ad101aad9d2ca369114d7ac7f4f2",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "ActualArrayLengths.lean": {
+      "byte_count": 6577,
+      "sha256": "43d71d446633037afbedbd5e400ea6fbee10eb9567c22a589f2c12bdf3031791",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "StructuralProjection.lean": {
+      "byte_count": 6150,
+      "sha256": "25f0504c087a1f75898c3d0cf27e1524f897928340d1462a21d3689ed52aa87b",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "ActualSchemaProfile.lean": {
+      "byte_count": 9483,
+      "sha256": "9aaf6ac5e6d2db1f033ef218895a6b287e08189c738cb08097aee45db66f51fc",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "ActualStructuralDepth.lean": {
+      "byte_count": 6970,
+      "sha256": "2ffc6238312fc477363023b649699b52fdadc99bffd3667451150d44ca4a9f41",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "ProfileOrderProjection.lean": {
+      "byte_count": 18437,
+      "sha256": "3b7a7195d275e31e9bc76f27be82576d0aa9f0dc2de5f0e6e74eb399ba2c39b7",
+      "visibility": "paper cites reported private full-source identity",
+      "exact_source_recovered": false
+    },
+    "ActualProfileProjection.lean": {
+      "byte_count": 172285,
+      "sha256": "5bf9c134323bbd5c3074a573412d6024dcf97aa87f2dd118f4fc9714bc450518",
+      "visibility": "paper cites reported private full-source identity",
+      "exact_source_recovered": false
+    },
+    "ParserConstructors.lean": {
+      "byte_count": 9623,
+      "sha256": "70f9de1e97a317ae308b6e15d2b3256adce55df8da6b6abf6901b290ee20ab7d",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "GuardExecution.lean": {
+      "byte_count": 8490,
+      "sha256": "04a7ea51932f7483e189e542f210041138e5ca829a42b914ee692f3633038476",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    },
+    "ActualGuardExecution.lean": {
+      "byte_count": 3621,
+      "sha256": "e9edaa9650c42bc99893a30723c17bbc596d9d955b6b98b152e52fa36ee23909",
+      "visibility": "paper cites private source identity",
+      "exact_source_recovered": false
+    }
+  },
+  "requested_toolchain": "Lean 4.24 (historical pair-wire module packet; exact toolchain should be confirmed from recovered original compiler receipt)",
+  "local_filename_inventory": {
+    "root": "/workspace",
+    "scoped_files": 8221,
+    "exact_named_lean_sources_observed": []
+  },
+  "remote_device_id": "e0603b5a-7955-455a-89dd-63bd7406f77b",
+  "remote_inventory_scope": [
+    {
+      "root": "/Users/samuelkott/Downloads",
+      "files": 5549,
+      "exact_module_filenames": [],
+      "scoped_archives": 234
+    },
+    {
+      "root": "/Users/samuelkott/Documents/Numina",
+      "files": 33,
+      "exact_module_filenames": [],
+      "scoped_archives": 1
+    },
+    {
+      "root": "/Users/samuelkott/Documents/GitHub/numina-production",
+      "files": 980,
+      "exact_module_filenames": [],
+      "scoped_archives": 28
+    },
+    {
+      "root": "/Users/samuelkott/Developer",
+      "files": 2384,
+      "exact_module_filenames": [],
+      "scoped_archives": 2
+    }
+  ],
+  "remote_matching_public_packet_inventory": [
+    {
+      "archive": "/Users/samuelkott/Downloads/PairWireRecovery-Ed25519-signed-public-2026-10-09 (1).zip",
+      "archive_size_bytes": 13846,
+      "exact_module_members": [
+        {
+          "name": "PairWireRecovery.lean",
+          "size_bytes": 5568
+        }
+      ]
+    },
+    {
+      "archive": "/Users/samuelkott/Downloads/PairWireRecovery-Ed25519-signed-public-2026-10-09 (3).zip",
+      "archive_size_bytes": 13846,
+      "exact_module_members": [
+        {
+          "name": "PairWireRecovery.lean",
+          "size_bytes": 5568
+        }
+      ]
+    },
+    {
+      "archive": "/Users/samuelkott/Downloads/PairWireRecovery-Ed25519-signed-public-2026-10-09 (2).zip",
+      "archive_size_bytes": 13846,
+      "exact_module_members": [
+        {
+          "name": "PairWireRecovery.lean",
+          "size_bytes": 5568
+        }
+      ]
+    },
+    {
+      "archive": "/Users/samuelkott/Downloads/PairWireRecovery-Ed25519-signed-public-2026-10-09.zip",
+      "archive_size_bytes": 13846,
+      "exact_module_members": [
+        {
+          "name": "PairWireRecovery.lean",
+          "size_bytes": 5568
+        }
+      ]
+    },
+    {
+      "archive": "/Users/samuelkott/Downloads/PairWireRecovery-Ed25519-signed-public-2026-10-09 (4).zip",
+      "archive_size_bytes": 13846,
+      "exact_module_members": [
+        {
+          "name": "PairWireRecovery.lean",
+          "size_bytes": 5568
+        }
+      ]
+    }
+  ],
+  "verified_original_workflow_inventory": [
+    {
+      "root": "/Users/samuelkott/Documents/Codex/2026-09-25/referenced-chatgpt-conversation-this-is-an",
+      "scoped_nonhidden_files": 10608,
+      "direct_exact_source_matches": [
+        {
+          "path": "/Users/samuelkott/Documents/Codex/2026-09-25/referenced-chatgpt-conversation-this-is-an/2026-10-09/task-4/source_download/PairWireRecovery.lean",
+          "size_bytes": 5568,
+          "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae"
+        },
+        {
+          "path": "/Users/samuelkott/Documents/Codex/2026-09-25/referenced-chatgpt-conversation-this-is-an/2026-10-09/task-4/public_source_package/PairWireRecovery.lean",
+          "size_bytes": 5568,
+          "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae"
+        }
+      ],
+      "other_lean_count": 0,
+      "other_lean_filenames": [],
+      "archive_member_inventories": 232,
+      "archive_source_matches": [
+        {
+          "archive": "/Users/samuelkott/Documents/Codex/2026-09-25/referenced-chatgpt-conversation-this-is-an/2026-10-09/task-4/PairWireRecovery-Ed25519-signed-public-2026-10-09.zip",
+          "matching_lean_members": [
+            {
+              "member": "PairWireRecovery.lean",
+              "size_bytes": 5568,
+              "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "targeted_archival_public_source_text_scan": [
+    {
+      "archive": "/Users/samuelkott/Downloads/referenced-chatgpt-conversation-this-is-an-3.zip",
+      "scope": "Public-source text members only; no private/hidden directories, key/custody/token/credential files or conversation dump",
+      "eligible_member_count": 354,
+      "module_reference_hits": [],
+      "exact_source_candidates": []
+    }
+  ],
+  "source_privacy_boundary": "Q.1 explicitly identifies later full Lean/JavaScript sources as private. Authorized review may check exact private sources in place or restricted scratch; no private source was recovered or republished.",
+  "recovered_private_source_count": 0,
+  "source_context_or_conversation_dumped": false,
+  "private_material_accessed": false,
+  "signed_deliverables_modified": false,
+  "original_reviewer_zip_locator": {
+    "library_file_id": "libfile_c2887d73285c819197c5674bc2004de3",
+    "expected_sha256": "08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80",
+    "source_public_readme": "/workspace/outputs/PairWireRecovery-Ed25519-signed-public-2026-10-09.zip!README.txt",
+    "binary_available_in_checked_sources": false
+  },
+  "original_source_locator": {
+    "library_file_id": "libfile_4ec5c077c65481919d3c973ff122aa0d",
+    "verified_local_original_path": "/Users/samuelkott/Documents/Codex/2026-09-25/referenced-chatgpt-conversation-this-is-an/2026-10-09/task-4/source_download/PairWireRecovery.lean"
+  },
+  "direct_library_native_tools_available": false,
+  "required_direct_imports": [
+    "ParserRefinement",
+    "PairExtraction"
+  ],
+  "unavailable_direct_imports": [
+    "ParserRefinement",
+    "PairExtraction"
+  ],
+  "later_named_module_dependency_closure_recovered": false,
+  "fresh_pair_wire_compilation_performed": false,
+  "whole_protocol_pass": false,
+  "status": "exact_public_source_available_but_dependency_closure_unavailable",
+  "limitations": [
+    "A signed exact PairWireRecovery source verifies source bytes; the signature does not carry its imported module closure.",
+    "No ParserRefinement or PairExtraction source was found in the checked sources.",
+    "The three referenced-conversation ZIPs are Numina application source snapshots; no actual conversation export JSON or exact module names were observed.",
+    "A targeted scan of 354 public text members in one retained large archive found no cited module-name references or Lean-source scalars.",
+    "The separate Lean 4.22 NCPS model proof package is not the historical Lean 4.24 pair-wire/schema/order/guard package."
+  ],
+  "next_verifiable_step": "Retrieve the original reviewer ZIP libfile_c2887d73285c819197c5674bc2004de3 through an authorized binary Library route, match SHA256 08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80, and inspect its exact imported-module closure before compilation.",
+  "checked_at_utc": "2026-10-11T04:33:41.812493+00:00",
+  "recovered_exact_public_source": {
+    "zip": "/workspace/outputs/PairWireRecovery-Ed25519-signed-public-2026-10-09.zip",
+    "zip_sha256": "889aa0f181e587e7b4a2acf1e056b5171794b0040c1f5da13f7c006c76029659",
+    "preserved_public_material": [
+      {
+        "path": "/workspace/scratch/numina-whole-protocol/appendix-q-recovered-public/PairWireRecovery.lean",
+        "bytes": 5568,
+        "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae",
+        "visibility": "Published source or public verification material"
+      },
+      {
+        "path": "/workspace/scratch/numina-whole-protocol/appendix-q-recovered-public/PairWireRecovery.lean.sig",
+        "bytes": 64,
+        "sha256": "5cc399a63f6656979773ed5f8838025131ff8c197fb4d717aa3283b147c2d0e2",
+        "visibility": "Published source or public verification material"
+      },
+      {
+        "path": "/workspace/scratch/numina-whole-protocol/appendix-q-recovered-public/operational_ed25519_public.raw",
+        "bytes": 32,
+        "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+        "visibility": "Published source or public verification material"
+      }
+    ],
+    "exact_paper_source_identity_matched": true,
+    "theorem_declaration_count": 15,
+    "definition_declaration_count": 2,
+    "theorem_names": [
+      "recovery_pipeline_eq_parser",
+      "recovery_exact_wire",
+      "accepted_occurrences_recover_wire",
+      "recovery_success_iff",
+      "recovery_failure_iff",
+      "ordered_occurrences_unique_wire",
+      "encoded_pair_recovery",
+      "duplicate_occurrences_recover_wire",
+      "empty_pair_recovery",
+      "occurrence_set_swap",
+      "extraction_swap",
+      "swapped_wires_distinct",
+      "set_extraction_not_injective",
+      "extractor_excludes_success_empty_set",
+      "generic_erasure_collision"
+    ],
+    "definition_names": [
+      "recoverWire",
+      "recoveredWire"
+    ],
+    "direct_imports": [
+      "ParserRefinement",
+      "PairExtraction"
+    ],
+    "source_signature_verified": true,
+    "altered_source_rejected": true,
+    "public_key_raw_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+    "python_version": "3.12.14",
+    "cryptography_version": "50.0.0",
+    "compilation_performed": false
+  },
+  "library_retrieval_limitation": "No generic Library/FileService binary downloader available. Pages read_page_reference requires an observed accessible page and does not support arbitrary archives."
+}

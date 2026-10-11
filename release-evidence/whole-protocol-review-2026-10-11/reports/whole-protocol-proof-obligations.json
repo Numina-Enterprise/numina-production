@@ -1,0 +1,692 @@
+{
+  "schema": "numina-whole-protocol-proof-obligations/v1",
+  "assessment_date_utc": "2026-10-11",
+  "status": "bounded_model_progress_verified_whole_protocol_obligations_open",
+  "whole_protocol_pass": false,
+  "complete_protocol_correctness_established": false,
+  "assessment_scope": "Recovered NCPS Lean4.22.0 source bundle, freshly kernel checked at trust0; manuscript draft-kott-numina-pair-binding-02 original104-page edition and recovered PairWireRecovery source. Source originals and existing signed delivery artifacts preserved.",
+  "evidence": {
+    "recovered_source_zip": {
+      "path": "/workspace/outputs/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    "fresh_original_verification": {
+      "path": "/workspace/scratch/ncps-proof-verification-final.json",
+      "sha256": "4b7bc3df2edd2865eb31d58f91c83f7023c5d2cb65d6f6f2a94eb4ed42435772",
+      "compiled_units": 12,
+      "named_theorems_audited": 131,
+      "trust_level": 0,
+      "custom_axioms": 0,
+      "sorryAx": 0,
+      "originals_unchanged": true
+    },
+    "all_theorem_premises": {
+      "path": "/workspace/scratch/numina-whole-protocol/RecoveredTheoremPremises.json",
+      "bytes": 49651,
+      "sha256": "5e69324c754c59b9139830d4b4c2efc588d3f7d7fec6919a1f3d23f08cc5b304",
+      "exact_namespace_qualified_theorem_set_matches_audit": true
+    },
+    "compiler": {
+      "version": "Lean4.22.0",
+      "commit": "ba2cbbf09d4978f416e0ebd1fceeebc2c4138c05",
+      "platform": "arm64-apple-darwin23.6.0",
+      "path": "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean"
+    },
+    "existing_foundational_axioms": {
+      "union": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "theorem_dependency_counts": {
+        "propext": 60,
+        "Quot.sound": 22,
+        "Classical.choice": 2
+      },
+      "classical_choice_declarations": [
+        "NCPS.length_zero_iff",
+        "NCPS.Utf8.reject_any_bom_prefixed"
+      ],
+      "note": "Logical dependencies are disclosed. They are distinct from explicit theorem hypotheses and from computational cryptographic assumptions."
+    },
+    "fresh_v156_historical_execution": {
+      "artifacts": {
+        "v156-source-commitment-verification.json": {
+          "path": "/workspace/scratch/v156-source-commitment-verification.json",
+          "bytes": 2892,
+          "sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2"
+        },
+        "v156-provider-observation-2026-10-11.json": {
+          "path": "/workspace/scratch/v156-provider-observation-2026-10-11.json",
+          "bytes": 1940,
+          "sha256": "8a508c380f8a9bf85c072ad4e19032775a1014c6ade4e35e1fb1158dd5da1169"
+        }
+      },
+      "historical_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+      "selected_historical_source_commitments_verified": true,
+      "original_digest_function_executed": true,
+      "historical_four_binding_cells_consistent": true,
+      "exact_scope": "Historicalpublicfinal-build/final-manifest sorted source-payload projections under original scripts/production-pair.mjs#pairSourceHash; current-environments recordedbinding consistency.",
+      "source_archive_bytes_independently_hashed": false,
+      "actual_current_companion_source_equality_verified": false,
+      "operational_Ed25519_deployment_receipt_verified": false,
+      "protocol_profile_is_numina_pair_binding_v1": false,
+      "whole_v156_pass": false,
+      "note": "This fresh historical reproduction closes the older manuscript source-unavailability limitation for the selected checked commitments. It does not supply a formal resolver/SHA implementation proof, provider archive-byte equality or companion current-state/deployment evidence."
+    }
+  },
+  "bounded_new_proofs": {
+    "source_path": "/workspace/scratch/numina-whole-protocol/NCPSModelClosure.lean",
+    "remote_source_path": "/private/tmp/ncps-independent-recheck-20261011-fndn1lhh/NCPSModelClosure.lean",
+    "source_bytes": 2656,
+    "source_sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8",
+    "frozen": true,
+    "verification_path": "/workspace/scratch/numina-whole-protocol/NCPSModelClosure-verification.json",
+    "verification_sha256": "ff14e73206d01df8c7ad23306d8d756282209ea7313f2f618f9d4e9b1c9ec573",
+    "axiom_stdout_path": "/workspace/scratch/numina-whole-protocol/NCPSModelClosure-audit.log",
+    "axiom_stdout_sha256": "793a71cda57131492622d9941d87b01216621dca287e023dfa2f0e450b0eb584",
+    "compiler_exit_code": 0,
+    "trust_level": 0,
+    "custom_axioms": 0,
+    "sorryAx": 0,
+    "declarations": [
+      {
+        "name": "NCPS.ModelClosure.evaluate_eq_true_iff_accepts",
+        "proved_statement": "The recovered seven-field Bool evaluator returns true exactly when its own declarative Accepts predicate holds.",
+        "axioms": [
+          "propext"
+        ],
+        "scope": "Model gate correspondence only; report flags are not shown to reflect actual external findings."
+      },
+      {
+        "name": "NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts",
+        "proved_statement": "That model evaluator returns false exactly when its own declarative Accepts predicate does not hold.",
+        "axioms": [
+          "propext"
+        ],
+        "scope": "Does not implement the manuscript's separate invalid, pending, unverified and accepted diagnostic result contract."
+      },
+      {
+        "name": "NCPS.ModelClosure.framed_encode_injective",
+        "proved_statement": "For a fixed byte tag and supplied codec with a proven RoundTrip witness, framing after encoding is injective.",
+        "axioms": [
+          "propext"
+        ],
+        "scope": "Conditional on the codec witness; neither concrete JCS nor the exact domain-tag literal is instantiated."
+      },
+      {
+        "name": "NCPS.ModelClosure.extensional_pair_set_not_injective",
+        "proved_statement": "Mapping an ordered byte pair to the membership predicate of its extraction set is not injective:([], [zeroByte]) and([zeroByte], []) collide.",
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "scope": "Confirms an already disclosed manuscript boundary. It is not a flaw in the ordered payload/ordered-occurrence scheme."
+      }
+    ],
+    "second_isolated_rerun_and_review": {
+      "status": "PASS_BOUNDED_MODEL_EXTENSION",
+      "method": "Second agent extracted frozen sourceZIP into a separate new Mac scratch directory and recompiled all12base units plus four-theorem extension using the same pinned native compiler at trust0. Fresh base and extension axiom outputs matched exactly.",
+      "qualification": "Independent rerun within the same connected environment; not an external third-party certification.",
+      "artifacts": {
+        "independent-compiler-check.json": {
+          "path": "/workspace/scratch/numina-whole-protocol/independent-compiler-check.json",
+          "bytes": 22974,
+          "sha256": "0212bfb89153b5525c3b7b9eea38766fd4fb5f43e88a0d5206de9c30a44ed5ed"
+        },
+        "independent-proof-review.json": {
+          "path": "/workspace/scratch/numina-whole-protocol/independent-proof-review.json",
+          "bytes": 12749,
+          "sha256": "c9c15d2385aa94117c57cc1ff674a0099cd7fa637880a946fb12b46e6d058b02"
+        }
+      }
+    }
+  },
+  "target_theorems": {
+    "input": "Untrusted wire bytes plus an independently supplied environment/context containing the pinned interpretation/profile/schema/hash and signature policies, expected project/release/role/source scope, authenticated trust store, original-artifact access, authenticated current-state evidence, authorized private mapping where required, observation time and resource budgets.",
+    "output": "A structured decision record naming the exact validated payload and digests, all eight manuscript findings with evidence/reasons, exact verifier/policy versions, cache age where relevant, and lifecycle/verdict state.",
+    "soundness": "For every context and wire, if the concrete implementation returns ACCEPT for a target, there exists one payload parsed and validated from that wire; its canonical bytes and framed message are exact, its signature matches the selected acceptance predicate, its key/scope are independently authorized, both commitments reproduce, required current-source/freshness/private-linkage predicates hold, and the output findings refer to that same target under that same context.",
+    "completeness": "For every valid wire/context with all required evidence available, if every selected specification acceptance condition holds and no applicable revocation/conflict/resource failure exists, the implementation returns ACCEPT for that target. Unavailable required evidence must produce an explicit incomplete result.",
+    "refinement": "A proof-carrying map from the actual implementation state/transition semantics to the exact abstract protocol preserves initialization and every step or declared stutter; the abstract safety invariants imply accepted outputs are sound and unauthorized/replayed/conflicting/invalid inputs never gain acceptance.",
+    "resource_behavior": "For bounded inputs the implementation terminates within the selected model's resource semantics or returns a specified incomplete/error result without manufacturing pass evidence.",
+    "cryptographic_authenticity": "Any computational claim that acceptance implies signer-origin or collision-free commitment association must identify a probabilistic adversary/game and explicit hardness assumptions. Deterministic verification correctness alone does not prove unforgeability or provenance.",
+    "scope_limit": "Formal protocol correctness cannot prove the signer's scientific/attribution statement true, legal identity, live deployment or actual source availability from self-reported flags."
+  },
+  "obligations": [
+    {
+      "id": "SPEC-01",
+      "priority": 1,
+      "status": "open",
+      "title": "Pin one complete interpretation and profile",
+      "depends_on": [],
+      "precise_goal": "Define the exact specification objects consumed by run: governing source/import closure, closed schema, source/hash-profile registry, signature-policy predicate, trust/revision/private-resolution policy, bounds and lifecycle semantics. Prove all references resolve uniquely to these pinned objects.",
+      "available_support": [
+        "NCPS.Advanced.resolve",
+        "NCPS.Advanced.duplicate_symbols_rejected",
+        "NCPS.Advanced.same_release_is_equal"
+      ],
+      "gap": "Recovered definitions are generic. Candidate16KiB/depth8 and older1MiB/depth64 profiles are distinct; the manuscript's signature-policy proposal remains NOT ADOPTED.",
+      "next_action": "Materialize an exact public specification packet and dependency manifest for one target edition. Candidate correctness can be proved for explicitly fixed parameters without claiming operational adoption.",
+      "manuscript_sections": [
+        "3",
+        "4",
+        "15.10",
+        "15.13.1",
+        "AppendixQ"
+      ]
+    },
+    {
+      "id": "DEPENDENCY-01",
+      "priority": 1,
+      "status": "open",
+      "title": "Recover and verify exact intended Lean dependency closure",
+      "depends_on": [
+        "SPEC-01"
+      ],
+      "precise_goal": "Hash-bind every imported source/compiled module, Std/compiler version and axiom audit to the exact proof target; compile the whole graph at trust0; match all declared theorem names to audits; prove final witnesses are from this graph.",
+      "available_support": [
+        "Fresh4.22.0 bundle compilation and131-declaration audit"
+      ],
+      "gap": "Distinct4.24.0 corrected core/pair-wire/structural packages are incompletely recovered. Matching names or historical counts cannot replace exact sources.",
+      "next_action": "Recover the original pair-wire engineering ZIP and exact AppendixQ packets; verify identities before compiling with native pinned4.24.0. Do not substitute4.22 namespaces or synthesize missing imports."
+    },
+    {
+      "id": "PARSE-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Actual strict intake and closed schema",
+      "depends_on": [
+        "SPEC-01",
+        "DEPENDENCY-01"
+      ],
+      "precise_goal": "Prove actual parseStrict/validate soundness and completeness for UTF8, decoded Unicode, duplicate detection before discard, exact nested key sets/types, source-order constraints, revision bounds, predecessor/null rules, approved identifiers and stated limits.",
+      "available_support": [
+        "NCPS.extract_accepted_iff",
+        "NCPS.Utf8.decode_success_implies_no_bom",
+        "NCPS.Utf8.decode_success_implies_valid_utf8",
+        "NCPS.Utf8.allowed_scalar_no_noncharacter"
+      ],
+      "gap": "ParserProfile supplies arbitrary parses/occurrences functions. UTF8 boundary delegates String.fromUTF8? and does not prove full JSON escaping, JCS or implementation behavior; partial4.24 key/array/structure sources are missing.",
+      "next_action": "Implement or recover one concrete bounded parser and validators, define their grammar/semantics and prove rejection/acceptance correspondence before composing with the gate.",
+      "manuscript_sections": [
+        "3",
+        "6.1",
+        "16.8"
+      ]
+    },
+    {
+      "id": "ATTRIBUTION-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Preserve all eight semantic findings",
+      "depends_on": [
+        "SPEC-01",
+        "PARSE-01"
+      ],
+      "precise_goal": "Specify and prove attribution-map validity separately from schema validity, then define a proved mapping from the concrete eight-finding decision record to any abstract gate model; prove no required finding is dropped or silently folded.",
+      "available_support": [
+        "NCPS.Advanced.VerificationReport",
+        "NCPS.ModelClosure.evaluate_eq_true_iff_accepts"
+      ],
+      "gap": "Manuscript\u00a76 names eight findings. Recovered VerificationReport has seven fields and no separate attribution-map field. Gate equivalence is therefore not yet correspondence to the full manuscript result schema.",
+      "next_action": "Extend a successor model or provide an explicit justified embedding with a proved attribution invariant; preserve existing frozen source and signed delivery.",
+      "manuscript_sections": [
+        "6",
+        "6.3"
+      ]
+    },
+    {
+      "id": "PAIR-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Concrete ordered-pair recovery and association",
+      "depends_on": [
+        "PARSE-01",
+        "DEPENDENCY-01"
+      ],
+      "precise_goal": "For actual source A/B input and record construction, prove the source order, identifiers and commitment/attribution fields refer to the same ordered pair. Use an order-preserving representation; prove exact roundtrip/canonical accepted-wire converse.",
+      "available_support": [
+        "NCPS.tagged_equivalence_left",
+        "NCPS.tagged_equivalence_right",
+        "RecoveredPairWireRecovery.lean15theoremsnotyetrecompiled",
+        "NCPS.ModelClosure.extensional_pair_set_not_injective"
+      ],
+      "gap": "The extensional extraction set loses order and duplicate multiplicity. Exact PairWireRecovery direct imports are absent. Its candidate typed pair codec does not instantiate actual NCPS JSON/payload semantics.",
+      "next_action": "Recover ParserRefinement and PairExtraction closure, compile the exact concrete recovery unit, and add a separately proved bridge from that codec to the chosen signed record field semantics.",
+      "manuscript_sections": [
+        "4",
+        "6",
+        "16.6.3",
+        "16.6.4"
+      ]
+    },
+    {
+      "id": "JCS-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Exact canonical record bytes",
+      "depends_on": [
+        "PARSE-01",
+        "PAIR-01"
+      ],
+      "precise_goal": "Instantiate the actual record codec and prove C=UTF8(JCS(payload)) exactly, canonical roundtrip and uniqueness on allowed payloads, UTF16 key ordering, array/string preservation, number behavior and absence of BOM/trailing newline.",
+      "available_support": [
+        "NCPS.Advanced.canonical_roundtrip",
+        "NCPS.Advanced.canonical_serialization_injective",
+        "NCPS.Advanced.sample_codec_roundtrip"
+      ],
+      "gap": "Generic RoundTrip is an explicit premise. The only concrete recovered codec is an illustrative leading-tag binary SampleRecord, explicitly not JCS.",
+      "next_action": "Prove a concrete bounded JCS implementation against exact selected value/scalar semantics, or integrate an independently established formal implementation with a proved adapter. Finite fixtures supplement but do not establish universal correspondence.",
+      "manuscript_sections": [
+        "4",
+        "AppendixM"
+      ]
+    },
+    {
+      "id": "FRAME-01",
+      "priority": 3,
+      "status": "open_concrete_instantiation",
+      "title": "Exact pure-Ed25519 signed message",
+      "depends_on": [
+        "JCS-01"
+      ],
+      "precise_goal": "Prove M=ASCII(NUMINA-PAIR-BINDING/V1)||0x00||C, with the22ASCII-byte literal plus one separator, no extra bytes and pure Ed25519 rather than application prehash/Ed25519ctx.",
+      "available_support": [
+        "NCPS.frame_injective",
+        "NCPS.Advanced.frame_length",
+        "NCPS.ModelClosure.framed_encode_injective",
+        "Previously reproduced AppendixM finite fixture"
+      ],
+      "gap": "Fixed-tag generic injectivity is proved; exact concrete payload codec/literal-to-runtime preimage bridge remains unproved. Fixed-tag injectivity does not establish separation across arbitrary different byte tags; any cross-protocol tag-registry uniqueness/separator constraints require their own specification and proof.",
+      "next_action": "Instantiate the literal bytes and concrete codec, prove executable preimage equality and provider-call message identity, then add byte-level positive/tamper/cross-domain regression vectors.",
+      "manuscript_sections": [
+        "4",
+        "AppendixM"
+      ]
+    },
+    {
+      "id": "ED25519-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Verification acceptance predicate and implementation correspondence",
+      "depends_on": [
+        "SPEC-01",
+        "FRAME-01"
+      ],
+      "precise_goal": "Define exact raw-key/signature decoding, canonical scalar/point rules, small-order/subgroup/cofactor handling and signature equation; prove concrete provider/native verifier returns true iff the selected mathematical predicate holds on the exact M.",
+      "available_support": [
+        "Historicalpublic-onlysignaturechecks",
+        "Publicpinpointdecompressioncheck"
+      ],
+      "gap": "No recovered Lean module implements Ed25519 verification or proves provider correspondence. Policy remains a NOT ADOPTED proposal, and observed165provider disagreements/finite919case comparisons expose that provider naming alone is insufficient.",
+      "next_action": "Fix the predicate and pinned adapter, recover policy/corpus bytes, reconcile every negative/edge expectation and obtain a proof or a separately documented trusted implementation boundary. Do not replace the missing proof with a custom axiom.",
+      "manuscript_sections": [
+        "4",
+        "15.13.1",
+        "16.3"
+      ]
+    },
+    {
+      "id": "TRUST-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Independent key, role and scope authorization",
+      "depends_on": [
+        "SPEC-01",
+        "ED25519-01"
+      ],
+      "precise_goal": "Prove accepted key_id matches the raw-key fingerprint under the selected profile and the authenticated trust entry permits exact project/release/source/role at the selected validity/revocation times; reject out-of-scope keys even with valid signatures.",
+      "available_support": [
+        "NCPS.Advanced.accepted_authority_valid",
+        "NCPS.Advanced.signature_alone_not_acceptance",
+        "NCPS.Advanced.untrusted_signature_rejected"
+      ],
+      "gap": "Current theorems project or reject modeled flags; no concrete authenticated trust-store resolver or authorization semantics is instantiated.",
+      "next_action": "Define trusted-input authenticity boundary, trust-entry parser and scope checks, prove their decision soundness, and obtain operational trust receipts separately.",
+      "manuscript_sections": [
+        "5",
+        "6.1"
+      ]
+    },
+    {
+      "id": "SOURCE-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Source reproduction and current equality",
+      "depends_on": [
+        "SPEC-01",
+        "PAIR-01",
+        "JCS-01"
+      ],
+      "precise_goal": "Prove selected historical normalization/hash computations operate on exact resolved artifacts, compare both ordered commitments, and keep current canonical-source equality as a distinct predicate backed by independently authenticated immutable identity.",
+      "available_support": [
+        "NCPS.Advanced.accepted_sources_valid",
+        "NCPS.Advanced.accepted_current_source_when_required",
+        "NCPS.Advanced.genesis_congruent",
+        "Freshv156historicalselectedcommitmentexecutionreport; bothhistoricalcommitmentsmatchedandbindingcellsconsistent"
+      ],
+      "gap": "No concrete companion artifact/hash-profile resolver, formal SHA256 implementation bridge or current-companion-source proof is supplied. Hash equality is not an unconditional proof of source equality. The older PDF v156 source-unavailability statement is historical: selected historical v156 commitments have now been freshly reproduced successfully, as pinned in this assessment. Their universal-pair.production.v1 profile remains distinct from numina.pair-binding.v1.",
+      "next_action": "Preserve completed selected historical commitment reproduction; obtain exact artifacts for the actual companion target, prove normalization/digest/resolver correspondence and independent current-source identity. State collision resistance only as an explicit computational assumption where required.",
+      "manuscript_sections": [
+        "6.1",
+        "16.7"
+      ],
+      "historical_execution_subgap": {
+        "status": "closed_for_selected_historical_v156_projection",
+        "evidence": {
+          "path": "/workspace/scratch/v156-source-commitment-verification.json",
+          "bytes": 2892,
+          "sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2"
+        },
+        "both_selected_historical_commitments_match": true,
+        "qualification": "Originalhistoricaldigestfunctionexecuted; no fullverifier/regeneration/build or currentcompanion equality is claimed."
+      },
+      "remaining_execution_limits": [
+        "Provider-reported49,070,080Barchivebytesnotretrieved/independentlyhashed",
+        "Freshproviderobservationisunsignedauthenticatedmetadata",
+        "NoactualoperationalEd25519finaldeploymentreceipt",
+        "Noexternal/current-stateattestationorwholev156pass"
+      ]
+    },
+    {
+      "id": "STATE-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Authenticated revision/replay/conflict lifecycle",
+      "depends_on": [
+        "SPEC-01",
+        "TRUST-01",
+        "SOURCE-01"
+      ],
+      "precise_goal": "Instantiate current-state authority and transition system; prove predecessor links, monotonic update rules, revocation, same-revision conflict preservation, cache-age rules and stale/rollback/fork rejection; acceptance requires authenticated current binding/revision/payload digest.",
+      "available_support": [
+        "NCPS.Advanced.reachable_maps",
+        "NCPS.Advanced.safety_preserved",
+        "NCPS.refinement_preserves_invariant"
+      ],
+      "gap": "Only generic proof-carrying refinement and an integer-counter example exist. A timestamp or predecessor digest alone cannot establish current branch. No actual NCPS state-to-runtime refinement witness exists.",
+      "next_action": "Define concrete binding/journal state and transitions, prove initialization/step simulation and inductive invariants, then test concurrency/recovery under the exact implementation. Specify fairness/progress separately for any liveness claim.",
+      "manuscript_sections": [
+        "6.2",
+        "9",
+        "16.6"
+      ]
+    },
+    {
+      "id": "PRIVATE-01",
+      "priority": 3,
+      "status": "open_if_policy_requires",
+      "title": "Authorized private mapping semantics",
+      "depends_on": [
+        "SPEC-01",
+        "TRUST-01"
+      ],
+      "precise_goal": "Prove permitted opaque references resolve only through an authenticated authorized mapping/version and missing/denied evidence remains unverified; public input cannot choose arbitrary resolver locations.",
+      "available_support": [
+        "NCPS.Advanced.accepted_private_when_required",
+        "NCPS.Advanced.unverified_private_not_acceptance_when_required"
+      ],
+      "gap": "Recovered model only checks a privateResolution flag. No authenticated resolver/mapping implementation or receipt is recovered. Mapping association does not prove inverse genesis derivation or unique common origin.",
+      "next_action": "Specify resolver interface/access-control/output evidence and prove decision behavior under supplied authenticated mapping, then obtain authorized operational mapping evidence separately.",
+      "manuscript_sections": [
+        "6.1",
+        "7"
+      ]
+    },
+    {
+      "id": "DECISION-01",
+      "priority": 2,
+      "status": "open_concrete_semantics",
+      "title": "Structured verdicts, closure and failure dominance",
+      "depends_on": [
+        "ATTRIBUTION-01",
+        "ED25519-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "precise_goal": "Prove null signature yields unsigned pending, malformed/failing signature yields invalid, diagnostic findings remain distinct, failure dominates and unavailable/pending/blocked/crashed/incomplete never yields signed acceptance; every mandatory closure stage is Finished(Pass) for the pinned target.",
+      "available_support": [
+        "NCPS.ModelClosure.evaluate_eq_true_iff_accepts",
+        "NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts",
+        "NCPS.Advanced.blocked_stage_prevents_closure",
+        "NCPS.Advanced.current_evidence_not_full_pass"
+      ],
+      "gap": "Modeled flags and FullProtocolPass conjunction do not demonstrate completion/soundness of actual check execution. The recovered report has seven rather than eight findings and closure statuses omit execution lifecycle states.",
+      "next_action": "Define an executable structured result/lifecycle type and connect each check's actual semantics to a finding before proving aggregate soundness/completeness.",
+      "manuscript_sections": [
+        "6.3",
+        "15.7"
+      ]
+    },
+    {
+      "id": "RUNTIME-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Actual executable/state refinement and source-to-binary linkage",
+      "depends_on": [
+        "DEPENDENCY-01",
+        "PARSE-01",
+        "JCS-01",
+        "ED25519-01",
+        "STATE-01",
+        "DECISION-01"
+      ],
+      "precise_goal": "Construct a refinement/conformance witness for the exact implementation and build; prove wire intake, validation, message construction, cryptography, evidence resolution and decision output agree with the exact specification, and resource failures preserve incomplete outcomes.",
+      "available_support": [
+        "NCPS.Advanced.conforming_implementations_agree",
+        "NCPS.Advanced.conforms_iff_observational_equality",
+        "NCPS.Advanced.safety_preserved"
+      ],
+      "gap": "Conforms and Refinement are supplied premises, not discharged implementation theorems. Existing repository release-envelope verification signs canonical{artifact_type,key_id,payload}; it must not be identified with the distinct NUMINA-PAIR-BINDING/V1 companion preimage.",
+      "next_action": "Select actual companion implementation source/build, define semantics/adapters and prove each bridge. Pin native toolchain/binary/dependencies; independently validate without promoting sampled test agreement to universal proof.",
+      "manuscript_sections": [
+        "8",
+        "16.6",
+        "16.8"
+      ],
+      "related_repository_sources": [
+        "/workspace/numina-production/public/runtime-release-model.js:40",
+        "/workspace/numina-production/public/runtime-release-model.js:58"
+      ]
+    },
+    {
+      "id": "OPERATIONAL-01",
+      "priority": 3,
+      "status": "separate_evidence_open",
+      "title": "Field deployment and reality correspondence",
+      "depends_on": [
+        "RUNTIME-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "precise_goal": "Obtain exact deployed source/build/environment/operator identities, actually accepted companion bytes, independent trust/current-state/resolver outputs, observed usage and revocation/recovery/failure receipts for a declared interval.",
+      "available_support": [
+        "Historicalsignedmanuscriptandobservationpackages",
+        "Boundedformalproofreports"
+      ],
+      "gap": "No abstract theorem, signed manuscript, sourceZIP, succeeded metadata or website availability proves these live facts. These are evidence obligations, not custom Lean axioms.",
+      "next_action": "Conduct authorized operational validation with reproducible receipts after the concrete protocol has been implemented and approved for the selected environment.",
+      "manuscript_sections": [
+        "8",
+        "10"
+      ]
+    }
+  ],
+  "known_impossible_or_invalid_strengthenings": [
+    {
+      "claim": "An extensional extraction set uniquely identifies an ordered pair.",
+      "result": "False; fresh Lean counterexample verifies order loss. The manuscript already discloses this and uses ordered occurrences for recovery."
+    },
+    {
+      "claim": "SHA256 equality universally implies equality of arbitrary source byte sequences.",
+      "result": "False as an unconditional injectivity statement for unbounded inputs and fixed-size output. Use exact bytes or state a bounded/computational collision-resistance premise."
+    },
+    {
+      "claim": "A mathematically valid signature proves independent signer authorization or truth of signed attribution.",
+      "result": "Unsupported; recovered model itself proves a valid-signature/untrusted-authority report is not accepted."
+    },
+    {
+      "claim": "Signed timestamp/predecessor identifies the latest/current branch.",
+      "result": "Unsupported without independently authenticated current-state and conflict/revocation policy."
+    },
+    {
+      "claim": "FullProtocolPass fields set to pass establish actual whole protocol correctness.",
+      "result": "A conjunction of asserted status values proves properties of that model only; actual check semantics and runtime refinement are separate obligations."
+    }
+  ],
+  "missing_manuscript_dependencies": {
+    "recovered_exact_source": {
+      "filename": "PairWireRecovery.lean",
+      "bytes": 5568,
+      "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae",
+      "package_path": "/workspace/outputs/PairWireRecovery-Ed25519-signed-public-2026-10-09.zip",
+      "status": "source_hash_matched_dependencies_not_recompiled"
+    },
+    "missing_direct_imports": [
+      "ParserRefinement.lean",
+      "PairExtraction.lean"
+    ],
+    "additional_named_core_source": "ReferenceNCPSCore.lean",
+    "seven_inherited_module_closure": "Manuscript states seven inherited modules but does not enumerate every filename/hash. Other identities must be recovered from the original engineering packet rather than invented from namespaces.",
+    "original_engineering_packet_locator": {
+      "library_id": "libfile_c2887d73285c819197c5674bc2004de3",
+      "declared_zip_sha256": "08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80",
+      "bytes_recovered_here": false
+    },
+    "missing_Appendix_Q_sources": [
+      {
+        "filename": "ActualSchemaKeys.lean",
+        "bytes": 14367,
+        "sha256": "a2790bea590086c7903d0d2b92c6c43145b5ad101aad9d2ca369114d7ac7f4f2"
+      },
+      {
+        "filename": "ActualArrayLengths.lean",
+        "bytes": 6577,
+        "sha256": "43d71d446633037afbedbd5e400ea6fbee10eb9567c22a589f2c12bdf3031791"
+      },
+      {
+        "filename": "StructuralProjection.lean",
+        "bytes": 6150,
+        "sha256": "25f0504c087a1f75898c3d0cf27e1524f897928340d1462a21d3689ed52aa87b"
+      },
+      {
+        "filename": "ActualSchemaProfile.lean",
+        "bytes": 9483,
+        "sha256": "9aaf6ac5e6d2db1f033ef218895a6b287e08189c738cb08097aee45db66f51fc"
+      },
+      {
+        "filename": "ActualStructuralDepth.lean",
+        "bytes": 6970,
+        "sha256": "2ffc6238312fc477363023b649699b52fdadc99bffd3667451150d44ca4a9f41"
+      },
+      {
+        "filename": "ProfileOrderProjection.lean",
+        "bytes": 18437,
+        "sha256": "3b7a7195d275e31e9bc76f27be82576d0aa9f0dc2de5f0e6e74eb399ba2c39b7",
+        "manuscript_status": "reported"
+      },
+      {
+        "filename": "ActualProfileProjection.lean",
+        "bytes": 172285,
+        "sha256": "5bf9c134323bbd5c3074a573412d6024dcf97aa87f2dd118f4fc9714bc450518",
+        "manuscript_status": "reported"
+      },
+      {
+        "filename": "ParserConstructors.lean",
+        "bytes": 9623,
+        "sha256": "70f9de1e97a317ae308b6e15d2b3256adce55df8da6b6abf6901b290ee20ab7d"
+      },
+      {
+        "filename": "GuardExecution.lean",
+        "bytes": 8490,
+        "sha256": "04a7ea51932f7483e189e542f210041138e5ca829a42b914ee692f3633038476"
+      },
+      {
+        "filename": "ActualGuardExecution.lean",
+        "bytes": 3621,
+        "sha256": "e9edaa9650c42bc99893a30723c17bbc596d9d955b6b98b152e52fa36ee23909"
+      }
+    ],
+    "missing_other_exact_units": [
+      "CorrectedLean4.24.0core95theorems/239auditeddeclarationsfullsourceidentityanddependencyclosure",
+      "Actual4.24compilerreceipt/transcript/dependency/toolchainpacketsforpair-wireandstructuralgroups",
+      "Pinnedsignature-policyproposal/adapter/corpuspacketandadoptiondecision",
+      "Concretecompanionimplementationandformalruntimebridge"
+    ],
+    "searched_scope": [
+      "MacDocuments/Numina",
+      "Mac/private/tmp/ncps-lean4-checkexcludingvendoredtoolchain",
+      "Mac/private/tmp/ncps-proof-release-20261009-gpt6-01",
+      "LoosefilesandpublicZIPmembersunder/workspace/outputsand/workspace/scratch"
+    ],
+    "search_limitation": "Bounded artifact searches do not prove absence elsewhere. Existing Library ID is a recovery route, not proof its bytes were retrieved.",
+    "note": "Distinct4.24.0 package identities cannot be substantiated by this4.22.0 source bundle; do not sum inherited theorem counts."
+  },
+  "actionable_sequence": [
+    {
+      "step": 1,
+      "action": "Recover exact pair-wire engineering packet via its existing Library locator and the remaining AppendixQ source/receipt packets; verify every printed hash and complete import graph.",
+      "closes": [
+        "DEPENDENCY-01"
+      ],
+      "does_not_close": [
+        "ED25519-01",
+        "RUNTIME-01",
+        "OPERATIONAL-01"
+      ]
+    },
+    {
+      "step": 2,
+      "action": "Fix a complete explicit companion interpretation/profile and concrete eight-finding/lifecycle schema; define a target run/context/decision specification.",
+      "closes": [
+        "SPEC-01",
+        "ATTRIBUTION-01"
+      ],
+      "qualification": "Definition alone is not proof of implementation correctness."
+    },
+    {
+      "step": 3,
+      "action": "Prove concrete bounded intake, ordered payload mapping and canonical bytes; instantiate exact framed message. Compose existing roundtrip/injectivity lemmas using proved witnesses.",
+      "closes": [
+        "PARSE-01",
+        "PAIR-01",
+        "JCS-01",
+        "FRAME-01"
+      ]
+    },
+    {
+      "step": 4,
+      "action": "Discharge signature acceptance, trust, source commitments, replay/current-state and authorized resolver bridges with explicit independent-input assumptions and exact policy/binary boundaries.",
+      "closes": [
+        "ED25519-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ]
+    },
+    {
+      "step": 5,
+      "action": "Prove aggregate concrete decision soundness/completeness and implementation/state refinement; audit all dependencies and run independently justified interoperability/security validation.",
+      "closes": [
+        "DECISION-01",
+        "RUNTIME-01"
+      ]
+    },
+    {
+      "step": 6,
+      "action": "Obtain real deployment/source/current-state/resolver/usage/failure-recovery receipts if a field-deployment claim is required.",
+      "closes": [
+        "OPERATIONAL-01"
+      ],
+      "qualification": "Operational observation supports reality correspondence; it is separate from the formal correctness theorem."
+    }
+  ],
+  "overall_conclusion": "Available sources support four additional bounded kernel-checked statements and a verified131-theorem abstract bundle. Actual whole-protocol soundness/completeness remains open because concrete semantics, exact distinct dependencies and implementation/refinement witnesses are absent. No new full-pass claim, custom axiom, signature or modification of frozen originals is made.",
+  "assessment_frozen": true
+}

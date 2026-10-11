@@ -1,0 +1,404 @@
+{
+  "schema": "numina.whole-protocol-assessment-successor.v1",
+  "assembled_at_utc": "2026-10-11T04:43:23.654653+00:00",
+  "status": "assessment_completed_with_blockers",
+  "whole_protocol_correctness_established": false,
+  "target": "Manuscript numina.pair-binding.v1; distinct from singular universal-pair.v4 runtime projection",
+  "attribution": {
+    "author": "Samuel J. Kott",
+    "contributor": "Lauren J. Anderson",
+    "ai_assistant_display_name": "Ed25519"
+  },
+  "source_of_record": "Numina production tree",
+  "frozen_original_source_record_sha256": "1cf4c2fe90af6d24229ac227ed26f28cc02c50f70980ffccab2273b3577c1957",
+  "original_delivery_files_verified": 10,
+  "prior_signed_pdf_and_package_unchanged": true,
+  "model": {
+    "base_theorems": 131,
+    "successor_theorems": 4,
+    "independent_units_compiled": 13,
+    "trust_level": 0,
+    "new_custom_axioms": 0,
+    "new_admitted_proofs": 0,
+    "extension_sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8",
+    "codec_roundtrip_is_explicit_premise": true,
+    "seven_field_gate_does_not_yet_model_all_eight_manuscript_findings": true
+  },
+  "original_pdf_and_checksum_readback": {
+    "signatures_verified": 3,
+    "tamper_rejections": 6,
+    "raw_public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+  },
+  "historical_source_commitment_reproduction": "Closed for selected v156 historical projections; formal/current companion bridges remain open",
+  "open_obligation_count": 15,
+  "closure_obligations": [
+    {
+      "id": "SPEC-01",
+      "priority": 1,
+      "status": "open",
+      "title": "Pin one complete interpretation and profile",
+      "depends_on": [],
+      "precise_goal": "Define the exact specification objects consumed by run: governing source/import closure, closed schema, source/hash-profile registry, signature-policy predicate, trust/revision/private-resolution policy, bounds and lifecycle semantics. Prove all references resolve uniquely to these pinned objects.",
+      "available_support": [
+        "NCPS.Advanced.resolve",
+        "NCPS.Advanced.duplicate_symbols_rejected",
+        "NCPS.Advanced.same_release_is_equal"
+      ],
+      "gap": "Recovered definitions are generic. Candidate16KiB/depth8 and older1MiB/depth64 profiles are distinct; the manuscript's signature-policy proposal remains NOT ADOPTED.",
+      "next_action": "Materialize an exact public specification packet and dependency manifest for one target edition. Candidate correctness can be proved for explicitly fixed parameters without claiming operational adoption.",
+      "manuscript_sections": [
+        "3",
+        "4",
+        "15.10",
+        "15.13.1",
+        "AppendixQ"
+      ]
+    },
+    {
+      "id": "DEPENDENCY-01",
+      "priority": 1,
+      "status": "open",
+      "title": "Recover and verify exact intended Lean dependency closure",
+      "depends_on": [
+        "SPEC-01"
+      ],
+      "precise_goal": "Hash-bind every imported source/compiled module, Std/compiler version and axiom audit to the exact proof target; compile the whole graph at trust0; match all declared theorem names to audits; prove final witnesses are from this graph.",
+      "available_support": [
+        "Fresh4.22.0 bundle compilation and131-declaration audit"
+      ],
+      "gap": "Distinct4.24.0 corrected core/pair-wire/structural packages are incompletely recovered. Matching names or historical counts cannot replace exact sources.",
+      "next_action": "Recover the original pair-wire engineering ZIP and exact AppendixQ packets; verify identities before compiling with native pinned4.24.0. Do not substitute4.22 namespaces or synthesize missing imports."
+    },
+    {
+      "id": "PARSE-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Actual strict intake and closed schema",
+      "depends_on": [
+        "SPEC-01",
+        "DEPENDENCY-01"
+      ],
+      "precise_goal": "Prove actual parseStrict/validate soundness and completeness for UTF8, decoded Unicode, duplicate detection before discard, exact nested key sets/types, source-order constraints, revision bounds, predecessor/null rules, approved identifiers and stated limits.",
+      "available_support": [
+        "NCPS.extract_accepted_iff",
+        "NCPS.Utf8.decode_success_implies_no_bom",
+        "NCPS.Utf8.decode_success_implies_valid_utf8",
+        "NCPS.Utf8.allowed_scalar_no_noncharacter"
+      ],
+      "gap": "ParserProfile supplies arbitrary parses/occurrences functions. UTF8 boundary delegates String.fromUTF8? and does not prove full JSON escaping, JCS or implementation behavior; partial4.24 key/array/structure sources are missing.",
+      "next_action": "Implement or recover one concrete bounded parser and validators, define their grammar/semantics and prove rejection/acceptance correspondence before composing with the gate.",
+      "manuscript_sections": [
+        "3",
+        "6.1",
+        "16.8"
+      ]
+    },
+    {
+      "id": "ATTRIBUTION-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Preserve all eight semantic findings",
+      "depends_on": [
+        "SPEC-01",
+        "PARSE-01"
+      ],
+      "precise_goal": "Specify and prove attribution-map validity separately from schema validity, then define a proved mapping from the concrete eight-finding decision record to any abstract gate model; prove no required finding is dropped or silently folded.",
+      "available_support": [
+        "NCPS.Advanced.VerificationReport",
+        "NCPS.ModelClosure.evaluate_eq_true_iff_accepts"
+      ],
+      "gap": "Manuscript\u00a76 names eight findings. Recovered VerificationReport has seven fields and no separate attribution-map field. Gate equivalence is therefore not yet correspondence to the full manuscript result schema.",
+      "next_action": "Extend a successor model or provide an explicit justified embedding with a proved attribution invariant; preserve existing frozen source and signed delivery.",
+      "manuscript_sections": [
+        "6",
+        "6.3"
+      ]
+    },
+    {
+      "id": "PAIR-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Concrete ordered-pair recovery and association",
+      "depends_on": [
+        "PARSE-01",
+        "DEPENDENCY-01"
+      ],
+      "precise_goal": "For actual source A/B input and record construction, prove the source order, identifiers and commitment/attribution fields refer to the same ordered pair. Use an order-preserving representation; prove exact roundtrip/canonical accepted-wire converse.",
+      "available_support": [
+        "NCPS.tagged_equivalence_left",
+        "NCPS.tagged_equivalence_right",
+        "RecoveredPairWireRecovery.lean15theoremsnotyetrecompiled",
+        "NCPS.ModelClosure.extensional_pair_set_not_injective"
+      ],
+      "gap": "The extensional extraction set loses order and duplicate multiplicity. Exact PairWireRecovery direct imports are absent. Its candidate typed pair codec does not instantiate actual NCPS JSON/payload semantics.",
+      "next_action": "Recover ParserRefinement and PairExtraction closure, compile the exact concrete recovery unit, and add a separately proved bridge from that codec to the chosen signed record field semantics.",
+      "manuscript_sections": [
+        "4",
+        "6",
+        "16.6.3",
+        "16.6.4"
+      ]
+    },
+    {
+      "id": "JCS-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Exact canonical record bytes",
+      "depends_on": [
+        "PARSE-01",
+        "PAIR-01"
+      ],
+      "precise_goal": "Instantiate the actual record codec and prove C=UTF8(JCS(payload)) exactly, canonical roundtrip and uniqueness on allowed payloads, UTF16 key ordering, array/string preservation, number behavior and absence of BOM/trailing newline.",
+      "available_support": [
+        "NCPS.Advanced.canonical_roundtrip",
+        "NCPS.Advanced.canonical_serialization_injective",
+        "NCPS.Advanced.sample_codec_roundtrip"
+      ],
+      "gap": "Generic RoundTrip is an explicit premise. The only concrete recovered codec is an illustrative leading-tag binary SampleRecord, explicitly not JCS.",
+      "next_action": "Prove a concrete bounded JCS implementation against exact selected value/scalar semantics, or integrate an independently established formal implementation with a proved adapter. Finite fixtures supplement but do not establish universal correspondence.",
+      "manuscript_sections": [
+        "4",
+        "AppendixM"
+      ]
+    },
+    {
+      "id": "FRAME-01",
+      "priority": 3,
+      "status": "open_concrete_instantiation",
+      "title": "Exact pure-Ed25519 signed message",
+      "depends_on": [
+        "JCS-01"
+      ],
+      "precise_goal": "Prove M=ASCII(NUMINA-PAIR-BINDING/V1)||0x00||C, with the22ASCII-byte literal plus one separator, no extra bytes and pure Ed25519 rather than application prehash/Ed25519ctx.",
+      "available_support": [
+        "NCPS.frame_injective",
+        "NCPS.Advanced.frame_length",
+        "NCPS.ModelClosure.framed_encode_injective",
+        "Previously reproduced AppendixM finite fixture"
+      ],
+      "gap": "Fixed-tag generic injectivity is proved; exact concrete payload codec/literal-to-runtime preimage bridge remains unproved. Fixed-tag injectivity does not establish separation across arbitrary different byte tags; any cross-protocol tag-registry uniqueness/separator constraints require their own specification and proof.",
+      "next_action": "Instantiate the literal bytes and concrete codec, prove executable preimage equality and provider-call message identity, then add byte-level positive/tamper/cross-domain regression vectors.",
+      "manuscript_sections": [
+        "4",
+        "AppendixM"
+      ]
+    },
+    {
+      "id": "ED25519-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Verification acceptance predicate and implementation correspondence",
+      "depends_on": [
+        "SPEC-01",
+        "FRAME-01"
+      ],
+      "precise_goal": "Define exact raw-key/signature decoding, canonical scalar/point rules, small-order/subgroup/cofactor handling and signature equation; prove concrete provider/native verifier returns true iff the selected mathematical predicate holds on the exact M.",
+      "available_support": [
+        "Historicalpublic-onlysignaturechecks",
+        "Publicpinpointdecompressioncheck"
+      ],
+      "gap": "No recovered Lean module implements Ed25519 verification or proves provider correspondence. Policy remains a NOT ADOPTED proposal, and observed165provider disagreements/finite919case comparisons expose that provider naming alone is insufficient.",
+      "next_action": "Fix the predicate and pinned adapter, recover policy/corpus bytes, reconcile every negative/edge expectation and obtain a proof or a separately documented trusted implementation boundary. Do not replace the missing proof with a custom axiom.",
+      "manuscript_sections": [
+        "4",
+        "15.13.1",
+        "16.3"
+      ]
+    },
+    {
+      "id": "TRUST-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Independent key, role and scope authorization",
+      "depends_on": [
+        "SPEC-01",
+        "ED25519-01"
+      ],
+      "precise_goal": "Prove accepted key_id matches the raw-key fingerprint under the selected profile and the authenticated trust entry permits exact project/release/source/role at the selected validity/revocation times; reject out-of-scope keys even with valid signatures.",
+      "available_support": [
+        "NCPS.Advanced.accepted_authority_valid",
+        "NCPS.Advanced.signature_alone_not_acceptance",
+        "NCPS.Advanced.untrusted_signature_rejected"
+      ],
+      "gap": "Current theorems project or reject modeled flags; no concrete authenticated trust-store resolver or authorization semantics is instantiated.",
+      "next_action": "Define trusted-input authenticity boundary, trust-entry parser and scope checks, prove their decision soundness, and obtain operational trust receipts separately.",
+      "manuscript_sections": [
+        "5",
+        "6.1"
+      ]
+    },
+    {
+      "id": "SOURCE-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Source reproduction and current equality",
+      "depends_on": [
+        "SPEC-01",
+        "PAIR-01",
+        "JCS-01"
+      ],
+      "precise_goal": "Prove selected historical normalization/hash computations operate on exact resolved artifacts, compare both ordered commitments, and keep current canonical-source equality as a distinct predicate backed by independently authenticated immutable identity.",
+      "available_support": [
+        "NCPS.Advanced.accepted_sources_valid",
+        "NCPS.Advanced.accepted_current_source_when_required",
+        "NCPS.Advanced.genesis_congruent",
+        "Freshv156historicalselectedcommitmentexecutionreport; bothhistoricalcommitmentsmatchedandbindingcellsconsistent"
+      ],
+      "gap": "No concrete companion artifact/hash-profile resolver, formal SHA256 implementation bridge or current-companion-source proof is supplied. Hash equality is not an unconditional proof of source equality. The older PDF v156 source-unavailability statement is historical: selected historical v156 commitments have now been freshly reproduced successfully, as pinned in this assessment. Their universal-pair.production.v1 profile remains distinct from numina.pair-binding.v1.",
+      "next_action": "Preserve completed selected historical commitment reproduction; obtain exact artifacts for the actual companion target, prove normalization/digest/resolver correspondence and independent current-source identity. State collision resistance only as an explicit computational assumption where required.",
+      "manuscript_sections": [
+        "6.1",
+        "16.7"
+      ],
+      "historical_execution_subgap": {
+        "status": "closed_for_selected_historical_v156_projection",
+        "evidence": {
+          "path": "/workspace/scratch/v156-source-commitment-verification.json",
+          "bytes": 2892,
+          "sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2"
+        },
+        "both_selected_historical_commitments_match": true,
+        "qualification": "Originalhistoricaldigestfunctionexecuted; no fullverifier/regeneration/build or currentcompanion equality is claimed."
+      },
+      "remaining_execution_limits": [
+        "Provider-reported49,070,080Barchivebytesnotretrieved/independentlyhashed",
+        "Freshproviderobservationisunsignedauthenticatedmetadata",
+        "NoactualoperationalEd25519finaldeploymentreceipt",
+        "Noexternal/current-stateattestationorwholev156pass"
+      ]
+    },
+    {
+      "id": "STATE-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Authenticated revision/replay/conflict lifecycle",
+      "depends_on": [
+        "SPEC-01",
+        "TRUST-01",
+        "SOURCE-01"
+      ],
+      "precise_goal": "Instantiate current-state authority and transition system; prove predecessor links, monotonic update rules, revocation, same-revision conflict preservation, cache-age rules and stale/rollback/fork rejection; acceptance requires authenticated current binding/revision/payload digest.",
+      "available_support": [
+        "NCPS.Advanced.reachable_maps",
+        "NCPS.Advanced.safety_preserved",
+        "NCPS.refinement_preserves_invariant"
+      ],
+      "gap": "Only generic proof-carrying refinement and an integer-counter example exist. A timestamp or predecessor digest alone cannot establish current branch. No actual NCPS state-to-runtime refinement witness exists.",
+      "next_action": "Define concrete binding/journal state and transitions, prove initialization/step simulation and inductive invariants, then test concurrency/recovery under the exact implementation. Specify fairness/progress separately for any liveness claim.",
+      "manuscript_sections": [
+        "6.2",
+        "9",
+        "16.6"
+      ]
+    },
+    {
+      "id": "PRIVATE-01",
+      "priority": 3,
+      "status": "open_if_policy_requires",
+      "title": "Authorized private mapping semantics",
+      "depends_on": [
+        "SPEC-01",
+        "TRUST-01"
+      ],
+      "precise_goal": "Prove permitted opaque references resolve only through an authenticated authorized mapping/version and missing/denied evidence remains unverified; public input cannot choose arbitrary resolver locations.",
+      "available_support": [
+        "NCPS.Advanced.accepted_private_when_required",
+        "NCPS.Advanced.unverified_private_not_acceptance_when_required"
+      ],
+      "gap": "Recovered model only checks a privateResolution flag. No authenticated resolver/mapping implementation or receipt is recovered. Mapping association does not prove inverse genesis derivation or unique common origin.",
+      "next_action": "Specify resolver interface/access-control/output evidence and prove decision behavior under supplied authenticated mapping, then obtain authorized operational mapping evidence separately.",
+      "manuscript_sections": [
+        "6.1",
+        "7"
+      ]
+    },
+    {
+      "id": "DECISION-01",
+      "priority": 2,
+      "status": "open_concrete_semantics",
+      "title": "Structured verdicts, closure and failure dominance",
+      "depends_on": [
+        "ATTRIBUTION-01",
+        "ED25519-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "precise_goal": "Prove null signature yields unsigned pending, malformed/failing signature yields invalid, diagnostic findings remain distinct, failure dominates and unavailable/pending/blocked/crashed/incomplete never yields signed acceptance; every mandatory closure stage is Finished(Pass) for the pinned target.",
+      "available_support": [
+        "NCPS.ModelClosure.evaluate_eq_true_iff_accepts",
+        "NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts",
+        "NCPS.Advanced.blocked_stage_prevents_closure",
+        "NCPS.Advanced.current_evidence_not_full_pass"
+      ],
+      "gap": "Modeled flags and FullProtocolPass conjunction do not demonstrate completion/soundness of actual check execution. The recovered report has seven rather than eight findings and closure statuses omit execution lifecycle states.",
+      "next_action": "Define an executable structured result/lifecycle type and connect each check's actual semantics to a finding before proving aggregate soundness/completeness.",
+      "manuscript_sections": [
+        "6.3",
+        "15.7"
+      ]
+    },
+    {
+      "id": "RUNTIME-01",
+      "priority": 2,
+      "status": "open",
+      "title": "Actual executable/state refinement and source-to-binary linkage",
+      "depends_on": [
+        "DEPENDENCY-01",
+        "PARSE-01",
+        "JCS-01",
+        "ED25519-01",
+        "STATE-01",
+        "DECISION-01"
+      ],
+      "precise_goal": "Construct a refinement/conformance witness for the exact implementation and build; prove wire intake, validation, message construction, cryptography, evidence resolution and decision output agree with the exact specification, and resource failures preserve incomplete outcomes.",
+      "available_support": [
+        "NCPS.Advanced.conforming_implementations_agree",
+        "NCPS.Advanced.conforms_iff_observational_equality",
+        "NCPS.Advanced.safety_preserved"
+      ],
+      "gap": "Conforms and Refinement are supplied premises, not discharged implementation theorems. Existing repository release-envelope verification signs canonical{artifact_type,key_id,payload}; it must not be identified with the distinct NUMINA-PAIR-BINDING/V1 companion preimage.",
+      "next_action": "Select actual companion implementation source/build, define semantics/adapters and prove each bridge. Pin native toolchain/binary/dependencies; independently validate without promoting sampled test agreement to universal proof.",
+      "manuscript_sections": [
+        "8",
+        "16.6",
+        "16.8"
+      ],
+      "related_repository_sources": [
+        "/workspace/numina-production/public/runtime-release-model.js:40",
+        "/workspace/numina-production/public/runtime-release-model.js:58"
+      ]
+    },
+    {
+      "id": "OPERATIONAL-01",
+      "priority": 3,
+      "status": "separate_evidence_open",
+      "title": "Field deployment and reality correspondence",
+      "depends_on": [
+        "RUNTIME-01",
+        "TRUST-01",
+        "SOURCE-01",
+        "STATE-01",
+        "PRIVATE-01"
+      ],
+      "precise_goal": "Obtain exact deployed source/build/environment/operator identities, actually accepted companion bytes, independent trust/current-state/resolver outputs, observed usage and revocation/recovery/failure receipts for a declared interval.",
+      "available_support": [
+        "Historicalsignedmanuscriptandobservationpackages",
+        "Boundedformalproofreports"
+      ],
+      "gap": "No abstract theorem, signed manuscript, sourceZIP, succeeded metadata or website availability proves these live facts. These are evidence obligations, not custom Lean axioms.",
+      "next_action": "Conduct authorized operational validation with reproducible receipts after the concrete protocol has been implemented and approved for the selected environment.",
+      "manuscript_sections": [
+        "8",
+        "10"
+      ]
+    }
+  ],
+  "next_verifiable_step": "Retrieve the original reviewer ZIP libfile_c2887d73285c819197c5674bc2004de3 through an authorized binary Library route, match SHA256 08a2b5c40fed00559332ed9da81a6006b0725c44769b1162d4b38ca11a2a4d80, and inspect its exact imported-module closure before compilation.",
+  "boundaries": [
+    "Existing runtime canonicalizers and operational delivery signatures do not establish companion wire acceptance.",
+    "Kernel checking depends on the pinned compiler/standard library; computational crypto and operational authenticity assumptions remain explicit.",
+    "No IETF stream acceptance, deployment, policy adoption, private linkage or underlying scientific claim is established by this builder."
+  ]
+}

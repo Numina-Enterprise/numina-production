@@ -1,0 +1,4 @@
+'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]
+'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]
+'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]
+'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]
