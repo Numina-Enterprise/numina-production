@@ -187,6 +187,14 @@ def listener():
     return sorted(rows)
 
 
+def canonical_commit():
+    commit = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '--verify', 'HEAD'],
+                                     text=True, timeout=5).strip()
+    if not re.fullmatch(r'[0-9a-f]{40}', commit):
+        raise ValueError('CANONICAL_COMMIT_REQUIRED')
+    return commit
+
+
 def snapshot():
     incoming = BASE / 'incoming'
     directory(incoming)
@@ -201,7 +209,7 @@ def snapshot():
         records.append([name, stamp(folder / 'task.json')])
     # File stats wake the observer; content digests bind any resulting receipt.
     inputs = [[str(p), stamp(p)] for p in INPUTS]
-    canonical = [inputs, stamp(ROOT / '.git/HEAD'), stamp(ROOT / '.git/refs/heads/main')]
+    canonical = [inputs, canonical_commit()]
     refresh = stamp(BASE / 'refresh.json')
     triggers = {
         'canonical_inputs': canonical,
@@ -239,9 +247,7 @@ def canonical_inputs():
             or {t.get('id') for t in tasks} != TASK_IDS
             or any(t.get('configurationId') != t.get('id') or t.get('canonicalRoot') != str(ROOT) for t in tasks)):
         raise ValueError('CANONICAL_ASSIGNMENT_BINDING_MISMATCH')
-    commit = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True, timeout=5).strip()
-    if not re.fullmatch(r'[0-9a-f]{40}', commit):
-        raise ValueError('CANONICAL_COMMIT_REQUIRED')
+    commit = canonical_commit()
     source = {'canonicalRoot': str(ROOT), 'canonicalCommit': commit, 'inputIdentities': identities,
               'scope': 'Live scoped input snapshot; may include uncommitted source edits'}
     return manifest, ledger, {**source, 'sourceIdentitySha256': sha(encoded(source)),
