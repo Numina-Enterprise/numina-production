@@ -1,0 +1,63 @@
+{
+  "schema": "numina.v156.source-commitment-verification.v1",
+  "checked_at_utc": "2026-10-11T04:07:41.357Z",
+  "source_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+  "verification_scope": "Exact historical public final-build/final-manifest selected software source commitments and recorded four-cell binding consistency",
+  "original_digest_function": "scripts/production-pair.mjs#pairSourceHash (unmodified v156 bytes)",
+  "original_script_sha256": "75848f17d8e285c6b76def0da424cfc8b62cac1cc479ebdf8d45620869db54a8",
+  "original_digest_function_executed": true,
+  "regeneration_or_full_verifier_executed": false,
+  "source_digest_scope": "sorted-json-source-payload-excluding-derived-bindings-and-cross-file-pins",
+  "sources": [
+    {
+      "path": "public/final-build.json",
+      "sha256": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b"
+    },
+    {
+      "path": "public/final-manifest.json",
+      "sha256": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a"
+    }
+  ],
+  "components": [
+    {
+      "path": "public/final-build.json",
+      "source_commitment_match": true,
+      "four_binding_cells_match": true,
+      "declared_bound": true,
+      "declared_status": "SOURCE_BOUND",
+      "provider_execution_verified": false
+    },
+    {
+      "path": "public/final-manifest.json",
+      "source_commitment_match": true,
+      "four_binding_cells_match": true,
+      "declared_bound": true,
+      "declared_status": "SOURCE_BOUND",
+      "provider_execution_verified": false
+    },
+    {
+      "path": "public/current-environments.json",
+      "source_commitment_match": true,
+      "four_binding_cells_match": true,
+      "declared_bound": true,
+      "declared_status": "SOURCE_BOUND",
+      "provider_execution_verified": false
+    }
+  ],
+  "final_build_raw_sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+  "final_build_git_blob_sha1": "33adbedc600835207f90d68a1b6c6b1058fb83f9",
+  "cross_file_final_build_pins_match": true,
+  "docs_exact_public_byte_copies_match": true,
+  "selected_source_commitments_verified": true,
+  "protocol_profile_is_numina_pair_binding_v1": false,
+  "whole_v156_pass": false,
+  "provider_execution_verified": false,
+  "archive_bytes_retrieved_or_verified": false,
+  "external_or_current_state_attestation_verified": false,
+  "limitations": [
+    "Verification covers the historical sorted source-payload projection; it does not claim RFC8785 canonical JSON conformance.",
+    "The universal-pair.production.v1 metadata is distinct from the requested numina.pair-binding.v1 artifact profile.",
+    "The original full production verifier and release checks were not run; no regeneration or build occurred.",
+    "No provider archive-byte equality, current-state attestation, runtime behavior, operational Ed25519 deployment receipt or manuscript signature is established."
+  ]
+}

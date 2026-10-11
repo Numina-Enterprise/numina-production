@@ -1,0 +1,479 @@
+{
+  "schema": "numina.final-document-signing-receipt.v1",
+  "signed_at_utc": "2026-10-11T04:14:21.688548+00:00",
+  "algorithm": "pure Ed25519",
+  "message_framing": "exact file bytes; no canonicalization, prehash or SSHSIG",
+  "public_key_base64": "8p7GeYNsaInvh9QbhCv9IjYATBpthNS6wIFMrkWpDCg=",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "new_signature_count": 45,
+  "new_tamper_rejections": 90,
+  "source_manifest_sha256": "acddefca8d0467381b0b0f0c5de2119127cf8716a24583e305d21337bfb0a5c7",
+  "workflow_sha256": "25648a798550743fe2788532e56f4823e4d7b5c90d7f50cc3023528c12175709",
+  "existing_workflow_unchanged": true,
+  "custody": "Existing retained local login Keychain item; reused in place",
+  "key_generated_or_rotated": false,
+  "private_key_exported": false,
+  "keychain_mutated": false,
+  "python_version": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "cryptography_version": "50.0.2",
+  "purpose": "Final Numina pair-binding manuscript/document delivery and complete evidence inventory; not IETF approval",
+  "signature_coverage": "Every listed exact document plus final manifest and checksum inventory; binary artifacts bound by inventoried SHA-256",
+  "limitations": [
+    "Operational integrity and key correspondence only; not IETF or ISE approval",
+    "No private companion-wire record or whole-protocol acceptance issued",
+    "Historical originals remain unchanged; this is a new signing event",
+    "Provider archive bytes and requested earlier final-deployment-receipt remain unobserved"
+  ],
+  "signatures": [
+    {
+      "path": "README.md",
+      "message_bytes": 1896,
+      "message_sha256": "81bba26f1c60e34040d2378fe832b97304fb2bfecf429248988bd81186f62e37",
+      "signature_base64": "xnysZnpsTOFde1xBLPnHRGdZCOWNeIsnjXVPETQl8xd0KeyBm+N79izkjElEfj4l01znLnLKPNoi76o0DIc7Aw==",
+      "signature_sha256": "7008529444d52343c2b70c8771cfb86b61c2cf6a5e654077eb60fbc5d166510a",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "SHA256SUMS",
+      "message_bytes": 6254,
+      "message_sha256": "9f8328238896ef55500707fe45bc37f848244c15ee2ac3523f570f54060365f0",
+      "signature_base64": "oK+2bZwcEP0amBTX0WgWFuBaV2qwNdExjpOM6a2n2cVf+z2aott7MNPnGQTw49BujfFZz4Z6SWdbKlEL2vbNAg==",
+      "signature_sha256": "5a53c1ed8e0bf57eb6f0e66fbd7dd38745ab00ee65a44d96d4635f6c091ed1ca",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "delivery-manifest.json",
+      "message_bytes": 16623,
+      "message_sha256": "acddefca8d0467381b0b0f0c5de2119127cf8716a24583e305d21337bfb0a5c7",
+      "signature_base64": "occ9M9Q5eu/NCXS7P2uqt8UcLN8QPjn6FMmHFUEBZM3rNJaKkU99ejM43UQXIHJNRPkXabJiZnOcLZCc/Y+aBQ==",
+      "signature_sha256": "7cd84629d8e3ea95f4f7b11c909b2637401f3fdf15a420b7c33e58e969e0b815",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "document/Ed25519-Recovered-Evidence-Update.md",
+      "message_bytes": 11468,
+      "message_sha256": "836d0d878224b14a24fce363cae505f7eef74f137990c4b6a5cb5eede3ac96cc",
+      "signature_base64": "0J/QVvXzauCBFCTbAOX9blBmlqIFKQWQu9KOPZqp0UILQgR40rjRAXCkEDJWCcc8vfMbanVt8FAK2/DUO9c/Dw==",
+      "signature_sha256": "b11fb4c1f10ce53ddb78cc5e35c090b76d93ca7c39a6c078fd31de0e16a0420a",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "manuscript/draft-kott-numina-pair-binding-02-final.pdf",
+      "message_bytes": 808496,
+      "message_sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9",
+      "signature_base64": "RY5l4azhIHMIXCh8+FoCWnOof72RCxeSK9TOAEQAkIWKb6/EYwRjzLNubdx08Dj+D/ySiPmD8FC7od7oiQ3iBA==",
+      "signature_sha256": "306c22187641eccd92a017a5dcced2dc81185c6e8be342763698d03654395819",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "manuscript/original-draft-kott-numina-pair-binding-02-evidence-successor.pdf",
+      "message_bytes": 404249,
+      "message_sha256": "4b22068f0df2ff2d9b2b3084941ecada40b9915b68ededf4126db6e56671b03b",
+      "signature_base64": "+SCD6SZ2uDIOZQQE28er3up5gmd/EGfH25cxyNsqDJgNzYkHjQ7IuRvzjHAVibiDHZnQCcfeoFFPjAkV6aHBCA==",
+      "signature_sha256": "198f6b4cb91a5c8d68a1fc8155835a185e1e70f38559b4c5d07684fa6aca46b6",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/assemble-recovered-numina-package.py",
+      "message_bytes": 8559,
+      "message_sha256": "db9d693cf1661734d1a9fe7d965fa33e481952667e115af486c17353cb37a7a0",
+      "signature_base64": "dVrj2hSfntYZv+zmNEneRY4MrUi7ZuXNZ5ug/XaQwcLXtVu8ZEQy6DfvzNa6FlZtmjixTAr0/3k3j7WkiI70Ag==",
+      "signature_sha256": "b2892895011221df19201f42a3441362187c4dcb22456792c9bad08e5ef2130d",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/ed25519-deployment-receipt-check.json",
+      "message_bytes": 2966,
+      "message_sha256": "fbaded3597f8e9c8a6124d07a9008cdacbc15dac220acdc7e5804c2df020f922",
+      "signature_base64": "8KSlG8UlBaGPtE7L8l9SUfPq29mh0oEDJjW8kh6yrjyDxDp7QBPYRJGHc5uItuZAtj3HnZdzzLHSCJ49cZJhAQ==",
+      "signature_sha256": "9feb1c3a7d80cc6623b271f0ceb756c6dff459a4cc1798bbddef4e0aa8fbeb8b",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-build-clock.mjs",
+      "message_bytes": 305,
+      "message_sha256": "640c98ad52047f6f0f79533f147d36b3a81bf82b5edce244c93558510cc37c91",
+      "signature_base64": "Jrnu6y1sswC+nL2PKvDGzYistcDmEjOAzZOsLPQ0nUkvG4VgmMTUyoKQQAGNjOkunYmELBnK9PL/9cFeIeBEAg==",
+      "signature_sha256": "16cdb352098490c9e5bb4eeb68f487e11ff71f40e437f453957a84166089d7a8",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-build-path.txt",
+      "message_bytes": 33,
+      "message_sha256": "df3fe766a06b8a1d5afe881a3c4c8663fc9457365e371ede9f42112c8adff736",
+      "signature_base64": "OPOsKigyjHlEZsnr7H9vcWDd9PIl/VdYrWLmUJfD3oA7MeF1noS2DQTizqSDk1DhSuDAtXWthgaOM+fLVT9fBA==",
+      "signature_sha256": "67dccf1b85374fa7ca4199e14f5f6113ecd6ccd12d61a617bf130cb1c1cced87",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-cloud-setup.sh",
+      "message_bytes": 1449,
+      "message_sha256": "a88ac44e0436e7cd53d5a2ebbd153d2552990e28d45519011dcabbaa36a0b5b5",
+      "signature_base64": "hGljZmMQjkgtQehX9qFiLQsZsD22rK9m87YbbSvUZpxpZGSfK1ZZvIKAl7Z8TgR6w9QqjwRleuGl8yeYit2ZCA==",
+      "signature_sha256": "92b5968181d70793dea11d78136532a162743b4f79297c553d2d04d5f29b0183",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-ed25519-point-check.json",
+      "message_bytes": 5112,
+      "message_sha256": "897db23e0dc14f4e7457915b0f906e20bf976779aa0e35be4b4b3772498c5f7c",
+      "signature_base64": "UFa1u7b5yZdH/tOE12oA9CDlLb7IudOQdIhLZbKylyMSxOKWlciYfaEyig6JNRfAcC9Ec64BHs16VjrBqV8CDA==",
+      "signature_sha256": "16ef0446524fd61f28615efd65d59d78a4154469d0b08da509da6a49345f8093",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-final-deployment-observation.json",
+      "message_bytes": 1642,
+      "message_sha256": "225624f27ade58301a0b59da724ec9dd0b7e355a9ea3fcef3cb0c38464e1f46b",
+      "signature_base64": "OufEK+c1MPNK40EMvLfFrkfE1uPsMETvN/+PCR2VoKweyK620DHoUMq9pu/im7BvJW9exnOM+tRg8TpLXZAQBQ==",
+      "signature_sha256": "ff8a13f58a2a03a31a606fb7190892cfd7e1e945c29ff68222ac93f1759d3b47",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-pair-binding-02.txt",
+      "message_bytes": 302197,
+      "message_sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2",
+      "signature_base64": "WNouSPEQ4nawFgO1zdUFx/BfCI+HROtT6qe1NaMmBxnwUF8RyfvTM5v+ngorV15ThGcXfdEl38ZoQpR27YkmBA==",
+      "signature_sha256": "e4a16c06eb64222f8aa53354cf4c9b0918ebae106ece76cd6cd40faac711b01a",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-pairwire-original-zip.base64",
+      "message_bytes": 18465,
+      "message_sha256": "f75ed02cad23a9850448cf59e89cfcbec3aea6619429ecb4e6bca29ab8557cb7",
+      "signature_base64": "3Nfz5CVYBcb68Uk2K4AKvyjcdqW13vCtniLqkExLoO/p+ZdeuVfIXmPtRaaBJsSrAxY7svJbGXt0gYeX4VruCg==",
+      "signature_sha256": "b1eec9b85d16c646b0b35e65f3ebec48dcb2badfd5242058ca0c46d23fbdfd41",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-delivery-build.log",
+      "message_bytes": 10416,
+      "message_sha256": "04564ebeaf64163b66a1daac705246a0a294bd201413e60ef5d0b157b768f6e8",
+      "signature_base64": "Fr81s/dH2MCW4tE0sc4+ZayRcttAfovCHfkmOjQ2hEO8rY6CQbVTb7/krdaxEnqNsrNwmY4wzwHPmh/sv1doCA==",
+      "signature_sha256": "7253d3f62bf75e2754f9aceceb95436ba4c0c1ff40803a2693fe44b0a934f796",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-source-binding.json",
+      "message_bytes": 3689,
+      "message_sha256": "74048f0328475bee0e6bb36b2193b1b290c639f4634c7dca6968164da85a9873",
+      "signature_base64": "n0LPAaO6gwiTqIfovujVmYpAmYmgp8SjqgxKX0YK43Y1M5yIYtqwgam4n1QUmDE8nxNTG45Lq8lQfvqX4jH8BA==",
+      "signature_sha256": "5fda51739174b549d9439f2b8a577dc6418ee1afd2eef6d96fe4ccd4abef4310",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-transport.index",
+      "message_bytes": 162694,
+      "message_sha256": "01476bf0908d0e635198332fc964d9d14839f469c09d71387c8587f1563c6d98",
+      "signature_base64": "S1n516JsJ9AqRqKTiKRg8nlznknDT7nV1EKlsO5Uc+rk6jQ75vKTe7Cg6YFxC7y2bXhiGzhddzzTMG3rc7dECw==",
+      "signature_sha256": "80d944904ff7e4e2c0007e219b81270d912e6a1469086bb5b381e50a453e8589",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-update-build.log",
+      "message_bytes": 10623,
+      "message_sha256": "78c7fc9c1b2e89f43fd0b1ca78b138c0fa494e0aedb3f8453e066a82fc4972a9",
+      "signature_base64": "qqNs2PVwIoiZsHOCiMyHAggXjTs+nC0H79THFLH08t9D9VWw4ujIDbJ2PXrBT7ztm6wTmFmgwnL8K4vGfJIQBA==",
+      "signature_sha256": "88e86b99c0132374a2e197c4f3b05e6daa5f48801060cad28172b310958498cb",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-update-tests.log",
+      "message_bytes": 155839,
+      "message_sha256": "3e2b539e00dca658e24a450571df81a0563a312ca6e594b3c2329f5c2f4b3aae",
+      "signature_base64": "CtLI811LN8/w0C11F1ChyVKE4wXxKNCQ7+CP1TukP4WyYTLPNDnGTTjfu7uHKzaI80weLgYEHK+bZgHcqAJWAA==",
+      "signature_sha256": "d93383f8411ae3fbc5434310c9aaa515c73f7d042592bae46c9be11b863de2a9",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/numina-v161-original-zip.base64",
+      "message_bytes": 26381,
+      "message_sha256": "117a44ec6dcd6cdadedc342fc9ee4144c258c1f831b5f3b9078949a4cae6f5b9",
+      "signature_base64": "N6D4wkKWRww2RzGGMv4FreaZtHr8SXTAPYY3fPaaHUE97GbVr+Qd53Yfw7C/Sro9MRiVvz8R6r8K/M/VpcxBAw==",
+      "signature_sha256": "a1f083ffc2e69cf0a1fc65ea3868878a46fd074048adf6d12cfa3a944e895b8a",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/receipt-audit-provider-readback.json",
+      "message_bytes": 1694,
+      "message_sha256": "b261f60af46da9bdd4e14694c878ed3443ff40108a9cc9dceec957e58a02d2d0",
+      "signature_base64": "jufUYVQPeukB0mQKuKpVy+EB9dXyCsRqfAXJXlGk2Tj7SyWMllGbuhX7QKX+V9HJ9oiEbvUtbLS2nS1/lZmWCw==",
+      "signature_sha256": "ffed14b073db1476090f62c9fada5161b01d6365bdfd987966168b5be6a4c798",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/receipt-audit-sites-observation.json",
+      "message_bytes": 2998,
+      "message_sha256": "7a3cf47ba196be04f8579a73ec1db457c10eeca9da3ef5b856bd0f28b3d1ade8",
+      "signature_base64": "eBjntnPsrtYb8Vl1Hzm7qGVlaYB/uo/Q8QKtqpQlu7xfMpBpME2kMPWPE/m4P6VT8DpjWBdsNOoVX26zkxEEBg==",
+      "signature_sha256": "eced026ae13a1fc55114cfaa4d06a5c0ea77e75f19e46ae447e87eb6624016f8",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/run-receipt-audit.mjs",
+      "message_bytes": 20141,
+      "message_sha256": "69dc1d53b6c8fd7d6935d78a2f700ed28454167af1a79078cc2cb4637a050f5d",
+      "signature_base64": "bgEPY+o4fIdILhZd9kRlSx24aHJlSB0ukA2U1WQwciK3LFPpPsux0nLxyXQxJ4YFIEfRQD6LiQK6Tkms6YWgBg==",
+      "signature_sha256": "6a5a9e198048915e143d5eb6ccf3b877b12b9de13eb0df655e9dfbd96998bc87",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "supporting-output-snapshots/update-numina-manuscript-package.py",
+      "message_bytes": 9820,
+      "message_sha256": "bffa877bbb998f68731dad22f5cb74c55625bbce342861d720b602c6c44cd602",
+      "signature_base64": "HDrqZpf3Bzr5V3Gl/GK5OqHwxBvrWsgcmw/Ae3QYJYNTpHOh5yY5wyb5S8TMSmNTHsgEMcMf+ngWTJhqpRSDDA==",
+      "signature_sha256": "c0db39dc408c9b5872666dd659918f41de983183a86414ca7e4c0bfe8185867a",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/config/numina-manifest.v2.json",
+      "message_bytes": 28227,
+      "message_sha256": "e307b3ffda5fb6da9ee49bdc37ae911196e27941053a45e2e5bd03f82e7feae3",
+      "signature_base64": "w7U90+YQFFUIB64Isfq7ccS1HEgFV1Arz4tX8DJxSJYYCCMF73eiv5SpWm2mTekvtq1YOpZscr0+Yk0M5tV8Dg==",
+      "signature_sha256": "f1429331ff90b392c8db5fcdc313dfc71820eb760ca2d8a18f0ffdede15ca276",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/config/numina-production-bound-state.v1.json",
+      "message_bytes": 225,
+      "message_sha256": "cc2107f38a5b9c64a5326be7f3d7a1ed6a2602890259ee60ad0e2b0f9f020c4b",
+      "signature_base64": "V6cv0X/KcF3qGKo7d1l4P2UnKQJzRZ9pJ8kOrNPU4iafRAh9TgcK5x8R8Vn1fXRO079c0dzkxtcXujXfjZZNDQ==",
+      "signature_sha256": "1f69927a39652fcf8b7c1f1657868a1523112ed8e626ca54560bf212b7783541",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/docs/NUMINA-FINAL-BUILD.json",
+      "message_bytes": 157956,
+      "message_sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+      "signature_base64": "SFEnaR3Xr3Umb1QJXol8DuQVDzGKLE8ejVmCv76vD3DHVgpbmnLHhABwZcjVn91jwAy2wEtxrgbiKVE3c79ADQ==",
+      "signature_sha256": "7838d01680bbe7e281d8438968bab030614c8e8f1cae71539bade0c9f4afac68",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/docs/NUMINA-FINAL-MANIFEST.json",
+      "message_bytes": 38684,
+      "message_sha256": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762",
+      "signature_base64": "MADrNaWgGiXw7WV0eUXKb1h7CIdtqgBb9ey+h0j23L22IXJajIibj9MVc4AwTn+Z8Ixms7jbBQC54Pt9YxkCAg==",
+      "signature_sha256": "83ecba7f3f3597260e2716006864ae9006fd86e11fede6891deb16e7be992a92",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/public/current-environments.json",
+      "message_bytes": 35975,
+      "message_sha256": "5b25518639e7b5648bfc9825f38c68a55d5993650981961ec1103f40e8550caf",
+      "signature_base64": "wmI/JKoV7BwKtgRQ48bgb5XQJcF8Oh3TJBiWCIRy7LDv3SmwaSaiw6sR/gBNYo+3wrj5jSVAx5vRsC34/af6Aw==",
+      "signature_sha256": "f38b77b5abab14fc038e3796cce48680af11fbd8d8409cc9ce6e408c9ab8e9e5",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/public/final-build.json",
+      "message_bytes": 157956,
+      "message_sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+      "signature_base64": "SFEnaR3Xr3Umb1QJXol8DuQVDzGKLE8ejVmCv76vD3DHVgpbmnLHhABwZcjVn91jwAy2wEtxrgbiKVE3c79ADQ==",
+      "signature_sha256": "7838d01680bbe7e281d8438968bab030614c8e8f1cae71539bade0c9f4afac68",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/public/final-manifest.json",
+      "message_bytes": 38684,
+      "message_sha256": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762",
+      "signature_base64": "MADrNaWgGiXw7WV0eUXKb1h7CIdtqgBb9ey+h0j23L22IXJajIibj9MVc4AwTn+Z8Ixms7jbBQC54Pt9YxkCAg==",
+      "signature_sha256": "83ecba7f3f3597260e2716006864ae9006fd86e11fede6891deb16e7be992a92",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/recovered-byte-manifest.json",
+      "message_bytes": 3536,
+      "message_sha256": "110ec6b2845c01e98cc5dd377170961a720c906c1d4a1f969816dc1765c617fe",
+      "signature_base64": "tZEgwuAWXbOg+A2ri0W880cX7OUqLPRKAoS4X44Gncg+7w2E9fKAKaGdWwpZDH0seyxIX8I4jk8jdEvL3hq4Cg==",
+      "signature_sha256": "c7edd24f02724c7d8b01e53ab2a4d47e1d97a3f660a86452fa6917afb0e28d54",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "v156-selected-source/scripts/production-pair.mjs",
+      "message_bytes": 6950,
+      "message_sha256": "75848f17d8e285c6b76def0da424cfc8b62cac1cc479ebdf8d45620869db54a8",
+      "signature_base64": "QXtRnDm1TqieFJ8E1RXBWkOI5y6Wfa4jtsQo/uMMWMzE3jJfCTZUVEpL4s83dB5kdusY2GMJkEJMhSdgbZadBg==",
+      "signature_sha256": "3010224a44121726cdcce921c2e74cb859c630066634d693e384a130706d931c",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/final-deployment-receipt-verification.json",
+      "message_bytes": 17723,
+      "message_sha256": "9e1ec9e89726b09bc5b19f30e9ab214e861bc3f59a0f77aff37f2fe09c00243a",
+      "signature_base64": "svnlwqKy4hLO5F+JdajcF3rfmVgBABOiKSxGlZHHUFXJ+BcpWNbs18rZOEW9RttRFstI88VFgV7ETMquGDpIBA==",
+      "signature_sha256": "aef95bb2879b708e4ff1e3a78e218d3eeeb4ab7cd228cb7865fe7e8486f82444",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/ietf-independent-stream-verification.json",
+      "message_bytes": 1360,
+      "message_sha256": "68a2ba91897b8167a61361ddce935580cef588f60d7dc02a321d68b209746445",
+      "signature_base64": "bMnB+vXoZfCOEowuOBFxaP+AFCp6iOOKJ6oB9CtGIerX3oM+bRJCt3L3q/SoESp35+3lwyA8gUZK1+anRe1MDQ==",
+      "signature_sha256": "0d994a9e989a0c9a8e802af331d5a234d94191ff89b9095bf0cbb9ffed84fc41",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/ncps-appendix-q-source-search.json",
+      "message_bytes": 6339,
+      "message_sha256": "44479ef9e68e415593c3acf208708039be2adb821ab21407a6c1648c30fdb764",
+      "signature_base64": "K6j/VKdsPTqkROgdmN1IdhbZCmt4oZkWbwEXGiOPATysB0Kb2rgYn47JMzgmnPwmzPz36/E32GQMER0EupQgDw==",
+      "signature_sha256": "97bdf1aee6d3e3ad6d15a30f7992be3bd649dcf07f388cb829d0813db3ff4742",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/ncps-proof-assumptions-and-coverage.json",
+      "message_bytes": 1342,
+      "message_sha256": "9bf0ddf2ab0fad32af2c70c9b44f74ce172c2b20bb74ab7f73a583ab664032e6",
+      "signature_base64": "3pt1nSjcko/vWEahiP2H8TSa4NOh9xxTgBzHnixuI35EO4cd3PpmEAbkjbfpo2/Y3YJ2VaZu9oJMrM9xNJ9WCg==",
+      "signature_sha256": "3eba702d2bf5f7729f9b9d8e9d1a17cf3bed19c12d84781df0ee03e26c0d24fc",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/ncps-proof-verification-final.json",
+      "message_bytes": 41018,
+      "message_sha256": "4b7bc3df2edd2865eb31d58f91c83f7023c5d2cb65d6f6f2a94eb4ed42435772",
+      "signature_base64": "Wn/YPDn2tm6jv1zogF3rV/PSLcZhwGzzK6MRAd6gQFhnALmpm1kcTd/7xY8Nm1X1oSvL+hI5YFSAQkcjIduADA==",
+      "signature_sha256": "75438a95cfe03a0ed087fb06947e164cb33d4af485d68bc68c7511d43b9b704f",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/recovered-pairwire-package-verification.json",
+      "message_bytes": 1038,
+      "message_sha256": "cf14de229479066f576aee56130a2bc492e45333ec57f85fa298fbaffd6c2af8",
+      "signature_base64": "A7NxxYMHAu4l2F6EouDVpNGJsKMVpL1yMEOBLLIRRCzWZ3k/dWxSI2KgY58p9C7bUaYG86k3YV2+T0heybbjCw==",
+      "signature_sha256": "d8c5a22f09d81d9fe3e052cc5b5dd40be65af31592489f65a83241583f52fbb2",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/recovered-v161-package-independent-verification.json",
+      "message_bytes": 9079,
+      "message_sha256": "3caca9893b4985f70b815d3f65ab07551515420d17ab03001522ff1521127628",
+      "signature_base64": "/xCQY1JsiFCOG0sJyp4QEC9S/kqAR3YWLgN3+f7YN+qTNUde0W1SeOpvjMKLyIt6w9jS7pVlbsLOAnb2f7HcCw==",
+      "signature_sha256": "b83fa5d84b6d88450b4d8aa4c74c005b75175c84660f91934d71136b5f5a7f3e",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/v156-provider-observation-2026-10-11.json",
+      "message_bytes": 1940,
+      "message_sha256": "8a508c380f8a9bf85c072ad4e19032775a1014c6ade4e35e1fb1158dd5da1169",
+      "signature_base64": "5Nm/N44qTnUYkA4owlmTiCS5ULvHDjGjBHvXCBw5mUKOiivKKbjEyNdx9syBjyN4RfDleYGwguWrqSExWwvcAw==",
+      "signature_sha256": "8e9ff7773b3cd2fb1aca48a1457a588a99b1194156668f91365f6b4d9a57f2b6",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verification/v156-source-commitment-verification.json",
+      "message_bytes": 2892,
+      "message_sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2",
+      "signature_base64": "8v/g90j5/h7pNQ46kFcxTzJKtO/P5EL1BtcLuDifLrDJR2x96MrNhIzbqnuLynvGu8nNrnvnkpi7w5sFENYPDw==",
+      "signature_sha256": "026114ac623445606db7e9dd37996a13930672d4b04325422370c144a5385202",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verify_final.py",
+      "message_bytes": 4022,
+      "message_sha256": "8d3e4290f21d404ddebb69704e4c8d9a645e898285bfa776338dc557834df104",
+      "signature_base64": "LsVJAzWGUZajxrt7HgM6Jis23JiRSToEC3ff2MiPnnuibf/B0LJaLlKBIhqRilzRkW8aNjlJoNrzpEw4calgAA==",
+      "signature_sha256": "8c3c9cb01f681ea452af44de9e4c0dbefdf65d96599e00bd704e612610e8e7a3",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    },
+    {
+      "path": "verify_recovered.py",
+      "message_bytes": 2908,
+      "message_sha256": "a8618f49e8426b01402620e3c3df0ae726daf49f9ad7f812fdcf27563eb21152",
+      "signature_base64": "OYt8IipkkbkUoOTFfDZV2YCLLGchno4OnV0jx3PxXvQPVTA37vQ34DnJG0ZLSy8G0NAOMyk0vAv28EUCCez4AA==",
+      "signature_sha256": "5d357f50c8ec5efedf83faf542186e878f7f30fe5f18f416db0fd21dc0a0687b",
+      "verified": true,
+      "payload_mutation_rejected": true,
+      "signature_mutation_rejected": true
+    }
+  ]
+}
