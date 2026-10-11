@@ -26,6 +26,71 @@ function decodeSegment(segment) {
   return bytes;
 }
 
+// Reject ambiguous duplicate JSON members, including escaped-key aliases.
+// JSON.parse is still the authoritative syntax parser; this scanner adds
+// duplicate-name detection before the resulting object can authorize funds.
+function parseUniqueJson(bytes) {
+  const source=new TextDecoder('utf-8',{fatal:true}).decode(bytes);
+  const parsed=JSON.parse(source);
+  let index=0;
+  const whitespace=()=>{while(index<source.length && /[\x20\t\r\n]/.test(source[index]))index++;};
+  function quoted() {
+    requireGate(source[index]==='"','INVALID_JWS_JSON');
+    const begin=index++;
+    let escaped=false;
+    while(index<source.length) {
+      const ch=source[index++];
+      if(ch==='"'&&!escaped) return JSON.parse(source.slice(begin,index));
+      if(ch==='\\'&&!escaped){escaped=true;continue;}
+      escaped=false;
+    }
+    reject('INVALID_JWS_JSON');
+  }
+  function scan(depth) {
+    requireGate(depth<=32,'JWS_JSON_TOO_DEEP');
+    whitespace();
+    if(source[index]==='{') {
+      index++;
+      const keys=new Set();
+      whitespace();
+      if(source[index]==='}') {index++;return;}
+      for(;;) {
+        whitespace();
+        const key=quoted();
+        requireGate(!keys.has(key),'DUPLICATE_JWS_JSON_KEY');
+        keys.add(key);
+        whitespace();
+        requireGate(source[index++]===':','INVALID_JWS_JSON');
+        scan(depth+1);
+        whitespace();
+        const delimiter=source[index++];
+        if(delimiter==='}')return;
+        requireGate(delimiter===',','INVALID_JWS_JSON');
+      }
+    }
+    if(source[index]==='[') {
+      index++;
+      whitespace();
+      if(source[index]===']'){index++;return;}
+      for(;;){
+        scan(depth+1);
+        whitespace();
+        const delimiter=source[index++];
+        if(delimiter===']')return;
+        requireGate(delimiter===',','INVALID_JWS_JSON');
+      }
+    }
+    if(source[index]==='"'){quoted();return;}
+    const start=index;
+    while(index<source.length&&!/[\x20\t\r\n,\]}]/.test(source[index])) index++;
+    requireGate(index>start,'INVALID_JWS_JSON');
+  }
+  scan(0);
+  whitespace();
+  requireGate(index===source.length,'INVALID_JWS_JSON');
+  return parsed;
+}
+
 function readJws(token, expectedTyp) {
   requireGate(typeof token === 'string' && token.length <= 16384, 'INVALID_JWS');
   const pieces = token.split('.');
@@ -37,10 +102,12 @@ function readJws(token, expectedTyp) {
   requireGate(signature.length === 64, 'INVALID_ES256_SIGNATURE');
   let header, payload;
   try {
-    const decoder = new TextDecoder('utf-8', {fatal:true});
-    header = JSON.parse(decoder.decode(headerBytes));
-    payload = JSON.parse(decoder.decode(payloadBytes));
-  } catch {reject('INVALID_JWS_JSON');}
+    header = parseUniqueJson(headerBytes);
+    payload = parseUniqueJson(payloadBytes);
+  } catch(error) {
+    if(error?.paymentGateCode) throw error;
+    reject('INVALID_JWS_JSON');
+  }
   requireGate(hasExactFields(header, headerFields) &&
     header.alg === 'ES256' && header.typ === expectedTyp &&
     nonempty(header.kid), 'INVALID_JWS_HEADER');
