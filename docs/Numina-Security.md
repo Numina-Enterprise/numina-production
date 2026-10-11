@@ -58,9 +58,9 @@ Principal boundaries:
 | Data minimization | Telemetry uses route groups, counters, timing/status and random request identifiers, excluding bodies and account/treasury values. Private API data is excluded from the service-worker cache allowlist. | Hosting/provider log retention and downstream data flows require confirmation. |
 | Release identity | Source alignment checks, retained signed-build records and candidate hash checks; Windows checkout rules preserve compared bytes. | Exact deployed revision and archive, signing custody and independent verification must be recorded for each release. |
 
-## 4. Threat model
+## 4. Security requirements
 
-| Threat | Existing protection | Residual risk and required check |
+| Condition | Existing protection | Remaining requirement |
 | --- | --- | --- |
 | Cross-account access or forged identity | Server-side ownership checks and authenticated dispatcher boundary. | Direct-origin bypass and compromised identity providers require production testing. |
 | Stolen owner credentials | Credential-digest checks and explicit owner/delegation decisions. | Host/administrator compromise is outside a client library's protection. Require least privilege, MFA where supported and tested rotation/revocation. |

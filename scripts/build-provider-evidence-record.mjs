@@ -17,8 +17,8 @@ const archiveOutcome=String(process.env.NUMINA_ARCHIVE_OUTCOME||'unknown').trim(
 const actionsArchiveAvailable=archiveOutcome==='success'&&!!artifactName&&/^[1-9]\d*$/.test(artifactId)&&/^sha256:[0-9a-f]{64}$/i.test(artifactDigest);
 const workflowRunId=String(process.env.GITHUB_RUN_ID||'').trim(),runAttempt=String(process.env.GITHUB_RUN_ATTEMPT||'').trim();
 const archive=JSON.parse(inputBytes);
-assert(archive?.schema==='numina.provider-evidence-archive.v3'&&archive.root==='NUMINA'&&archive.manifest==='NUMINA','archive manifest drift');
-assert(archive.integrity_model==='github_commit_plus_release_sha256_readback'&&archive.credentialed===false&&archive.partnership_status==='asserted'&&archive.external_execution_performed===false,'archive boundary drift');
+assert(archive?.schema==='numina.provider-evidence-archive.v3'&&archive.root==='NUMINA'&&archive.manifest==='NUMINA','archive manifest mismatch');
+assert(archive.integrity_model==='github_commit_plus_release_sha256_readback'&&archive.credentialed===false&&archive.partnership_status==='asserted'&&archive.external_execution_performed===false,'archive boundary mismatch');
 assert(/^[0-9a-f]{40}$/i.test(String(archive.source_commit||'')),'source commit invalid');
 assert(archive.source_commit===(process.env.NUMINA_EXPECTED_GIT_SHA||process.env.GITHUB_SHA||'').trim(),'archive source does not match triggering commit');
 const {archive_sha256,...archivePayload}=archive;
@@ -27,8 +27,8 @@ assert(archive.transport?.identity==='NUMINA'&&archive.transport?.role==='diagno
 assert(/^\d+$/.test(workflowRunId)&&/^\d+$/.test(runAttempt),'GitHub workflow metadata invalid');
 
 const observation=archive.observation_set;
-assert(observation?.schema==='numina.provider-observation-set.v1'&&observation.release===RUNTIME_VERSION&&observation.status==='HEALTHY'&&observation.all_healthy===true,'provider set drift');
-assert(Array.isArray(observation.providers)&&observation.providers.join(',')==='arc,circle'&&observation.credentialed===false&&observation.partnership_status==='asserted'&&observation.external_execution_performed===false,'provider boundary drift');
+assert(observation?.schema==='numina.provider-observation-set.v1'&&observation.release===RUNTIME_VERSION&&observation.status==='HEALTHY'&&observation.all_healthy===true,'provider set mismatch');
+assert(Array.isArray(observation.providers)&&observation.providers.join(',')==='arc,circle'&&observation.credentialed===false&&observation.partnership_status==='asserted'&&observation.external_execution_performed===false,'provider boundary mismatch');
 const byProvider=new Map((observation.observations||[]).map(item=>[item.provider,item])),arc=byProvider.get('arc'),circle=byProvider.get('circle');
 assert(circle?.healthy===true&&circle?.observed?.message==='pong','Circle observation invalid');
 assert(arc?.healthy===true&&arc?.observed?.chain_id===5042002&&Number.isSafeInteger(arc?.observed?.latest_block),'Arc observation invalid');

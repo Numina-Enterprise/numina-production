@@ -33,8 +33,8 @@ export function syncApplicationReleasePin({write=false}={}){
   if(!currentBuild||!currentClient||!currentServer||!clientSha||!serverSha||
     !source.includes("export const APPLICATION_VERSION='"+version+"';")||
     !source.includes("export const APPLICATION_RELEASE='numina-v"+version+"';"))throw Error('Application release contract identity mismatch');
-  const drift=currentBuild!==buildId||currentClient!==clientSha||currentServer!==serverSha;
-  if(drift){
+  const mismatch=currentBuild!==buildId||currentClient!==clientSha||currentServer!==serverSha;
+  if(mismatch){
     if(!write)throw Error('Application release pin differs from current distribution: '+buildId);
     const updated=source
       .replace(buildPin,"export const EXPECTED_APPLICATION_ARTIFACT_BUILD_ID='"+buildId+"';")
@@ -42,7 +42,7 @@ export function syncApplicationReleasePin({write=false}={}){
       .replace(serverPin,"export const EXPECTED_APPLICATION_SERVER_SHA256='"+serverSha+"';");
     writeFileSync(contractPath,updated);
   }
-  return {buildId,clientSha256:clientSha,serverSha256:serverSha,artifactCount:artifacts.length,updated:write&&drift};
+  return {buildId,clientSha256:clientSha,serverSha256:serverSha,artifactCount:artifacts.length,updated:write&&mismatch};
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

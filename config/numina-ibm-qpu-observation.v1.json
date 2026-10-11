@@ -1,0 +1,71 @@
+{
+  "schema": "numina.ibm-qpu-evidence-readback.v1",
+  "reviewDate": "2026-10-11",
+  "sourceOfRecord": "/workspace/numina-production",
+  "historicalObservation": {
+    "path": "release-evidence/quantum-job-observation-2026-09-18.json",
+    "sha256": "0c1a46e06c89e72279a7468dd04813241948905658906189eb6b7e64502b4432",
+    "observationMethod": "authenticated_browser_job_detail",
+    "observedAt": "2026-09-18T20:53:28Z",
+    "provider": "NUMINA",
+    "jobId": "dakfqqvi3e6s738rfnqg",
+    "providerReported": {
+      "status": "Completed",
+      "backend": "ibm_kingston",
+      "region": "us-east",
+      "program": "executor",
+      "tag": "Composer",
+      "shots": 1024,
+      "measurementCounts": {
+        "10": 143,
+        "11": 450,
+        "00": 325,
+        "01": 106
+      },
+      "totalCompletionTime": "1m 39s",
+      "totalUsage": "2s",
+      "createdDisplay": "Sep 15, 2026, 3:10 AM",
+      "completedDisplay": "Sep 15, 2026, 3:11 AM",
+      "displayTimezoneVerified": false
+    },
+    "reportedCountsTotal": 1024,
+    "signedProviderReceiptImported": false,
+    "independentHardwareAuditEstablished": false,
+    "freshProviderObservation": false
+  },
+  "requestedBackend": {
+    "family": "Nighthawk",
+    "exactAllocatedBackendName": null,
+    "historicalObservationMatchesRequestedFamily": false,
+    "currentAccessEstablished": false,
+    "executionEstablished": false,
+    "hardwareUpgradePerformed": false
+  },
+  "canonicalApplication": {
+    "measurementSource": "src/quantum-backend.js",
+    "measurementBackend": "numina-statevector",
+    "measurementKind": "classical_simulator",
+    "measurementHardwareExecution": false,
+    "connectionSource": "src/ibm-quantum.js",
+    "connectionScope": "authenticated_backend_catalog_discovery",
+    "catalogAccessProvesCircuitExecution": false,
+    "jobSubmissionEnabled": false,
+    "treasuryWrites": false,
+    "currentCredentialsOrConnectionChecked": false
+  },
+  "reviewActions": {
+    "retainedSourceRead": true,
+    "newProviderAuthenticationPerformed": false,
+    "newJobSubmitted": false,
+    "providerCredentialRead": false,
+    "historicalEvidenceModified": false,
+    "newSignatureIssued": false,
+    "buildOrTestPerformed": false
+  },
+  "limitations": [
+    "A retained provider-UI observation reports the historical Kingston result; this readback is not an IBM-signed receipt or a fresh provider result.",
+    "The historical display timezone is unknown; no UTC job start or completion time is inferred from the displayed values.",
+    "The retained job does not establish Nighthawk allocation, current QPU access, application deployment, quantum advantage, or financial settlement.",
+    "Configured provider secret names and hardware workflow source do not establish successful provider authentication or execution."
+  ]
+}

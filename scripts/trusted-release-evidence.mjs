@@ -11,7 +11,7 @@ const identity=value=>['root','manifest','identity','authority','source','eviden
 // Test keys are supplied explicitly by isolated tests; production always uses
 // the pinned release identity. No environment variable can replace that pin.
 export function verifyReleaseEnvelope(envelope,type,{pinnedKey=PINNED_RUNTIME_PUBLIC_KEY,keyId=PINNED_RUNTIME_KEY_ID}={}){
-  assert(envelope?.artifact_type===type&&envelope.algorithm==='Ed25519'&&envelope.public_key===pinnedKey&&envelope.key_id===keyId,'runtime signing identity drift');
+  assert(envelope?.artifact_type===type&&envelope.algorithm==='Ed25519'&&envelope.public_key===pinnedKey&&envelope.key_id===keyId,'runtime signing identity mismatch');
   const raw=Buffer.from(pinnedKey,'base64');
   assert(raw.length===32&&createHash('sha256').update(raw).digest('hex').slice(0,24)===keyId,'pinned key invalid');
   const key=createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),raw]),format:'der',type:'spki'});
@@ -36,19 +36,19 @@ export function readSignedControl(response,{verifyEnvelope=verifyReleaseEnvelope
   assert(identity(signed)&&signed.surface==='control-manifest'&&signed.productionSource==='NUMINA'&&signed.authenticated===true&&signed.verified===true&&signed.provider_verification===true&&signed.deployment==='NUMINA'&&signed.deployed===true,'control projection invalid');
   const control=signed.payload,controls=control?.controls,funds=control?.funds,execution=control?.execution,partnership=control?.partnership;
   assert(['root','manifest','identity','authority'].every(key=>control?.[key]==='NUMINA')&&control.schema==='numina.control-manifest.v1'&&control.release===EXPECTED_RELEASE.production_version,'control release invalid');
-  assert(control.external_execution_performed===false&&control.external_funds_moved===false,'control external execution boundary drift');
+  assert(control.external_execution_performed===false&&control.external_funds_moved===false,'control external execution boundary mismatch');
   for(const key of ['runtime_controls_configurable','real_funds_enabled','public_execution_api_enabled','public_execution_route_exposed','execution_authorized','live_submission_enabled','provider_submitter_approved','live_provider_submitter_enabled','owner_authorization_required','pre_signed_payload_required'])assert(controls?.[key]===true,'control authorization missing: '+key);
   for(const key of ['employer_ip_enabled','arbitrary_provider_url_allowed','embedded_private_key_allowed'])assert(controls?.[key]===false,'unsafe control: '+key);
-  for(const [record,schema] of [[funds,'numina.funds-manifest.v1'],[execution,'numina.execution-manifest.v1'],[partnership,'numina.partnership-manifest.v1']])assert(record?.schema===schema&&['root','manifest','identity','authority'].every(key=>record[key]==='NUMINA'),'control component identity drift');
-  assert(funds.status==='ENABLED_BY_OWNER'&&funds.real_funds_enabled===true&&funds.external_balance_verified===false&&funds.external_backing_asserted===false&&funds.external_funds_moved===false,'funding evidence boundary drift');
+  for(const [record,schema] of [[funds,'numina.funds-manifest.v1'],[execution,'numina.execution-manifest.v1'],[partnership,'numina.partnership-manifest.v1']])assert(record?.schema===schema&&['root','manifest','identity','authority'].every(key=>record[key]==='NUMINA'),'control component identity mismatch');
+  assert(funds.status==='ENABLED_BY_OWNER'&&funds.real_funds_enabled===true&&funds.external_balance_verified===false&&funds.external_backing_asserted===false&&funds.external_funds_moved===false,'funding evidence boundary mismatch');
   const target={schema:'numina.fundable-targets.v1',scope:'numina_native',target_display:'500T',target_amount:'500000000000000',target_scale:'trillion',target_count:500,status:'TARGET_BOUND',external_balance_verified:false,external_backing_asserted:false,external_funds_moved:false};
-  assert(equal(funds.fundable_targets,target)&&equal(controls.fundable_targets,target),'native target boundary drift');
-  assert(execution.status==='GOVERNED_LIVE_SUBMISSION_ENABLED'&&equal(execution.supported_live_providers,['arc'])&&execution.submit_route==='/v1/execution/submit','execution provider boundary drift');
+  assert(equal(funds.fundable_targets,target)&&equal(controls.fundable_targets,target),'native target boundary mismatch');
+  assert(execution.status==='GOVERNED_LIVE_SUBMISSION_ENABLED'&&equal(execution.supported_live_providers,['arc'])&&execution.submit_route==='/v1/execution/submit','execution provider boundary mismatch');
   for(const key of ['execution_authorized','live_submission_enabled','provider_submitter_approved','public_execution_api_enabled','public_execution_route_exposed','live_provider_submitter_exposed','owner_authorization_required','pre_signed_payload_required','pre_signed_provider_submitter_available'])assert(execution[key]===true,'execution authorization missing: '+key);
   for(const key of ['arbitrary_provider_url_allowed','embedded_private_key_allowed','external_execution_performed'])assert(execution[key]===false,'unsafe execution: '+key);
   assert(execution.credentialed_provider_submitter_available===false,'credentialed submission is outside the pre-signed release boundary');
   assert(typeof execution.authorization_id==='string'&&execution.authorization_id.length>0&&funds.authorization_id===execution.authorization_id&&partnership.authorization_id===execution.authorization_id,'owner authorization binding mismatch');
-  assert(partnership.partnership_status==='asserted'&&partnership.external_evidence_bound===false&&partnership.external_partnership_verified===false,'partnership evidence boundary drift');
+  assert(partnership.partnership_status==='asserted'&&partnership.external_evidence_bound===false&&partnership.external_partnership_verified===false,'partnership evidence boundary mismatch');
   return {control,fundableTargets:target};
 }
 

@@ -5,7 +5,7 @@ import {NUMINA_TREE,NUMINA_FRONTIER_LAYERS} from '../src/numina-root.js';
 
 const ROOT_URL = new URL('../', import.meta.url);
 const ROOT = decodeURIComponent(ROOT_URL.pathname).replace(/^\/(?:[A-Za-z]:)/, m=>m.slice(1));
-const SELF = 'scripts\\apply-numina-manifest-metadata.mjs';
+const SELF = join('scripts','apply-numina-manifest-metadata.mjs');
 const CANONICAL_TREASURY_VALUES=NUMINA_CANONICAL_TREASURY_VALUES;
 const CANONICAL_USD_DEPOSIT=NUMINA_CANONICAL_USD_DEPOSIT;
 const CANONICAL_USDC_DEPOSIT=NUMINA_CANONICAL_USDC_DEPOSIT;
@@ -59,7 +59,7 @@ const REPLACEMENTS = [
 const TEXT_EXTS = new Set(['.json','.js','.mjs','.md','.yml','.yaml','.html']);
 const SKIP = new Set(['.git','node_modules','dist','.next','build','DerivedData','archive','release-evidence','vendor','history','reviews','provenance']);
 const ACTIVE_REWRITE_ROOTS=['config','public','src','api','integrations/numina','runtime/vercel-production','mobile','scripts','docs','tests'];
-const PINNED_METADATA_ARTIFACTS=new Set(['public\\final-build.json','public\\final-manifest.json','docs\\NUMINA-FINAL-BUILD.json','docs\\NUMINA-FINAL-MANIFEST.json']);
+const PINNED_METADATA_ARTIFACTS=new Set([['public','final-build.json'],['public','final-manifest.json'],['docs','NUMINA-FINAL-BUILD.json'],['docs','NUMINA-FINAL-MANIFEST.json']].map(parts=>join(...parts)));
 const PINNED_UPDATE_MODE=process.argv.includes('--update-final-artifacts'); // Artifact bytes may evolve; immutable release hash references are preserved separately.
 
 function walk(dir,out=[]){

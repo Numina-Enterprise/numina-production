@@ -9,6 +9,8 @@ import {readControl,bootstrapControl,controlManifestView,commitControl} from './
 import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
 import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
+import {APP_VERSION} from './app-core.js';
+import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 // Numina singular authority: production treasury workflows authenticate with repository-scoped GitHub OIDC.
 export const CONTROL_API_KEY_SHA256_PIN='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
 export const SOURCE_OF_TRUTH_MODEL=NUMINA;
@@ -88,20 +90,52 @@ export async function controlBody(req){
   try{const raw=new TextDecoder('utf-8',{fatal:true}).decode(combined),value=JSON.parse(raw);if(stable(value)!==raw)controlError('CANONICAL_JSON_REQUIRED',400);return value;}catch{controlError('CANONICAL_JSON_REQUIRED',400);}
 }
 async function readApplicationRelease(req,env){
+  let value;
   try{
-    if(!env.ASSETS?.fetch)return null;
+    if(!env.ASSETS?.fetch)controlError('APPLICATION_RELEASE_UNAVAILABLE',503);
     const response=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:'GET'}));
-    if(!response.ok)return null;
-    const value=await response.json();
-    return value?.root===NUMINA&&value?.identity===NUMINA?value:null;
-  }catch{return null;}
+    if(!response.ok)controlError('APPLICATION_RELEASE_UNAVAILABLE',503);
+    value=await response.json();
+  }catch(error){
+    if(error.code)throw error;
+    controlError('APPLICATION_RELEASE_INVALID',503);
+  }
+  if(value?.schema!=='numina.application-release.v2'||value.schema_version!==2||
+      value.identity!==NUMINA||value.manifest!==NUMINA||value.singular!==true||
+      value.version!==APP_VERSION||value.release!=='numina-v'+APP_VERSION||
+      value.runtime_dependency?.identity!==EXPECTED_RELEASE.identity||
+      value.runtime_dependency?.version!==EXPECTED_RELEASE.production_version||
+      value.runtime_dependency?.release!==EXPECTED_RELEASE.release){
+    controlError('APPLICATION_RELEASE_IDENTITY_MISMATCH',503);
+  }
+  const hex=/^[a-f0-9]{64}(?![\s\S])/;
+  if(value.artifact_digest_algorithm!=='sha256'||typeof value.build_id!=='string'||!hex.test(value.build_id)||
+      typeof value.workerSha256!=='string'||!hex.test(value.workerSha256)||!Array.isArray(value.artifacts)||!value.artifacts.length){
+    controlError('APPLICATION_RELEASE_INVENTORY_INVALID',503);
+  }
+  let previous='',framing='',workerHash=null;
+  for(const artifact of value.artifacts){
+    const path=artifact?.path;
+    if(typeof path!=='string'||!path||/[\u0000-\u001f\u007f\\]/.test(path)||
+        path.split('/').some(part=>!part||part==='.'||part==='..')||path<=previous||
+        typeof artifact.sha256!=='string'||!hex.test(artifact.sha256))controlError('APPLICATION_RELEASE_INVENTORY_INVALID',503);
+    framing+=artifact.sha256+'  '+path+'\n';previous=path;
+    if(path==='server/index.js')workerHash=artifact.sha256;
+  }
+  // This checks the manifest's literal inventory digest. The build/publisher
+  // separately pins and hashes its actual files; embedding that generated pin
+  // in the inventoried Worker would make the Worker hash self-referential.
+  const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(framing));
+  const buildId=Array.from(new Uint8Array(bytes),byte=>byte.toString(16).padStart(2,'0')).join('');
+  if(buildId!==value.build_id||workerHash!==value.workerSha256){
+    controlError('APPLICATION_RELEASE_INVENTORY_MISMATCH',503);
+  }
+  return value;
 }
 async function controlNuminaManifest(req,env){
   const application=await readApplicationRelease(req,env);
   return numinaRootProjection({
     version:CONTROL_VERSION,
-    core:NUMINA,repository:NUMINA,software:NUMINA,worker:NUMINA,journal:NUMINA,runtime:NUMINA,artifact:NUMINA,
-    authentication:NUMINA,deployment:NUMINA,delivery:NUMINA,readiness:NUMINA,treasury:NUMINA,storage:NUMINA,projection:NUMINA,transport:NUMINA,
     deployed:true,
     mechanics:{
       repository:{full_name:GITHUB_OIDC_REPOSITORY,branch:'main'},
