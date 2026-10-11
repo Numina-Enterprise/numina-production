@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "inventoried_files": 51,
+  "new_exact_document_signatures": 45,
+  "new_tamper_rejections": 90,
+  "historical_signatures": 4,
+  "historical_tamper_rejections": 8,
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "pdf_directly_signed": true,
+  "whole_protocol_verified": false,
+  "independent_stream_acceptance_verified": false
+}

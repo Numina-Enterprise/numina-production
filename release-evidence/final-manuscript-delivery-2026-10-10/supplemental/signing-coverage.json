@@ -1,0 +1,54 @@
+{
+  "schema": "numina.supplemental-document-signature-coverage.v1",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "format": "pure Ed25519 over exact file bytes; no canonicalization or prehash",
+  "documents": [
+    {
+      "path": "supplemental/Numina-Final-Delivery-Verification.json",
+      "bytes": 396,
+      "sha256": "bbbac2ca844052ad23d9de09ac57f454cc0e350af785f9b1fe13fc5728870441"
+    },
+    {
+      "path": "supplemental/README.md",
+      "bytes": 1747,
+      "sha256": "0fb86a21f8ac2159e8465756ad31e2813c4f1b7d69342ac752e3be8e00aa9de5"
+    },
+    {
+      "path": "supplemental/numina-final-signing-receipt.base64",
+      "bytes": 33505,
+      "sha256": "e2492156aaf37d5a57cc9fa00a9aa27ee7ecab78a18d7e0686320bd55a21c724"
+    },
+    {
+      "path": "supplemental/numina-final-signing-request.json",
+      "bytes": 3272,
+      "sha256": "8be1c2cfb7daf712ca64242dda1dfb2e794ceb01ee2cef36c19164901e37811d"
+    },
+    {
+      "path": "supplemental/sign-final-in-place.py",
+      "bytes": 6435,
+      "sha256": "1e9a003a4591ea3304f9c5ce8132644e92ac62daf25bbf64009d3390e88e6dfd"
+    },
+    {
+      "path": "supplemental/verify_download.py",
+      "bytes": 3538,
+      "sha256": "3d607d218cefa331f4b22f831196423f57255570d0b454f9416c2e684f9b3281"
+    },
+    {
+      "path": "delivery/signing/final-document-signing-receipt.json",
+      "bytes": 25128,
+      "sha256": "e027dcd6a6e4e46ae30d15bdde1de15939b88814914f763b705a51aae4ef3109"
+    },
+    {
+      "path": "supplemental/user-pasted-signing-receipt-1.base64",
+      "bytes": 33504,
+      "sha256": "fe9ec5919eb265e0f34fc80e52428b66f0fd751306bc55815564027bcc70671a"
+    },
+    {
+      "path": "supplemental/user-pasted-signing-receipt-2.base64",
+      "bytes": 33504,
+      "sha256": "fe9ec5919eb265e0f34fc80e52428b66f0fd751306bc55815564027bcc70671a"
+    }
+  ],
+  "coverage_file_itself_directly_signed": true,
+  "scope": "New operational delivery signatures, not IETF approval"
+}

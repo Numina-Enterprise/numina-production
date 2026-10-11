@@ -1,0 +1,394 @@
+{
+  "schema": "numina.final-manuscript-delivery.v1",
+  "identity": "NUMINA",
+  "original_manuscript_pages": 104,
+  "evidence_update_pages": 3,
+  "updated_manuscript_pages": 107,
+  "original_page_content_streams_preserved": true,
+  "original_signed_packages_preserved": true,
+  "recovered_signature_count": 4,
+  "tamper_checks_passed": 8,
+  "original_manuscript_user_reports_already_signed": true,
+  "original_manuscript_signature_status": "not_recovered",
+  "pdf_integrity_binding": "SHA-256 commitment in detached-signed delivery manifest",
+  "embedded_pdf_signature": false,
+  "zip_byte_signature": false,
+  "signature_intent": {
+    "algorithm": "pure Ed25519",
+    "message_format": "exact file bytes; no canonicalization, prehash or SSHSIG",
+    "targets": [
+      "README.md",
+      "SHA256SUMS",
+      "delivery-manifest.json",
+      "document/Ed25519-Recovered-Evidence-Update.md",
+      "manuscript/draft-kott-numina-pair-binding-02-final.pdf",
+      "manuscript/original-draft-kott-numina-pair-binding-02-evidence-successor.pdf",
+      "supporting-output-snapshots/assemble-recovered-numina-package.py",
+      "supporting-output-snapshots/ed25519-deployment-receipt-check.json",
+      "supporting-output-snapshots/numina-build-clock.mjs",
+      "supporting-output-snapshots/numina-build-path.txt",
+      "supporting-output-snapshots/numina-cloud-setup.sh",
+      "supporting-output-snapshots/numina-ed25519-point-check.json",
+      "supporting-output-snapshots/numina-final-deployment-observation.json",
+      "supporting-output-snapshots/numina-pair-binding-02.txt",
+      "supporting-output-snapshots/numina-pairwire-original-zip.base64",
+      "supporting-output-snapshots/numina-site-delivery-build.log",
+      "supporting-output-snapshots/numina-site-source-binding.json",
+      "supporting-output-snapshots/numina-site-transport.index",
+      "supporting-output-snapshots/numina-update-build.log",
+      "supporting-output-snapshots/numina-update-tests.log",
+      "supporting-output-snapshots/numina-v161-original-zip.base64",
+      "supporting-output-snapshots/receipt-audit-provider-readback.json",
+      "supporting-output-snapshots/receipt-audit-sites-observation.json",
+      "supporting-output-snapshots/run-receipt-audit.mjs",
+      "supporting-output-snapshots/update-numina-manuscript-package.py",
+      "v156-selected-source/config/numina-manifest.v2.json",
+      "v156-selected-source/config/numina-production-bound-state.v1.json",
+      "v156-selected-source/docs/NUMINA-FINAL-BUILD.json",
+      "v156-selected-source/docs/NUMINA-FINAL-MANIFEST.json",
+      "v156-selected-source/public/current-environments.json",
+      "v156-selected-source/public/final-build.json",
+      "v156-selected-source/public/final-manifest.json",
+      "v156-selected-source/recovered-byte-manifest.json",
+      "v156-selected-source/scripts/production-pair.mjs",
+      "verification/final-deployment-receipt-verification.json",
+      "verification/ietf-independent-stream-verification.json",
+      "verification/ncps-appendix-q-source-search.json",
+      "verification/ncps-proof-assumptions-and-coverage.json",
+      "verification/ncps-proof-verification-final.json",
+      "verification/recovered-pairwire-package-verification.json",
+      "verification/recovered-v161-package-independent-verification.json",
+      "verification/v156-provider-observation-2026-10-11.json",
+      "verification/v156-source-commitment-verification.json",
+      "verify_final.py",
+      "verify_recovered.py"
+    ],
+    "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+    "scope": "Operational final manuscript/evidence delivery; separate from companion wire acceptance and IETF approval"
+  },
+  "ncps_bounded_proof_pass": true,
+  "whole_protocol_verified": false,
+  "independent_stream_acceptance_verified": false,
+  "direct_document_extensions": [
+    ".pdf",
+    ".md",
+    ".json",
+    ".py",
+    ".mjs",
+    ".js",
+    ".sh",
+    ".lean",
+    ".txt",
+    ".log",
+    ".index",
+    ".base64"
+  ],
+  "signature_targets": [
+    "README.md",
+    "SHA256SUMS",
+    "delivery-manifest.json",
+    "document/Ed25519-Recovered-Evidence-Update.md",
+    "manuscript/draft-kott-numina-pair-binding-02-final.pdf",
+    "manuscript/original-draft-kott-numina-pair-binding-02-evidence-successor.pdf",
+    "supporting-output-snapshots/assemble-recovered-numina-package.py",
+    "supporting-output-snapshots/ed25519-deployment-receipt-check.json",
+    "supporting-output-snapshots/numina-build-clock.mjs",
+    "supporting-output-snapshots/numina-build-path.txt",
+    "supporting-output-snapshots/numina-cloud-setup.sh",
+    "supporting-output-snapshots/numina-ed25519-point-check.json",
+    "supporting-output-snapshots/numina-final-deployment-observation.json",
+    "supporting-output-snapshots/numina-pair-binding-02.txt",
+    "supporting-output-snapshots/numina-pairwire-original-zip.base64",
+    "supporting-output-snapshots/numina-site-delivery-build.log",
+    "supporting-output-snapshots/numina-site-source-binding.json",
+    "supporting-output-snapshots/numina-site-transport.index",
+    "supporting-output-snapshots/numina-update-build.log",
+    "supporting-output-snapshots/numina-update-tests.log",
+    "supporting-output-snapshots/numina-v161-original-zip.base64",
+    "supporting-output-snapshots/receipt-audit-provider-readback.json",
+    "supporting-output-snapshots/receipt-audit-sites-observation.json",
+    "supporting-output-snapshots/run-receipt-audit.mjs",
+    "supporting-output-snapshots/update-numina-manuscript-package.py",
+    "v156-selected-source/config/numina-manifest.v2.json",
+    "v156-selected-source/config/numina-production-bound-state.v1.json",
+    "v156-selected-source/docs/NUMINA-FINAL-BUILD.json",
+    "v156-selected-source/docs/NUMINA-FINAL-MANIFEST.json",
+    "v156-selected-source/public/current-environments.json",
+    "v156-selected-source/public/final-build.json",
+    "v156-selected-source/public/final-manifest.json",
+    "v156-selected-source/recovered-byte-manifest.json",
+    "v156-selected-source/scripts/production-pair.mjs",
+    "verification/final-deployment-receipt-verification.json",
+    "verification/ietf-independent-stream-verification.json",
+    "verification/ncps-appendix-q-source-search.json",
+    "verification/ncps-proof-assumptions-and-coverage.json",
+    "verification/ncps-proof-verification-final.json",
+    "verification/recovered-pairwire-package-verification.json",
+    "verification/recovered-v161-package-independent-verification.json",
+    "verification/v156-provider-observation-2026-10-11.json",
+    "verification/v156-source-commitment-verification.json",
+    "verify_final.py",
+    "verify_recovered.py"
+  ],
+  "binding_id": "numina-pair-binding-02-final-document-delivery-2026-10-10",
+  "companion_wire_record_created": false,
+  "requested_named_deployment_receipt_observed": false,
+  "v156_selected_source_commitments_verified": true,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1896,
+      "sha256": "81bba26f1c60e34040d2378fe832b97304fb2bfecf429248988bd81186f62e37"
+    },
+    {
+      "path": "document/Ed25519-Recovered-Evidence-Update.md",
+      "bytes": 11468,
+      "sha256": "836d0d878224b14a24fce363cae505f7eef74f137990c4b6a5cb5eede3ac96cc"
+    },
+    {
+      "path": "manuscript/draft-kott-numina-pair-binding-02-final.pdf",
+      "bytes": 808496,
+      "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9"
+    },
+    {
+      "path": "manuscript/original-draft-kott-numina-pair-binding-02-evidence-successor.pdf",
+      "bytes": 404249,
+      "sha256": "4b22068f0df2ff2d9b2b3084941ecada40b9915b68ededf4126db6e56671b03b"
+    },
+    {
+      "path": "original-signed-packages/Numina-v161-operational-observation-binding-2026-10-09.zip",
+      "bytes": 19783,
+      "sha256": "e999eff016e49fe789504f62cd3dda5a5aa66a824fb918eb4d49fced506f2a37"
+    },
+    {
+      "path": "original-signed-packages/PairWireRecovery-Ed25519-signed-public-2026-10-09.zip",
+      "bytes": 13846,
+      "sha256": "889aa0f181e587e7b4a2acf1e056b5171794b0040c1f5da13f7c006c76029659"
+    },
+    {
+      "path": "proofs/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    {
+      "path": "signing/operational-ed25519-public.raw32",
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+    },
+    {
+      "path": "supporting-output-snapshots/assemble-recovered-numina-package.py",
+      "bytes": 8559,
+      "sha256": "db9d693cf1661734d1a9fe7d965fa33e481952667e115af486c17353cb37a7a0"
+    },
+    {
+      "path": "supporting-output-snapshots/ed25519-deployment-receipt-check.json",
+      "bytes": 2966,
+      "sha256": "fbaded3597f8e9c8a6124d07a9008cdacbc15dac220acdc7e5804c2df020f922"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-build-clock.mjs",
+      "bytes": 305,
+      "sha256": "640c98ad52047f6f0f79533f147d36b3a81bf82b5edce244c93558510cc37c91"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-build-path.txt",
+      "bytes": 33,
+      "sha256": "df3fe766a06b8a1d5afe881a3c4c8663fc9457365e371ede9f42112c8adff736"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-cloud-setup.sh",
+      "bytes": 1449,
+      "sha256": "a88ac44e0436e7cd53d5a2ebbd153d2552990e28d45519011dcabbaa36a0b5b5"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-document-update-preview-2.png",
+      "bytes": 244987,
+      "sha256": "b9092f4e06e6ee3f43d72ebff23d3202772f629435a385cec764e97d88af7b96"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-document-update-preview.png",
+      "bytes": 296354,
+      "sha256": "3367c60319bbc2453f095f33ee60cc3b98f21ae52bb0fbdf534bdc2447dd7032"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-ed25519-point-check.json",
+      "bytes": 5112,
+      "sha256": "897db23e0dc14f4e7457915b0f906e20bf976779aa0e35be4b4b3772498c5f7c"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-final-deployment-observation.json",
+      "bytes": 1642,
+      "sha256": "225624f27ade58301a0b59da724ec9dd0b7e355a9ea3fcef3cb0c38464e1f46b"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-pair-binding-02.txt",
+      "bytes": 302197,
+      "sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-pairwire-original-zip.base64",
+      "bytes": 18465,
+      "sha256": "f75ed02cad23a9850448cf59e89cfcbec3aea6619429ecb4e6bca29ab8557cb7"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-receipt-audit-update.tar.gz",
+      "bytes": 39857922,
+      "sha256": "10f5ffe837979ad0f26dbb4c223ff41ed5a52b8d4621c40af565aa102a1a9235"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-canonical-delivery.tar.gz",
+      "bytes": 39857883,
+      "sha256": "555c9285eb6baae123bae0de81cf90f53ed000c3e2c3013d667c77b295b9f642"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-delivery-build.log",
+      "bytes": 10416,
+      "sha256": "04564ebeaf64163b66a1daac705246a0a294bd201413e60ef5d0b157b768f6e8"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-source-binding.json",
+      "bytes": 3689,
+      "sha256": "74048f0328475bee0e6bb36b2193b1b290c639f4634c7dca6968164da85a9873"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-site-transport.index",
+      "bytes": 162694,
+      "sha256": "01476bf0908d0e635198332fc964d9d14839f469c09d71387c8587f1563c6d98"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-update-build.log",
+      "bytes": 10623,
+      "sha256": "78c7fc9c1b2e89f43fd0b1ca78b138c0fa494e0aedb3f8453e066a82fc4972a9"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-update-tests.log",
+      "bytes": 155839,
+      "sha256": "3e2b539e00dca658e24a450571df81a0563a312ca6e594b3c2329f5c2f4b3aae"
+    },
+    {
+      "path": "supporting-output-snapshots/numina-v161-original-zip.base64",
+      "bytes": 26381,
+      "sha256": "117a44ec6dcd6cdadedc342fc9ee4144c258c1f831b5f3b9078949a4cae6f5b9"
+    },
+    {
+      "path": "supporting-output-snapshots/receipt-audit-provider-readback.json",
+      "bytes": 1694,
+      "sha256": "b261f60af46da9bdd4e14694c878ed3443ff40108a9cc9dceec957e58a02d2d0"
+    },
+    {
+      "path": "supporting-output-snapshots/receipt-audit-sites-observation.json",
+      "bytes": 2998,
+      "sha256": "7a3cf47ba196be04f8579a73ec1db457c10eeca9da3ef5b856bd0f28b3d1ade8"
+    },
+    {
+      "path": "supporting-output-snapshots/run-receipt-audit.mjs",
+      "bytes": 20141,
+      "sha256": "69dc1d53b6c8fd7d6935d78a2f700ed28454167af1a79078cc2cb4637a050f5d"
+    },
+    {
+      "path": "supporting-output-snapshots/update-numina-manuscript-package.py",
+      "bytes": 9820,
+      "sha256": "bffa877bbb998f68731dad22f5cb74c55625bbce342861d720b602c6c44cd602"
+    },
+    {
+      "path": "v156-selected-source/config/numina-manifest.v2.json",
+      "bytes": 28227,
+      "sha256": "e307b3ffda5fb6da9ee49bdc37ae911196e27941053a45e2e5bd03f82e7feae3"
+    },
+    {
+      "path": "v156-selected-source/config/numina-production-bound-state.v1.json",
+      "bytes": 225,
+      "sha256": "cc2107f38a5b9c64a5326be7f3d7a1ed6a2602890259ee60ad0e2b0f9f020c4b"
+    },
+    {
+      "path": "v156-selected-source/docs/NUMINA-FINAL-BUILD.json",
+      "bytes": 157956,
+      "sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2"
+    },
+    {
+      "path": "v156-selected-source/docs/NUMINA-FINAL-MANIFEST.json",
+      "bytes": 38684,
+      "sha256": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762"
+    },
+    {
+      "path": "v156-selected-source/public/current-environments.json",
+      "bytes": 35975,
+      "sha256": "5b25518639e7b5648bfc9825f38c68a55d5993650981961ec1103f40e8550caf"
+    },
+    {
+      "path": "v156-selected-source/public/final-build.json",
+      "bytes": 157956,
+      "sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2"
+    },
+    {
+      "path": "v156-selected-source/public/final-manifest.json",
+      "bytes": 38684,
+      "sha256": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762"
+    },
+    {
+      "path": "v156-selected-source/recovered-byte-manifest.json",
+      "bytes": 3536,
+      "sha256": "110ec6b2845c01e98cc5dd377170961a720c906c1d4a1f969816dc1765c617fe"
+    },
+    {
+      "path": "v156-selected-source/scripts/production-pair.mjs",
+      "bytes": 6950,
+      "sha256": "75848f17d8e285c6b76def0da424cfc8b62cac1cc479ebdf8d45620869db54a8"
+    },
+    {
+      "path": "verification/final-deployment-receipt-verification.json",
+      "bytes": 17723,
+      "sha256": "9e1ec9e89726b09bc5b19f30e9ab214e861bc3f59a0f77aff37f2fe09c00243a"
+    },
+    {
+      "path": "verification/ietf-independent-stream-verification.json",
+      "bytes": 1360,
+      "sha256": "68a2ba91897b8167a61361ddce935580cef588f60d7dc02a321d68b209746445"
+    },
+    {
+      "path": "verification/ncps-appendix-q-source-search.json",
+      "bytes": 6339,
+      "sha256": "44479ef9e68e415593c3acf208708039be2adb821ab21407a6c1648c30fdb764"
+    },
+    {
+      "path": "verification/ncps-proof-assumptions-and-coverage.json",
+      "bytes": 1342,
+      "sha256": "9bf0ddf2ab0fad32af2c70c9b44f74ce172c2b20bb74ab7f73a583ab664032e6"
+    },
+    {
+      "path": "verification/ncps-proof-verification-final.json",
+      "bytes": 41018,
+      "sha256": "4b7bc3df2edd2865eb31d58f91c83f7023c5d2cb65d6f6f2a94eb4ed42435772"
+    },
+    {
+      "path": "verification/recovered-pairwire-package-verification.json",
+      "bytes": 1038,
+      "sha256": "cf14de229479066f576aee56130a2bc492e45333ec57f85fa298fbaffd6c2af8"
+    },
+    {
+      "path": "verification/recovered-v161-package-independent-verification.json",
+      "bytes": 9079,
+      "sha256": "3caca9893b4985f70b815d3f65ab07551515420d17ab03001522ff1521127628"
+    },
+    {
+      "path": "verification/v156-provider-observation-2026-10-11.json",
+      "bytes": 1940,
+      "sha256": "8a508c380f8a9bf85c072ad4e19032775a1014c6ade4e35e1fb1158dd5da1169"
+    },
+    {
+      "path": "verification/v156-source-commitment-verification.json",
+      "bytes": 2892,
+      "sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2"
+    },
+    {
+      "path": "verify_final.py",
+      "bytes": 4022,
+      "sha256": "8d3e4290f21d404ddebb69704e4c8d9a645e898285bfa776338dc557834df104"
+    },
+    {
+      "path": "verify_recovered.py",
+      "bytes": 2908,
+      "sha256": "a8618f49e8426b01402620e3c3df0ae726daf49f9ad7f812fdcf27563eb21152"
+    }
+  ]
+}

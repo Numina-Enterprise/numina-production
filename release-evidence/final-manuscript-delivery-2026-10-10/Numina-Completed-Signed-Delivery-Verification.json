@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "new_document_signatures": 55,
+  "signed_package_checksum": true,
+  "total_new_signature_count": 56,
+  "new_tamper_rejections": 112,
+  "historical_signatures": 4,
+  "historical_tamper_rejections": 8,
+  "pdf_directly_signed": true,
+  "receipt_and_base64_directly_signed": true,
+  "bounded_ncps_proofs": 131,
+  "whole_protocol_verified": false,
+  "independent_stream_acceptance_verified": false
+}
