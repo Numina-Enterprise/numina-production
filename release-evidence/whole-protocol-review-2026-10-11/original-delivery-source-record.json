@@ -1,0 +1,65 @@
+{
+  "schema": "numina.final-manuscript-source-record.v1",
+  "source_of_record": "Numina production tree",
+  "versioned_evidence": "release-evidence/final-manuscript-delivery-2026-10-10",
+  "complete_delivery_path": "outputs/final-manuscript-delivery-2026-10-10",
+  "distribution_archives_tracked_in_git": false,
+  "new_signatures_verified": 56,
+  "new_tamper_rejections": 112,
+  "historical_signatures_verified": 4,
+  "ncps_bounded_proofs_verified": 131,
+  "whole_protocol_verified": false,
+  "independent_stream_acceptance_verified": false,
+  "files": [
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/Numina-Completed-Signed-Delivery-Verification.json",
+      "bytes": 419,
+      "sha256": "6b97734c24a9cdb8386ca4fe9ec8c3f0855929f24da70053c4cadaf6bc9980db"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/Numina-Final-Delivery-Contents.zip",
+      "bytes": 81561336,
+      "sha256": "a4b97d9f16da245f9b5a105cd6760a563b6ca5cef71b5a0265d38ae37cb70337"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/Numina-Final-Delivery-Contents.zip.sha256",
+      "bytes": 101,
+      "sha256": "b865c522ac556fc058750dee99bbe66ffbb6d296e011deaf8b351387544b9d7f"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/Numina-Final-Delivery-Contents.zip.sha256.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "d6af24730c6c83850bf757bd07e3525bb4d926025f545d54098c19b0b1edee68"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/Numina-Pair-Binding-02-completed-signed-package.zip",
+      "bytes": 81567674,
+      "sha256": "62e1273889f5782da1530394f8963e7b29033a973b5af6fd94e4f83ffd080a38"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/README.md",
+      "bytes": 1747,
+      "sha256": "0fb86a21f8ac2159e8465756ad31e2813c4f1b7d69342ac752e3be8e00aa9de5"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/draft-kott-numina-pair-binding-02-final.pdf",
+      "bytes": 808496,
+      "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/draft-kott-numina-pair-binding-02-final.pdf.ed25519.sig64",
+      "bytes": 64,
+      "sha256": "306c22187641eccd92a017a5dcced2dc81185c6e8be342763698d03654395819"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/operational-ed25519-public.raw32",
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+    },
+    {
+      "path": "outputs/final-manuscript-delivery-2026-10-10/verify_download.py",
+      "bytes": 3538,
+      "sha256": "3d607d218cefa331f4b22f831196423f57255570d0b454f9416c2e684f9b3281"
+    }
+  ]
+}

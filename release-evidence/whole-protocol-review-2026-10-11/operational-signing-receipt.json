@@ -1,0 +1,141 @@
+{
+  "schema": "numina.correctness-review-operational-signing-receipt.v1",
+  "signed_at_utc": "2026-10-11T04:45:11.237534+00:00",
+  "purpose": "Authorized operational delivery signatures over finalized public correctness-review reports and their exact byte inventory; no companion issuance, policy adoption, deployment or whole-protocol certification.",
+  "algorithm": "pure Ed25519",
+  "framing": "Exact full-file bytes; no canonicalization or prehash",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "inventory_sha256": "e001a9f18cdb02bd42c1f506908a36485e8ae795162848a95fb45deda195a13a",
+  "whole_protocol_correctness_established": false,
+  "key_generated_or_rotated": false,
+  "private_key_exported": false,
+  "custody_mutated": false,
+  "memory_zeroization_guaranteed": false,
+  "documents": [
+    {
+      "path": "README.md",
+      "bytes": 1935,
+      "sha256": "6e3e83dadf01e94e1b8e514eb694b9030f5362a214318bf68313f4a21f23cf4e"
+    },
+    {
+      "path": "assessment.json",
+      "bytes": 22004,
+      "sha256": "187f4e249fc1f9a2360baf1ff90dca5a26d9a9444f7ec84f67b4d73d023b6e36"
+    },
+    {
+      "path": "build-numina-correctness-reports.py",
+      "bytes": 17862,
+      "sha256": "d9938c274370024827c31d0f39263de26926924ac1de60171cf94993ed188c5c"
+    },
+    {
+      "path": "original-delivery-source-record.json",
+      "bytes": 2752,
+      "sha256": "1cf4c2fe90af6d24229ac227ed26f28cc02c50f70980ffccab2273b3577c1957"
+    },
+    {
+      "path": "reports/NCPSModelClosure-audit.log",
+      "bytes": 330,
+      "sha256": "793a71cda57131492622d9941d87b01216621dca287e023dfa2f0e450b0eb584"
+    },
+    {
+      "path": "reports/NCPSModelClosure-verification.json",
+      "bytes": 772,
+      "sha256": "ff14e73206d01df8c7ad23306d8d756282209ea7313f2f618f9d4e9b1c9ec573"
+    },
+    {
+      "path": "reports/NCPSModelClosure.lean",
+      "bytes": 2656,
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+    },
+    {
+      "path": "reports/RecoveredTheoremPremises.json",
+      "bytes": 49651,
+      "sha256": "5e69324c754c59b9139830d4b4c2efc588d3f7d7fec6919a1f3d23f08cc5b304"
+    },
+    {
+      "path": "reports/agent-reviews-finalized.json",
+      "bytes": 3775,
+      "sha256": "d090fc92e53beeeb602dc0fae97193f998a0e6a4d192a7d1a5dad219b722d964"
+    },
+    {
+      "path": "reports/appendix-q-recovery.json",
+      "bytes": 12840,
+      "sha256": "48488df60fa613f54ec3b303c31b60d6a75e353486af697ff55c0f7da4eed4a5"
+    },
+    {
+      "path": "reports/implementation-conformance-review.json",
+      "bytes": 13358,
+      "sha256": "585794193a58a03a3d6c1498d80005e9902123f88dc7da90d06ac3a7f5ae3148"
+    },
+    {
+      "path": "reports/implementation-conformance-review.md",
+      "bytes": 2983,
+      "sha256": "696838afc920bcc550921fb377b539909893e7cca288ebbd626ddb5465394f60"
+    },
+    {
+      "path": "reports/independent-compiler-check.json",
+      "bytes": 22974,
+      "sha256": "0212bfb89153b5525c3b7b9eea38766fd4fb5f43e88a0d5206de9c30a44ed5ed"
+    },
+    {
+      "path": "reports/independent-proof-review.json",
+      "bytes": 12749,
+      "sha256": "c9c15d2385aa94117c57cc1ff674a0099cd7fa637880a946fb12b46e6d058b02"
+    },
+    {
+      "path": "reports/independent-remote-check.py",
+      "bytes": 4465,
+      "sha256": "16a104075684c32c21389c68f394cd8de19021cfe80fd1e1888fe4336fbcc8d9"
+    },
+    {
+      "path": "reports/original-pdf-and-package-checksum-readback.json",
+      "bytes": 2119,
+      "sha256": "6ef157c0e2cec56c9383b5f365d0b559560d8e648ce98020381eb99984f55d0b"
+    },
+    {
+      "path": "reports/probe-runtime-canonicalization.py",
+      "bytes": 12968,
+      "sha256": "4268c5c03e2cca8e43c6d3a3726bafbc37961d827ba90ee019f3f3ae829e6cdf"
+    },
+    {
+      "path": "reports/root-canonicalization-readback.json",
+      "bytes": 13095,
+      "sha256": "71f37e4ed96709cf6aa88d2eea10ad7c699ed25185921268348b27ffbca0ff1c"
+    },
+    {
+      "path": "reports/v156-provider-observation.json",
+      "bytes": 1940,
+      "sha256": "8a508c380f8a9bf85c072ad4e19032775a1014c6ade4e35e1fb1158dd5da1169"
+    },
+    {
+      "path": "reports/v156-source-commitment-verification.json",
+      "bytes": 2892,
+      "sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2"
+    },
+    {
+      "path": "reports/verify-original-pdf-and-package-checksum.py",
+      "bytes": 6465,
+      "sha256": "fbc3904350aa622ac4d2b58a992c6b4e76541e8c456845f76b00abc383d0081a"
+    },
+    {
+      "path": "reports/whole-protocol-proof-obligations.json",
+      "bytes": 37512,
+      "sha256": "367f954f3e0316144c204a7f46e338f41570587d3864206aa857e16a3417d7ac"
+    },
+    {
+      "path": "verify_assessment.py",
+      "bytes": 3890,
+      "sha256": "8e1859753762b290df4a7160f4935b166eb07ebf744a9e390d314b86b478f27f"
+    },
+    {
+      "path": "inventory.json",
+      "bytes": 4629,
+      "sha256": "e001a9f18cdb02bd42c1f506908a36485e8ae795162848a95fb45deda195a13a"
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 2667,
+      "sha256": "dd8f21b6f13b29e605a64a32ed3a1b5cab06b44625a3c5d8ccf8ef015ecc76ad"
+    }
+  ]
+}

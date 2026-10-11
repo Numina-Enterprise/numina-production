@@ -1,0 +1,43 @@
+{
+  "schema": "numina.v156-provider-observation.v1",
+  "observed_at_utc": "2026-10-11 04:05:28 UTC",
+  "source": "Authenticated Sites get_site_version and get_deployment_status calls",
+  "classification": "authenticated_provider_metadata_unsigned",
+  "is_ed25519_signed_receipt": false,
+  "version": {
+    "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_eca729611498819187ec1788038df2f5",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "version_number": 156,
+    "source": {
+      "commit_sha": "df099d3ae4952a9966cf3b9e4ef299626dc7d338"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000e7a8822f9810515788e20eae",
+      "content_hash": "sha256:0c3119a6dd28e921c80b0bf1ca00f280859af040e1e1b43868872b22d2925101",
+      "size_bytes": 49070080,
+      "file_count": 378
+    },
+    "deployment_id": "appgdep_6ac5cfad4a708191916da7ec25bf01eb"
+  },
+  "deployment": {
+    "id": "appgdep_6ac5cfad4a708191916da7ec25bf01eb",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "title": "Numina Labs",
+    "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_eca729611498819187ec1788038df2f5",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+    "has_mcp": true,
+    "screenshot_asset_pointer": "sediment://file_00000000e71c81f8b6d5c692849177c1",
+    "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+    "failure_message": null,
+    "env_set_revision": 14,
+    "updated_at": "2026-10-07T04:51:50.230086+00:00"
+  },
+  "limitations": [
+    "Provider-reported archive content_hash; archive bytes were not retrieved or independently hashed.",
+    "This record confirms the v156 latest publish attempt status, not current live version or runtime health.",
+    "No exact final-deployment-receipt artifact or detached signature returned by these provider tools."
+  ]
+}
