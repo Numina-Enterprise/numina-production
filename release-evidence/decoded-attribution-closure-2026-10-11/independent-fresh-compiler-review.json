@@ -1,0 +1,1052 @@
+{
+  "schema": "numina.independent-attribution-compiler-review/v1",
+  "checked_at_utc": "2026-10-11T04:59:45.901946+00:00",
+  "device": "Samuels-MacBook-Pro.local",
+  "device_id": "e0603b5a-7955-455a-89dd-63bd7406f77b",
+  "fresh_scratch_path": "/private/tmp/ncps-attribution-receipt-audit-mr0uldeh",
+  "compiler": {
+    "path": "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+    "sha256": "c89073b8a577a5914ead7b740d2ad996af1ad5ad5b4bfc2825e0bce2f01b6aa4",
+    "version": "Lean (version 4.22.0, arm64-apple-darwin23.6.0, commit ba2cbbf09d4978f416e0ebd1fceeebc2c4138c05, Release)",
+    "trust_level": 0
+  },
+  "source_zip": {
+    "path": "/Users/samuelkott/Documents/Numina/NCPS-Lean4-Proofs-2026-10-09.zip",
+    "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+  },
+  "source_inventory": {
+    "NCPSVerification.lean": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+    "NCPSClosure.lean": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+    "NCPSAll.lean": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7",
+    "NCPSFullAxiomAudit.lean": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468",
+    "NCPSRelations.lean": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+    "NCPSModelClosure.lean": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8",
+    "NCPSUtf8.lean": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+    "NCPSCore.lean": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+    "NCPSProtocol.lean": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+    "NCPSAudit.lean": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+    "NCPSVersion.lean": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+    "NCPSAttributionClosure.lean": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee",
+    "NCPSBoundaries.lean": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+    "NCPSCodec.lean": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+    "NCPSState.lean": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1"
+  },
+  "compilation": [
+    {
+      "module": "NCPSCore",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSCore.olean",
+        "NCPSCore.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSProtocol",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSProtocol.olean",
+        "NCPSProtocol.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSCodec",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSCodec.olean",
+        "NCPSCodec.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSRelations",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSRelations.olean",
+        "NCPSRelations.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSState",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSState.olean",
+        "NCPSState.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSClosure",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSClosure.olean",
+        "NCPSClosure.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSVerification",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSVerification.olean",
+        "NCPSVerification.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSVersion",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSVersion.olean",
+        "NCPSVersion.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSBoundaries",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSBoundaries.olean",
+        "NCPSBoundaries.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSAudit",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSAudit.olean",
+        "NCPSAudit.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSUtf8",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSUtf8.olean",
+        "NCPSUtf8.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSAll",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSAll.olean",
+        "NCPSAll.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSModelClosure",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSModelClosure.olean",
+        "NCPSModelClosure.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]\n'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]\n",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSAttributionClosure",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSAttributionClosure.olean",
+        "NCPSAttributionClosure.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "'NCPS.AttributionClosure.check_true_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.check_false_iff_not_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_valid' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_accepted' depends on axioms: [propext]\n'NCPS.AttributionClosure.map_member_order_immaterial' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_sources_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_people_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.unapproved_note_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.all_seven_findings_preserved' does not depend on any axioms\n'NCPS.AttributionClosure.attribution_pass_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.evaluated_collection_iff' depends on axioms: [propext]\n'NCPS.AttributionClosure.invalid_attribution_never_accepted' depends on axioms: [propext]\n",
+      "stderr": ""
+    }
+  ],
+  "base_audit": {
+    "expected_declarations": 131,
+    "unique_expected": 131,
+    "output_lines": 131,
+    "dependencies": {
+      "Classical.choice": 2,
+      "Quot.sound": 22,
+      "propext": 60
+    },
+    "entries": [
+      {
+        "declaration": "NCPS.byte_lt_256",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.empty_length",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.length_zero_iff",
+        "axioms": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.concat_length",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.concat_empty_left",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.concat_empty_right",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.concat_assoc",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.byteAt_out_of_bounds",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.byteAt_in_bounds",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.bytes_ext",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.fromTagged_length",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.fromTagged_toTagged",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.emptyTagged_length",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ExtractionSet.empty_no_mem",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ExtractionSet.fromList_mem",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ExtractionSet.fromList_duplicate",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ExtractionSet.fromList_swap",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.rejection_ne_empty_success",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.erasure_collision",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.extract_rejected_iff",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.extract_accepted_iff",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.nonempty_slices_implies_success",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.accepted_empty_distinct_from_rejected",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.extracted_empty_sequence_is_nonempty",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ofFn_injective",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.fromTagged_injective",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.toTagged_fromTagged",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.tagged_equivalence_left",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.tagged_equivalence_right",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.codec_injective_of_roundtrip",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.canonical_roundtrip",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.canonical_serialization_injective",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.sample_roundtrip",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.sample_codec_roundtrip",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.sample_encode_injective",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.sample_rejects_empty",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.frame_length",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.frame_injective",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.conforming_implementations_agree",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.unknown_not_proven",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.failed_not_proven",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.positive_proven",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.refinement_preserves_reachability",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.refinement_preserves_invariant",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.codec_injective_of_roundtrip",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.canonical_roundtrip",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.canonical_serialization_injective",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.encodeObject_defined",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.object_roundtrip",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.sample_roundtrip",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.sample_codec_roundtrip",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.sample_encode_injective",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.sample_rejects_empty",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.frame_length",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.frame_injective",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.frame_of_equal_payload",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.conforms_implies_realize_eq",
+        "axioms": [
+          "Quot.sound"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.realize_eq_implies_conforms",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.conforms_iff_observational_equality",
+        "axioms": [
+          "Quot.sound"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.conforming_implementations_agree",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.declaration_ids_are_distinct",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.both_demo_relations_empty_on_any_instances",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.duplicate_symbols_rejected",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.local_only_resolves",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.imported_only_resolves",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.absent_symbols_rejected",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.reachable_maps",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.safety_preserved",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.counter_refinement_preserves_reachability",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.counter_concrete_next",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.unavailable_is_blocked",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.unchecked_is_not_passed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.positive_check_passed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.negative_check_failed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.blocked_ne_failed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.blocked_ne_passed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.unchecked_ne_passed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.fully_closed_implies_each_pass",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.blocked_stage_prevents_closure",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.failed_stage_prevents_closure",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.unchecked_stage_prevents_closure",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.allPass_fully_closed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.proof_gate_required",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.evidence_without_prerequisites_blocked",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.accepted_signature_valid",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.accepted_authority_valid",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.accepted_sources_valid",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.accepted_freshness",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.accepted_private_when_required",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.accepted_current_source_when_required",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.signature_alone_not_acceptance",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.unavailable_authority_ne_passed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.unverified_private_not_acceptance_when_required",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.untrusted_signature_rejected",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.same_release_is_equal",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.labels_equal_but_releases_differ",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.genesis_congruent",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.deterministic_does_not_imply_injective",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.zero_depth_unique",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.no_singleton_at_any_bound",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.bounded_search_may_fail",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.empty_is_prefix",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.empty_is_suffix",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.empty_is_infix",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.prefix_reflexive",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.suffix_reflexive",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.infix_reflexive",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.prefix_transitive",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.suffix_transitive",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.prefix_length_bound",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.suffix_length_bound",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Advanced.full_pass_requires_jcs",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.full_pass_requires_signatures",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.full_pass_requires_trust",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.full_pass_requires_field",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.blocked_field_prevents_full_pass",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.incomplete_jcs_prevents_full_pass",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Advanced.current_evidence_not_full_pass",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.bom_is_detected",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.bom_is_rejected",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Utf8.reject_any_bom_prefixed",
+        "axioms": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Utf8.decode_success_implies_no_bom",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Utf8.decode_success_implies_valid_utf8",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.Utf8.fdd0_is_noncharacter",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.fdef_is_noncharacter",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.plane_zero_fffe_is_noncharacter",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.last_unicode_noncharacter",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.ascii_is_allowed",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.surrogate_is_rejected",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.noncharacter_is_rejected",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.Utf8.allowed_scalar_no_noncharacter",
+        "axioms": [
+          "propext"
+        ]
+      }
+    ],
+    "mismatches": [],
+    "output_sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a",
+    "stdout": "'NCPS.byte_lt_256' does not depend on any axioms\n'NCPS.empty_length' does not depend on any axioms\n'NCPS.length_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'NCPS.concat_length' depends on axioms: [propext]\n'NCPS.concat_empty_left' depends on axioms: [propext]\n'NCPS.concat_empty_right' depends on axioms: [propext]\n'NCPS.concat_assoc' depends on axioms: [propext]\n'NCPS.byteAt_out_of_bounds' depends on axioms: [propext]\n'NCPS.byteAt_in_bounds' does not depend on any axioms\n'NCPS.bytes_ext' depends on axioms: [propext]\n'NCPS.fromTagged_length' depends on axioms: [propext]\n'NCPS.fromTagged_toTagged' depends on axioms: [propext]\n'NCPS.emptyTagged_length' depends on axioms: [propext]\n'NCPS.ExtractionSet.empty_no_mem' depends on axioms: [propext, Quot.sound]\n'NCPS.ExtractionSet.fromList_mem' depends on axioms: [propext, Quot.sound]\n'NCPS.ExtractionSet.fromList_duplicate' depends on axioms: [propext, Quot.sound]\n'NCPS.ExtractionSet.fromList_swap' depends on axioms: [propext, Quot.sound]\n'NCPS.rejection_ne_empty_success' depends on axioms: [propext, Quot.sound]\n'NCPS.erasure_collision' depends on axioms: [propext, Quot.sound]\n'NCPS.extract_rejected_iff' depends on axioms: [propext, Quot.sound]\n'NCPS.extract_accepted_iff' depends on axioms: [propext, Quot.sound]\n'NCPS.nonempty_slices_implies_success' depends on axioms: [propext, Quot.sound]\n'NCPS.accepted_empty_distinct_from_rejected' depends on axioms: [propext, Quot.sound]\n'NCPS.extracted_empty_sequence_is_nonempty' depends on axioms: [propext, Quot.sound]\n'NCPS.ofFn_injective' depends on axioms: [propext, Quot.sound]\n'NCPS.fromTagged_injective' depends on axioms: [propext, Quot.sound]\n'NCPS.toTagged_fromTagged' depends on axioms: [propext, Quot.sound]\n'NCPS.tagged_equivalence_left' depends on axioms: [propext]\n'NCPS.tagged_equivalence_right' depends on axioms: [propext, Quot.sound]\n'NCPS.codec_injective_of_roundtrip' does not depend on any axioms\n'NCPS.canonical_roundtrip' does not depend on any axioms\n'NCPS.canonical_serialization_injective' does not depend on any axioms\n'NCPS.sample_roundtrip' depends on axioms: [propext]\n'NCPS.sample_codec_roundtrip' depends on axioms: [propext]\n'NCPS.sample_encode_injective' depends on axioms: [propext]\n'NCPS.sample_rejects_empty' does not depend on any axioms\n'NCPS.frame_length' depends on axioms: [propext]\n'NCPS.frame_injective' does not depend on any axioms\n'NCPS.conforming_implementations_agree' does not depend on any axioms\n'NCPS.unknown_not_proven' does not depend on any axioms\n'NCPS.failed_not_proven' does not depend on any axioms\n'NCPS.positive_proven' does not depend on any axioms\n'NCPS.refinement_preserves_reachability' does not depend on any axioms\n'NCPS.refinement_preserves_invariant' does not depend on any axioms\n'NCPS.Advanced.codec_injective_of_roundtrip' does not depend on any axioms\n'NCPS.Advanced.canonical_roundtrip' does not depend on any axioms\n'NCPS.Advanced.canonical_serialization_injective' does not depend on any axioms\n'NCPS.Advanced.encodeObject_defined' depends on axioms: [propext]\n'NCPS.Advanced.object_roundtrip' depends on axioms: [propext]\n'NCPS.Advanced.sample_roundtrip' depends on axioms: [propext]\n'NCPS.Advanced.sample_codec_roundtrip' depends on axioms: [propext]\n'NCPS.Advanced.sample_encode_injective' depends on axioms: [propext]\n'NCPS.Advanced.sample_rejects_empty' does not depend on any axioms\n'NCPS.Advanced.frame_length' depends on axioms: [propext]\n'NCPS.Advanced.frame_injective' depends on axioms: [propext]\n'NCPS.Advanced.frame_of_equal_payload' does not depend on any axioms\n'NCPS.Advanced.conforms_implies_realize_eq' depends on axioms: [Quot.sound]\n'NCPS.Advanced.realize_eq_implies_conforms' does not depend on any axioms\n'NCPS.Advanced.conforms_iff_observational_equality' depends on axioms: [Quot.sound]\n'NCPS.Advanced.conforming_implementations_agree' does not depend on any axioms\n'NCPS.Advanced.declaration_ids_are_distinct' does not depend on any axioms\n'NCPS.Advanced.both_demo_relations_empty_on_any_instances' does not depend on any axioms\n'NCPS.Advanced.duplicate_symbols_rejected' depends on axioms: [propext]\n'NCPS.Advanced.local_only_resolves' depends on axioms: [propext]\n'NCPS.Advanced.imported_only_resolves' depends on axioms: [propext]\n'NCPS.Advanced.absent_symbols_rejected' depends on axioms: [propext]\n'NCPS.Advanced.reachable_maps' does not depend on any axioms\n'NCPS.Advanced.safety_preserved' does not depend on any axioms\n'NCPS.Advanced.counter_refinement_preserves_reachability' does not depend on any axioms\n'NCPS.Advanced.counter_concrete_next' does not depend on any axioms\n'NCPS.Advanced.unavailable_is_blocked' does not depend on any axioms\n'NCPS.Advanced.unchecked_is_not_passed' does not depend on any axioms\n'NCPS.Advanced.positive_check_passed' does not depend on any axioms\n'NCPS.Advanced.negative_check_failed' does not depend on any axioms\n'NCPS.Advanced.blocked_ne_failed' does not depend on any axioms\n'NCPS.Advanced.blocked_ne_passed' does not depend on any axioms\n'NCPS.Advanced.unchecked_ne_passed' does not depend on any axioms\n'NCPS.Advanced.fully_closed_implies_each_pass' does not depend on any axioms\n'NCPS.Advanced.blocked_stage_prevents_closure' does not depend on any axioms\n'NCPS.Advanced.failed_stage_prevents_closure' does not depend on any axioms\n'NCPS.Advanced.unchecked_stage_prevents_closure' does not depend on any axioms\n'NCPS.Advanced.allPass_fully_closed' does not depend on any axioms\n'NCPS.Advanced.proof_gate_required' does not depend on any axioms\n'NCPS.Advanced.evidence_without_prerequisites_blocked' depends on axioms: [propext]\n'NCPS.Advanced.accepted_signature_valid' does not depend on any axioms\n'NCPS.Advanced.accepted_authority_valid' does not depend on any axioms\n'NCPS.Advanced.accepted_sources_valid' does not depend on any axioms\n'NCPS.Advanced.accepted_freshness' does not depend on any axioms\n'NCPS.Advanced.accepted_private_when_required' does not depend on any axioms\n'NCPS.Advanced.accepted_current_source_when_required' does not depend on any axioms\n'NCPS.Advanced.signature_alone_not_acceptance' does not depend on any axioms\n'NCPS.Advanced.unavailable_authority_ne_passed' does not depend on any axioms\n'NCPS.Advanced.unverified_private_not_acceptance_when_required' does not depend on any axioms\n'NCPS.Advanced.untrusted_signature_rejected' depends on axioms: [propext]\n'NCPS.Advanced.same_release_is_equal' does not depend on any axioms\n'NCPS.Advanced.labels_equal_but_releases_differ' does not depend on any axioms\n'NCPS.Advanced.genesis_congruent' does not depend on any axioms\n'NCPS.Advanced.deterministic_does_not_imply_injective' does not depend on any axioms\n'NCPS.Advanced.zero_depth_unique' does not depend on any axioms\n'NCPS.Advanced.no_singleton_at_any_bound' depends on axioms: [propext]\n'NCPS.Advanced.bounded_search_may_fail' depends on axioms: [propext]\n'NCPS.Advanced.empty_is_prefix' depends on axioms: [propext]\n'NCPS.Advanced.empty_is_suffix' depends on axioms: [propext]\n'NCPS.Advanced.empty_is_infix' depends on axioms: [propext]\n'NCPS.Advanced.prefix_reflexive' depends on axioms: [propext]\n'NCPS.Advanced.suffix_reflexive' depends on axioms: [propext]\n'NCPS.Advanced.infix_reflexive' depends on axioms: [propext]\n'NCPS.Advanced.prefix_transitive' depends on axioms: [propext]\n'NCPS.Advanced.suffix_transitive' depends on axioms: [propext]\n'NCPS.Advanced.prefix_length_bound' depends on axioms: [propext]\n'NCPS.Advanced.suffix_length_bound' depends on axioms: [propext]\n'NCPS.Advanced.full_pass_requires_jcs' does not depend on any axioms\n'NCPS.Advanced.full_pass_requires_signatures' does not depend on any axioms\n'NCPS.Advanced.full_pass_requires_trust' does not depend on any axioms\n'NCPS.Advanced.full_pass_requires_field' does not depend on any axioms\n'NCPS.Advanced.blocked_field_prevents_full_pass' does not depend on any axioms\n'NCPS.Advanced.incomplete_jcs_prevents_full_pass' does not depend on any axioms\n'NCPS.Advanced.current_evidence_not_full_pass' does not depend on any axioms\n'NCPS.Utf8.bom_is_detected' does not depend on any axioms\n'NCPS.Utf8.bom_is_rejected' depends on axioms: [propext, Quot.sound]\n'NCPS.Utf8.reject_any_bom_prefixed' depends on axioms: [propext, Classical.choice, Quot.sound]\n'NCPS.Utf8.decode_success_implies_no_bom' depends on axioms: [propext, Quot.sound]\n'NCPS.Utf8.decode_success_implies_valid_utf8' depends on axioms: [propext, Quot.sound]\n'NCPS.Utf8.fdd0_is_noncharacter' does not depend on any axioms\n'NCPS.Utf8.fdef_is_noncharacter' does not depend on any axioms\n'NCPS.Utf8.plane_zero_fffe_is_noncharacter' does not depend on any axioms\n'NCPS.Utf8.last_unicode_noncharacter' does not depend on any axioms\n'NCPS.Utf8.ascii_is_allowed' does not depend on any axioms\n'NCPS.Utf8.surrogate_is_rejected' does not depend on any axioms\n'NCPS.Utf8.noncharacter_is_rejected' does not depend on any axioms\n'NCPS.Utf8.allowed_scalar_no_noncharacter' depends on axioms: [propext]\n",
+    "pass": true,
+    "exit_code": 0,
+    "stderr": "",
+    "exact_original_131_log_match": true
+  },
+  "model_closure_audit": {
+    "expected_declarations": 4,
+    "unique_expected": 4,
+    "output_lines": 4,
+    "dependencies": {
+      "propext": 4,
+      "Quot.sound": 1
+    },
+    "entries": [
+      {
+        "declaration": "NCPS.ModelClosure.evaluate_eq_true_iff_accepts",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ModelClosure.framed_encode_injective",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.ModelClosure.extensional_pair_set_not_injective",
+        "axioms": [
+          "Quot.sound",
+          "propext"
+        ]
+      }
+    ],
+    "mismatches": [],
+    "output_sha256": "793a71cda57131492622d9941d87b01216621dca287e023dfa2f0e450b0eb584",
+    "stdout": "'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]\n'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]\n",
+    "pass": true
+  },
+  "attribution_audit": {
+    "expected_declarations": 12,
+    "unique_expected": 12,
+    "output_lines": 12,
+    "dependencies": {
+      "propext": 11
+    },
+    "entries": [
+      {
+        "declaration": "NCPS.AttributionClosure.check_true_iff_fixed",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.check_false_iff_not_fixed",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.fixed_view_valid",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.fixed_view_accepted",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.map_member_order_immaterial",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.reversed_sources_rejected",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.reversed_people_rejected",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.unapproved_note_rejected",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.all_seven_findings_preserved",
+        "axioms": []
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.attribution_pass_iff_fixed",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.evaluated_collection_iff",
+        "axioms": [
+          "propext"
+        ]
+      },
+      {
+        "declaration": "NCPS.AttributionClosure.invalid_attribution_never_accepted",
+        "axioms": [
+          "propext"
+        ]
+      }
+    ],
+    "mismatches": [],
+    "output_sha256": "bce0ae670dd8c95337d12a0137346443ff3c83184d968f5de83ca73c13513824",
+    "stdout": "'NCPS.AttributionClosure.check_true_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.check_false_iff_not_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_valid' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_accepted' depends on axioms: [propext]\n'NCPS.AttributionClosure.map_member_order_immaterial' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_sources_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_people_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.unapproved_note_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.all_seven_findings_preserved' does not depend on any axioms\n'NCPS.AttributionClosure.attribution_pass_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.evaluated_collection_iff' depends on axioms: [propext]\n'NCPS.AttributionClosure.invalid_attribution_never_accepted' depends on axioms: [propext]\n",
+    "pass": true,
+    "source_theorem_count": 12,
+    "custom_axioms": 0,
+    "sorryAx": 0
+  },
+  "scratch_sources_unchanged": true,
+  "original_archive_unchanged": true,
+  "whole_protocol_pass": false,
+  "scope": "Independent fresh fourteen-unit compilation and axiom audit only; decoded attribution/model subgap, not raw parser/schema/provenance/lifecycle/Ed25519/runtime conformance."
+}

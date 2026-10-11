@@ -1,0 +1,162 @@
+{
+  "schema": "numina.decoded-attribution-advance.v1",
+  "status": "bounded_fixed_attribution_model_subgap_closed",
+  "target": "Documented fixed attribution in manuscript numina.pair-binding.v1, over a new decoded-value representation",
+  "source_of_record": "Numina production tree; signed whole-protocol review retained unchanged",
+  "new_source": {
+    "bytes": 8263,
+    "sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee"
+  },
+  "prior_dependencies": {
+    "base_archive": {
+      "path": "/Users/samuelkott/Documents/Numina/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    "model_extension": {
+      "path": "/private/tmp/ncps-independent-recheck-20261011-fndn1lhh/NCPSModelClosure.lean",
+      "bytes": 2656,
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+    }
+  },
+  "closed_subgap": {
+    "parent_obligation": "ATTRIBUTION-01",
+    "parent_obligation_still_open": true,
+    "completed": "Concrete fixed decoded-value checker, an explicitly separate eighth finding, inherited seven-finding preservation, and proved checker/gate composition.",
+    "strongest_theorem": "For every modeled VerificationPolicy, inherited VerificationReport, and DecodedAttributionView, evaluateEight(policy, collectReport(base, view)) = true iff Accepts(policy, base) AND FixedAttribution(view).",
+    "why_substantive": "Attribution is computed from exact source identifiers and aliases, people names and labels, the two-entry person-to-alias map, and the note. It is not a freely assumed eighth pass flag.",
+    "precise_domain": "Typed decoded strings and lists only; personToAlias is represented as a two-member association list allowing both member orders, while source and people array order remain fixed.",
+    "nonvacuity": "The exact fixedView satisfies the predicate and is accepted by the decoded checker.",
+    "rejection_properties": "Reversed sources, reversed people, and any note different from the pinned Appendix F literal are rejected regardless of the other decoded fields.",
+    "provenance_limit": "No proof that actual raw JSON is parsed or projected into this representation; no evidence locators, target identifiers, observation times or result reasons are added to this bounded finding-only model."
+  },
+  "fixed_literals": {
+    "source_text_sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2",
+    "source_text_path": "/workspace/outputs/Numina-Pair-Binding-02-final-signed-package/supporting-output-snapshots/numina-pair-binding-02.txt",
+    "note_utf8_bytes": 364,
+    "note_sha256": "d4b9a83bb742ac50eb42d773ebfa04cf7130ba87527597c469b2ab67cbc8a8c9",
+    "source_order": [
+      {
+        "source_id": "source_1",
+        "alias": "UNIVERSAL_PAIR_1"
+      },
+      {
+        "source_id": "source_2",
+        "alias": "UNIVERSAL_PAIR_2"
+      }
+    ],
+    "personal_order": [
+      {
+        "name": "Sam Kott",
+        "label": "1A"
+      },
+      {
+        "name": "Lauren Anderson",
+        "label": "1B"
+      }
+    ],
+    "person_to_alias": {
+      "Sam Kott": "UNIVERSAL_PAIR_2",
+      "Lauren Anderson": "UNIVERSAL_PAIR_1"
+    },
+    "note_policy": "Only the documented fixed Appendix F note is admitted. Independently approved versioned replacements are outside this new fixed-profile model.",
+    "no_personal_fact_verification": true
+  },
+  "proof_execution": {
+    "new_theorems": 12,
+    "isolated_builds": 2,
+    "compilation_units_each": 14,
+    "trust_level": 0,
+    "compiler": {
+      "path": "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+      "version": "Lean (version 4.22.0, arm64-apple-darwin23.6.0, commit ba2cbbf09d4978f416e0ebd1fceeebc2c4138c05, Release)",
+      "sha256": "c89073b8a577a5914ead7b740d2ad996af1ad5ad5b4bfc2825e0bce2f01b6aa4",
+      "trust_level": 0
+    },
+    "all_builds_passed": true,
+    "original_131_axiom_log_reproduced_in_each_build": true,
+    "new_axioms": {
+      "propext_theorems": 11,
+      "no_axioms_theorems": 1,
+      "custom_axioms": 0,
+      "sorryAx": 0
+    },
+    "explicit_theorem_premises": [
+      "Main correspondence quantifies arbitrary inherited seven-field modeled reports; it does not prove their findings true of an actual target.",
+      "Reversal rejection lemmas assume the corresponding decoded list equals the documented reverse.",
+      "Unapproved-note rejection assumes decoded note differs from the literal.",
+      "Invalid-attribution rejection assumes the independently defined FixedAttribution predicate does not hold."
+    ],
+    "trusted_checking_base": "Pinned native Lean 4.22.0 and its standard library; no claim that the compiler or String/List equality implementation has itself been verified here.",
+    "semantic_review": {
+      "path": "attribution-semantic-review.json",
+      "verdict": "PASS within decoded fixed-attribution and composed model scope"
+    },
+    "third_agent_independent_compiler_review": {
+      "status": "PASS",
+      "path": "independent-fresh-compiler-review.json",
+      "bytes": 37576,
+      "sha256": "b53ef21648862c5aace95c3e991b85ff6769f5ca2a1474affa7edccc9b0e2410",
+      "fresh_units_compiled": 14,
+      "original_base_audit_exact": true,
+      "inherited_four_theorem_audit_exact": true,
+      "new_twelve_names_and_axioms_match": true,
+      "source_unchanged": true
+    }
+  },
+  "preservation": {
+    "signed_successor_files_checked": 54,
+    "signed_successor_bytes_unchanged": true,
+    "source_identity": {
+      "new_lean_bytes": 8263,
+      "new_lean_sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee"
+    },
+    "copied_dependency_identities": [
+      {
+        "path": "dependencies/NCPS-Lean4-Proofs-2026-10-09.zip",
+        "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+      },
+      {
+        "path": "dependencies/NCPSModelClosure.lean",
+        "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+      }
+    ]
+  },
+  "remaining_minimum_inputs": [
+    {
+      "id": "ATTR-WIRE-01",
+      "owner": "unassigned",
+      "missing": "Exact intended companion raw-input parser, closed schema, decoded-value representation and projection source/build identity.",
+      "pass_condition": "Kernel-checked or otherwise explicitly justified correspondence proving this view contains exactly the parsed source/people/map/note values, with duplicate-key rejection before collapse and no unknown-member omission used as acceptance evidence.",
+      "reason": "No matching companion implementation was found in the reviewed production source roots. The new view is not a parser."
+    },
+    {
+      "id": "ATTR-REPORT-01",
+      "owner": "unassigned",
+      "missing": "Exact actual eight-finding report construction and acceptance implementation, including provenance and lifecycle metadata.",
+      "pass_condition": "Prove the installed report computation uses this checker or a semantically equivalent pinned implementation, preserves each inherited field, and retains per-check target/evidence/time/reason plus pending, unavailable and failed states."
+    },
+    {
+      "id": "ATTR-POLICY-01",
+      "owner": "unassigned",
+      "missing": "Chosen operational attribution profile and independently authenticated approval/version binding.",
+      "pass_condition": "Bind the exact accepted note/map to the requested project/release/source scope, and handle any versioned replacement through independently approved policy rather than accepting arbitrary schema-valid text."
+    },
+    {
+      "id": "PROTOCOL-REST",
+      "owner": "unassigned",
+      "missing": "Concrete JSON/JCS/Ed25519 correspondence, cryptographic assumptions, independently authenticated trust/current state/private linkage, source/binary/refinement and required original proof-package dependencies.",
+      "pass_condition": "Discharge the remaining exact obligations in the signed whole-protocol assessment against one pinned target. This decoded-attribution theorem cannot substitute for those witnesses."
+    }
+  ],
+  "separate_unchanged_limits": {
+    "legacy_eight_boolean_schema": "Unknown legacy ClosureResult field names/projection remain unavailable and are not invented by EightFindingReport.",
+    "distinct_lean_424_sources": "The new module imports the exact 4.22.0 bundle and frozen four-theorem extension. It does not replace or verify missing 4.24.0 parser/projection/guard sources.",
+    "actual_companion_deployment_verified": false,
+    "raw_wire_to_model_refinement_verified": false,
+    "whole_protocol_correctness_established": false,
+    "ietf_independent_stream_acceptance_established_by_this_packet": false,
+    "new_signature_issued": false
+  },
+  "next_verifiable_step": "Obtain the exact raw companion decoder/report implementation and prove its decoded attribution projection and eight-finding construction correspond to this checked fixed-value model. Independent compiler review of the new source has now passed."
+}

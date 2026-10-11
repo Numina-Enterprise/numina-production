@@ -1,0 +1,444 @@
+{
+  "schema": "numina.decoded-attribution-proof-check.v1",
+  "checked_at": "2026-10-11T04:57:43.074631+00:00",
+  "compiler": {
+    "path": "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+    "version": "Lean (version 4.22.0, arm64-apple-darwin23.6.0, commit ba2cbbf09d4978f416e0ebd1fceeebc2c4138c05, Release)",
+    "sha256": "c89073b8a577a5914ead7b740d2ad996af1ad5ad5b4bfc2825e0bce2f01b6aa4",
+    "trust_level": 0
+  },
+  "base_archive": {
+    "path": "/Users/samuelkott/Documents/Numina/NCPS-Lean4-Proofs-2026-10-09.zip",
+    "bytes": 22789,
+    "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+  },
+  "previous_extension": {
+    "path": "/private/tmp/ncps-independent-recheck-20261011-fndn1lhh/NCPSModelClosure.lean",
+    "bytes": 2656,
+    "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+  },
+  "new_source": {
+    "bytes": 8263,
+    "sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee"
+  },
+  "independent_runs": [
+    {
+      "scratch": "/private/tmp/ncps-attribution-independent-wi72af83",
+      "compilation": [
+        {
+          "module": "NCPSCore",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSCore.olean",
+            "NCPSCore.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSProtocol",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSProtocol.olean",
+            "NCPSProtocol.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSCodec",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSCodec.olean",
+            "NCPSCodec.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSRelations",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSRelations.olean",
+            "NCPSRelations.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSState",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSState.olean",
+            "NCPSState.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSClosure",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSClosure.olean",
+            "NCPSClosure.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSVerification",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSVerification.olean",
+            "NCPSVerification.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSVersion",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSVersion.olean",
+            "NCPSVersion.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSBoundaries",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSBoundaries.olean",
+            "NCPSBoundaries.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSAudit",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSAudit.olean",
+            "NCPSAudit.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSUtf8",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSUtf8.olean",
+            "NCPSUtf8.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSAll",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSAll.olean",
+            "NCPSAll.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSModelClosure",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSModelClosure.olean",
+            "NCPSModelClosure.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]\n'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]\n",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSAttributionClosure",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSAttributionClosure.olean",
+            "NCPSAttributionClosure.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "'NCPS.AttributionClosure.check_true_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.check_false_iff_not_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_valid' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_accepted' depends on axioms: [propext]\n'NCPS.AttributionClosure.map_member_order_immaterial' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_sources_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_people_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.unapproved_note_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.all_seven_findings_preserved' does not depend on any axioms\n'NCPS.AttributionClosure.attribution_pass_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.evaluated_collection_iff' depends on axioms: [propext]\n'NCPS.AttributionClosure.invalid_attribution_never_accepted' depends on axioms: [propext]\n",
+          "stderr": ""
+        }
+      ],
+      "all_compilations_passed": true,
+      "base_axiom_audit": {
+        "exit_code": 0,
+        "stdout_sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a",
+        "original_log_exact": true,
+        "stderr": ""
+      }
+    },
+    {
+      "scratch": "/private/tmp/ncps-attribution-independent-2fll2w27",
+      "compilation": [
+        {
+          "module": "NCPSCore",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSCore.olean",
+            "NCPSCore.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSProtocol",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSProtocol.olean",
+            "NCPSProtocol.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSCodec",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSCodec.olean",
+            "NCPSCodec.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSRelations",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSRelations.olean",
+            "NCPSRelations.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSState",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSState.olean",
+            "NCPSState.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSClosure",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSClosure.olean",
+            "NCPSClosure.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSVerification",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSVerification.olean",
+            "NCPSVerification.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSVersion",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSVersion.olean",
+            "NCPSVersion.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSBoundaries",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSBoundaries.olean",
+            "NCPSBoundaries.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSAudit",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSAudit.olean",
+            "NCPSAudit.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSUtf8",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSUtf8.olean",
+            "NCPSUtf8.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSAll",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSAll.olean",
+            "NCPSAll.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSModelClosure",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSModelClosure.olean",
+            "NCPSModelClosure.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]\n'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]\n",
+          "stderr": ""
+        },
+        {
+          "module": "NCPSAttributionClosure",
+          "command": [
+            "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+            "-t",
+            "0",
+            "-o",
+            "NCPSAttributionClosure.olean",
+            "NCPSAttributionClosure.lean"
+          ],
+          "exit_code": 0,
+          "stdout": "'NCPS.AttributionClosure.check_true_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.check_false_iff_not_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_valid' depends on axioms: [propext]\n'NCPS.AttributionClosure.fixed_view_accepted' depends on axioms: [propext]\n'NCPS.AttributionClosure.map_member_order_immaterial' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_sources_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.reversed_people_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.unapproved_note_rejected' depends on axioms: [propext]\n'NCPS.AttributionClosure.all_seven_findings_preserved' does not depend on any axioms\n'NCPS.AttributionClosure.attribution_pass_iff_fixed' depends on axioms: [propext]\n'NCPS.AttributionClosure.evaluated_collection_iff' depends on axioms: [propext]\n'NCPS.AttributionClosure.invalid_attribution_never_accepted' depends on axioms: [propext]\n",
+          "stderr": ""
+        }
+      ],
+      "all_compilations_passed": true,
+      "base_axiom_audit": {
+        "exit_code": 0,
+        "stdout_sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a",
+        "original_log_exact": true,
+        "stderr": ""
+      }
+    }
+  ],
+  "all_runs_passed": true,
+  "whole_protocol_correctness_verified": false
+}
