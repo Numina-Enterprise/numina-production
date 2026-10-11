@@ -138,3 +138,30 @@ test('different key environments never pass signed production history policy', a
     keys:[]},f.authority,'numina-key-history+jwt');
   await assert.rejects(verify(f,f.issue(),{keyHistoryJws:invalid}),/KEY_HISTORY_INVALID/);
 });
+
+test('duplicate JSON members and escaped aliases are always rejected, even with valid issuer signatures',async()=>{
+  const f=fixture();
+  const header=JSON.stringify({alg:'ES256',typ:'numina-payment-verdict+jwt',kid:'key1'});
+  const raw=JSON.stringify(f.claim);
+  const duplicates=[
+    raw.slice(0,-1)+',"payer":"'+f.claim.payer+'"}',
+    raw.slice(0,-1)+',"pay\\u0065r":"'+f.claim.payer+'"}',
+    raw.replace('"request":{','"request":{"recipient":"shadow",'),
+  ];
+  for(const bodyRaw of duplicates) {
+    const b64h=Buffer.from(header).toString('base64url');
+    const b64p=Buffer.from(bodyRaw).toString('base64url');
+    const input=b64h+'.'+b64p;
+    const signature=cryptoSign('sha256',Buffer.from(input,'ascii'),
+      {key:f.issuer.privateKey,dsaEncoding:'ieee-p1363'}).toString('base64url');
+    const jwt=input+'.'+signature;
+    await assert.rejects(verify(f,jwt),/DUPLICATE_JWS_JSON_KEY/);
+  }
+  const duplicateHeader='{"alg":"ES256","typ":"numina-payment-verdict+jwt","kid":"key1","alg":"ES256"}';
+  const head=Buffer.from(duplicateHeader).toString('base64url');
+  const pay=Buffer.from(JSON.stringify(f.claim)).toString('base64url');
+  const signingInput=head+'.'+pay;
+  const sig=cryptoSign('sha256',Buffer.from(signingInput,'ascii'),
+    {key:f.issuer.privateKey,dsaEncoding:'ieee-p1363'}).toString('base64url');
+  await assert.rejects(verify(f,signingInput+'.'+sig),/DUPLICATE_JWS_JSON_KEY/);
+});
