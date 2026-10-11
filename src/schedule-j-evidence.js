@@ -93,13 +93,15 @@ export const TREASURY_ASSERTION_TYPES = Object.freeze([
 ]);
 export function recordTreasuryAssertion(kind, {sourceClass, reference, recordedAt} = {}) {
   if (!TREASURY_ASSERTION_TYPES.includes(kind)) throw new Error('UNKNOWN_ASSERTION_TYPE');
-  if (!['INTERNAL_SOFTWARE', 'PROVIDER_OBSERVATION', 'INDEPENDENT_VERIFICATION'].includes(sourceClass) ||
+  // Do not let a caller label its own record "independently verified". An independently
+  // verified receipt belongs in a separately trusted verification pipeline.
+  if (!['INTERNAL_SOFTWARE', 'PROVIDER_OBSERVATION'].includes(sourceClass) ||
       !assertNonempty(reference) || !assertNonempty(recordedAt)) {
     throw new Error('EVIDENCE_PROVENANCE_REQUIRED');
   }
   return Object.freeze({
     kind, sourceClass, reference, recordedAt,
-    independentlyVerified: sourceClass === 'INDEPENDENT_VERIFICATION',
+    independentlyVerified: false,
     reconciliationStatus: 'NOT_RECONCILED',
   });
 }
