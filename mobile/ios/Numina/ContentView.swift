@@ -91,7 +91,7 @@ struct ContentView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(title == "Status" ? "Show System Status" : "Open \\(title)")
+        .accessibilityLabel(title == "Status" ? "Show System Status" : "Open \(title)")
     }
 }
 
