@@ -5,6 +5,7 @@ enum AppConfiguration {
     static let coreVersion = Bundle.main.object(forInfoDictionaryKey: "NuminaCoreVersion") as? String ?? "Not available"
     static let origin = URL(string: "https://numinalabs.xyz")!
     static let startURL = origin.appendingPathComponent("app")
+    static let servicesURL = origin.appendingPathComponent("services")
     static let frontierURL = origin.appendingPathComponent("frontier")
     static let privacyURL = origin.appendingPathComponent("privacy")
     static let supportURL = origin.appendingPathComponent("contact")
@@ -24,7 +25,7 @@ enum AppConfiguration {
     static func diagnosticRoute(_ url: URL) -> String {
         guard isFirstParty(url) else { return "External navigation" }
         // Never retain query strings, fragments, or arbitrary private resource paths.
-        let publicRoutes = ["/", "/app", "/frontier", "/privacy", "/contact", "/control"]
+        let publicRoutes = ["/", "/app", "/services", "/frontier", "/privacy", "/contact", "/control"]
         return publicRoutes.contains(url.path) ? url.path : "Other first-party page"
     }
 
