@@ -49,5 +49,5 @@ jobs:
             tail -120 "$LOG"
             exit 1
           fi
-          grep -E 'Test Case .* passed|Executed [0-9]+ tests|\\*\\* TEST SUCCEEDED \\*\\*' "$LOG" | tail -30
+          grep -E 'Test Case .* passed|Executed [0-9]+ tests|TEST SUCCEEDED' "$LOG" | tail -30
           xcrun xcresulttool get test-results summary --path "$RESULT"
