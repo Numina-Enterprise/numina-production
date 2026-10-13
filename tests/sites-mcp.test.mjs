@@ -31,7 +31,7 @@ function logs(t){
 function assertDependency(result,captured,{toolName,backendPath,code}){
   assert.equal(result.status,503);
   assert.equal(result.body.error.data.reason,code);
-  assert.deepEqual(captured,[{event:'numina_request_failure',requestId:'synthetic-request',path:'/mcp',method:'POST',stage:'mcp_backend_response',exception:'Error',code,toolName,backendPath}]);
+  assert.deepEqual(captured.filter(log=>log.event==='numina_request_failure'),[{event:'numina_request_failure',requestId:'synthetic-request',path:'/mcp',method:'POST',stage:'mcp_backend_response',exception:'Error',code,toolName,backendPath}]);
   assert.doesNotMatch(JSON.stringify({result,captured}),new RegExp(canary));
 }
 
@@ -104,6 +104,7 @@ test('native treasury replay failures retain their safe code and block evidence'
   const before=await readControl(env.DB);
   const result=await call('numina_treasury_evidence',env,ownerHeaders);
   assertDependency(result,captured,{toolName:'numina_treasury_evidence',backendPath:'/api/control/v2/treasury/evidence',code:'TREASURY_REPLAY_MISMATCH'});
+  assert.deepEqual(captured.filter(log=>log.event==='numina_treasury_replay_failure'),[{event:'numina_treasury_replay_failure',stage:'event_result',eventRevision:1,differingFields:['unknown_fields']}]);
   assert.equal((await readControl(env.DB)).head_hash,before.head_hash);
 });
 

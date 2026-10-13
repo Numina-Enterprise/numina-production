@@ -13,15 +13,24 @@ Set these variables in the existing Sites production environment:
 | `NUMINA_STRIPE_TREASURY_READ_KEY` | Existing live restricted key, stored only as a server secret |
 | `NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT` | Financial Account ID above |
 
-The key needs **Money Management Financial Accounts: Read** and **Money Management Financial Address: Read**. Stripe's confirmed permission identifier for the latter is `money_management_financial_address_read`. No money-movement or write permission is required. Preserve unrelated settings on an existing key. Never commit a key, place it in client code, or paste it into a diagnostic record.
+The key needs **Money Management Financial Accounts: Read** and **Financial Addresses: Read**. The connected Stripe API catalogue for `2026-09-30.preview`, inspected on 2026-10-13, reports these required permission identifiers:
+
+| Provider request | Catalogue permission |
+| --- | --- |
+| `GET /v2/money_management/financial_accounts/{id}` | `hzn_financial_account_read` |
+| `GET /v2/money_management/financial_addresses` | `hzn_financial_address_read` |
+
+The runtime remains pinned to `2026-08-26.preview`. The catalogue identifiers describe the current catalogue; they do not establish the exact deployed key's permissions or confirm compatibility of the pinned response schema. Confirm the permission named in the failing request's non-secret Stripe Workbench error before changing an existing key. No money-movement or write permission is required. Preserve unrelated settings on an existing key. Never commit a key, place it in client code, or paste it into a diagnostic record.
 
 The source template is `.env.example`; the machine-readable requirements are `config/stripe-provider-routes.json`. These files describe configuration, not a claim that the deployed credential has those permissions. Changing source files alone does not change Stripe key permissions.
 
 ## Inspect and repair the deployed connection
 
+At 2026-10-13 10:24:40 UTC, production logged `stripe_provider_routes_provider_error` with Stripe HTTP 403 and request ID `req_v2uR3bWv3sJeL180J`; Numina returned `503 STRIPE_PROVIDER_ROUTES_ACCESS_DENIED`. This establishes a provider denial. The exact deployed key's permissions and the provider's non-secret error explanation have not been checked. A successful read through a separate connected Stripe session does not verify this deployed credential or the runtime's pinned response schema.
+
 1. Sign in to the Numina Stripe account and open Workbench request logs. Find the latest `GET /v2/money_management/financial_addresses` request caused by **Check deposit routes** in the Numina owner control room.
-2. Inspect its HTTP status, request ID and error. Use the masked key identity in that request to locate the exact deployed restricted key. Do not reveal or copy its secret.
-3. In the restricted key's permissions, inspect Money Management Financial Address. If Read is missing, obtain authorization and enable that specific read permission. Retain Financial Accounts Read and other existing settings. Save and confirm the visible saved setting.
+2. Inspect its HTTP status, request ID and non-secret permission error. Start with `req_v2uR3bWv3sJeL180J` for the recorded denial, and use a newer matching request if available. Use the masked key identity in that request to locate the exact deployed restricted key. Do not reveal or copy its secret.
+3. In the restricted key's permissions, inspect **Financial Addresses: Read** and confirm the permission named by Workbench. If Read is missing, obtain authorization and enable that specific read permission. Retain Financial Accounts Read and other existing settings. Save and confirm the visible saved setting.
 4. If permissions were updated on the existing key, retry without replacing the credential. If the configured key was rotated, have the owner update the server secret through the existing production environment's secure workflow and deploy that environment change.
 5. In Numina's owner control room, select **Check deposit routes** again. Confirm the browser request returns HTTP 200 and Stripe Workbench records the matching successful address read. Record the observation time, request ID, exact currencies and `complete` value.
 

@@ -34,10 +34,11 @@ test('host authorization gates submission, accepted jobs deduplicate and telemet
   assert.equal(status.hardwareExecutionVerified,false);assert.doesNotMatch(JSON.stringify(logs),/Private objective|host-policy|provider-1|secret/);
 });
 test('concurrent submission and ambiguous acceptance are bounded and never automatically retried',async()=>{
-  let release,calls=0;const pending=new Promise(resolve=>release=resolve);
+  let release,enterProvider,calls=0;const pending=new Promise(resolve=>release=resolve);
+  const providerEntered=new Promise(resolve=>enterProvider=resolve);
   const adapter=createQuantumAdapter({maxConcurrent:1,authorize:async()=>true,driver:{name:'fixture',
-    submit:async()=>{calls++;await pending;throw Error('provider secret')},status:async()=>({status:'RUNNING'})}});
-  const first=adapter.submit(input());await new Promise(resolve=>setImmediate(resolve));
+    submit:async()=>{calls++;enterProvider();await pending;throw Error('provider secret')},status:async()=>({status:'RUNNING'})}});
+  const first=adapter.submit(input());await Promise.race([providerEntered,first]);
   await assert.rejects(adapter.submit(input()),{code:'QUANTUM_JOB_IN_FLIGHT'});
   await assert.rejects(adapter.submit(input('job-2')),{code:'QUANTUM_CAPACITY_LIMIT'});
   release();await assert.rejects(first,{code:'QUANTUM_SUBMISSION_OUTCOME_UNKNOWN'});

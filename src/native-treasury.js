@@ -4,6 +4,15 @@ import {NUMINA_TREASURY_ROUTE,treasuryExact,validateTreasuryProjection,treasuryP
 import {NUMINA} from './numina-root.js';
 import {NUMINA_NATIVE_TREASURY_SYNC,NUMINA_TREASURY_CONNECTION} from '../public/treasury-connection-model.js';
 
+const treasuryReplayResultFields=['outcome','route','execution_scope','projection','transaction_request','mint_event','bank_transaction'];
+const treasuryReplayProjectionFields=['schema','identity','structure','hashIdentity','artifactPathIdentity','runtimeIdIdentity','securityMechanicsIdentity','singular','unit','authority','verification','system_of_record','scope','balance','last_event_id','transaction_requests'];
+function treasuryReplayFailure(stage,eventRevision,expected,observed,fields){
+  const differingFields=fields.filter(field=>Object.hasOwn(expected??{},field)!==Object.hasOwn(observed??{},field)||Object.hasOwn(expected??{},field)&&stable(expected[field])!==stable(observed[field]));
+  if(Object.keys(observed??{}).some(field=>!fields.includes(field)))differingFields.push('unknown_fields');
+  try{console.error(JSON.stringify({event:'numina_treasury_replay_failure',stage,eventRevision:Number.isSafeInteger(eventRevision)?eventRevision:null,differingFields}));}catch{}
+  controlError('TREASURY_REPLAY_MISMATCH',503);
+}
+
 // Bind storage and the authenticated Principal once. There is one treasury in the existing journal.
 export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.now()/1000)}){
   async function context(){
@@ -14,11 +23,15 @@ export function createNuminaTreasury({db,principal,root,now=()=>Math.floor(Date.
     for(const event of row.journalEvents.filter(event=>event.type==='treasury')){
       const command=event.command;
       if(event.actor!==root||command?.type!=='treasury'||command.id!==event.id||command.expectedRevision!==event.revision-1||command.data?.expectedHead!==event.previous||await controlHash(command)!==event.commandHash)controlError('TREASURY_JOURNAL_INVALID',503);
-      const reduced=reduceTreasuryProjection(replayed,command.data,event.actor,event.id);
-      if(!treasuryProjectionEquals(reduced.result,event.result))controlError('TREASURY_REPLAY_MISMATCH',503);
+      const initialProjection=replayed===null?event.result?.projection:null;
+      if(initialProjection!==null){
+        try{validateTreasuryProjection(initialProjection);}catch{treasuryReplayFailure('event_projection',event.revision,{}, {projection:initialProjection},treasuryReplayResultFields);}
+      }
+      const reduced=reduceTreasuryProjection(replayed,command.data,event.actor,event.id,initialProjection);
+      if(!treasuryProjectionEquals(reduced.result,event.result))treasuryReplayFailure('event_result',event.revision,reduced.result,event.result,treasuryReplayResultFields);
       replayed=reduced.projection;
     }
-    if(!treasuryProjectionEquals(replayed,row.manifest.nativeTreasury??null))controlError('TREASURY_REPLAY_MISMATCH',503);
+    if(!treasuryProjectionEquals(replayed,row.manifest.nativeTreasury??null))treasuryReplayFailure('manifest_projection',row.revision,replayed,row.manifest.nativeTreasury??null,treasuryReplayProjectionFields);
     return row;
   }
   async function proofFor(id){
