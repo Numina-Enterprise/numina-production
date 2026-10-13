@@ -3,6 +3,21 @@
 const treasuryHash = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const treasuryText = value => typeof value === 'string' && value.length > 0;
 const treasuryRevision = value => Number.isSafeInteger(value) && value >= 0;
+const treasuryLegacyProjectionFields = Object.freeze(['schema', 'unit', 'authority', 'verification',
+  'system_of_record', 'scope', 'balance', 'last_event_id', 'transaction_requests']);
+const treasuryProjectionMetadata = Object.freeze({identity:'NUMINA', structure:'NUMINA', hashIdentity:'NUMINA',
+  artifactPathIdentity:'NUMINA', runtimeIdIdentity:'NUMINA', securityMechanicsIdentity:'NUMINA', singular:true});
+function treasuryProjectionShapeMatches(value) {
+  if (!value || Object.getPrototypeOf(value) !== Object.prototype ||
+      !treasuryLegacyProjectionFields.every(field => Object.hasOwn(value, field))) return false;
+  const count = Object.keys(value).length;
+  if (Reflect.ownKeys(value).length !== count) return false;
+  // Retained proofs keep their original exact shape; no metadata is added to
+  // either projection before its canonical bytes and hashes are checked.
+  if (count === treasuryLegacyProjectionFields.length) return true;
+  return count === treasuryLegacyProjectionFields.length + Object.keys(treasuryProjectionMetadata).length &&
+    Object.entries(treasuryProjectionMetadata).every(([field, expected]) => Object.hasOwn(value, field) && value[field] === expected);
+}
 // Release metadata describes these checks and binds the exact distributed bytes.
 // It does not attest the server, a provider balance, or a deployment.
 export function treasuryClientVerificationManifest(verifierSha256) {
@@ -43,7 +58,7 @@ export async function verifyTreasuryRecord(data, {allowUninitialized = false} = 
     if (data.status === 'NOT_INITIALIZED') return allowUninitialized && data.projection === null && data.canonical_proof === null;
     if (data.status !== 'READY') return false;
     const p = data.projection, proof = data.canonical_proof, event = proof?.event, command = event?.command;
-    if (p?.schema !== 'numina.treasury.projection.v1' || p.unit !== 'NUSD' || p.authority !== 'NUMINA' || p.verification !== 'VERIFIED' || p.system_of_record !== 'NUMINA' || p.scope !== 'Numina-native' || p.identity !== 'NUMINA' || p.structure !== 'NUMINA' || p.hashIdentity !== 'NUMINA' || p.artifactPathIdentity !== 'NUMINA' || p.runtimeIdIdentity !== 'NUMINA' || p.securityMechanicsIdentity !== 'NUMINA' || p.singular !== true || typeof p.balance !== 'string' || !/^(0|[1-9][0-9]{0,77})$/.test(p.balance) || !treasuryText(p.last_event_id) || !Array.isArray(p.transaction_requests) || p.transaction_requests.length > 100) return false;
+    if (!treasuryProjectionShapeMatches(p) || p.schema !== 'numina.treasury.projection.v1' || p.unit !== 'NUSD' || p.authority !== 'NUMINA' || p.verification !== 'VERIFIED' || p.system_of_record !== 'NUMINA' || p.scope !== 'Numina-native' || typeof p.balance !== 'string' || !/^(0|[1-9][0-9]{0,77})$/.test(p.balance) || !treasuryText(p.last_event_id) || !Array.isArray(p.transaction_requests) || p.transaction_requests.length > 100) return false;
     if (proof?.algorithm !== 'SHA-256' || proof.canonicalization !== 'Numina canonical JSON' || proof.scope !== 'Numina-native journal record' || !treasuryHash(proof.hash)) return false;
     const manifestHash = event?.manifestHash ?? event?.['stateHash']; // historical receipt compatibility only
     if (event?.type !== 'treasury' || event.id !== p.last_event_id || event.actor !== data.principal || !treasuryText(event.actor) || !treasuryRevision(event.revision) || event.revision < 1 || event.revision > data.revision || !treasuryHash(event.previous) || !treasuryHash(manifestHash)) return false;

@@ -2,7 +2,9 @@ import {controlError,stable} from './control.js';
 import {NUMINA_NATIVE_TREASURY_SYNC} from '../public/treasury-connection-model.js';
 
 export const NUMINA_TREASURY_ROUTE='numina.treasury.v1';
+const NUMINA_TREASURY_LEGACY_MODEL=Object.freeze({schema:'numina.treasury.projection.v1',unit:'NUSD',authority:'NUMINA',verification:'VERIFIED',system_of_record:'NUMINA',scope:'Numina-native'});
 export const NUMINA_TREASURY_MODEL=Object.freeze({schema:'numina.treasury.projection.v1',identity:'NUMINA',structure:'NUMINA',hashIdentity:'NUMINA',artifactPathIdentity:'NUMINA',runtimeIdIdentity:'NUMINA',securityMechanicsIdentity:'NUMINA',singular:true,unit:'NUSD',authority:'NUMINA',verification:'VERIFIED',system_of_record:'NUMINA',scope:'Numina-native'});
+const treasuryMetadataFields=['identity','structure','hashIdentity','artifactPathIdentity','runtimeIdIdentity','securityMechanicsIdentity','singular'];
 export const NUMINA_TREASURY_INITIAL_BALANCE=NUMINA_NATIVE_TREASURY_SYNC.componentRoleValue;
 const treasuryUnsigned=/^(0|[1-9][0-9]{0,77})$/;
 const treasurySigned=/^-?[1-9][0-9]{0,77}$/;
@@ -12,15 +14,24 @@ export function treasuryExact(value,fields){
   if(!value||Object.getPrototypeOf(value)!==Object.prototype||Object.keys(value).length!==fields.length||fields.some(field=>!Object.hasOwn(value,field)))controlError('INVALID_TREASURY_FIELDS',400);
 }
 function treasuryReason(value){if(typeof value!=='string'||!value.trim()||value.length>1000||/[\u0000-\u001f]/.test(value))controlError('TREASURY_REASON_REQUIRED',400);}
+function treasuryProjectionModel(value){
+  // Frozen journals predate the seven metadata fields. Accept only the complete
+  // historical or current shape; neither format permits partial or unknown fields.
+  const model=treasuryMetadataFields.some(field=>Object.hasOwn(value??{},field))?NUMINA_TREASURY_MODEL:NUMINA_TREASURY_LEGACY_MODEL;
+  treasuryExact(value,[...Object.keys(model),'balance','last_event_id','transaction_requests']);
+  if(Reflect.ownKeys(value).length!==Object.keys(value).length)controlError('INVALID_TREASURY_FIELDS',400);
+  if(Object.entries(model).some(([key,expected])=>value[key]!==expected))controlError('TREASURY_STATE_CORRUPT',503);
+  return model;
+}
 export function validateTreasuryProjection(value){
-  treasuryExact(value,[...Object.keys(NUMINA_TREASURY_MODEL),'balance','last_event_id','transaction_requests']);
-  if(Object.entries(NUMINA_TREASURY_MODEL).some(([key,expected])=>value[key]!==expected)||typeof value.balance!=='string'||!treasuryUnsigned.test(value.balance)||typeof value.last_event_id!=='string'||!Array.isArray(value.transaction_requests)||value.transaction_requests.length>100)controlError('TREASURY_STATE_CORRUPT',503);
+  treasuryProjectionModel(value);
+  if(typeof value.balance!=='string'||!treasuryUnsigned.test(value.balance)||typeof value.last_event_id!=='string'||!Array.isArray(value.transaction_requests)||value.transaction_requests.length>100)controlError('TREASURY_STATE_CORRUPT',503);
   return value;
 }
 
 // Pure reducer: no provider calls, mint submission, bank connection or new root.
 // Every accepted operation is a new immutable journal event; prior history is never rewritten.
-export function reduceTreasuryProjection(current,data,actor,eventId){
+export function reduceTreasuryProjection(current,data,actor,eventId,recordedInitialProjection=null){
   treasuryExact(data,['Principal','Authority','Objective','Intent','expectedHead']);
   if(data.Principal!==actor||data.Authority!=='NUMINA')controlError('TREASURY_AUTHORITY_DENIED',403);
   const intent=data.Intent;
@@ -32,7 +43,10 @@ export function reduceTreasuryProjection(current,data,actor,eventId){
   if(intent.operation==='INITIALIZE'){
     treasuryExact(intent,['operation','reason']);treasuryReason(intent.reason);
     if(projection)controlError('TREASURY_ALREADY_INITIALIZED',409);
-    projection={...NUMINA_TREASURY_MODEL,balance:NUMINA_TREASURY_INITIAL_BALANCE,last_event_id:eventId,transaction_requests:[]};
+    // Historical replay selects its model from the exact recorded projection,
+    // never a caller flag. New initialization keeps the current metadata format.
+    const model=recordedInitialProjection===null?NUMINA_TREASURY_MODEL:treasuryProjectionModel(validateTreasuryProjection(recordedInitialProjection));
+    projection={...model,balance:NUMINA_TREASURY_INITIAL_BALANCE,last_event_id:eventId,transaction_requests:[]};
   }else{
     if(!projection)controlError('TREASURY_NOT_INITIALIZED',409);
     if(intent.operation==='ADJUST_PROJECTION'){

@@ -6,20 +6,38 @@
   "account": "acct_1UEEPnQdJat0efmT",
   "financial_account": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
   "api_version": "2026-08-26.preview",
+  "permission_catalog": {
+    "api_version": "2026-09-30.preview",
+    "observed_on": "2026-10-13",
+    "source": "connected Stripe API operation details",
+    "pinned_runtime_response_compatibility_verified": false
+  },
   "credential_environment_variable": "NUMINA_STRIPE_TREASURY_READ_KEY",
   "financial_account_environment_variable": "NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT",
   "credential_type": "restricted_live_key",
   "required_read_access": [
     {
       "resource": "Money Management Financial Accounts",
-      "access": "Read"
+      "access": "Read",
+      "permission": "hzn_financial_account_read",
+      "permission_scope": "permission_catalog.api_version"
     },
     {
-      "resource": "Money Management Financial Address",
+      "resource": "Financial Addresses",
       "access": "Read",
-      "permission": "money_management_financial_address_read"
+      "permission": "hzn_financial_address_read",
+      "permission_scope": "permission_catalog.api_version"
     }
   ],
+  "production_denial": {
+    "observed_at": "2026-10-13T10:24:40Z",
+    "provider_http_status": 403,
+    "provider_request_id": "req_v2uR3bWv3sJeL180J",
+    "application_http_status": 503,
+    "application_error": "STRIPE_PROVIDER_ROUTES_ACCESS_DENIED",
+    "exact_deployed_key_permissions_checked": false,
+    "non_secret_workbench_error_confirmation_required": true
+  },
   "provider_requests": [
     {
       "method": "GET",
