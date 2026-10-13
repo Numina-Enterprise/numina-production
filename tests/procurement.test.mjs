@@ -4,10 +4,11 @@ import built from '../dist/server/index.js';
 import {database} from '../scripts/sqlite.mjs';
 import {bootstrapControl,readControl} from '../src/control-store.js';
 import {controlHash} from '../src/control.js';
+import {applicationReleaseAssets} from './helpers/application-release-assets.mjs';
 
 test('procurement is discoverable across public clients without granting treasury access',async()=>{
   const db=database(),owner='email:procurement@example.test';
-  const env={DB:db,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash('isolated-test-key'),NUMINA_LIVEMODE:'true',NUMINA_TELEMETRY_LOGS:'false'};
+  const env={DB:db,ASSETS:applicationReleaseAssets(),NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash('isolated-test-key'),NUMINA_LIVEMODE:'true',NUMINA_TELEMETRY_LOGS:'false'};
   try{
     await bootstrapControl(db,owner,Math.floor(Date.now()/1000));
     const before=await readControl(db);

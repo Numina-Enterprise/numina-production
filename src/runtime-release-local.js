@@ -1,4 +1,5 @@
 import {EXPECTED_RELEASE,RUNTIME_VERSION,PINNED_RUNTIME_PUBLIC_KEY,PINNED_RUNTIME_KEY_ID,RELEASE_ARTIFACT_TYPE} from '../public/runtime-contract.js';
+import {observeNuminaNode} from '../runtime/vercel-production/lib/network-observation.mjs';
 
 const selfHostedRuntimeEncoder=new TextEncoder();
 const SELF_HOSTED_SIGNER_PATHS=new Set([
@@ -103,8 +104,12 @@ export async function routeLocalRuntime(request,env={},pins={}){
   if(!['GET','HEAD'].includes(request.method))return selfHostedRuntimeResponse(request,{error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'});
   if(path==='/v1/execution/providers')return selfHostedRuntimeResponse(request,{schema:'numina.execution-provider-catalog.v1',
     release:RUNTIME_VERSION,providers:[],live_submission_route_exposed:false,external_execution_performed:false});
-  if(path==='/v2/network/status')return selfHostedRuntimeResponse(request,{schema:'numina.network-status.v2',identity:'NUMINA',
-    release:RUNTIME_VERSION,currentChainStateVerified:false,operationalState:'UNVERIFIED'});
+  if(path==='/v2/network/status'){
+    const observation=await observeNuminaNode({env});
+    return selfHostedRuntimeResponse(request,observation.body,observation.httpStatus,{
+      'CDN-Cache-Control':'no-store','Referrer-Policy':'no-referrer'
+    });
+  }
   if(path==='/v2/network/deployment-estimate')return selfHostedRuntimeResponse(request,{error:'NETWORK_ESTIMATE_UNAVAILABLE',release:RUNTIME_VERSION},503);
   if(!SELF_HOSTED_SIGNER_PATHS.has(path))return selfHostedRuntimeResponse(request,{error:'RUNTIME_LOCAL_ROUTE_UNAVAILABLE',release:RUNTIME_VERSION},503);
   try{

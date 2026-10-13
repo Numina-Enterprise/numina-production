@@ -46,15 +46,18 @@ test('old control plane remains reachable as a local compatibility view',async()
   assert.match(html,/return_to=%2Fcontrol/);
 });
 
-test('packaged homepage links current runtime verification and preserves the control page',()=>{
+test('packaged institutional homepage and Frontier runtime preserve their distinct roles',()=>{
   const home=readFileSync(new URL('../dist/client/index.html',import.meta.url),'utf8');
+  const frontier=readFileSync(new URL('../dist/client/frontier.html',import.meta.url),'utf8');
   const control=readFileSync(new URL('../dist/client/control.html',import.meta.url),'utf8');
-  assert.match(home,/frontier-ui[.]js/);
-  assert.match(home,/href="\/build"/);
+  assert.match(home,/href="\/enterprise[.]css"/);
+  assert.match(home,/class="service-pane"/);
+  assert.match(frontier,/frontier-ui[.]js/);
+  assert.match(frontier,/href="\/build"/);
   const build=readFileSync(new URL('../dist/client/build.html',import.meta.url),'utf8');
   assert.match(build,/runtime-release-ui[.]js/);
   assert.match(build,/data-conformance>Checking…/);
-  assert.match(home,/href="\/control"/);
+  assert.match(frontier,/href="\/control"/);
   const applicationMajor=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8')).version.split('.')[0];
   assert.ok(control.includes('<title>Numina '+applicationMajor+' — Control plane</title>'));
   assert.match(control,/href="\/control" aria-current="page"/);

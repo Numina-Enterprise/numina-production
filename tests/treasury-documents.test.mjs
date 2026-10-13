@@ -5,11 +5,12 @@ import {bootstrapControl,readControl,commitControl} from '../src/control-store.j
 import {controlHash} from '../src/control.js';
 import {TREASURY_DOCUMENT_LIMIT} from '../src/treasury-documents.js';
 import {MemoryBucket} from './helpers/memory-bucket.mjs';
+import {applicationReleaseAssets} from './helpers/application-release-assets.mjs';
 import worker from '../src/worker.js';
 const base='https://numina.test/api/control/v1/treasury-documents',owner='email:owner@example.test',key='test-document-owner-key',pdf=new TextEncoder().encode('%PDF-1.4\nLOCAL TRANSPORT TEST - NOT BANK EVIDENCE\n%%EOF');
 const identity=email=>({'oai-authenticated-user-id':'local-test','oai-authenticated-user-email':email});
 const ownerHeaders=identity('owner@example.test'),delegateHeaders=identity('delegate@example.test');
-async function fixture(){const DB=database();await bootstrapControl(DB,owner,Math.floor(Date.now()/1000));return {DB,BUCKET:new MemoryBucket(),NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
+async function fixture(){const DB=database();await bootstrapControl(DB,owner,Math.floor(Date.now()/1000));return {DB,BUCKET:new MemoryBucket(),ASSETS:applicationReleaseAssets(),NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
 function request(method='GET',body,headers={},suffix=''){return new Request(base+suffix,{method,headers:{...ownerHeaders,...(body?{'Content-Type':'application/pdf','X-Document-Name':'transport-test.pdf',Origin:'https://numina.test'}:{}),...headers},...(body?{body,duplex:'half'}:{})});}
 async function call(env,req){const response=await worker.fetch(req,env);return {response,data:await response.json()};}
 

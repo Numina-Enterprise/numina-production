@@ -9,10 +9,11 @@ import {NUMINA_DENOMINATION_POLICY as policy} from '../public/treasury-valuation
 import {loadNativeTreasury,clearNativeTreasury} from '../public/native-treasury.js';
 import {NuminaClient} from '../integrations/numina/src/client.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
+import {applicationReleaseAssets} from './helpers/application-release-assets.mjs';
 const json=path=>JSON.parse(readFileSync(new URL('../'+path,import.meta.url)));
 
 test('all public layers and discovery tools carry the same declared policy without changing treasury state',async()=>{
-  const db=database(),owner='email:layers@example.test',env={DB:db,NUMINA_LIVEMODE:'true'};
+  const db=database(),owner='email:layers@example.test',env={DB:db,ASSETS:applicationReleaseAssets(),NUMINA_LIVEMODE:'true'};
   try{
     await bootstrapControl(db,owner,Math.floor(Date.now()/1000));const before=await readControl(db);
     for(const path of ['/api/control/v1/manifest','/api/control/v2/manifest','/api/control/v2/architecture','/api/app/v1/catalog','/api/nusd/v1/status']){

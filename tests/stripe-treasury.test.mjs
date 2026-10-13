@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {database} from '../scripts/sqlite.mjs';
 import {bootstrapControl,readControl,commitControl} from '../src/control-store.js';
 import {controlHash} from '../src/control.js';
+import {applicationReleaseAssets} from './helpers/application-release-assets.mjs';
 import {readStripeTreasury,STRIPE_TREASURY_ACCOUNT,STRIPE_TREASURY_FINANCIAL_ACCOUNT} from '../src/stripe-treasury.js';
 import worker from '../src/worker.js';
 
@@ -24,7 +25,7 @@ function providerResponse(value=financialAccount(),status=200,headers={}){return
 function numericText(formatted){assert.equal(typeof formatted,'string');const match=formatted.replace(/[$,]/g,'').match(/-?\d+(?:\.\d+)?/);assert.ok(match,'formatted amount must contain a number');return match[0];}
 function assertSafe(value){const text=typeof value==='string'?value:JSON.stringify(value);assert.equal(text.includes(readKey),false);assert.equal(text.includes(canary),false);}
 async function rejectsWith(promise,code,status){await assert.rejects(promise,error=>{assert.equal(error.code,code);assert.equal(error.status,status);assertSafe(String(error));assertSafe(error);return true;});}
-async function fixture(){const DB=database();await bootstrapControl(DB,owner,Math.floor(Date.now()/1000));return {...config(),DB,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(ownerKey)};}
+async function fixture(){const DB=database();await bootstrapControl(DB,owner,Math.floor(Date.now()/1000));return {...config(),DB,ASSETS:applicationReleaseAssets(),NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(ownerKey)};}
 function routeRequest(headers=ownerHeaders,method='GET'){return new Request(endpoint,{method,headers:{...headers,...(method==='POST'?{Origin:'https://numina.test'}:{})}});}
 
 test('Treasury read is one pinned GET and returns a sanitized read-only projection',async()=>{

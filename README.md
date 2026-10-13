@@ -21,7 +21,7 @@ The canonical Numina-native treasury uses `readTreasury()` and `writeTreasury(ev
 
 ## Build and provenance
 
-Use Node 24. Install the pinned test dependencies with `npm ci --prefix runtime/nusd --ignore-scripts` and `npm ci --prefix runtime/nusd/development --ignore-scripts`, then run `npm run build`, `npm test`, and `npm run release:numina`. The suite verifies generated build artifacts, so build before testing. **NUMINA REPOSITORY is the canonical repository root; all builds, releases, deployments, evidence, and runtime surfaces are downstream productions of NUMINA.**
+Use Node 26.11.1 for the root build and local cloud preview; select the verified isolated toolchain using [the Node 26 setup instructions](docs/Numina-Node26-Setup.md). The NUSD package, contract and container toolchains retain their separate Node 24 pins. Under Node 24, install the pinned test dependencies with `npm ci --prefix runtime/nusd --ignore-scripts` and `npm ci --prefix runtime/nusd/development --ignore-scripts`. Select Node 26.11.1 again, then run `npm run build`, `npm test`, and `npm run release:numina`. The suite verifies generated build artifacts, so build before testing. **NUMINA REPOSITORY is the canonical repository root; all builds, releases, deployments, evidence, and runtime surfaces are downstream productions of NUMINA.**
 
 Runtime signing keys, provider credentials and private records belong only in production secret/storage services. `.env.example` has no live credential values. The private JWK in `fixtures/demo-test-key.json` is explicitly an intentionally public reference-test fixture and must never be used for production authorization.
 
@@ -41,7 +41,7 @@ NUMINA REPOSITORY is the canonical root source. Its main branch produces all dow
 
 ## Source alignment
 
-Read [the source map](docs/Source-Alignment-v4.md). `node scripts/build.mjs` validates maintained package versions and generates `/source-alignment.json` from their actual source. Run `python scripts/package-distributions.py` after changing integration, plugin or native source files, then build. The existing root, journal and native treasury routes remain authoritative across L1–L5. Historical evidence and reconstructed runtime sources retain their own identities.
+Read [the source map](docs/Source-Alignment-v4.md). `node scripts/build.mjs` validates maintained package versions and generates `/source-alignment.json` from their actual source. Run `python scripts/package-distributions.py` after changing integration, plugin or native source files, then build. The existing root, journal and native treasury routes remain authoritative across L1–L7. Historical evidence and reconstructed runtime sources retain their own identities.
 
 ## Connections
 

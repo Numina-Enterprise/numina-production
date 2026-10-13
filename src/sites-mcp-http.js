@@ -14,7 +14,11 @@ const SITES_MCP_TOOLS=[
   ['numina_treasury_evidence','Owner-only read of the existing treasury evidence snapshot; declarations retain their recorded scope.'],
   ['numina_owner_state','Owner-only read of the canonical control state through the existing authorized control API.']
 ].map(([name,description])=>({name,description,inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:name==='numina_provider_routes'||name==='numina_treasury_evidence'}}));
-const SITES_MCP_PUBLIC_ERROR_CODES=new Set(['UNAUTHENTICATED','AUTHORITY_DENIED','OWNER_REQUIRED','OWNER_VIEW_REQUIRED','AUTHORITY_CONFIGURATION_MISSING','AUTHORITY_CONFIGURATION_INVALID','ROOT_CONFIGURATION_MISMATCH','ORIGIN_DENIED','RATE_LIMITED','DEPENDENCY_UNAVAILABLE','CONNECTION_MANIFEST_UNAVAILABLE','SIGNING_CONFIGURATION_MISSING','SIGNING_CONFIGURATION_INVALID','SERVICE_UNAVAILABLE','APPLICATION_RELEASE_UNAVAILABLE','APPLICATION_RELEASE_INVALID']);
+const SITES_MCP_PUBLIC_ERROR_CODES=new Set([
+  'UNAUTHENTICATED','AUTHORITY_DENIED','OWNER_REQUIRED','OWNER_VIEW_REQUIRED','AUTHORITY_CONFIGURATION_MISSING','AUTHORITY_CONFIGURATION_INVALID','ROOT_CONFIGURATION_MISMATCH','ORIGIN_DENIED','RATE_LIMITED','DEPENDENCY_UNAVAILABLE','CONNECTION_MANIFEST_UNAVAILABLE','SIGNING_CONFIGURATION_MISSING','SIGNING_CONFIGURATION_INVALID','SERVICE_UNAVAILABLE','APPLICATION_RELEASE_UNAVAILABLE','APPLICATION_RELEASE_INVALID',
+  'SIGNING_UNAVAILABLE','STRIPE_TREASURY_NOT_CONNECTED','STRIPE_TREASURY_UNAVAILABLE','STRIPE_TREASURY_INVALID_RESPONSE','STRIPE_TREASURY_TIMEOUT','STRIPE_PROVIDER_ROUTES_ACCESS_DENIED','STRIPE_PROVIDER_ROUTES_UNAVAILABLE','STRIPE_PROVIDER_ROUTES_INVALID_RESPONSE',
+  'TREASURY_JOURNAL_INVALID','TREASURY_REPLAY_MISMATCH','TREASURY_PROOF_UNAVAILABLE','TREASURY_PROOF_INVALID','TREASURY_PROJECTION_MISMATCH','TREASURY_SNAPSHOT_CHANGED'
+]);
 function sitesMcpResponse(value,status=200,extra={}){return new Response(value===null?null:JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Authorization, Cookie, oai-authenticated-user-id, oai-authenticated-user-email',...extra}});}
 function sitesMcpError(id,code,message,status=400,reason=null){return sitesMcpResponse({jsonrpc:'2.0',id,error:{code,message,...(reason?{data:{reason}}:{})}},status,status===405?{Allow:'POST'}:{});}
 function sitesMcpFailure(reason,status=400){return Object.assign(new Error(reason),{code:reason,status});}
@@ -49,9 +53,11 @@ function sitesMcpOwnerIdentityRequest(req){
   if(headers.get('oai-authenticated-user-id')?.trim()&&headers.get('oai-authenticated-user-email')?.trim())headers.delete('authorization');
   return new Request(req.url,{method:'GET',headers});
 }
-function sitesMcpLogDependency(requestId,reason,stage,exception='Error'){
+function sitesMcpLogDependency(requestId,reason,stage,exception='Error',name=null){
   const types=new Set(['Error','TypeError','ReferenceError','RangeError','URIError','SyntaxError','AggregateError']);
-  console.error(JSON.stringify({event:'numina_request_failure',requestId:requestId||null,path:'/mcp',method:'POST',stage,exception:types.has(exception)?exception:'Error',code:sitesMcpSafeReason(reason)}));
+  const toolName=SITES_MCP_PUBLIC_NAMES.has(name)||Object.hasOwn(SITES_MCP_OWNER_ROUTES,name)?name:null;
+  const backendPath=toolName===null?null:SITES_MCP_PUBLIC_NAMES.has(toolName)?'/api/control/v2/discovery-mcp':SITES_MCP_OWNER_ROUTES[toolName];
+  console.error(JSON.stringify({event:'numina_request_failure',requestId:requestId||null,path:'/mcp',method:'POST',stage,exception:types.has(exception)?exception:'Error',code:sitesMcpSafeReason(reason),toolName,backendPath}));
 }
 
 // Sites performs OAuth and supplies trusted visitor headers at dispatch. This
@@ -65,10 +71,10 @@ export async function sitesMcpHttp(req,env,{requestId=null}={}){
   try{msg=await sitesMcpReadJson(req);}catch(error){return sitesMcpError(null,error?.code==='INVALID_JSON'?-32700:-32600,error?.code==='INVALID_JSON'?'Parse error':'Invalid request body',error?.status||400,['JSON_REQUIRED','EMPTY_BODY','BODY_TIMEOUT','BODY_TOO_LARGE','INVALID_JSON'].includes(error?.code)?error.code:'INVALID_REQUEST_BODY');}
   const id=msg?.id??null,hasId=msg&&Object.hasOwn(msg,'id');
   if(!msg||Array.isArray(msg)||typeof msg!=='object'||msg.jsonrpc!=='2.0'||typeof msg.method!=='string'||(hasId&&id!==null&&typeof id!=='string'&&!Number.isSafeInteger(id)))return sitesMcpError(null,-32600,'Invalid Request');
+  const version=req.headers.get('MCP-Protocol-Version');
+  if(msg.method!=='initialize'&&version&&!SITES_MCP_PROTOCOL_VERSIONS.includes(version))return sitesMcpError(id,-32602,'Unsupported MCP protocol version',400,'UNSUPPORTED_PROTOCOL_VERSION');
   if(!hasId)return sitesMcpResponse(null,202);
   if(msg.params!==undefined&&(!msg.params||Array.isArray(msg.params)||typeof msg.params!=='object'))return sitesMcpError(id,-32602,'Expected object parameters');
-  const version=req.headers.get('MCP-Protocol-Version');
-  if(version&&!SITES_MCP_PROTOCOL_VERSIONS.includes(version))return sitesMcpError(id,-32602,'Unsupported MCP protocol version',400,'UNSUPPORTED_PROTOCOL_VERSION');
   const result=value=>sitesMcpResponse({jsonrpc:'2.0',id,result:value});
   if(msg.method==='initialize'){
     const requested=msg.params?.protocolVersion;
@@ -98,11 +104,11 @@ export async function sitesMcpHttp(req,env,{requestId=null}={}){
       response=await (path.startsWith('/api/control/v2/')?frontierHttp(forward,env):controlHttp(forward,env));
     }
     const payload=await response.json();
-    if(!response.ok){const reason=sitesMcpSafeReason(payload?.error);if(response.status>=500)sitesMcpLogDependency(requestId,reason,'mcp_backend_response');return sitesMcpError(id,[401,403].includes(response.status)?-32001:-32000,[401,403].includes(response.status)?'Authorization denied':'Tool dependency unavailable',response.status,reason);}
+    if(!response.ok){const reason=sitesMcpSafeReason(payload?.error);if(response.status>=500)sitesMcpLogDependency(requestId,reason,'mcp_backend_response','Error',name);return sitesMcpError(id,[401,403].includes(response.status)?-32001:-32000,[401,403].includes(response.status)?'Authorization denied':'Tool dependency unavailable',response.status,reason);}
     if(SITES_MCP_PUBLIC_NAMES.has(name)){
-      if(payload.jsonrpc!=='2.0'||payload.id!==id||(!payload.result&&!payload.error)){sitesMcpLogDependency(requestId,'DEPENDENCY_UNAVAILABLE','mcp_discovery_response');return sitesMcpError(id,-32000,'Invalid discovery response',503,'DEPENDENCY_UNAVAILABLE');}
+      if(payload.jsonrpc!=='2.0'||payload.id!==id||(!payload.result&&!payload.error)){sitesMcpLogDependency(requestId,'DEPENDENCY_UNAVAILABLE','mcp_discovery_response','Error',name);return sitesMcpError(id,-32000,'Invalid discovery response',503,'DEPENDENCY_UNAVAILABLE');}
       return sitesMcpResponse(payload);
     }
     return result({content:[{type:'text',text:JSON.stringify(payload)}],isError:false});
-  }catch(error){const status=Number.isInteger(error?.status)&&error.status>=400&&error.status<=599?error.status:503;if(status>=500)sitesMcpLogDependency(requestId,error?.code,'mcp_backend_dispatch',error?.name);return sitesMcpError(id,[401,403].includes(status)?-32001:-32000,[401,403].includes(status)?'Authorization denied':'Tool dependency unavailable',status,sitesMcpSafeReason(error?.code));}
+  }catch(error){const status=Number.isInteger(error?.status)&&error.status>=400&&error.status<=599?error.status:503;if(status>=500)sitesMcpLogDependency(requestId,error?.code,'mcp_backend_dispatch',error?.name,name);return sitesMcpError(id,[401,403].includes(status)?-32001:-32000,[401,403].includes(status)?'Authorization denied':'Tool dependency unavailable',status,sitesMcpSafeReason(error?.code));}
 }
