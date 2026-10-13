@@ -8,6 +8,7 @@ import {
   controlManifestView,
   readControl
 } from '../src/control-store.js';
+import {controlHash,initialControlManifest,reduceControl} from '../src/control.js';
 
 // Project Aurum Phase 2-inspired *boundary* tests on Numina's existing control
 // plane. Synthetic values only. No PETs, customer data, wallet keys, provider
@@ -115,3 +116,103 @@ test('AURUM-C04: changed journal bytes are detected before a reviewer reconstruc
 //   implemented or tested here.
 // - External sanctions verification, regulatory reporting, wallet ownership,
 //   payment completion and legal settlement finality remain out of scope.
+
+
+const privateRequest = (commitment, overrides = {}) => ({
+  id: '1'.repeat(32),
+  route: 'internal.commitment.v1',
+  wants: {
+    resource: 'record:private/' + '2'.repeat(32),
+    commitment
+  },
+  requiredEvidence: [],
+  ...overrides
+});
+const privateCommand = (data, id = '3'.repeat(32)) => ({
+  id,
+  type: 'request',
+  expectedRevision: 0,
+  data
+});
+const privateCommitment = async () => 'sha256:' + await controlHash({
+  salt: 'client_only_randomized_salt_' + '9'.repeat(64),
+  subject: PRIVATE_MARKER
+});
+
+test('AURUM-C05: commitment-only mode persists no submitted private plaintext and can replay exactly', async t => {
+  const db = await fixture(t);
+  // The local client keeps both the sensitive data and the salt. Only its
+  // previously computed commitment enters any control command.
+  const commitment = await privateCommitment();
+  const req = privateRequest(commitment);
+  await commitControl(db, privateCommand(req), OWNER, now());
+  const state = await controlManifestView(db, OWNER, now());
+  const next = state.decisions.find(d => d.requestId === req.id).nextAction;
+  assert.equal(next.adapter, 'internal.commitment.v1');
+  assert.equal(next.kind, 'record.write');
+
+  const commit = {id: '4'.repeat(32), type: 'execute', expectedRevision: 1,
+    data: {requestId: req.id, actionId: next.actionId}};
+  const outcome = await commitControl(db, commit, OWNER, now());
+  assert.equal(outcome.event.result.recordId, req.id);
+  assert.equal((await commitControl(db, commit, OWNER, now())).replayed, true);
+
+  const persisted = await readControl(db);
+  assert.equal(persisted.revision, 2);
+  assert.deepEqual(Object.keys(persisted.manifest.records[0]).sort(),
+    ['at','commitment','evidenceId','requestId','resource'].sort());
+  assert.equal(persisted.manifest.records[0].commitment, commitment);
+  assert.equal(persisted.manifest.requests[0].wants.payload, undefined);
+  assert.equal(persisted.manifest.requests[0].verifiedOutcome.scope, 'internal.commitment.v1');
+  assert.equal(persisted.manifest.evidence[0].adapter, 'internal.commitment.v1');
+  assert.equal(JSON.stringify(persisted).includes(PRIVATE_MARKER), false);
+  assert.equal(JSON.stringify(persisted).includes('client_only_randomized_salt'), false);
+
+  // Deterministic replay must continue to bind manifest and decision hashes.
+  const events = persisted.journalEvents;
+  let replayed = initialControlManifest(events[0].actor, events[0].at);
+  for (const event of events.slice(1)) {
+    const step = await reduceControl(replayed,event.command,event.actor,event.revision-1,event.at);
+    assert.equal(await controlHash(step.manifest), event.manifestHash);
+    assert.equal(await controlHash(step.decisions), event.decisionsHash);
+    replayed = step.manifest;
+  }
+  assert.equal(await controlHash(replayed), persisted.manifest_hash);
+});
+
+test('AURUM-C06: plaintext, metadata extras and low-entropy identifiers fail before any journal write', async t => {
+  const db = await fixture(t);
+  const commitment = await privateCommitment();
+  const base = privateRequest(commitment);
+  const negatives = [
+    [privateCommand({...base,wants:{...base.wants,payload:PRIVATE_MARKER}}), /UNKNOWN_FIELDS/],
+    [privateCommand({...base,wants:{...base.wants,note:PRIVATE_MARKER}}), /UNKNOWN_FIELDS/],
+    [privateCommand({...base,wants:{resource:'record:private/email@example.test',commitment}}), /PRIVATE_OPAQUE_RESOURCE_REQUIRED/],
+    [privateCommand({...base,id:'customer-alice'}), /PRIVATE_OPAQUE_ID_REQUIRED/],
+    [privateCommand(base,'request-with-personal-identifier'), /PRIVATE_OPAQUE_ID_REQUIRED/],
+    [privateCommand({...base,requiredEvidence:['private-note']}), /PRIVATE_EVIDENCE_NOT_SUPPORTED/],
+    [privateCommand({...base,wants:{...base.wants,commitment:'sha256:'+'0'.repeat(5)}}), /PRIVATE_COMMITMENT_REQUIRED/]
+  ];
+  for (const [command, expected] of negatives) {
+    await assert.rejects(commitControl(db,command,OWNER,now()), expected);
+  }
+  const persisted=await readControl(db);
+  assert.equal(persisted.revision,0);
+  assert.equal(persisted.eventCount,1);
+  assert.equal(JSON.stringify(persisted).includes(PRIVATE_MARKER),false);
+});
+
+test('AURUM-C07: even an otherwise allowed private commit requires an opaque command ID', async t => {
+  const db=await fixture(t);
+  const req=privateRequest(await privateCommitment());
+  await commitControl(db,privateCommand(req),OWNER,now());
+  const decision=(await controlManifestView(db,OWNER,now())).decisions[0];
+  assert.equal(decision.outcome,'ALLOW');
+  await assert.rejects(commitControl(db,{
+    id:'private-record-with-name',expectedRevision:1,type:'execute',
+    data:{requestId:req.id,actionId:decision.nextAction.actionId}
+  },OWNER,now()),/PRIVATE_OPAQUE_ID_REQUIRED/);
+  const persisted=await readControl(db);
+  assert.equal(persisted.revision,1);
+  assert.equal(persisted.manifest.records.length,0);
+});
