@@ -11,7 +11,7 @@ Status: DRAFT, OFFLINE CONTRACT TESTS ONLY. NOT a BIS conformity report, regulat
 The BIS characterizes Aurum Phase 2 as an exploratory proof of concept in the retail-digital-cash context. Its privacy mechanisms include encryption, BBS+ signatures, pseudonym-based ownership and zero-knowledge proofs. These results are an architectural inspiration, not an applicable technical certification or obligation for Numina's Ethereum or institutional execution products.
 
 ## Actual Numina source boundary inspected
-- src/control.js: the only supported production control adapter on this path is internal.record.v1; unsupported routes produce ESCALATE, with no verified next action.
+- src/control.js: existing `internal.record.v1` stores the exact plaintext payload. This draft PR adds opt-in `internal.commitment.v1`, which accepts only opaque identifiers and a client-prepared digest. Unsupported external routes still produce `ESCALATE` without a verified next action. Neither internal adapter submits external transactions.
 - src/control-store.js: grant-filtered delegate projections and an integrity-checked, hash-linked event journal; privileged owner can reconstruct complete state.
 - docs/Control-Plane-v1.md: no external payment, custody, trading or settlement adapter is connected to this control path.
 - tests/control.test.mjs: existing coverage of authorization, atomic commits, stale revisions, delegation and evidence integrity.
@@ -22,7 +22,7 @@ Source inspection is not source-to-build-to-deployment binding. No production se
 ## Executable tests added
 Run from the repository root on the repository's Node 26 toolchain:
 
-    node --test tests/aurum-privacy-controls.test.mjs
+    node --test tests/control.test.mjs tests/aurum-privacy-controls.test.mjs
 
 Tests must operate on temporary, in-memory SQLite data and synthetic identities only.
 
@@ -32,13 +32,23 @@ Tests must operate on temporary, in-memory SQLite data and synthetic identities 
 | AURUM-C02 | Unknown actor denied; revoking the delegated grant removes access | Existing authority regression |
 | AURUM-C03 | Unsupported Ethereum transfer adapter escalates and cannot create an internal execution record | Existing execution boundary |
 | AURUM-C04 | Corruption of journal event bytes is detected on read | Existing hash-integrity check |
+| AURUM-C05 | A client-side, salted opaque commitment flows through request/commit/replay without plaintext in recorded request, record or journal | New opt-in minimization contract |
+| AURUM-C06 | Plaintext payload, extra fields, non-opaque identifiers, unstructured resource, unsupported evidence fields and malformed digests fail before journal write | Negative input corpus |
+| AURUM-C07 | Execution for commitment-only record requires an opaque command ID | Audit identifier minimization |
 
 Passing C01 does NOT mean the private data are never stored: the current journal intentionally retains original command bodies. Passing C04 does NOT mean receipts are digitally signed or resilient to coordinated changes by a privileged database administrator.
 
-## Control gap register (not yet implemented or verified)
+## Commitment-only path — precise scope and limitations
+The client must prepare an opaque resource ID, a 128-bit-or-more unpredictable request ID, an equally opaque command ID, and a commitment derived from a fresh secret salt and private content using an unambiguous encoding. The server accepts only the lowercase-hex SHA-256 commitment string. It cannot verify the salt, the underlying content, or whether the digest encodes meaningful provenance. The decision engine authorizes **internal record commitment**, not external payment, securities delivery, customer verification, compliance approval, or settlement.
+
+This change preserves historical journal bytes and legacy `internal.record.v1` payloads. Existing raw command bodies remain in historical state/journal and are **not** retroactively redacted. No deployment of this draft route has been established.
+
+Exact storage-scope checks: C05 inspects the persisted manifest, request, record and event journal for the synthetic private marker and synthetic salt prefix; C06 rejects unexpected fields and checks journal revision is unchanged; C07 proves an attempted non-opaque execution ID cannot create a record. These are synthetic invariants, not proof of system-wide PII removal.
+
+## Control gap register (draft gaps; note P01 partial)
 | ID | Proposed requirement | Closure evidence |
 | --- | --- | --- |
-| AURUM-P01 | Minimize and classify subject data before request/journal ingestion; avoid raw KYC/PII in generic record payloads | Schema-level whitelist and negative tests proving persistence never includes prohibited sensitive fields |
+| AURUM-P01 | **Partially addressed on draft branch:** opt-in commitment-only record mode rejects plaintext payload fields. Legacy mode and actor identities still persist cleartext. Classification and enforcement across all other input surfaces remain open. | C05–C07 plus a separate system-wide ingress schema/data-retention audit; no default privacy claim |
 | AURUM-P02 | Bind a transaction's identity, wallet, issuer/asset eligibility, jurisdiction, limits, policy version and approval/deny/escalate reason before an external provider handoff | Request-schema controls, denial corpus, durable policy version and fresh external authorization proof |
 | AURUM-P03 | Purpose-limited, recipient-bound disclosure of only permitted attributes; explicit expiry, revocation, and independently enforceable reviewer scope | Tests for correct reviewer, wrong reviewer, wrong purpose, stale/revoked grants and replay |
 | AURUM-P04 | PET implementation with separately reviewed cryptographic design (eg selective disclosure / ZKP) and cryptographic negative corpus | Independently reproducible proof verification, key/algorithm governance, constant-time/privacy review, correctness and performance receipts |
@@ -47,10 +57,10 @@ Passing C01 does NOT mean the private data are never stored: the current journal
 | AURUM-P07 | Legal settlement-finality and reconciliation evidence distinct from merely submitted, mined, confirmed or internally recorded | Named counterparties and ledger/legal finality proofs plus contradictory/timeout/reorg corpus |
 | AURUM-P08 | Bind independently tested source hash, build digest, deployment identity and runtime policy before enablement | External source/build/runtime receipts and independently repeatable live acceptance report |
 
-No production wallet, private key, customer identity, digital money, financial account, money movement, sanctions API, or central-bank infrastructure is used. No new permission is granted.
+No production wallet, private key, customer identity, digital money, financial account, money movement, sanctions API, or central-bank infrastructure is used. No new permission is granted. Commitment verification is not confidential-data storage or encryption. Salt and raw information remain entirely client-side under a separately governed retention policy. A predictable/unsalted digest can be guessed. Actor and grant identities remain in the journal. No historical journal rewrite or global de-identification is attempted.
 
 ## Review and acceptance
-- Keep this as a draft PR. Do not merge/deploy from this test exercise without review of CI, Node version, actual source/build binding and privacy implications.
+- Keep this as a draft PR. Do not merge/deploy from this exercise without review of CI, Node version, actual source/build binding, legacy-schema semantics and privacy implications.
 - Keep treasury/financial execution gates unchanged and closed unless independently authorized and proven.
 - Record the exact test invocation, Node version, commit SHA, CI provider, job conclusion and time. Absence of a test receipt means NOT VERIFIED, not PASS.
 - Scope is existing control boundary verification. A compliant PET implementation requires separate architecture and cryptographic review.
