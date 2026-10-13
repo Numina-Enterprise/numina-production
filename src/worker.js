@@ -4,7 +4,7 @@ import {treasuryConnectionHttp} from './treasury-connection-http.js';
 import {reviewerHttp,reviewerContext} from './reviewer.js';
 import {connectionsHttp} from './connections-http.js';
 import {CORE_MANIFEST,CORE_CONTEXT} from './core-v18.js';
-import {controlHttp,CONTROL_API_KEY_SHA256_PIN,SOURCE_OF_TRUTH_MODEL,CONTROL_WORKER_IDENTITY,AUTHORITY_IDENTITY,ENVIRONMENT_MODEL,DELIVERY_SURFACE_MODEL} from './control-http.js';
+import {controlHttp,SOURCE_OF_TRUTH_MODEL,CONTROL_WORKER_IDENTITY,AUTHORITY_IDENTITY,ENVIRONMENT_MODEL,DELIVERY_SURFACE_MODEL} from './control-http.js';
 import {routeRc20} from './rc20.js';
 import {routeRuntime} from './runtime-http.js';
 import {appHttp} from './app-http.js';
@@ -19,11 +19,6 @@ const security={"X-Numina-Version":"4.0.0","X-Numina-Profile":"numina-production
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
  async fetch(req,env){
-  const configuredControlPin=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';
-  const controlPin=configuredControlPin||CONTROL_API_KEY_SHA256_PIN;
-  const inheritedEnv=Object.create(env);
-  Object.defineProperty(inheritedEnv,'NUMINA_CONTROL_API_KEY_SHA256',{value:controlPin,enumerable:true,configurable:true});
-  env=inheritedEnv;
   const url=new URL(req.url),path=url.pathname;
   const span=path==='/api/ops/v1/telemetry'?{requestId:crypto.randomUUID(),finish(){}}:numinaWebTelemetry.begin({path,method:req.method,log:env.NUMINA_TELEMETRY_LOGS!=='false'});
   const requestId=span.requestId;let status=200;
@@ -34,15 +29,15 @@ export default {
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));
    }
-   if(path==='/mcp')return finish(await sitesMcpHttp(req,env,{requestId}));
    if(path.startsWith('/api/reviewer/v1/'))return finish(await reviewerHttp(req,env));
    if(path.startsWith('/api/nusd/v1/'))return finish(await nusdHttp(req));
-   if(path.startsWith('/api/')){
+   if(path.startsWith('/api/')||path==='/mcp'){
     const review=await reviewerContext(req,env);
     if(review?.error)return finish(review.error);
-    if(review){req=review.req;const reviewEnv=Object.create(review.env);Object.defineProperty(reviewEnv,'NUMINA_CONTROL_API_KEY_SHA256',{value:controlPin,enumerable:true,configurable:true});env=reviewEnv;}
+    if(review){req=review.req;env=review.env;}
 
    }
+   if(path==='/mcp')return finish(await sitesMcpHttp(req,env,{requestId}));
    if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))return finish(await transferReceiptsHttp(req,env));
    if(path.startsWith('/api/financial/v1/'))return finish(await financialEvidenceHttp(req,env));
    if(path.startsWith('/api/treasury/v1/'))return finish(await treasuryConnectionHttp(req,env));

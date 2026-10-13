@@ -11,7 +11,7 @@ import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/walle
 import {readWalletDeploymentIntent,writeWalletDeploymentIntent} from './wallet-execution-store.js';
 import {APP_VERSION} from './app-core.js';
 import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
-// Numina singular authority: production treasury workflows authenticate with repository-scoped GitHub OIDC.
+// Historical release metadata only; bearer authorization uses deployment configuration.
 export const CONTROL_API_KEY_SHA256_PIN='d00bb7c7b85a0ff5ef6681db70aed9cdcfab1a5cd60186d334dcb57d07a4c0e6';
 export const SOURCE_OF_TRUTH_MODEL=NUMINA;
 export const CONTROL_WORKER_IDENTITY=NUMINA;
@@ -64,7 +64,7 @@ export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.fl
     return await crypto.subtle.verify('RSASSA-PKCS1-v1_5',publicKey,decodeB64Url(parts[2]),new TextEncoder().encode(parts[0]+'.'+parts[1]));
   }catch{return false;}
 }
-function controlApiKeyPins(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured&&configured!==CONTROL_API_KEY_SHA256_PIN?[CONTROL_API_KEY_SHA256_PIN,configured]:[CONTROL_API_KEY_SHA256_PIN];}
+function controlApiKeyPin(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(!configured)controlError('AUTHORITY_CONFIGURATION_MISSING',503);if(!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured;}
 function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 export async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
@@ -73,7 +73,7 @@ export async function controlActor(req,env){
     if(!auth.startsWith('Bearer '))controlError('UNAUTHENTICATED',401);
     const token=auth.slice(7);
     if(token.split('.').length===3&&await verifyGithubActionsOidc(token))return env.NUMINA_CONTROL_OWNER;
-    if(!controlApiKeyPins(env).includes(await controlHash(token)))controlError('UNAUTHENTICATED',401);
+    if(controlApiKeyPin(env)!==await controlHash(token))controlError('UNAUTHENTICATED',401);
     return env.NUMINA_CONTROL_OWNER;
   }
   // Identity is supplied by Sites or the verified reviewer middleware. Reviewers

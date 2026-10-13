@@ -17,7 +17,8 @@ concurrency:
 
 jobs:
   settle:
-    runs-on: NUMINA
+    if: false # Pending hosted migration and implementation approval.
+    runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 5
     env:
