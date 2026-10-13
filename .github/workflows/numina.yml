@@ -49,6 +49,9 @@ jobs:
       - name: NUMINA build
         run: npm run build
 
+      - name: NUMINA Aurum privacy boundary regression
+        run: node --test tests/aurum-privacy-controls.test.mjs
+
       - name: NUMINA identity
         run: |
           node --check runtime/nusd/scripts/deploy-production.mjs
