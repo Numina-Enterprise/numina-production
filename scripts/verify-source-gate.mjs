@@ -32,13 +32,23 @@ export function validateSandboxState({ version, uid, noNewPrivileges, effectiveC
   assert.equal(routes.trim().split(/\r?\n/).length, 1, 'SOURCE_GATE_EXTERNAL_ROUTE_DENIED');
 }
 
+export function validatePrivateWorkMount(mountInfo) {
+  const entries = mountInfo.trim().split(/\r?\n/).map(line => line.split(' - ')).filter(([fields]) => fields.split(' ')[4] === '/work');
+  assert.equal(entries.length, 1, 'SOURCE_GATE_PRIVATE_WORK_MOUNT_REQUIRED');
+  const [fields, filesystem] = entries[0];
+  const options = fields.split(' ')[5].split(',');
+  assert.equal(filesystem?.split(' ')[0], 'tmpfs', 'SOURCE_GATE_PRIVATE_WORK_TMPFS_REQUIRED');
+  assert.ok(['rw', 'nosuid', 'nodev'].every(option => options.includes(option)) && !options.includes('noexec'), 'SOURCE_GATE_PRIVATE_WORK_EXEC_AND_RESTRICTIONS_REQUIRED');
+  return { mountPoint: '/work', type: 'tmpfs', options };
+}
+
 export function dockerArguments({ sourceRoot, nodeHome }) {
   for (const value of [sourceRoot, nodeHome]) assert.ok(posix.isAbsolute(value) && !/[,\r\n]/.test(value), 'SOURCE_GATE_UNSAFE_MOUNT_PATH');
   assert.match(nodeHome, /^\/opt\/hostedtoolcache\/node\/26\.11\.1\/(?:x64|arm64)$/, 'SOURCE_GATE_PUBLIC_NODE_TOOLCACHE_REQUIRED');
   return [
     'run', '--rm', '--network', 'none', '--read-only', '--user', '1000:1000',
     '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
-    '--tmpfs', '/work:rw,nosuid,nodev,size=3g,mode=1777',
+    '--tmpfs', '/work:rw,nosuid,nodev,exec,size=3g,mode=1777',
     '--tmpfs', '/tmp:rw,nosuid,nodev,size=256m,mode=1777',
     '--mount', 'type=bind,src=' + sourceRoot + ',dst=/source,readonly',
     '--mount', 'type=bind,src=' + nodeHome + ',dst=/node26,readonly',
@@ -73,6 +83,17 @@ export function runGateContainer({ sourceRoot, nodeHome, environment, expectedSo
   return { ...receipt, osImage: SOURCE_GATE_OS_IMAGE };
 }
 
+export function writeGateOutput(output, stream = process.stdout) {
+  return new Promise((accept, reject) => stream.write(output, error => error ? reject(error) : accept()));
+}
+
+export async function runGateContainerWithFlushedOutput(plan, run = spawnSync, write = writeGateOutput) {
+  let output = '';
+  try {
+    return runGateContainer({ ...plan, onOutput: chunk => { output += chunk; } }, run);
+  } finally { await write(output); }
+}
+
 export function assertCleanTrackedSource({ sourceRoot, environment }, run = spawnSync) {
   for (const args of [['diff', '--quiet'], ['diff', '--cached', '--quiet']]) {
     const result = run('git', args, { cwd: sourceRoot, env: environment, encoding: 'utf8' });
@@ -99,6 +120,11 @@ export function runSandboxSuite({ nodeExecutable, npmEntry, workingDirectory, ca
 }
 
 export async function sandboxMain() {
+  try { await runSandboxMain(); }
+  finally { await writeGateOutput(''); }
+}
+
+async function runSandboxMain() {
   const status = readFileSync('/proc/self/status', 'utf8');
   const effectiveCapabilities = status.match(/^CapEff:\s*([a-f0-9]+)$/m)?.[1];
   const noNewPrivileges = status.match(/^NoNewPrivs:\s*(\d+)$/m)?.[1] === '1';
@@ -107,6 +133,7 @@ export async function sandboxMain() {
     routes: readFileSync('/proc/net/route', 'utf8'),
     socketPresent: ['/var/run/docker.sock', '/run/docker.sock', '/run/containerd/containerd.sock'].some(existsSync)
   });
+  const workMount = validatePrivateWorkMount(readFileSync('/proc/self/mountinfo', 'utf8'));
   const { createConnection } = await import('node:net');
   const { createSocket } = await import('node:dgram');
   const http = await import('node:http'), https = await import('node:https');
@@ -133,7 +160,7 @@ export async function sandboxMain() {
     socket.send(Buffer.from('isolation'), 53, '198.51.100.1', error => error ? deny(error) : allowed());
     return socket;
   });
-  console.log(JSON.stringify({ schema: 'numina.source-gate.isolation.v1', nodeVersion: process.version, uid: process.getuid(), noNewPrivileges, effectiveCapabilities, networkDenied: true, credentialEnvironmentAbsent: true, hostSocketsAbsent: true }));
+  console.log(JSON.stringify({ schema: 'numina.source-gate.isolation.v1', nodeVersion: process.version, uid: process.getuid(), noNewPrivileges, effectiveCapabilities, workMount, networkDenied: true, credentialEnvironmentAbsent: true, hostSocketsAbsent: true }));
   assertCredentialFreeGitConfig(readFileSync('/source/.git/config', 'utf8'));
   const git = spawnSync('git', ['--version'], { encoding: 'utf8' });
   assert.ok(!git.error && git.status === 0, 'SOURCE_GATE_REQUIRED_TOOL_MISSING_git: full root suite not executed');
@@ -170,7 +197,7 @@ export async function sandboxMain() {
   console.log('NUMINA_SOURCE_GATE_DISPOSABLE_BUILD ' + JSON.stringify({ schema: 'numina.source-gate.disposable-build.v1', nodeVersion: process.version, sourceCommit, ...result }));
 }
 
-function main() {
+async function main() {
   validateRuntime({ platform: process.platform, version: process.version });
   assert.ok(lstatSync(join(root, '.git')).isDirectory(), 'SOURCE_GATE_LOCAL_GIT_DIRECTORY_REQUIRED');
   assertCredentialFreeGitConfig(readFileSync(join(root, '.git/config'), 'utf8'));
@@ -187,7 +214,7 @@ function main() {
     assert.equal(git.stdout.trim(), expected, 'SOURCE_GATE_SOURCE_SHA_MISMATCH');
     assertCleanTrackedSource({ sourceRoot: root, environment });
     const sourceRoot = realpathSync(root), nodeHome = dirname(dirname(realpathSync(process.execPath)));
-    const result = runGateContainer({ sourceRoot, nodeHome, environment, expectedSourceCommit: expected, onOutput: output => process.stdout.write(output) });
+    const result = await runGateContainerWithFlushedOutput({ sourceRoot, nodeHome, environment, expectedSourceCommit: expected });
     const after = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, env: environment, encoding: 'utf8' });
     assert.equal(after.status, 0, 'SOURCE_GATE_SOURCE_READBACK_FAILED');
     assert.equal(after.stdout.trim(), expected, 'SOURCE_GATE_SOURCE_CHANGED');
@@ -196,4 +223,4 @@ function main() {
   } finally { rmSync(temporary, { recursive: true, force: true }); }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();

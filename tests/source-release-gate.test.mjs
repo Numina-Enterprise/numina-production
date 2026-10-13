@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { inspect } from 'node:util';
+import { Writable } from 'node:stream';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const readWorkflow = name => readFileSync(join(root, '.github/workflows', name), 'utf8');
@@ -40,6 +41,7 @@ test('Docker boundary emits only readonly source/runtime mounts and an isolated 
   assert.equal(args[args.indexOf('--security-opt') + 1], 'no-new-privileges');
   assert.ok(args.includes('--read-only'));
   const values = flag => args.flatMap((value, index) => value === flag ? [args[index + 1]] : []);
+  assert.deepEqual(values('--tmpfs'), ['/work:rw,nosuid,nodev,exec,size=3g,mode=1777', '/tmp:rw,nosuid,nodev,size=256m,mode=1777']);
   assert.deepEqual(values('--mount'), ['type=bind,src=/home/runner/work/numina/numina,dst=/source,readonly', 'type=bind,src=/opt/hostedtoolcache/node/26.11.1/x64,dst=/node26,readonly']);
   assert.deepEqual(values('--env'), ['HOME=/work', 'PATH=/node26/bin:/usr/local/bin:/usr/bin:/bin']);
   assert.equal(args[args.indexOf('--entrypoint') + 1], '/node26/bin/node');
@@ -62,6 +64,50 @@ test('failed Docker boundary cannot produce a successful full-suite result', asy
   assert.throws(() => runGateContainer(plan, () => ({ status: 42 })), /SOURCE_GATE_CONTAINER_FAILED/);
   assert.throws(() => runGateContainer(plan, () => ({ error: Error('missing'), status: null })), /SOURCE_GATE_DOCKER_UNAVAILABLE/);
   assert.throws(() => runGateContainer(plan, () => ({ status: 0, stdout: '' })), /SOURCE_GATE_DISPOSABLE_RECEIPT_REQUIRED/);
+});
+
+test('private build mount must support native addon mappings while retaining mount restrictions', async () => {
+  const { validatePrivateWorkMount } = await gateModule();
+  assert.equal(typeof validatePrivateWorkMount, 'function');
+  const safe = '41 35 0:42 / /work rw,nosuid,nodev,relatime - tmpfs tmpfs rw,size=3145728k\n';
+  assert.deepEqual(validatePrivateWorkMount(safe), { mountPoint: '/work', type: 'tmpfs', options: ['rw', 'nosuid', 'nodev', 'relatime'] });
+  for (const unsafe of [safe.replace('nodev,', 'nodev,noexec,'), safe.replace('nosuid,', ''), safe.replace('nodev,', ''), safe.replace('rw,', 'ro,'), safe.replace(' - tmpfs ', ' - ext4 '), safe.replace('/work ', '/tmp ')]) assert.throws(() => validatePrivateWorkMount(unsafe));
+});
+
+test('Docker failure waits for the entire captured stdout write before propagating', async () => {
+  const { runGateContainerWithFlushedOutput, writeGateOutput } = await gateModule();
+  assert.equal(typeof runGateContainerWithFlushedOutput, 'function');
+  assert.equal(typeof writeGateOutput, 'function');
+  const payload = 'NUMINA_SOURCE_GATE_POST_BUILD ' + JSON.stringify({ fixture: 'x'.repeat(256 * 1024) }) + '\nFIXTURE_FULL_SUMMARY_TAIL\n';
+  let completeWrite, written, settled = false;
+  const output = { write(value, callback) { written = value; completeWrite = callback; return false; } };
+  const pending = runGateContainerWithFlushedOutput({ sourceRoot: '/repo', nodeHome: '/opt/hostedtoolcache/node/26.11.1/x64', environment: {} }, () => ({ status: 42, stdout: payload }), value => writeGateOutput(value, output));
+  const failure = pending.then(() => { settled = true; assert.fail('Container failure must remain blocking'); }, error => { settled = true; return error; });
+  await new Promise(accept => setImmediate(accept));
+  assert.equal(settled, false);
+  assert.equal(written, payload);
+  completeWrite();
+  assert.match((await failure).message, /SOURCE_GATE_CONTAINER_FAILED/);
+});
+
+test('stdout write failures remain blocking', async () => {
+  const { writeGateOutput } = await gateModule();
+  assert.equal(typeof writeGateOutput, 'function');
+  await assert.rejects(writeGateOutput('fixture', { write(_value, callback) { callback(Error('fixture output failure')); } }), /fixture output failure/);
+});
+
+test('sandbox flush barrier waits behind previously queued stdout', async () => {
+  const { writeGateOutput } = await gateModule();
+  let completePriorWrite, flushed = false;
+  const output = new Writable({ write(chunk, _encoding, callback) { if (chunk.length) completePriorWrite = callback; else callback(); } });
+  output.write('FIXTURE_QUEUED_POST_BUILD_OUTPUT');
+  const pending = writeGateOutput('', output).then(() => { flushed = true; });
+  await new Promise(accept => setImmediate(accept));
+  assert.equal(flushed, false);
+  completePriorWrite();
+  await pending;
+  assert.equal(flushed, true);
+  output.end();
 });
 
 test('Docker success must carry one matching disposable build receipt', async () => {
