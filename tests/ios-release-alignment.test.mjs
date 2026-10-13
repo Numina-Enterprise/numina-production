@@ -39,7 +39,7 @@ test('bundle identity mismatch and build regression fail',()=>{
   const value=input(); value.policy.packageIdentity='other.app';
   assert.throws(()=>deriveIOSIdentity(value),/BUNDLE_IDENTITY_MISMATCH/);
   const earlier=input(); earlier.settings=earlier.settings.replace(/CURRENT_PROJECT_VERSION = \d+/,'CURRENT_PROJECT_VERSION = 1');
-  assert.throws(()=>deriveIOSIdentity(earlier),/IOS_BUILD_REGRESSION/);
+  assert.throws(()=>deriveIOSIdentity(earlier),/IOS_BUILD_SEQUENCE_INVALID/);
 });
 test('generated xcconfig matches current dependency identities without signing secrets',()=>{
   const rendered=renderIOSRelease(checkIOSRelease());

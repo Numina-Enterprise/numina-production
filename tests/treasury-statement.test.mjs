@@ -4,6 +4,7 @@ import {readdirSync,readFileSync} from 'node:fs';
 import {database} from '../scripts/sqlite.mjs';
 import {bootstrapControl,readControl,commitControl} from '../src/control-store.js';
 import {controlHash} from '../src/control.js';
+import {applicationReleaseAssets} from './helpers/application-release-assets.mjs';
 import worker from '../src/worker.js';
 import {NUSD_POLICY} from '../src/nusd-http.js';
 const owner='email:owner@example.test',delegate='email:delegate@example.test',key='local-owner-test-key';
@@ -11,7 +12,7 @@ const path='/api/control/v1/treasury-attestation';
 const identity=email=>({'oai-authenticated-user-id':'platform-test-user','oai-authenticated-user-email':email});
 const request=(headers={},method='GET')=>new Request('https://numina.test'+path,{headers,method});
 const containsPrivate=s=>/500000000000000|500,000,000,000,000|Bank of America|Treasury transfers and NUSD settlement are active\. Funds moved\./.test(s);
-async function fixture(){const DB=database(),now=Math.floor(Date.now()/1000);await bootstrapControl(DB,owner,now);return {DB,NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
+async function fixture(){const DB=database(),now=Math.floor(Date.now()/1000);await bootstrapControl(DB,owner,now);return {DB,ASSETS:applicationReleaseAssets(),NUMINA_CONTROL_OWNER:owner,NUMINA_CONTROL_API_KEY_SHA256:await controlHash(key)};}
 
 test('legacy owner statement is replaced by the private canonical Numina treasury route',async()=>{
  const env=await fixture();try{

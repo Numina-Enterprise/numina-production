@@ -9,16 +9,18 @@ Numina is the existing authority root. The website, Numina OS, native clients, i
 | L3 | Agent principals, delegated authority, policy and human approval | `src/control.js`, `src/frontier.js` |
 | L4 | Governed execution, provider preparation, MCP and A2A | `src/frontier.js`, `src/frontier-http.js` |
 | L5 | Signed provenance and the singular NUSD projection | `src/frontier-http.js`, `src/native-treasury.js`, `src/native-treasury-model.js` |
+| L6 | Treasury account views and current environment bindings | `src/native-treasury.js`, `public/architecture-layers.js`, `config/numina-current-environments.json` |
+| L7 | Application release and final artifact bindings | `scripts/release-manifest.mjs`, `public/final-build.json`, `public/final-manifest.json` |
 
 The canonical root identity is retained in `mobile/signing/release-identities.json`; its head is read at `/api/control/v2/head`. Current control state and treasury are `/api/control/v2/state` and `/api/control/v1/treasury`. A package does not initialize another root or duplicate an account balance.
 
-All five layers inherit the shared treasury reference in `/api/control/v2/architecture`. It identifies one NUSD balance, `readTreasury()` and `writeTreasury(event)`. The business metadata and `/source-alignment.json` reference that same treasury. Live amounts and funding status come from the authenticated `/api/control/v2/treasury/accounts` response, never from a static release value. The build rejects conflicting routes or a hard-coded original funding-plan status.
+All seven layers inherit the shared treasury reference in `/api/control/v2/architecture`. It identifies one NUSD balance, `readTreasury()` and `writeTreasury(event)`. The business metadata and `/source-alignment.json` reference that same treasury. Live amounts and funding status come from the authenticated `/api/control/v2/treasury/accounts` response, never from a static release value. The build rejects conflicting routes or a hard-coded original funding-plan status.
 
 The funding panel displays `nativeFundingView.status` alongside the original plan and owner-declaration receipt links. The current native `FUNDED_PLAN` status derives from the recorded owner declaration; the original signed plan retains its historical status. Website and integration clients check that the derived view agrees with its source fields, native projection, revision and head. These consistency checks do not independently verify external reserves or settlement.
 
 The product and maintained packages are version 4.0.0. Existing HTTP and receipt schemas retain v1/v2 identifiers for compatibility. Platform certificates retain their actual issuer and status. The reconstructed rc27 verifier is deployed with its own source and artifact identity. The frozen v1.8 core and historical build assessments retain their original identities. The existing owner, journal, treasury and native signing identities are preserved.
 
-The build runs `scripts/source-alignment.mjs`. It rejects inconsistent maintained versions, stale integration file inventories, changed runtime pins or mismatched Android release identity. The resulting `/source-alignment.json` lists source hashes, the shared routes and L1–L5. Its hash is included in the application artifact inventory.
+The build runs `scripts/source-alignment.mjs`. It rejects inconsistent maintained versions, stale integration file inventories, changed runtime pins or mismatched Android release identity. The resulting `/source-alignment.json` lists source hashes, the shared routes and L1–L7. Its hash is included in the application artifact inventory.
 
 After editing distributed sources, run `python scripts/package-distributions.py`, then `node scripts/build.mjs`. Packaging regenerates integration metadata, plugin and native source archives and verifies their bytes. Existing native binaries retain their exact builder/source records. Recompile when native executable inputs change. These commands do not run application tests, submit store applications or create financial receipts.
 
@@ -30,7 +32,7 @@ The application inventory, source-alignment inventory and integration distributi
 
 `recorded_release_evidence` retains the original dated receipt content. `recorded_release_evidence_context` and the release UI label it historical. Current artifact identity is the generated `build_id`; historical publication receipts do not establish deployment of that build. Current native distribution metadata comes from `distribution.native_candidates` and its own recorded workflow evidence.
 
-The canonical treasury remains one 500,000,000,000,000 NUSD native projection shared across L1–L5 through `readTreasury()` and `writeTreasury(event)`. Funding status comes from `/api/control/v2/treasury/accounts`, not duplicated static balances. This release performs no treasury write or external transfer.
+The canonical treasury remains one 500,000,000,000,000 NUSD native projection shared across L1–L7 through `readTreasury()` and `writeTreasury(event)`. Funding status comes from `/api/control/v2/treasury/accounts`, not duplicated static balances. This release performs no treasury write or external transfer.
 
 ## Source-input hash scopes
 
@@ -49,4 +51,4 @@ The installed web app requires a live connection. Its service worker removes pri
 
 The canonical public origin is `https://numinalabs.xyz`. NUMINA REPOSITORY is the canonical source and root lineage; its `main` branch produces every downstream runtime surface. Provider-neutral Numina routing maps the application API families to the retained application backend at `https://personal-space-m7q9.skott34.chatgpt.site`, preserving its journal and documents. Upstream routes must never create a public-origin recursion loop. Wallet and deployment-readiness pages remain part of the canonical Numina application, and download fallback retains the recorded artifact identities.
 
-The backend currently runs source `db71c054cda7442e4c5f357e9e27e542fd2a7db9`; it is not claimed to match the latest NUMINA repository source. Android build 4 and iOS build 6 still require current-source signed artifacts and store submission receipts. The historical Android build 3 and iOS build 5 downloads are not relabeled as current-source builds.
+A historical routing assessment recorded backend source `db71c054cda7442e4c5f357e9e27e542fd2a7db9`. That assessment does not identify the currently served revision; current backend alignment requires a fresh deployment readback against the intended source. Android build 4 and iOS build 6 still require current-source signed artifacts and store submission receipts. The historical Android build 3 and iOS build 5 downloads are not relabeled as current-source builds.

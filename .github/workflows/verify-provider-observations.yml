@@ -95,6 +95,7 @@ jobs:
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
           npm run build
+          npm test
           node scripts/sync-application-release-pin.mjs
           echo "NUMINA_ROOT_VERIFIED=true" >> "$GITHUB_ENV"
       - name: Build trusted source release gate

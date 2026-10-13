@@ -21,5 +21,6 @@ test('recorded network and token verification remain separate from current finan
  assert.equal(NUSD_POLICY.network_policy.independently_verified,false);
  assert.equal(NUSD_POLICY.asset.chain,verified.chainId);assert.equal(NUSD_POLICY.asset.contract,verified.token.address);
  assert.equal(NUSD_POLICY.asset.decimals,18);assert.equal(NUSD_POLICY.capabilities.mint,false);assert.equal(NUSD_POLICY.capabilities.settlement,false);
- assert.equal(NUSD_POLICY.operator_activation.currentChainActivityVerified,true);assert.equal(NUSD_POLICY.capabilities.transfer,true);
+ assert.equal(NUSD_POLICY.operator_activation.status,'operator_active');assert.equal(NUSD_POLICY.operator_activation.evidenceType,'operator_native_declaration');
+ assert.equal(NUSD_POLICY.operator_activation.currentChainActivityVerified,false);assert.equal(NUSD_POLICY.operator_activation.currentChainPauseState,null);assert.equal(NUSD_POLICY.capabilities.transfer,true);
 });

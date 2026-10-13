@@ -9,7 +9,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs",
-    "start": "node scripts/serve-numina-cloud.mjs",
+    "start": "bash scripts/numina-cloud-preview.sh",
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs",
     "publish:source": "node scripts/publish-with-telemetry.mjs",

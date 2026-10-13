@@ -101,6 +101,7 @@ record.checks.requiredArchitectureMatches=true;
 record.sourceInputs.push(...['config/numina-architecture.json','config/numina-routing.json','src/native-treasury-model.js'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 record.hostRouting={canonicalApplicationOrigin:'https://numinalabs.xyz',verifierOrigin:'https://numinalabs.xyz',treasuryRoute:sharedTreasury.route,applicationManifest,providerObservationRoute:'/api/control/v1/stripe-treasury',telemetryMetricMap:'/telemetry-metrics.json',telemetryGuide:'/downloads/Telemetry-and-Quantum.md',independentTreasuryCreated:false};
 record.sourceInputs.push({path:'scripts/package-rc27.py',sha256:digest(fs.readFileSync('scripts/package-rc27.py'))});
+record.sourceInputs.push(...['runtime/vercel-production/lib/network-observation.mjs','runtime/vercel-production/api/node-connection.mjs','src/runtime-release-local.js','scripts/build.mjs','scripts/package-rc26.py'].map(path=>({path,sha256:digest(fs.readFileSync(path))})));
 const distribution=json('mobile/signing/distribution-policy.json');
 if(distribution.distributionTeam?.name!=='Numina'||distribution.distributionTeam.authority!=='NUMINA'||distribution.distributionTeam.count!==1||distribution.layers.join(',')!=='L1,L2,L3,L4,L5,L6,L7'||NUMINA_LAYERS.distribution?.policy!=='/downloads/distribution-policy.json')throw Error('Distribution must share the Numina root across all layers');
 record.distribution={...NUMINA_LAYERS.distribution,appleTeamStatus:distribution.apple.teamStatus};

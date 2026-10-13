@@ -4,11 +4,28 @@ import {readFileSync,readdirSync} from 'node:fs';
 import worker from '../src/worker.js';
 const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8');
 const routes=['/app','/frontier','/economy','/services','/integrations','/build','/control','/labs'];
+const institutionalPages=new Set(['index.html','government.html','financial-institutions.html','partners.html','developers.html','trust.html','uk-eu.html','mena.html','apac.html','contact.html']);
+const institutionalRoutes=['/government','/financial-institutions','/partners','/developers','/trust','/contact'];
 
 test('every website page shares the Numina design and complete primary navigation',()=>{
   for(const file of readdirSync(new URL('../public/',import.meta.url)).filter(name=>name.endsWith('.html'))){
     const html=read(file),header=html.match(/<header\b[^>]*>(.*?)<\/header>/s)?.[1];
-    assert.ok(header,file);assert.match(header,/Intelligence in Motion/,file);assert.match(html,/href="\/motion.css"/,file);
+    assert.ok(header,file);assert.match(header,/Intelligence in Motion/,file);
+    if(institutionalPages.has(file)){
+      assert.match(html,/href="\/enterprise.css"/,file);
+      const nav=header.match(/<nav[^>]*aria-label="Main navigation"[^>]*>(.*?)<\/nav>/s)?.[1];
+      assert.ok(nav,file+' Main navigation');
+      assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),institutionalRoutes,file);
+      assert.ok([...nav.matchAll(/aria-current="page"/g)].length<=1,file);
+      assert.doesNotMatch(html,/<nav[^>]*aria-label="Mobile navigation"/,file);
+      assert.doesNotMatch(html,/<a[^>]*href="(?:https:\/\/(?:www\.)?numinalabs.xyz)?\/pricing(?:["#?])/);
+      continue;
+    }
+    if(!/href="\/motion.css"/.test(html)){
+      assert.match(header,/<nav[^>]*aria-label="Main navigation"/,file);
+      assert.doesNotMatch(html,/<a[^>]*href="(?:https:\/\/(?:www\.)?numinalabs.xyz)?\/pricing(?:["#?])/);
+      continue;
+    }
     for(const label of ['Main navigation','Mobile navigation']){
       const nav=header.match(new RegExp('<nav[^>]*aria-label="'+label+'"[^>]*>(.*?)</nav>','s'))?.[1];
       assert.ok(nav,file+' '+label);assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),routes,file);
@@ -16,7 +33,9 @@ test('every website page shares the Numina design and complete primary navigatio
     }
     assert.doesNotMatch(html,/<a[^>]*href="(?:https:\/\/(?:www\.)?numinalabs.xyz)?\/pricing(?:["#?])/);
   }
-  assert.equal(read('index.html'),read('frontier.html'));
+  assert.notEqual(read('index.html'),read('frontier.html'));
+  assert.match(read('index.html'),/class="service-pane"/);
+  assert.match(read('index.html'),/Institutional digital-asset infrastructure/);
 });
 
 test('services and pricing combine scope, terms and the existing enterprise request routes once',()=>{
