@@ -41,8 +41,8 @@ jobs:
           node-version: '26.11.1'
           package-manager-cache: false
 
-      - name: Verify identity and runner security regressions
-        run: node --test tests/control-identity-regression.test.mjs tests/runner-policy.test.mjs
+      - name: Verify identity, runner and source-gate unit regressions
+        run: node --test tests/control-identity-regression.test.mjs tests/runner-policy.test.mjs tests/source-release-gate.test.mjs
 
       - name: NUMINA pinned dependencies
         run: |
@@ -50,6 +50,10 @@ jobs:
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
 
       - name: NUMINA build
+        # Missing sandbox prerequisites block release creation.
+        run: node scripts/verify-source-gate.mjs
+
+      - name: NUMINA build after full-suite gate
         run: npm run build
 
       - name: NUMINA identity

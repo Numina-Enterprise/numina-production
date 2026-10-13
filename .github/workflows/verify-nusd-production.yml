@@ -17,28 +17,13 @@ permissions:
 
 jobs:
   verify:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: github.repository == 'skott34-dot/numina-production' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository) || (github.event_name != 'workflow_run' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 10
     env:
+      NUMINA_VERIFICATION_SOURCE_SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       NUMINA_RPC_URL: https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/
-      NUMINA_RPC_AUTHORIZATION: ${{ secrets.NUMINA_RPC_AUTHORIZATION }}
-      NUMINA_RPC_USERNAME: ${{ secrets.NUMINA_RPC_USERNAME }}
-      NUMINA_RPC_PASSWORD: ${{ secrets.NUMINA_RPC_PASSWORD }}
-      NUMINA_RPC_APP_USERNAME: ${{ secrets.NUMINA_RPC_APP_USERNAME }}
-      NUMINA_RPC_APP_PASSWORD: ${{ secrets.NUMINA_RPC_APP_PASSWORD }}
-      NUMINA_RPC_APP_CREDENTIAL: ${{ secrets.NUMINA_RPC_APP_CREDENTIAL }}
-      NUMINA_KALEIDO_APP_CREDENTIAL: ${{ secrets.NUMINA_KALEIDO_APP_CREDENTIAL }}
-      KALEIDO_APP_CREDENTIAL: ${{ secrets.KALEIDO_APP_CREDENTIAL }}
-      KALEIDO_APP_CRED_USERNAME: ${{ secrets.KALEIDO_APP_CRED_USERNAME }}
-      KALEIDO_APP_CRED_PASSWORD: ${{ secrets.KALEIDO_APP_CRED_PASSWORD }}
-      KALEIDO_APP_USERNAME: ${{ secrets.KALEIDO_APP_USERNAME }}
-      KALEIDO_APP_PASSWORD: ${{ secrets.KALEIDO_APP_PASSWORD }}
-      KALEIDO_USERNAME: ${{ secrets.KALEIDO_USERNAME }}
-      KALEIDO_PASSWORD: ${{ secrets.KALEIDO_PASSWORD }}
-      NUMINA_KALEIDO_API_KEY: ${{ secrets.NUMINA_KALEIDO_API_KEY }}
-      KALEIDO_API_KEY: ${{ secrets.KALEIDO_API_KEY }}
       NUMINA_EXPECTED_CHAIN_ID: '962421430'
       NUMINA_EXPECTED_GENESIS: '0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1'
       NUMINA_SENDER: '0x1a45671AE2ee3E52264116151924FAAcb80Fc02E'
@@ -47,19 +32,52 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ env.NUMINA_VERIFICATION_SOURCE_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '26'
+          node-version-file: '.nvmrc'
       - name: Install locked NUSD runtime dependencies
         working-directory: runtime/nusd
         run: npm ci --ignore-scripts
+      - name: Verify exact source in isolated full-suite gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$(git rev-parse HEAD)" = "$NUMINA_VERIFICATION_SOURCE_SHA"
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+          node scripts/verify-source-gate.mjs
       - name: Verify production deployment from chain state
+        # Existing verifier can bootstrap/revoke a provider credential.
+        # It is unreachable if the full source gate or prerequisites fail.
+        env:
+          NUMINA_RPC_AUTHORIZATION: ${{ secrets.NUMINA_RPC_AUTHORIZATION }}
+          NUMINA_RPC_USERNAME: ${{ secrets.NUMINA_RPC_USERNAME }}
+          NUMINA_RPC_PASSWORD: ${{ secrets.NUMINA_RPC_PASSWORD }}
+          NUMINA_RPC_APP_USERNAME: ${{ secrets.NUMINA_RPC_APP_USERNAME }}
+          NUMINA_RPC_APP_PASSWORD: ${{ secrets.NUMINA_RPC_APP_PASSWORD }}
+          NUMINA_RPC_APP_CREDENTIAL: ${{ secrets.NUMINA_RPC_APP_CREDENTIAL }}
+          NUMINA_KALEIDO_APP_CREDENTIAL: ${{ secrets.NUMINA_KALEIDO_APP_CREDENTIAL }}
+          KALEIDO_APP_CREDENTIAL: ${{ secrets.KALEIDO_APP_CREDENTIAL }}
+          KALEIDO_APP_CRED_USERNAME: ${{ secrets.KALEIDO_APP_CRED_USERNAME }}
+          KALEIDO_APP_CRED_PASSWORD: ${{ secrets.KALEIDO_APP_CRED_PASSWORD }}
+          KALEIDO_APP_USERNAME: ${{ secrets.KALEIDO_APP_USERNAME }}
+          KALEIDO_APP_PASSWORD: ${{ secrets.KALEIDO_APP_PASSWORD }}
+          KALEIDO_USERNAME: ${{ secrets.KALEIDO_USERNAME }}
+          KALEIDO_PASSWORD: ${{ secrets.KALEIDO_PASSWORD }}
+          NUMINA_KALEIDO_API_KEY: ${{ secrets.NUMINA_KALEIDO_API_KEY }}
+          KALEIDO_API_KEY: ${{ secrets.KALEIDO_API_KEY }}
         working-directory: runtime/nusd
         run: node scripts/verify-production.mjs deployment-verification.json
       - name: Commit durable NUMINA verification
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         shell: bash
         run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$NUMINA_VERIFICATION_SOURCE_SHA"
           git config user.name "NUMINA"
           git config user.email "actions@users.noreply.github.com"
           git add runtime/nusd/deployment-verification.json
@@ -67,5 +85,6 @@ jobs:
             echo "Verification already current."
           else
             git commit -m "Record verified NUSD production deployment"
-            git push origin HEAD:main
+            # Token is provided to this push only, never persisted in .git/config.
+            git -c credential.helper= -c credential.helper='!f() { printf "%s\n" "username=x-access-token" "password=$GITHUB_TOKEN"; }; f' push origin HEAD:main
           fi
