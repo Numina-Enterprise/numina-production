@@ -41,6 +41,9 @@ jobs:
           node-version: '26.11.1'
           package-manager-cache: false
 
+      - name: Verify identity and runner security regressions
+        run: node --test tests/control-identity-regression.test.mjs tests/runner-policy.test.mjs
+
       - name: NUMINA pinned dependencies
         run: |
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund

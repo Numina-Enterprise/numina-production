@@ -224,7 +224,7 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.hostIdentity,'NUMINA');
   assert.equal(policy.runnerIdentity,'NUMINA');
   assert.equal(policy.allRunnerIdentities,'NUMINA');
-  assert.equal(policy.runnerTarget,'NUMINA');
+  assert.equal(policy.runnerTarget,'ubuntu-24.04');
   assert.equal(policy.selfHostedPolicy,'deny_execution_preserve_registration_records');
   assert.equal(policy.futureRunnerPolicy,'deny');
   assert.equal(policy.rules.preserveCurrentRunners,true);
@@ -242,9 +242,9 @@ test('current NUMINA runners are preserved without freezing placement',()=>{
   assert.equal(policy.executionTargets.hostedLinuxPolicy.migrationNotice.migrationBegins,'2026-10-19');
   assert.equal(policy.executionTargets.hostedLinuxPolicy.migrationNotice.target,'ubuntu-26');
   const workflowsUrl=new URL('../.github/workflows/',import.meta.url);
-  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-24.04','numina.yml':'ubuntu-24.04','verify-provider-observations.yml':'ubuntu-24.04','numina-android-release.yml':'ubuntu-24.04','numina-ios-signing.yml':'macos-latest','publish-sites-control-source.yml':'ubuntu-24.04','verify-root-numina.yml':'ubuntu-24.04','activate-minted-nusd.yml':'ubuntu-24.04','align-native-treasury-500t.yml':'ubuntu-24.04','check-sites-control-origin.yml':'ubuntu-24.04','deploy-nusd-contracts.yml':'ubuntu-24.04','diagnose-control-auth.yml':'ubuntu-24.04','ibm-quantum-hardware.yml':'ubuntu-24.04','ibm-quantum-smoke.yml':'ubuntu-24.04','initiate-treasury-aggregate-model.yml':'ubuntu-24.04','verify-workflow-pins.yml':'ubuntu-24.04','sync-control-key-pin.yml':'ubuntu-24.04','verify-nusd-production.yml':'ubuntu-24.04','numina-ci-start.yml':'ubuntu-24.04','repair-rc27-integration-manifest.yml':'ubuntu-24.04'});
-  assert.deepEqual(policy.executionTargets.workflowTargetSets,{'numina-mobile-release-build.yml':['ubuntu-24.04','macos-latest'],'numina-mobile-store-distribution.yml':['ubuntu-24.04','macos-latest'],'numina-site-builder.yml':['ubuntu-24.04','ubuntu-24.04'],'numina-nusd-runtime-builder.yml':['ubuntu-24.04','ubuntu-24.04']});
-  assert.equal(policy.executionTargets.default,'NUMINA');
+  assert.deepEqual(policy.executionTargets.workflowOverrides,{'numina-release.yml':'ubuntu-24.04','numina.yml':'ubuntu-24.04','verify-provider-observations.yml':'ubuntu-24.04','numina-android-release.yml':'ubuntu-24.04','numina-ios-signing.yml':'macos-latest','numina-ios-branch-build.yml':'macos-latest','publish-sites-control-source.yml':'ubuntu-24.04','verify-root-numina.yml':'ubuntu-24.04','activate-minted-nusd.yml':'ubuntu-24.04','align-native-treasury-500t.yml':'ubuntu-24.04','check-sites-control-origin.yml':'ubuntu-24.04','deploy-nusd-contracts.yml':'ubuntu-24.04','diagnose-control-auth.yml':'ubuntu-24.04','ibm-quantum-hardware.yml':'ubuntu-24.04','ibm-quantum-smoke.yml':'ubuntu-24.04','initiate-treasury-aggregate-model.yml':'ubuntu-24.04','verify-workflow-pins.yml':'ubuntu-24.04','sync-control-key-pin.yml':'ubuntu-24.04','verify-nusd-production.yml':'ubuntu-24.04','numina-ci-start.yml':'ubuntu-24.04','repair-rc27-integration-manifest.yml':'ubuntu-24.04'});
+  assert.deepEqual(policy.executionTargets.workflowTargetSets,{'numina-native-packages.yml':['ubuntu-24.04','macos-latest'],'numina-mobile-release-build.yml':['ubuntu-24.04','macos-latest'],'numina-mobile-store-distribution.yml':['ubuntu-24.04','macos-latest'],'numina-site-builder.yml':['ubuntu-24.04','ubuntu-24.04'],'numina-nusd-runtime-builder.yml':['ubuntu-24.04','ubuntu-24.04']});
+  assert.equal(policy.executionTargets.default,'ubuntu-24.04');
   let declarations=0;
   for(const name of readdirSync(workflowsUrl).filter(name=>/\.ya?ml$/i.test(name))){
     const content=readFileSync(new URL(name,workflowsUrl),'utf8');

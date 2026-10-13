@@ -1,9 +1,9 @@
 {
-  "schema": "numina.runner-policy.v14",
+  "schema": "numina.runner-policy.v15",
   "identity": "NUMINA",
   "runnerIdentity": "NUMINA",
   "allRunnerIdentities": "NUMINA",
-  "runnerTarget": "NUMINA",
+  "runnerTarget": "ubuntu-24.04",
   "preserveMode": "current_runner_count",
   "preservedRunnerCount": 34,
   "selfHostedPolicy": "deny_execution_preserve_registration_records",
@@ -25,13 +25,18 @@
   },
   "hostIdentity": "NUMINA",
   "executionTargets": {
-    "default": "NUMINA",
+    "default": "ubuntu-24.04",
+    "approvedHostedLabels": [
+      "ubuntu-24.04",
+      "macos-latest"
+    ],
     "workflowOverrides": {
       "numina-release.yml": "ubuntu-24.04",
       "numina.yml": "ubuntu-24.04",
       "verify-provider-observations.yml": "ubuntu-24.04",
       "numina-android-release.yml": "ubuntu-24.04",
       "numina-ios-signing.yml": "macos-latest",
+      "numina-ios-branch-build.yml": "macos-latest",
       "publish-sites-control-source.yml": "ubuntu-24.04",
       "activate-minted-nusd.yml": "ubuntu-24.04",
       "align-native-treasury-500t.yml": "ubuntu-24.04",
@@ -48,8 +53,27 @@
       "numina-ci-start.yml": "ubuntu-24.04",
       "repair-rc27-integration-manifest.yml": "ubuntu-24.04"
     },
-    "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Numina root verification, provider verification, privileged control/deployment checks, and declared native workflows use only their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted runner registration records may be retained as historical/admin state, but self-hosted execution and scheduling are denied; no new runner or signing identity is introduced.",
+    "scope": "NUMINA remains the singular logical identity, separate from the GitHub-hosted execution target. Only literal ubuntu-24.04 and macos-latest labels are approved for local runner declarations. The six former custom-label jobs remain declared but disabled pending migration and implementation approval. Existing self-hosted registration records remain historical/admin state; self-hosted execution and scheduling remain denied.",
+    "disabledJobs": {
+      "numina-ios-branch-build.yml": ["ios"],
+      "numina-native-packages.yml": ["android", "ios"],
+      "probe-numina-runtime-auth.yml": ["probe"],
+      "rebuild-nusd-artifacts.yml": ["rebuild"],
+      "settle-numina-aggregate-model.yml": ["settle"]
+    },
+    "reusableWorkflowCalls": {
+      "historical-numina-rc26-verifier.yml": {
+        "build-and-attest": "skott34-dot/numina-builder/.github/workflows/numina-rc26-verifier-builder.yml@f85e9428fa8bf0371931429479f31b0348ead454"
+      },
+      "numina-nusd-runtime.yml": {
+        "build-and-attest": "./.github/workflows/numina-nusd-runtime-builder.yml"
+      }
+    },
     "workflowTargetSets": {
+      "numina-native-packages.yml": [
+        "ubuntu-24.04",
+        "macos-latest"
+      ],
       "numina-mobile-release-build.yml": [
         "ubuntu-24.04",
         "macos-latest"
