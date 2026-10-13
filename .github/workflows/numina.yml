@@ -49,13 +49,6 @@ jobs:
           npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
           npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
 
-      - name: Read official Node26 image manifest metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          # Registry metadata only; do not pull or run this mutable tag.
-          docker buildx imagetools inspect docker.io/library/node:26.11.1-bookworm --format '{{json .Manifest}}'
-
       - name: NUMINA build
         # Missing sandbox prerequisites block release creation.
         run: node scripts/verify-source-gate.mjs

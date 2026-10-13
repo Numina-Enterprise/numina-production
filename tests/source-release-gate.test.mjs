@@ -43,7 +43,7 @@ test('Docker boundary emits only readonly source/runtime mounts and an isolated 
   assert.deepEqual(values('--mount'), ['type=bind,src=/home/runner/work/numina/numina,dst=/source,readonly', 'type=bind,src=/opt/hostedtoolcache/node/26.11.1/x64,dst=/node26,readonly']);
   assert.deepEqual(values('--env'), ['HOME=/work', 'PATH=/node26/bin:/usr/local/bin:/usr/bin:/bin']);
   assert.equal(args[args.indexOf('--entrypoint') + 1], '/node26/bin/node');
-  assert.ok(args.includes('node:24.21.0-bookworm-slim@sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553'));
+  assert.ok(args.includes('docker.io/library/node:26.11.1-bookworm@sha256:f1233c415b41ffcf237c717b3dea92e9d4ea006e0e4c71edcb790605d74f5404'));
   assert.throws(() => dockerArguments({ sourceRoot: '/repo,readonly=false', nodeHome: '/opt/hostedtoolcache/node/26.11.1/x64' }));
   assert.throws(() => dockerArguments({ sourceRoot: '/repo', nodeHome: '/home/runner' }));
 });
