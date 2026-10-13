@@ -57,6 +57,8 @@ test('GitHub Release SHA-256 read-back gates trusted source release creation and
   assert.doesNotMatch(workflow,/NUMINA_PROVIDER_INGEST_URL|NUMINA_TRUSTED_RELEASE_URL|ACTIONS_ID_TOKEN_REQUEST_URL|id-token:\s*write/);
   assert.match(steps[providerPublish],/publish-github-evidence\.mjs/);
   assert.match(steps[trustedPublish],/publish-github-evidence\.mjs/);
-  assert.match(steps[gate],/npm run build/);assert.match(steps[gate],/npm test/);assert.doesNotMatch(steps[gate],/continue-on-error|\|\|\s*true/,'Source verification must remain a failure gate');
+  assert.match(steps[gate],/node scripts\/verify-source-gate\.mjs/);
+  assert.ok(steps[gate].indexOf('node scripts/verify-source-gate.mjs')<steps[gate].indexOf('NUMINA_ROOT_VERIFIED=true'),'The isolated build, pin and full npm test gate must precede source trust');
+  assert.doesNotMatch(steps[gate],/continue-on-error|\|\|\s*true/,'Source verification must remain a failure gate');
 });
 
