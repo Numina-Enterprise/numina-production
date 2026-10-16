@@ -56,6 +56,8 @@ provider-connected, or adopted as a legally applicable regulatory obligation.
   legalApplicability records; requires external independent source matching
   before an official code can enter review; internal treasury assertion types
   cannot automatically establish independent settlement.
+  Mapping verification and staging use the same captured, immutable row and
+  source fields, including nested evidence, across asynchronous verification.
 - src/payment-authorization-gates.js: exact-byte ES256/JWS verification,
   reject unknown top-level claims, explicit issuer/operator/payer/audience/
   recipient/asset/amount/settlement-endpoint binding, immutable policy SHA-256,
@@ -70,9 +72,33 @@ provider-connected, or adopted as a legally applicable regulatory obligation.
   never extinguish obligations; no automatic resubmit after unknown outcomes;
   external finality and reconciliation require different verifier callbacks;
   the hash chain is NOT itself an independent trusted audit anchor.
+  Destination authorization applies and journals only the captured destination
+  and proof that were sent to its verifier.
 - tests/*-evidence-gates.test.mjs, tests/schedule-j-evidence.test.mjs and
   tests/payment-authorization-gates.test.mjs: isolated fixture tests; no
   financial services or network transactions.
+
+### Finality verification and exclusive receipt allocation
+
+`verifyIndependentFinality` receives a frozen context containing `obligation`,
+`submission` (`idempotencyKey` and `requestHash`), `destination`, and `receiptRef`.
+Its independently retrieved evidence must match the obligation/disclosure IDs,
+submission fields, receipt reference, asset, amount, and destination. It must
+also supply a canonical `transferNamespace` and `transferId` for the external
+transfer. Those values must identify the same transfer across receipt aliases;
+they must come from the trusted verifier's rail/network/event policy, rather
+than being assigned per obligation or by an untrusted caller.
+
+Before a share becomes `SETTLED_UNRECONCILED`, a trusted `allocateReceipt`
+adapter with `durability: 'PERSISTENT_ATOMIC'` must exclusively commit the
+canonical `transferKey` and its exact obligation/submission/finality binding.
+`commit` returns exactly `true` only after durable atomic exclusive allocation;
+an existing allocation, missing adapter, exception, or denial fails closed.
+The production adapter must enforce uniqueness of `transferKey` across all
+workers and obligations. After an unknown commit outcome, recover the durable
+allocation record before retrying; this model does not authorize resubmission.
+A capability label or an in-memory fixture does not establish real durability,
+provider finality, independent custody, or reconciliation.
 
 ## SATP reviewer failure-scenario gap matrix
 
@@ -81,7 +107,7 @@ provider-connected, or adopted as a legally applicable regulatory obligation.
 | Message identity / duplicate POST | idempotencyKey + exact requestHash; same-key conflict rejected | Persist idempotency keys before outbound I/O; concurrency test under multiple workers |
 | Replay / agent delegation | issuer-bound nonce, PoP, expiry, audience, endpoint; unknown claims reject | Atomic shared nonce+limit store, restart and concurrent replay tests |
 | Retry semantics / ambiguous response | unknown outcome blocks novel attempt | Provider receipt lookup, safe retry protocol and recovery after lost responses |
-| Finality ambiguity | FINALITY_VERIFIED needs a separate independently retrieved callback | Pin chain/network/contract, finality policy, independently verified RPC/provider receipts |
+| Finality ambiguity | Independently retrieved finality binds obligation/submission; canonical transfer requires exclusive durable allocation | Pin chain/network/contract, finality policy, independently verified RPC/provider receipts and multi-worker allocation uniqueness |
 | Partitions and timeouts | unresolved attempts cannot become settled by timeout | Crash recovery, delayed message, reorg, partition and reconciliation testing |
 | Cryptographic validation | exact-input ES256 and signed historical keys | Key rotation/revocation tests, issuer pinning, external security review |
 | Operator roles / payer authority | explicit operator/payer/mandate/destination binding | Approved role registry, KYC/CDD and organizational delegation proofs |
@@ -103,7 +129,8 @@ provider-connected, or adopted as a legally applicable regulatory obligation.
 2. Integrate transactional, durable nonce/cumulative-limit storage, and
    execute the concurrency/restart negative tests.
 3. Implement independently verified beneficiary destination authority,
-   provider/RPC finality, audit anchoring and reconciliation adapters.
+   provider/RPC finality, exclusive durable receipt allocation, audit anchoring
+   and reconciliation adapters.
 4. Run full Node 26 hosted CI and a security review on this PR before
    any treasury-path integration. Do not add self-hosted runners.
 5. Preserve one Numina treasury with three separately evidenced asset roles.
