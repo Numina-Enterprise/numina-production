@@ -35,6 +35,7 @@ export function createCommittedSubjectShare({id,disclosureId,subjectHandle,asset
 // provider / blockchain confirmation.
 export async function transitionCommittedShare(state, action, {
   verifyDestinationAuthorization,verifyIndependentFinality,verifyReconciliation,
+  allocateReceipt,
 }={}) {
   yes(state?.obligation && Array.isArray(state.events) && action &&
     validTime(action.at) && text(action.actor),'INVALID_TRANSITION');
@@ -42,20 +43,23 @@ export async function transitionCommittedShare(state, action, {
     'IRREVOCABLE_COMMITMENT_CANNOT_CANCEL_OR_REDUCE');
   switch(action.type) {
     case 'DESTINATION': {
-      yes(state.phase==='COMMITTED_UNSETTLED' && !state.attempts.length &&
-        text(action.destination) && text(action.authorizationRef) &&
+      // The authorization and resulting event must use the same snapshot,
+      // including when caller-owned inputs change while verification awaits.
+      const snapshot=structuredClone(state);
+      const {destination,authorizationRef,actor,at}=action;
+      Object.freeze(snapshot.obligation);
+      yes(snapshot.phase==='COMMITTED_UNSETTLED' && !snapshot.attempts.length &&
+        text(destination) && text(authorizationRef) &&
         typeof verifyDestinationAuthorization === 'function',
         'DESTINATION_AUTHORIZATION_REQUIRED');
-      yes((await verifyDestinationAuthorization({
-        obligation:state.obligation,destination:action.destination,
-        authorizationRef:action.authorizationRef,actor:action.actor,
-        previousDestination:state.destination,
-      }))===true,'DESTINATION_AUTHORIZATION_FAILED');
-      const next={...state,destination:action.destination,
-        destinationVersion:state.destinationVersion+1};
-      return addEvent(next,state.destination?'DESTINATION_ROTATED':'DESTINATION_REGISTERED',
-        {destination:action.destination,authorizationRef:action.authorizationRef,
-          actor:action.actor,version:next.destinationVersion},action.at);
+      yes((await verifyDestinationAuthorization(Object.freeze({
+        obligation:snapshot.obligation,destination,authorizationRef,actor,
+        previousDestination:snapshot.destination,
+      })))===true,'DESTINATION_AUTHORIZATION_FAILED');
+      const next={...snapshot,destination,
+        destinationVersion:snapshot.destinationVersion+1};
+      return addEvent(next,snapshot.destination?'DESTINATION_ROTATED':'DESTINATION_REGISTERED',
+        {destination,authorizationRef,actor,version:next.destinationVersion},at);
     }
     case 'HOLD':
     case 'RELEASE_HOLD': {
@@ -88,23 +92,69 @@ export async function transitionCommittedShare(state, action, {
           actor:action.actor,outcome:'UNKNOWN'},action.at);
     }
     case 'FINALITY_VERIFIED': {
-      yes(state.phase==='COMMITTED_UNSETTLED' &&
-        state.attempts.length===1 && text(action.receiptRef) &&
+      const snapshot=structuredClone(state);
+      const {receiptRef,actor,at}=action;
+      Object.freeze(snapshot.obligation);
+      yes(snapshot.phase==='COMMITTED_UNSETTLED' &&
+        snapshot.attempts.length===1 && text(receiptRef) &&
         typeof verifyIndependentFinality==='function',
         'INDEPENDENT_FINALITY_REQUIRED');
-      const verified=await verifyIndependentFinality(action.receiptRef);
+      const submission=Object.freeze({
+        idempotencyKey:snapshot.attempts[0].idempotencyKey,
+        requestHash:snapshot.attempts[0].requestHash,
+      });
+      yes(text(submission.idempotencyKey) && text(submission.requestHash) &&
+        /^[a-f0-9]{64}$/.test(submission.requestHash),
+        'IDEMPOTENCY_EVIDENCE_REQUIRED');
+      // No local fallback: this trusted adapter must atomically allocate each
+      // canonical external transfer to one exact obligation/submission binding
+      // in durable storage. Capability declaration alone proves no durability.
+      yes(allocateReceipt && allocateReceipt.durability==='PERSISTENT_ATOMIC' &&
+        typeof allocateReceipt.commit==='function',
+        'DURABLE_RECEIPT_ALLOCATION_STORE_REQUIRED');
+      const commitAllocation=allocateReceipt.commit.bind(allocateReceipt);
+      // Returned bindings must be established from independent rail evidence,
+      // rather than merely echoing these expected values.
+      const verified=await verifyIndependentFinality(Object.freeze({
+        obligation:snapshot.obligation,submission,
+        destination:snapshot.destination,receiptRef,
+      }));
       yes(verified?.independentlyRetrieved===true &&
         verified?.verified===true &&
         verified?.sourceClass==='EXTERNAL_RAIL' &&
-        verified?.asset===state.obligation.asset &&
-        verified?.amountMinor===state.obligation.subjectAmountMinor &&
-        verified?.destination===state.destination &&
+        verified?.obligationId===snapshot.obligation.id &&
+        verified?.disclosureId===snapshot.obligation.disclosureId &&
+        verified?.idempotencyKey===submission.idempotencyKey &&
+        verified?.requestHash===submission.requestHash &&
+        verified?.receiptRef===receiptRef &&
+        verified?.asset===snapshot.obligation.asset &&
+        verified?.amountMinor===snapshot.obligation.subjectAmountMinor &&
+        verified?.destination===snapshot.destination &&
+        text(verified.transferNamespace) && text(verified.transferId) &&
         text(verified.transactionRef) && text(verified.sourceDigest),
         'FINALITY_EVIDENCE_NOT_VERIFIED');
-      const finality={receiptRef:action.receiptRef,transactionRef:verified.transactionRef,
-        sourceDigest:verified.sourceDigest,verifiedAt:action.at};
-      return addEvent({...state,phase:'SETTLED_UNRECONCILED',finality},
-        'subject_share_settled',{...finality,actor:action.actor},action.at);
+      // The verifier supplies a rail/network/asset namespace and transfer ID
+      // that remain stable across receipt aliases. Array encoding avoids key
+      // collisions from concatenating namespace and ID with a delimiter.
+      const finality=Object.freeze({
+        obligationId:verified.obligationId,disclosureId:verified.disclosureId,
+        idempotencyKey:verified.idempotencyKey,requestHash:verified.requestHash,
+        receiptRef,asset:verified.asset,amountMinor:verified.amountMinor,
+        destination:verified.destination,transferNamespace:verified.transferNamespace,
+        transferId:verified.transferId,transactionRef:verified.transactionRef,
+        sourceDigest:verified.sourceDigest,verifiedAt:at,
+      });
+      let allocated;
+      try {
+        allocated=await commitAllocation(Object.freeze({
+          transferKey:JSON.stringify([finality.transferNamespace,finality.transferId]),
+          obligation:snapshot.obligation,submission,
+          destination:snapshot.destination,finality,actor,
+        }));
+      } catch {throw new Error('ATOMIC_RECEIPT_ALLOCATION_UNAVAILABLE');}
+      yes(allocated===true,'RECEIPT_ALLOCATION_DENIED');
+      return addEvent({...snapshot,phase:'SETTLED_UNRECONCILED',finality},
+        'subject_share_settled',{...finality,actor},at);
     }
     case 'RECONCILED': {
       yes(state.phase==='SETTLED_UNRECONCILED' && state.finality &&

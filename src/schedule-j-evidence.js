@@ -27,6 +27,13 @@ export const EVIDENCE_DIMENSIONS = Object.freeze([
 const emptyStatus = () => ({status: 'NOT_EVIDENCED', reviewer: null, sourceRefs: [], reviewedAt: null});
 const assertNonempty = x => typeof x === 'string' && x.trim().length > 0;
 const assertDigest = x => typeof x === 'string' && /^[a-f0-9]{64}$/.test(x);
+const freezeSnapshot = value => {
+  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    Object.values(value).forEach(freezeSnapshot);
+  }
+  return value;
+};
 
 export function buildScheduleJRegistry() {
   return CATEGORIES.flatMap(category => Array.from({length: category.count}, (_, index) => ({
@@ -46,38 +53,42 @@ export function buildScheduleJRegistry() {
 // verifier has matched the exact code and definition to an authoritative document.
 // Matching a URL string or a caller-supplied "verified" boolean is insufficient.
 export async function stageScheduleJMapping(row, candidate, {verifyOfficialSource} = {}) {
-  if (!row || row.accountDefinitionStatus !== 'UNVERIFIED' ||
-      !/^SJ-(RC|KC|IE|BS)-\d{2}$/.test(row.internalId) ||
-      !assertNonempty(candidate?.accountCode) ||
-      !assertNonempty(candidate?.definition) ||
-      !assertNonempty(candidate?.sourceUrl) ||
-      !assertNonempty(candidate?.sourceRevision) ||
-      !assertDigest(candidate?.sourceSha256) ||
+  // Preserve exactly what is reviewed, including the row's nested evidence,
+  // while the independent verifier retrieves its source asynchronously.
+  const rowSnapshot = row ? freezeSnapshot(structuredClone(row)) : null;
+  const mapping = Object.freeze({
+    internalId: rowSnapshot?.internalId,
+    accountCode: candidate?.accountCode,
+    definition: candidate?.definition,
+    sourceUrl: candidate?.sourceUrl,
+    sourceRevision: candidate?.sourceRevision,
+    sourceSha256: candidate?.sourceSha256,
+  });
+  if (!rowSnapshot || rowSnapshot.accountDefinitionStatus !== 'UNVERIFIED' ||
+      !/^SJ-(RC|KC|IE|BS)-\d{2}$/.test(mapping.internalId) ||
+      !assertNonempty(mapping.accountCode) ||
+      !assertNonempty(mapping.definition) ||
+      !assertNonempty(mapping.sourceUrl) ||
+      !assertNonempty(mapping.sourceRevision) ||
+      !assertDigest(mapping.sourceSha256) ||
       typeof verifyOfficialSource !== 'function') {
     throw new Error('OFFICIAL_ACCOUNT_EVIDENCE_REQUIRED');
   }
-  const verification = await verifyOfficialSource({
-    internalId: row.internalId,
-    accountCode: candidate.accountCode,
-    definition: candidate.definition,
-    sourceUrl: candidate.sourceUrl,
-    sourceRevision: candidate.sourceRevision,
-    sourceSha256: candidate.sourceSha256,
-  });
+  const verification = await verifyOfficialSource(mapping);
   if (verification?.authority !== 'NCUA' ||
       verification?.exactMatch !== true ||
       verification?.independentlyRetrieved !== true ||
-      verification?.sourceSha256 !== candidate.sourceSha256) {
+      verification?.sourceSha256 !== mapping.sourceSha256) {
     throw new Error('OFFICIAL_ACCOUNT_SOURCE_NOT_VERIFIED');
   }
   return {
-    ...row,
-    officialAccountCode: candidate.accountCode,
-    officialDefinition: candidate.definition,
+    ...rowSnapshot,
+    officialAccountCode: mapping.accountCode,
+    officialDefinition: mapping.definition,
     officialSource: {
-      url: candidate.sourceUrl,
-      revision: candidate.sourceRevision,
-      sha256: candidate.sourceSha256,
+      url: mapping.sourceUrl,
+      revision: mapping.sourceRevision,
+      sha256: mapping.sourceSha256,
     },
     accountDefinitionStatus: 'SOURCE_MATCHED_PENDING_REVIEW',
   };

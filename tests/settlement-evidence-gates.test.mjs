@@ -19,11 +19,14 @@ async function submitted() {
   return transitionCommittedShare(await ready(),act('SUBMISSION_RECORDED',
     {idempotencyKey:'req-1',requestHash:'a'.repeat(64)}));
 }
-const independent=(value={})=>({verifyIndependentFinality:async()=>({
+const independent=(value={})=>({verifyIndependentFinality:async({receiptRef})=>({
   verified:true,independentlyRetrieved:true,sourceClass:'EXTERNAL_RAIL',
+  obligationId:'share-synthetic',disclosureId:'read-123',
+  idempotencyKey:'req-1',requestHash:'a'.repeat(64),receiptRef,
   asset:'USDC',amountMinor:'600',destination:'destination-test',
+  transferNamespace:'synthetic-chain:test-network:usdc',transferId:'transfer-test',
   transactionRef:'chain-receipt-test',sourceDigest:'a'.repeat(64),...value,
-})});
+}),allocateReceipt:{durability:'PERSISTENT_ATOMIC',commit:async()=>true}});
 
 test('commit fixes subject majority and refuses cancellable shares',()=>{
   const c=newShare();
