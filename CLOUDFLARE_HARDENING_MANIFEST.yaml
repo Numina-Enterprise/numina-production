@@ -1,0 +1,105 @@
+# ==============================================================================
+# CLOUDFLARE EDGE HARDENING CONFIGURATION & MANIFEST
+# Account ID: 3c1fd59ef2ef67f750b4bc23e656d722
+# Zone: numinalabs.xyz (Zone ID: Verified Active)
+# Sovereign Primary Origin: Google Cloud Platform (project-0317d6c9-e943-409e-83f)
+# Canonical State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+# ==============================================================================
+
+account_id: "3c1fd59ef2ef67f750b4bc23e656d722"
+zone: "numinalabs.xyz"
+status: "HARDENED_FAIL_CLOSED"
+
+# 1. SSL/TLS & ENCRYPTION PROFILE
+ssl_tls:
+  mode: "strict" # Full (Strict) SSL with GCP Cloud Run / Load Balancer origin cert
+  min_tls_version: "1.3"
+  tls_1_3: "on"
+  opportunistic_encryption: "on"
+  always_use_https: "on"
+  automatic_https_rewrites: "on"
+  hsts:
+    enabled: true
+    max_age: 31536000 # 1 year
+    include_subdomains: true
+    preload: true
+    nosniff: true
+
+# 2. DNS & INTEGRITY SHIELD
+dns:
+  dnssec: "active"
+  algorithm: 13 # ECDSA Curve P-256 with SHA-256
+  nameservers:
+    - "fred.ns.cloudflare.com"
+    - "lola.ns.cloudflare.com"
+  cname_flattening: "flatten_all"
+  dns_records:
+    apex:
+      type: "CNAME"
+      name: "numinalabs.xyz"
+      target: "ghs.googlehosted.com" # Google Cloud Run Custom Domain Ingress
+      proxied: true
+    www:
+      type: "CNAME"
+      name: "www.numinalabs.xyz"
+      target: "ghs.googlehosted.com"
+      proxied: true
+
+# 3. WEB APPLICATION FIREWALL (WAF) & ZERO-TRUST RULES
+waf_rules:
+  # Rule 1: Fail-Closed Origin Verification
+  - id: "RULE_01_PRIMARY_ORIGIN_VERIFICATION"
+    action: "block"
+    expression: '(http.host eq "numinalabs.xyz" or http.host eq "www.numinalabs.xyz") and not (ssl)'
+    description: "Fail-closed rejection of unencrypted ingress traffic"
+
+  # Rule 2: Strict HTTP Method Restrictions
+  - id: "RULE_02_HTTP_METHOD_SANITIZATION"
+    action: "block"
+    expression: 'not http.request.method in {"GET" "POST" "HEAD" "OPTIONS"}'
+    description: "Block all non-whitelisted HTTP methods across edge routes"
+
+  # Rule 3: Admin & Control Plane Isolation
+  - id: "RULE_03_CONTROL_PLANE_PROTECTION"
+    action: "challenge" # Managed challenge for administrative routes
+    expression: 'http.request.uri.path contains "/control-room" or http.request.uri.path contains "/admin"'
+    description: "Enforce zero-trust multi-factor challenge on sensitive console ingress"
+
+  # Rule 4: Quantum & AI Endpoint Rate Limiting
+  - id: "RULE_04_RATE_LIMIT_QUANTUM_AI"
+    action: "rate_limit"
+    expression: 'http.request.uri.path contains "/simulate" or http.request.uri.path contains "/voice/stream"'
+    characteristics:
+      - "ip.src"
+    threshold: 60
+    period: 60 # Max 60 requests per minute per IP
+
+# 4. EDGE SECURITY HEADERS (TRANSFORM RULES)
+security_headers:
+  Content-Security-Policy: "default-src 'self' https://numinalabs.xyz https://www.numinalabs.xyz; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://numinalabs.xyz https://us-central1-run.googleapis.com; frame-ancestors 'none';"
+  X-Frame-Options: "DENY"
+  X-Content-Type-Options: "nosniff"
+  Referrer-Policy: "strict-origin-when-cross-origin"
+  Permissions-Policy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(self), payment=(self), usb=()"
+  Cross-Origin-Opener-Policy: "same-origin"
+  Cross-Origin-Resource-Policy: "same-origin"
+
+# 5. DDOS & BOT MANAGEMENT
+ddos_protection:
+  sensitivity: "high"
+  bot_fight_mode: "on"
+  challenge_passage: 1800 # 30 minutes
+
+# 6. FAIL-OVER & ORIGIN ANCHOR
+origin_routing:
+  primary:
+    provider: "Google Cloud Platform"
+    service: "Cloud Run"
+    project_id: "project-0317d6c9-e943-409e-83f"
+    region: "us-central1"
+    host_header: "numinalabs.xyz"
+  auxiliary:
+    provider: "IBM Cloud"
+    service: "Code Engine"
+    region: "us-south"
+    purpose: "Quantum Circuit Acceleration Only"
