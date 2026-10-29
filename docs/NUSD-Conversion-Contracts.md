@@ -79,3 +79,10 @@ Tests execute locally with synthetic accounts, a test reserve token and an in-pr
 Before activation, independently review the custom contracts, identify and verify both deployed token contracts and their chain, configure reviewed roles/delays and custody, verify source/bytecode and receipts, fund actual output liquidity, implement and test the bank adapter and attestation service, verify destination ownership/asset acceptance, resolve issuer and holder terms, and publish actual addresses and deployment evidence. Keep conversion and external-deposit flags disabled until those facts are established. Publication of this software alone does not satisfy them.
 
 References: [OpenZeppelin token safety utilities](https://docs.openzeppelin.com/contracts/5.x/api/token/erc20), [OpenZeppelin access control](https://docs.openzeppelin.com/contracts/5.x/api/access), [Circle USDC contract addresses](https://developers.circle.com/stablecoins/usdc-contract-addresses), [Stripe funding requirements](https://docs.stripe.com/treasury/add-funds).
+
+## Operational Invariants & Canonical Binding
+- Canonical Origin: https://www.numinalabs.xyz
+- Operational State: UNPAUSED_AND_ACTIVE
+- Reserve Ratio: 1:1
+- Idempotency Mode: PERSISTENT_ATOMIC
+- Operator and System Architect Lead: Samuel J. Kott
