@@ -1,0 +1,86 @@
+{
+  "topology_schema": "numina.enterprise.4repo.v1",
+  "generated_at": "2026-10-28T22:47:00Z",
+  "organization": "Numina-Enterprise",
+  "invariants": {
+    "cluster_state_root": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+    "authority_keypin": "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce",
+    "guardian_keypin": "465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c",
+    "domain": "numinalabs.xyz",
+    "dnssec": "ACTIVE_ECDSA_P256"
+  },
+  "repositories": {
+    "numina-builder": {
+      "purpose": "Outlines core application infrastructure, hosts Xcode iOS builds and Android Gradle builds",
+      "canonical_files": [
+        "mobile/ios/**",
+        "mobile/android/**",
+        "mobile/signing/**",
+        "mobile/store-listing/**",
+        ".github/workflows/numina-ios-branch-build.yml",
+        ".github/workflows/numina-ios-signing.yml",
+        ".github/workflows/numina-android-release.yml",
+        ".github/workflows/numina-mobile-release-build.yml",
+        ".github/workflows/numina-mobile-store-distribution.yml",
+        "archive/numina-builder/**"
+      ]
+    },
+    "numina-production": {
+      "purpose": "Serves real live production files, canonical state, Cloud HSM signing, multi-cloud runtimes, and live releases",
+      "canonical_files": [
+        "numina-financial-core/**",
+        "numina-smart-contracts/**",
+        "numina-stripe-app/**",
+        "numina-voice-agent/**",
+        "numina-ibm-quantum/**",
+        "numinalabs-web/**",
+        "database/neon/**",
+        "release-evidence/**",
+        "FRONTIER.md",
+        "VICTORY_CERTIFICATE.md",
+        "NUMINA_ORGANIZATION_AND_AUDIT_REPORT.md",
+        "numina-multi-cloud-topology.yaml"
+      ]
+    },
+    "sitesk": {
+      "purpose": "Stores website history, web evolution revisions, and Cloudflare Worker / edge source history",
+      "canonical_files": [
+        "runtime/vercel-production/**",
+        "sites-builder/**",
+        ".github/workflows/numina-site-builder.yml",
+        ".github/workflows/check-sites-control-origin.yml",
+        ".github/workflows/publish-sites-control-source.yml",
+        "release-evidence/sites-source-projection-2026-10-11.json",
+        "release-evidence/vercel-custom-domain-delivery-*.json"
+      ]
+    },
+    "diagram-design": {
+      "purpose": "Stores agentic singular design, Mermaid architectural models, swarm topologies, and governance specifications",
+      "canonical_files": [
+        "numina-agent-swarm/**",
+        "config/numina-architecture.json",
+        "config/numina-agentforce-tasks.v1.json",
+        "docs/Architecture-and-Singularity.md",
+        "docs/Telemetry-and-Quantum.md",
+        "rules/**",
+        "AGENTS.md",
+        "GEMINI.md"
+      ]
+    }
+  },
+  "external_infrastructure_review": {
+    "neon_db": {
+      "console_url": "https://console.neon.tech/app/org-round-band-48289588/projects",
+      "role": "Historical evidence and migration archive",
+      "status": "Archived least-privilege schemas retained in database/neon/"
+    },
+    "vercel": {
+      "accounts": [
+        "https://vercel.com/skott34-dot",
+        "https://vercel.com/numina-167f7fe7"
+      ],
+      "role": "Pre-cutover edge delivery & deployment receipts",
+      "status": "Sunset in favor of Cloudflare edge (fred/lola.ns.cloudflare.com) + GCP Cloud Run / IBM Code Engine serverless origins"
+    }
+  }
+}
