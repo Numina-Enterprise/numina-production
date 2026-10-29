@@ -1,0 +1,9 @@
+{
+  "account_id": "3c1fd59ef2ef67f750b4bc23e656d722",
+  "primary_origin": "https://project-0317d6c9-e943-409e-83f.us-central1.run.app",
+  "domain": "numinalabs.xyz",
+  "github_workflow": ".github/workflows/deploy-cloudflare.yml",
+  "credentials_present": false,
+  "status": "READY_AWAITING_SECRET_BINDING",
+  "last_verified_at": "2026-10-29T04:28:27.940Z"
+}
