@@ -22,7 +22,7 @@ Write-Host "----------------------------------------------------------"
 if (-not (Get-Command "ibmcloud" -ErrorAction SilentlyContinue)) {
   Write-Warning "IBM Cloud CLI ('ibmcloud') is not installed or not in PATH."
   Write-Host "To install IBM Cloud CLI on Windows, run:" -ForegroundColor Yellow
-  Write-Host "  iex(New-Object Net.WebClient).DownloadString('https://clis.cloud.ibm.com/install/powershell')"
+  Write-Host "  Write-Warning 'Download verified installer from https://cloud.ibm.com/docs/cli'"
   exit 1
 }
 
