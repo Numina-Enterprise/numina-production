@@ -1,0 +1,75 @@
+# NUMINA ENTERPRISE MULTI-CLOUD HYBRID TOPOLOGY SPECIFICATION
+# Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+# Authority Keypin:   46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce
+# Guardian Keypin:    465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c
+
+schema: "numina.multi-cloud-topology.v1"
+version: "4.0.0-m2"
+clusterStateRoot: "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd"
+
+clouds:
+  # 1. Google Cloud Platform Configuration
+  googleCloud:
+    projectId: "project-0317d6c9-e943-409e-83f"
+    primaryRegion: "us-central1"
+    primaryZone: "us-central1-a"
+    services:
+      cloudHsmKms:
+        keyRing: "numina-ring"
+        location: "us-central1"
+        protectionLevel: "HSM"
+        keys:
+          treasuryRoot:
+            name: "treasury-root"
+            algorithm: "ED25519"
+            purpose: "ASYMMETRIC_SIGN"
+            keypin: "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce"
+          guardianSigner:
+            name: "guardian-signer"
+            algorithm: "ED25519"
+            purpose: "ASYMMETRIC_SIGN"
+            keypin: "465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c"
+      secretManager:
+        namespace: "projects/project-0317d6c9-e943-409e-83f/secrets"
+        requiredSecrets:
+          - "bofa-cashpro-mtls-cert"
+          - "bofa-cashpro-mtls-key"
+          - "bofa-cashpro-client-secret"
+          - "stripe-restricted-api-key"
+          - "stripe-webhook-signing-secret"
+      cloudBuild:
+        stagingBucket: "gs://project-0317d6c9-e943-409e-83f_cloudbuild"
+        pipelineConfig: "numinalabs-web/cloudbuild.yaml"
+
+  # 2. IBM Cloud Configuration
+  ibmCloud:
+    consoleUrl: "https://cloud.ibm.com"
+    defaultRegion: "us-south"
+    resourceGroup: "default"
+    services:
+      quantumHardware:
+        sdk: "qiskit~=2.5.2"
+        runtime: "qiskit-ibm-runtime~=0.47.0"
+        channel: "ibm_quantum_platform"
+        workload: "Bell-state entanglement physical QPU validation"
+        evidencePath: "release-evidence/ibm-quantum-hardware.json"
+        workflow: ".github/workflows/ibm-quantum-hardware.yml"
+      codeEngine:
+        overviewUrl: "https://cloud.ibm.com/containers/serverless/overview"
+        cliConfigUrl: "https://cloud.ibm.com/containers/serverless/cli"
+        project: "numina-serverless-project"
+        application: "numinalabs-web"
+        sourcePath: "numinalabs-web"
+        containerPort: 80
+        deploymentScript: "deploy_ibm_code_engine.ps1"
+
+  # 3. GitHub Central Coordination
+  gitHub:
+    organization: "Numina-Enterprise"
+    canonicalRepository: "numina-production"
+    repositoryUrl: "https://github.com/Numina-Enterprise/numina-production"
+    coordinationRoles:
+      centralCoordination: "Master repository linking all documentation, submodules, and evidence"
+      cicdPipeline: ".github/workflows/ (Release, Android, iOS, Quantum validation)"
+      immutableReceipts: "release-evidence/ (Cryptographic proofs, audit traces, receipts)"
+      archivePins: "archive/full-evidence-20261028-m2"
