@@ -46,6 +46,8 @@ jobs:
           apiToken: ${{ secrets.NUMINA_CONTROL_API_KEY || secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '3c1fd59ef2ef67f750b4bc23e656d722' }}
           command: deploy --dry-run=false
+        env:
+          CLOUDFLARE_TUNNEL_TOKEN: ${{ secrets.NUMINA_RPC_AUTHORIZATION }}
 
       - name: Purge Cloudflare Edge Cache for numinalabs.xyz
         if: success() && env.CLOUDFLARE_ZONE_ID != ''
