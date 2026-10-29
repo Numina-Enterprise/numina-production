@@ -1,0 +1,22 @@
+{
+  "schema": "numina.public-slsa-readiness.v1",
+  "assessment_date": "2026-09-12",
+  "release": "core-v1.8+prod-v1.9.0-rc22",
+  "specification": "SLSA v1.2",
+  "track": "Build",
+  "target_build_level": 3,
+  "slsa_level_claimed": null,
+  "actual_rc22_provenance_statement_verified": false,
+  "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+  "record_type": "readiness_assessment_not_builder_provenance",
+  "missing_evidence": [
+    "Trusted hosted-builder identity and provenance statement",
+    "Build isolation and provenance protection controls",
+    "Exact artifact-to-deployment binding"
+  ],
+  "sources": [
+    "https://slsa.dev/spec/v1.2/",
+    "https://slsa.dev/spec/v1.2/build-requirements",
+    "https://slsa.dev/provenance/v1"
+  ]
+}

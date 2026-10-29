@@ -1,0 +1,104 @@
+{
+  "schema": "numina.hosted-runtime-completion.v1",
+  "recordedAt": "2026-09-12T23:40:28.662Z",
+  "status": "image_built_provenance_verified_not_deployed",
+  "source": {
+    "commit": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+    "directory": "runtime/nusd",
+    "ref": "refs/heads/main",
+    "repository": "skott34-dot/numina-production",
+    "repositoryId": 1367647143
+  },
+  "run": {
+    "attempt": 1,
+    "id": 34725802271,
+    "url": "https://github.com/skott34-dot/numina-production/actions/runs/34725802271/attempts/1"
+  },
+  "builder": {
+    "workflow": "skott34-dot/numina-builder/.github/workflows/numina-nusd-runtime-builder.yml",
+    "commit": "cda9bf7702d909ed1d8e16c338a91e283c1bce53"
+  },
+  "subjects": [
+    {
+      "file": "numina-nusd-linux-runtime-source.tar.gz",
+      "sha256": "4486f9aae6a7e01078a09860c604f8a17573cd1c7126e2060ac91c1b4329a0ac",
+      "bytes": 39472,
+      "verificationResult": "numina-nusd-linux-runtime-source.tar.gz.attestation-verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "ghVerificationExitCode": 0
+    },
+    {
+      "file": "numina-nusd-linux-runtime-image.docker.tar.gz",
+      "sha256": "796add5e929bc63105a0d0e97e026d62481c46af09ec1cb08a30f1f5dafdcc33",
+      "bytes": 84434244,
+      "verificationResult": "numina-nusd-linux-runtime-image.docker.tar.gz.attestation-verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "ghVerificationExitCode": 0
+    },
+    {
+      "file": "numina-nusd-runtime-inventory.json",
+      "sha256": "33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9",
+      "bytes": 6357,
+      "verificationResult": "numina-nusd-runtime-inventory.json.attestation-verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "ghVerificationExitCode": 0
+    }
+  ],
+  "signaturePolicy": {
+    "repository": "skott34-dot/numina-production",
+    "sourceDigest": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+    "sourceRef": "refs/heads/main",
+    "oidcIssuer": "https://token.actions.githubusercontent.com",
+    "predicateType": "https://slsa.dev/provenance/v1",
+    "selfHostedRunnersDenied": true
+  },
+  "image": {
+    "applicationContainerStarted": false,
+    "architecture": "amd64",
+    "archiveFormat": "gzip-compressed docker image save",
+    "configDigest": "sha256:edff50ea08f24fa4c5c3f69575cdcf5768a00b8b7ab3738c31a9137e2a42a76e",
+    "localBuildTag": "numina-nusd-runtime:candidate",
+    "os": "linux",
+    "registryPushed": false
+  },
+  "contract": {
+    "artifactSha256": "79d38c7f5f6560e538d2ab68fad8ca8b1ce72e7b64d932e0fa6b5e1798b5bb24",
+    "deploymentPerformed": false,
+    "role": "precompiled_input",
+    "solidityCompiledThisRun": false,
+    "sourceSha256": "3a118007e78ee6e455c6c51528a55b8eeb63e2ec5c294e7c71757804df0871bf"
+  },
+  "buildScope": {
+    "applicationEntrypointExecuted": false,
+    "contractBroadcast": false,
+    "dockerBuildExecuted": true,
+    "dockerfileBuildStepsExecuted": true,
+    "mintOrTransferPerformed": false,
+    "providerSubmissionPerformed": false,
+    "rpcCredentialsSupplied": false,
+    "testsRun": false
+  },
+  "builderSignedProvenanceVerified": true,
+  "productionHostDeploymentVerified": false,
+  "productionJournalDurabilityVerified": false,
+  "submissionReady": false,
+  "slsaBuildLevelClaimed": null,
+  "financialEvidence": {
+    "bankOriginVerified": false,
+    "verifiedReserveAmountUsd": null,
+    "contractAddress": null,
+    "deploymentTransactionHash": null,
+    "mintTransactionHash": null,
+    "settlementTransactionHash": null,
+    "fundsMoved": false
+  },
+  "linkedWebsiteRelease": {
+    "manifest": "../../numina-manifest-verification-2026-09-12/application-release-v2.json",
+    "sha256": "0897957d6c456885deefbdfb3cc62e0e58be6bdaf475adc41c20dbdeaae55b4c",
+    "builderCommit": "4a7210c10fcfa79436018e8ba337244402661036",
+    "sourceCommit": "b92548b3ad5cd05f6aa22e2ffd250dc70ab198b4",
+    "runId": 34718391021,
+    "scope": "Existing separately attested website release; not changed or redeployed by this runtime build"
+  },
+  "scope": "Unsigned completion index of independently verified artifact signatures and observed build records. No inference of reserves, financial execution or complete L3 compliance from signatures alone."
+}

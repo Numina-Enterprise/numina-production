@@ -1,0 +1,84 @@
+{
+  "schema": "numina.coordinator-signing-readback.v1",
+  "observedAtUtc": "2026-10-11T20:23:27.780230+00:00",
+  "reviewer": "/root/continuous_service_review",
+  "canonicalRoot": "/workspace/numina-production",
+  "reviewMode": "fresh_read_only_process_source_and_stored_observation_readback",
+  "checks": {
+    "processAlive": true,
+    "freshHeartbeat": true,
+    "coordinationEnabled": true,
+    "currentCanonicalHeadMatches": true,
+    "observedCanonicalHeadMatches": true,
+    "workingTreeClean": true,
+    "launchSourceMatches": true,
+    "runIdentityMatches": true,
+    "allRegisteredActionsObserved": true,
+    "noVisibleFailures": true,
+    "allAssignedTasksObserved": true,
+    "completionClaimRemainsZero": true
+  },
+  "allChecksPassed": true,
+  "canonicalCommit": "8fe0287318e71bb4e46ace6d265a857c7167e10f",
+  "sourceObservationCommit": "8fe0287318e71bb4e46ace6d265a857c7167e10f",
+  "workingTreeClean": true,
+  "sourceScript": {
+    "path": "scripts/numina-cloud-work-loop.py",
+    "sha256": "243b8b280b64275b33176b592dfb21736f0940b7a91e1e71acaa5b255aac1a31",
+    "launchSha256": "243b8b280b64275b33176b592dfb21736f0940b7a91e1e71acaa5b255aac1a31",
+    "changedSinceLaunch": false
+  },
+  "process": {
+    "pid": 96880,
+    "runId": "20261011T095815Z-feaa09d3faa0400c9c1aea5e54aef6ef",
+    "state": "running",
+    "processAlive": true,
+    "heartbeatAtUtc": "2026-10-11T20:23:27.607640+00:00",
+    "heartbeatAgeSeconds": 0.14,
+    "heartbeatStale": false,
+    "uptimeSeconds": 37512.38,
+    "intervalSeconds": 60,
+    "continuousCloudCoordinationEnabled": true,
+    "lastObservationAtUtc": "2026-10-11T10:19:16.544139+00:00"
+  },
+  "observations": {
+    "latestObservationAtUtc": "2026-10-11T10:19:16.544139+00:00",
+    "latestObservationSha256": "07be55b71d05c418e35165b21d2be1606a63f99cb99d8904ce0bb3d6f0c80cf9",
+    "sourceIdentitySha256": "a099b3dee6c0462e251c484b4f497bdbac779f9427151e66650c6e32166cb228",
+    "registeredActionCount": 6,
+    "successfulActionCount": 6,
+    "failedActionCount": 0,
+    "failedActions": [],
+    "visibleFailureCount": 0,
+    "observationFailureCount": 0
+  },
+  "tasks": {
+    "assignedTaskCount": 100,
+    "observedQueueCount": 100,
+    "coordinationStateCounts": {
+      "input_observed": 13,
+      "awaiting_executor": 37,
+      "needs_evidence": 50
+    },
+    "tasksCompletedByCoordinator": 0
+  },
+  "lifecycleLimits": {
+    "continuousWhileManagedHostRunningOnly": true,
+    "hostAvailabilityGuaranteed": false,
+    "modelExecutionEnabled": false,
+    "salesforceActivationEstablished": false,
+    "financialExecutionEnabled": false,
+    "newSignaturesIssuedByCoordinator": false,
+    "permanentParallelModelAgentsEstablished": false,
+    "scope": "Daemon process and six bounded read-only observations; no guarantee of uninterrupted host uptime, permanent agents, activated Salesforce agents or whole-protocol correctness"
+  },
+  "reviewOperations": {
+    "testsExecuted": false,
+    "sourceEdited": false,
+    "serviceRestarted": false,
+    "jobsSubmitted": false,
+    "financialActionsPerformed": false,
+    "privateReportContentIncluded": false,
+    "signatureIssuedByReviewer": false
+  }
+}

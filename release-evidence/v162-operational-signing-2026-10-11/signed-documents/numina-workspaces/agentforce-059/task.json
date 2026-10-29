@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-059",
+  "configurationId": "agentforce-059",
+  "team": "signatures",
+  "title": "Read public13-signature proof subset",
+  "nextBestAction": "Read exact public proof packet identities and prior signature readback without rewriting historical notes.",
+  "target": "decoded-attribution public proof packet",
+  "priority": 12,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/signature_delivery_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-059",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "signature_records",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-059.json",
+    "passCondition": "Receipt identifies13 direct signatures and12 bounded theorems at their retained scope.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

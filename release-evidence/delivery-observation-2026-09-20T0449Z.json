@@ -1,0 +1,89 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T04:49:45Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "87c20cba9aa51e5010d40cf1ccecf6893bfe88bb",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "canonicalRun": {
+      "runId": 35489770158,
+      "workflow": ".github/workflows/numina.yml",
+      "status": "queued",
+      "sourceSha": "87c20cba9aa51e5010d40cf1ccecf6893bfe88bb"
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "online",
+    "used": true,
+    "exactSourceSha": "87c20cba9aa51e5010d40cf1ccecf6893bfe88bb",
+    "build": {
+      "command": "npm run build",
+      "succeeded": true,
+      "buildId": "76e98f0632aff9f60be3be37e73fc8764d875aa9877cac46d186db542c9727fd",
+      "artifactCount": 309,
+      "applicationVersion": "4.0.0"
+    },
+    "testGate": {
+      "command": "npm test",
+      "succeeded": false,
+      "failedChecks": [
+        "application manifest aliases contain the same current release bytes",
+        "current native distribution retains its actual Android and iOS build identities",
+        "account views share one checked balance without changing stored references",
+        "browser accepts the current singular native holdings and preserved historical models without mixing them",
+        "current native holdings reject contradictory execution claims, substituted destinations and extra evidence fields",
+        "account alignment rejects changed groups and provider claims before and after initialization",
+        "current NUMINA runners are preserved without freezing placement"
+      ]
+    },
+    "signingIdentityInventedOrRotated": false
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "latestObservedDeployment": {
+      "id": "dpl_6nsRufK24uNUsvzZcktv89L3gg3V",
+      "sourceSha": "9d3e3b22a4b84e6ec6cefc91584f1d3e983c8aea",
+      "state": "ERROR",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorMessage": "Command \"npm run build\" exited with 1"
+    },
+    "currentSourceDeploymentObserved": false
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub Actions runner allocation remains unavailable",
+    "Current exact-head npm test gate still fails on seven consistency checks",
+    "No Vercel production deployment has yet been observed for sourceMainSha",
+    "Android/iOS signing remains unclaimed until configured signing workflows actually run and produce artifacts"
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

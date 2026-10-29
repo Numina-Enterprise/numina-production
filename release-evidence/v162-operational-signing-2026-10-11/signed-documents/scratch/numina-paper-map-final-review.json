@@ -1,0 +1,129 @@
+{
+  "schema": "numina.paper-map-consistency-review.v1",
+  "observedAtUtc": "2026-10-11T10:07:08.433151+00:00",
+  "canonicalRoot": "/workspace/numina-production",
+  "status": "consistent_at_documentary_attribution_scope",
+  "method": "Read exact current files, SHA-256 identities and direct PDF text extraction for pages 76\u201377; compare the retained literal attribution record and renderer source. No application execution or proof/signature rerun.",
+  "fileIdentities": {
+    "workspaceManifest": {
+      "path": "/workspace/numina-production/config/numina-workspaces.v1.json",
+      "byteCount": 38914,
+      "sha256": "b933fb0efc56c4b5f83e9fbc1c3a8e62f8850e6cb5be752b94fd4afeeaf5355e"
+    },
+    "taskLedger": {
+      "path": "/workspace/numina-production/config/numina-agentforce-tasks.v1.json",
+      "byteCount": 205407,
+      "sha256": "5152939ef13ec78ce198205a8bcf24e31319576cf37612073c835bd541f09263"
+    },
+    "houseHtml": {
+      "path": "/workspace/numina-production/public/workspaces.html",
+      "byteCount": 6710,
+      "sha256": "cabd3336a8ddc47b66fd621b2466fca7d5d627fc88698a93b56f8d636d263e0e"
+    },
+    "houseRenderer": {
+      "path": "/workspace/numina-production/public/workspaces-ui.js",
+      "byteCount": 13895,
+      "sha256": "084a05bf463ccf97b1bfcaec6d4a5f47f8a05e7a4c2360f35968e2ac6892bd3b"
+    },
+    "houseStyles": {
+      "path": "/workspace/numina-production/public/workspaces.css",
+      "byteCount": 9164,
+      "sha256": "c68d0d9654740d9b3b7e20e998d5c122b283b37371558f5b3246661cef40608a"
+    },
+    "controlRoomDocumentation": {
+      "path": "/workspace/numina-production/docs/Numina-Control-Room-Map.md",
+      "byteCount": 1668,
+      "sha256": "df62eafe994f5017cc6da27c2ee98974911ea626c5479938054d33090efa0436"
+    },
+    "retainedAttributionLiteral": {
+      "path": "/workspace/numina-production/release-evidence/decoded-attribution-closure-2026-10-11/attribution-literal-source.json",
+      "byteCount": 1598,
+      "sha256": "0dec8f4ebecff71a1f27c3ddd6bee97f3c0f01cde2f59aabab4eb16b6cf6046f"
+    },
+    "signedFinalPdf": {
+      "path": "/workspace/numina-production/outputs/final-manuscript-delivery-2026-10-10/draft-kott-numina-pair-binding-02-final.pdf",
+      "byteCount": 808496,
+      "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9"
+    }
+  },
+  "paperEvidence": {
+    "section": "Appendix F.1\u2013F.2",
+    "pages": [
+      76,
+      77
+    ],
+    "personToAlias": {
+      "Sam Kott": "UNIVERSAL_PAIR_2",
+      "Lauren Anderson": "UNIVERSAL_PAIR_1"
+    },
+    "approvedSoftwareAttributionNote": "UNIVERSAL_PAIR_1 labels the existing final-build normalized SHA-256 commitment attributed to Lauren Anderson (1B). UNIVERSAL_PAIR_2 labels the existing final-manifest SHA-256 commitment attributed to Sam Kott (1A). Personal attribution remains 1A first with Sam Kott, then 1B with Lauren Anderson. The two references are associated with one private genesis record.",
+    "aiAssistantBoundary": "The paper identifies Ed25519 as the AI-assistance credit separately from Ed25519 the signature algorithm; the assistant adds no source commitment or signing authority."
+  },
+  "peopleReadback": [
+    {
+      "name": "Samuel J. Kott",
+      "personalLabel": "1A",
+      "paperDisplayName": "Sam Kott",
+      "sourceId": "source_2",
+      "sourceAlias": "UNIVERSAL_PAIR_2",
+      "manifestMatchesExpected": true,
+      "literalPersonLabelMatches": true,
+      "literalPersonAliasMatches": true,
+      "literalSourceAliasMatches": true,
+      "rendererContainsExactTuple": true
+    },
+    {
+      "name": "Lauren J. Anderson",
+      "personalLabel": "1B",
+      "paperDisplayName": "Lauren Anderson",
+      "sourceId": "source_1",
+      "sourceAlias": "UNIVERSAL_PAIR_1",
+      "manifestMatchesExpected": true,
+      "literalPersonLabelMatches": true,
+      "literalPersonAliasMatches": true,
+      "literalSourceAliasMatches": true,
+      "rendererContainsExactTuple": true
+    }
+  ],
+  "consistencyChecks": {
+    "personCountIsTwo": true,
+    "paperFullNamesAndRolesPresent": true,
+    "paperF1ExactAliasMapPresent": true,
+    "paperF2ExactApprovedNotePresent": true,
+    "allPersonComparisonsAgree": true,
+    "paperReferenceHashMatchesActualPdf": true,
+    "rendererPaperHashMatchesActualPdf": true,
+    "referencePagesAre76And77": true,
+    "documentationPaperHashMatchesActualPdf": true,
+    "ledgerPinsExactWorkspaceManifest": true,
+    "controlRoomUsesCanonicalRoot": true,
+    "houseLinksControlAndLedger": true,
+    "signedAliasAndManuscriptChangeFlagsFalse": true,
+    "attributionDoesNotGrantSigningAuthority": true,
+    "personalMoneyActionsDisabled": true
+  },
+  "workspaceReadback": {
+    "workspaceIds": 105,
+    "teamIds": [
+      "engineering",
+      "deployment",
+      "proofs",
+      "signatures",
+      "review"
+    ],
+    "preparedAgentforceConfigurations": 100,
+    "taskRows": 100,
+    "communicationRooms": 17,
+    "publicRoomLinks": 13,
+    "opaquePrivateRoomPlaceholders": 4,
+    "privateRoomMetadataExcludedFromPublicMap": true
+  },
+  "findings": [],
+  "limits": [
+    "This confirms documentary attribution consistency of the canonical root and renderer source; the control-room metadata is an operational map, not an issued companion payload.",
+    "No live-site/browser rendering, publication, Salesforce activation or agent concurrency is established by this review.",
+    "This review identifies the exact retained signed PDF bytes; its detached signature was not rerun, replaced or modified.",
+    "Matching attribution does not establish legal identity, coauthor consent, discovery priority, private genesis linkage, signer authority, whole-protocol correctness or IETF Independent Stream acceptance.",
+    "No source, signed evidence, task row, manuscript or private room record was modified. Only this separate review report was written."
+  ]
+}

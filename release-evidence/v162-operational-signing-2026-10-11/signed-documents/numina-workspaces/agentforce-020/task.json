@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-020",
+  "configurationId": "agentforce-020",
+  "team": "review",
+  "title": "Review connector protocol gap summary",
+  "nextBestAction": "Reconcile actual issuer/resource/scopes, implementation, repair publication and observed MCP-call gaps.",
+  "target": "existing MCP repair handoff",
+  "priority": 4,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/red_team_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-020",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "connector_protocol",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-020.json",
+    "passCondition": "Receipt distinguishes prepared adapter from connected authenticated MCP behavior.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

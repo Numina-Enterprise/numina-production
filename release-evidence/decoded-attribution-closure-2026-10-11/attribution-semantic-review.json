@@ -1,0 +1,139 @@
+{
+  "schema": "numina.independent-attribution-semantic-review.v1",
+  "observed_at_utc": "2026-10-11T04:58:27.560291+00:00",
+  "reviewer": "independent delegated agent /root/whole_proof_independent/attribution_semantics_review",
+  "mode": "Read-only inspection of inputs; only this separate review artifact was written.",
+  "acceptance_scope": "Exact fixed decoded attribution values and computed eight-finding composition with recovered NCPS.Advanced.VerificationReport; no whole-protocol correctness claim.",
+  "verdict": "PASS within stated semantic scope; Lean compiler/kernel acceptance not checked by this reviewer.",
+  "inputs": [
+    {
+      "path": "/workspace/scratch/numina-acceptance-advance-2026-10-11/proof/NCPSAttributionClosure.lean",
+      "sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee",
+      "role": "new proposed bounded checker and gate composition"
+    },
+    {
+      "path": "/workspace/scratch/numina-acceptance-advance-2026-10-11/proof/attribution-literal-source.json",
+      "sha256": "0dec8f4ebecff71a1f27c3ddd6bee97f3c0f01cde2f59aabab4eb16b6cf6046f",
+      "role": "author-supplied literal extraction record, independently compared to manuscript"
+    },
+    {
+      "path": "/workspace/scratch/numina-pair-binding-02.txt",
+      "sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2",
+      "role": "frozen manuscript text inspected independently"
+    },
+    {
+      "path": "/workspace/outputs/Numina-Pair-Binding-02-final-signed-package/supporting-output-snapshots/numina-pair-binding-02.txt",
+      "sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2",
+      "role": "preserved signed-package supporting text; byte-equal to frozen scratch text"
+    },
+    {
+      "path": "/workspace/scratch/numina-whole-protocol/independent-source-review/NCPSVerification.lean",
+      "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "role": "existing seven-finding model semantics"
+    },
+    {
+      "path": "/workspace/scratch/numina-whole-protocol/NCPSModelClosure.lean",
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8",
+      "role": "existing abstract seven-finding executable-gate correspondence"
+    }
+  ],
+  "manuscript_evidence": [
+    {
+      "lines": "420-505",
+      "finding": "Closed payload schema, distinct source/personal ordering, fixed identities, and exact approved note or independently approved versioned replacement."
+    },
+    {
+      "lines": "648-654",
+      "finding": "Eight independent results are required, each with target/evidence/time/reason metadata where relevant."
+    },
+    {
+      "lines": "4108-4142",
+      "finding": "Appendix F fixes the two-key map and owner-approved note; it disclaims signing authority, identity proof and verification of private linkage/current source/signature/trust/freshness."
+    }
+  ],
+  "independent_executable_readback_checks": {
+    "frozen_scratch_and_preserved_bytes_equal": true,
+    "literal_record_source_digest_matches": true,
+    "lean_note_matches_independent_appendix_f_extraction": true,
+    "literal_record_note_matches_independent_extraction": true,
+    "literal_note_digest_matches": true,
+    "source_order_and_aliases_exact": true,
+    "people_order_names_and_labels_exact": true,
+    "map_two_assignments_exact": true,
+    "eight_finding_slots_exact": true,
+    "proposed_theorem_statement_count_is_twelve": true,
+    "axiom_print_request_count_is_twelve": true
+  },
+  "fixed_note": {
+    "utf8_bytes": 364,
+    "sha256": "d4b9a83bb742ac50eb42d773ebfa04cf7130ba87527597c469b2ab67cbc8a8c9",
+    "comparison": "Independently joined PDF-text line wraps with one space and removed surrounding prose quotation marks; matches Lean literal and extraction record."
+  },
+  "semantic_findings": [
+    {
+      "id": "source-order",
+      "result": "pass",
+      "detail": "Exact two-element list is source_1/UNIVERSAL_PAIR_1 followed by source_2/UNIVERSAL_PAIR_2. Equality excludes missing/extra/reordered decoded source identities."
+    },
+    {
+      "id": "personal-order",
+      "result": "pass",
+      "detail": "Exact two-element list is Sam Kott/1A followed by Lauren Anderson/1B, independently of source ordering."
+    },
+    {
+      "id": "map",
+      "result": "pass",
+      "detail": "Only expectedMap or its reverse is accepted. For these two distinct entries this represents both object-member orders and excludes extras, missing entries and duplicates at the supplied decoded-list boundary. It does not prove raw JSON duplicate detection."
+    },
+    {
+      "id": "note",
+      "result": "pass",
+      "detail": "The literal is exact Appendix F.2 wording. Restricting this model to that fixed note is narrower than the manuscript allowance for independently approved versioned replacements and is explicitly bounded."
+    },
+    {
+      "id": "computed-eighth-finding",
+      "result": "pass",
+      "detail": "attributionFinding computes pass/mismatch using equality checks over supplied decoded values. collectReport uses that computed result; the meaningful composition theorem does not accept an arbitrary eighth pass flag as its attribution premise."
+    },
+    {
+      "id": "seven-field-preservation",
+      "result": "pass",
+      "detail": "toSeven(collectReport base v)=base preserves all seven inherited fields exactly. No additional success facts are fabricated for them."
+    },
+    {
+      "id": "gate-composition",
+      "result": "pass",
+      "detail": "evaluated_collection_iff states exactly that the composed gate is true iff NCPS.Advanced.Accepts policy base and FixedAttribution v. This is conditional on inherited abstract findings and supplied decoded values, rather than actual check execution."
+    },
+    {
+      "id": "metadata-boundary",
+      "result": "explicitly-excluded",
+      "detail": "EightFindingReport contains eight Finding slots but omits \u00a76 target/evidence/observation-time/reason metadata and check lifecycle. File comment expressly states this limit."
+    },
+    {
+      "id": "legacy-boundary",
+      "result": "explicitly-excluded",
+      "detail": "No legacy unknown eight-Boolean ClosureResult closure is claimed or reconstructed."
+    }
+  ],
+  "statement_premises": {
+    "check_true_iff_fixed": "For every supplied DecodedAttributionView, concrete Bool checks correspond to the stated FixedAttribution equality predicate.",
+    "check_false_iff_not_fixed": "Boolean false corresponds to failure of that same fixed decoded-value predicate.",
+    "reversed_sources_rejected": "Requires the supplied source list to equal exactly expectedSources.reverse; then failure is concluded.",
+    "reversed_people_rejected": "Requires the supplied personal list to equal exactly expectedPeople.reverse; then failure is concluded.",
+    "unapproved_note_rejected": "Requires supplied note != approvedNote; proves only rejection by this fixed-note checker.",
+    "evaluated_collection_iff": "Base is an arbitrary inherited report. Only the attribution finding is computed here. Existing signature/trust/source/freshness/private findings retain their abstract supplied status.",
+    "invalid_attribution_never_accepted": "Requires not FixedAttribution v; rejects the computed collection regardless of inherited base report flags."
+  },
+  "findings_requiring_correction": [],
+  "not_established": [
+    "Lean 4.22.0 compilation, theorem elaboration, or complete axiom audit by this review.",
+    "Raw JSON parsing, duplicate-member detection, parser/refinement correspondence, full closed-schema validation, Unicode decoding or JCS byte correspondence.",
+    "Artifact/profile/hash values or independently approved deployment profile adoption.",
+    "Ed25519 correctness, trusted signer authorization, actual source commitment reproduction, current-source equality, revision freshness or private genesis linkage.",
+    "Identity, discovery priority, consent or truth of owner attribution statement.",
+    "\u00a76 full report provenance/lifecycle implementation or historical unknown legacy closure.",
+    "Whole-protocol correctness or operational companion acceptance."
+  ],
+  "next_verifiable_step": "Compile this exact source hash with recovered dependencies under Lean 4.22.0 and inspect all twelve axiom outputs; pass requires successful compiler exit and only justified audited dependencies. Refresh this source-bound review if semantic definitions change."
+}

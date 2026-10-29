@@ -1,0 +1,59 @@
+{
+  "schema": "numina.provider-confirmation-request.v1",
+  "recordType": "UNFILLED_REQUEST_TEMPLATE",
+  "providerConfirmation": {
+    "status": "NOT_RECEIVED",
+    "provider": "NUMINA",
+    "providerAccountReference": null,
+    "issuerReference": null,
+    "issuedAt": null,
+    "sourceDocumentSha256": null,
+    "sourceDocumentReference": null,
+    "providerSignature": null
+  },
+  "balance": {
+    "currency": null,
+    "amountInSmallestUnits": null,
+    "decimals": null,
+    "bucket": "available",
+    "sourceTimestamp": null
+  },
+  "asset": {
+    "networkReference": null,
+    "tokenContract": null,
+    "providerAssetAccepted": null
+  },
+  "allocation": {
+    "allocationReference": null,
+    "allocatedAmountInSmallestUnits": null,
+    "encumbrances": null,
+    "sourceAccountReference": null,
+    "destinationReference": null,
+    "sharedAllocationId": null
+  },
+  "settlement": {
+    "transactionReference": null,
+    "receipt": null,
+    "completed": false
+  },
+  "verification": {
+    "issuerAuthenticated": false,
+    "sourceMatched": false,
+    "amountVerified": false,
+    "allocationVerified": false,
+    "providerAcceptanceVerified": false,
+    "completedMintVerified": false
+  },
+  "ownerApproval": {
+    "status": "NOT_RECORDED",
+    "sourceReference": null,
+    "providerApprovalInferred": false
+  },
+  "effects": {
+    "fundsCreated": false,
+    "balancesChanged": false,
+    "transactionSigned": false,
+    "depositSubmitted": false
+  },
+  "scope": "Unfilled request for authentic provider evidence; not a provider confirmation, reserve attestation or transaction."
+}

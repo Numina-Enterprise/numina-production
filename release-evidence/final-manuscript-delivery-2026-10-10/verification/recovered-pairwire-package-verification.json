@@ -1,0 +1,27 @@
+{
+  "schema": "numina.recovered-public-package-verification.v1",
+  "package_file": "PairWireRecovery-Ed25519-signed-public-2026-10-09.zip",
+  "package_sha256": "889aa0f181e587e7b4a2acf1e056b5171794b0040c1f5da13f7c006c76029659",
+  "original_package_preserved": true,
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "checks": [
+    {
+      "file": "PairWireRecovery.lean",
+      "bytes": 5568,
+      "sha256": "51ea8ef76197ba53ca5a9e3bd1de6f82fff8ff52ad37238c9933e29f2ac39eae",
+      "signature_valid": true,
+      "altered_payload_rejected": true,
+      "altered_signature_rejected": true
+    },
+    {
+      "file": "Hello_Ed25519.test.txt",
+      "bytes": 13,
+      "sha256": "70837757cf4216c162bb61c50016d251bd968004b2ced41411c766c860edf159",
+      "signature_valid": true,
+      "altered_payload_rejected": true,
+      "altered_signature_rejected": true
+    }
+  ],
+  "scope": "Exact source and Hello Ed25519 test signatures; no manuscript signature is asserted.",
+  "report_signed": false
+}

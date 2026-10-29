@@ -1,0 +1,30 @@
+{
+  "schema": "numina.container-base-observation.v1",
+  "observedAt": "2026-09-12T23:06:21.905Z",
+  "source": "Docker Official Image library/node registry manifest",
+  "tag": "24.21.0-bookworm-slim",
+  "image": "node:24.21.0-bookworm-slim@sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+  "digest": "sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+  "platforms": [
+    {
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      },
+      "digest": "sha256:713cfbf4a0ac19f40e1bb9919893e126b74a5c8cf5d0623c9f89515c8f74c6fa"
+    },
+    {
+      "platform": {
+        "architecture": "arm64",
+        "os": "linux",
+        "variant": "v8"
+      },
+      "digest": "sha256:8d1405ad7696efa6941cb7745c2aa51d02549b900e4a40fdf212a1b5115dd1b9"
+    }
+  ],
+  "manifestBytes": 3929,
+  "registryDigestMatchesBytes": true,
+  "imageBuilt": false,
+  "imageStarted": false,
+  "signatureVerified": false
+}

@@ -1,0 +1,25 @@
+[Unit]
+Description=Numina Public Verification Plane
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+User=numina
+Group=numina
+WorkingDirectory=/opt/numina
+Environment=NUMINA_ENV=production
+Environment=NUMINA_ROLE=public-verifier
+Environment=NUMINA_ALLOW_EPHEMERAL_KEY=false
+Environment=NUMINA_SIGNING_KEY_FILE=/etc/numina/release.pem
+ExecStart=/opt/numina/.venv/bin/python -m numina_prod.cli serve --host 127.0.0.1 --port 8080
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/numina
+CapabilityBoundingSet=
+AmbientCapabilities=
+[Install]
+WantedBy=multi-user.target

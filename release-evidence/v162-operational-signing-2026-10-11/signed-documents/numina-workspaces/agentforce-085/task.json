@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-085",
+  "configurationId": "agentforce-085",
+  "team": "review",
+  "title": "Read native artifact delivery gap",
+  "nextBestAction": "Record current signed artifact, provider and device receipts for the existing native deliverable or retain missing inputs.",
+  "target": "native NUM-16 artifact evidence",
+  "priority": 17,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/slack_room_frontier_report",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-085",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "native_evidence",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-085.json",
+    "passCondition": "Receipt binds actual artifact/provider/device identities without inferring release from a task label.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

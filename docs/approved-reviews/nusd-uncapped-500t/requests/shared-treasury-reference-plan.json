@@ -1,0 +1,57 @@
+{
+  "schema": "numina.nusd.shared-treasury-reference-plan.v1",
+  "status": "OWNER_APPROVED_REVIEW",
+  "canonical": {
+    "id": "numina-native-treasury",
+    "initialSupplyNusd": "500000000000000",
+    "initialSupplyBaseUnits": "500000000000000000000",
+    "countedOnce": true
+  },
+  "displayPolicy": {
+    "canonicalUnit": "NUSD",
+    "countedOnce": true,
+    "displayLabels": [
+      "NUSD",
+      "USD",
+      "USDC"
+    ],
+    "displayPolicyStatus": "OWNER_FINALIZED",
+    "declaredTarget": {
+      "NUSD": "1",
+      "USD": "1",
+      "USDC": "1"
+    },
+    "ownerReportsVerified": true,
+    "providerEvidenceVerifiedByThisPackage": false,
+    "usdOrUsdcCreatedByIssuance": false
+  },
+  "references": [
+    {
+      "label": "Numina native treasury",
+      "canonicalId": "numina-native-treasury",
+      "relationship": "reference_to_same_canonical_value",
+      "additionalAllocationNusd": "0",
+      "providerReportedBalance": false
+    },
+    {
+      "label": "Stripe treasury",
+      "canonicalId": "numina-native-treasury",
+      "relationship": "reference_to_same_canonical_value",
+      "additionalAllocationNusd": "0",
+      "providerReportedBalance": false
+    },
+    {
+      "label": "Bank of America treasury",
+      "canonicalId": "numina-native-treasury",
+      "relationship": "reference_to_same_canonical_value",
+      "additionalAllocationNusd": "0",
+      "providerReportedBalance": false
+    }
+  ],
+  "totalReferencedCanonicalNusd": "500000000000000",
+  "additionalNusdFromReferences": "0",
+  "providerFundingVerified": false,
+  "contractDeploymentVerified": false,
+  "journalWritten": false,
+  "receipt": null
+}

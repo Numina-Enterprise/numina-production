@@ -1,0 +1,117 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-20T17:46:17Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "472fbc5cdbc51363231c86fa1f1d527e715d45ff",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "latestMainRun": {
+      "runId": 35526832131,
+      "jobId": 106120356831,
+      "workflow": ".github/workflows/numina.yml",
+      "sourceSha": "472fbc5cdbc51363231c86fa1f1d527e715d45ff",
+      "status": "completed",
+      "conclusion": "failure",
+      "executedStepCount": 0
+    },
+    "ubuntuAllocationProbe": {
+      "runId": 35525350687,
+      "jobId": 106116421373,
+      "status": "completed",
+      "conclusion": "failure",
+      "executedStepCount": 0
+    }
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "deployment": {
+      "id": "dpl_GKg8Cq8E9Na25K3SvhB28Bxa8Gdj",
+      "buildId": "bld_bmy0xde8t",
+      "sourceSha": "472fbc5cdbc51363231c86fa1f1d527e715d45ff",
+      "state": "READY",
+      "target": "production",
+      "transportUrl": "https://numina-production-mntghbq24-numina-167f7fe7.vercel.app",
+      "canonicalUrl": "https://numinalabs.xyz",
+      "applicationBuildId": "fe09be82428d058b2d570cd8636c0d27e1b424367b60b7758281ba8cf564c5ae",
+      "applicationVersion": "4.0.0",
+      "release": "numina-v4.0.0"
+    },
+    "endpointVerification": [
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "sha256": "ac08440552a6b1aac5128dfcb11db188a5bf76c61a9596ea605e786badda2fd3"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "sha256": "02c97c543ee83170006e7723831b33b85de56e4112663a1812fabafffb147a70"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "sha256": "12a67fc4f6a14a95d26acf9f7ddac64cae00dea9417b8c8ca3a776bddfe861ae"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "sha256": "2143a9687bc9e6719e722bc91e8937eabad3c088cf058b76305d44c3e8c9fc2b"
+      }
+    ],
+    "deploymentEstimate": {
+      "status": "FINAL",
+      "productionReady": true,
+      "reservesVerified": false,
+      "settlementVerified": false
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "online",
+    "used": true,
+    "exactSourceSha": "472fbc5cdbc51363231c86fa1f1d527e715d45ff",
+    "buildSucceeded": true,
+    "testGate": {
+      "succeeded": true,
+      "tests": 910,
+      "passed": 910,
+      "failed": 0
+    },
+    "signingIdentityInventedOrRotated": false
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "remainingBlockers": [
+    "GitHub-hosted runner allocation remains unavailable; the latest main NUMINA job and the explicit Ubuntu allocation probe failed before any workflow step executed.",
+    "Android signing remains unclaimed because the hosted workflow could not execute and the fallback device has no configured NUMINA Android signing vault or Android SDK environment.",
+    "iOS signing remains unclaimed because the hosted macOS workflow could not execute and the fallback device is Windows with no configured Apple distribution signing environment.",
+    "Store submission remains unclaimed because no new signed Android or iOS artifact was produced and no provider submission receipt exists."
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

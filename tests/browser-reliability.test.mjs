@@ -1,0 +1,114 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+import {APP_OFFERS} from '../src/app-core.js';
+import {selectService,countryOptions,offerLabel} from '../public/app-entry.js';
+
+const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
+const response=(body,status=200)=>Response.json(body,{status});
+const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+const tick=()=>new Promise(r=>setTimeout(r,0));
+async function settled(){for(let i=0;i<8;i++)await tick();}
+class Element{
+ constructor(tag='div'){this.tagName=tag;this.children=[];this.listeners={};this.hidden=false;this.disabled=false;this.value='';this.checked=false;this._text='';}
+ set textContent(value){this._text=String(value);this.children=[];}
+ get textContent(){return this._text+this.children.map(c=>c.textContent).join('');}
+ get options(){return this.children;}
+ append(...nodes){this.children.push(...nodes);}
+ replaceChildren(...nodes){this._text='';this.children=[...nodes];}
+ addEventListener(name,fn){this.listeners[name]=fn;}
+ setAttribute(){}
+ scrollIntoView(){}
+ querySelector(selector){return this.children.find(node=>'#'+node.id===selector)||null;}
+ reset(){this.onReset?.();}
+ async fire(name,extra={}){return this.listeners[name]?.({preventDefault(){},...extra});}
+}
+function harness(kind,fetcher){
+ const nodes=new Map(),events={};const html=readFileSync(new URL('../public/'+(kind==='app'?'app':'control')+'.html',import.meta.url),'utf8');
+ for(const match of html.matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g)){const node=new Element(match[1]);node.hidden=/\bhidden\b/.test(match[0]);nodes.set(match[2],node);}
+ const get=id=>{assert.ok(nodes.has(id),'Unknown UI node '+id);return nodes.get(id);};
+ if(kind==='app'){
+  for(const id of ['diagnostic','audit']){const option=new Element('option');option.value=id;get('service').append(option);}get('service').value='diagnostic';
+  get('request-form').onReset=()=>{for(const id of ['request-title','request-brief','request-success'])get(id).value='';get('service').value='diagnostic';};
+ }
+ const window={addEventListener:(name,fn)=>events[name]=fn,location:{assign(){throw new Error('Unexpected navigation in test');}}};
+ const document={getElementById:get,createElement:tag=>new Element(tag),dispatchEvent:event=>events[event.type]?.(event),addEventListener:(name,fn)=>events[name]=fn,
+  querySelectorAll:selector=>selector.startsWith('a[')?[]:selector.includes('workspace')?[...nodes.values()].filter(n=>n.tagName==='button'):selector.includes('checkout-button')?[get('checkout-button')]:[]};
+ const context=vm.createContext({document,window,navigator:{onLine:true},location:{href:'https://numina.test/app'},fetch:fetcher,Response,URL,URLSearchParams,AbortController,crypto,Intl,Date,TextEncoder,CustomEvent,setTimeout,clearTimeout,console,selectService,countryOptions,offerLabel,
+  clearTreasuryDocuments(){},async loadTreasuryDocuments(){},clearStripeTreasury(){},async loadStripeTreasury(){}});
+ const exports=kind==='app'?'({api,openOrder,loadOrders,savedView,boot,clearSession,get session(){return session;},get selected(){return selected;}})':'({api,refresh,run,clearSession,get snapshot(){return snapshot;}})';
+ const receiptModule='const {clearControlReceipt,renderControlReceipt}=(()=>{'+source('control-receipts.js')+';return {clearControlReceipt,renderControlReceipt};})();';
+ const nativeModule='const {clearNativeTreasury,loadNativeTreasury}=(()=>{'+source('treasury-proof.js')+'\n'+source('treasury-valuation.js')+'\n'+source('treasury-amount.js')+'\n'+source('native-treasury.js')+';return {clearNativeTreasury,loadNativeTreasury};})();';
+ vm.runInContext(source('http-client.js')+'\n'+receiptModule+'\n'+nativeModule+'\n'+source(kind==='app'?'app-ui.js':'control.js')+'\nglobalThis.subject='+exports,context);
+ return {get,events,subject:context.subject,context,close(){events.pagehide?.();}};
+}
+function order(id,title=id){return {id,title,revision:0,brief:'Private brief '+id,successCriteria:'Private success '+id,service:'diagnostic',country:'US',status:'submitted',isOwner:true,payment:{status:'unconfirmed',gross:0,refunded:0}};}
+function appFetch(overrides=()=>null){return async(path,options)=>{
+ const custom=overrides(path,options);if(custom)return await custom;
+ if(path.endsWith('/catalog'))return response({offers:APP_OFFERS});
+ if(path.endsWith('/health'))return response({status:'ready',paymentConfirmation:'configured'});
+ if(path.endsWith('/session'))return response({email:'owner@example.test',operator:true});
+ if(path.includes('/orders?'))return response({orders:[order('a')],next:null});
+ if(path.endsWith('/events'))return response({events:[]});
+ return response({order:order(path.split('/').at(-1))});
+};}
+
+test('JSON deadlines cover stalled bodies and never retry a write',async()=>{
+ let calls=0;const c=vm.createContext({fetch:async()=>{calls++;return {ok:true,json:()=>new Promise(()=>{})};},AbortController,setTimeout,clearTimeout});
+ vm.runInContext(source('http-client.js'),c);
+ await assert.rejects(vm.runInContext("requestJson('/save',{method:'POST',timeoutMs:10})",c),{name:'TimeoutError'});assert.equal(calls,1);
+});
+
+test('expired app session removes private records and ignores late responses',async()=>{
+ let expired=false;const pending=deferred();let slow=false;
+ const h=harness('app',appFetch(path=>expired&&path.includes('/orders?')?response({error:'SIGN_IN_REQUIRED'},401):slow&&path.endsWith('/a')?pending.promise:null));
+ try{await settled();await h.subject.openOrder('a');assert.equal(h.get('detail-brief').textContent,'Private brief a');slow=true;const opening=h.subject.openOrder('a');expired=true;await assert.rejects(h.subject.loadOrders());pending.resolve(response({order:order('a')}));await opening.catch(()=>{});await settled();
+  assert.equal(h.subject.session,null);assert.equal(h.subject.selected,null);assert.equal(h.get('detail-brief').textContent,'');assert.equal(h.get('orders-list').children.length,0);assert.equal(h.get('checkout-button').hidden,true);assert.equal(h.get('request-fields').disabled,true);
+ }finally{h.close();}
+});
+
+test('newer selection and closing details invalidate slow app responses',async()=>{
+ const pending=deferred();let slow=true;const h=harness('app',appFetch(path=>slow&&path.endsWith('/a')?pending.promise:null));
+ try{await settled();const first=h.subject.openOrder('a');await h.subject.openOrder('b');pending.resolve(response({order:order('a')}));await first;assert.equal(h.subject.selected.id,'b');
+  const second=deferred();slow=false;h.context.fetch=appFetch(path=>path.endsWith('/a')?second.promise:null);const late=h.subject.openOrder('a');await h.get('close-detail').fire('click');second.resolve(response({order:order('a')}));await late;assert.equal(h.subject.selected,null);assert.equal(h.get('order-detail').hidden,true);
+ }finally{h.close();}
+});
+
+test('catalog failure keeps intake disabled even when authentication succeeds',async()=>{
+ let posts=0;const h=harness('app',appFetch((path,options)=>{if(options.method==='POST')posts++;return path.endsWith('/catalog')?response({error:'SERVICE_UNAVAILABLE'},503):null;}));
+ try{await settled();assert.ok(h.subject.session);assert.equal(h.get('request-fields').disabled,true);await h.get('request-form').fire('submit');assert.equal(posts,0);}finally{h.close();}
+});
+test('NUSD records retain scope-only controls when the catalog cannot load',async()=>{
+ const record={...order('nusd'),service:'result_access',requestOnly:true,status:'scoped',payment:{status:'not_available',currency:'nusd',gross:null,refunded:null}};
+ const h=harness('app',appFetch(path=>path.endsWith('/catalog')?response({error:'SERVICE_UNAVAILABLE'},503):path.endsWith('/nusd')?response({order:record}):null));
+ try{await settled();await h.subject.openOrder('nusd');assert.match(h.get('detail-payment').textContent,/NUSD service/);assert.doesNotMatch(h.get('detail-payment').textContent,/\$0/);assert.equal(h.get('checkout-button').hidden,true);const actions=h.get('order-action').options.map(o=>o.value);assert.ok(!actions.includes('start'));assert.ok(actions.includes('cancel'));}finally{h.close();}
+});
+
+test('acknowledged save remains acknowledged when refresh fails and stale actions are cleared',async()=>{
+ let fail=false;const h=harness('app',appFetch(path=>fail&&path.includes('/orders?')?response({error:'SERVICE_UNAVAILABLE'},503):null));
+ try{await settled();await h.subject.openOrder('a');fail=true;await h.subject.savedView('a','Action saved.');assert.match(h.get('app-notice').textContent,/^Action saved\./);assert.equal(h.subject.selected,null);assert.equal(h.get('order-detail').hidden,true);assert.equal(h.get('checkout-button').hidden,true);}finally{h.close();}
+});
+
+test('browser restoration revalidates the app after aborting an in-flight boot',async()=>{
+ const pending=deferred();let delay=true;const h=harness('app',appFetch(path=>delay&&path.endsWith('/catalog')?pending.promise:null));
+ try{h.events.pagehide();delay=false;h.events.pageshow({persisted:true});pending.resolve(response({offers:APP_OFFERS}));await settled();assert.ok(h.subject.session);assert.equal(h.get('request-fields').disabled,false);}finally{h.close();}
+});
+
+test('Control Room clears all private state when background owner authentication expires',async()=>{
+ const h=harness('control',async path=>{
+  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{stateIntegrity:true,evidenceHead:true}});
+  if(path.endsWith('/treasury'))return response({error:'UNAUTHENTICATED'},401);
+  return response({projection:'complete',revision:1,state:{requests:[],evidence:[],grants:[{id:'root',subject:'private-owner',resourcePrefix:'record:',scopes:['record.write']}]},decisions:[]});
+ });
+ try{await settled();assert.equal(h.subject.snapshot,null);assert.equal(h.get('workspace').hidden,true);assert.equal(h.get('grants').textContent,'');assert.equal(h.get('state-proof').textContent,'');assert.equal(h.get('signin').hidden,false);}finally{h.close();}
+});
+
+test('Control Room drops stale records and disables actions after refresh failure',async()=>{
+ let failed=false;const h=harness('control',async path=>{
+  if(failed)return response({error:'DEPENDENCY_UNAVAILABLE'},503);
+  if(path.endsWith('/health'))return response({status:'ready',revision:1,checks:{stateIntegrity:true,evidenceHead:true}});
+  return response({projection:'scoped',revision:1,state:{requests:[],evidence:[],grants:[]},decisions:[]});
+ });
+ try{await settled();assert.ok(h.subject.snapshot);failed=true;await assert.rejects(h.subject.refresh());assert.equal(h.subject.snapshot,null);assert.equal(h.get('workspace').hidden,true);assert.equal(h.get('reconcile').disabled,true);assert.equal(h.get('health').textContent,'Unavailable');}finally{h.close();}
+});

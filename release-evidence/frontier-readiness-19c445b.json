@@ -1,0 +1,191 @@
+{
+  "verification": {
+    "schema": "numina.frontier-readiness-verification.v1",
+    "verifiedAt": "2026-09-20T07:55:53.642Z",
+    "signatureVerified": true,
+    "payloadMatchesReceipt": true,
+    "ready": true,
+    "deployed": true,
+    "sourceCommit": "19c445bd88680a2a11ec07a1a87e925be7d71ab5",
+    "deploymentId": "dpl_5kVERo7Vasy99Q9smxZNdf91eNaC",
+    "applicationBuildId": "c58cfea4d2ca238f5a50c9f6d8af10b1b34ef97363c66b765e3bc1963d7117eb",
+    "runtimeBuildId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+    "providerExternalBalanceVerified": false,
+    "evidenceBoundary": "READINESS_AND_SOFTWARE_STATE_ONLY"
+  },
+  "receipt": {
+    "artifact_type": "NUMINA_FRONTIER_READINESS",
+    "key_id": "3a2fe594a7e10458ae89683f",
+    "payload": {
+      "schema": "numina.frontier-readiness.v3",
+      "observed_at": "2026-09-20T07:55:52.796Z",
+      "root": "NUMINA",
+      "manifest": "NUMINA",
+      "identity": "NUMINA",
+      "authority": "NUMINA",
+      "source": "NUMINA",
+      "evidence": "NUMINA",
+      "provider": "NUMINA",
+      "host": "NUMINA",
+      "provenance": "NUMINA",
+      "deployment": "NUMINA",
+      "service": "NUMINA",
+      "external_service": "NUMINA",
+      "softwareIdentity": "NUMINA",
+      "softwareExternal": false,
+      "softwareTreasury": {
+        "identity": "NUMINA",
+        "singular": true,
+        "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+        "treasuryIdentity": "NUMINA",
+        "treasuryCount": 1,
+        "accountCount": 1,
+        "componentCount": 3,
+        "holdingsCount": 3,
+        "balanceCount": 1,
+        "accountModel": "ONE_NATIVE_TREASURY_ACCOUNT_THREE_NATIVE_HOLDINGS",
+        "componentsAreSeparateTreasuries": false,
+        "aggregateModeledValue": "1500000000000000",
+        "aggregateModeledUnit": "NUSD",
+        "componentRoleValue": "500000000000000",
+        "componentUnits": [
+          "USD",
+          "USDC",
+          "NUSD"
+        ],
+        "bankUsd": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USD"
+        },
+        "stripeUsdc": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "USDC"
+        },
+        "nativeNusd": {
+          "current": "500000000000000",
+          "available": "500000000000000",
+          "unit": "NUSD"
+        },
+        "aggregate": {
+          "current": "1500000000000000",
+          "unit": "NUSD"
+        }
+      },
+      "deployed": true,
+      "ready": true,
+      "checks": {
+        "application_release_valid": true,
+        "application_runtime_binding": true,
+        "runtime_manifest_identity": true,
+        "release_attestation_signature": true,
+        "supply_chain_identity": true,
+        "numina_provider_of_record": true,
+        "numina_deployment": true
+      },
+      "application": {
+        "version": "4.0.0",
+        "release": "numina-v4.0.0",
+        "build_id": "c58cfea4d2ca238f5a50c9f6d8af10b1b34ef97363c66b765e3bc1963d7117eb",
+        "canonical_manifest_build_id": "c58cfea4d2ca238f5a50c9f6d8af10b1b34ef97363c66b765e3bc1963d7117eb",
+        "artifact_inventory_build_id": "c58cfea4d2ca238f5a50c9f6d8af10b1b34ef97363c66b765e3bc1963d7117eb",
+        "artifact_inventory_scope": "generated_distribution_artifact_inventory",
+        "build_identity_relation": "converged"
+      },
+      "runtime": {
+        "root": "NUMINA",
+        "manifest": "NUMINA",
+        "identity": "NUMINA",
+        "authority": "NUMINA",
+        "source": "NUMINA",
+        "evidence": "NUMINA",
+        "provider": "NUMINA",
+        "host": "NUMINA",
+        "provenance": "NUMINA",
+        "deployment": "NUMINA",
+        "singular": true,
+        "build_identity": "NUMINA",
+        "all_builds_are_numina": true,
+        "non_numina_builds_allowed": false,
+        "canonical_source": "github",
+        "canonical_repository": "skott34-dot/numina-production",
+        "canonical_branch": "main",
+        "release": "core-v1.8+prod-v1.9.0-rc26",
+        "core_version": "1.8.0",
+        "production_version": "1.9.0-rc26",
+        "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+        "production_files_root": "0890f3a837d26ee445b5ad9d311387e119ee564949a439cfe325b47fb32762fd",
+        "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+        "core_conformance_artifact_sha256": "ed9656ba60eb89f4bbce85d8693c462eb64062af423cc4b48f6b5db20d7bc18f",
+        "spdx_sbom_sha256": "fd53e695ace2fcb04f619ff48dffd07b02ee3baebfa848301897c0c5cba1dcfa",
+        "slsa_provenance_sha256": "f4abb2d2cb164427486dc740225532195106f1ee49e0fd0d22c0007fa463d9a5"
+      },
+      "external_services": {
+        "identity": "NUMINA",
+        "service": "NUMINA",
+        "provider": "NUMINA",
+        "transport_identity": "NUMINA",
+        "singular": true,
+        "substrate_observations_only": true
+      },
+      "provider_of_record": {
+        "identity": "NUMINA",
+        "authority": "NUMINA",
+        "source": "NUMINA",
+        "host": "NUMINA",
+        "provenance": "NUMINA",
+        "scope": "NUMINA",
+        "receipts": "NUMINA",
+        "settlements": "NUMINA",
+        "funds": "NUMINA",
+        "confirmation_evidence": "NUMINA"
+      },
+      "transport": {
+        "identity": "NUMINA",
+        "authority": "NUMINA",
+        "source": "NUMINA",
+        "evidence": "NUMINA",
+        "provenance": "NUMINA",
+        "host": "NUMINA",
+        "role": "factual_transport_verification_channel",
+        "separate_roles": true,
+        "singular_identity": true,
+        "substrate_observation": {
+          "identity": "NUMINA",
+          "service": "NUMINA",
+          "substrate": "Vercel",
+          "verified": true,
+          "observation": {
+            "schema": "numina.transport-observation.v1",
+            "root": "NUMINA",
+            "manifest": "NUMINA",
+            "identity": "NUMINA",
+            "authority": "NUMINA",
+            "source": "NUMINA",
+            "evidence": "NUMINA",
+            "provider": "NUMINA",
+            "host": "NUMINA",
+            "provenance": "NUMINA",
+            "provider_verification": true,
+            "deployment": "NUMINA",
+            "transport": "vercel",
+            "authoritative": false,
+            "host_url": "https://numinalabs.xyz",
+            "environment": "production",
+            "deployment_id": "dpl_5kVERo7Vasy99Q9smxZNdf91eNaC",
+            "transport_url": "https://numina-production-3x4es887f-numina-167f7fe7.vercel.app",
+            "git_commit_sha": "19c445bd88680a2a11ec07a1a87e925be7d71ab5",
+            "git_commit_ref": "main",
+            "runtime_release": "1.9.0-rc26",
+            "release": "core-v1.8+prod-v1.9.0-rc26"
+          }
+        }
+      },
+      "mode": "NUMINA"
+    },
+    "algorithm": "Ed25519",
+    "public_key": "UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=",
+    "signature": "eX8j+AxglnUtiAoGKnMokwnQdlgFC0pfBnob8VkmBT0UeD9jUkEHho6NJ33GEbjYeeP40QseyMyLd6+EnFlfDw=="
+  }
+}

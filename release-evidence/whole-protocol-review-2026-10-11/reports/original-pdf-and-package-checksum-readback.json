@@ -1,0 +1,42 @@
+{
+  "schema": "numina.original-pdf-and-package-checksum-readback.v1",
+  "checked_at_utc": "2026-10-11T04:34:55.286741+00:00",
+  "status": "PASS",
+  "source_record_sha256": "1cf4c2fe90af6d24229ac227ed26f28cc02c50f70980ffccab2273b3577c1957",
+  "source_record_file_count_verified": 10,
+  "raw_public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "raw_public_key_bytes": 32,
+  "original_pdf": {
+    "member": "delivery/manuscript/original-draft-kott-numina-pair-binding-02-evidence-successor.pdf",
+    "bytes": 404249,
+    "sha256": "4b22068f0df2ff2d9b2b3084941ecada40b9915b68ededf4126db6e56671b03b",
+    "signature_sha256": "198f6b4cb91a5c8d68a1fc8155835a185e1e70f38559b4c5d07684fa6aca46b6",
+    "signature_verified": true,
+    "signature_event": "2026-10-11T04:14:21.688548+00:00",
+    "scope": "New retained operational signature over unchanged original PDF bytes; not recovery of an earlier manuscript signature."
+  },
+  "inner_inventory_checksum": {
+    "member": "delivery/SHA256SUMS",
+    "bytes": 6254,
+    "exact_text_sha256": "9f8328238896ef55500707fe45bc37f848244c15ee2ac3523f570f54060365f0",
+    "signature_sha256": "5a53c1ed8e0bf57eb6f0e66fbd7dd38745ab00ee65a44d96d4635f6c091ed1ca",
+    "signature_verified": true,
+    "original_pdf_hash_line_matches": true
+  },
+  "inner_zip_checksum": {
+    "archive": "Numina-Final-Delivery-Contents.zip",
+    "archive_sha256": "a4b97d9f16da245f9b5a105cd6760a563b6ca5cef71b5a0265d38ae37cb70337",
+    "checksum_text_bytes": 101,
+    "exact_text_sha256": "b865c522ac556fc058750dee99bbe66ffbb6d296e011deaf8b351387544b9d7f",
+    "signature_sha256": "d6af24730c6c83850bf757bd07e3525bb4d926025f545d54098c19b0b1edee68",
+    "signature_verified": true,
+    "exact_format": "lowercase SHA256, two ASCII spaces, exact ZIP name, single LF"
+  },
+  "outer_zip_sha256": "62e1273889f5782da1530394f8963e7b29033a973b5af6fd94e4f83ffd080a38",
+  "outer_and_inner_archive_bytes_match": true,
+  "verified_signatures": 3,
+  "tamper_rejections": 6,
+  "whole_protocol_correctness_established": false,
+  "files_changed": false,
+  "new_signatures_issued": false
+}

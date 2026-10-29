@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-090",
+  "configurationId": "agentforce-090",
+  "team": "review",
+  "title": "Read external delivery configuration gap",
+  "nextBestAction": "Record internal ops-inbox observations separately from any unconfigured external Regroup delivery.",
+  "target": "external delivery metadata",
+  "priority": 18,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/slack_room_frontier_report",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-090",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "external_delivery_evidence",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-090.json",
+    "passCondition": "Receipt names supported current delivery connector or explicit unavailable external route.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

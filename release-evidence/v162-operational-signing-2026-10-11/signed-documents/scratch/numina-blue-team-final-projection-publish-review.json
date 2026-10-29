@@ -1,0 +1,148 @@
+{
+  "schema": "numina.blue-team-final-projection-publish-review.v1",
+  "checked_at": "2026-10-11T10:17:23.538785+00:00",
+  "unsigned": true,
+  "status": "PASS_BOUNDED_ARCHIVE_BINDING",
+  "archive": {
+    "path": "/workspace/numina-production/outputs/sites-source-projection-2026-10-11/numina-cloud-site-delivery.tar.gz",
+    "bytes": 39983201,
+    "sha256": "7c0276be32c7a830dadb7bdf8f67ff0138c38db422dee949e4314760f1d4b792",
+    "members": 391,
+    "regular_files": 366
+  },
+  "application_inventory": {
+    "artifact_count": 362,
+    "build_id": "90d04b7d6561269ab5cc1043683e4e65a5fd8331af40b3dc18d413d89c432e8c",
+    "worker_sha256": "0aafd35964ab38d98aaa7f44603d343202dbdcba4320cce65c342d1ebc9d860c",
+    "exact_source_worker_framing": true
+  },
+  "hosting": {
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "d1": "DB",
+    "r2": "BUCKET",
+    "capabilities": [
+      "mcp"
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "0000_hard_midnight",
+      "sha256": "426ebaf13a30177e8be8c91d273685b64f55c2bc680d48e17d591a0afe4ac19d"
+    },
+    {
+      "tag": "0001_useful_black_crow",
+      "sha256": "bf5b083343cc3484b6a341d2e7211ef33a674eaa769b7b6d7c68b29700ba3765"
+    },
+    {
+      "tag": "0002_chief_rachel_grey",
+      "sha256": "c76617ec10b48c6171675412e49934af3b2041c70195d6155e8f0b2b6d5433fe"
+    },
+    {
+      "tag": "0003_google_play_reviewer",
+      "sha256": "b3cb0fb430d03cf7e30fd4adcad9ac2cd3e915040f253fe5e9c52523696d75da"
+    },
+    {
+      "tag": "0004_wallet_deployment_intents",
+      "sha256": "ebe68cfa03065d7b913a56224750c0e3f01e7e75bf90c97221c3a81bfeb9ddc7"
+    },
+    {
+      "tag": "0005_numina_manifest_control",
+      "sha256": "ec7630f3a19b4cce331fe4e735463ec1b01f05b4f8a77dafff1f84cd643eac9a"
+    }
+  ],
+  "canonical_config_sha256": {
+    "workspaces": "b933fb0efc56c4b5f83e9fbc1c3a8e62f8850e6cb5be752b94fd4afeeaf5355e",
+    "tasks": "5152939ef13ec78ce198205a8bcf24e31319576cf37612073c835bd541f09263",
+    "treasury-team": "487ba9e2c816f03b33692d53602e7b8e3809f4916794db8b7b85a4e4b5f2fda8"
+  },
+  "retained_signed_proof_packet": {
+    "files": 28,
+    "file_set_and_every_byte_equal": true,
+    "cryptographic_or_Lean_rerun_performed": false
+  },
+  "task_history": {
+    "created": 0,
+    "revised": 3,
+    "preserved": 97,
+    "revisions": [
+      {
+        "configurationId": "agentforce-056",
+        "oldBytes": 1743,
+        "oldSha256": "45bea29ad27170d5e447c90646d0eb9ce5c26471dafbefb2072636ccf7a2516c",
+        "newBytes": 1828,
+        "newSha256": "b43bd63de9657ce19ac977a18cbd1c7c155c0426d2bf54276301b384af4385d0"
+      },
+      {
+        "configurationId": "agentforce-061",
+        "oldBytes": 1753,
+        "oldSha256": "0deacab264aad6a3d121ba80aeaa51b23af936781b925becde26f419d69f7bdf",
+        "newBytes": 1764,
+        "newSha256": "ac80dce8244301fb17b7825323df0ec113db82aa774ae920d5ee9d5ad28a843d"
+      },
+      {
+        "configurationId": "agentforce-100",
+        "oldBytes": 1859,
+        "oldSha256": "85fa6852a675e3f8ef04394dfe5c631acc91bb8c20488ce363a4f883f3f0faa6",
+        "newBytes": 1921,
+        "newSha256": "330104e5551d45272b2fbbc0190b5177790faa6a38e957dc2f37eaae7039b3ad"
+      }
+    ],
+    "root_receipt_sha256": "16d9ce7be657d4c9e791b24cfda5714fcd82e7a3c0cd04a15be2b8badd63827c"
+  },
+  "metadata_script": {
+    "current_sha256": "1a431efefc42f9d7eb23e7d6977e9eeaa3cd22e09e787b524998ee89141299be",
+    "matches_HEAD_plus_two_intended_path_line_changes": true,
+    "self_in_reported_rewritten_files": false,
+    "pre_build_sha_recorded": false,
+    "historical_unchanged_byte_claim_established": false
+  },
+  "private_raw_file_digests_checked": 2,
+  "private_key_material_detected": false,
+  "regression_build_mutation_or_network_runs": false,
+  "failures": [],
+  "retained_limits": [
+    "This is a local source/archive binding review; live publication/readback is a separate action.",
+    "Sites journal export remains truncated; complete current state/hash-chain/replay is not certified.",
+    "Salesforce agents remain unactivated; prepared workspaces do not reserve execution capacity.",
+    "Whole-protocol correctness and Independent Stream acceptance remain separate unestablished claims."
+  ],
+  "source_projection": {
+    "canonical_commit": "ae545f4a3b59cc7151b22b2fef3e873f5fd9d057",
+    "canonical_tree": "c587a8d51ef7730eada9e1c4fac4cc88e88de486",
+    "sites_commit": "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb",
+    "sites_tree": "f0e5411733a908f9211270eaec51be3c7b676044",
+    "sites_base_commit": "76a08b2d54679238416ee87818732ac441c5f933",
+    "direct_parent": "f2323a9c741e88cc9671bd055d0b189d87bb110e",
+    "exact_fast_forward_lineage": [
+      "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb",
+      "f2323a9c741e88cc9671bd055d0b189d87bb110e"
+    ],
+    "exact_delta": [
+      "A\trelease-evidence/sites-source-projection-2026-10-11.json",
+      "D\tnumina-release-v4.0.0.tar.gz",
+      "D\treleases/v4.0.0/numina-release-v4.0.0.tar.gz"
+    ],
+    "source_clean": true,
+    "provenance_sha256": "6c835d4da668ac117dd9ed3cf3b6805f3634b70141972617d6e99879296026f7"
+  },
+  "rebuilt_archive_delta": {
+    "matching_previous_regular_files": 359,
+    "changed_regular_files": [
+      "dist/client/downloads/Numina-Continuous-Cloud-Coordination.md",
+      "dist/client/downloads/application-release-v2.json",
+      "dist/client/downloads/application-release-v3.json",
+      "dist/client/downloads/application-release-v4.json",
+      "dist/client/downloads/integration-manifest.json",
+      "dist/client/downloads/release.json",
+      "dist/client/source-alignment.json"
+    ],
+    "worker_and_client_unchanged": true,
+    "old_archive_reused": false
+  },
+  "saved_provider_archive_scope": {
+    "provider_reported_tar_sha256": "ddd80fea0f6a308cdfe6c8316ec230ae37747e0a5a0eba034e5223336714a849",
+    "provider_reported_bytes": 45824000,
+    "independently_hashed": false,
+    "distinct_from_uploaded_gzip": true
+  }
+}

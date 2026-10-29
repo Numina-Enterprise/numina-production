@@ -1,0 +1,94 @@
+{
+  "schema": "numina.treasury.submission-requests.v1",
+  "identity": "NUMINA",
+  "recordedAt": "2026-09-18T18:35:03Z",
+  "evidenceType": "owner_instruction",
+  "ownerReportedSubmission": {
+    "statement": "SUBMITTED",
+    "evidenceType": "owner_statement",
+    "providerReferenceSupplied": false,
+    "independentlyVerified": false,
+    "scope": "Owner reports submission; this application has not submitted either transfer."
+  },
+  "ownerBackingDeclaration": {
+    "mintedAggregateNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "nusdUsdBackingRatio": "1:1",
+    "nusdUsdcBackingRatio": "1:1",
+    "evidenceType": "owner_statement",
+    "providerFundingVerified": false,
+    "currentBurnStateIndependentlyVerified": false
+  },
+  "source": "owner instruction in delivery task",
+  "modelEquivalence": {
+    "declaredBy": "owner",
+    "rate": "1 NUSD = 1 USD = 1 USDC",
+    "providerConversionVerified": false
+  },
+  "requests": [
+    {
+      "id": "numina-ach-500t-20260918",
+      "rail": "ACH",
+      "currency": "USD",
+      "amount": "500000000000000",
+      "source": "Numina Native Treasury",
+      "destination": "Bank of America savings (private configuration)",
+      "direction": "FROM_NUMINA_TO_BANK",
+      "status": "BLOCKED_NOT_SUBMITTED",
+      "ownerAuthorized": true,
+      "providerAuthorizationVerified": false,
+      "blockers": [
+        "FUNDED_USD_SOURCE_NOT_CONNECTED",
+        "ACH_PROVIDER_SUBMISSION_ADAPTER_NOT_CONFIGURED",
+        "PROVIDER_DESTINATION_REFERENCE_REQUIRED"
+      ],
+      "submissionPerformed": false,
+      "settled": false,
+      "providerReference": null,
+      "receipt": null
+    },
+    {
+      "id": "numina-usdc-500t-20260918",
+      "rail": "USDC",
+      "currency": "USDC",
+      "amount": "500000000000000",
+      "source": "Numina Native Treasury",
+      "destination": null,
+      "network": null,
+      "status": "BLOCKED_NOT_SUBMITTED",
+      "ownerAuthorized": true,
+      "providerAuthorizationVerified": false,
+      "blockers": [
+        "FUNDED_USDC_SOURCE_NOT_CONNECTED",
+        "USDC_NETWORK_AND_DESTINATION_REQUIRED",
+        "USDC_SUBMISSION_ADAPTER_NOT_CONFIGURED"
+      ],
+      "submissionPerformed": false,
+      "settled": false,
+      "providerReference": null,
+      "receipt": null
+    }
+  ],
+  "settlementRecords": [],
+  "financialExecution": false,
+  "scope": "These are owner-request records, not provider submissions, payment confirmations, available funds or settlement evidence. No ACH or USDC movement occurred when these records were created.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

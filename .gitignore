@@ -7,3 +7,28 @@ node_modules/
 Thumbs.db
 *.log
 .env
+.env.local
+
+# Build artifacts & runtime caches
+work/
+outputs/
+__pycache__/
+*.pyc
+.sites-runtime/
+runtime/nusd/artifacts/unsigned-deployment.json
+**/role-wallets.private.json
+**/*.keystore.json
+dist/
+
+.vercel/
+.wrangler/
+.openai/publishing/
+
+# Private Apple signing inputs and native build output
+*.p12
+*.p8
+*.mobileprovision
+*.key
+*.local.xcconfig
+packages/
+*.xcarchive/

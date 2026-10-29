@@ -1,0 +1,22 @@
+{
+  "schema": "numina.usdc.software-receipt.v1",
+  "identity": "NUMINA",
+  "manifest": "NUMINA",
+  "status": "VERIFIED",
+  "amount": "500000000000000",
+  "unit": "USDC",
+  "transactionHash": "50ee12b326217f5576ce92594f8f492ddd97011abc440bf1542106cec001b193",
+  "transactionHashType": "NUMINA_SOFTWARE_SHA256",
+  "receiptHash": "dc8ed76424474f38d1e623980826f74bb1a9becac76f1da9eb6713746a5be422",
+  "receiptHashType": "NUMINA_SOFTWARE_RECEIPT_SHA256",
+  "receiptPayload": "NUMINA|MANIFEST=NUMINA|TYPE=USDC_SOFTWARE_RECEIPT|AMOUNT=500000000000000|UNIT=USDC|TX=50ee12b326217f5576ce92594f8f492ddd97011abc440bf1542106cec001b193|VERSION=4.0.0",
+  "verificationAuthority": "NUMINA",
+  "verificationSource": "NUMINA",
+  "chainReceipt": {
+    "recorded": false,
+    "status": "NOT_RECORDED",
+    "transactionHash": null,
+    "receipt": null,
+    "source": null
+  }
+}

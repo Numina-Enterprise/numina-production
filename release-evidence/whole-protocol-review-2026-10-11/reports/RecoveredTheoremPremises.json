@@ -1,0 +1,926 @@
+{
+  "schema": "numina-recovered-theorem-premises/v1",
+  "source_zip_sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e",
+  "toolchain": "leanprover/lean4:v4.22.0",
+  "scope": "Authoritative exact headers from131source theorem declarations; hypotheses remain in these headers. Not a claim of concrete protocol instantiation.",
+  "all_131_declarations_match_fresh_axiom_audit": true,
+  "theorems": [
+    {
+      "declaration": "NCPS.byte_lt_256",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 22,
+      "exact_declaration_header": "theorem byte_lt_256 (x : Byte) : x.val < 256"
+    },
+    {
+      "declaration": "NCPS.empty_length",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 23,
+      "exact_declaration_header": "theorem empty_length : emptyBytes.length = 0"
+    },
+    {
+      "declaration": "NCPS.length_zero_iff",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 24,
+      "exact_declaration_header": "theorem length_zero_iff (b : Bytes) :\n    b.length = 0 \u2194 b = emptyBytes"
+    },
+    {
+      "declaration": "NCPS.concat_length",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 30,
+      "exact_declaration_header": "theorem concat_length (a b : Bytes) :\n    (concat a b).length = a.length + b.length"
+    },
+    {
+      "declaration": "NCPS.concat_empty_left",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 34,
+      "exact_declaration_header": "theorem concat_empty_left (b : Bytes) :\n    concat emptyBytes b = b"
+    },
+    {
+      "declaration": "NCPS.concat_empty_right",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 38,
+      "exact_declaration_header": "theorem concat_empty_right (b : Bytes) :\n    concat b emptyBytes = b"
+    },
+    {
+      "declaration": "NCPS.concat_assoc",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 42,
+      "exact_declaration_header": "theorem concat_assoc (a b c : Bytes) :\n    concat (concat a b) c = concat a (concat b c)"
+    },
+    {
+      "declaration": "NCPS.byteAt_out_of_bounds",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 46,
+      "exact_declaration_header": "theorem byteAt_out_of_bounds (b : Bytes) (i : Nat)\n    (h : b.length \u2264 i) : byteAt b i = none"
+    },
+    {
+      "declaration": "NCPS.byteAt_in_bounds",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 50,
+      "exact_declaration_header": "theorem byteAt_in_bounds (b : Bytes) (i : Nat)\n    (h : i < b.length) : byteAt b i = some b[i]"
+    },
+    {
+      "declaration": "NCPS.bytes_ext",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 54,
+      "exact_declaration_header": "theorem bytes_ext (a b : Bytes)\n    (h : \u2200 i : Nat, byteAt a i = byteAt b i) : a = b"
+    },
+    {
+      "declaration": "NCPS.fromTagged_length",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 64,
+      "exact_declaration_header": "theorem fromTagged_length (s : TaggedBytes) :\n    (fromTagged s).length = s.1"
+    },
+    {
+      "declaration": "NCPS.fromTagged_toTagged",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 69,
+      "exact_declaration_header": "theorem fromTagged_toTagged (b : Bytes) :\n    fromTagged (toTagged b) = b"
+    },
+    {
+      "declaration": "NCPS.emptyTagged_length",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 82,
+      "exact_declaration_header": "theorem emptyTagged_length : (fromTagged emptyTagged).length = 0"
+    },
+    {
+      "declaration": "NCPS.ExtractionSet.empty_no_mem",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 101,
+      "exact_declaration_header": "theorem ExtractionSet.empty_no_mem (b : Bytes) :\n    \u00ac ExtractionSet.mem ExtractionSet.empty b"
+    },
+    {
+      "declaration": "NCPS.ExtractionSet.fromList_mem",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 105,
+      "exact_declaration_header": "theorem ExtractionSet.fromList_mem (xs : Occurrences) (b : Bytes) :\n    ExtractionSet.mem (ExtractionSet.fromList xs) b \u2194 b \u2208 xs"
+    },
+    {
+      "declaration": "NCPS.ExtractionSet.fromList_duplicate",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 109,
+      "exact_declaration_header": "theorem ExtractionSet.fromList_duplicate (b : Bytes) :\n    (ExtractionSet.fromList [b, b]).contains =\n      (ExtractionSet.fromList [b]).contains"
+    },
+    {
+      "declaration": "NCPS.ExtractionSet.fromList_swap",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 116,
+      "exact_declaration_header": "theorem ExtractionSet.fromList_swap (a b : Bytes) :\n    (ExtractionSet.fromList [a, b]).contains =\n      (ExtractionSet.fromList [b, a]).contains"
+    },
+    {
+      "declaration": "NCPS.rejection_ne_empty_success",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 144,
+      "exact_declaration_header": "theorem rejection_ne_empty_success :\n    ExtractionResult.rejected \u2260\n      ExtractionResult.accepted ExtractionSet.empty"
+    },
+    {
+      "declaration": "NCPS.erasure_collision",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 150,
+      "exact_declaration_header": "theorem erasure_collision :\n    (erase .rejected).contains =\n      (erase (.accepted ExtractionSet.empty)).contains"
+    },
+    {
+      "declaration": "NCPS.extract_rejected_iff",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 154,
+      "exact_declaration_header": "theorem extract_rejected_iff (p : ParserProfile) (b : Bytes) :\n    extract p b = .rejected \u2194 p.parses b = false"
+    },
+    {
+      "declaration": "NCPS.extract_accepted_iff",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 159,
+      "exact_declaration_header": "theorem extract_accepted_iff (p : ParserProfile) (b : Bytes)\n    (s : ExtractionSet) :\n    extract p b = .accepted s \u2194\n      p.parses b = true \u2227\n      ExtractionSet.fromList (p.occurrences b) = s"
+    },
+    {
+      "declaration": "NCPS.nonempty_slices_implies_success",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 167,
+      "exact_declaration_header": "theorem nonempty_slices_implies_success (p : ParserProfile)\n    (b : Bytes) (w : Bytes)\n    (h : (slices p b).contains w) : p.parses b = true"
+    },
+    {
+      "declaration": "NCPS.accepted_empty_distinct_from_rejected",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 177,
+      "exact_declaration_header": "theorem accepted_empty_distinct_from_rejected :\n    ExtractionResult.accepted (ExtractionSet.fromList []) \u2260\n      ExtractionResult.rejected"
+    },
+    {
+      "declaration": "NCPS.extracted_empty_sequence_is_nonempty",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 183,
+      "exact_declaration_header": "theorem extracted_empty_sequence_is_nonempty :\n    (ExtractionSet.fromList [emptyBytes]).contains emptyBytes"
+    },
+    {
+      "declaration": "NCPS.ofFn_injective",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 188,
+      "exact_declaration_header": "theorem ofFn_injective {n : Nat} (f g : Fin n \u2192 Byte)\n    (h : List.ofFn f = List.ofFn g) : f = g"
+    },
+    {
+      "declaration": "NCPS.fromTagged_injective",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 194,
+      "exact_declaration_header": "theorem fromTagged_injective :\n    \u2200 s t : TaggedBytes, fromTagged s = fromTagged t \u2192 s = t"
+    },
+    {
+      "declaration": "NCPS.toTagged_fromTagged",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 207,
+      "exact_declaration_header": "theorem toTagged_fromTagged (s : TaggedBytes) :\n    toTagged (fromTagged s) = s"
+    },
+    {
+      "declaration": "NCPS.tagged_equivalence_left",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 212,
+      "exact_declaration_header": "theorem tagged_equivalence_left (b : Bytes) :\n    fromTagged (toTagged b) = b"
+    },
+    {
+      "declaration": "NCPS.tagged_equivalence_right",
+      "module": "NCPSCore.lean",
+      "module_sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+      "source_line": 215,
+      "exact_declaration_header": "theorem tagged_equivalence_right (s : TaggedBytes) :\n    toTagged (fromTagged s) = s"
+    },
+    {
+      "declaration": "NCPS.codec_injective_of_roundtrip",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 24,
+      "exact_declaration_header": "theorem codec_injective_of_roundtrip {R : Type}\n    (c : Codec R) (h : RoundTrip c) :\n    InjectiveFn c.encode"
+    },
+    {
+      "declaration": "NCPS.canonical_roundtrip",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 46,
+      "exact_declaration_header": "theorem canonical_roundtrip {R : Type}\n    (c : Codec R) (h : RoundTrip c) (r : R) :\n    parseCanonical c (serialize c r) = some r"
+    },
+    {
+      "declaration": "NCPS.canonical_serialization_injective",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 50,
+      "exact_declaration_header": "theorem canonical_serialization_injective {R : Type}\n    (c : Codec R) (h : RoundTrip c) :\n    InjectiveFn (serialize c)"
+    },
+    {
+      "declaration": "NCPS.sample_roundtrip",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 80,
+      "exact_declaration_header": "theorem sample_roundtrip (r : SampleRecord) :\n    sampleDecode (sampleEncode r) = some r"
+    },
+    {
+      "declaration": "NCPS.sample_codec_roundtrip",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 87,
+      "exact_declaration_header": "theorem sample_codec_roundtrip : RoundTrip sampleCodec"
+    },
+    {
+      "declaration": "NCPS.sample_encode_injective",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 90,
+      "exact_declaration_header": "theorem sample_encode_injective :\n    InjectiveFn sampleEncode"
+    },
+    {
+      "declaration": "NCPS.sample_rejects_empty",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 94,
+      "exact_declaration_header": "theorem sample_rejects_empty :\n    sampleDecode [] = none"
+    },
+    {
+      "declaration": "NCPS.frame_length",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 102,
+      "exact_declaration_header": "theorem frame_length (domainTag payload : Bytes) :\n    (frame domainTag payload).length = domainTag.length + 1 + payload.length"
+    },
+    {
+      "declaration": "NCPS.frame_injective",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 106,
+      "exact_declaration_header": "theorem frame_injective (domainTag : Bytes) :\n    InjectiveFn (frame domainTag)"
+    },
+    {
+      "declaration": "NCPS.conforming_implementations_agree",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 127,
+      "exact_declaration_header": "theorem conforming_implementations_agree\n    (F : RelationFamily) (spec : Semantics F)\n    (k\u2081 k\u2082 : Implementation F)\n    (h\u2081 : Conforms F spec k\u2081) (h\u2082 : Conforms F spec k\u2082)\n    (r : F.RelId) (q : F.Inst r) :\n    k\u2081.eval r q = k\u2082.eval r q"
+    },
+    {
+      "declaration": "NCPS.unknown_not_proven",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 148,
+      "exact_declaration_header": "theorem unknown_not_proven : isProven .unverified = false"
+    },
+    {
+      "declaration": "NCPS.failed_not_proven",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 149,
+      "exact_declaration_header": "theorem failed_not_proven : isProven .failed = false"
+    },
+    {
+      "declaration": "NCPS.positive_proven",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 150,
+      "exact_declaration_header": "theorem positive_proven : isProven .proven = true"
+    },
+    {
+      "declaration": "NCPS.refinement_preserves_reachability",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 171,
+      "exact_declaration_header": "theorem refinement_preserves_reachability {Op Abs : Type}\n    (src : TransitionSystem Op) (dst : TransitionSystem Abs)\n    (\u03c1 : Refinement src dst) (s : Op) :\n    Reachable src s \u2192 Reachable dst (\u03c1.mapState s)"
+    },
+    {
+      "declaration": "NCPS.refinement_preserves_invariant",
+      "module": "NCPSProtocol.lean",
+      "module_sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+      "source_line": 182,
+      "exact_declaration_header": "theorem refinement_preserves_invariant {Op Abs : Type}\n    (src : TransitionSystem Op) (dst : TransitionSystem Abs)\n    (\u03c1 : Refinement src dst)\n    (safe : Abs \u2192 Prop)\n    (hSafe : \u2200 s, Reachable dst s \u2192 safe s)\n    (s : Op) (h : Reachable src s) :\n    safe (\u03c1.mapState s)"
+    },
+    {
+      "declaration": "NCPS.Advanced.codec_injective_of_roundtrip",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 23,
+      "exact_declaration_header": "theorem codec_injective_of_roundtrip {R : Type}\n    (c : Codec R) (h : RoundTrip c) :\n    Injective c.encode"
+    },
+    {
+      "declaration": "NCPS.Advanced.canonical_roundtrip",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 45,
+      "exact_declaration_header": "theorem canonical_roundtrip {R : Type}\n    (c : Codec R) (h : RoundTrip c) (r : R) :\n    parseCanonical c (serialize c r) = some r"
+    },
+    {
+      "declaration": "NCPS.Advanced.canonical_serialization_injective",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 49,
+      "exact_declaration_header": "theorem canonical_serialization_injective {R : Type}\n    (c : Codec R) (h : RoundTrip c) :\n    Injective (serialize c)"
+    },
+    {
+      "declaration": "NCPS.Advanced.encodeObject_defined",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 69,
+      "exact_declaration_header": "theorem encodeObject_defined {O R : Type}\n    (m : SemanticMapping O R) (c : Codec R) (o : O) (r : R)\n    (h : m.toRecord o = some r) :\n    encodeObject m c o = some (c.encode r)"
+    },
+    {
+      "declaration": "NCPS.Advanced.object_roundtrip",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 75,
+      "exact_declaration_header": "theorem object_roundtrip {O R : Type}\n    (m : SemanticMapping O R) (c : Codec R)\n    (h : RoundTrip c) (o : O) (r : R)\n    (hto : m.toRecord o = some r)\n    (hfrom : m.toObject r = some o) :\n    (encodeObject m c o).bind (decodeObject m c) = some o"
+    },
+    {
+      "declaration": "NCPS.Advanced.sample_roundtrip",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 105,
+      "exact_declaration_header": "theorem sample_roundtrip (r : SampleRecord) :\n    sampleDecode (sampleEncode r) = some r"
+    },
+    {
+      "declaration": "NCPS.Advanced.sample_codec_roundtrip",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 112,
+      "exact_declaration_header": "theorem sample_codec_roundtrip : RoundTrip sampleCodec"
+    },
+    {
+      "declaration": "NCPS.Advanced.sample_encode_injective",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 115,
+      "exact_declaration_header": "theorem sample_encode_injective :\n    Injective sampleEncode"
+    },
+    {
+      "declaration": "NCPS.Advanced.sample_rejects_empty",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 119,
+      "exact_declaration_header": "theorem sample_rejects_empty : sampleDecode [] = none"
+    },
+    {
+      "declaration": "NCPS.Advanced.frame_length",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 125,
+      "exact_declaration_header": "theorem frame_length (tag payload : Bytes) :\n    (frame tag payload).length = tag.length + 1 + payload.length"
+    },
+    {
+      "declaration": "NCPS.Advanced.frame_injective",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 129,
+      "exact_declaration_header": "theorem frame_injective (tag : Bytes) :\n    Injective (frame tag)"
+    },
+    {
+      "declaration": "NCPS.Advanced.frame_of_equal_payload",
+      "module": "NCPSCodec.lean",
+      "module_sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+      "source_line": 137,
+      "exact_declaration_header": "theorem frame_of_equal_payload (tag a b : Bytes) (h : a = b) :\n    frame tag a = frame tag b"
+    },
+    {
+      "declaration": "NCPS.Advanced.conforms_implies_realize_eq",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 28,
+      "exact_declaration_header": "theorem conforms_implies_realize_eq\n    (F : RelationFamily) (spec : Semantics F)\n    (k : Implementation F) (h : Conforms F spec k) :\n    realize k = spec"
+    },
+    {
+      "declaration": "NCPS.Advanced.realize_eq_implies_conforms",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 35,
+      "exact_declaration_header": "theorem realize_eq_implies_conforms\n    (F : RelationFamily) (spec : Semantics F)\n    (k : Implementation F) (h : realize k = spec) :\n    Conforms F spec k"
+    },
+    {
+      "declaration": "NCPS.Advanced.conforms_iff_observational_equality",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 42,
+      "exact_declaration_header": "theorem conforms_iff_observational_equality\n    (F : RelationFamily) (spec : Semantics F)\n    (k : Implementation F) :\n    Conforms F spec k \u2194 realize k = spec"
+    },
+    {
+      "declaration": "NCPS.Advanced.conforming_implementations_agree",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 50,
+      "exact_declaration_header": "theorem conforming_implementations_agree\n    (F : RelationFamily) (spec : Semantics F)\n    (a b : Implementation F)\n    (ha : Conforms F spec a) (hb : Conforms F spec b)\n    (r : F.RelId) (q : F.Inst r) :\n    a.eval r q = b.eval r q"
+    },
+    {
+      "declaration": "NCPS.Advanced.declaration_ids_are_distinct",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 77,
+      "exact_declaration_header": "theorem declaration_ids_are_distinct :\n    DemoRelId.precedes \u2260 DemoRelId.conflicts"
+    },
+    {
+      "declaration": "NCPS.Advanced.both_demo_relations_empty_on_any_instances",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 81,
+      "exact_declaration_header": "theorem both_demo_relations_empty_on_any_instances\n    (r : DemoRelId) (q : DemoInstances r) :\n    emptyDemoSemantics r q = false"
+    },
+    {
+      "declaration": "NCPS.Advanced.duplicate_symbols_rejected",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 104,
+      "exact_declaration_header": "theorem duplicate_symbols_rejected {Name : Type}\n    (reg : SymbolRegistry Name) (name : Name) (x y : Nat)\n    (hl : reg.localDecl name = some x)\n    (hi : reg.importDecl name = some y) :\n    resolve reg name = .error .duplicate"
+    },
+    {
+      "declaration": "NCPS.Advanced.local_only_resolves",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 111,
+      "exact_declaration_header": "theorem local_only_resolves {Name : Type}\n    (reg : SymbolRegistry Name) (name : Name) (x : Nat)\n    (hl : reg.localDecl name = some x)\n    (hi : reg.importDecl name = none) :\n    resolve reg name = .ok x"
+    },
+    {
+      "declaration": "NCPS.Advanced.imported_only_resolves",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 118,
+      "exact_declaration_header": "theorem imported_only_resolves {Name : Type}\n    (reg : SymbolRegistry Name) (name : Name) (x : Nat)\n    (hl : reg.localDecl name = none)\n    (hi : reg.importDecl name = some x) :\n    resolve reg name = .ok x"
+    },
+    {
+      "declaration": "NCPS.Advanced.absent_symbols_rejected",
+      "module": "NCPSRelations.lean",
+      "module_sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+      "source_line": 125,
+      "exact_declaration_header": "theorem absent_symbols_rejected {Name : Type}\n    (reg : SymbolRegistry Name) (name : Name)\n    (hl : reg.localDecl name = none)\n    (hi : reg.importDecl name = none) :\n    resolve reg name = .error .absent"
+    },
+    {
+      "declaration": "NCPS.Advanced.reachable_maps",
+      "module": "NCPSState.lean",
+      "module_sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1",
+      "source_line": 30,
+      "exact_declaration_header": "theorem reachable_maps {C A : Type}\n    {concrete : TransitionSystem C}\n    {abstract : TransitionSystem A}\n    (r : Refinement concrete abstract) :\n    \u2200 {c}, Reachable concrete c \u2192\n      Reachable abstract (r.mapState c)"
+    },
+    {
+      "declaration": "NCPS.Advanced.safety_preserved",
+      "module": "NCPSState.lean",
+      "module_sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1",
+      "source_line": 48,
+      "exact_declaration_header": "theorem safety_preserved {C A : Type}\n    {concrete : TransitionSystem C}\n    {abstract : TransitionSystem A}\n    (r : Refinement concrete abstract)\n    (safe : A \u2192 Prop)\n    (hSafe : \u2200 a, Reachable abstract a \u2192 safe a)\n    (c : C)\n    (hc : Reachable concrete c) :\n    safe (r.mapState c)"
+    },
+    {
+      "declaration": "NCPS.Advanced.counter_refinement_preserves_reachability",
+      "module": "NCPSState.lean",
+      "module_sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1",
+      "source_line": 79,
+      "exact_declaration_header": "theorem counter_refinement_preserves_reachability (n : Nat)\n    (h : Reachable counterConcrete n) :\n    Reachable counterAbstract n"
+    },
+    {
+      "declaration": "NCPS.Advanced.counter_concrete_next",
+      "module": "NCPSState.lean",
+      "module_sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1",
+      "source_line": 85,
+      "exact_declaration_header": "theorem counter_concrete_next (n m : Nat)\n    (h : Reachable counterConcrete n)\n    (step : counterConcrete.step n m) :\n    Reachable counterAbstract m"
+    },
+    {
+      "declaration": "NCPS.Advanced.unavailable_is_blocked",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 34,
+      "exact_declaration_header": "theorem unavailable_is_blocked (result : Option Bool) :\n    check \u27e8false, result\u27e9 = .blocked"
+    },
+    {
+      "declaration": "NCPS.Advanced.unchecked_is_not_passed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 37,
+      "exact_declaration_header": "theorem unchecked_is_not_passed :\n    check \u27e8true, none\u27e9 = .notChecked"
+    },
+    {
+      "declaration": "NCPS.Advanced.positive_check_passed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 40,
+      "exact_declaration_header": "theorem positive_check_passed :\n    check \u27e8true, some true\u27e9 = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.negative_check_failed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 43,
+      "exact_declaration_header": "theorem negative_check_failed :\n    check \u27e8true, some false\u27e9 = .fail"
+    },
+    {
+      "declaration": "NCPS.Advanced.blocked_ne_failed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 46,
+      "exact_declaration_header": "theorem blocked_ne_failed : CheckStatus.blocked \u2260 .fail"
+    },
+    {
+      "declaration": "NCPS.Advanced.blocked_ne_passed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 47,
+      "exact_declaration_header": "theorem blocked_ne_passed : CheckStatus.blocked \u2260 .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.unchecked_ne_passed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 48,
+      "exact_declaration_header": "theorem unchecked_ne_passed : CheckStatus.notChecked \u2260 .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.fully_closed_implies_each_pass",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 55,
+      "exact_declaration_header": "theorem fully_closed_implies_each_pass (report : ClosureReport)\n    (hc : FullyClosed report) (stage : ClosureStage) :\n    report stage = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.blocked_stage_prevents_closure",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 59,
+      "exact_declaration_header": "theorem blocked_stage_prevents_closure (report : ClosureReport)\n    (stage : ClosureStage)\n    (h : report stage = .blocked) :\n    \u00ac FullyClosed report"
+    },
+    {
+      "declaration": "NCPS.Advanced.failed_stage_prevents_closure",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 68,
+      "exact_declaration_header": "theorem failed_stage_prevents_closure (report : ClosureReport)\n    (stage : ClosureStage)\n    (h : report stage = .fail) :\n    \u00ac FullyClosed report"
+    },
+    {
+      "declaration": "NCPS.Advanced.unchecked_stage_prevents_closure",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 77,
+      "exact_declaration_header": "theorem unchecked_stage_prevents_closure (report : ClosureReport)\n    (stage : ClosureStage)\n    (h : report stage = .notChecked) :\n    \u00ac FullyClosed report"
+    },
+    {
+      "declaration": "NCPS.Advanced.allPass_fully_closed",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 88,
+      "exact_declaration_header": "theorem allPass_fully_closed : FullyClosed allPass"
+    },
+    {
+      "declaration": "NCPS.Advanced.proof_gate_required",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 93,
+      "exact_declaration_header": "theorem proof_gate_required (report : ClosureReport)\n    (h : FullyClosed report) :\n    report .proof = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.evidence_without_prerequisites_blocked",
+      "module": "NCPSClosure.lean",
+      "module_sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+      "source_line": 108,
+      "exact_declaration_header": "theorem evidence_without_prerequisites_blocked\n    (ev : EvidenceGate) (h : ev.record.prerequisitesAvailable = false) :\n    evidenceStatus ev = .blocked"
+    },
+    {
+      "declaration": "NCPS.Advanced.accepted_signature_valid",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 40,
+      "exact_declaration_header": "theorem accepted_signature_valid\n    (p : VerificationPolicy) (r : VerificationReport)\n    (h : Accepts p r) : r.signature = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.accepted_authority_valid",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 45,
+      "exact_declaration_header": "theorem accepted_authority_valid\n    (p : VerificationPolicy) (r : VerificationReport)\n    (h : Accepts p r) : r.authority = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.accepted_sources_valid",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 50,
+      "exact_declaration_header": "theorem accepted_sources_valid\n    (p : VerificationPolicy) (r : VerificationReport)\n    (h : Accepts p r) : r.sourceCommitments = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.accepted_freshness",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 55,
+      "exact_declaration_header": "theorem accepted_freshness\n    (p : VerificationPolicy) (r : VerificationReport)\n    (h : Accepts p r) : r.freshness = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.accepted_private_when_required",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 60,
+      "exact_declaration_header": "theorem accepted_private_when_required\n    (p : VerificationPolicy) (r : VerificationReport)\n    (h : Accepts p r) (hp : p.requirePrivateResolution = true) :\n    r.privateResolution = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.accepted_current_source_when_required",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 66,
+      "exact_declaration_header": "theorem accepted_current_source_when_required\n    (p : VerificationPolicy) (r : VerificationReport)\n    (h : Accepts p r) (hp : p.requireCurrentSource = true) :\n    r.currentSource = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.signature_alone_not_acceptance",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 81,
+      "exact_declaration_header": "theorem signature_alone_not_acceptance\n    (p : VerificationPolicy) :\n    \u00ac Accepts p signatureValidUntrusted"
+    },
+    {
+      "declaration": "NCPS.Advanced.unavailable_authority_ne_passed",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 88,
+      "exact_declaration_header": "theorem unavailable_authority_ne_passed :\n    Finding.unavailable \u2260 .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.unverified_private_not_acceptance_when_required",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 91,
+      "exact_declaration_header": "theorem unverified_private_not_acceptance_when_required\n    (p : VerificationPolicy) (r : VerificationReport)\n    (hp : p.requirePrivateResolution = true)\n    (hu : r.privateResolution = .unavailable) :\n    \u00ac Accepts p r"
+    },
+    {
+      "declaration": "NCPS.Advanced.untrusted_signature_rejected",
+      "module": "NCPSVerification.lean",
+      "module_sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+      "source_line": 112,
+      "exact_declaration_header": "theorem untrusted_signature_rejected (p : VerificationPolicy) :\n    evaluate p signatureValidUntrusted = false"
+    },
+    {
+      "declaration": "NCPS.Advanced.same_release_is_equal",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 25,
+      "exact_declaration_header": "theorem same_release_is_equal (a b : ArtifactRelease)\n    (h : SameRelease a b) : a = b"
+    },
+    {
+      "declaration": "NCPS.Advanced.labels_equal_but_releases_differ",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 44,
+      "exact_declaration_header": "theorem labels_equal_but_releases_differ :\n    releaseA.versionLabel = releaseB.versionLabel \u2227\n    \u00ac SameRelease releaseA releaseB"
+    },
+    {
+      "declaration": "NCPS.Advanced.genesis_congruent",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 73,
+      "exact_declaration_header": "theorem genesis_congruent (alg : GenesisAlgorithm)\n    (v : Nat) (a b : SourcePair)\n    (h : a = b) :\n    protocolGenesis alg v a = protocolGenesis alg v b"
+    },
+    {
+      "declaration": "NCPS.Advanced.deterministic_does_not_imply_injective",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 82,
+      "exact_declaration_header": "theorem deterministic_does_not_imply_injective :\n    \u2203 a b : SourcePair,\n      a \u2260 b \u2227\n      protocolGenesis constantGenesis 1 a =\n        protocolGenesis constantGenesis 1 b"
+    },
+    {
+      "declaration": "NCPS.Advanced.zero_depth_unique",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 105,
+      "exact_declaration_header": "theorem zero_depth_unique :\n    searchWithin (fun _ => 1) 0 = some 0"
+    },
+    {
+      "declaration": "NCPS.Advanced.no_singleton_at_any_bound",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 108,
+      "exact_declaration_header": "theorem no_singleton_at_any_bound (limit : Nat) :\n    searchWithin (fun _ => 2) limit = none"
+    },
+    {
+      "declaration": "NCPS.Advanced.bounded_search_may_fail",
+      "module": "NCPSVersion.lean",
+      "module_sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+      "source_line": 114,
+      "exact_declaration_header": "theorem bounded_search_may_fail :\n    searchWithin (fun _ => 2) 255 = none"
+    },
+    {
+      "declaration": "NCPS.Advanced.empty_is_prefix",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 20,
+      "exact_declaration_header": "theorem empty_is_prefix (b : Bytes) :\n    IsPrefix emptyBytes b"
+    },
+    {
+      "declaration": "NCPS.Advanced.empty_is_suffix",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 25,
+      "exact_declaration_header": "theorem empty_is_suffix (b : Bytes) :\n    IsSuffix emptyBytes b"
+    },
+    {
+      "declaration": "NCPS.Advanced.empty_is_infix",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 30,
+      "exact_declaration_header": "theorem empty_is_infix (b : Bytes) :\n    IsInfix emptyBytes b"
+    },
+    {
+      "declaration": "NCPS.Advanced.prefix_reflexive",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 35,
+      "exact_declaration_header": "theorem prefix_reflexive (b : Bytes) :\n    IsPrefix b b"
+    },
+    {
+      "declaration": "NCPS.Advanced.suffix_reflexive",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 40,
+      "exact_declaration_header": "theorem suffix_reflexive (b : Bytes) :\n    IsSuffix b b"
+    },
+    {
+      "declaration": "NCPS.Advanced.infix_reflexive",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 45,
+      "exact_declaration_header": "theorem infix_reflexive (b : Bytes) :\n    IsInfix b b"
+    },
+    {
+      "declaration": "NCPS.Advanced.prefix_transitive",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 50,
+      "exact_declaration_header": "theorem prefix_transitive (a b c : Bytes)\n    (hab : IsPrefix a b) (hbc : IsPrefix b c) :\n    IsPrefix a c"
+    },
+    {
+      "declaration": "NCPS.Advanced.suffix_transitive",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 58,
+      "exact_declaration_header": "theorem suffix_transitive (a b c : Bytes)\n    (hab : IsSuffix a b) (hbc : IsSuffix b c) :\n    IsSuffix a c"
+    },
+    {
+      "declaration": "NCPS.Advanced.prefix_length_bound",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 66,
+      "exact_declaration_header": "theorem prefix_length_bound (a b : Bytes)\n    (h : IsPrefix a b) : a.length \u2264 b.length"
+    },
+    {
+      "declaration": "NCPS.Advanced.suffix_length_bound",
+      "module": "NCPSBoundaries.lean",
+      "module_sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+      "source_line": 71,
+      "exact_declaration_header": "theorem suffix_length_bound (a b : Bytes)\n    (h : IsSuffix a b) : a.length \u2264 b.length"
+    },
+    {
+      "declaration": "NCPS.Advanced.full_pass_requires_jcs",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 38,
+      "exact_declaration_header": "theorem full_pass_requires_jcs (ev : ProtocolEvidence)\n    (h : FullProtocolPass ev) :\n    ev.jcsInteroperability = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.full_pass_requires_signatures",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 43,
+      "exact_declaration_header": "theorem full_pass_requires_signatures (ev : ProtocolEvidence)\n    (h : FullProtocolPass ev) :\n    ev.signatureInteroperability = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.full_pass_requires_trust",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 48,
+      "exact_declaration_header": "theorem full_pass_requires_trust (ev : ProtocolEvidence)\n    (h : FullProtocolPass ev) :\n    ev.independentTrust = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.full_pass_requires_field",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 53,
+      "exact_declaration_header": "theorem full_pass_requires_field (ev : ProtocolEvidence)\n    (h : FullProtocolPass ev) :\n    ev.fieldDeployment = .pass"
+    },
+    {
+      "declaration": "NCPS.Advanced.blocked_field_prevents_full_pass",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 58,
+      "exact_declaration_header": "theorem blocked_field_prevents_full_pass (ev : ProtocolEvidence)\n    (hb : ev.fieldDeployment = .blocked) :\n    \u00ac FullProtocolPass ev"
+    },
+    {
+      "declaration": "NCPS.Advanced.incomplete_jcs_prevents_full_pass",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 66,
+      "exact_declaration_header": "theorem incomplete_jcs_prevents_full_pass (ev : ProtocolEvidence)\n    (hb : ev.jcsInteroperability = .notChecked) :\n    \u00ac FullProtocolPass ev"
+    },
+    {
+      "declaration": "NCPS.Advanced.current_evidence_not_full_pass",
+      "module": "NCPSAudit.lean",
+      "module_sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+      "source_line": 106,
+      "exact_declaration_header": "theorem current_evidence_not_full_pass :\n    \u00ac FullProtocolPass currentEvidence"
+    },
+    {
+      "declaration": "NCPS.Utf8.bom_is_detected",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 25,
+      "exact_declaration_header": "theorem bom_is_detected : hasBom bom = true"
+    },
+    {
+      "declaration": "NCPS.Utf8.bom_is_rejected",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 27,
+      "exact_declaration_header": "theorem bom_is_rejected : decodeWholeDocument bom = none"
+    },
+    {
+      "declaration": "NCPS.Utf8.reject_any_bom_prefixed",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 30,
+      "exact_declaration_header": "theorem reject_any_bom_prefixed (tail : NCPS.Bytes) :\n    decodeWholeDocument (bom ++ tail) = none"
+    },
+    {
+      "declaration": "NCPS.Utf8.decode_success_implies_no_bom",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 36,
+      "exact_declaration_header": "theorem decode_success_implies_no_bom\n    (b : NCPS.Bytes) (s : String)\n    (h : decodeWholeDocument b = some s) :\n    hasBom b = false"
+    },
+    {
+      "declaration": "NCPS.Utf8.decode_success_implies_valid_utf8",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 45,
+      "exact_declaration_header": "theorem decode_success_implies_valid_utf8\n    (b : NCPS.Bytes) (s : String)\n    (h : decodeWholeDocument b = some s) :\n    String.fromUTF8? (asByteArray b) = some s"
+    },
+    {
+      "declaration": "NCPS.Utf8.fdd0_is_noncharacter",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 64,
+      "exact_declaration_header": "theorem fdd0_is_noncharacter : isNoncharacter 0xFDD0 = true"
+    },
+    {
+      "declaration": "NCPS.Utf8.fdef_is_noncharacter",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 65,
+      "exact_declaration_header": "theorem fdef_is_noncharacter : isNoncharacter 0xFDEF = true"
+    },
+    {
+      "declaration": "NCPS.Utf8.plane_zero_fffe_is_noncharacter",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 66,
+      "exact_declaration_header": "theorem plane_zero_fffe_is_noncharacter :\n    isNoncharacter 0xFFFE = true"
+    },
+    {
+      "declaration": "NCPS.Utf8.last_unicode_noncharacter",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 68,
+      "exact_declaration_header": "theorem last_unicode_noncharacter :\n    isNoncharacter 0x10FFFF = true"
+    },
+    {
+      "declaration": "NCPS.Utf8.ascii_is_allowed",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 70,
+      "exact_declaration_header": "theorem ascii_is_allowed : allowedScalar 0x41 = true"
+    },
+    {
+      "declaration": "NCPS.Utf8.surrogate_is_rejected",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 71,
+      "exact_declaration_header": "theorem surrogate_is_rejected : allowedScalar 0xD800 = false"
+    },
+    {
+      "declaration": "NCPS.Utf8.noncharacter_is_rejected",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 72,
+      "exact_declaration_header": "theorem noncharacter_is_rejected : allowedScalar 0xFDD0 = false"
+    },
+    {
+      "declaration": "NCPS.Utf8.allowed_scalar_no_noncharacter",
+      "module": "NCPSUtf8.lean",
+      "module_sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+      "source_line": 74,
+      "exact_declaration_header": "theorem allowed_scalar_no_noncharacter (cp : Nat)\n    (h : allowedScalar cp = true) : isNoncharacter cp = false"
+    }
+  ]
+}

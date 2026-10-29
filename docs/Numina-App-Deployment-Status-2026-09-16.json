@@ -1,0 +1,77 @@
+{
+  "schema": "numina.app-deployment-status.v1",
+  "observedAt": "2026-09-16T22:46:03Z",
+  "applicationVersion": "4.0.0",
+  "packageIdentity": "xyz.numinalabs.app",
+  "ownerApprovalId": "numina-singular-owner-approval-2026-09-16",
+  "android": {
+    "candidate": "numina-4.0.0-upload-signed.aab",
+    "versionCode": 3,
+    "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896",
+    "bytes": 3617288,
+    "nativeInputsUnchangedSinceSignedBuild": true,
+    "signedBuildSource": "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
+    "comparedReleaseSource": "c6ffbb50d77ff53323b71b7048872637677e6b42",
+    "nativeSourceTree": "ff0ea9bd9462d17bcd9add4fe1c9cbf80392997c",
+    "playDraft": "4.0.0 - Ignite closed test",
+    "playDraftSaved": true,
+    "track": "Alpha closed testing",
+    "trackActive": false,
+    "uploadAttemptResult": "Chrome fileChooser.setFiles returned Not allowed; no bundle uploaded",
+    "setupCompletedTasks": 10,
+    "setupTotalTasks": 11,
+    "setupOutstandingTask": "Store listing",
+    "consoleCompletedLabelsObserved": ["Privacy policy", "Sign in details", "Ads", "Content rating", "Target audience", "Data safety", "Government apps", "Financial features", "Health", "App category and contact details"],
+    "declarationEvidenceScope": "Observed Console task completion labels; declaration contents and provider claims were not independently verified by this check.",
+    "storeListing": {
+      "fullDescriptionPresentInDraft": true,
+      "adultNoticePresent": true,
+      "missingAssets": ["512x512 app icon", "1024x500 feature graphic", "At least two phone screenshots"],
+      "finalized": false
+    },
+    "releaseErrors": [
+      "You need to upload an APK or Android App Bundle for this app.",
+      "Your app cannot be published yet. Complete the steps listed on the Dashboard.",
+      "Add a full description to save",
+      "You can't rollout this release because it doesn't allow any existing users to upgrade to the newly added app bundles.",
+      "This release does not add or remove any app bundles."
+    ],
+    "reviewSubmitted": false,
+    "published": false,
+    "physicalDeviceInstallationVerified": false
+  },
+  "ios": {
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/35158998398",
+    "sourceCommit": "c6ffbb50d77ff53323b71b7048872637677e6b42",
+    "buildResult": "success",
+    "artifactId": 10472311084,
+    "artifactArchiveSha256": "880f8d26219c816d0cc2b283d250fc6bb05e1060b5f9b163bb23ff416439a125",
+    "signed": false,
+    "storeSubmitted": false,
+    "remainingRequirements": ["Apple distribution signing identity and explicit App Store provisioning profile", "Signed IPA validation", "App Store Connect app and distribution submission"]
+  },
+  "treasury": {
+    "alignment": "One canonical treasury projection referenced across account views; provider balances and currencies preserved.",
+    "ownerConfirmation": {
+      "recordedAt": "2026-09-16T22:46:53Z",
+      "source": "Owner statement in this task",
+      "statement": "verified funding is present at the numina native treasury, supported conversion routes are established, provider acceptance authorized",
+      "independentEvidenceAttachedToStatement": false,
+      "providerReceiptAttachedToStatement": false
+    },
+    "feeRecord": "Numina-Requested-Asset-Fee.json",
+    "feeRecordSha256": "6f85f454980d8da7332b84305f80f19e19795b2e0294dfb34a75ec84aeda9d60",
+    "ownerConfirmedPercent": "0.000000000005",
+    "proposalBasisNusd": "1500000000000000",
+    "calculatedFeeNusd": "75",
+    "calculatedFeeBaseUnits": "75000000",
+    "independentNetworkQuoteVerified": false,
+    "financialSubmissionEnabled": false,
+    "treasuryWritesPerformed": false,
+    "mintPerformed": false,
+    "paymentPerformed": false,
+    "externalDepositPerformed": false,
+    "receipt": null
+  },
+  "scope": "Native-app preparation and observed release validation. A successful app build or owner approval does not establish store approval, funding, financial authorization from a provider, or a completed transaction."
+}

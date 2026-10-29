@@ -1,0 +1,6 @@
+{
+  "schema": "numina.nusd.recipient-evidence-request.v1",
+  "expectedChainId": "962421430",
+  "recipient": null,
+  "block": { "tag": "finalized" }
+}

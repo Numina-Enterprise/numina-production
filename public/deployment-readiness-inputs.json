@@ -1,0 +1,521 @@
+{
+  "schema": "numina.deployment-readiness-inputs.v1",
+  "package": {
+    "schema": "numina.nusd.preparation-tools-package.v1",
+    "url": "/downloads/Numina-500T-Preparation-Tools.zip",
+    "sha256": "9304f2f3e0a72c2a8db857ad0ee3557523eccfac0b61db3d39e33626b40baeea",
+    "bytes": 116292,
+    "files": 46,
+    "node": "24.x",
+    "dependency": {
+      "ethers": "6.15.0"
+    },
+    "toolFunctions": [
+      "offline_constructor_encoding",
+      "read_only_network_observation",
+      "supplied_receipt_consistency_checks"
+    ],
+    "productionReady": false,
+    "financialExecution": false,
+    "walletCreated": false,
+    "reviewAttestationsCreated": false
+  },
+  "request": {
+    "schema": "numina.nusd.uncapped-deployment-review.v1",
+    "status": "OWNER_APPROVED_REVIEW_EXECUTION_INPUTS_PENDING",
+    "candidateSchema": "numina.nusd.contract-candidate.v3",
+    "supplyPolicy": "uncapped",
+    "network": {
+      "chainId": 962421430,
+      "name": "Numina blockchain",
+      "finalityPolicy": "Require 12 confirmations on an unchanged canonical chain after a reviewed genesis pin, a successful receipt and exact runtime/role/supply/pause-state checks. This is an acceptance policy, not independent proof of consensus.",
+      "identityVerified": false,
+      "rpcUrl": null,
+      "expectedGenesisHash": null
+    },
+    "constructor": [
+      {
+        "name": "initialSupplyBaseUnits",
+        "type": "uint256",
+        "value": "500000000000000000000"
+      },
+      {
+        "name": "initialRecipient",
+        "type": "address",
+        "value": null
+      },
+      {
+        "name": "admin",
+        "type": "address",
+        "value": "0xa7e9FB02495700ccE0d209392C0A30FbE077498e"
+      },
+      {
+        "name": "issuer",
+        "type": "address",
+        "value": "0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0"
+      },
+      {
+        "name": "minter",
+        "type": "address",
+        "value": "0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6"
+      },
+      {
+        "name": "pauser",
+        "type": "address",
+        "value": "0x434AB24E613055Fd2598Fd9f0558A06a94D39c81"
+      },
+      {
+        "name": "adminDelaySeconds",
+        "type": "uint48",
+        "value": "86400"
+      },
+      {
+        "name": "approvedIssuerPolicyHash",
+        "type": "bytes32",
+        "value": "0x95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c"
+      }
+    ],
+    "preparationPolicy": {
+      "path": "requests/issuance-preparation-policy.json",
+      "sha256": "95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c",
+      "signed": false,
+      "executionAuthorization": false,
+      "ownerReviewApproved": true
+    },
+    "artifact": {
+      "path": "artifacts/NuminaUSD.json",
+      "sha256": "a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a"
+    },
+    "source": {
+      "path": "contracts/NuminaUSD.sol",
+      "sha256": "87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc"
+    },
+    "unresolvedReviewRecords": {
+      "independentSecurityAudit": null,
+      "authorizedIssuerAndJurisdictions": null,
+      "custodianAndReserveEvidence": null,
+      "redeemabilityTermsAndOperations": null,
+      "financialCrimeAndSanctionsControls": null,
+      "independentRoleKeyCustody": null,
+      "incidentAndPauseRecovery": null,
+      "applicationSettlementAndFulfillmentReview": null
+    },
+    "walletTransaction": {
+      "from": null,
+      "to": null,
+      "value": "0",
+      "data": null,
+      "nonce": null,
+      "gasLimit": null,
+      "maxFeePerGas": null,
+      "maxPriorityFeePerGas": null
+    },
+    "encoded": false,
+    "encodingBlockedBy": [
+      "NUSD-compatible native treasury recipient not supplied",
+      "Network identity and gas sender/fees are unverified",
+      "Eight production review records remain unresolved",
+      "Owner review approval is recorded; wallet transaction inputs and independent production review evidence remain incomplete"
+    ],
+    "submissionApproved": false,
+    "signed": false,
+    "broadcast": false,
+    "contractAddress": null,
+    "transactionHash": null,
+    "receipt": null,
+    "ownerReviewApproved": true
+  },
+  "requirements": {
+    "schema": "numina.nusd.handoff-unresolved-inputs.v1",
+    "createdAt": "2026-09-16T01:26:43.535Z",
+    "requestAmountNusd": "500000000000000",
+    "unresolvedCount": 36,
+    "items": [
+      {
+        "id": "native_recipient",
+        "phase": "before_token_preparation",
+        "status": "UNRESOLVED",
+        "description": "Explicit native NUSD initial recipient and verified control/acceptance; do not substitute the Stripe USDC destination",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/constructor/1/value",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "rpc_endpoint",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Reviewed authenticated production RPC endpoint",
+        "file": "network-inputs.json",
+        "jsonPointer": "/rpcUrl",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "rpc_authentication",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Secure RPC authentication reference; credentials stay outside this package",
+        "file": "network-inputs.json",
+        "jsonPointer": "/rpcAuthenticationReference",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "expected_genesis",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Reviewed expected genesis hash independent of the old observation",
+        "file": "network-inputs.json",
+        "jsonPointer": "/expectedGenesisHash",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "sender",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Owner-controlled transaction sender with signing environment and fee-balance evidence",
+        "file": "network-inputs.json",
+        "jsonPointer": "/feeInputs/sender",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "nonce",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Fresh nonce for the selected sender on the reviewed chain",
+        "file": "network-inputs.json",
+        "jsonPointer": "/feeInputs/currentNonce",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "fee_asset",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Confirmed native fee asset",
+        "file": "network-inputs.json",
+        "jsonPointer": "/feeInputs/feeAsset",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "fee_model",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Reviewed fee model supported by this chain",
+        "file": "network-inputs.json",
+        "jsonPointer": "/feeInputs/feeModel",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "gas_limit",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Estimate for the final exact constructor data",
+        "file": "network-inputs.json",
+        "jsonPointer": "/feeInputs/gasLimit",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "fee_budget",
+        "phase": "before_token_signing",
+        "status": "UNRESOLVED",
+        "description": "Explicit applicable gas price or fee caps and maximum total fee",
+        "file": "network-inputs.json",
+        "jsonPointer": "/feeInputs/maximumTotalFee",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "independentSecurityAudit",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/independentSecurityAudit",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "authorizedIssuerAndJurisdictions",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/authorizedIssuerAndJurisdictions",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "custodianAndReserveEvidence",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/custodianAndReserveEvidence",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "redeemabilityTermsAndOperations",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/redeemabilityTermsAndOperations",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "financialCrimeAndSanctionsControls",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/financialCrimeAndSanctionsControls",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "independentRoleKeyCustody",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/independentRoleKeyCustody",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "incidentAndPauseRecovery",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/incidentAndPauseRecovery",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "applicationSettlementAndFulfillmentReview",
+        "phase": "before_production_signing",
+        "status": "UNRESOLVED",
+        "description": "Genuine review reference and actual acceptance evidence; owner preparation approval is distinct",
+        "file": "requests/NuminaUSD.constructor-review.json",
+        "jsonPointer": "/unresolvedReviewRecords/applicationSettlementAndFulfillmentReview",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "token_receipt",
+        "phase": "after_token_submission",
+        "status": "UNRESOLVED",
+        "description": "Successful canonical finalized deployment receipt and every expected runtime/state check",
+        "file": "token-receipt-verification.json",
+        "jsonPointer": "/receipt",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "confirmed_nusd_address",
+        "phase": "before_dependent_preparation",
+        "status": "UNRESOLVED",
+        "description": "Use only the token address established by the verified deployment receipt",
+        "file": "token-receipt-verification.json",
+        "jsonPointer": "/contractAddress",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaSettlement.runtime_binding",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Reproduce and review the immutable-reference mapping and bound runtime comparison for this exact dependent artifact",
+        "file": "dependent-inputs/NuminaSettlement.json",
+        "jsonPointer": "/runtimeVerificationPreparation/reviewedBoundRuntimeHash",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaSettlement.v3_integration_retest",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Retest this dependent contract with the exact v3 NUSD token identity and ABI",
+        "file": "dependent-inputs/NuminaSettlement.json",
+        "jsonPointer": "/v3TokenIntegrationRetested",
+        "value": false,
+        "evidence": null
+      },
+      {
+        "id": "NuminaSettlement.transaction",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Separately review this deployment sender, nonce, exact data, fees and owner signature",
+        "file": "dependent-inputs/NuminaSettlement.json",
+        "jsonPointer": "/walletTransaction/data",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDCConversion.usdcToken",
+        "phase": "before_dependent_preparation",
+        "status": "UNRESOLVED",
+        "description": "Explicit validated usdcToken for NuminaUSDCConversion",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/constructor/1/value",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDCConversion.liquidityManager",
+        "phase": "before_dependent_preparation",
+        "status": "UNRESOLVED",
+        "description": "Explicit validated liquidityManager for NuminaUSDCConversion",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/constructor/3/value",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDCConversion.runtime_binding",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Reproduce and review the immutable-reference mapping and bound runtime comparison for this exact dependent artifact",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/runtimeVerificationPreparation/reviewedBoundRuntimeHash",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDCConversion.v3_integration_retest",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Retest this dependent contract with the exact v3 NUSD token identity and ABI",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/v3TokenIntegrationRetested",
+        "value": false,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDCConversion.transaction",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Separately review this deployment sender, nonce, exact data, fees and owner signature",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/walletTransaction/data",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDRedemption.operator",
+        "phase": "before_dependent_preparation",
+        "status": "UNRESOLVED",
+        "description": "Explicit validated operator for NuminaUSDRedemption",
+        "file": "dependent-inputs/NuminaUSDRedemption.json",
+        "jsonPointer": "/constructor/2/value",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDRedemption.confirmer",
+        "phase": "before_dependent_preparation",
+        "status": "UNRESOLVED",
+        "description": "Explicit validated confirmer for NuminaUSDRedemption",
+        "file": "dependent-inputs/NuminaUSDRedemption.json",
+        "jsonPointer": "/constructor/3/value",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDRedemption.runtime_binding",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Reproduce and review the immutable-reference mapping and bound runtime comparison for this exact dependent artifact",
+        "file": "dependent-inputs/NuminaUSDRedemption.json",
+        "jsonPointer": "/runtimeVerificationPreparation/reviewedBoundRuntimeHash",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDRedemption.v3_integration_retest",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Retest this dependent contract with the exact v3 NUSD token identity and ABI",
+        "file": "dependent-inputs/NuminaUSDRedemption.json",
+        "jsonPointer": "/v3TokenIntegrationRetested",
+        "value": false,
+        "evidence": null
+      },
+      {
+        "id": "NuminaUSDRedemption.transaction",
+        "phase": "before_dependent_signing",
+        "status": "UNRESOLVED",
+        "description": "Separately review this deployment sender, nonce, exact data, fees and owner signature",
+        "file": "dependent-inputs/NuminaUSDRedemption.json",
+        "jsonPointer": "/walletTransaction/data",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "official_usdc_identity",
+        "phase": "before_conversion_deployment",
+        "status": "UNRESOLVED",
+        "description": "Official six-decimal USDC identity must be established on the same reviewed chain; a matching symbol/decimals is insufficient",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/usdcIdentity/issuerReference",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "conversion_liquidity",
+        "phase": "before_conversion_execution",
+        "status": "UNRESOLVED",
+        "description": "Actual separately verified funded output-token liquidity, participant role, allowances and unpause transaction",
+        "file": "dependent-inputs/NuminaUSDCConversion.json",
+        "jsonPointer": "/usdcIdentity/liquidityEvidence",
+        "value": null,
+        "evidence": null
+      },
+      {
+        "id": "bank_provider_funding",
+        "phase": "before_bank_submission",
+        "status": "UNRESOLVED",
+        "description": "Actual source funds, provider permissions and validated bank instructions with separate provider submission and receipt",
+        "file": "dependent-inputs/NuminaUSDRedemption.json",
+        "jsonPointer": "/bankRail/availableFundingEvidence",
+        "value": null,
+        "evidence": null
+      }
+    ],
+    "note": "Post-submission receipt requirements are separated from pre-submission prerequisites. Null entries are not review approvals or transaction receipts."
+  },
+  "networkObservationTemplate": {
+    "rpcUrl": "https://u0yth28mgh-u0vtj8pzdz-rpc.us0-aws.kaleido.io/",
+    "expectedChainId": "962421430",
+    "expectedGenesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+    "sender": null,
+    "constructorData": null,
+    "pinBasis": "Provider observation from https://numina-production.vercel.app/v2/network/status at 2026-09-16T01:53:42.562Z; not independent network approval",
+    "productionIdentityApproved": false,
+    "authenticationEnvironmentVariable": "NUMINA_RPC_AUTHORIZATION"
+  },
+  "sourceFiles": [
+    {
+      "path": "requests/NuminaUSD.constructor-review.json",
+      "sha256": "9e0f7260dbd9589f0c5bee4a5b50f35ef0099a5dc7468e689d71e878af3eda39"
+    },
+    {
+      "path": "unresolved-inputs.json",
+      "sha256": "a0f9edfe9d0954f0d89b3d4ccf17c644d66f03b59886e7b8332ed2d9e5030eb8"
+    },
+    {
+      "path": "configuration/network-observation.request.json",
+      "sha256": "c1ee1db0c6db54ae70427165f5229a735910603287687383eaaacb863a621edf"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+metrics FieldMetrics(mrec_usd_minor=1450000, liquid_authority_usd_minor=1300000, uncertain_usd_minor=50000, max_velocity_usd_minor_per_seq=200000, max_observation_lag_seq=3, dependency_concentration_bps=10000, pressure_bps=6153, entropy_index=2500, sample_count=2)
+compliant False ('DEPENDENCY_CONCENTRATION', 'MREC', 'OBSERVATION_LAG', 'UNCERTAINTY', 'VELOCITY')
+instructions (ContractionInstruction(domain_id='EU', old_limit_usd_minor=600000, new_limit_usd_minor=300000, old_velocity_usd_minor_per_seq=100000, new_velocity_usd_minor_per_seq=100000, old_offline_horizon_seq=1, new_offline_horizon_seq=1, reason='DEPENDENCY_CONCENTRATION+MREC'), ContractionInstruction(domain_id='US', old_limit_usd_minor=1000000, new_limit_usd_minor=250000, old_velocity_usd_minor_per_seq=200000, new_velocity_usd_minor_per_seq=100000, old_offline_horizon_seq=3, new_offline_horizon_seq=1, reason='DEPENDENCY_CONCENTRATION+MREC+OBSERVATION_LAG+UNCERTAINTY+VELOCITY'))
+non_expansion True c06673163b44c833d3b29d613810dd508836b5cdeebca272597b4a634c994461
+stress_mrec 1450000

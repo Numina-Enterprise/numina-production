@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-076",
+  "configurationId": "agentforce-076",
+  "team": "engineering",
+  "title": "Define receipt intake binding",
+  "nextBestAction": "Review the required task ID, run ID, canonical commit, target, input/output hashes and observed status fields.",
+  "target": "task receipt contract",
+  "priority": 16,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/engineering_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-076",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "task_ledger",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-076.json",
+    "passCondition": "Receipt documents fields and rejects a completion declaration without matching evidence.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

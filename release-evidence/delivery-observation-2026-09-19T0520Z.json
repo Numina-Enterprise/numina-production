@@ -1,0 +1,125 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "observedAt": "2026-09-19T05:20:39Z",
+  "repository": "skott34-dot/numina-production",
+  "branch": "main",
+  "sourceHeadObserved": "8b922c6516428a4a8d6d9e165c2ee37be4fbf3db",
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "canonicalWorkflow": ".github/workflows/numina.yml",
+    "runnerLabel": "NUMINA",
+    "currentHeadRuns": [
+      {
+        "workflow": "NUMINA",
+        "runId": 35422647416,
+        "jobId": 105843018326,
+        "sourceCommit": "8b922c6516428a4a8d6d9e165c2ee37be4fbf3db",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "executedSteps": 0
+      },
+      {
+        "workflow": "Verify provider observations",
+        "runId": 35422647435,
+        "jobId": 105843018638,
+        "sourceCommit": "8b922c6516428a4a8d6d9e165c2ee37be4fbf3db",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "executedSteps": 0
+      }
+    ],
+    "blocker": "No runner acquired the NUMINA-labeled jobs before cancellation; canonical build and mobile signing reruns were not claimed."
+  },
+  "vercel": {
+    "buildCapacityAvailable": true,
+    "canonicalHeadDeployment": {
+      "sourceCommit": "8b922c6516428a4a8d6d9e165c2ee37be4fbf3db",
+      "statusContext": "Vercel – numina-production",
+      "status": "success",
+      "description": "Deployment has completed",
+      "deploymentId": "EioGfjXeVNZgpEBzCdSNFYwajDux",
+      "dashboardUrl": "https://vercel.com/numina-167f7fe7/numina-production/EioGfjXeVNZgpEBzCdSNFYwajDux",
+      "teamScope": "numina-167f7fe7",
+      "project": "numina-production",
+      "providerReceiptSource": "GitHub commit status posted by Vercel",
+      "receiptObservedAt": "2026-09-19T04:57:26Z"
+    },
+    "connectedReadScope": {
+      "scope": "skott34-dot",
+      "proScopeReadable": false,
+      "proScopeReadError": "403 Forbidden: re-authentication required for numina-167f7fe7"
+    },
+    "publicEndpointVerification": {
+      "origin": "https://www.numinalabs.xyz",
+      "verifiedThrough": "2026-09-19T05:20:39Z",
+      "transport": "Vercel HTTP fetch",
+      "endpoints": [
+        {
+          "path": "/final-build.json",
+          "status": 200,
+          "schema": "numina.final-build.v1",
+          "reportedStatus": "FINAL"
+        },
+        {
+          "path": "/downloads/nusd/deployment-receipt.json",
+          "status": 200,
+          "schema": "numina.nusd.production-deployment-receipt.v1",
+          "finality": "FINAL",
+          "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+          "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+        },
+        {
+          "path": "/api/nusd/v1/status",
+          "status": 200,
+          "schema": "numina.nusd.status.v1"
+        },
+        {
+          "path": "/v2/network/deployment-estimate",
+          "status": 200,
+          "schema": "numina.deployment-estimate.v1",
+          "reportedStatus": "FINAL",
+          "requestId": "9b902a73-54d0-46f0-80ba-8a15d5281211"
+        }
+      ],
+      "scope": "These are factual HTTP receipts from the canonical domain. Direct Pro-team deployment inspection remains unavailable, so the endpoint responses are not asserted as deployment-ID-level alias proof."
+    }
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false,
+    "blocker": "GitHub Actions runner allocation unavailable; no new signing workflow execution was possible."
+  },
+  "fallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false
+  },
+  "boundaries": {
+    "receiptsOnly": true,
+    "signingIdentityInventedOrRotated": false,
+    "storeSubmissionUnclaimedWithoutProviderReceipt": true,
+    "fundMovementPerformed": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

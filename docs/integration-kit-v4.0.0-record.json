@@ -1,0 +1,25 @@
+{
+  "schema": "numina.integration.archive.v2",
+  "version": "4.0.0",
+  "revision": "numina-root-v4.0.0",
+  "archive": "numina-integration-kit-v4.0.0.zip",
+  "bytes": 116179,
+  "sha256": "d8f67037d1a3d7688cc8b3dadeb4f1035ffbb3f20bfa8371f0cd26102a1f3fa4",
+  "packagedAtUtc": "2026-10-13T10:38:33.093579+00:00",
+  "sourceFiles": 55,
+  "testsRun": false,
+  "defaultTools": [
+    "numina_provider_routes",
+    "numina_read_treasury",
+    "numina_application_release",
+    "numina_runtime_build",
+    "numina_nusd_status",
+    "numina_nusd_network",
+    "numina_service_catalog"
+  ],
+  "applicationManifest": "https://numinalabs.xyz/v4/release/manifest",
+  "providerInstallationPerformed": false,
+  "registryPublicationPerformed": false,
+  "sitePublicationPerformedByThisPackageStep": false,
+  "livemode": true
+}

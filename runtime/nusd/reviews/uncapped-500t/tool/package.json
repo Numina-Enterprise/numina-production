@@ -1,0 +1,13 @@
+{
+  "name": "numina-nusd-v3-review-tools",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "ethers": "6.15.0"
+  }
+}

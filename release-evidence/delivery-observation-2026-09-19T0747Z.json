@@ -1,0 +1,72 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T07:47:00Z",
+  "canonicalRepository": "skott34-dot/numina-production",
+  "branch": "main",
+  "observedSourceCommit": "22647eab5f8540b6bb9bc1d113c983dcf2a205bb",
+  "sourceCommitMessage": "Sync tests/numina-treasury-aggregate.test.mjs to modeled-unit location labels",
+  "githubActions": {
+    "runnerBackedExecutionVerified": false,
+    "capacityProbe": {
+      "runId": 35429740245,
+      "jobId": 105862060745,
+      "workflow": "Verify immutable workflow dependencies",
+      "status": "queued",
+      "conclusion": null,
+      "stepsObserved": false,
+      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED"
+    },
+    "canonicalDeliveryWorkflowsRerun": false,
+    "reason": "The current-head runner probe remained queued without runner-backed execution, so build, website publish, Android signing, and iOS signing were not rerun."
+  },
+  "vercel": {
+    "connectedScope": "skott34-dot",
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "project": "numina-production",
+    "buildCapacityObserved": true,
+    "capacityEvidence": {
+      "deploymentId": "dpl_87zrdzaXCT2iQg985iUiDWasF6Cs",
+      "sourceCommit": "ccaa010d14ce9198c910983df505f094f4464b90",
+      "sourceBranch": "sync/native-holdings-singular-20260919",
+      "buildingAt": "2026-09-19T07:23:42.498Z",
+      "readyAt": "2026-09-19T07:23:48.869Z",
+      "state": "ERROR",
+      "errorCode": "syntax_error",
+      "errorMessage": "Command npm run build exited with 1",
+      "observation": "Provider accepted and ran a build; this proves connected-scope build capacity, not a successful canonical-main deployment."
+    },
+    "canonicalMainDeploymentVerified": false
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false,
+    "signingIdentityChanged": false
+  },
+  "storeSubmission": {
+    "googlePlayClaimed": false,
+    "appStoreClaimed": false,
+    "reason": "No newly verified signed Android or iOS artifact was produced."
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "numina.treasury.ach-transfer-instruction.v1",
+  "id": "numina:treasury:ach:bofa-3486:2026-09-19:v1",
+  "identity": "NUMINA",
+  "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+  "status": "INITIATED",
+  "createdAt": "2026-09-19",
+  "amountNusd": "500000000000000",
+  "targetAmountUsd": "500000000000000",
+  "ratio": "1:1",
+  "contract": "NuminaUSDRedemption",
+  "nativeContractId": "numina:nusd-usd:redemption:v1",
+  "destination": {
+    "location": "Bank of America Savings 3486",
+    "linkedOfficialName": "Business Advantage Sav",
+    "accountLast4": "3486",
+    "institutionId": "ins_127989",
+    "routingReference": "073000176",
+    "routingReferenceType": "DESTINATION_ACH_ROUTING_REFERENCE",
+    "routingReferenceUserConfirmed": true
+  },
+  "settlementReceipt": {
+    "id": "numina:treasury:settlement:2026-09-19:v1",
+    "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json"
+  },
+  "mintEvidence": {
+    "path": "runtime/nusd/mint-receipt.json",
+    "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+  },
+  "treasuryInstructionSubmissionPerformed": true,
+  "achOriginatorSubmissionPerformed": false,
+  "achOriginatorReceipt": null,
+  "note": "The five execution fields apply only to this instruction. INITIATED records internal intent, not external ACH submission, confirmation or settlement. The routing reference is not an ACH trace. The global NUMINA identity is unchanged.",
+  "achTraceNumber": null,
+  "authorizationStatus": "AUTHORIZED",
+  "numinaExecutionPerformed": false,
+  "externalAchOriginatorConfirmed": false,
+  "achOriginatorSubmissionSource": null,
+  "treasuryIdentity": "NUMINA NATIVE TREASURY",
+  "achOriginatorIdentity": "NUMINA",
+  "originatorAndTreasurySingular": true,
+  "originatorRole": "NUMINA_NATIVE_TREASURY",
+  "endpoint": "073000176",
+  "endpointIdentity": "SK Consulting LLC",
+  "instructionState": "INITIATED",
+  "executionScope": "THIS_ACH_EXECUTION_ONLY",
+  "providerConfirmationId": null,
+  "providerSubmissionVerified": false,
+  "networkSubmissionVerified": false,
+  "bankSettlementVerified": false,
+  "evidenceScope": "Internal authorized instruction only; no provider or ACH network execution evidence recorded.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

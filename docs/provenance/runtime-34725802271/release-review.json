@@ -1,0 +1,217 @@
+{
+  "schema": "numina.nusd.runtime-release-review.v1",
+  "reviewedAt": "2026-09-12T23:45:06Z",
+  "decision": "builder_signed_artifacts_verified_image_built_not_deployed",
+  "method": "Read and compare retained successful GH verification results, signed inventory, provider run records and local artifact bytes. No GH verification rerun, test suite, network request, image start or deployment was performed for this review.",
+  "intendedSource": {
+    "repository": "skott34-dot/numina-production",
+    "repositoryId": 1367647143,
+    "ref": "refs/heads/main",
+    "commit": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+    "directory": "runtime/nusd"
+  },
+  "intendedBuilder": {
+    "workflow": "skott34-dot/numina-builder/.github/workflows/numina-nusd-runtime-builder.yml",
+    "commit": "cda9bf7702d909ed1d8e16c338a91e283c1bce53"
+  },
+  "run": {
+    "id": 34725802271,
+    "attempt": 1,
+    "url": "https://github.com/skott34-dot/numina-production/actions/runs/34725802271/attempts/1",
+    "status": "completed",
+    "conclusion": "success",
+    "createdAt": "2026-09-12T23:35:10Z",
+    "updatedAt": "2026-09-12T23:35:53Z",
+    "sourceCommit": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+    "caller": ".github/workflows/numina-nusd-runtime.yml"
+  },
+  "runAndInventoryComparisons": {
+    "providerRunMatches": true,
+    "providerSourceMatches": true,
+    "referencedBuilderMatches": true,
+    "inventorySourceMatches": true,
+    "inventoryRunMatches": true,
+    "sourceArchiveInventoryMatches": true,
+    "imageArchiveInventoryMatches": true
+  },
+  "subjects": [
+    {
+      "file": "numina-nusd-linux-runtime-source.tar.gz",
+      "bytes": 39472,
+      "sha256": "4486f9aae6a7e01078a09860c604f8a17573cd1c7126e2060ac91c1b4329a0ac",
+      "signedSubjectSha256": "4486f9aae6a7e01078a09860c604f8a17573cd1c7126e2060ac91c1b4329a0ac",
+      "subjectDigestMatches": true,
+      "verificationResult": "numina-nusd-linux-runtime-source.tar.gz.attestation-verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "ghExitCodeFromCompletionRecord": 0,
+      "identityComparisons": {
+        "sourceDigestMatches": true,
+        "sourceRepositoryMatches": true,
+        "sourceRepositoryIdMatches": true,
+        "sourceRefMatches": true,
+        "builderDigestMatches": true,
+        "signerWorkflowMatches": true,
+        "certificateRunMatches": true,
+        "predicateRunMatches": true,
+        "oidcIssuerMatches": true,
+        "runnerIsGithubHosted": true,
+        "predicateTypeMatches": true,
+        "predicateSourceMatches": true
+      },
+      "verifiedTimestamps": [
+        {
+          "type": "Tlog",
+          "uri": "https://rekor.sigstore.dev",
+          "timestamp": "2026-09-12T18:35:49-05:00"
+        }
+      ]
+    },
+    {
+      "file": "numina-nusd-linux-runtime-image.docker.tar.gz",
+      "bytes": 84434244,
+      "sha256": "796add5e929bc63105a0d0e97e026d62481c46af09ec1cb08a30f1f5dafdcc33",
+      "signedSubjectSha256": "796add5e929bc63105a0d0e97e026d62481c46af09ec1cb08a30f1f5dafdcc33",
+      "subjectDigestMatches": true,
+      "verificationResult": "numina-nusd-linux-runtime-image.docker.tar.gz.attestation-verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "ghExitCodeFromCompletionRecord": 0,
+      "identityComparisons": {
+        "sourceDigestMatches": true,
+        "sourceRepositoryMatches": true,
+        "sourceRepositoryIdMatches": true,
+        "sourceRefMatches": true,
+        "builderDigestMatches": true,
+        "signerWorkflowMatches": true,
+        "certificateRunMatches": true,
+        "predicateRunMatches": true,
+        "oidcIssuerMatches": true,
+        "runnerIsGithubHosted": true,
+        "predicateTypeMatches": true,
+        "predicateSourceMatches": true
+      },
+      "verifiedTimestamps": [
+        {
+          "type": "Tlog",
+          "uri": "https://rekor.sigstore.dev",
+          "timestamp": "2026-09-12T18:35:49-05:00"
+        }
+      ]
+    },
+    {
+      "file": "numina-nusd-runtime-inventory.json",
+      "bytes": 6357,
+      "sha256": "33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9",
+      "signedSubjectSha256": "33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9",
+      "subjectDigestMatches": true,
+      "verificationResult": "numina-nusd-runtime-inventory.json.attestation-verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "ghExitCodeFromCompletionRecord": 0,
+      "identityComparisons": {
+        "sourceDigestMatches": true,
+        "sourceRepositoryMatches": true,
+        "sourceRepositoryIdMatches": true,
+        "sourceRefMatches": true,
+        "builderDigestMatches": true,
+        "signerWorkflowMatches": true,
+        "certificateRunMatches": true,
+        "predicateRunMatches": true,
+        "oidcIssuerMatches": true,
+        "runnerIsGithubHosted": true,
+        "predicateTypeMatches": true,
+        "predicateSourceMatches": true
+      },
+      "verifiedTimestamps": [
+        {
+          "type": "Tlog",
+          "uri": "https://rekor.sigstore.dev",
+          "timestamp": "2026-09-12T18:35:49-05:00"
+        }
+      ]
+    }
+  ],
+  "mismatches": [],
+  "image": {
+    "applicationContainerStarted": false,
+    "architecture": "amd64",
+    "archiveFormat": "gzip-compressed docker image save",
+    "configDigest": "sha256:edff50ea08f24fa4c5c3f69575cdcf5768a00b8b7ab3738c31a9137e2a42a76e",
+    "localBuildTag": "numina-nusd-runtime:candidate",
+    "os": "linux",
+    "registryPushed": false
+  },
+  "baseImageRequested": "node:24.21.0-bookworm-slim@sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+  "contract": {
+    "artifactSha256": "79d38c7f5f6560e538d2ab68fad8ca8b1ce72e7b64d932e0fa6b5e1798b5bb24",
+    "deploymentPerformed": false,
+    "role": "precompiled_input",
+    "solidityCompiledThisRun": false,
+    "sourceSha256": "3a118007e78ee6e455c6c51528a55b8eeb63e2ec5c294e7c71757804df0871bf"
+  },
+  "buildScope": {
+    "applicationEntrypointExecuted": false,
+    "contractBroadcast": false,
+    "dockerBuildExecuted": true,
+    "dockerfileBuildStepsExecuted": true,
+    "mintOrTransferPerformed": false,
+    "providerSubmissionPerformed": false,
+    "rpcCredentialsSupplied": false,
+    "testsRun": false
+  },
+  "scope": {
+    "builderSignedArtifactsVerified": true,
+    "linuxAmd64ImageBuilt": true,
+    "applicationStarted": false,
+    "productionHostDeploymentVerified": false,
+    "persistentProductionJournalVerified": false,
+    "runtimeSubmissionReady": false,
+    "registryPushPerformed": false,
+    "independentAuditPerformed": false,
+    "reservesVerified": false,
+    "custodyVerified": false,
+    "settlementVerified": false,
+    "slsaBuildLevelClaimed": null,
+    "thirdPartyCertificationClaimed": false,
+    "websiteChangedByThisBuild": false
+  },
+  "limitations": [
+    "All three results contain the same signed statement covering three subjects; separate per-file successful command exit codes are recorded in completion-record.json.",
+    "The signed inventory records actual Docker build/save activity. The image was not loaded or started in this review, and no production Linux host or persistent journal was verified.",
+    "The contract is a precompiled input. This build did not compile Solidity, broadcast deployment, mint, transfer or submit to a provider.",
+    "Artifact signatures establish the recorded builder/source/subject binding; signatures alone do not establish all SLSA Build L3 controls, security audit completion, asset backing, custody or settlement.",
+    "The separately attested website release remains distinct and was not rebuilt or redeployed by this runtime workflow."
+  ],
+  "evidence": [
+    {
+      "file": "run.json",
+      "sha256": "0248f6606b878c880cc7f2f83813a46cded3b3b193fd2d7fef0b20e1886e0ec9"
+    },
+    {
+      "file": "run-after-download.json",
+      "sha256": "0248f6606b878c880cc7f2f83813a46cded3b3b193fd2d7fef0b20e1886e0ec9"
+    },
+    {
+      "file": "artifacts.json",
+      "sha256": "2297f8cc8d9146512eb78725e361dbea01a763a4af478d2e41ce5f610b24684f"
+    },
+    {
+      "file": "numina-nusd-runtime-inventory.json",
+      "sha256": "33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9"
+    },
+    {
+      "file": "provenance.jsonl",
+      "sha256": "a01099e8d7454f7d3a5888dbad8556ba1cefc18d50c3751cbcfcbf7d51dde350"
+    },
+    {
+      "file": "verification-plan.json",
+      "sha256": "f9e97240155e23e5c32e0edd41325deede279db2de4edbfd422166424d44608c"
+    },
+    {
+      "file": "download-observation.json",
+      "sha256": "7921d9a5bc6662663fa1948a12998f57d6d051a585ca57deed19c7edcba6ad2f"
+    },
+    {
+      "file": "completion-record.json",
+      "sha256": "30eca8717baf3fb9657ee8ed903c70011c8f9dca92a5c88fe18bbc193f219b47"
+    }
+  ]
+}

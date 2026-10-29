@@ -1,0 +1,280 @@
+{
+  "schema": "numina.independent-model-closure-review.v1",
+  "reviewed_at": "2026-10-11T04:29:15.968318+00:00",
+  "status": "PASS_BOUNDED_MODEL_EXTENSION",
+  "whole_protocol_correctness": {
+    "status": "BLOCKED",
+    "verified": false,
+    "reason": "The checked extension concerns generic acceptance findings, a codec with an explicit round-trip premise, and extensional extraction. It does not prove concrete companion parsing, RFC8785 serialization, RFC8032 verification, authorized/current-state decisions, or operational refinement."
+  },
+  "independent_execution": {
+    "separate_scratch": true,
+    "source_from_original_archive": true,
+    "fresh_base_olean_files": true,
+    "compiler": {
+      "path": "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+      "sha256": "c89073b8a577a5914ead7b740d2ad996af1ad5ad5b4bfc2825e0bce2f01b6aa4",
+      "version": "Lean (version 4.22.0, arm64-apple-darwin23.6.0, commit ba2cbbf09d4978f416e0ebd1fceeebc2c4138c05, Release)",
+      "trust_level": 0
+    },
+    "compilation_units": [
+      {
+        "module": "NCPSCore",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSProtocol",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSCodec",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSRelations",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSState",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSClosure",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSVerification",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSVersion",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSBoundaries",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSAudit",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSUtf8",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSAll",
+        "exit_code": 0
+      },
+      {
+        "module": "NCPSModelClosure",
+        "exit_code": 0
+      }
+    ],
+    "every_unit_passed": true,
+    "base_theorem_count": 131,
+    "new_theorem_count": 4,
+    "combined_named_model_theorems": 135,
+    "base_axiom_audit": {
+      "exit_code": 0,
+      "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a",
+      "original_log_exact": true
+    },
+    "new_axiom_audit": "'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]\n'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]\n",
+    "custom_axioms_found": 0,
+    "admitted_proofs_found": 0,
+    "compiler_transcript": {
+      "path": "/workspace/scratch/numina-whole-protocol/independent-compiler-check.json",
+      "bytes": 22974,
+      "sha256": "0212bfb89153b5525c3b7b9eea38766fd4fb5f43e88a0d5206de9c30a44ed5ed"
+    },
+    "epistemic_limit": "The native compiler and its pinned standard library are part of the trusted checking base. This execution does not establish their correctness."
+  },
+  "checked_inputs": {
+    "extension": {
+      "path": "/workspace/scratch/numina-whole-protocol/NCPSModelClosure.lean",
+      "bytes": 2656,
+      "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8"
+    },
+    "independent_transcript": {
+      "path": "/workspace/scratch/numina-whole-protocol/independent-compiler-check.json",
+      "bytes": 22974,
+      "sha256": "0212bfb89153b5525c3b7b9eea38766fd4fb5f43e88a0d5206de9c30a44ed5ed"
+    },
+    "original_proof_zip": {
+      "path": "/workspace/outputs/NCPS-Lean4-Proofs-2026-10-09.zip",
+      "bytes": 22789,
+      "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e"
+    },
+    "signed_final_pdf": {
+      "path": "/workspace/outputs/draft-kott-numina-pair-binding-02-final.pdf",
+      "bytes": 808496,
+      "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9"
+    },
+    "completed_signed_package": {
+      "path": "/workspace/outputs/Numina-Pair-Binding-02-completed-signed-package.zip",
+      "bytes": 81567674,
+      "sha256": "62e1273889f5782da1530394f8963e7b29033a973b5af6fd94e4f83ffd080a38"
+    },
+    "canonical_evidence_update": {
+      "path": "/workspace/numina-production/docs/Ed25519-Recovered-Evidence-Update.md",
+      "bytes": 11468,
+      "sha256": "836d0d878224b14a24fce363cae505f7eef74f137990c4b6a5cb5eede3ac96cc"
+    },
+    "original_manuscript_text": {
+      "path": "/workspace/scratch/numina-pair-binding-02.txt",
+      "bytes": 302197,
+      "sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2"
+    }
+  },
+  "dependency_identity": {
+    "original_archive_sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e",
+    "zip_members_checked": 19,
+    "original_receipt_entries_checked": 18,
+    "every_zip_member_matches_original_directory_leaf": true,
+    "every_receipt_identity_passed": true,
+    "imported_base": "NCPSAll imports the eleven original proof modules; the extension changes none of those modules.",
+    "model_encoding": "Bytes = List (Fin 256); verification reports contain seven abstract Finding fields and the policy contains two Bool requirements."
+  },
+  "theorem_reviews": [
+    {
+      "name": "NCPS.ModelClosure.evaluate_eq_true_iff_accepts",
+      "status": "PASS",
+      "quantification": "Every NCPS.Advanced.VerificationPolicy and VerificationReport.",
+      "conclusion": "The modeled executable gate returns true exactly when the declared Accepts conjunction holds.",
+      "explicit_premises": [],
+      "axioms": [
+        "propext"
+      ],
+      "interpretation": "A complete soundness/completeness correspondence for this particular modeled finding gate.",
+      "limitation": "Report fields are asserted findings. No theorem relates them to raw payload parsing, actual signatures, signer authorization, source hashing, attribution mapping, revocation, current revision, or private linkage."
+    },
+    {
+      "name": "NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts",
+      "status": "PASS",
+      "quantification": "Every modeled policy and report.",
+      "conclusion": "The Boolean gate returns false exactly when Accepts does not hold.",
+      "explicit_premises": [],
+      "axioms": [
+        "propext"
+      ],
+      "interpretation": "Rejection is the exact Boolean complement of the modeled acceptance conjunction.",
+      "limitation": "The theorem does not distinguish operational failure reasons or supply the evidence required to populate report findings."
+    },
+    {
+      "name": "NCPS.ModelClosure.framed_encode_injective",
+      "status": "PASS",
+      "quantification": "Every Record type, codec, fixed byte tag, and pair of records.",
+      "conclusion": "Equal fixed-tag framed encodings imply equal records.",
+      "explicit_premises": [
+        "RoundTrip codec: for every record, decode(encode(record)) = some record."
+      ],
+      "axioms": [
+        "propext"
+      ],
+      "interpretation": "Composition of the existing codec-injectivity and fixed-prefix cancellation proofs.",
+      "limitation": "RoundTrip remains a required supplied hypothesis. Neither JCS round-trip conformance nor domain separation across arbitrary distinct tags nor signature/hash collision resistance is proved."
+    },
+    {
+      "name": "NCPS.ModelClosure.extensional_pair_set_not_injective",
+      "status": "PASS",
+      "quantification": "The mapping of all ordered byte-sequence pairs to the corresponding extensional two-item membership predicate.",
+      "conclusion": "That mapping is not injective because swapping distinct ordered values preserves the set.",
+      "explicit_premises": [],
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ],
+      "interpretation": "A kernel-checked boundary showing that order cannot be recovered from the extensional set projection.",
+      "limitation": "The counterexample is over generic byte pairs. It is not a new attack on the complete ordered companion JSON payload. The original manuscript already discloses this distinction."
+    }
+  ],
+  "manuscript_alignment": {
+    "status": "ALIGNED_WITH_STATED_BOUNDARIES",
+    "evidence": [
+      {
+        "source": "numina-pair-binding-02.txt",
+        "lines": [
+          648,
+          655
+        ],
+        "section": "6 and 6.1",
+        "finding": "The manuscript requires structured independent findings and concrete parsing, schema, cryptographic, trust and source checks. The extension proves only their abstract decision conjunction."
+      },
+      {
+        "source": "numina-pair-binding-02.txt",
+        "lines": [
+          1575,
+          1589
+        ],
+        "section": "15 evidence closure",
+        "finding": "The manuscript requires concrete semantic correspondence and conformance. These remain unsupplied by the abstract finding gate."
+      },
+      {
+        "source": "numina-pair-binding-02.txt",
+        "lines": [
+          1853,
+          1858
+        ],
+        "section": "typed extraction",
+        "finding": "Sets do not retain discovery order or multiplicity; ordered occurrence interfaces remain separate."
+      },
+      {
+        "source": "numina-pair-binding-02.txt",
+        "lines": [
+          2564,
+          2580
+        ],
+        "section": "16.6.3 and 16.6.4",
+        "finding": "The manuscript explicitly reports swap collision for the set extractor and distinct Lean4.24 source/receipt identities. This Lean4.22 proof does not rerun or replace those separate sources."
+      }
+    ],
+    "no_equivalence_to_missing_424_bundle_claimed": true
+  },
+  "remaining_obligations": [
+    {
+      "id": "concrete-byte-boundary",
+      "owner": "unassigned",
+      "status": "BLOCKED",
+      "missing": "Pinned concrete companion decoder and RFC8785 canonicalizer with proofs or a justified refinement into the model; strict duplicate-key, I-JSON, number, escape, ordering and depth/size obligations.",
+      "closure": "Locate the intended exact implementation and prove its byte-level accepted input/output behavior refines the declared payload/serialization model."
+    },
+    {
+      "id": "actual-crypto-and-trust",
+      "owner": "unassigned",
+      "status": "BLOCKED",
+      "missing": "A formal relation from actual Ed25519 verification and registry/key-role/scope/revocation checks to the signature and authority findings.",
+      "closure": "Supply the exact algorithm/provider acceptance contract and independently pinned trust policy, then prove that the implementation report satisfies those predicates under disclosed computational assumptions."
+    },
+    {
+      "id": "current-state-and-private-resolution",
+      "owner": "unassigned",
+      "status": "BLOCKED",
+      "missing": "Revision/current-source/private-linkage semantics and the authenticated durable-state inputs required by the policy.",
+      "closure": "Supply immutable state-transition and resolver contracts with current authenticated inputs, and prove the acceptance findings are sound for those inputs."
+    },
+    {
+      "id": "implementation-refinement",
+      "owner": "unassigned",
+      "status": "BLOCKED",
+      "missing": "A correspondence proof between the actual operational companion implementation and the model's verification findings and transitions.",
+      "closure": "Pin executable source/build/spec identities and discharge initial/step preservation plus report-field soundness against the concrete definitions."
+    },
+    {
+      "id": "manuscript-424-proof-package",
+      "owner": "unassigned",
+      "status": "BLOCKED",
+      "missing": "The separate exact-source dependencies and compiler evidence for the manuscript's detailed Lean4.24 parser/projection/guard proof packages.",
+      "closure": "Recover those pinned sources and dependencies and independently rerun their theorem statements and axiom audits; do not substitute the generic Lean4.22 bundle."
+    }
+  ],
+  "original_evidence_preservation": {
+    "source_directory_unchanged_in_independent_run": true,
+    "signed_pdf_matches_established_digest": true,
+    "signed_package_matches_established_digest": true,
+    "repository_status_short": "",
+    "repository_head": "9b744f6354c4e1259c7e0c8626c6e67fc78fe5ac",
+    "modifications_by_this_review": "Only new files under /workspace/scratch/numina-whole-protocol and a separate remote scratch directory."
+  },
+  "next_verifiable_step": "Pin and inspect the intended concrete companion verifier and connect its report-producing checks to the now-proved modeled acceptance predicate. Fresh source/proof recovery is required before a whole-protocol status can advance."
+}

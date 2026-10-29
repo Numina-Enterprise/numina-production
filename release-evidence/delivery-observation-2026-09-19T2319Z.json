@@ -1,0 +1,145 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T23:19:54Z",
+  "sourceRepository": "skott34-dot/numina-production",
+  "sourceBranch": "main",
+  "sourceMainSha": "ca6191dfaa7c21e22bd6aabc5aacb3d482ef332b",
+  "status": "PARTIAL_EXTERNAL_DELIVERY",
+  "runnerPolicy": {
+    "preserveExistingRunners": true,
+    "preservedRunnerCount": 27,
+    "preserveExistingSelfHostedRunners": true,
+    "futureRunnerPolicy": "deny",
+    "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
+    "authorizationLiteral": "NUMINA",
+    "signingIdentityInventedOrRotated": false
+  },
+  "githubActions": {
+    "runnerAllocationAvailable": false,
+    "canonicalRetry": {
+      "workflow": ".github/workflows/numina.yml",
+      "runId": 35475676544,
+      "runAttempt": 2,
+      "jobId": 105984781892,
+      "status": "completed",
+      "conclusion": "failure",
+      "stepCount": 0,
+      "artifacts": [],
+      "jobLogAvailable": false
+    },
+    "androidSigning": {
+      "workflow": ".github/workflows/numina-android-release.yml",
+      "authorizationRequired": true,
+      "authorizationValue": "NUMINA",
+      "signedArtifactVerified": false
+    },
+    "iosSigning": {
+      "workflow": ".github/workflows/numina-ios-signing.yml",
+      "authorizationRequired": true,
+      "authorizationValue": "NUMINA",
+      "signedArtifactVerified": false
+    }
+  },
+  "vercel": {
+    "capacityAvailable": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deployment": {
+      "id": "dpl_BR2PJ1MBnT8y4bbgcFuqhZCUcyEQ",
+      "source": "git",
+      "target": "production",
+      "state": "READY",
+      "commitSha": "ca6191dfaa7c21e22bd6aabc5aacb3d482ef332b",
+      "url": "https://numina-production-btrj41c3w-skott34-dot.vercel.app",
+      "aliases": [
+        "https://www.numinalabs.xyz",
+        "https://numinalabs.xyz",
+        "https://numina-production.vercel.app",
+        "https://numina-production-skott34-dot.vercel.app",
+        "https://numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    },
+    "productionVerification": {
+      "primaryOrigin": "https://www.numinalabs.xyz",
+      "finalBuild": {
+        "path": "/final-build.json",
+        "status": 200
+      },
+      "deploymentReceipt": {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "status": 200
+      },
+      "nusdStatus": {
+        "path": "/api/nusd/v1/status",
+        "status": 200
+      },
+      "deploymentEstimate": {
+        "path": "/v2/network/deployment-estimate",
+        "status": 200
+      }
+    },
+    "deploymentReceiptSummary": {
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "tokenContractAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "tokenBlockNumber": "51725",
+      "tokenReceiptStatus": "0x1",
+      "tokenFinalConfirmations": 25,
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "settlementContractAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementBlockNumber": "51726",
+      "settlementReceiptStatus": "0x1",
+      "settlementFinalConfirmations": 24,
+      "externalUsdSettlement": false,
+      "externalUsdcSettlement": false,
+      "bankReceipt": null,
+      "providerReceipt": null
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "deviceId": "bca8fabc-523e-47d5-b048-ffbff76fb786",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false
+  },
+  "mobile": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionPerformed": false,
+    "appStoreSubmissionPerformed": false,
+    "providerSubmissionReceipts": []
+  },
+  "executionBoundaries": {
+    "financialTransferPerformed": false,
+    "treasuryBalanceChanged": false,
+    "externalSettlementClaimed": false
+  },
+  "remainingBlockers": [
+    "GitHub Actions runner allocation",
+    "Android signing cannot execute until a runner is allocated and NUMINA authorization is supplied",
+    "iOS signing cannot execute until a runner is allocated and NUMINA authorization is supplied",
+    "App-store submission remains unclaimed until signed artifacts and a connected provider submission path both exist",
+    "VENGEANCE remote fallback is offline"
+  ],
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

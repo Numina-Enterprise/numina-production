@@ -1,0 +1,75 @@
+{
+  "schema": "numina.salesforce-migration-integration-health.v1",
+  "checked_at": "2026-10-11T20:26:10Z",
+  "audit_status": "migration_report_recorded_integration_health_unverified",
+  "intended_scope": "Record the user's reported Salesforce migration confirmation and independently check the current workspace integration access and supported authenticated health capability.",
+  "target_reference": "Existing Numina Salesforce organization",
+  "reported_salesforce_status": {
+    "source": "User-provided update attributed to Salesforce confirmation",
+    "migration": "succeeded",
+    "organization_availability": "fully_available",
+    "statement": "Salesforce confirmed my org migration succeeded and the org is fully available. Integration health still needs checking at Salesforce confirmation.",
+    "direct_provider_confirmation_record_observed": false,
+    "provider_confirmation_identifier": null,
+    "interpretation": "The successful migration and fully available organization are retained as reported facts. They are separate from current workspace connector access."
+  },
+  "observed_workspace_integration": {
+    "source": "Fresh Plugin Management search for Salesforce Agentforce",
+    "salesforce_plugin": {
+      "id": "plugin_asdk_app_697d413990c88191a2bf4799604f8f6c",
+      "status": "DISABLED_BY_ADMIN",
+      "installation_policy": "NOT_AVAILABLE",
+      "installed": false
+    },
+    "callable_salesforce_or_agentforce_tools": 0,
+    "supported_authenticated_salesforce_health_capability_observed": false,
+    "alternative_unconnected_plugin_used": false,
+    "administrator_policy_changed": false
+  },
+  "observed_cloud_access": {
+    "source": "Fresh managed cloud environment status",
+    "configuration_revision": "93",
+    "observations_current": true,
+    "connectivity": "connected",
+    "network_mode": "restricted",
+    "known_salesforce_org_host_permitted": false,
+    "configured_runtime_variable_count": 0,
+    "configured_secret_count": 0,
+    "configured_outbound_identity_count": 0,
+    "credential_values_or_private_files_read": false
+  },
+  "integration_health": {
+    "status": "not_observed",
+    "authenticated_org_health_request_performed": false,
+    "authenticated_org_metadata_response_observed": false,
+    "agentforce_agent_or_version_readback_observed": false,
+    "agentforce_activation_or_deployment_observed": false,
+    "org_unavailability_inferred_from_connector_policy": false,
+    "limitation": "Administrator-disabled workspace access limits this integration check. It provides no evidence that the Salesforce organization itself is unavailable or that its reported migration failed."
+  },
+  "closure_condition": {
+    "owner": "Existing Salesforce access owner and workspace administrator",
+    "needed": "An approved supported authenticated Salesforce access path and a health/metadata read for the existing organization.",
+    "pass": "A dated receiving-system response confirms the authenticated target org, current integration health and exact Agentforce identities/permissions. Preserve the reported successful migration separately from that response."
+  },
+  "actions": {
+    "read_only_plugin_discovery": true,
+    "managed_access_status_read": true,
+    "login_or_installation": false,
+    "administrator_policy_bypass": false,
+    "agent_activation_or_deployment": false,
+    "test_suite_execution": false,
+    "outgoing_messages": false,
+    "purchase_or_payment": false,
+    "source_edit": false,
+    "already_frozen_package_modified": false
+  },
+  "signature_status": "unsigned_supplemental_report_pending_separate_signing_event",
+  "privacy": {
+    "org_url_published": false,
+    "username_or_email_published": false,
+    "salesforce_org_id_published": false,
+    "credentials_or_private_provider_records_included": false
+  },
+  "next_verifiable_step": "Use the approved existing Salesforce connection to read authenticated integration health and target-org/Agentforce metadata; retain the response as a separately identified supplemental receipt."
+}

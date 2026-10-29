@@ -1,0 +1,39 @@
+{
+  "schema": "numina.mobile-post-release-policy.v1",
+  "identity": "NUMINA",
+  "applicationVersion": "4.0.0",
+  "hostedOrigin": "https://numinalabs.xyz",
+  "hostedEntryPoint": "/app",
+  "deliveryModel": {
+    "android": "TRUSTED_WEB_ACTIVITY_HOSTED_SHELL",
+    "ios": "FIRST_PARTY_WKWEBVIEW_HOSTED_SHELL"
+  },
+  "postReleaseHostedUpdatesAllowed": true,
+  "allowedWithoutNativeStoreBinary": [
+    "hosted_html_css_and_content",
+    "first_party_api_returned_records",
+    "operational_status_and_evidence_views",
+    "server_side_validation_and_workflow_state",
+    "support_privacy_and_help_content",
+    "feature_visibility_within_already_reviewed_native_capabilities",
+    "hosted_workspace_navigation_within_numinalabs_xyz"
+  ],
+  "nativeStoreUpdateRequired": [
+    "swift_java_or_native_executable_code",
+    "new_native_permissions_or_entitlements",
+    "new_sdk_framework_or_native_dependency",
+    "bundle_or_package_identity_change",
+    "signing_identity_or_provisioning_change",
+    "new_device_api_or_background_capability",
+    "native_security_boundary_change",
+    "native_navigation_or_authentication_bridge_change",
+    "downloaded_executable_code_that_changes_native_app_functionality"
+  ],
+  "rules": {
+    "firstPartyHttpsOnly": true,
+    "nativeMessageBridge": false,
+    "nativeCredentialBridge": false,
+    "remoteNativeCodeExecution": false,
+    "storeSubmissionRequiredForNativeCapabilityChanges": true
+  }
+}

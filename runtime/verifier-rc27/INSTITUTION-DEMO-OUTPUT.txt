@@ -1,0 +1,7 @@
+institution: NUMINA-DEMO
+viable: True
+rights_capacity: 1000000
+active_authority: 500000
+mrec: 550000
+lifecycle: ACTIVE
+build_digest: 2f88a1549dc9ddc9322b1bdf07d42dc10678d52e68e65bd7c03f538398473620

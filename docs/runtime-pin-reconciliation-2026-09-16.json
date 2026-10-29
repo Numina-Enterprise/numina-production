@@ -1,0 +1,127 @@
+{
+  "schema": "numina.runtime-pin-reconciliation.v1",
+  "observedAt": "2026-09-16T00:48:00.723Z",
+  "origin": "https://numina-production.vercel.app",
+  "scope": "NUMINA",
+  "priorHashes": {
+    "spdx_sbom_sha256": "adb4a6afce75b3e6b66405375d919feac45f1b65fa72f3ad12e7ef840c80e2b6",
+    "slsa_provenance_sha256": "d151346159b4d189a5fa7824e2b8e712d8de6bddc80da80c498164cd50bbe6fb"
+  },
+  "verifiedLocalArtifacts": [
+    {
+      "file": "software-bom.spdx.json",
+      "sha256": "5ac4ea89b8de437ec2a05ddaceb7ffdebd5c9a6d5ed5b9d746128b0406d832f9"
+    },
+    {
+      "file": "build-provenance.intoto.json",
+      "sha256": "26acb573fbd05080ac3d4d1a26f6a50215aa976f604790dd6845c512f811554b"
+    }
+  ],
+  "sourceAndFrozenCoreUnchanged": true,
+  "newRuntimeDeployment": false,
+  "manifest": "NUMINA",
+  "attestation": {
+    "artifact_type": "NUMINA_RELEASE_ATTESTATION",
+    "key_id": "3a2fe594a7e10458ae89683f",
+    "payload": {
+      "product": "Numina Economic Authority Infrastructure",
+      "core_release_binding": {
+        "schema": "numina.rc26.core-binding.v1",
+        "product": "Numina",
+        "application_version": "3.0.0",
+        "release": "core-v1.8+prod-v1.9.0-rc26",
+        "production_version": "1.9.0-rc26",
+        "release_series": "rc26",
+        "canonical_root_hash": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+        "root_count": 1,
+        "lineage_count": 1,
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5"
+        ],
+        "core_version": "1.8.0",
+        "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+        "frozen_core_valid": true,
+        "frozen_core_checked_files": 105,
+        "frozen_source_policy": "preserved_exact_bytes",
+        "historical_conformance_relabelled": false,
+        "scope": "One rc26 release binds the preserved core and canonical Numina root; no financial execution or reserve verification is established."
+      },
+      "core_version": "1.8.0",
+      "production_version": "1.9.0-rc26",
+      "release": "core-v1.8+prod-v1.9.0-rc26",
+      "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+      "frozen_core_valid": true,
+      "frozen_core_checked_files": 105,
+      "core_conformance_valid": true,
+      "core_conformance_passing_tests": 309,
+      "production_files_root": "0890f3a837d26ee445b5ad9d311387e119ee564949a439cfe325b47fb32762fd",
+      "authority_store_schema_name": "numina_authority_commit_store",
+      "authority_store_schema_version": 1,
+      "production_postgres_isolation": "SERIALIZABLE",
+      "runtime_controls_configurable": true,
+      "public_execution_api_enabled": false,
+      "testnet_execution_enabled": false,
+      "circle_testnet_submit_enabled": false,
+      "arc_verification_enabled": false,
+      "arc_chain_id": 5042002,
+      "arc_required_confirmations": 1,
+      "arc_rpc_quorum": 2,
+      "evidence_network_enabled": true,
+      "evidence_job_ttl_seconds": 3600,
+      "real_funds_enabled": false,
+      "employer_ip_enabled": false,
+      "build_id": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+      "core_conformance_artifact_sha256": "ed9656ba60eb89f4bbce85d8693c462eb64062af423cc4b48f6b5db20d7bc18f",
+      "release_gate_artifact_sha256": null,
+      "spdx_sbom_sha256": "5ac4ea89b8de437ec2a05ddaceb7ffdebd5c9a6d5ed5b9d746128b0406d832f9",
+      "slsa_provenance_sha256": "26acb573fbd05080ac3d4d1a26f6a50215aa976f604790dd6845c512f811554b",
+      "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+      "slsa_level_claimed": null,
+      "environment": "production",
+      "role": "public-verifier",
+      "frozen_core": {
+        "valid": true,
+        "manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+        "checked_files": 105,
+        "failures": []
+      },
+      "conformance": {
+        "captured_at": 1789145310,
+        "command": [
+          "/opt/pyvenv/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_numina_core.py",
+          "tests"
+        ],
+        "core_version": "1.8.0",
+        "duration_ms": 2015,
+        "frozen_core_valid": true,
+        "frozen_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+        "passing_tests": 309,
+        "production_version": "1.9.0-rc20",
+        "return_code": 0,
+        "valid": true
+      },
+      "control_state": {
+        "runtime_controls_configurable": true,
+        "real_funds_enabled": false,
+        "employer_ip_enabled": false,
+        "public_execution_api_enabled": false,
+        "testnet_execution_enabled": false,
+        "circle_testnet_submit_enabled": false,
+        "arc_verification_enabled": false,
+        "evidence_network_enabled": true
+      },
+      "generated_at": 1789519679
+    },
+    "algorithm": "Ed25519",
+    "public_key": "UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=",
+    "signature": "0gKamJXBAAWt6PPLPNTEQktfftAqjpvvxxokXZtuz/501GcXnIllejLppLsbgNfyXZ753Jqrolyq+T5OacShDQ=="
+  }
+}

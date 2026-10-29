@@ -1,0 +1,12 @@
+{
+  "stage": "/workspace/numina-production/outputs/v162-signed-delivery-2026-10-11/signed-supplement",
+  "request_sha256": "01d4439457149ce8b74802986b1408a33462365e1153a2c31042c1061a38730f",
+  "inventory_sha256": "e7672d7039b1e60a7eda7170a7626e99075ab04040b3a07fbed31bb618076510",
+  "request_bytes": 117259,
+  "target_count": 13,
+  "expected_new_signatures": 14,
+  "transport_bytes": 45812,
+  "transport_sha256": "7b68d8eef3e8000c5285402add1c129664bef549124838b4665a2c40c3e481ba",
+  "chunk_size": 12288,
+  "chunks": 4
+}

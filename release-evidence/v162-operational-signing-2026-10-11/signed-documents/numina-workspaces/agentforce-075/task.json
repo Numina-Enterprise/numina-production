@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-075",
+  "configurationId": "agentforce-075",
+  "team": "review",
+  "title": "Review public proof recovery disclosure",
+  "nextBestAction": "Limit dependency recovery records to exact public source identities and access gaps; do not publish private proof contents.",
+  "target": "public dependency readbacks",
+  "priority": 15,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/red_team_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-075",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "public_proof_dependencies",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-075.json",
+    "passCondition": "Receipt identifies safe references and unrecovered sources without disclosing private material.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

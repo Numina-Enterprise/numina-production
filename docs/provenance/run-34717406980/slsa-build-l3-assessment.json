@@ -1,0 +1,279 @@
+{
+  "schema": "numina.slsa-build-assessment.v1",
+  "assessment_recorded_at": "2026-09-12T20:45:14Z",
+  "standard": {
+    "name": "SLSA",
+    "specification_version": "1.2",
+    "track": "Build",
+    "level": 3,
+    "requirements_url": "https://slsa.dev/spec/v1.2/build-requirements"
+  },
+  "decision": "meets_build_l3_for_named_artifacts_under_self_assessment",
+  "assessment_method": "producer_self_assessment_with_assisted_review",
+  "third_party_certified": false,
+  "assessment_document_builder_signed": false,
+  "claim": "Numina 2.0's deployment archive and application inventory from GitHub Actions run 34717406980 meet SLSA v1.2 Build Level 3 under this documented self-assessment, with verified builder-signed provenance.",
+  "scope": {
+    "application_version": "2.0.0",
+    "application_build_id": "86534be2a6ea3fd513ce323932caf7381518ab45f435a4e69cad877e950d7770",
+    "subjects": [
+      {
+        "file": "numina-site-v2.0.0.tar.gz",
+        "bytes": 3131913,
+        "sha256": "daa688cd91a3a792531ee09f56129dbb8412f3c4516bc6d0da3a6d748c4e13d9"
+      },
+      {
+        "file": "application-release-v2.json",
+        "bytes": 12993,
+        "sha256": "30434a312366a8869b93e9f27b428ee0e5f385c1bd0e8fc877912a98fe97f792"
+      }
+    ],
+    "source_repository": "skott34-dot/numina-production",
+    "source_repository_id": 1367647143,
+    "source_ref": "refs/heads/main",
+    "source_sha": "38ba12943decfb33ad3579ed322e5f02bcd1372a",
+    "builder_repository": "skott34-dot/numina-builder",
+    "builder_repository_id": 1367645630,
+    "builder_sha": "4a7210c10fcfa79436018e8ba337244402661036",
+    "builder_workflow": ".github/workflows/numina-site-builder.yml",
+    "builder_workflow_url": "https://github.com/skott34-dot/numina-builder/blob/4a7210c10fcfa79436018e8ba337244402661036/.github/workflows/numina-site-builder.yml",
+    "caller_workflow": ".github/workflows/numina-release.yml",
+    "run_id": 34717406980,
+    "run_attempt": 1,
+    "run_url": "https://github.com/skott34-dot/numina-production/actions/runs/34717406980/attempts/1",
+    "run_status": "completed",
+    "run_conclusion": "success"
+  },
+  "verified_provenance": {
+    "predicate_type": "https://slsa.dev/provenance/v1",
+    "build_type": "https://actions.github.io/buildtypes/workflow/v1",
+    "oidc_issuer": "https://token.actions.githubusercontent.com",
+    "runner_environment": "github-hosted",
+    "verification_recorded_at": "2026-09-12T20:34:58.458029+00:00",
+    "verified_transparency_timestamp": "2026-09-12T15:33:00-05:00",
+    "transparency_service": "https://rekor.sigstore.dev",
+    "bundle_file": "provenance.jsonl",
+    "bundle_sha256": "f7884feee62e1262254b5faa076271c83fcb10b1194c3b2e69a26fbb3f1aa470",
+    "archive_artifact_id": 10305336258
+  },
+  "requirements": [
+    {
+      "id": "producer.platform",
+      "requirement": "Choose an appropriate build platform",
+      "assessment": "satisfied_with_documented_platform_trust",
+      "evidence": [
+        "The immutable reusable workflow performs both the build and provenance generation on GitHub-hosted runners.",
+        "GitHub documents reusable workflows with artifact attestations as its Build L3 approach; this assessment maps the implementation to the current v1.2 requirements."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/increase-security-rating"
+      ]
+    },
+    {
+      "id": "producer.consistent_process",
+      "requirement": "Follow a consistent build process",
+      "assessment": "satisfied",
+      "evidence": [
+        "Fixed builder revision, designated source repository and numeric ID, protected main, workflow_dispatch only, no caller-supplied inputs or inherited secrets.",
+        "The source revision is checked out by immutable SHA; the package version, dependency-free build policy and build/package commands are fixed by the reviewed workflow."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements"
+      ]
+    },
+    {
+      "id": "producer.distribution",
+      "requirement": "Distribute provenance",
+      "assessment": "satisfied_for_recorded_release",
+      "evidence": [
+        "The successful public-repository attestation action stores the provenance with GitHub; the actual bundle is retained as provenance.jsonl and was used by the recorded verifier.",
+        "Archive and application inventory are both named signed subjects. This assessment does not claim that its own later publication has already happened."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://docs.github.com/en/actions/concepts/security/artifact-attestations"
+      ]
+    },
+    {
+      "id": "provenance.exists_authentic",
+      "requirement": "Provenance exists and is authentic",
+      "assessment": "satisfied",
+      "evidence": [
+        "The in-toto statement uses https://slsa.dev/provenance/v1 and identifies both exact SHA-256 subjects.",
+        "The verification result records successful Sigstore signature verification, GitHub OIDC issuer, expected signer workflow and revision, source identity/revision, hosted runner, exact run/attempt, and a verified Rekor timestamp."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://cli.github.com/manual/gh_attestation_verify"
+      ]
+    },
+    {
+      "id": "provenance.unforgeable_signing",
+      "requirement": "Signing material is inaccessible to user-defined build steps",
+      "assessment": "satisfied_with_documented_platform_trust",
+      "evidence": [
+        "The build job has contents:read only, no id-token permission, no persistent checkout credentials and no application secrets.",
+        "A separate fresh signing job has id-token:write and attestations:write. It does not check out source, unpack the archive, execute source scripts, install dependencies or restore caches.",
+        "The accepted certificate pins the reusable workflow revision; a signature from another workflow is insufficient."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/increase-security-rating"
+      ]
+    },
+    {
+      "id": "provenance.unforgeable_fields",
+      "requirement": "Trusted generation or verification of provenance fields",
+      "assessment": "satisfied_with_documented_platform_trust",
+      "evidence": [
+        "The signing job uses the pinned actions/attest generated SLSA predicate, not a predicate supplied by application code.",
+        "Verified platform identity claims supply the source, workflow, runner, builder and invocation. The signer calculates subjects from downloaded immutable artifact bytes.",
+        "SLSA permits output subject names and digests to originate from the tenant; choosing build output bytes does not grant the tenant authority to forge builder identity."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements"
+      ]
+    },
+    {
+      "id": "provenance.external_parameters",
+      "requirement": "External parameters fully enumerated; dependencies best effort",
+      "assessment": "satisfied_for_reviewed_interface",
+      "evidence": [
+        "The reusable workflow accepts no inputs, commands, source-ref override, runner override, artifact paths, predicates or caller secrets.",
+        "The statement records the caller workflow repository, path and ref; the resolved source commit is recorded and the immutable builder identity fixes its internal configuration.",
+        "Dependency completeness remains best effort. No claim of a complete transitive dependency inventory, hermeticity or reproducibility is made."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements"
+      ]
+    },
+    {
+      "id": "isolation.hosted_ephemeral",
+      "requirement": "Hosted execution, separation between concurrent builds and fresh environments",
+      "assessment": "satisfied_with_documented_platform_trust",
+      "evidence": [
+        "Both jobs explicitly use standard ubuntu-24.04 GitHub-hosted runners; the verified certificate records github-hosted.",
+        "GitHub documents a new VM for each standard runner. This is the platform assurance relied upon for cross-job and cross-build isolation and removal of persistent tenant state."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://docs.github.com/en/actions/concepts/runners/github-hosted-runners"
+      ]
+    },
+    {
+      "id": "isolation.cache_outputs_services",
+      "requirement": "Prevent cache poisoning and unintended remote influence",
+      "assessment": "satisfied_with_documented_platform_trust",
+      "evidence": [
+        "No application dependency/build cache is configured; setup-node package-manager caching is disabled.",
+        "Output uploads do not overwrite artifacts. The signing job retrieves current-run immutable artifact IDs and requires digest mismatch errors.",
+        "The reviewed builder exposes no remote-control service or external execution hook. GitHub control-plane and artifact-service isolation remain trusted platform properties."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://slsa.dev/spec/v1.2/assessing-build-platforms"
+      ]
+    },
+    {
+      "id": "platform.security_practices",
+      "requirement": "Industry security best practices",
+      "assessment": "satisfied_with_documented_platform_trust",
+      "evidence": [
+        "Observed controls include full-SHA action pins, restricted permissions, protected-source checks, credential isolation, keyless workload identity, immutable outputs and an explicit verification allowlist.",
+        "The builder is owner-governed; no independent human approval or administrative security audit is asserted.",
+        "GitHub manages standard runner maintenance and upgrades. Platform administration, secure communications, key protection and vulnerability response are part of the explicitly trusted managed-platform boundary."
+      ],
+      "sources": [
+        "https://slsa.dev/spec/v1.2/build-requirements",
+        "https://docs.github.com/en/actions/concepts/runners/github-hosted-runners",
+        "https://slsa.dev/spec/v1.2/assessing-build-platforms"
+      ]
+    }
+  ],
+  "concrete_unmet_build_l3_requirements_identified": [],
+  "trust_assumptions": [
+    "GitHub's hosted runner, control plane, OIDC claims and artifact service meet their documented isolation and authenticity properties.",
+    "Sigstore certificate issuance, trust roots and Rekor verification are trusted; the recorded GitHub CLI verification result accurately represents its execution.",
+    "The pinned builder/action revisions and source identity are the approved trust policy. The source and builder are owner-governed; no independent maintainer review or provider audit is claimed.",
+    "The recorded run and verification evidence are authentic retained observations. This review did not rerun the build or verification command."
+  ],
+  "delivery_scope": {
+    "live_inventory_matches_signed_subject_observed": true,
+    "complete_provider_transform_provenance_verified": false,
+    "running_private_worker_bytes_independently_inspected": false,
+    "explanation": "Later hosting archive transformations and injected HTML are outside the two signed build subjects. They limit end-to-end delivery claims, not the assessed build level of those original subjects."
+  },
+  "out_of_scope": [
+    "Separate rc22 runtime dependency build/provenance and historical rc20 releases.",
+    "Subsequent hosting transformations, complete delivery-chain provenance and independently observed executing server bytes.",
+    "Product correctness, absence of vulnerabilities, test coverage, hermeticity and reproducibility.",
+    "Financial execution, treasury assets/reserves, NUSD issuance or backing, legal or regulatory approval.",
+    "Native-store publication and LLM marketplace installation or approval.",
+    "Future builds or artifacts with different digests, sources, builder revisions or interfaces."
+  ],
+  "publication_and_maintenance": [
+    "Publish this assessment separately with the existing bundle and verification policy/result; do not change the signed inventory.",
+    "The assessment itself is explanatory metadata, not a new builder signature or independent certification.",
+    "Preserve original records that recorded slsa_level_claimed:null; this subsequent assessment supplies the scoped conclusion without rewriting them.",
+    "Retain artifacts and proof beyond the workflow's 30-day artifact retention, and reassess changes to builder pins, source identity, accepted inputs or platform trust."
+  ],
+  "evidence": [
+    {
+      "file": "approved-policy.json",
+      "bytes": 1277,
+      "sha256": "3c2830cbc1cd16c2d8b136d7b1c77d4de284e4e6372728cbcdb5eb7c61ba30d1"
+    },
+    {
+      "file": "verification-result.json",
+      "bytes": 18946,
+      "sha256": "cdf4831970bd2cd7493b6cb8aa089af509c8c001dba7d71e5bf8f7b402400380"
+    },
+    {
+      "file": "production-record.json",
+      "bytes": 4123,
+      "sha256": "2647a116260cd417e3b94a4b6e5a1d8f4fd05aa7b29cd884d1660a169975f2af"
+    },
+    {
+      "file": "run.json",
+      "bytes": 14694,
+      "sha256": "9fbc991b748c1979e79c3f69b34ecbdf44f9d90c3cfa2474ea1f1a737ceb34a9"
+    },
+    {
+      "file": "artifacts.json",
+      "bytes": 2519,
+      "sha256": "812c92423f9ea13bdfed022ad086caa4b853af84ef9bc54f12e2f4e92986bbf0"
+    },
+    {
+      "file": "provenance.jsonl",
+      "bytes": 11777,
+      "sha256": "f7884feee62e1262254b5faa076271c83fcb10b1194c3b2e69a26fbb3f1aa470"
+    },
+    {
+      "file": "numina-site-v2.0.0.tar.gz",
+      "bytes": 3131913,
+      "sha256": "daa688cd91a3a792531ee09f56129dbb8412f3c4516bc6d0da3a6d748c4e13d9"
+    },
+    {
+      "file": "application-release-v2.json",
+      "bytes": 12993,
+      "sha256": "30434a312366a8869b93e9f27b428ee0e5f385c1bd0e8fc877912a98fe97f792"
+    }
+  ],
+  "sources": {
+    "requirements": "https://slsa.dev/spec/v1.2/build-requirements",
+    "assessment": "https://slsa.dev/spec/v1.2/assessing-build-platforms",
+    "github_l3": "https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/increase-security-rating",
+    "runners": "https://docs.github.com/en/actions/concepts/runners/github-hosted-runners",
+    "verification": "https://cli.github.com/manual/gh_attestation_verify",
+    "attestations": "https://docs.github.com/en/actions/concepts/security/artifact-attestations"
+  },
+  "review_actions": {
+    "read_only_evidence_review": true,
+    "tests_run": false,
+    "build_run": false,
+    "deployment_performed": false,
+    "signed_inventory_modified": false,
+    "production_record_modified": false
+  }
+}

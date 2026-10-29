@@ -1,0 +1,39 @@
+{
+  "sourceCommit": "cd28af207f39fe8ba010ef83eafbd832448ffbbf",
+  "android": {
+    "runId": 34947973846,
+    "status": "success",
+    "artifactId": 10387977303,
+    "artifactSha256": "66a56ca36b9b8b5d0520db1f842cd18af830790ed58d4ac8ce47e30217bf243d",
+    "localHashVerification": true,
+    "signatureVerificationInWorkflow": true,
+    "artifacts": [
+      {
+        "file": "numina-4.0.0-release-signed.apk",
+        "bytes": 3797876,
+        "sha256": "ea6216a7f5fa0b8832841f0ca75ed546a03de48e9052a29745c75b8c4126ea61"
+      },
+      {
+        "file": "numina-4.0.0-upload-signed.aab",
+        "bytes": 3617288,
+        "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896"
+      }
+    ],
+    "storeSubmitted": false
+  },
+  "ios": {
+    "runId": 34947887766,
+    "branchBuildRunId": 34947840584,
+    "status": "success",
+    "artifactId": 10387709520,
+    "artifactSha256": "0aae4cd1eceeaccdc948b81e23230c8a95673ce6ad7d4b66c79041198c35fea0",
+    "appArchiveSha256": "b69dc40ecdb84eb5aa38327c1d80e1c5d20a1c4f6d72ebe33b63353188025746",
+    "localHashVerification": true,
+    "bundleIdentifier": "xyz.numinalabs.app",
+    "version": "4.0.0",
+    "build": "5",
+    "sdk": "iphoneos26.5",
+    "signed": false,
+    "storeSubmitted": false
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "numina.nusd.local-candidate-test-report.v1",
+  "observedAt": "2026-09-16T01:14:01.225Z",
+  "status": "PASS",
+  "scope": "Deterministic in-process Ganache tests only; no remote chain or production wallet.",
+  "compiler": "0.8.37+commit.f401782d.Emscripten.clang",
+  "dependencyVersions": {
+    "@openzeppelin/contracts": "5.4.0",
+    "solc": "0.8.37",
+    "ethers": "6.15.0",
+    "ganache": "7.9.2"
+  },
+  "sourceSha256": "87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc",
+  "artifactSha256": "a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a",
+  "testsSha256": "6e00a2f8b2c26f1ca84926bc3290a38c1a0de93a9f59a3ad393103ba2adf3d1f",
+  "counts": {
+    "tests": 9,
+    "passed": 9,
+    "failed": 0
+  },
+  "tests": [
+    {
+      "name": "artifact reproduces exactly, has eight constructor inputs and no configurable cap ABI",
+      "result": "PASS",
+      "durationMs": 896.6086
+    },
+    {
+      "name": "exact 500T constructor issuance and 1500T regression each mint once to one recipient before pausing",
+      "result": "PASS",
+      "durationMs": 875.7845
+    },
+    {
+      "name": "distinct issuer and minter can issue beyond the former cap after admin unpause, once only",
+      "result": "PASS",
+      "durationMs": 629.505
+    },
+    {
+      "name": "uint256 headroom reserves concurrent issuance exactly and burns release numeric capacity",
+      "result": "PASS",
+      "durationMs": 1260.6846
+    },
+    {
+      "name": "cancel and expiry release reserved headroom during pause without reusing issuance IDs",
+      "result": "PASS",
+      "durationMs": 1389.3361
+    },
+    {
+      "name": "pause contains issuance, transfers and burns while only admin can resume",
+      "result": "PASS",
+      "durationMs": 1032.652
+    },
+    {
+      "name": "configuration rejects zero identities, role overlap and unsupported role grants",
+      "result": "PASS",
+      "durationMs": 759.8053
+    },
+    {
+      "name": "authorization validates recipient, amount, reference and bounded lifetime; expired mint stays reserved until cleanup",
+      "result": "PASS",
+      "durationMs": 693.2979
+    },
+    {
+      "name": "delayed administrator rotation preserves distinct roles and removes prior admin authority",
+      "result": "PASS",
+      "durationMs": 510.3789
+    }
+  ],
+  "notes": [
+    "Ganache used its JavaScript fallback because the optional native uWS binary was unavailable."
+  ],
+  "externalExecution": {
+    "signed": false,
+    "broadcast": false,
+    "deployed": false,
+    "minted": false,
+    "deposited": false
+  }
+}

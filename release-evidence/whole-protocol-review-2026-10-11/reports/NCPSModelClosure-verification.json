@@ -1,0 +1,16 @@
+{
+  "path": "/private/tmp/ncps-independent-recheck-20261011-fndn1lhh/NCPSModelClosure.lean",
+  "sha256": "033a23ec61cf9e0fa850907988ddf21fc18649015e7d9983524644f86f092ad8",
+  "bytes": 2656,
+  "command": [
+    "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+    "-t",
+    "0",
+    "-o",
+    "NCPSModelClosure.olean",
+    "NCPSModelClosure.lean"
+  ],
+  "exit_code": 0,
+  "stdout": "'NCPS.ModelClosure.evaluate_eq_true_iff_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.evaluate_eq_false_iff_not_accepts' depends on axioms: [propext]\n'NCPS.ModelClosure.framed_encode_injective' depends on axioms: [propext]\n'NCPS.ModelClosure.extensional_pair_set_not_injective' depends on axioms: [propext, Quot.sound]\n",
+  "stderr": ""
+}

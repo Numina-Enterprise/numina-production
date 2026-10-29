@@ -1,0 +1,147 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAtUtc": "2026-09-20T20:20:53.9206891Z",
+  "canonicalRepository": "skott34-dot/numina-production",
+  "canonicalBranch": "main",
+  "observedMainHead": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+  "githubActions": {
+    "hostedRunnerAllocationVerified": true,
+    "canonicalBuild": {
+      "runId": 35535021311,
+      "headSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+      "conclusion": "success",
+      "artifactId": 10612109821,
+      "artifactName": "NUMINA",
+      "artifactDigest": "sha256:371ccc53c1b55f591abf037564f89e1440f63c39d838786108eb9cc0ba692dfd",
+      "artifactSizeBytes": 39838379
+    },
+    "websitePublish": {
+      "runId": 35534626424,
+      "headSha": "d3bbcdb8e6aab5859b59e08cdd71246acd037ce8",
+      "conclusion": "cancelled",
+      "fallbackUsed": "authenticated Vercel CLI on VENGEANCE"
+    },
+    "androidSigning": {
+      "runId": 35535021337,
+      "headSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+      "conclusion": "success",
+      "signatureVerification": true,
+      "artifactId": 10612745065,
+      "artifactName": "numina-android-signed-final",
+      "artifactDigest": "sha256:3f7e678f74611a3e8662b51959a48387b5222109f331ac8755fb367a3803ea12",
+      "artifactSizeBytes": 7021902,
+      "files": [
+        {
+          "name": "numina-4.0.0-release-signed.apk",
+          "bytes": 3797876,
+          "sha256": "f19370be880065d2800b938ecc0f16f6fb48711071f55687c036ecffd4ad594c"
+        },
+        {
+          "name": "numina-4.0.0-upload-signed.aab",
+          "bytes": 3617290,
+          "sha256": "bbea60871bafaf05526ad7aac163e335f79e6b7b905e73891bd985233bf3c20a"
+        },
+        {
+          "name": "signed-build-record.json",
+          "sha256": "8e1ba88c8364e88ae6511048ffbbc2cc8911ba00a9727c0ce32b9108ff724d98"
+        }
+      ],
+      "packageIdentity": "xyz.numinalabs.app",
+      "versionName": "4.0.0",
+      "versionCode": 4,
+      "storeSubmitted": false,
+      "providerReceipt": null
+    },
+    "iosSigning": {
+      "runId": 35535021321,
+      "headSha": "502b9725451bb6134bd7e9a9506cd0dd53cbed72",
+      "compileConclusion": "success",
+      "signingConclusion": "failure",
+      "blocker": "Required Apple signing secrets are not configured.",
+      "missingInputsObservedEmpty": [
+        "NUMINA_APPLE_TEAM_ID",
+        "NUMINA_APPLE_DISTRIBUTION_P12_BASE64",
+        "NUMINA_APPLE_DISTRIBUTION_P12_PASSWORD",
+        "NUMINA_APPLE_PROVISIONING_PROFILE_BASE64"
+      ],
+      "signedArtifact": null,
+      "storeSubmitted": false,
+      "providerReceipt": null
+    },
+    "storeDistributionWorkflow": {
+      "observedRunId": 35535020658,
+      "event": "push",
+      "conclusion": "failure",
+      "jobCount": 0,
+      "providerSubmissionVerified": false
+    }
+  },
+  "vercel": {
+    "capacityVerified": true,
+    "sourceCommit": "d3bbcdb8e6aab5859b59e08cdd71246acd037ce8",
+    "deploymentId": "dpl_6xPMMx4rGwccTMxqQRr7E7VcuTuv",
+    "productionUrl": "https://numina-production-rns9hp5di-numina-167f7fe7.vercel.app",
+    "alias": "https://numinalabs.xyz",
+    "status": "READY",
+    "endpointChecks": [
+      {
+        "path": "/final-build.json",
+        "httpStatus": 200,
+        "schema": "numina.final-build.v1",
+        "status": "FINAL",
+        "applicationVersion": "4.0.0"
+      },
+      {
+        "path": "/downloads/nusd/deployment-receipt.json",
+        "httpStatus": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finality": "FINAL",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      {
+        "path": "/api/nusd/v1/status",
+        "httpStatus": 200,
+        "schema": "numina.nusd.status.v1",
+        "operatorActivation": "active_operator_confirmed"
+      },
+      {
+        "path": "/v2/network/deployment-estimate",
+        "httpStatus": 200,
+        "schema": "numina.deployment-estimate.v1",
+        "status": "FINAL",
+        "signed": true,
+        "broadcast": true,
+        "minted": true,
+        "productionReady": true,
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b"
+      }
+    ]
+  },
+  "storeSubmission": {
+    "googlePlaySubmitted": false,
+    "appStoreSubmitted": false,
+    "providerReceipts": [],
+    "scope": "No store submission is claimed without a successful provider-side receipt."
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

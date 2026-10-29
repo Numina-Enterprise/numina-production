@@ -1,0 +1,30 @@
+{
+  "schema": "numina.nusd.owner-approved-review.v1",
+  "preparedAt": "2026-09-16T01:14:50.231Z",
+  "status": "OWNER_APPROVED_REVIEW",
+  "ownerReviewApproved": true,
+  "supplyPolicy": "uncapped",
+  "initialSupplyNusd": "500000000000000",
+  "initialSupplyBaseUnits": "500000000000000000000",
+  "countedOnce": true,
+  "sourceSha256": "87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc",
+  "artifactSha256": "a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a",
+  "policySha256": "95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c",
+  "softwareTestStatus": "PASS",
+  "localTestCount": 9,
+  "local500TConstructorVerified": true,
+  "recipientResolved": false,
+  "encoded": false,
+  "submissionApproved": false,
+  "independentSecurityAuditVerified": false,
+  "providerFundingVerified": false,
+  "financialExecution": {
+    "signed": false,
+    "broadcast": false,
+    "deployed": false,
+    "minted": false,
+    "deposited": false,
+    "journalWritten": false
+  },
+  "supersedesReviewQuantity": "1500000000000000"
+}

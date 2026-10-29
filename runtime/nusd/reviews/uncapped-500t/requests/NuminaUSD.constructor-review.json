@@ -1,0 +1,69 @@
+{
+  "schema": "numina.nusd.uncapped-deployment-review.v1",
+  "candidateSchema": "numina.nusd.contract-candidate.v3",
+  "supplyPolicy": "uncapped",
+  "constructor": [
+    {
+      "name": "initialSupplyBaseUnits",
+      "type": "uint256",
+      "value": "500000000000000000000"
+    },
+    {
+      "name": "initialRecipient",
+      "type": "address",
+      "value": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E"
+    },
+    {
+      "name": "admin",
+      "type": "address",
+      "value": "0xa7e9FB02495700ccE0d209392C0A30FbE077498e"
+    },
+    {
+      "name": "issuer",
+      "type": "address",
+      "value": "0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0"
+    },
+    {
+      "name": "minter",
+      "type": "address",
+      "value": "0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6"
+    },
+    {
+      "name": "pauser",
+      "type": "address",
+      "value": "0x434AB24E613055Fd2598Fd9f0558A06a94D39c81"
+    },
+    {
+      "name": "adminDelaySeconds",
+      "type": "uint48",
+      "value": "86400"
+    },
+    {
+      "name": "approvedIssuerPolicyHash",
+      "type": "bytes32",
+      "value": "0x95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c"
+    }
+  ],
+  "artifact": {
+    "path": "runtime/nusd/reviews/uncapped-500t/artifacts/NuminaUSD.json",
+    "sha256": "a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a"
+  },
+  "source": {
+    "path": "runtime/nusd/reviews/uncapped-500t/contracts/NuminaUSD.sol",
+    "sha256": "87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc"
+  },
+  "preparationPolicy": {
+    "path": "docs/approved-reviews/nusd-uncapped-500t/requests/issuance-preparation-policy.json",
+    "sha256": "95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c"
+  },
+  "unresolvedReviewRecords": {
+    "independentSecurityAudit": null,
+    "authorizedIssuerAndJurisdictions": null,
+    "custodianAndReserveEvidence": null,
+    "redeemabilityTermsAndOperations": null,
+    "financialCrimeAndSanctionsControls": null,
+    "independentRoleKeyCustody": null,
+    "incidentAndPauseRecovery": null,
+    "applicationSettlementAndFulfillmentReview": null
+  }
+}

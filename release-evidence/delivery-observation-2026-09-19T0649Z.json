@@ -1,0 +1,123 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T06:49:47Z",
+  "canonicalRepository": "skott34-dot/numina-production",
+  "branch": "main",
+  "observedSourceCommit": "0e035ab7286e771c1523afaa4545aea58ab2983d",
+  "sourceCommitMessage": "Rebind tests/numina-identity.test.mjs to normalized native treasury manifest",
+  "githubActions": {
+    "runnerBackedExecutionVerified": false,
+    "canonicalBuild": {
+      "runId": 35427586762,
+      "jobId": 105856108194,
+      "status": "completed",
+      "conclusion": "failure",
+      "stepsObserved": false,
+      "logsObserved": false,
+      "blocker": "GITHUB_ACTIONS_RUNNER_NOT_ALLOCATED"
+    },
+    "websitePublish": {
+      "runId": 35427586760,
+      "status": "pending",
+      "jobsObserved": 0,
+      "artifactReceipt": null
+    },
+    "androidSigning": {
+      "runId": 35427586740,
+      "status": "pending",
+      "jobsObserved": 0,
+      "signedArtifactReceipt": null,
+      "providerSubmissionReceipt": null
+    },
+    "iosSigning": {
+      "runId": 35427586737,
+      "status": "pending",
+      "jobsObserved": 0,
+      "signedArtifactReceipt": null,
+      "providerSubmissionReceipt": null
+    }
+  },
+  "vercel": {
+    "scope": "numina-167f7fe7",
+    "providerStatus": "success",
+    "providerDescription": "Deployment has completed",
+    "sourceCommit": "0e035ab7286e771c1523afaa4545aea58ab2983d",
+    "deploymentId": "Fe5qqBWz36HpG4tDHmm6Ng61CBxn",
+    "deploymentDashboard": "https://vercel.com/numina-167f7fe7/numina-production/Fe5qqBWz36HpG4tDHmm6Ng61CBxn",
+    "statusObservedAt": "2026-09-19T06:48:31Z",
+    "connectedDeploymentDetailResolved": false,
+    "connectedDeploymentDetailBlocker": "VERCEL_SCOPE_403_REAUTH_REQUIRED",
+    "duplicateFreeScope": {
+      "scope": "skott34-dot",
+      "capacityAvailable": false,
+      "blocker": "api-deployments-free-per-day",
+      "providerMessage": "Resource is limited - try again in 24 hours (more than 100)"
+    }
+  },
+  "publicEndpointObservations": {
+    "origin": "https://www.numinalabs.xyz",
+    "currentDeploymentBindingVerified": false,
+    "finalBuild": {
+      "path": "/final-build.json",
+      "httpStatus": 200,
+      "schema": "numina.final-build.v1",
+      "status": "FINAL",
+      "servedVerifiedCodeCommit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c",
+      "servedFinalizedAt": "2026-09-18",
+      "vercelCache": "HIT",
+      "observation": "The canonical domain is reachable but this response does not identify the observed current main commit; exact alias-to-deployment binding is not claimed."
+    },
+    "nusdDeploymentReceipt": {
+      "path": "/downloads/nusd/deployment-receipt.json",
+      "httpStatus": 200,
+      "schema": "numina.nusd.production-deployment-receipt.v1",
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "finality": "FINAL"
+    },
+    "nusdStatus": {
+      "path": "/api/nusd/v1/status",
+      "httpStatus": 200,
+      "schema": "numina.nusd.status.v1"
+    },
+    "deploymentEstimate": {
+      "path": "/v2/network/deployment-estimate",
+      "httpStatus": 200,
+      "schema": "numina.deployment-estimate.v1",
+      "status": "FINAL",
+      "requestId": "f3e2b568-1db9-4a75-a601-d0eba9d79cc6"
+    }
+  },
+  "remoteFallback": {
+    "device": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00",
+    "used": false,
+    "signingIdentityChanged": false
+  },
+  "storeSubmission": {
+    "googlePlayClaimed": false,
+    "appStoreClaimed": false,
+    "reason": "No newly verified signed Android or iOS artifact was produced."
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

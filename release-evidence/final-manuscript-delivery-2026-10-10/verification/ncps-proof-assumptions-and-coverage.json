@@ -1,0 +1,17 @@
+{
+  "source_theorem_count": 131,
+  "source_unique_count": 131,
+  "audit_count": 131,
+  "audited_unique_count": 131,
+  "all_named_theorems_audited": true,
+  "source_theorems_missing_audit": [],
+  "audit_names_not_source_theorems": [],
+  "explicit_assumptions_and_limits": [
+    "Generic codec results require an explicit RoundTrip premise. The concrete SampleRecord codec is a binary illustration, not RFC8785 JSON canonicalization.",
+    "Implementation agreement requires conformance to the same specification; the runtime implementations are not proved conformant by these lemmas.",
+    "Refinement and safety transfer require supplied initial/step preservation and abstract safety premises. The concrete refinement example is an integer counter, not an operational NCPS system.",
+    "Closure and acceptance rules operate on modeled status flags; a pass flag is not independently established evidence that external schema, Ed25519, authority, freshness or deployments passed.",
+    "UTF8 boundary uses Lean String.fromUTF8? and rejects a BOM; Unicode scalar examples do not establish a complete JSON parser, escaping policy or JCS canonicalizer.",
+    "Only foundational logical axioms propext, Quot.sound and Classical.choice occur. Their disclosed presence is separate from theorem hypotheses and the model-to-implementation gap."
+  ]
+}

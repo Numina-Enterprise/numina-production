@@ -1,0 +1,1018 @@
+{
+  "checked_at_utc": "2026-10-11T04:03:50.872507+00:00",
+  "device": "Samuels-MacBook-Pro.local",
+  "device_id": "e0603b5a-7955-455a-89dd-63bd7406f77b",
+  "source_path": "/Users/samuelkott/Documents/Numina/NCPS-Lean4-Proofs-2026-10-09",
+  "scratch_path": "/private/tmp/ncps-independent-recheck-20261011-fndn1lhh",
+  "compiler_path": "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+  "toolchain_pin": "leanprover/lean4:v4.22.0",
+  "compiler_version": "Lean (version 4.22.0, arm64-apple-darwin23.6.0, commit ba2cbbf09d4978f416e0ebd1fceeebc2c4138c05, Release)",
+  "compiler_sha256": "c89073b8a577a5914ead7b740d2ad996af1ad5ad5b4bfc2825e0bce2f01b6aa4",
+  "trust_level": 0,
+  "kernel_type_checking_enabled": true,
+  "original_receipt": {
+    "project": "NCPS / Singular \u2014 Ed25519: A Universal Companion Model",
+    "date_utc": "2026-10-09T20:03:52.540128+00:00",
+    "toolchain": "Lean 4.22.0; arm64-apple-darwin23.6.0",
+    "proof_modules": 11,
+    "theorems_audited": 131,
+    "compiler_exit_code": 0,
+    "axiom_allowlist": [
+      "propext",
+      "Quot.sound",
+      "Classical.choice"
+    ],
+    "custom_axioms": 0,
+    "sorryAx": 0,
+    "whole_protocol_pass": false,
+    "limitations": [
+      "No complete RFC8785 JSON conformance",
+      "No operational RFC8032 cross-provider policy acceptance",
+      "No independent signer/current-state/deployment receipts",
+      "No full manuscript-to-proof traceability"
+    ],
+    "files": {
+      "NCPSAll.lean": {
+        "bytes": 208,
+        "sha256": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7"
+      },
+      "NCPSAudit.lean": {
+        "bytes": 3303,
+        "sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4"
+      },
+      "NCPSBoundaries.lean": {
+        "bytes": 1846,
+        "sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d"
+      },
+      "NCPSClosure.lean": {
+        "bytes": 3187,
+        "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5"
+      },
+      "NCPSCodec.lean": {
+        "bytes": 4360,
+        "sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd"
+      },
+      "NCPSCore.lean": {
+        "bytes": 6614,
+        "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3"
+      },
+      "NCPSFullAxiomAudit.lean": {
+        "bytes": 6568,
+        "sha256": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468"
+      },
+      "NCPSFullAxiomAudit.log": {
+        "bytes": 8937,
+        "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a"
+      },
+      "NCPSProtocol.lean": {
+        "bytes": 6228,
+        "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e"
+      },
+      "NCPSRelations.lean": {
+        "bytes": 3912,
+        "sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb"
+      },
+      "NCPSState.lean": {
+        "bytes": 2882,
+        "sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1"
+      },
+      "NCPSUtf8.lean": {
+        "bytes": 2847,
+        "sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7"
+      },
+      "NCPSVerification.lean": {
+        "bytes": 3536,
+        "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516"
+      },
+      "NCPSVersion.lean": {
+        "bytes": 3349,
+        "sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e"
+      },
+      "README.md": {
+        "bytes": 1167,
+        "sha256": "ff22e567bf952ea47fa46b161bcd4d98de940d6a9170b254521bd4e356cf21e7"
+      },
+      "check_axioms.py": {
+        "bytes": 875,
+        "sha256": "98eabdb49de86660eb59b1fd164b42f8da7bda62dd4d3e5783aab541c0a2f4ce"
+      },
+      "lean-toolchain": {
+        "bytes": 25,
+        "sha256": "8f6680f8389e8adee06cb2bd44372c6d60dce0e8301630b61a99a5642d1bd71b"
+      },
+      "verify.sh": {
+        "bytes": 444,
+        "sha256": "a1af9acb3a1d9d356a0ed7ff237f1cd7223cd5c5d008099d7f8c0aa51396bb03"
+      }
+    }
+  },
+  "original_inventory": {
+    "NCPSAll.lean": {
+      "bytes": 208,
+      "sha256": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7"
+    },
+    "NCPSAll.olean": {
+      "bytes": 19872,
+      "sha256": "8c7569d87ff12b41e6bf56fe868ed852f068ee0fe7ed75c0efd3ec75222f04de"
+    },
+    "NCPSAudit.lean": {
+      "bytes": 3303,
+      "sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4"
+    },
+    "NCPSAudit.olean": {
+      "bytes": 119560,
+      "sha256": "5e8add672457c1489af3f8374c13b2a1d3f2e3f5959ebf401a3c48a6b0adae6f"
+    },
+    "NCPSBoundaries.lean": {
+      "bytes": 1846,
+      "sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d"
+    },
+    "NCPSBoundaries.olean": {
+      "bytes": 47592,
+      "sha256": "3027887a65b25f95661d38a3c41c68ac9200adfd9cc167fd33ab308146c28f54"
+    },
+    "NCPSClosure.lean": {
+      "bytes": 3187,
+      "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5"
+    },
+    "NCPSClosure.olean": {
+      "bytes": 344224,
+      "sha256": "f854a6724451830fbad38e214f6caa084aa6a97ed9412edc60ed04e754797ee0"
+    },
+    "NCPSCodec.lean": {
+      "bytes": 4360,
+      "sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd"
+    },
+    "NCPSCodec.olean": {
+      "bytes": 304952,
+      "sha256": "3998c5e439c9d2b498d651f0f8b879c40dfb1c91e4588704c81962bc7b72d971"
+    },
+    "NCPSCore.lean": {
+      "bytes": 6614,
+      "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3"
+    },
+    "NCPSCore.olean": {
+      "bytes": 242120,
+      "sha256": "f0eb2c327fea1958baa0d482e1d3b279c2526b58aa91bac87cf8472464fe00a4"
+    },
+    "NCPSFullAxiomAudit.lean": {
+      "bytes": 6568,
+      "sha256": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468"
+    },
+    "NCPSFullAxiomAudit.log": {
+      "bytes": 8937,
+      "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a"
+    },
+    "NCPSFullAxiomAudit.recheck.log": {
+      "bytes": 8937,
+      "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a"
+    },
+    "NCPSProtocol.lean": {
+      "bytes": 6228,
+      "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e"
+    },
+    "NCPSProtocol.olean": {
+      "bytes": 448152,
+      "sha256": "d0bc87d635fea0390fe48b259943fdd4c6313ddb44879a66ba8dcedf08c222a0"
+    },
+    "NCPSRelations.lean": {
+      "bytes": 3912,
+      "sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb"
+    },
+    "NCPSRelations.olean": {
+      "bytes": 238048,
+      "sha256": "a5b808ee065dc108d5959844b9baf7a586fdc6ca66921ac119a3c551bb866988"
+    },
+    "NCPSState.lean": {
+      "bytes": 2882,
+      "sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1"
+    },
+    "NCPSState.olean": {
+      "bytes": 138328,
+      "sha256": "94e195f09567ab456962f26049ef3ed26fef7732e99b8fe059a234bbaea2502a"
+    },
+    "NCPSUtf8.lean": {
+      "bytes": 2847,
+      "sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7"
+    },
+    "NCPSUtf8.olean": {
+      "bytes": 112392,
+      "sha256": "d74fead360e277d2a2908306e7076d6ea397b4366decc426ba23f6dd461d53e4"
+    },
+    "NCPSVerification.lean": {
+      "bytes": 3536,
+      "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516"
+    },
+    "NCPSVerification.olean": {
+      "bytes": 343448,
+      "sha256": "1d7142d4deefee29a0b7485e0414671508645c2c68bab9b1a0adb49be130661d"
+    },
+    "NCPSVersion.lean": {
+      "bytes": 3349,
+      "sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e"
+    },
+    "NCPSVersion.olean": {
+      "bytes": 340752,
+      "sha256": "4d77302fb5e5197507ecf245e1b32afc9d911626b821593676ca9ecfd07f0bba"
+    },
+    "README.md": {
+      "bytes": 1167,
+      "sha256": "ff22e567bf952ea47fa46b161bcd4d98de940d6a9170b254521bd4e356cf21e7"
+    },
+    "VERIFICATION_RECEIPT.json": {
+      "bytes": 3123,
+      "sha256": "0d4b887661ae3c5d5ec175ef4d931e54d519793a2fba913e97c2b05347483a1c"
+    },
+    "check_axioms.py": {
+      "bytes": 875,
+      "sha256": "98eabdb49de86660eb59b1fd164b42f8da7bda62dd4d3e5783aab541c0a2f4ce"
+    },
+    "lean-toolchain": {
+      "bytes": 25,
+      "sha256": "8f6680f8389e8adee06cb2bd44372c6d60dce0e8301630b61a99a5642d1bd71b"
+    },
+    "verify.sh": {
+      "bytes": 444,
+      "sha256": "a1af9acb3a1d9d356a0ed7ff237f1cd7223cd5c5d008099d7f8c0aa51396bb03"
+    }
+  },
+  "receipt_manifest_checks": [
+    {
+      "name": "NCPSAll.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 208,
+        "sha256": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7"
+      },
+      "declared": {
+        "bytes": 208,
+        "sha256": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7"
+      }
+    },
+    {
+      "name": "NCPSAudit.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 3303,
+        "sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4"
+      },
+      "declared": {
+        "bytes": 3303,
+        "sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4"
+      }
+    },
+    {
+      "name": "NCPSBoundaries.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 1846,
+        "sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d"
+      },
+      "declared": {
+        "bytes": 1846,
+        "sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d"
+      }
+    },
+    {
+      "name": "NCPSClosure.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 3187,
+        "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5"
+      },
+      "declared": {
+        "bytes": 3187,
+        "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5"
+      }
+    },
+    {
+      "name": "NCPSCodec.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 4360,
+        "sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd"
+      },
+      "declared": {
+        "bytes": 4360,
+        "sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd"
+      }
+    },
+    {
+      "name": "NCPSCore.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 6614,
+        "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3"
+      },
+      "declared": {
+        "bytes": 6614,
+        "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3"
+      }
+    },
+    {
+      "name": "NCPSFullAxiomAudit.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 6568,
+        "sha256": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468"
+      },
+      "declared": {
+        "bytes": 6568,
+        "sha256": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468"
+      }
+    },
+    {
+      "name": "NCPSFullAxiomAudit.log",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 8937,
+        "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a"
+      },
+      "declared": {
+        "bytes": 8937,
+        "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a"
+      }
+    },
+    {
+      "name": "NCPSProtocol.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 6228,
+        "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e"
+      },
+      "declared": {
+        "bytes": 6228,
+        "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e"
+      }
+    },
+    {
+      "name": "NCPSRelations.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 3912,
+        "sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb"
+      },
+      "declared": {
+        "bytes": 3912,
+        "sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb"
+      }
+    },
+    {
+      "name": "NCPSState.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 2882,
+        "sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1"
+      },
+      "declared": {
+        "bytes": 2882,
+        "sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1"
+      }
+    },
+    {
+      "name": "NCPSUtf8.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 2847,
+        "sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7"
+      },
+      "declared": {
+        "bytes": 2847,
+        "sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7"
+      }
+    },
+    {
+      "name": "NCPSVerification.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 3536,
+        "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516"
+      },
+      "declared": {
+        "bytes": 3536,
+        "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516"
+      }
+    },
+    {
+      "name": "NCPSVersion.lean",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 3349,
+        "sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e"
+      },
+      "declared": {
+        "bytes": 3349,
+        "sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e"
+      }
+    },
+    {
+      "name": "README.md",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 1167,
+        "sha256": "ff22e567bf952ea47fa46b161bcd4d98de940d6a9170b254521bd4e356cf21e7"
+      },
+      "declared": {
+        "bytes": 1167,
+        "sha256": "ff22e567bf952ea47fa46b161bcd4d98de940d6a9170b254521bd4e356cf21e7"
+      }
+    },
+    {
+      "name": "check_axioms.py",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 875,
+        "sha256": "98eabdb49de86660eb59b1fd164b42f8da7bda62dd4d3e5783aab541c0a2f4ce"
+      },
+      "declared": {
+        "bytes": 875,
+        "sha256": "98eabdb49de86660eb59b1fd164b42f8da7bda62dd4d3e5783aab541c0a2f4ce"
+      }
+    },
+    {
+      "name": "lean-toolchain",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 25,
+        "sha256": "8f6680f8389e8adee06cb2bd44372c6d60dce0e8301630b61a99a5642d1bd71b"
+      },
+      "declared": {
+        "bytes": 25,
+        "sha256": "8f6680f8389e8adee06cb2bd44372c6d60dce0e8301630b61a99a5642d1bd71b"
+      }
+    },
+    {
+      "name": "verify.sh",
+      "sha256_match": true,
+      "bytes_match": true,
+      "actual": {
+        "bytes": 444,
+        "sha256": "a1af9acb3a1d9d356a0ed7ff237f1cd7223cd5c5d008099d7f8c0aa51396bb03"
+      },
+      "declared": {
+        "bytes": 444,
+        "sha256": "a1af9acb3a1d9d356a0ed7ff237f1cd7223cd5c5d008099d7f8c0aa51396bb03"
+      }
+    }
+  ],
+  "compilation": [
+    {
+      "module": "NCPSCore",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSCore.olean",
+        "NCPSCore.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSProtocol",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSProtocol.olean",
+        "NCPSProtocol.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSCodec",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSCodec.olean",
+        "NCPSCodec.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSRelations",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSRelations.olean",
+        "NCPSRelations.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSState",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSState.olean",
+        "NCPSState.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSClosure",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSClosure.olean",
+        "NCPSClosure.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSVerification",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSVerification.olean",
+        "NCPSVerification.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSVersion",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSVersion.olean",
+        "NCPSVersion.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSBoundaries",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSBoundaries.olean",
+        "NCPSBoundaries.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSAudit",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSAudit.olean",
+        "NCPSAudit.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSUtf8",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSUtf8.olean",
+        "NCPSUtf8.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "module": "NCPSAll",
+      "command": [
+        "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+        "-t",
+        "0",
+        "-o",
+        "NCPSAll.olean",
+        "NCPSAll.lean"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "axiom_audit": {
+    "command": [
+      "/private/tmp/ncps-lean4-check/elan/toolchains/leanprover--lean4---v4.22.0/bin/lean",
+      "-t",
+      "0",
+      "NCPSFullAxiomAudit.lean"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "expected_declarations": 131,
+    "output_lines": 131,
+    "unique_expected_declarations": 131,
+    "dependencies": {
+      "Classical.choice": 2,
+      "propext": 60,
+      "Quot.sound": 22
+    },
+    "mismatches": [],
+    "log_sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a",
+    "fresh_log_matches_original": true,
+    "full_output": "'NCPS.byte_lt_256' does not depend on any axioms\n'NCPS.empty_length' does not depend on any axioms\n'NCPS.length_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]\n'NCPS.concat_length' depends on axioms: [propext]\n'NCPS.concat_empty_left' depends on axioms: [propext]\n'NCPS.concat_empty_right' depends on axioms: [propext]\n'NCPS.concat_assoc' depends on axioms: [propext]\n'NCPS.byteAt_out_of_bounds' depends on axioms: [propext]\n'NCPS.byteAt_in_bounds' does not depend on any axioms\n'NCPS.bytes_ext' depends on axioms: [propext]\n'NCPS.fromTagged_length' depends on axioms: [propext]\n'NCPS.fromTagged_toTagged' depends on axioms: [propext]\n'NCPS.emptyTagged_length' depends on axioms: [propext]\n'NCPS.ExtractionSet.empty_no_mem' depends on axioms: [propext, Quot.sound]\n'NCPS.ExtractionSet.fromList_mem' depends on axioms: [propext, Quot.sound]\n'NCPS.ExtractionSet.fromList_duplicate' depends on axioms: [propext, Quot.sound]\n'NCPS.ExtractionSet.fromList_swap' depends on axioms: [propext, Quot.sound]\n'NCPS.rejection_ne_empty_success' depends on axioms: [propext, Quot.sound]\n'NCPS.erasure_collision' depends on axioms: [propext, Quot.sound]\n'NCPS.extract_rejected_iff' depends on axioms: [propext, Quot.sound]\n'NCPS.extract_accepted_iff' depends on axioms: [propext, Quot.sound]\n'NCPS.nonempty_slices_implies_success' depends on axioms: [propext, Quot.sound]\n'NCPS.accepted_empty_distinct_from_rejected' depends on axioms: [propext, Quot.sound]\n'NCPS.extracted_empty_sequence_is_nonempty' depends on axioms: [propext, Quot.sound]\n'NCPS.ofFn_injective' depends on axioms: [propext, Quot.sound]\n'NCPS.fromTagged_injective' depends on axioms: [propext, Quot.sound]\n'NCPS.toTagged_fromTagged' depends on axioms: [propext, Quot.sound]\n'NCPS.tagged_equivalence_left' depends on axioms: [propext]\n'NCPS.tagged_equivalence_right' depends on axioms: [propext, Quot.sound]\n'NCPS.codec_injective_of_roundtrip' does not depend on any axioms\n'NCPS.canonical_roundtrip' does not depend on any axioms\n'NCPS.canonical_serialization_injective' does not depend on any axioms\n'NCPS.sample_roundtrip' depends on axioms: [propext]\n'NCPS.sample_codec_roundtrip' depends on axioms: [propext]\n'NCPS.sample_encode_injective' depends on axioms: [propext]\n'NCPS.sample_rejects_empty' does not depend on any axioms\n'NCPS.frame_length' depends on axioms: [propext]\n'NCPS.frame_injective' does not depend on any axioms\n'NCPS.conforming_implementations_agree' does not depend on any axioms\n'NCPS.unknown_not_proven' does not depend on any axioms\n'NCPS.failed_not_proven' does not depend on any axioms\n'NCPS.positive_proven' does not depend on any axioms\n'NCPS.refinement_preserves_reachability' does not depend on any axioms\n'NCPS.refinement_preserves_invariant' does not depend on any axioms\n'NCPS.Advanced.codec_injective_of_roundtrip' does not depend on any axioms\n'NCPS.Advanced.canonical_roundtrip' does not depend on any axioms\n'NCPS.Advanced.canonical_serialization_injective' does not depend on any axioms\n'NCPS.Advanced.encodeObject_defined' depends on axioms: [propext]\n'NCPS.Advanced.object_roundtrip' depends on axioms: [propext]\n'NCPS.Advanced.sample_roundtrip' depends on axioms: [propext]\n'NCPS.Advanced.sample_codec_roundtrip' depends on axioms: [propext]\n'NCPS.Advanced.sample_encode_injective' depends on axioms: [propext]\n'NCPS.Advanced.sample_rejects_empty' does not depend on any axioms\n'NCPS.Advanced.frame_length' depends on axioms: [propext]\n'NCPS.Advanced.frame_injective' depends on axioms: [propext]\n'NCPS.Advanced.frame_of_equal_payload' does not depend on any axioms\n'NCPS.Advanced.conforms_implies_realize_eq' depends on axioms: [Quot.sound]\n'NCPS.Advanced.realize_eq_implies_conforms' does not depend on any axioms\n'NCPS.Advanced.conforms_iff_observational_equality' depends on axioms: [Quot.sound]\n'NCPS.Advanced.conforming_implementations_agree' does not depend on any axioms\n'NCPS.Advanced.declaration_ids_are_distinct' does not depend on any axioms\n'NCPS.Advanced.both_demo_relations_empty_on_any_instances' does not depend on any axioms\n'NCPS.Advanced.duplicate_symbols_rejected' depends on axioms: [propext]\n'NCPS.Advanced.local_only_resolves' depends on axioms: [propext]\n'NCPS.Advanced.imported_only_resolves' depends on axioms: [propext]\n'NCPS.Advanced.absent_symbols_rejected' depends on axioms: [propext]\n'NCPS.Advanced.reachable_maps' does not depend on any axioms\n'NCPS.Advanced.safety_preserved' does not depend on any axioms\n'NCPS.Advanced.counter_refinement_preserves_reachability' does not depend on any axioms\n'NCPS.Advanced.counter_concrete_next' does not depend on any axioms\n'NCPS.Advanced.unavailable_is_blocked' does not depend on any axioms\n'NCPS.Advanced.unchecked_is_not_passed' does not depend on any axioms\n'NCPS.Advanced.positive_check_passed' does not depend on any axioms\n'NCPS.Advanced.negative_check_failed' does not depend on any axioms\n'NCPS.Advanced.blocked_ne_failed' does not depend on any axioms\n'NCPS.Advanced.blocked_ne_passed' does not depend on any axioms\n'NCPS.Advanced.unchecked_ne_passed' does not depend on any axioms\n'NCPS.Advanced.fully_closed_implies_each_pass' does not depend on any axioms\n'NCPS.Advanced.blocked_stage_prevents_closure' does not depend on any axioms\n'NCPS.Advanced.failed_stage_prevents_closure' does not depend on any axioms\n'NCPS.Advanced.unchecked_stage_prevents_closure' does not depend on any axioms\n'NCPS.Advanced.allPass_fully_closed' does not depend on any axioms\n'NCPS.Advanced.proof_gate_required' does not depend on any axioms\n'NCPS.Advanced.evidence_without_prerequisites_blocked' depends on axioms: [propext]\n'NCPS.Advanced.accepted_signature_valid' does not depend on any axioms\n'NCPS.Advanced.accepted_authority_valid' does not depend on any axioms\n'NCPS.Advanced.accepted_sources_valid' does not depend on any axioms\n'NCPS.Advanced.accepted_freshness' does not depend on any axioms\n'NCPS.Advanced.accepted_private_when_required' does not depend on any axioms\n'NCPS.Advanced.accepted_current_source_when_required' does not depend on any axioms\n'NCPS.Advanced.signature_alone_not_acceptance' does not depend on any axioms\n'NCPS.Advanced.unavailable_authority_ne_passed' does not depend on any axioms\n'NCPS.Advanced.unverified_private_not_acceptance_when_required' does not depend on any axioms\n'NCPS.Advanced.untrusted_signature_rejected' depends on axioms: [propext]\n'NCPS.Advanced.same_release_is_equal' does not depend on any axioms\n'NCPS.Advanced.labels_equal_but_releases_differ' does not depend on any axioms\n'NCPS.Advanced.genesis_congruent' does not depend on any axioms\n'NCPS.Advanced.deterministic_does_not_imply_injective' does not depend on any axioms\n'NCPS.Advanced.zero_depth_unique' does not depend on any axioms\n'NCPS.Advanced.no_singleton_at_any_bound' depends on axioms: [propext]\n'NCPS.Advanced.bounded_search_may_fail' depends on axioms: [propext]\n'NCPS.Advanced.empty_is_prefix' depends on axioms: [propext]\n'NCPS.Advanced.empty_is_suffix' depends on axioms: [propext]\n'NCPS.Advanced.empty_is_infix' depends on axioms: [propext]\n'NCPS.Advanced.prefix_reflexive' depends on axioms: [propext]\n'NCPS.Advanced.suffix_reflexive' depends on axioms: [propext]\n'NCPS.Advanced.infix_reflexive' depends on axioms: [propext]\n'NCPS.Advanced.prefix_transitive' depends on axioms: [propext]\n'NCPS.Advanced.suffix_transitive' depends on axioms: [propext]\n'NCPS.Advanced.prefix_length_bound' depends on axioms: [propext]\n'NCPS.Advanced.suffix_length_bound' depends on axioms: [propext]\n'NCPS.Advanced.full_pass_requires_jcs' does not depend on any axioms\n'NCPS.Advanced.full_pass_requires_signatures' does not depend on any axioms\n'NCPS.Advanced.full_pass_requires_trust' does not depend on any axioms\n'NCPS.Advanced.full_pass_requires_field' does not depend on any axioms\n'NCPS.Advanced.blocked_field_prevents_full_pass' does not depend on any axioms\n'NCPS.Advanced.incomplete_jcs_prevents_full_pass' does not depend on any axioms\n'NCPS.Advanced.current_evidence_not_full_pass' does not depend on any axioms\n'NCPS.Utf8.bom_is_detected' does not depend on any axioms\n'NCPS.Utf8.bom_is_rejected' depends on axioms: [propext, Quot.sound]\n'NCPS.Utf8.reject_any_bom_prefixed' depends on axioms: [propext, Classical.choice, Quot.sound]\n'NCPS.Utf8.decode_success_implies_no_bom' depends on axioms: [propext, Quot.sound]\n'NCPS.Utf8.decode_success_implies_valid_utf8' depends on axioms: [propext, Quot.sound]\n'NCPS.Utf8.fdd0_is_noncharacter' does not depend on any axioms\n'NCPS.Utf8.fdef_is_noncharacter' does not depend on any axioms\n'NCPS.Utf8.plane_zero_fffe_is_noncharacter' does not depend on any axioms\n'NCPS.Utf8.last_unicode_noncharacter' does not depend on any axioms\n'NCPS.Utf8.ascii_is_allowed' does not depend on any axioms\n'NCPS.Utf8.surrogate_is_rejected' does not depend on any axioms\n'NCPS.Utf8.noncharacter_is_rejected' does not depend on any axioms\n'NCPS.Utf8.allowed_scalar_no_noncharacter' depends on axioms: [propext]\n",
+    "pass": true
+  },
+  "existing_audit_checker": {
+    "exit_code": 0,
+    "stdout": "KERNEL_AUDIT_131_PASS CUSTOM_AXIOMS_0 SORRY_AX_0\nFOUNDATIONAL_DEPENDENCIES: {'propext': 60, 'Classical.choice': 2, 'Quot.sound': 22}\n",
+    "stderr": ""
+  },
+  "source_scan": {
+    "modules": [
+      {
+        "module": "NCPSCore",
+        "theorem_count": 29,
+        "theorem_names": [
+          "byte_lt_256",
+          "empty_length",
+          "length_zero_iff",
+          "concat_length",
+          "concat_empty_left",
+          "concat_empty_right",
+          "concat_assoc",
+          "byteAt_out_of_bounds",
+          "byteAt_in_bounds",
+          "bytes_ext",
+          "fromTagged_length",
+          "fromTagged_toTagged",
+          "emptyTagged_length",
+          "ExtractionSet.empty_no_mem",
+          "ExtractionSet.fromList_mem",
+          "ExtractionSet.fromList_duplicate",
+          "ExtractionSet.fromList_swap",
+          "rejection_ne_empty_success",
+          "erasure_collision",
+          "extract_rejected_iff",
+          "extract_accepted_iff",
+          "nonempty_slices_implies_success",
+          "accepted_empty_distinct_from_rejected",
+          "extracted_empty_sequence_is_nonempty",
+          "ofFn_injective",
+          "fromTagged_injective",
+          "toTagged_fromTagged",
+          "tagged_equivalence_left",
+          "tagged_equivalence_right"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSProtocol",
+        "theorem_count": 15,
+        "theorem_names": [
+          "codec_injective_of_roundtrip",
+          "canonical_roundtrip",
+          "canonical_serialization_injective",
+          "sample_roundtrip",
+          "sample_codec_roundtrip",
+          "sample_encode_injective",
+          "sample_rejects_empty",
+          "frame_length",
+          "frame_injective",
+          "conforming_implementations_agree",
+          "unknown_not_proven",
+          "failed_not_proven",
+          "positive_proven",
+          "refinement_preserves_reachability",
+          "refinement_preserves_invariant"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSCodec",
+        "theorem_count": 12,
+        "theorem_names": [
+          "codec_injective_of_roundtrip",
+          "canonical_roundtrip",
+          "canonical_serialization_injective",
+          "encodeObject_defined",
+          "object_roundtrip",
+          "sample_roundtrip",
+          "sample_codec_roundtrip",
+          "sample_encode_injective",
+          "sample_rejects_empty",
+          "frame_length",
+          "frame_injective",
+          "frame_of_equal_payload"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSRelations",
+        "theorem_count": 10,
+        "theorem_names": [
+          "conforms_implies_realize_eq",
+          "realize_eq_implies_conforms",
+          "conforms_iff_observational_equality",
+          "conforming_implementations_agree",
+          "declaration_ids_are_distinct",
+          "both_demo_relations_empty_on_any_instances",
+          "duplicate_symbols_rejected",
+          "local_only_resolves",
+          "imported_only_resolves",
+          "absent_symbols_rejected"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSState",
+        "theorem_count": 4,
+        "theorem_names": [
+          "reachable_maps",
+          "safety_preserved",
+          "counter_refinement_preserves_reachability",
+          "counter_concrete_next"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSClosure",
+        "theorem_count": 14,
+        "theorem_names": [
+          "unavailable_is_blocked",
+          "unchecked_is_not_passed",
+          "positive_check_passed",
+          "negative_check_failed",
+          "blocked_ne_failed",
+          "blocked_ne_passed",
+          "unchecked_ne_passed",
+          "fully_closed_implies_each_pass",
+          "blocked_stage_prevents_closure",
+          "failed_stage_prevents_closure",
+          "unchecked_stage_prevents_closure",
+          "allPass_fully_closed",
+          "proof_gate_required",
+          "evidence_without_prerequisites_blocked"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSVerification",
+        "theorem_count": 10,
+        "theorem_names": [
+          "accepted_signature_valid",
+          "accepted_authority_valid",
+          "accepted_sources_valid",
+          "accepted_freshness",
+          "accepted_private_when_required",
+          "accepted_current_source_when_required",
+          "signature_alone_not_acceptance",
+          "unavailable_authority_ne_passed",
+          "unverified_private_not_acceptance_when_required",
+          "untrusted_signature_rejected"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSVersion",
+        "theorem_count": 7,
+        "theorem_names": [
+          "same_release_is_equal",
+          "labels_equal_but_releases_differ",
+          "genesis_congruent",
+          "deterministic_does_not_imply_injective",
+          "zero_depth_unique",
+          "no_singleton_at_any_bound",
+          "bounded_search_may_fail"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSBoundaries",
+        "theorem_count": 10,
+        "theorem_names": [
+          "empty_is_prefix",
+          "empty_is_suffix",
+          "empty_is_infix",
+          "prefix_reflexive",
+          "suffix_reflexive",
+          "infix_reflexive",
+          "prefix_transitive",
+          "suffix_transitive",
+          "prefix_length_bound",
+          "suffix_length_bound"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSAudit",
+        "theorem_count": 7,
+        "theorem_names": [
+          "full_pass_requires_jcs",
+          "full_pass_requires_signatures",
+          "full_pass_requires_trust",
+          "full_pass_requires_field",
+          "blocked_field_prevents_full_pass",
+          "incomplete_jcs_prevents_full_pass",
+          "current_evidence_not_full_pass"
+        ],
+        "flagged_code_tokens": []
+      },
+      {
+        "module": "NCPSUtf8",
+        "theorem_count": 13,
+        "theorem_names": [
+          "bom_is_detected",
+          "bom_is_rejected",
+          "reject_any_bom_prefixed",
+          "decode_success_implies_no_bom",
+          "decode_success_implies_valid_utf8",
+          "fdd0_is_noncharacter",
+          "fdef_is_noncharacter",
+          "plane_zero_fffe_is_noncharacter",
+          "last_unicode_noncharacter",
+          "ascii_is_allowed",
+          "surrogate_is_rejected",
+          "noncharacter_is_rejected",
+          "allowed_scalar_no_noncharacter"
+        ],
+        "flagged_code_tokens": []
+      }
+    ],
+    "total_named_theorem_declarations": 131,
+    "note": "Comments and quoted strings removed; lexical scan supplements actual kernel axiom audit. Premises and abstractions remain explicit mathematical assumptions."
+  },
+  "sibling_zip": {
+    "path": "/Users/samuelkott/Documents/Numina/NCPS-Lean4-Proofs-2026-10-09.zip",
+    "bytes": 22789,
+    "sha256": "62b3607544daeb524fb82ad60c7442eb9281f9cfb1862029fc716cfd5a14954e",
+    "members": [
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSAll.lean",
+        "bytes": 208,
+        "sha256": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSAudit.lean",
+        "bytes": 3303,
+        "sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSBoundaries.lean",
+        "bytes": 1846,
+        "sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSClosure.lean",
+        "bytes": 3187,
+        "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSCodec.lean",
+        "bytes": 4360,
+        "sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSCore.lean",
+        "bytes": 6614,
+        "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSFullAxiomAudit.lean",
+        "bytes": 6568,
+        "sha256": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSFullAxiomAudit.log",
+        "bytes": 8937,
+        "sha256": "2824568ab4918ed1cfa7e84ae96d01c423aad214e03c1bce8ea43bf7d220ab1a",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSProtocol.lean",
+        "bytes": 6228,
+        "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSRelations.lean",
+        "bytes": 3912,
+        "sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSState.lean",
+        "bytes": 2882,
+        "sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSUtf8.lean",
+        "bytes": 2847,
+        "sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSVerification.lean",
+        "bytes": 3536,
+        "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/NCPSVersion.lean",
+        "bytes": 3349,
+        "sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/README.md",
+        "bytes": 1167,
+        "sha256": "ff22e567bf952ea47fa46b161bcd4d98de940d6a9170b254521bd4e356cf21e7",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/VERIFICATION_RECEIPT.json",
+        "bytes": 3123,
+        "sha256": "0d4b887661ae3c5d5ec175ef4d931e54d519793a2fba913e97c2b05347483a1c",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/check_axioms.py",
+        "bytes": 875,
+        "sha256": "98eabdb49de86660eb59b1fd164b42f8da7bda62dd4d3e5783aab541c0a2f4ce",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/lean-toolchain",
+        "bytes": 25,
+        "sha256": "8f6680f8389e8adee06cb2bd44372c6d60dce0e8301630b61a99a5642d1bd71b",
+        "matches_directory_leaf": true
+      },
+      {
+        "member": "NCPS-Lean4-Proofs-2026-10-09/verify.sh",
+        "bytes": 444,
+        "sha256": "a1af9acb3a1d9d356a0ed7ff237f1cd7223cd5c5d008099d7f8c0aa51396bb03",
+        "matches_directory_leaf": true
+      }
+    ],
+    "mismatching_members": []
+  },
+  "originals_unchanged": true,
+  "bounded_scope": {
+    "whole_protocol_verified": false,
+    "cryptographic_implementation_verified": false,
+    "RFC8785_conformance_verified": false,
+    "deployment_or_current_state_verified": false,
+    "edition_Q_exact_sources_located_under_Documents_Numina": false,
+    "reason": "These generic model proofs are a separate Lean4.22.0/131-theorem bundle. The manuscript AppendixQ lists distinct source identities associated with Lean4.24.0 corrected/structural proof packages."
+  }
+}

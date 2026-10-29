@@ -1,0 +1,169 @@
+{
+  "retained_tmp_locations": [
+    {
+      "root": "/private/tmp/ncps-lean4-check",
+      "exists": true,
+      "proof_inventory": [
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSUtf8ProfileBoundary.audit.lean",
+          "bytes": 204,
+          "sha256": "f0f598bdb766b547f7e958ba6afd08229e48b1f4fc63a7a7e19ded28e25eaf3b"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSVerification.lean",
+          "bytes": 3536,
+          "sha256": "73070eff0cf5f01c103f4f92b39c23c544abe900f4cfb370d503f83fe975a516"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/Tmp.lean",
+          "bytes": 18,
+          "sha256": "bad736df88281abae4c2bba24d632d13db9b2ef1b78fa89fa670d7d057d2c756"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSClosure.lean",
+          "bytes": 3187,
+          "sha256": "b4b0afc5b5a68ebe0209a99ba90b077bf40f8273d7e8c842160c5a0f5922cfa5"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/InspectDecoder.lean",
+          "bytes": 333,
+          "sha256": "b18103adcc5e942d8e574e6d76fa87bdfcb190cc7d8d863fc5e2824c21c32b5b"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSAll.lean",
+          "bytes": 208,
+          "sha256": "21e6c3206dab18c6f142654bd515bb2204742f2ca581a046d8b6db0cd328c0a7"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/Smoke.lean",
+          "bytes": 327,
+          "sha256": "e860e14c4bef2984bddce1b7642d0363572453576dfe279500fd45f16ba845e9"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSUtf8ProfileBoundary.lean",
+          "bytes": 1109,
+          "sha256": "765b700ec14adb0dab78e4a6026bdadc617fa7f0ab1f87a78699868ca9e13ff1"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSFullAxiomAudit.lean",
+          "bytes": 6568,
+          "sha256": "636c31f1c72a3aa81618f36c72f33a7cdf3487247e577598a653cc318e048468"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/TryRfl.lean",
+          "bytes": 240,
+          "sha256": "b09784363f927d46d20ccb15c862b6d99a1211d21f7d216f2adba2fdb782f6fd"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSRelations.lean",
+          "bytes": 3912,
+          "sha256": "49a41ceb14078d13547c65aa7a1fd817132c3e03b452ce451d97401750e703bb"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/InspectDecoder3.lean",
+          "bytes": 106,
+          "sha256": "a3aee39625a926661883171a8ff54f2a4ef9cd8b0d0452ec6e02682480f9eb94"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/InspectUtf8.lean",
+          "bytes": 421,
+          "sha256": "ed9bc8cee4582f99e432e9c90011a9b097a1c613a79d81404c4e5aaa0e3936bf"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSUtf8.lean",
+          "bytes": 2847,
+          "sha256": "506aee3b90487dc1ed887a49e65e0e21416b7e299277ddb49ec9cf0a1e7fa6d7"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSCore.lean",
+          "bytes": 6614,
+          "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/InspectDecoder2.lean",
+          "bytes": 190,
+          "sha256": "cd5750b563e224868365c0e3067bed2a7772ca7685528cb70602132e667f6755"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSProtocol.lean",
+          "bytes": 6228,
+          "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSAudit.lean",
+          "bytes": 3303,
+          "sha256": "3f3e1fc198e14765b87637d0175dc8c0d29cc839d7b0e5cf3c6e35e5afd3fec4"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSVersion.lean",
+          "bytes": 3349,
+          "sha256": "9a72a663e857b9759c5c33fa26514afb744f63207b270bd37ca1cc32640c6b8e"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSBoundaries.lean",
+          "bytes": 1846,
+          "sha256": "382fd3d9ce13d131437470e7c8357d94bd3510b1913f2abd6548c66aac32171d"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/Test.lean",
+          "bytes": 62,
+          "sha256": "fddd752f29fa5c52cc998caa34f7a50b84dfdc8063d6aaf21d5936bcd96f6b20"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSCodec.lean",
+          "bytes": 4360,
+          "sha256": "a25a7cbe7ee7579510e9e8756f9ce5433b3c322e49bc51aa02f9ddec50bc1ecd"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSState.lean",
+          "bytes": 2882,
+          "sha256": "ae05c23e445319e9a5eb4deef1b23c857e1fd1b112bc4f9e0c65ca7df6ebf0f1"
+        },
+        {
+          "path": "/private/tmp/ncps-lean4-check/NCPSUtf8Audit.lean",
+          "bytes": 643,
+          "sha256": "50d80699eeaf83ed12719c0934f459fccbaa82cbcf3eb855ea32226538379d15"
+        }
+      ],
+      "exact_named_Appendix_Q_matches": [],
+      "archives": [
+        {
+          "path": "/private/tmp/ncps-lean4-check/proof_sources.zip",
+          "bytes": 14956,
+          "matches": []
+        }
+      ]
+    },
+    {
+      "root": "/private/tmp/ncps-proof-release-20261009-gpt6-01",
+      "exists": true,
+      "proof_inventory": [
+        {
+          "path": "/private/tmp/ncps-proof-release-20261009-gpt6-01/NCPSCore.lean",
+          "bytes": 6614,
+          "sha256": "8fd4ec8a22539cb9193ffc2b0a04cd089db23edc52f32686b2c62a4ba48bc6d3"
+        },
+        {
+          "path": "/private/tmp/ncps-proof-release-20261009-gpt6-01/NCPSProtocol.lean",
+          "bytes": 6228,
+          "sha256": "c9df6ee03a4258cc7f5a79e7082a6508f984f779def9bfeccdcfa7bc62f5b14e"
+        },
+        {
+          "path": "/private/tmp/ncps-proof-release-20261009-gpt6-01/NCPSAudit.lean",
+          "bytes": 2749,
+          "sha256": "929afe50e354d3af1e21faf2d5dad19af3b417dfdaf5b9c295bebcade6b2a342"
+        },
+        {
+          "path": "/private/tmp/ncps-proof-release-20261009-gpt6-01/NCPSBoundaries.lean",
+          "bytes": 5175,
+          "sha256": "d10bc1cb362868e323f330262871c80599d365eee474e0406ea63490ab455a03"
+        }
+      ],
+      "exact_named_Appendix_Q_matches": [],
+      "archives": []
+    }
+  ],
+  "native_toolchains": [
+    "leanprover--lean4---v4.22.0"
+  ]
+}
