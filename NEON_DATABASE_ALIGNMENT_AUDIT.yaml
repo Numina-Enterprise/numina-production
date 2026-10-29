@@ -1,0 +1,79 @@
+# ==============================================================================
+# NEON DATABASE AUDIT & SOVEREIGN ALIGNMENT SPECIFICATION
+# Console Target: https://console.neon.tech/app/org-round-band-48289588/projects
+# Sovereign Primary Anchor: Google Cloud Platform (project-0317d6c9-e943-409e-83f)
+# Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+# Operational Status: HISTORICAL_PROVENANCE_SEALED / ZERO_DIRECT_INGRESS
+# ==============================================================================
+
+organization_id: "org-round-band-48289588"
+sovereign_authority: "Google Cloud Platform (us-central1)"
+cluster_role: "ARCHIVAL_PROVENANCE_AND_LEAST_PRIVILEGE_EVIDENCE_STORE"
+
+# ------------------------------------------------------------------------------
+# 1. ARCHITECTURAL POSITION & SOVEREIGNTY LAW
+# ------------------------------------------------------------------------------
+sovereignty_rules:
+  primary_authority:
+    provider: "Google Cloud Platform"
+    project_id: "project-0317d6c9-e943-409e-83f"
+    role: "SOLE_AUTHORITY_FOR_FINANCIAL_SETTLEMENT_AND_KEYPINNING"
+    hsm_keypin: "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce"
+
+  neon_role:
+    status: "SUNSET_AND_ISOLATED"
+    runtime_ingress: "DISABLED"
+    reason: |
+      Neon Postgres database (org-round-band-48289588) previously served as an interim
+      evidence persistence store via GitHub OIDC RPCs (commit 346f0cf1).
+      In accordance with FRONTIER.md and commit 014aa0d9, runtime evidence routes were
+      retired from live edge traffic and transferred to immutable GitHub Releases and
+      Google Cloud HSM signed attestation ledgers.
+
+# ------------------------------------------------------------------------------
+# 2. SCHEMA PROVENANCE AUDIT (database/neon/)
+# ------------------------------------------------------------------------------
+audited_migrations:
+  - version: "0001"
+    file: "database/neon/0001_numina_manifest_evidence.sql"
+    purpose: "Establishes base numina_evidence_records table, RLS, and cryptographic hash indices."
+    verified_status: "HISTORICAL_BASELINE_SEALED"
+
+  - version: "0002"
+    file: "database/neon/0002_security_least_privilege.sql"
+    purpose: "Enforces strict Postgres least-privilege roles, stripping anonymous writes."
+    verified_status: "LEAST_PRIVILEGE_ENFORCED"
+
+  - version: "0003"
+    file: "database/neon/0003_trusted_release_v3_rpc_least_privilege.sql"
+    purpose: "Restricts function access to GitHub Actions OIDC authenticated claims only."
+    verified_status: "OIDC_GUARDED"
+
+  - version: "0004"
+    file: "database/neon/0004_rc27_runtime_cutover.sql"
+    purpose: "RC27 runtime cutover preserving RC26 rows and updating fail-closed validation."
+    verified_status: "RC27_CUTOVER_COMPLIANT"
+
+# ------------------------------------------------------------------------------
+# 3. CONSOLE HARDENING VERIFICATION CHECKLIST (org-round-band-48289588)
+# ------------------------------------------------------------------------------
+console_security_posture:
+  compute_endpoints:
+    scale_to_zero: "enabled"            # Auto-suspend after 5 minutes of idle to eliminate attack surface
+    ip_allowlist: "restricted"          # Whitelist GCP Cloud Run egress CIDRs and GitHub Actions OIDC runner IPs only
+    ssl_enforcement: "require"          # sslmode=require mandatory on all pooler and direct connections
+  roles_and_privileges:
+    neondb_owner: "restricted_to_admin"
+    public_schema_anonymous_access: "REVOKED"
+    rls_enabled: true
+  backup_and_retention:
+    point_in_time_recovery: "active"    # Retention window preserved for regulatory compliance
+    zero_data_loss_policy: true
+
+# ------------------------------------------------------------------------------
+# 4. RUNTIME DEPENDENCY STATUS
+# ------------------------------------------------------------------------------
+runtime_dependency_assertion:
+  neon_active_dependency: false        # Verified in scripts/build-trusted-source-release.mjs
+  vercel_active_dependency: false      # Verified in scripts/build-trusted-source-release.mjs
+  gcloud_active_dependency: true       # Sovereign primary
