@@ -1,11 +1,11 @@
 steps:
-  # Build container image
+  # Build container image targeting modern Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest', '.']
 
-  # Push container image
+  # Push container image to existing numina-production repository
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest']
+    args: ['push', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest']
 
   # Deploy to Cloud Run in us-central1
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,7 +15,7 @@ steps:
       - 'deploy'
       - 'numinalabs-web'
       - '--image'
-      - 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest'
+      - 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -25,4 +25,4 @@ steps:
       - 'project-0317d6c9-e943-409e-83f'
 
 images:
-  - 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest'
+  - 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest'
