@@ -1,0 +1,29 @@
+{
+  "hardened_at": "2026-10-29T04:04:05.324Z",
+  "cluster_state_root": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+  "authority_keypin": "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce",
+  "guardian_keypin": "465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c",
+  "target_series": "1.9.0-rc27",
+  "security_policies": {
+    "zero_float_arithmetic": true,
+    "hsm_keypinning_enforced": true,
+    "unpinned_bootstrap_eliminated": true,
+    "dnssec_algorithm_13_ecdsa_active": true,
+    "fail_closed_signer_checks": true
+  },
+  "file_checksums_sha256": {
+    "ALIGNMENT_STATE_RATIFIED.json": "e249134c29754d241f751bb0d76c616440b7570c978cd1369dc6abf4d941fc10",
+    "VICTORY_CERTIFICATE.md": "44e09b3d5ea021a16afb5732f1304ee1a7720a3ee3ab7656e935371cd68cdae5",
+    "numinalabs-web/Dockerfile": "61d078b23ac0c9c358617ac94efc67f7e84549c2fed72ec0e0449fdb49a50e40",
+    "numinalabs-web/nginx.conf": "85f38870e488ea857138f20338523cb3fbad38ca56e1eef74f75813cd9971d10",
+    "numina-voice-agent/live_voice_agent.py": "d9e15063ecc1e8a1df43b21eb770972b2fffc7d40ebdb31543916c7c8686c7a8",
+    "numina-voice-agent/incident_response_agent.py": "05c5a26b0405d974aa548fe2e1f1b357548c30d5f862ff8630f740dab65a3089",
+    "numina-ibm-quantum/app.py": "021406e234127e65a284d4d8771e3220afded6cf0d326fe1869f3dee62f61a6d",
+    "numina-linear-bridge/app.py": "b518f478882f3278bb0e9055b46434ae005c362b00ce03fc92f07d5fb1bda565",
+    "mobile/ios/Configuration/Numina.xcconfig": "d1ac1538a7cc661e2ccd82626d79aa2a735973a5d8d2eba23730e8ae6cc0d59c",
+    "mobile/ios/.xcodecloud/ci_post_clone.sh": "76dda7abc9ae772354c2bde8781c37168f0ee4ce33fa396f21da0ca2dffe8482",
+    "mobile/ios/Numina/Numina.entitlements": "cd8a21755e7e3f6b9eb126addaf28238c6b825dca00b58baa752636134c5476f",
+    ".github/workflows/deploy-ibm-code-engine.yml": "f349eb24206d08dfe8a0b6607cce7f6d9a61976d64f273261952e7b28fb5e70a",
+    "topology-manifests/four_repo_topology.json": "ae0096287ab0d48c9733b43092de9339c2e43866afc7181a040722316dd4221f"
+  }
+}
