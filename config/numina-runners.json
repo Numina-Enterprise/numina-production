@@ -5,7 +5,7 @@
   "allRunnerIdentities": "NUMINA",
   "runnerTarget": "NUMINA",
   "preserveMode": "current_runner_count",
-  "preservedRunnerCount": 34,
+  "preservedRunnerCount": 36,
   "selfHostedPolicy": "deny_execution_preserve_registration_records",
   "futureRunnerPolicy": "deny",
   "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
@@ -46,7 +46,9 @@
       "verify-nusd-production.yml": "ubuntu-24.04",
       "verify-root-numina.yml": "ubuntu-24.04",
       "numina-ci-start.yml": "ubuntu-24.04",
-      "repair-rc27-integration-manifest.yml": "ubuntu-24.04"
+      "repair-rc27-integration-manifest.yml": "ubuntu-24.04",
+      "deploy-cloudflare.yml": "ubuntu-24.04",
+      "deploy-ibm-code-engine.yml": "ubuntu-24.04"
     },
     "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Numina root verification, provider verification, privileged control/deployment checks, and declared native workflows use only their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted runner registration records may be retained as historical/admin state, but self-hosted execution and scheduling are denied; no new runner or signing identity is introduced.",
     "workflowTargetSets": {
