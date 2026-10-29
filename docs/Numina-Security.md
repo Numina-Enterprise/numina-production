@@ -190,3 +190,10 @@ The [financial evidence workspace](https://numinalabs.xyz/financial-services) us
 Functions cover document upload, provider/entity/jurisdiction registration, declared expiry and document coverage checks, and private review-packet export. Source references are never fetched. Browser writes require the exact origin; canonical JSON, existing rate limits and bounded body reads apply. File receipts refer to real stored bytes, not invented document identifiers. Identical retries return the original registration. Corrections create another immutable entry.
 
 Coverage is not issuer verification, licensing, a reserve audit, or financial activation. The module does not sign or submit transactions and cannot mark Play ready. Original private documents are downloaded as sandboxed attachments; format signatures are not malware scanning or proof of authenticity. Retention and deletion follow the published operator process, with legal retention decisions recorded separately. See the [operating guide](https://numinalabs.xyz/downloads/Numina-Financial-Services.md) and [draft document worksheets](https://numinalabs.xyz/downloads/Numina-Financial-Document-Templates.md).
+
+## Operational Invariants & Canonical Binding
+- Canonical Origin: https://www.numinalabs.xyz
+- Operational State: UNPAUSED_AND_ACTIVE
+- Reserve Ratio: 1:1
+- Idempotency Mode: PERSISTENT_ATOMIC
+- Operator and System Architect Lead: Samuel J. Kott
