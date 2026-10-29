@@ -1,0 +1,69 @@
+# ==============================================================================
+# GODADDY VENTURE ALIGNMENT & BRAND PROTECTION MANIFEST
+# Target: https://dashboard.godaddy.com/venture?ventureId=c4c05090-1d2d-42e1-8404-40077b848247
+# Venture ID: c4c05090-1d2d-42e1-8404-40077b848247
+# Sovereign Primary Anchor: Google Cloud Platform (project-0317d6c9-e943-409e-83f)
+# Canonical Production Domain: numinalabs.xyz
+# Primary Registrar / DNSSEC Authority: Porkbun LLC / Cloudflare Edge (3c1fd59ef2ef67f750b4bc23e656d722)
+# ==============================================================================
+
+venture_id: "c4c05090-1d2d-42e1-8404-40077b848247"
+platform: "GoDaddy Venture & Domain Services"
+status: "ALIGNED_AND_PROTECTED"
+
+# ------------------------------------------------------------------------------
+# 1. ENTERPRISE BRAND ASSETS & DOMAIN PORTFOLIO ALIGNMENT
+# ------------------------------------------------------------------------------
+enterprise_identity:
+  entity_name: "SK Consulting LLC / Numina Labs"
+  system_architect_lead: "Samuel J. Kott"
+  primary_domain: "numinalabs.xyz"
+  brand_names:
+    - "Numina"
+    - "Numina Labs"
+    - "Numina Enterprise"
+    - "Numina OS"
+    - "NUSD"
+
+domain_hierarchy_policy:
+  canonical_production:
+    domain: "numinalabs.xyz"
+    registrar: "Porkbun LLC"
+    nameservers:
+      - "fred.ns.cloudflare.com"
+      - "lola.ns.cloudflare.com"
+    dnssec: "ACTIVE_ALGORITHM_13_ECDSA_P256"
+    role: "PRIMARY_PRODUCTION_SERVICE_ORIGIN"
+
+  godaddy_venture_domains:
+    role: "BRAND_DEFENSE_AND_FORWARDING_PERIMETER"
+    policy: "FAIL_CLOSED_FORWARDING_TO_PRIMARY"
+    routing_rule: |
+      Any domains, websites, or landing pages hosted or managed within GoDaddy Venture
+      ID c4c05090-1d2d-42e1-8404-40077b848247 must strictly enforce permanent 301 redirects
+      with TLS 1.3 to https://numinalabs.xyz. No secondary financial, API, or signing
+      endpoints may be established on GoDaddy infrastructure.
+
+# ------------------------------------------------------------------------------
+# 2. SECURITY HARDENING FOR GODADDY VENTURE CONSOLE
+# ------------------------------------------------------------------------------
+console_security_controls:
+  account_protection:
+    two_factor_authentication: "MANDATORY_HARDWARE_OR_TOTP"
+    domain_lock: "ACTIVE"               # Registrar lock enabled on all domains to prevent unauthorized transfers
+    privacy_protection: "FULL"          # WHOIS / RDAP privacy masking enabled
+  dns_records:
+    apex_behavior: "301 Redirect to https://numinalabs.xyz"
+    spf_record: "v=spf1 -all"           # Fail-closed: GoDaddy domains not permitted to originate raw email unless explicitly delegated
+    dmarc_record: "v=DMARC1; p=reject; rua=mailto:skott34@numinalabs.xyz"
+  ssl_tls:
+    https_redirection: "ENFORCED"
+    tls_version: "TLS 1.3 preferred, TLS 1.2 minimum"
+
+# ------------------------------------------------------------------------------
+# 3. COMPLIANCE & SOVEREIGNTY INVARIANTS
+# ------------------------------------------------------------------------------
+sovereignty_invariants:
+  - "Google Cloud Platform project-0317d6c9-e943-409e-83f remains the exclusive sovereign root for Numina."
+  - "GoDaddy Venture c4c05090-1d2d-42e1-8404-40077b848247 acts purely as a secondary brand asset perimeter."
+  - "No cryptographic keys, Ed25519 seed phrases, or financial ledgers reside on GoDaddy systems."
