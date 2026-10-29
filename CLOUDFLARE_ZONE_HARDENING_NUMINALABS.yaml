@@ -1,0 +1,124 @@
+# ==============================================================================
+# CLOUDFLARE ZONE SPECIFIC HARDENING MANIFEST: numinalabs.xyz
+# Target: https://dash.cloudflare.com/3c1fd59ef2ef67f750b4bc23e656d722/numinalabs.xyz
+# Sovereign Primary Origin: Google Cloud Platform (project-0317d6c9-e943-409e-83f)
+# Root Keypin Authority: 46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce
+# Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+# Mode: INSTITUTIONAL_FAIL_CLOSED
+# ==============================================================================
+
+zone_name: "numinalabs.xyz"
+account_id: "3c1fd59ef2ef67f750b4bc23e656d722"
+governance_profile: "INSTITUTIONAL_BANKING_AND_DEFENSE"
+
+# ------------------------------------------------------------------------------
+# 1. ZONE-LEVEL SSL/TLS HARDENING (SSL/TLS tab)
+# ------------------------------------------------------------------------------
+ssl_tls:
+  encryption_mode: "strict"             # Full (Strict) SSL: validates GCP Cloud Run / Load Balancer origin cert
+  edge_certificates:
+    min_tls_version: "1.3"              # Strictly reject TLS 1.0, 1.1, and 1.2
+    tls_1_3: "on"                       # 0-RTT / TLS 1.3 enabled
+    opportunistic_encryption: "on"
+    always_use_https: "on"
+    automatic_https_rewrites: "on"
+    universal_ssl: "enabled"
+  hsts:
+    status: "active"
+    max_age: 31536000                   # 1 Year (31,536,000 seconds)
+    include_subdomains: true
+    preload: true
+    nosniff: true
+  origin_server:
+    authenticated_origin_pulls: "on"   # Require Cloudflare client certificate validation on origin
+
+# ------------------------------------------------------------------------------
+# 2. DNS & DOMAIN SHIELD (DNS tab)
+# ------------------------------------------------------------------------------
+dns_configuration:
+  dnssec:
+    status: "active"
+    algorithm: 13                       # ECDSA Curve P-256 with SHA-256
+    digest_type: 2                      # SHA-256
+    flags: 257                          # KSK
+  cname_flattening: "flatten_all"
+  multi_provider_dns: false
+  authoritative_nameservers:
+    - "fred.ns.cloudflare.com"
+    - "lola.ns.cloudflare.com"
+  records:
+    - name: "numinalabs.xyz"
+      type: "CNAME"
+      content: "ghs.googlehosted.com"   # Google Cloud Run Ingress
+      proxied: true
+      ttl: 1
+    - name: "www.numinalabs.xyz"
+      type: "CNAME"
+      content: "ghs.googlehosted.com"
+      proxied: true
+      ttl: 1
+
+# ------------------------------------------------------------------------------
+# 3. WEB APPLICATION FIREWALL & CUSTOM RULES (Security > WAF tab)
+# ------------------------------------------------------------------------------
+firewall_rules:
+  - name: "CRITICAL-01: Block Unencrypted Non-HTTPS Ingress"
+    action: "block"
+    expression: "(not ssl)"
+    description: "Strict transport security boundary: drop all cleartext HTTP packets at the edge"
+
+  - name: "CRITICAL-02: Sanitize HTTP Request Methods"
+    action: "block"
+    expression: '(not http.request.method in {"GET" "POST" "HEAD" "OPTIONS"})'
+    description: "Strict whitelist: forbid PUT, DELETE, TRACE, CONNECT, or non-standard verbs"
+
+  - name: "CRITICAL-03: Zero-Trust Administrative Perimeter (/control-room*)"
+    action: "managed_challenge"
+    expression: '(http.request.uri.path contains "/control-room" or http.request.uri.path contains "/admin" or http.request.uri.path contains "/ops")'
+    description: "Enforce Cloudflare Managed Challenge & Browser Integrity Check on sensitive control planes"
+
+  - name: "CRITICAL-04: Quantum & AI Endpoint Rate Limiting"
+    action: "rate_limit"
+    expression: '(http.request.uri.path contains "/simulate" or http.request.uri.path contains "/voice/stream" or http.request.uri.path contains "/linear/task")'
+    rate_limiting:
+      threshold: 60
+      period: 60
+      action: "block"
+      timeout: 300
+
+  - name: "CRITICAL-05: Known Exploit & Prototype Pollution Shield"
+    action: "block"
+    expression: '(http.request.uri.query contains "__proto__" or http.request.uri.query contains "constructor.prototype" or http.request.uri.path contains "../" or http.request.uri.path contains "..\\")'
+    description: "Fail-closed drop of path traversal and object prototype injection payloads"
+
+# ------------------------------------------------------------------------------
+# 4. BOT MANAGEMENT & DDOS MITIGATION (Security > Bots / DDoS tab)
+# ------------------------------------------------------------------------------
+bots_and_ddos:
+  bot_fight_mode: "on"
+  browser_integrity_check: "on"
+  challenge_passage: 1800               # 30 Minutes
+  security_level: "high"
+  ddos_mitigation: "adaptive_l7_fail_closed"
+
+# ------------------------------------------------------------------------------
+# 5. RESPONSE TRANSFORM RULES (Rules > Transform Rules tab)
+# ------------------------------------------------------------------------------
+edge_security_headers:
+  Content-Security-Policy: "default-src 'self' https://numinalabs.xyz https://www.numinalabs.xyz; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://numinalabs.xyz https://us-central1-run.googleapis.com; frame-ancestors 'none';"
+  X-Frame-Options: "DENY"
+  X-Content-Type-Options: "nosniff"
+  Referrer-Policy: "strict-origin-when-cross-origin"
+  Permissions-Policy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(self), payment=(self), usb=()"
+  Cross-Origin-Opener-Policy: "same-origin"
+  Cross-Origin-Resource-Policy: "same-origin"
+  Strict-Transport-Security: "max-age=31536000; includeSubDomains; preload"
+
+# ------------------------------------------------------------------------------
+# 6. CACHING & PURGE POLICIES (Caching tab)
+# ------------------------------------------------------------------------------
+caching:
+  caching_level: "standard"
+  browser_cache_ttl: 14400              # 4 hours
+  always_online: "off"                  # Fail closed: never serve stale cached states during backend failure
+  development_mode: "off"
