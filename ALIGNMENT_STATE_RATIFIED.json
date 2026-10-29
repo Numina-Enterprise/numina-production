@@ -1,0 +1,36 @@
+{
+  "aligned_at": "2026-10-29T04:02:35.389Z",
+  "cluster_state_root": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+  "authority_keypin": "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce",
+  "guardian_keypin": "465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c",
+  "runtime_series": "1.9.0-rc27",
+  "components": {
+    "financial_core": {
+      "tests": "31/31 passed",
+      "status": "VERIFIED_ZERO_FLOAT"
+    },
+    "smart_contracts": {
+      "tests": "3/3 passed",
+      "status": "VERIFIED_SOLIDITY_RESERVES"
+    },
+    "quantum_engine": {
+      "backend": "qiskit-2.5.2",
+      "sampler": "1024_shots_bell_state",
+      "status": "QUANTUM_STATE_ALIGNED"
+    },
+    "linear_agent_bridge": {
+      "endpoint": "https://linear.app/numinalabs/agent",
+      "status": "HTTP_200_ALIGNED"
+    },
+    "ios_xcode_cloud": {
+      "bundle_id": "xyz.numinalabs.app",
+      "target": "iOS 15.0+ Universal",
+      "status": "ENTITLEMENTS_AND_POST_CLONE_ALIGNED"
+    },
+    "voice_agent": {
+      "model": "gemini-3.8-live",
+      "mode": "NON_BLOCKING_ASYNC",
+      "status": "ACTIVE_PCM_STREAMING"
+    }
+  }
+}
