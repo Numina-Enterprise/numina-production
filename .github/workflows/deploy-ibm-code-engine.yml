@@ -1,0 +1,130 @@
+name: Deploy Numina to IBM Cloud Code Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'IBM Cloud Region (e.g., us-south, us-east)'
+        required: true
+        default: 'us-south'
+      resource_group:
+        description: 'IBM Cloud Resource Group'
+        required: true
+        default: 'default'
+      project_name:
+        description: 'IBM Code Engine Project Name'
+        required: true
+        default: 'numina-serverless-project'
+      deploy_quantum:
+        description: 'Deploy Quantum Compute Service container'
+        type: boolean
+        required: true
+        default: true
+      deploy_web:
+        description: 'Deploy NuminaLabs Web container'
+        type: boolean
+        required: true
+        default: true
+
+env:
+  IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+  IBM_QUANTUM_API_KEY: ${{ secrets.IBM_QUANTUM_API_KEY || secrets.QISKIT_IBM_TOKEN }}
+
+jobs:
+  deploy-code-engine:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify IBM Cloud Credentials
+        shell: bash
+        run: |
+          if [ -z "$IBM_CLOUD_API_KEY" ]; then
+            echo "::error ::IBM_CLOUD_API_KEY secret is not configured in repository settings."
+            echo "Please set IBM_CLOUD_API_KEY in https://github.com/Numina-Enterprise/numina-production/settings/secrets/actions"
+            exit 1
+          fi
+          echo "IBM Cloud API Key verified."
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install IBM Cloud CLI & Code Engine plugin
+        shell: bash
+        run: |
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud plugin install code-engine -f
+          ibmcloud plugin install container-registry -f
+          ibmcloud --version
+          ibmcloud plugin list
+
+      - name: Authenticate to IBM Cloud
+        shell: bash
+        run: |
+          ibmcloud login --apikey "$IBM_CLOUD_API_KEY" -r "${{ inputs.region }}" -g "${{ inputs.resource_group }}"
+
+      - name: Target / Create Code Engine Project
+        shell: bash
+        run: |
+          PROJECT_NAME="${{ inputs.project_name }}"
+          echo "Checking Code Engine project: $PROJECT_NAME"
+          if ibmcloud ce project get --name "$PROJECT_NAME" >/dev/null 2>&1; then
+            echo "Selecting existing project: $PROJECT_NAME"
+            ibmcloud ce project select --name "$PROJECT_NAME"
+          else
+            echo "Creating new project: $PROJECT_NAME"
+            ibmcloud ce project create --name "$PROJECT_NAME"
+            ibmcloud ce project select --name "$PROJECT_NAME"
+          fi
+
+      - name: Deploy Numina Web to Code Engine
+        if: ${{ inputs.deploy_web }}
+        shell: bash
+        run: |
+          APP_NAME="numinalabs-web"
+          echo "Deploying $APP_NAME from source (numinalabs-web)..."
+          if ibmcloud ce app get --name "$APP_NAME" >/dev/null 2>&1; then
+            ibmcloud ce app update \
+              --name "$APP_NAME" \
+              --build-source ./numinalabs-web
+          else
+            ibmcloud ce app create \
+              --name "$APP_NAME" \
+              --build-source ./numinalabs-web \
+              --port 8080 \
+              --min-scale 1 \
+              --max-scale 10 \
+              --cpu 0.25 \
+              --memory 0.5G
+          fi
+          WEB_URL=$(ibmcloud ce app get --name "$APP_NAME" --output URL)
+          echo "NuminaLabs Web deployed at: $WEB_URL"
+
+      - name: Deploy Numina Quantum Engine to Code Engine
+        if: ${{ inputs.deploy_quantum }}
+        shell: bash
+        run: |
+          APP_NAME="numina-quantum-engine"
+          echo "Deploying $APP_NAME from source (numina-ibm-quantum)..."
+          
+          ENV_FLAGS=()
+          if [ -n "$IBM_QUANTUM_API_KEY" ]; then
+            ENV_FLAGS=(--env "IBM_QUANTUM_API_KEY=$IBM_QUANTUM_API_KEY")
+          fi
+
+          if ibmcloud ce app get --name "$APP_NAME" >/dev/null 2>&1; then
+            ibmcloud ce app update \
+              --name "$APP_NAME" \
+              --build-source ./numina-ibm-quantum \
+              "${ENV_FLAGS[@]}"
+          else
+            ibmcloud ce app create \
+              --name "$APP_NAME" \
+              --build-source ./numina-ibm-quantum \
+              --port 8080 \
+              --min-scale 0 \
+              --max-scale 5 \
+              --cpu 0.5 \
+              --memory 1G \
+              "${ENV_FLAGS[@]}"
+          fi
+          Q_URL=$(ibmcloud ce app get --name "$APP_NAME" --output URL)
+          echo "Numina Quantum Engine deployed at: $Q_URL"
