@@ -1,0 +1,85 @@
+# ==============================================================================
+# CLOUDFLARE API TOKEN HARDENING & LEAST-PRIVILEGE MANIFEST
+# Profile: https://dash.cloudflare.com/profile/api-tokens
+# Account ID: 3c1fd59ef2ef67f750b4bc23e656d722
+# Zone: numinalabs.xyz
+# Sovereign Primary Authority: Google Cloud Platform (project-0317d6c9-e943-409e-83f)
+# Security Law: STRICT_LEAST_PRIVILEGE_FAIL_CLOSED
+# ==============================================================================
+
+account_id: "3c1fd59ef2ef67f750b4bc23e656d722"
+governance_profile: "INSTITUTIONAL_API_CREDENTIAL_POLICY"
+
+# ------------------------------------------------------------------------------
+# 1. CANONICAL DEPLOYMENT TOKEN SPECIFICATION (Create Custom Token)
+# ------------------------------------------------------------------------------
+canonical_token_profile:
+  token_name: "NUMINA_EDGE_DEPLOYMENT_PRIMARY_HSM_ALIGNED"
+  summary: "Automates Cloudflare Worker deployment and cache purge for numinalabs.xyz without broad account takeover capabilities"
+
+  # Step-by-step permissions matrix:
+  permissions:
+    # Scope 1: Account-Level Permissions
+    account_permissions:
+      - permission: "Workers Scripts"
+        access: "Edit"
+      - permission: "Workers KV Storage"
+        access: "Edit"
+      - permission: "Workers Routes"
+        access: "Edit"
+      - permission: "Account Settings"
+        access: "Read" # Strictly Read-Only
+
+    # Scope 2: Zone-Level Permissions (Targeted strictly to numinalabs.xyz)
+    zone_permissions:
+      - permission: "Zone"
+        access: "Read"
+      - permission: "Cache Purge"
+        access: "Purge"
+      - permission: "Workers Routes"
+        access: "Edit"
+      - permission: "DNS"
+        access: "Read" # Read-Only prevents unauthorized DNS hijacking via CI token
+      - permission: "SSL and Certificates"
+        access: "Read" # Read-Only
+
+  # Step 3: Account & Zone Resource Scoping (Never choose 'All zones' or 'All accounts')
+  resource_scoping:
+    account_resources:
+      include:
+        - "Account: 3c1fd59ef2ef67f750b4bc23e656d722"
+    zone_resources:
+      include:
+        - "Specific Zone: numinalabs.xyz"
+
+  # Step 4: Client IP Address Filtering (Zero-Trust)
+  client_ip_filtering:
+    mode: "RESTRICTED"
+    allowed_cidrs:
+      - "Google Cloud Run egress CIDRs"
+      - "GitHub Actions official IP ranges (meta API)"
+      - "Operator authorized egress"
+
+  # Step 5: TTL & Expiration Policy
+  ttl_policy:
+    maximum_token_lifetime_days: 90
+    rolling_rotation_required: true
+
+# ------------------------------------------------------------------------------
+# 2. PROHIBITED PERMISSIONS (Security Hardening Guardrails)
+# ------------------------------------------------------------------------------
+prohibited_permissions:
+  - "User: Edit"                  # Cannot alter user profile, billing or 2FA
+  - "Account: Members Edit"        # Cannot add rogue admin members to Cloudflare
+  - "Zone: Delete"                # Cannot delete the zone numinalabs.xyz
+  - "Zone: Subscriptions Edit"    # Cannot modify billing tier
+  - "DNS: Edit"                   # Cannot alter nameservers or CNAME records via CI token
+
+# ------------------------------------------------------------------------------
+# 3. VERIFICATION & AUDIT RPC
+# ------------------------------------------------------------------------------
+verification_endpoint:
+  method: "GET"
+  url: "https://api.cloudflare.com/client/v4/user/tokens/verify"
+  expected_response_code: 200
+  expected_status: "active"
