@@ -45,7 +45,7 @@ jobs:
           echo "IBM Cloud API Key verified."
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
 
       - name: Install IBM Cloud CLI & Code Engine plugin
         shell: bash
