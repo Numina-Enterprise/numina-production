@@ -1,0 +1,41 @@
+# PRIMARY CLOUD LOCATION SPECIFICATION: GOOGLE CLOUD PLATFORM
+# Authority Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+# Canonical Project: project-0317d6c9-e943-409e-83f (us-central1)
+
+schema: "numina.primary-location.v1"
+primaryCloud:
+  provider: "google-cloud-platform"
+  projectId: "project-0317d6c9-e943-409e-83f"
+  region: "us-central1"
+  zone: "us-central1-a"
+  role: "PRIMARY_AUTHORITY_AND_INGRESS_LOCATION"
+  authorityKeyring: "projects/project-0317d6c9-e943-409e-83f/locations/us-central1/keyRings/numina-ring"
+  protectionLevel: "HSM"
+  artifactRegistry: "us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production"
+  storageBucket: "gs://project-0317d6c9-e943-409e-83f_cloudbuild"
+
+routingTopology:
+  ingress:
+    domain: "numinalabs.xyz"
+    dnssec: "ACTIVE_ALGORITHM_13_ECDSA_P256"
+    edge: "Cloudflare (fred.ns.cloudflare.com / lola.ns.cloudflare.com)"
+    primaryOrigin: "Google Cloud Run (project-0317d6c9-e943-409e-83f / us-central1)"
+    secondaryAuxiliaryOrigin: "IBM Cloud Code Engine (us-south / serverless)"
+
+subordinateLocations:
+  ibmCloud:
+    role: "AUXILIARY_QUANTUM_COMPUTE_ACCELERATOR"
+    region: "us-south"
+    service: "IBM Qiskit Runtime QPU Sampler"
+  appleAppStore:
+    role: "CLIENT_MOBILE_DISTRIBUTION"
+    bundleId: "xyz.numinalabs.app"
+  githubEnterprise:
+    role: "CANONICAL_SOURCE_AND_REVISION_AUTHORITY"
+    organization: "Numina-Enterprise"
+    repository: "numina-production"
+
+invariants:
+  - "Google Cloud Platform project-0317d6c9-e943-409e-83f is the single authoritative anchor for KMS/HSM signing."
+  - "All multi-cloud and edge routes resolve strictly to Google Cloud us-central1 as primary."
+  - "No subordinate cloud or external provider holds unilateral ledger modification authority."
