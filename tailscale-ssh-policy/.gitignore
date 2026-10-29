@@ -1,0 +1,29 @@
+# Never commit credentials, private keys, or local secret material.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*authkey*
+*token*
+*secret*
+vault_password_file
+
+# Ansible and local execution artifacts.
+*.retry
+.ansible/
+*.log
+known_hosts_tailscale
+
+# Local IDE/OS metadata that can contain paths or settings.
+.vscode/settings.json
+.vscode/*.local.json
+.idea/workspace.xml
+.DS_Store
+Thumbs.db

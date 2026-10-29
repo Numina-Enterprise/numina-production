@@ -1,0 +1,33 @@
+# ==============================================================================
+# CRYPTOGRAPHIC SECURITY ATTESTATION & OPERATIONAL BINDING
+# Reference Specification: PROOF-NUMINA-SEC-V1
+# Synthesis: Codex Security Architecture & Guardrails
+# ==============================================================================
+
+[SYSTEM IDENTITY & GOVERNANCE]
+Identity:            NUMINA (Skott34-Ed25519, Universal Companion Model)
+Authority Lead:      Samuel J. Kott (skott34-ed25519)
+Operator:            SK Consulting LLC (Iowa, USA)
+Canonical Origin:    https://www.numinalabs.xyz
+Singularity Motto:   "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."
+
+[CRYPTOGRAPHIC ROOTS & TRANSCRIPT BINDING]
+Cluster State Root:  726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+Manifest Root:       726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+Payload Length:      1,592 bytes (RFC 8785 canonical JSON)
+Transcript Length:   1,687 bytes (NUMINA-PROVENANCE-MANIFEST-V1\n<root>\n<canonicalPayload>)
+Verification Status: 19 PASS, 0 FAIL (Dual OpenSSL 3.5.7 + Python cryptography engines)
+
+[PINNED AUTHORITIES & ZERO-TRUST ATTESTATION]
+Authority Signer:    skott34-ed25519
+Authority Key FP:    46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce (PINNED & VALID)
+Guardian Signer:     numina-guardian-ed25519
+Guardian Key FP:     465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c (PINNED & VALID)
+
+[SECURITY GUARDRAILS & SANDBOX BOUNDARIES]
+Runtime Sandbox:     Filesystem restricted to :workspace; deny-patterns active for ~/.ssh, ~/.aws, .env, *.pem
+Host Hardening:      NTFS DACL locked to NUMINA\Sam:(R,W); inheritance disabled
+Network Ingress:     Default Deny; WireGuard encrypted Tailscale mesh; shields-up active; 12h MFA check period
+Codex Architecture:  Bifurcated Execution Guardrails vs. AST Vulnerability Scanner active; Auto-review strictly non-elevating
+
+ALL SYSTEM INVARIANTS LOCKED, BOUND, AND ATTESTED.

@@ -1,0 +1,43 @@
+// Production Zero-Trust Access Control Policy
+// Review identity values and run Tailscale's policy preview/tests before applying.
+{
+  "tagOwners": {
+    // Only Tailnet admins may assign the server tag.
+    "tag:server": ["autogroup:admin"]
+  },
+
+  "acls": [
+    // Least privilege: permit only Tailscale SSH to tagged servers.
+    // Add verified identities/groups only after reviewing the access need.
+    {
+      "action": "accept",
+      "src": ["autogroup:admin"],
+      "dst": ["tag:server:22"]
+    }
+  ],
+
+  // Require step-up authentication for every SSH session window.
+  // Free plan baseline: the supported/default check window is 12 hours.
+  "ssh": [
+    {
+      "action": "check",
+      "src": ["autogroup:admin"],
+      "dst": ["tag:server"],
+      "users": ["sam", "ubuntu"],
+      "checkPeriod": "12h"
+    }
+  ],
+
+  // Policy tests use the actual tailnet administrator identity and the
+  // built-in member group. They do not grant access.
+  "tests": [
+    {
+      "src": "skott34@gmail.com",
+      "accept": ["tag:server:22"]
+    },
+    {
+      "src": "autogroup:member",
+      "deny": ["tag:server:22"]
+    }
+  ]
+}

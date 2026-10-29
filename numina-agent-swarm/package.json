@@ -1,0 +1,18 @@
+{
+  "name": "numina-agent-swarm",
+  "version": "1.0.0",
+  "description": "Numina 15-Division Autonomous Multi-Agent Swarm Dispatcher & Target Task Engine",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "node src/swarm-dispatcher.mjs"
+  },
+  "keywords": [
+    "multi-agent",
+    "autonomous-swarm",
+    "zero-trust",
+    "numina"
+  ],
+  "author": "SK Consulting LLC",
+  "license": "UNLICENSED"
+}

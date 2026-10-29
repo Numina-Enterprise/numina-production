@@ -1,0 +1,33 @@
+# ==============================================================================
+# LEARNED WORKSPACE KNOWLEDGE BASE & SYSTEM INVARIANTS
+# Verified Context: Google Cloud & Numina Cryptographic Architecture
+# ==============================================================================
+
+[ACTIVE GOOGLE CLOUD CONFIGURATION]
+Config Profile:     numina
+Account:            skott34@gmail.com
+Project ID:         project-0317d6c9-e943-409e-83f
+Region / Zone:      us-central1 / us-central1-c
+OS Login Key:       ssh-ed25519 (Fingerprint: 86b4e73b43583e203f3a673292e0a04389fc52aecce20d94e468e8784637339f)
+Origin User:        samuelkott@Mac.attlocal.net
+
+[GCS STORAGE BUCKET POSTURE]
+Primary Bucket:     gs://project-0317d6c9-e943-409e-83f_cloudbuild/
+Access Policy:      Uniform Bucket-Level Access (Enforced)
+Public Access:      Prevented (Enforced)
+Versioning:         Enabled (true)
+Soft Delete:        7 days retention (604,800s)
+Key Objects:        documents/St Louis Lease.pdf (MD5: 2oQ5GxcEucNJP/5xPkn5Gw==, Size: 2,406,636 bytes)
+
+[CRYPTOGRAPHIC PROVENANCE & MANIFEST INVARIANTS]
+Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+Authority Signer:   skott34-ed25519 (Fingerprint: 46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce)
+Guardian Signer:    numina-guardian-ed25519 (Fingerprint: 465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c)
+Verification:       19 PASS / 0 FAIL (Dual Python 3.12 cryptography + OpenSSL 3.5.7 engines)
+
+[TAILSCALE ZERO-TRUST MESH STATUS]
+Host Node:          numina (100.122.164.84)
+Target Node:        samuels-macbook-pro (100.120.255.85)
+Hardened Policy:    Default-Deny Grants, Ports 22 & 443 restricted to autogroup:admin, 12h MFA Check Mode
+Client Shields:     Active (--shields-up=true, --accept-routes=false)
+Quarantine Vault:   .cloudflared isolated under Read-Only NTFS DACL (NUMINA\Sam:R)

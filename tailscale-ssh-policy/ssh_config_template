@@ -1,0 +1,8 @@
+# Codex Hardened Tailscale Transport
+Host *.ts.net 100.*
+    # Route through Tailscale's authenticated WireGuard layer
+    ProxyCommand "C:\Program Files\Tailscale\tailscale.exe" nc %h %p
+    StrictHostKeyChecking accept-new
+    UserKnownHostsFile ~/.ssh/known_hosts_tailscale
+    ServerAliveInterval 30
+    ServerAliveCountMax 3

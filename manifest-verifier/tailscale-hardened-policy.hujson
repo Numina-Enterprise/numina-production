@@ -1,0 +1,40 @@
+// Canonical Tailscale SSH Zero-Trust Policy
+// Target: https://console.tailscale.com/admin/acls/file
+{
+  // Only tailnet admins may assign the server tag.
+  "tagOwners": {
+    "tag:server": ["autogroup:admin"]
+  },
+
+  // Permit only Tailscale SSH to tagged servers.
+  "acls": [
+    {
+      "action": "accept",
+      "src": ["autogroup:admin"],
+      "dst": ["tag:server:22"]
+    }
+  ],
+
+  // Tailscale SSH: only the sam and ubuntu OS accounts, with 12-hour checks.
+  "ssh": [
+    {
+      "action": "check",
+      "src": ["autogroup:admin"],
+      "dst": ["tag:server"],
+      "users": ["sam", "ubuntu"],
+      "checkPeriod": "12h"
+    }
+  ],
+
+  // Tests are non-authorizing assertions.
+  "tests": [
+    {
+      "src": "skott34@gmail.com",
+      "accept": ["tag:server:22"]
+    },
+    {
+      "src": "autogroup:member",
+      "deny": ["tag:server:22"]
+    }
+  ]
+}

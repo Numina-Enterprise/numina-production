@@ -1,0 +1,114 @@
+{
+  "deploymentId": "dep-1793233186001",
+  "deployedAt": "2026-10-29T00:19:46.001Z",
+  "clusterStateRoot": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+  "sprintGid": "1219183110870936",
+  "divisionsCount": 15,
+  "divisions": [
+    {
+      "divisionId": "numina-accounting",
+      "room": "numina-accounting",
+      "task": "Reconcile ISO 20022 and BAI2 statements with native ledger",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "353597c5ed7a06b050c49d3c2ef8508d02dd7700d63f0b7cfa38a35476f0bea3"
+    },
+    {
+      "divisionId": "numina-apple-team",
+      "room": "numina-apple-deployment",
+      "task": "Audit macOS LaunchDaemons, POSIX ACLs, and Swift Concurrency",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "233ba1e14c46caa8cc63f18741f271fd46a9c81758d1f028b53f9eff68cce064"
+    },
+    {
+      "divisionId": "numina-compliance-risk",
+      "room": "#numina-compliance-risk",
+      "task": "Enforce Zero-Trust Gateway default-deny and manifest verification",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "a9263bf5cbe6457a181645cc29d94020f552b8606017b8da94bdc73dab6d9283"
+    },
+    {
+      "divisionId": "numina-engineering-cio",
+      "room": "#numina-engineering",
+      "task": "Execute Windows maintenance, service health, and ACL checks",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "e52096d385e0327e3205a1670ddc9b1eda09520980cd1ccad79cbe3f1fef5043"
+    },
+    {
+      "divisionId": "numina-federal-capture",
+      "room": "#numina-federal-capture",
+      "task": "Verify FIPS 140-3 HSM key custody and post-quantum invariants",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "81fdeb3d0ce4ab0144a0db731ae014f50f9e03cc440d2a0e57652d1668451b62"
+    },
+    {
+      "divisionId": "numina-finance-treasury",
+      "room": "#numina-finance-treasury",
+      "task": "Process 3-stage atomic settlements & Stripe webhook ingestion",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "0fba505165db7725765af66cd8f9bd988a47958d84170337f9d6294a559ac473"
+    },
+    {
+      "divisionId": "numina-crypto-monitor",
+      "room": "#numina-finance-treasury",
+      "task": "Monitor NUSD UNPAUSED_AND_ACTIVE invariant & 1:1 reserve solvency",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "7928a32d2cc03f32fa3f050acb8c7da1da822b44d17861393b75136cf55e2dd0"
+    },
+    {
+      "divisionId": "numina-google-play-team",
+      "room": "numina-google-play-deployment",
+      "task": "Validate Android Play App Bundle (AAB) & tree-shaking rules",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "ca99633dffb56a99a9ca29418945e78196622ea8c2d3922b2e98badf854e6383"
+    },
+    {
+      "divisionId": "numina-google-enterprise",
+      "room": "#numina-engineering",
+      "task": "Audit GCP project-0317d6c9 resources and IAP 35.235.240.0/20",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "cebd9f4259b0d7375d6d51d373369f204d1bc4a9b519a7ea4828ba41a56abefc"
+    },
+    {
+      "divisionId": "numina-legal",
+      "room": "numina-legal",
+      "task": "Validate dual-key authorizations (skott34 + guardian) & treaty bounds",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "acfda13ea7329b292dcea9ce9835e13e72e1474338cd7104ca4ed6d5f0b0ec7c"
+    },
+    {
+      "divisionId": "numina-growth-matrix",
+      "room": "#numina-market-intel",
+      "task": "Process merchant metrics, telemetry feeds, and partner integrations",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "4d3c1ab8791ad3603fb6424101fb38cb6e08ef20420393219648c7722a1b68bb"
+    },
+    {
+      "divisionId": "numina-publicity-narrative",
+      "room": "#numina-publicity-narrative",
+      "task": "Synchronize canonical public communications & release notes",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "a9c9fd7f4420eefedc8998bd8688a1d377cd75f61be8554dceaaf589f61ca90a"
+    },
+    {
+      "divisionId": "numina-strategy",
+      "room": "#numina-strategy",
+      "task": "Track multi-quarter milestone schedules and sprint capacity",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "c1f44dd91926a6a36768c9b6a80e1c07099c997a707dbc59e7c9b95172467dd6"
+    },
+    {
+      "divisionId": "numina-website-soc",
+      "room": "#numina",
+      "task": "Monitor 24/7 web perimeter (numinalabs.xyz) & TLS certificates",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "8774d9c1209dcb70b2231dd9482899e18edd3c1b260481b539a2d47b21a7488f"
+    },
+    {
+      "divisionId": "vengeance-independent-review",
+      "room": "VENGEANCE_SANDBOX_ISOLATED",
+      "task": "Execute independent air-gapped security audits & fuzzing",
+      "status": "ACTIVE_AND_DEPLOYED",
+      "proofDigest": "d5de620e7bc28a1d2cffe8d7d802f5179d5e8e1e2f20fa9f183fdcbbf895d84b"
+    }
+  ]
+}

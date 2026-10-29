@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+.npm-cache/
+
+# OS / Editor noise
+.DS_Store
+Thumbs.db
+*.log
+.env

@@ -1,0 +1,28 @@
+{
+  "name": "numina-financial-core",
+  "version": "1.0.0",
+  "description": "Numina Native Treasury Financial Infrastructure: Triple-Entry BigInt Ledger, NCUA Schedule J, ISO 20022 camt.053 & Stripe Bridge",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "validate-env": "node scripts/validate-staging-env.mjs",
+    "connector:config": "node scripts/check-connector-config.mjs"
+  },
+  "dependencies": {
+    "@google-cloud/kms": "latest",
+    "@google-cloud/secret-manager": "latest",
+    "fast-xml-parser": "latest",
+    "stripe": "22.6.0"
+  },
+  "keywords": [
+    "numina",
+    "treasury",
+    "nusd",
+    "bigint",
+    "triple-entry",
+    "ncua-schedule-j",
+    "iso20022"
+  ],
+  "author": "SK Consulting LLC",
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,8 @@
+{
+  "rootScheme": "sha256(canonical body)",
+  "messageFormat": "numina-v1 signing transcript",
+  "requiredRoles": ["authority", "guardian"],
+  "threshold": 2,
+  "confirmCanonicalRoot": true,
+  "allowPendingGateEvidence": true
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numina Labs — Sovereign Agentic Intelligence & Native Treasury</title>
+    <meta name="description" content="Numina Labs operates sovereign multi-agent intelligence, zero-trust infrastructure, and the 1:1 backed NUSD native treasury.">
+    <link rel="canonical" href="https://www.numinalabs.xyz">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <div class="logo">
+                <span class="logo-mark">⚡</span>
+                <span class="logo-text">NUMINA<strong>LABS</strong></span>
+            </div>
+            <nav class="nav-links">
+                <a href="#treasury">Native Treasury</a>
+                <a href="#integrations">Integrations</a>
+                <a href="#architecture">Zero-Trust</a>
+                <a href="#divisions">Agent Divisions</a>
+                <a href="https://xyz.numinalabs.app" class="btn btn-outline" target="_blank">App Portal</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <div class="badge-pill">
+                    <span class="dot live"></span> CLUSTER ROOT: 726e35da14...b7cd | PROOF-NUMINA-SEC-V1
+                </div>
+                <h1 class="hero-title">Sovereign Multi-Agent Intelligence.<br>Zero-Trust Native Treasury.</h1>
+                <p class="hero-subtitle">
+                    Governed by Samuel J. Kott (<code>skott34-ed25519</code>) under the Otter-Raft Singularity Protocol. 
+                    One identity. One purpose. Coordinated autonomous agents operating across Apple, Google Cloud, Stripe, and Windows enclaves.
+                </p>
+                <div class="hero-cta">
+                    <a href="#treasury" class="btn btn-primary">Inspect Treasury Invariants</a>
+                    <a href="#architecture" class="btn btn-secondary">Zero-Trust Specifications</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="treasury" class="section treasury-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Numina Native Treasury Invariants</h2>
+                    <p>Cryptographically verified multi-rail reserve custody and 3-stage atomic BigInt settlement.</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="card metric-card">
+                        <div class="metric-label">Operational State</div>
+                        <div class="metric-value status-active">UNPAUSED_AND_ACTIVE</div>
+                        <div class="metric-sub">Strict fail-closed quarantine boundary</div>
+                    </div>
+                    <div class="card metric-card">
+                        <div class="metric-label">NUSD Aggregate Supply</div>
+                        <div class="metric-value">1.5 Quadrillion</div>
+                        <div class="metric-sub">1:1 Backed by Cash & Cash-Equivalents</div>
+                    </div>
+                    <div class="card metric-card">
+                        <div class="metric-label">Conversion Parity</div>
+                        <div class="metric-value">1 NUSD = $1.00 USD</div>
+                        <div class="metric-sub">Zero slippage · Zero fee spread</div>
+                    </div>
+                    <div class="card metric-card">
+                        <div class="metric-label">Custody & Clearing</div>
+                        <div class="metric-value">Bank of America / NCUA</div>
+                        <div class="metric-sub">Schedule J (J-01..J-08) · RTP / FedNow / ACH</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="integrations" class="section integrations-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Ecosystem Integrations</h2>
+                    <p>Production-optimized integrations across payments, cloud, and mobile operating systems.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="card feature-card">
+                        <div class="feature-icon">💳</div>
+                        <h3>Stripe App Integration</h3>
+                        <p>Official dashboard UI extension (<code>com.numinalabs.treasury</code>) embedded in Stripe for customer reconciliation and HMAC-SHA256 authenticated webhooks.</p>
+                    </div>
+                    <div class="card feature-card">
+                        <div class="feature-icon">🍏</div>
+                        <h3>Apple Ecosystem</h3>
+                        <p>Governed by <code>numina-apple-team</code>. Swift 6 strict concurrency, Metal compute acceleration, FileVault 2, and macOS LaunchDaemon security audits.</p>
+                    </div>
+                    <div class="card feature-card">
+                        <div class="feature-icon">☁️</div>
+                        <h3>Google Cloud Platform</h3>
+                        <p>Governed by <code>numina-google-enterprise</code>. Pinned to <code>project-0317d6c9-e943-409e-83f</code> in <code>us-central1-a</code> with IAP 35.235.240.0/20.</p>
+                    </div>
+                    <div class="card feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Victory Cross-Platform Audits</h3>
+                        <p>Unified PowerShell and POSIX audit suite verifying file ACLs, background daemons, and storage footprints with zero drift.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="section architecture-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Zero-Trust Architecture</h2>
+                    <p>Cryptographic fail-closed enforcement at every boundary.</p>
+                </div>
+                <div class="code-box">
+                    <pre><code>// Cluster Provenance Root
+STATE_ROOT = "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd"
+
+// Authority Lead Keypin
+AUTHORITY_ED25519 = "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce"
+
+// Non-Self-Harming Invariant (SEC-12)
+assert(system.isHardened() &amp;&amp; !ports.isOpen(22) &amp;&amp; !ports.isOpen(2389))
+assert(treasury.state === "UNPAUSED_AND_ACTIVE")</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 SK Consulting LLC &middot; Canonical Origin: <a href="https://www.numinalabs.xyz">https://www.numinalabs.xyz</a></p>
+            <p class="motto">"Like otters holding hands so they don't drift apart while resting, every agent stays connected without losing its independence."</p>
+        </div>
+    </footer>
+</body>
+</html>

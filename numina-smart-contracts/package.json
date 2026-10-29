@@ -1,0 +1,19 @@
+{
+  "name": "numina-smart-contracts",
+  "version": "1.0.0",
+  "description": "Numina Native Treasury Smart Contracts: ERC-20 NUSD, EIP-712 Dual-Key Settlement & Revenue Splitter",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "keywords": [
+    "solidity",
+    "nusd",
+    "eip-712",
+    "erc-20",
+    "treasury",
+    "revenue-rails"
+  ],
+  "author": "SK Consulting LLC",
+  "license": "UNLICENSED"
+}

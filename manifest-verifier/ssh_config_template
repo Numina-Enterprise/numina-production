@@ -1,0 +1,20 @@
+# ==============================================================================
+# CODEX SSH CLIENT CONFIGURATION OVER TAILSCALE MESH
+# Destination: %USERPROFILE%\.ssh\config
+# ==============================================================================
+
+# 1. Global Zero-Trust Defaults: WireGuard transport, Identity verification
+Host *.ts.net 100.*
+    # Route directly through Tailscale's authenticated tunnel
+    ProxyCommand "C:\Program Files\Tailscale\tailscale.exe" nc %h %p
+    StrictHostKeyChecking accept-new
+    UserKnownHostsFile ~/.ssh/known_hosts_tailscale
+    ServerAliveInterval 30
+    ServerAliveCountMax 3
+
+# 2. Target Server Profile (Linux Node / Mac)
+Host numina-server
+    HostName 100.120.255.85
+    User sam
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes

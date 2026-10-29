@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "numina-provenance-manifest-v1",
+  "authorityLead": "Samuel J. Kott",
+  "operator": "SK Consulting LLC",
+  "canonicalOrigin": "https://www.numinalabs.xyz",
+  "nusdOperationalState": "UNPAUSED_AND_ACTIVE",
+  "verifiedAsanaSprintGid": "1219183110870936",
+  "singularityIdentity": {
+    "identity": "NUMINA",
+    "model": "Skott34-Ed25519, Universal Companion Model",
+    "foundation": "Ed25519",
+    "governance": "Zero Trust + Multi-Signature Authorization",
+    "motto": "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."
+  },
+  "productionAcceptanceGates": [
+    {
+      "id": "GATE_1",
+      "name": "RC27 Release Verification Report",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "GATE_2",
+      "name": "Runtime Signer Verification Report",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "GATE_3",
+      "name": "Build 6 Verification Report",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "GATE_4",
+      "name": "Backup & Restore Validation Report",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "GATE_5",
+      "name": "S0 Governance Approval Package",
+      "status": "VERIFIED"
+    }
+  ],
+  "createdAtMs": 1792800000000,
+  "documents": [
+    {
+      "path": "docs/Numina-Evidence-Integration-Gates-2026-10-11.md",
+      "byteLength": 7421,
+      "sha256": "2fa0d8271f14327a9754adddf76bdcfd91a7d6de5b1addcbdb52675b32c5cc89",
+      "utf8Clean": true
+    },
+    {
+      "path": "docs/Numina-Security.md",
+      "byteLength": 10407,
+      "sha256": "6af93453d6373e0a165180a0a9af6962d3075d6d34b5b5d6eee1e14b4431b018",
+      "utf8Clean": true
+    },
+    {
+      "path": "docs/NUSD-Conversion-Contracts.md",
+      "byteLength": 7694,
+      "sha256": "9cc698d11fe9c7e49a39596f0c4123a4c72691926bea55837a718230627b9150",
+      "utf8Clean": true
+    }
+  ],
+  "clusterStateRootSha256": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+  "manifestSha256": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+  "multiSignature": {
+    "algorithm": "ed25519",
+    "signedAtMs": 1792800000000,
+    "signers": [
+      {
+        "keyId": "skott34-ed25519",
+        "role": "authority",
+        "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAxqpbjMTzgULVeNq/W0tdU1RzPKmkuldC2U4DDI5g6yI=\n-----END PUBLIC KEY-----\n",
+        "signatureHex": "2605a41daec24eff961ff4cb6894117175f75289aff190141aecb13aec7adbf732ab0dcfd8d41ef63b740e8a6e4d1e14e9f2a8646ddccd901e1c55c75d7ace08"
+      },
+      {
+        "keyId": "numina-guardian-ed25519",
+        "role": "guardian",
+        "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAhUrpnMscm/Vc7p+7k6eAcxDT0gVUcQ1dhKkgaJ2BVNg=\n-----END PUBLIC KEY-----\n",
+        "signatureHex": "7163074f4b728d547083a1049cb5b662db4037766d4de5df0d07d049b23925ebae015a4625f3c2e259301d6ed1f2487045430f66b10071f78ef4b796bf49db0c"
+      }
+    ]
+  }
+}

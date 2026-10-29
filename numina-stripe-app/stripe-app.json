@@ -1,0 +1,33 @@
+{
+  "id": "com.numinalabs.treasury",
+  "version": "0.1.0",
+  "name": "Numina Native Treasury",
+  "icon": "assets/icon.png",
+  "permissions": [
+    {
+      "permission": "balance_read",
+      "purpose": "Read Stripe balance to reconcile with Numina Native Treasury BigInt triple-entry ledger"
+    },
+    {
+      "permission": "charges_read",
+      "purpose": "Ingest payment records for 3-stage atomic settlement"
+    },
+    {
+      "permission": "customers_read",
+      "purpose": "Link customer profiles to Numina cryptographic IDs"
+    }
+  ],
+  "ui_extension": {
+    "views": [
+      {
+        "viewport": "stripe.dashboard.drawer.default",
+        "component": "App"
+      },
+      {
+        "viewport": "stripe.dashboard.customer.detail",
+        "component": "CustomerDetailView"
+      }
+    ]
+  },
+  "post_install_url": "https://numinalabs.xyz/integrations/stripe/success"
+}

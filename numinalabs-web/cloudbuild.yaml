@@ -1,0 +1,28 @@
+steps:
+  # Build container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest', '.']
+
+  # Push container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest']
+
+  # Deploy to Cloud Run in us-central1
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'numinalabs-web'
+      - '--image'
+      - 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--project'
+      - 'project-0317d6c9-e943-409e-83f'
+
+images:
+  - 'gcr.io/project-0317d6c9-e943-409e-83f/numinalabs-web:latest'
