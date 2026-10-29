@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-051",
+  "configurationId": "agentforce-051",
+  "team": "engineering",
+  "title": "Pin current publication source",
+  "nextBestAction": "Record the exact canonical source files changed since the earlier staged archive and require a new source identity.",
+  "target": "current unsigned source changes",
+  "priority": 11,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/engineering_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-051",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "engineering_review",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-051.json",
+    "passCondition": "Receipt identifies the current commit/worktree identities and superseded stage.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

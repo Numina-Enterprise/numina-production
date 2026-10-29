@@ -1,0 +1,208 @@
+{
+  "baseImageRequested": "node:24.21.0-bookworm-slim@sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+  "buildScope": {
+    "applicationEntrypointExecuted": false,
+    "contractBroadcast": false,
+    "dockerBuildExecuted": true,
+    "dockerfileBuildStepsExecuted": true,
+    "mintOrTransferPerformed": false,
+    "providerSubmissionPerformed": false,
+    "rpcCredentialsSupplied": false,
+    "testsRun": false
+  },
+  "contract": {
+    "artifactSha256": "79d38c7f5f6560e538d2ab68fad8ca8b1ce72e7b64d932e0fa6b5e1798b5bb24",
+    "deploymentPerformed": false,
+    "role": "precompiled_input",
+    "solidityCompiledThisRun": false,
+    "sourceSha256": "3a118007e78ee6e455c6c51528a55b8eeb63e2ec5c294e7c71757804df0871bf"
+  },
+  "dockerVersion": {
+    "Client": {
+      "ApiVersion": "1.48",
+      "Arch": "amd64",
+      "BuildTime": "Tue Mar 25 15:07:16 2025",
+      "Context": "default",
+      "DefaultAPIVersion": "1.48",
+      "GitCommit": "b8034c0",
+      "GoVersion": "go1.23.7",
+      "Os": "linux",
+      "Platform": {
+        "Name": "Docker Engine - Community"
+      },
+      "Version": "28.0.4"
+    },
+    "Server": {
+      "ApiVersion": "1.48",
+      "Arch": "amd64",
+      "BuildTime": "2025-03-25T15:07:16.000000000+00:00",
+      "Components": [
+        {
+          "Details": {
+            "ApiVersion": "1.48",
+            "Arch": "amd64",
+            "BuildTime": "Tue Mar 25 15:07:16 2025",
+            "Experimental": "false",
+            "GitCommit": "6430e49",
+            "GoVersion": "go1.23.7",
+            "KernelVersion": "6.17.0-1022-azure",
+            "MinAPIVersion": "1.24",
+            "Os": "linux"
+          },
+          "Name": "Engine",
+          "Version": "28.0.4"
+        },
+        {
+          "Details": {
+            "GitCommit": "db8809540e1a7a9da5d518876894933ff55692ab"
+          },
+          "Name": "containerd",
+          "Version": "v2.3.4"
+        },
+        {
+          "Details": {
+            "GitCommit": "v1.5.1-0-g8f2685a4"
+          },
+          "Name": "runc",
+          "Version": "1.5.1"
+        },
+        {
+          "Details": {
+            "GitCommit": "de40ad0"
+          },
+          "Name": "docker-init",
+          "Version": "0.19.0"
+        }
+      ],
+      "GitCommit": "6430e49",
+      "GoVersion": "go1.23.7",
+      "KernelVersion": "6.17.0-1022-azure",
+      "MinAPIVersion": "1.24",
+      "Os": "linux",
+      "Platform": {
+        "Name": "Docker Engine - Community"
+      },
+      "Version": "28.0.4"
+    }
+  },
+  "files": [
+    {
+      "bytes": 335,
+      "path": ".dockerignore",
+      "sha256": "9092bbfec8ceb4bca69a8372762db9f463607a84f8bd6c67a9d6b161d576f500"
+    },
+    {
+      "bytes": 110,
+      "path": ".env.example",
+      "sha256": "a2ddd04c23324df505733b7df80aea2429b8e1b7ddfb5bee584df6bc86578b1c"
+    },
+    {
+      "bytes": 1116,
+      "path": "Dockerfile",
+      "sha256": "0f79e7826ee81991687987b91912809b43f6221e8303579a3b4c9c89e64b6527"
+    },
+    {
+      "bytes": 1376,
+      "path": "README.md",
+      "sha256": "565048a2c7e03f08414eabfcbf215e8fa297ea258f0d61e6fda3592c7aa9184e"
+    },
+    {
+      "bytes": 126752,
+      "path": "artifacts/NuminaUSD.json",
+      "sha256": "79d38c7f5f6560e538d2ab68fad8ca8b1ce72e7b64d932e0fa6b5e1798b5bb24"
+    },
+    {
+      "bytes": 962,
+      "path": "base-image.json",
+      "sha256": "c2de18f57511ae6e9ff4c53cd1719d8b88095eb2c2e55918cf75977af42144ef"
+    },
+    {
+      "bytes": 1722,
+      "path": "compose.yaml",
+      "sha256": "07df4cdfc37dd8a6604d499742e2a7d4c5edbe15ca0fd495bd91400bc045effc"
+    },
+    {
+      "bytes": 8547,
+      "path": "contracts/NuminaUSD.sol",
+      "sha256": "3a118007e78ee6e455c6c51528a55b8eeb63e2ec5c294e7c71757804df0871bf"
+    },
+    {
+      "bytes": 1088,
+      "path": "licenses/OpenZeppelin-LICENSE",
+      "sha256": "53c49f1fadf06be43cf0bf9f5fbe2f30f9cefb049cb522cd64eae7cafc4be27d"
+    },
+    {
+      "bytes": 1075,
+      "path": "licenses/ethers-LICENSE.md",
+      "sha256": "44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "bytes": 4202,
+      "path": "package-lock.json",
+      "sha256": "3c944e25caf7532a45f03c1889f38c4a4d186b3e13d4b688e5bfa2b87853645e"
+    },
+    {
+      "bytes": 217,
+      "path": "package.json",
+      "sha256": "7e3e8ec05dd1be09368722769fac5089d3c84151f4712bae4e6cc1f1b6530477"
+    },
+    {
+      "bytes": 3543,
+      "path": "runtime-entrypoint.mjs",
+      "sha256": "368ec944282d8b567693b322ad1da6279b31abf4eda07e599d11029b804d3429"
+    },
+    {
+      "bytes": 33729,
+      "path": "scripts/managed-deployment.mjs",
+      "sha256": "e0097966eef2e18ca35c28865525dec02c31564e5355d5a071d862e565861ca4"
+    },
+    {
+      "bytes": 5853,
+      "path": "scripts/validate-deployment.mjs",
+      "sha256": "b6906f55983427abb1e9dcb106ee96063bb2148dfb9b5393ecbbe02492aaf76d"
+    },
+    {
+      "bytes": 12040,
+      "path": "scripts/verify-network.mjs",
+      "sha256": "94149782a8eed913c32080a5b199948248bb0e096c677bff688df13e10f1d5fc"
+    }
+  ],
+  "image": {
+    "applicationContainerStarted": false,
+    "architecture": "amd64",
+    "archiveFormat": "gzip-compressed docker image save",
+    "configDigest": "sha256:edff50ea08f24fa4c5c3f69575cdcf5768a00b8b7ab3738c31a9137e2a42a76e",
+    "localBuildTag": "numina-nusd-runtime:candidate",
+    "os": "linux",
+    "registryPushed": false
+  },
+  "imageArchive": {
+    "bytes": 84434244,
+    "name": "numina-nusd-linux-runtime-image.docker.tar.gz",
+    "sha256": "796add5e929bc63105a0d0e97e026d62481c46af09ec1cb08a30f1f5dafdcc33"
+  },
+  "independentAuditPerformed": false,
+  "reservesVerified": false,
+  "run": {
+    "attempt": 1,
+    "id": 34725802271,
+    "url": "https://github.com/skott34-dot/numina-production/actions/runs/34725802271/attempts/1"
+  },
+  "schema": "numina.nusd.hosted-runtime-build.v1",
+  "settlementConnected": false,
+  "slsaLevelClaimed": null,
+  "source": {
+    "commit": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+    "directory": "runtime/nusd",
+    "ref": "refs/heads/main",
+    "repository": "skott34-dot/numina-production",
+    "repositoryId": 1367647143
+  },
+  "sourceArchive": {
+    "bytes": 39472,
+    "name": "numina-nusd-linux-runtime-source.tar.gz",
+    "sha256": "4486f9aae6a7e01078a09860c604f8a17573cd1c7126e2060ac91c1b4329a0ac"
+  },
+  "status": "image_built_application_not_started_not_deployed",
+  "submissionReady": false
+}

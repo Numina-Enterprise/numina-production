@@ -1,0 +1,199 @@
+{
+  "status": {
+    "product": "Numina Economic Authority Infrastructure",
+    "core_version": "1.8.0",
+    "production_version": "1.9.0-rc20",
+    "release": "core-v1.8+prod-v1.9.0-rc20",
+    "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+    "frozen_core_valid": true,
+    "frozen_core_checked_files": 105,
+    "core_conformance_valid": true,
+    "core_conformance_passing_tests": 309,
+    "production_files_root": "99135a7198571ec4928d04bb6df2e5b4244532730d58ee7e6d646f4ce00c1c34",
+    "authority_store_schema_name": "numina_authority_commit_store",
+    "authority_store_schema_version": 1,
+    "production_postgres_isolation": "SERIALIZABLE",
+    "public_execution_api": false,
+    "real_funds_enabled": false,
+    "employer_ip_enabled": false,
+    "build_id": "e7d3b0e4c1c0394301c7128a67941f0cf3f9044ad5ebf5fd7ae810d12175750e",
+    "core_conformance_artifact_sha256": "adc835250c32d0174eefbe23d4d8a0a098788fd1fc5638410f157b5af10ab544",
+    "release_gate_artifact_sha256": "e5713e038f74c5b956168c67149b3fae9b443e5970b838277211ffe164c6b6af",
+    "spdx_sbom_sha256": "608073d21803e594278125f530a22f556137bd55efc9dca454645960fca8aebd",
+    "slsa_provenance_sha256": "0e65687d68c06c8e2c723a1f7023bd51ba14d4bc6b44a6b7380fe338813a522f",
+    "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+    "slsa_level_claimed": null,
+    "environment": "production",
+    "role": "public-verifier",
+    "frozen_core": {
+      "valid": true,
+      "manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+      "checked_files": 105,
+      "failures": []
+    },
+    "conformance": {
+      "captured_at": 1789145310,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "test_numina_core.py",
+        "tests"
+      ],
+      "core_version": "1.8.0",
+      "duration_ms": 2015,
+      "frozen_core_valid": true,
+      "frozen_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+      "passing_tests": 309,
+      "production_version": "1.9.0-rc20",
+      "return_code": 0,
+      "valid": true
+    },
+    "safety": {
+      "real_funds_enabled": false,
+      "employer_ip_enabled": false,
+      "public_execution_api": false
+    },
+    "generated_at": 1789153956
+  },
+  "preflight": {
+    "valid": true,
+    "production_version": "1.9.0-rc20",
+    "environment": "production",
+    "role": "public-verifier",
+    "checks": [
+      {
+        "name": "frozen-core",
+        "ok": true,
+        "checked": 105,
+        "manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67"
+      },
+      {
+        "name": "core-conformance",
+        "ok": true,
+        "passing_tests": 309
+      },
+      {
+        "name": "constitutional-safety-boundary",
+        "ok": true,
+        "real_funds_enabled": false,
+        "employer_ip_enabled": false
+      },
+      {
+        "name": "release-signing-key",
+        "ok": true,
+        "detail": "mode=0o600"
+      }
+    ],
+    "failures": []
+  },
+  "supply": {
+    "valid": true,
+    "failures": [],
+    "spdx_sbom_sha256": "608073d21803e594278125f530a22f556137bd55efc9dca454645960fca8aebd",
+    "slsa_provenance_sha256": "0e65687d68c06c8e2c723a1f7023bd51ba14d4bc6b44a6b7380fe338813a522f",
+    "spdx_version": "SPDX-2.3",
+    "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+    "slsa_level_claimed": null,
+    "hosted_attestation_required_for_level_claim": true
+  },
+  "key": {
+    "algorithm": "Ed25519",
+    "key_id": "4f427a4ac471c324f89b7839",
+    "public_key": "bwsq5wdHhNy/qb3d+jxZEUO5OIIxtxmy62leNG9SN9I="
+  },
+  "ready": {
+    "status": "ready"
+  },
+  "manifest": {
+    "product": "Numina Economic Authority Infrastructure",
+    "core_version": "1.8.0",
+    "production_version": "1.9.0-rc20",
+    "release": "core-v1.8+prod-v1.9.0-rc20",
+    "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+    "frozen_core_valid": true,
+    "frozen_core_checked_files": 105,
+    "core_conformance_valid": true,
+    "core_conformance_passing_tests": 309,
+    "production_files_root": "99135a7198571ec4928d04bb6df2e5b4244532730d58ee7e6d646f4ce00c1c34",
+    "authority_store_schema_name": "numina_authority_commit_store",
+    "authority_store_schema_version": 1,
+    "production_postgres_isolation": "SERIALIZABLE",
+    "public_execution_api": false,
+    "real_funds_enabled": false,
+    "employer_ip_enabled": false,
+    "build_id": "e7d3b0e4c1c0394301c7128a67941f0cf3f9044ad5ebf5fd7ae810d12175750e",
+    "core_conformance_artifact_sha256": "adc835250c32d0174eefbe23d4d8a0a098788fd1fc5638410f157b5af10ab544",
+    "release_gate_artifact_sha256": "e5713e038f74c5b956168c67149b3fae9b443e5970b838277211ffe164c6b6af",
+    "spdx_sbom_sha256": "608073d21803e594278125f530a22f556137bd55efc9dca454645960fca8aebd",
+    "slsa_provenance_sha256": "0e65687d68c06c8e2c723a1f7023bd51ba14d4bc6b44a6b7380fe338813a522f",
+    "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+    "slsa_level_claimed": null
+  },
+  "attestation": {
+    "artifact_type": "NUMINA_RELEASE_ATTESTATION",
+    "key_id": "4f427a4ac471c324f89b7839",
+    "payload": {
+      "product": "Numina Economic Authority Infrastructure",
+      "core_version": "1.8.0",
+      "production_version": "1.9.0-rc20",
+      "release": "core-v1.8+prod-v1.9.0-rc20",
+      "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+      "frozen_core_valid": true,
+      "frozen_core_checked_files": 105,
+      "core_conformance_valid": true,
+      "core_conformance_passing_tests": 309,
+      "production_files_root": "99135a7198571ec4928d04bb6df2e5b4244532730d58ee7e6d646f4ce00c1c34",
+      "authority_store_schema_name": "numina_authority_commit_store",
+      "authority_store_schema_version": 1,
+      "production_postgres_isolation": "SERIALIZABLE",
+      "public_execution_api": false,
+      "real_funds_enabled": false,
+      "employer_ip_enabled": false,
+      "build_id": "e7d3b0e4c1c0394301c7128a67941f0cf3f9044ad5ebf5fd7ae810d12175750e",
+      "core_conformance_artifact_sha256": "adc835250c32d0174eefbe23d4d8a0a098788fd1fc5638410f157b5af10ab544",
+      "release_gate_artifact_sha256": "e5713e038f74c5b956168c67149b3fae9b443e5970b838277211ffe164c6b6af",
+      "spdx_sbom_sha256": "608073d21803e594278125f530a22f556137bd55efc9dca454645960fca8aebd",
+      "slsa_provenance_sha256": "0e65687d68c06c8e2c723a1f7023bd51ba14d4bc6b44a6b7380fe338813a522f",
+      "slsa_predicate_type": "https://slsa.dev/provenance/v1",
+      "slsa_level_claimed": null,
+      "environment": "production",
+      "role": "public-verifier",
+      "frozen_core": {
+        "valid": true,
+        "manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+        "checked_files": 105,
+        "failures": []
+      },
+      "conformance": {
+        "captured_at": 1789145310,
+        "command": [
+          "/opt/pyvenv/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_numina_core.py",
+          "tests"
+        ],
+        "core_version": "1.8.0",
+        "duration_ms": 2015,
+        "frozen_core_valid": true,
+        "frozen_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+        "passing_tests": 309,
+        "production_version": "1.9.0-rc20",
+        "return_code": 0,
+        "valid": true
+      },
+      "safety": {
+        "real_funds_enabled": false,
+        "employer_ip_enabled": false,
+        "public_execution_api": false
+      },
+      "generated_at": 1789154719
+    },
+    "algorithm": "Ed25519",
+    "public_key": "bwsq5wdHhNy/qb3d+jxZEUO5OIIxtxmy62leNG9SN9I=",
+    "signature": "0QsKbDreyZvZ9tiKJwEoWidhQbjh86plcz2uBlB/tipJuj/43Nypd98ZqtG/4jO7nNQQu+mQ0jKtbI3lZ/RYDg=="
+  }
+}

@@ -1,0 +1,55 @@
+# Preserve the exact signed artifacts and the hashes of their assessment evidence.
+docs/provenance/run-34717406980/* -text
+# Keep runtime source and precompiled artifact bytes identical to the reviewed inputs.
+runtime/nusd/** -text
+docs/contracts/** -text
+runtime/verifier-rc26/** -text
+runtime/verifier-rc27/** -text
+docs/provenance/runtime-34725802271/* -text
+# Distributed source inventories hash exact bytes on Windows and Linux.
+integrations/** -text
+mobile/** -text
+public/** -text
+src/** -text
+package.json -text
+runtime/vercel-production/package.json -text
+config/numina-architecture.json -text
+docs/treasury-client-alignment.md -text
+scripts/package-rc26.py -text
+scripts/package-rc27.py -text
+scripts/publish-with-telemetry.mjs -text
+scripts/connect-ibm-quantum.mjs -text
+# Preserve byte equality between source modules, gateway copies and ownership notices.
+runtime/vercel-production/** -text
+OWNERSHIP.md -text
+LICENSE.md -text
+NOTICE.md -text
+docs/Numina-Security.md -text
+docs/approved-reviews/** -text
+docs/Numina-500T-Simulation.md -text
+docs/Numina-500T-Deployment-Sequence.md -text
+docs/numina-500t-preparation-tools-record.json -text
+scripts/package-nusd-review-tools.py -text
+
+scripts/prepare-readiness-workspace.py -text
+docs/Numina-Local-Wallet.md -text
+docs/Numina-Browser-Deployment-Preparation.md -text
+docs/Numina-Requested-Asset-Fee.json -text
+
+# Current FINAL projections and source snapshots bind exact bytes across platforms.
+docs/NUMINA-FINAL-BUILD.json -text
+docs/native-package-record-v4.json -text
+release-evidence/numina-bofa-ach-instruction-2026-09-19.json -text
+
+# Preserve original receipt audit snapshots, signatures and checksums.
+release-evidence/receipt-audit-2026-10-09/** -text
+docs/Receipt-Audit-2026-10-09.md -text
+
+# Preserve final public point checks and authenticated publication observations.
+release-evidence/deployment-2026-10-09/** -text
+
+# Preserve signed evidence bytes and treat detached signatures as binary.
+release-evidence/** -text
+*.ed25519.sig64 binary
+*.raw32 binary
+scripts/build-numina-correctness-reports.py -text

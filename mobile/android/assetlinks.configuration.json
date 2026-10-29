@@ -1,0 +1,16 @@
+{
+  "status": "final_release_identity_configured",
+  "website": "https://numinalabs.xyz",
+  "required_public_path": "/.well-known/assetlinks.json",
+  "actual_app_signing_certificate_sha256": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+  "published": true,
+  "notes": "Retains the direct-distribution release certificate and adds the Google Play-issued fingerprint observed in the authenticated console. Upload keys are not app-signing identities. Publication and Android device verification are separate checks.",
+  "store_app_signing_certificate_sha256": "32:0E:E1:C6:E0:7C:2D:82:3E:8E:28:A4:F6:46:0C:73:DF:8A:55:2A:00:42:B6:AA:31:18:57:52:50:54:F4:1C",
+  "storeIdentityVerified": true,
+  "storeIdentityVerifiedAtUtc": "2026-09-14T16:14:50.488Z",
+  "storeIdentitySource": "Google Play Console > Numina (xyz.numinalabs.app) > App signing > Digital Asset Links JSON",
+  "deviceLinkVerificationPerformed": false,
+  "package_name": "xyz.numinalabs.app",
+  "finalBuildVersionCode": 4,
+  "finalBuildReceipt": "release-evidence/numina-final-build-2026-09-18.json"
+}

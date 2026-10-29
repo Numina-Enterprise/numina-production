@@ -1,0 +1,105 @@
+{
+  "schema": "numina.signed-build-production-record.v1",
+  "application_version": "2.0.0",
+  "application_build_id": "86534be2a6ea3fd513ce323932caf7381518ab45f435a4e69cad877e950d7770",
+  "site_version_number": 32,
+  "source": {
+    "schema": "numina.source-publication.v1",
+    "siteCommit": "c9bb24284688b41fea7562771cce4f7fc1425d4c",
+    "githubSourceCommit": "38ba12943decfb33ad3579ed322e5f02bcd1372a",
+    "sourceTree": "f3cb17ff06e469b9a7520047c45ac6d6c9c12312",
+    "sourceRepository": "skott34-dot/numina-production",
+    "builderRepository": "skott34-dot/numina-builder",
+    "builderCommit": "4a7210c10fcfa79436018e8ba337244402661036",
+    "historyPublished": false,
+    "exactSourceTreeMatch": true
+  },
+  "hosted_run": "https://github.com/skott34-dot/numina-production/actions/runs/34717406980/attempts/1",
+  "archive_sha256": "daa688cd91a3a792531ee09f56129dbb8412f3c4516bc6d0da3a6d748c4e13d9",
+  "inventory_sha256": "30434a312366a8869b93e9f27b428ee0e5f385c1bd0e8fc877912a98fe97f792",
+  "bundle_sha256": "f7884feee62e1262254b5faa076271c83fcb10b1194c3b2e69a26fbb3f1aa470",
+  "builder_signed_slsa_provenance_verified": true,
+  "signed_subjects": [
+    "numina-site-v2.0.0.tar.gz",
+    "application-release-v2.json"
+  ],
+  "predicate_type": "https://slsa.dev/provenance/v1",
+  "slsa_level_claimed": null,
+  "production": {
+    "id": "appgdep_6aa5b7abe5388191a9fc8df835fef3e3",
+    "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+    "title": "Numina Labs",
+    "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_23429204f32c81919729d0a0030d335c",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+    "failure_message": null,
+    "env_set_revision": 6,
+    "updated_at": "2026-09-12T20:36:22.806960+00:00"
+  },
+  "live_inventory_matches_signed_subject": true,
+  "html_delivery_transformations": [
+    {
+      "path": "/build.html",
+      "onlyOneInsertion": true,
+      "insertedCharacters": 938,
+      "challengeScriptPathPresent": true,
+      "originalContentOtherwiseMatches": true
+    },
+    {
+      "path": "/provenance.html",
+      "onlyOneInsertion": true,
+      "insertedCharacters": 938,
+      "challengeScriptPathPresent": true,
+      "originalContentOtherwiseMatches": true
+    },
+    {
+      "path": "/app.html",
+      "onlyOneInsertion": true,
+      "insertedCharacters": 938,
+      "challengeScriptPathPresent": true,
+      "originalContentOtherwiseMatches": true
+    },
+    {
+      "path": "/control.html",
+      "onlyOneInsertion": true,
+      "insertedCharacters": 938,
+      "challengeScriptPathPresent": true,
+      "originalContentOtherwiseMatches": true
+    },
+    {
+      "path": "/blockchain.html",
+      "onlyOneInsertion": true,
+      "insertedCharacters": 938,
+      "challengeScriptPathPresent": true,
+      "originalContentOtherwiseMatches": true
+    }
+  ],
+  "provider_archive_metadata": {
+    "archive_format": "tar",
+    "sediment_file_id": "file_000000007dec81f5a7c30352910f14bb",
+    "content_hash": "sha256:b065d27477ccbe727fb72b73454003e928fdd1f06749c1f21d547ac8f86e3aca",
+    "size_bytes": 3604480,
+    "file_count": 80
+  },
+  "provider_archive_digest_matches_uploaded_gzip": false,
+  "provider_archive_digest_matches_uncompressed_tar": false,
+  "complete_provider_transform_provenance_verified": false,
+  "running_private_worker_bytes_independently_inspected": false,
+  "compatibility": {
+    "existing_app_api": "/api/app/v1",
+    "existing_control_api": "/api/control/v1",
+    "database_schema_change_required": false,
+    "database_migration_performed": false,
+    "app_health": "ready",
+    "control_health": "ready"
+  },
+  "financial_execution_activated": false,
+  "nusd_issuance_activated": false,
+  "reserve_verification_established": false,
+  "native_store_publication_verified": false,
+  "llm_marketplace_installations_verified": false,
+  "test_suites_run": false
+}

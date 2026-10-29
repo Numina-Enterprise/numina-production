@@ -1,0 +1,57 @@
+{
+  "schema": "numina.financial-software-verification.v1",
+  "recordedAt": "2026-09-15T21:37:28.721Z",
+  "testedSourceCommit": "f3866c3451e97c27f14dc6f07b1360fc4d7fc5db",
+  "scope": "Local automated software tests with fixtures. Not a regulator, provider or Play approval.",
+  "command": "node --test tests/*.test.mjs",
+  "tests": 346,
+  "passed": 346,
+  "failed": 0,
+  "originalTestOutputSha256": "6a16e2d28df3b44a698c3d5408abce7e35603962663ffedbca9e9a66192fab80",
+  "claims": {
+    "fileReceiptValidationTested": true,
+    "privateOwnerIsolationTested": true,
+    "idempotencyTested": true,
+    "corruptionRejectionTested": true,
+    "treasuryUnchangedByEvidenceRegistrationTested": true,
+    "financialExecutionPerformed": false,
+    "issuerVerificationPerformed": false,
+    "providerAcceptanceEstablished": false,
+    "closedTestPublished": false
+  },
+  "sourceFiles": [
+    {
+      "path": "public/financial-model.js",
+      "sha256": "467751a741d2b260d4948de5eaa941427c6886369bc4c69d135de40571875c06"
+    },
+    {
+      "path": "public/financial-ui.js",
+      "sha256": "5ab9b8e3ae077eb4c290c522849018cf04688b7ac4b03353a78f6a1009e1ebd1"
+    },
+    {
+      "path": "src/financial-evidence.js",
+      "sha256": "e5c7ad8d18130eca6350f982468f4883bde7a7bffd12b24879747012018d0a3b"
+    },
+    {
+      "path": "src/treasury-documents.js",
+      "sha256": "692fdf5c87547daaab9c778ebd4a329b646adddd512453bee956e99342e1ed48"
+    },
+    {
+      "path": "src/reviewer.js",
+      "sha256": "30df6b03947b55b0ac909aae404813e18301c5e1e52745ac7de0a9b279ba97ff"
+    },
+    {
+      "path": "tests/financial-evidence.test.mjs",
+      "sha256": "740affea897af75afe8cd86e1f23cacb51560cb8331bf7ec5cd36b1d9a3969eb"
+    },
+    {
+      "path": "runtime/nusd/scripts/prepare-mint.mjs",
+      "sha256": "70cb7f0ebba53a634f3bb5b008e96d3b3b4e91088fc02a8b66286f6e7c861188"
+    },
+    {
+      "path": "runtime/nusd/scripts/verify-mint-recipient.mjs",
+      "sha256": "69a64dab4af5cfd1012927736ef575cb21b0eda7a66b45e65c056b5aceb8c059"
+    }
+  ],
+  "note": "Full 346-test run includes the combined financial workspace, mint preparation, provider templates and matching release/source security metadata. This verification record and the refreshed Console observation were added afterwards; final build and focused metadata checks are recorded with deployment in issue #25."
+}

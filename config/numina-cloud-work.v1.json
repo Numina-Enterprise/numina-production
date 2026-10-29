@@ -1,0 +1,30 @@
+{
+  "schema": "numina.cloud-work-config.v1",
+  "canonicalRoot": "/workspace/numina-production",
+  "mode": "continuous_read_only_evidence_coordination",
+  "intervalSeconds": 60,
+  "minimumIntervalSeconds": 30,
+  "workspaceBase": "/workspace/numina-workspaces",
+  "nodeExecutable": "/workspace/.numina-tools/node-v26.11.1-linux-x64/bin/node",
+  "previewOrigin": "http://127.0.0.1:8788",
+  "receiptIntake": "outputs/cloud-self-driving/incoming",
+  "registeredActions": [
+    "canonical_inputs",
+    "workspace_links",
+    "task_records",
+    "node_toolchain",
+    "cloud_preview",
+    "reviewer_receipts"
+  ],
+  "executionLimits": {
+    "financialActions": false,
+    "providerMutations": false,
+    "signing": false,
+    "testRuns": false,
+    "arbitraryCommands": false,
+    "salesforceActivation": false,
+    "modelExecutorEstablished": false,
+    "taskCompletionEvaluatorsRegistered": false,
+    "hostAvailabilityRequired": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "numina": {
+      "type": "http",
+      "url": "https://numinalabs.xyz/api/control/v2/discovery-mcp"
+    }
+  }
+}

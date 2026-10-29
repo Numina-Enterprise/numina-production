@@ -1,0 +1,79 @@
+{
+  "schema": "numina.per-file-verification-recheck.v1",
+  "startedAt": "2026-09-14T16:49:59.062Z",
+  "completedAt": "2026-09-14T16:50:09.574Z",
+  "status": "passed",
+  "historicalCompletion": {
+    "file": "completion-record.json",
+    "sha256": "30eca8717baf3fb9657ee8ed903c70011c8f9dca92a5c88fe18bbc193f219b47"
+  },
+  "detachedBundle": {
+    "file": "provenance.jsonl",
+    "sha256": "a01099e8d7454f7d3a5888dbad8556ba1cefc18d50c3751cbcfcbf7d51dde350"
+  },
+  "signaturePolicy": {
+    "repository": "skott34-dot/numina-production",
+    "sourceDigest": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+    "sourceRef": "refs/heads/main",
+    "signerWorkflow": "skott34-dot/numina-builder/.github/workflows/numina-nusd-runtime-builder.yml",
+    "signerDigest": "cda9bf7702d909ed1d8e16c338a91e283c1bce53",
+    "oidcIssuer": "https://token.actions.githubusercontent.com",
+    "predicateType": "https://slsa.dev/provenance/v1",
+    "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/34725802271/attempts/1",
+    "selfHostedRunnersDenied": true
+  },
+  "subjects": [
+    {
+      "file": "numina-nusd-linux-runtime-source.tar.gz",
+      "sha256": "4486f9aae6a7e01078a09860c604f8a17573cd1c7126e2060ac91c1b4329a0ac",
+      "bytes": 39472,
+      "commandExecuted": true,
+      "ghVerificationExitCode": 0,
+      "startedAt": "2026-09-14T16:49:59.088Z",
+      "completedAt": "2026-09-14T16:50:02.355Z",
+      "verificationResult": "numina-nusd-linux-runtime-source.tar.gz.2026-09-14.verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "verifiedIdentity": {
+        "matchingResults": 1,
+        "sourceDigest": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+        "signerDigest": "cda9bf7702d909ed1d8e16c338a91e283c1bce53"
+      }
+    },
+    {
+      "file": "numina-nusd-linux-runtime-image.docker.tar.gz",
+      "sha256": "796add5e929bc63105a0d0e97e026d62481c46af09ec1cb08a30f1f5dafdcc33",
+      "bytes": 84434244,
+      "commandExecuted": true,
+      "ghVerificationExitCode": 0,
+      "startedAt": "2026-09-14T16:50:02.409Z",
+      "completedAt": "2026-09-14T16:50:06.112Z",
+      "verificationResult": "numina-nusd-linux-runtime-image.docker.tar.gz.2026-09-14.verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "verifiedIdentity": {
+        "matchingResults": 1,
+        "sourceDigest": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+        "signerDigest": "cda9bf7702d909ed1d8e16c338a91e283c1bce53"
+      }
+    },
+    {
+      "file": "numina-nusd-runtime-inventory.json",
+      "sha256": "33c2517226539296eb40b7a24caeceb845ddf5a98c2589f359f141b555ff1fc9",
+      "bytes": 6357,
+      "commandExecuted": true,
+      "ghVerificationExitCode": 0,
+      "startedAt": "2026-09-14T16:50:06.168Z",
+      "completedAt": "2026-09-14T16:50:09.544Z",
+      "verificationResult": "numina-nusd-runtime-inventory.json.2026-09-14.verification.json",
+      "verificationResultSha256": "5621e79229941672139026cf3187000ffdecf9c987e1b0b541382c0aae9402fd",
+      "verifiedIdentity": {
+        "matchingResults": 1,
+        "sourceDigest": "2b0be57996c70e8fda49199d1d649fe3faf0e0d3",
+        "signerDigest": "cda9bf7702d909ed1d8e16c338a91e283c1bce53"
+      }
+    }
+  ],
+  "commandsExecuted": 3,
+  "commandsPassed": 3,
+  "inputFilesUnchanged": true,
+  "scope": "Unsigned observation of separate GH verification commands for historical NUSD build artifacts. No image was started, deployed or submitted to any provider; no NVIDIA access, licensing, reserves, mint, transfer or bank evidence is established."
+}

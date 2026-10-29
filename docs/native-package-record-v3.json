@@ -1,0 +1,110 @@
+{
+  "schema": "numina.native-package.v1",
+  "applicationVersion": "3.0.0",
+  "versionCode": 2,
+  "proposedPackageIdentity": "xyz.numinalabs.app",
+  "packageIdentityRegisteredOrConfirmed": false,
+  "hostedWorkspace": "https://numinalabs.xyz/app",
+  "android": {
+    "status": "signed_release_artifacts_built",
+    "binaries": [
+      {
+        "file": "numina-3.0.0-release-signed.apk",
+        "bytes": 3797876,
+        "sha256": "7f6455541cb0191efd5e2227f959b9dfb26bb8ccc04e1f21da5e710a281edf8b",
+        "platform": "android",
+        "signed": true,
+        "installable": true,
+        "url": "/downloads/numina-3.0.0-release-signed.apk"
+      },
+      {
+        "file": "numina-3.0.0-upload-signed.aab",
+        "bytes": 3617114,
+        "sha256": "d25633e4aa9fa75f509cc145506462e49e083ddc3cb8f13872e00e5ea699d550",
+        "platform": "android",
+        "signed": true,
+        "installable": false,
+        "url": "/downloads/numina-3.0.0-upload-signed.aab"
+      }
+    ],
+    "compiled": true,
+    "signingPerformed": true,
+    "deviceInstalled": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "signatureVerification": true,
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34785067667",
+    "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+    "buildCompletedAtUtc": "2026-09-13T21:53:32Z",
+    "releaseIdentity": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+    "uploadIdentity": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34"
+  },
+  "ios": {
+    "status": "unsigned_device_release_built",
+    "binaries": [
+      {
+        "file": "numina-3.0.0-ios-unsigned-app.zip",
+        "bytes": 85852,
+        "sha256": "d2186332922a26a84e8f3e0ee9ee3a55cdd08d60cfcf4f6e46a07fea082e6616",
+        "platform": "ios",
+        "signed": false,
+        "installable": false,
+        "url": "/downloads/numina-3.0.0-ios-unsigned-app.zip"
+      }
+    ],
+    "compiled": true,
+    "signed": false,
+    "ipaCreated": false,
+    "testsRun": false,
+    "storeSubmitted": false,
+    "nativeAuthenticatedSessionSupported": false,
+    "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34867504707",
+    "sourceCommit": "fd01df039f9e920afa29361a0df32709faa7dd08",
+    "buildCompletedAtUtc": "2026-09-14T16:16:32Z",
+    "previousBuilds": [
+      {
+        "buildRun": "https://github.com/skott34-dot/numina-production/actions/runs/34785069076",
+        "sourceCommit": "7e0de0c9e789cb9ab6aa499e891235b56510eb84",
+        "buildCompletedAtUtc": "2026-09-13T21:52:23Z",
+        "binaries": [
+          {
+            "file": "numina-3.0.0-ios-unsigned-app.zip",
+            "bytes": 61714,
+            "sha256": "ce5eec4e65d66f89c81e97f93cbac8b5ed4cd6144758592b0d2dccbd18103bf6",
+            "platform": "ios",
+            "signed": false,
+            "installable": false,
+            "url": "/downloads/numina-3.0.0-ios-unsigned-app.zip"
+          }
+        ]
+      }
+    ],
+    "appIconCompiled": true,
+    "appIconName": "AppIcon"
+  },
+  "sourceArchives": [
+    {
+      "platform": "android",
+      "file": "numina-os-3.0.0-android-source.zip",
+      "bytes": 10454,
+      "sha256": "490d05da6d371062478dcc12cc8b2474f33b8478f39c69979fa548613926538f",
+      "kind": "source_archive",
+      "installable": false
+    },
+    {
+      "platform": "ios",
+      "file": "numina-os-3.0.0-ios-source.zip",
+      "bytes": 39405,
+      "sha256": "efe375f929e4d1d86dbf6b033c9e55ab1382f9363eda9f0726977b7065fa99f8",
+      "kind": "source_archive",
+      "installable": false
+    }
+  ],
+  "sdkBinariesDependencyCachesOrCredentialsIncluded": false,
+  "slsaLevelClaimed": null,
+  "nusdActivationPerformed": false,
+  "storeListingOrApprovalClaimed": false,
+  "packagedAtUtc": "2026-09-13T21:49:52.493007+00:00",
+  "recordedAtUtc": "2026-09-13T21:56:35.907Z",
+  "sourcePackagedAtUtc": "2026-09-14T18:24:30.919915+00:00"
+}

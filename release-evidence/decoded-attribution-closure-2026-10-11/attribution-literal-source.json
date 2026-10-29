@@ -1,0 +1,36 @@
+{
+  "schema": "numina.fixed-attribution-literal-source.v1",
+  "source": "/workspace/outputs/Numina-Pair-Binding-02-final-signed-package/supporting-output-snapshots/numina-pair-binding-02.txt",
+  "source_bytes": 302197,
+  "source_sha256": "538647eb2a1fcc0808483947f166e7c2c538b06a18e3b9dc224fe607a88488f2",
+  "section": "Appendix F.2; section3 source and people order",
+  "approved_note": "UNIVERSAL_PAIR_1 labels the existing final-build normalized SHA-256 commitment attributed to Lauren Anderson (1B). UNIVERSAL_PAIR_2 labels the existing final-manifest SHA-256 commitment attributed to Sam Kott (1A). Personal attribution remains 1A first with Sam Kott, then 1B with Lauren Anderson. The two references are associated with one private genesis record.",
+  "extraction": "Join PDF-text line wraps using a single space, remove only the delimiting prose quotation marks; no substantive wording changes.",
+  "literal_utf8_bytes": 364,
+  "literal_sha256": "d4b9a83bb742ac50eb42d773ebfa04cf7130ba87527597c469b2ab67cbc8a8c9",
+  "sources": [
+    {
+      "source_id": "source_1",
+      "alias": "UNIVERSAL_PAIR_1"
+    },
+    {
+      "source_id": "source_2",
+      "alias": "UNIVERSAL_PAIR_2"
+    }
+  ],
+  "people": [
+    {
+      "name": "Sam Kott",
+      "label": "1A"
+    },
+    {
+      "name": "Lauren Anderson",
+      "label": "1B"
+    }
+  ],
+  "personToAlias": {
+    "Sam Kott": "UNIVERSAL_PAIR_2",
+    "Lauren Anderson": "UNIVERSAL_PAIR_1"
+  },
+  "scope": "New bounded decoded-value checker for the documented fixed attribution; not operational profile adoption or personal-identity verification."
+}

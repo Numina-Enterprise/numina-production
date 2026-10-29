@@ -1,0 +1,96 @@
+{
+  "schema": "numina.release-identities.v1",
+  "createdAt": "2026-09-13T20:17:29.240057+00:00",
+  "legalEntity": "SK Consulting LLC",
+  "packageIdentity": "xyz.numinalabs.app",
+  "googlePlayPackageRegistered": true,
+  "privateKeyStorage": "GitHub Actions encrypted secret NUMINA_RELEASE_SIGNING_VAULT; no private keys in source or local files",
+  "android": {
+    "release": {
+      "alias": "numina-release",
+      "algorithm": "RSA-3072 / SHA-256",
+      "certificateFile": "numina-android-release.pem",
+      "sha256": "7D:8D:0C:45:93:2C:05:3C:81:C8:92:45:75:18:1C:65:FA:84:F2:98:41:E8:09:7A:C7:EC:08:5D:1D:8D:29:AA",
+      "issuer": "self-signed Android application identity",
+      "expiresAt": "2056-09-05T20:17:29+00:00"
+    },
+    "upload": {
+      "alias": "numina-upload",
+      "algorithm": "RSA-3072 / SHA-256",
+      "certificateFile": "numina-android-upload.pem",
+      "sha256": "25:9B:B2:40:F5:74:EB:DA:4F:0E:F9:09:32:9C:06:C3:85:42:86:31:5F:08:05:CB:84:31:2B:5F:94:00:41:34",
+      "issuer": "self-signed Android application identity",
+      "expiresAt": "2056-09-05T20:17:29+00:00"
+    },
+    "playAppSigning": {
+      "sha256": "32:0E:E1:C6:E0:7C:2D:82:3E:8E:28:A4:F6:46:0C:73:DF:8A:55:2A:00:42:B6:AA:31:18:57:52:50:54:F4:1C",
+      "issuer": "Google Play App Signing",
+      "observedAtUtc": "2026-09-14T16:14:50.488Z",
+      "source": "Authenticated Google Play Console Digital Asset Links JSON",
+      "storeReleaseSubmitted": false
+    },
+    "finalBuild": {
+      "versionCode": 4,
+      "versionName": "4.0.0",
+      "signedArtifactRequired": true,
+      "googlePlaySubmissionReceipt": null
+    }
+  },
+  "apple": {
+    "status": "developer_registration_user_reported_signing_unverified",
+    "distributionCertificateIssued": false,
+    "developerMembershipActive": null,
+    "csrFile": "numina-ios-distribution.csr",
+    "ownerApproval": {
+      "status": "APPROVED",
+      "authority": "Numina owner",
+      "approvedAt": "2026-09-13T20:19:50.504Z",
+      "scope": "Submit this CSR for Apple distribution certificate issuance"
+    },
+    "appleIssuanceStatus": "UNVERIFIED",
+    "ownerReportedIssuance": {
+      "status": "ISSUED",
+      "source": "owner_statement",
+      "reportedAt": "2026-09-13T20:22:29.275Z",
+      "independentlyVerified": false
+    },
+    "developerRegistration": {
+      "status": "user_reported_complete",
+      "providerVerified": false
+    },
+    "csrVerification": {
+      "sha256": "2bd430bc0bfeca147d345057d0855260431dbe179db98baff50b4c88a2729688",
+      "requestSignatureVerified": true,
+      "verifiedAtUtc": "2026-09-14T23:06:03Z"
+    },
+    "finalBuild": {
+      "buildNumber": 6,
+      "marketingVersion": "4.0.0",
+      "signedArtifactRequired": true,
+      "appStoreSubmissionReceipt": null
+    }
+  },
+  "canonicalIdentity": {
+    "name": "Numina",
+    "authority": "NUMINA",
+    "rootHash": "51116c98ae1c5a9f58a59ff5c801a6b99413a3ef773a01091042866d4ee55db2",
+    "headUrl": "https://numinalabs.xyz/api/control/v2/head",
+    "relationship": "Platform certificates are credentials of this existing root; no additional root or treasury is created"
+  },
+  "finalBuild": {
+    "status": "FINAL_SOURCE_ALIGNED",
+    "applicationVersion": "4.0.0",
+    "androidVersionCode": 4,
+    "iosBuildNumber": 6,
+    "nusd": {
+      "chainId": "962421430",
+      "decimals": 18,
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "settlementAddress": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0",
+      "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+      "finality": "FINAL",
+      "receipt": "/downloads/nusd/deployment-receipt.json"
+    }
+  }
+}

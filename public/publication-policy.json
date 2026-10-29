@@ -1,0 +1,15 @@
+{
+  "schema": "numina.publication-policy.v1",
+  "identity": "NUMINA",
+  "authoritativePublicOrigin": "https://numinalabs.xyz",
+  "authoritativeHosting": "NUMINA_PUBLIC_ORIGIN",
+  "repository": "NUMINA",
+  "chatgptSitesRole": "OPTIONAL_MIRROR",
+  "chatgptSitesRequiredForRelease": false,
+  "mobileStoreDistributionRequiredForWebRelease": false,
+  "externalFinancialExecutionRequired": false,
+  "canonicalSource": "NUMINA_REPOSITORY",
+  "repositoryRole": "CANONICAL_ROOT_REPOSITORY",
+  "repositoryBranch": "main",
+  "propagation": "NUMINA"
+}

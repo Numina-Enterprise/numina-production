@@ -1,0 +1,95 @@
+[
+  {
+    "type": "function",
+    "name": "numina_provider_routes",
+    "description": "Read owner-authenticated provider route observations from /api/control/v2/treasury/provider-routes. Preserve each provider currency, network, destination and incomplete-observation status. Results are server-reported; this tool does not independently verify provider acceptance, NUSD identity, funding or transfer readiness, and cannot submit deposits or change balances.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "type": "function",
+    "name": "numina_read_treasury",
+    "description": "Read the owner-authenticated canonical Numina-native NUSD treasury through readTreasury(). Requires the production application and its owner token. Preserve NUMINA authority, system of record and native model verification scope. This tool does not submit transfers or independently verify bank or chain receipts.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "type": "function",
+    "name": "numina_application_release",
+    "description": "Read the Numina application release manifest at /v4/release/manifest. Keep the application version, artifact identity and runtime dependencies distinct. The response is server-reported; this tool does not verify signatures, inspect artifact bytes, install software or activate financial capabilities.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "type": "function",
+    "name": "numina_runtime_build",
+    "description": "Read the application manifest’s execution-runtime build record, source and builder revisions, artifact hashes, evidence links, financial-status source labels and any NUSD receipt/readiness records. All records are server-reported and not independently verified by this tool. It does not verify signatures or receipts, follow links, check live accounts, deploy a host, install a model plugin or establish reserves, transfers or settlement.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "type": "function",
+    "name": "numina_nusd_status",
+    "description": "Read public server-reported NUSD identity, capability and backing status without a token by passing null. A request ID instead requires server authentication for that caller’s private status. Server statements are not independent proof of reserves or a USD peg.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "request_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "request_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "type": "function",
+    "name": "numina_nusd_network",
+    "description": "Read Numina network policy and NUSD asset identity reported by the public status service. Does not contact blockchain RPC or independently verify network, token, reserves, balances or settlement.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "type": "function",
+    "name": "numina_service_catalog",
+    "description": "Read the public Numina service catalog and preserve its currency and request-only labels. USD amounts are cents; NUSD amounts can be null and are not a USD conversion. Does not open checkout, order, pay, unlock a result or activate a service.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  }
+]

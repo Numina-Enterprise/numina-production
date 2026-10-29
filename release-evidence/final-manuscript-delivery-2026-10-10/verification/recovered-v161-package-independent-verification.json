@@ -1,0 +1,246 @@
+{
+  "schema": "numina.recovered-v161-package-independent-verification.v1",
+  "checked_at": "2026-10-10T01:54:38.453574+00:00",
+  "scope": "Independent public-only verification of recovered original v161 observation signing package; exact payload bytes, raw public key, detached signatures, checksums and source/deployment record binding. This package does not sign the manuscript PDF.",
+  "archive": {
+    "path": "/workspace/outputs/Numina-v161-operational-observation-binding-2026-10-09.zip",
+    "byte_count": 19783,
+    "sha256": "e999eff016e49fe789504f62cd3dda5a5aa66a824fb918eb4d49fced506f2a37",
+    "matches_pdf_appendix_q_identity": true,
+    "file_count": 12,
+    "unsafe_paths": []
+  },
+  "checksum_entries": [
+    {
+      "path": "README.txt",
+      "sha256": "0325449de851d13a2436a57a1ba0493d8ad5973a4e56694ba5b391cdaba9a6a1",
+      "matches": true
+    },
+    {
+      "path": "fetch-receipt.json",
+      "sha256": "b3438e8eff30492be57d9f3390246c4331bbbc0285fc1f1f80706eb6035157ce",
+      "matches": true
+    },
+    {
+      "path": "independent-verification.json",
+      "sha256": "6d011a697c073873fdda1dae40575faa32a57edbd0b1318fae787979e171cf70",
+      "matches": true
+    },
+    {
+      "path": "operational-ed25519-public.raw",
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+      "matches": true
+    },
+    {
+      "path": "public-key.json",
+      "sha256": "84312927ba40599603a1acfcac39b1f0a510502e2fc497703ca107a6f9aadf7e",
+      "matches": true
+    },
+    {
+      "path": "publication-observation.json",
+      "sha256": "949cbb6d637fde547a95b40d6fa8c54b5af510effed38c74f1c9f25c37131733",
+      "matches": true
+    },
+    {
+      "path": "publication-observation.json.ed25519.sig",
+      "sha256": "60597b344025cc660dd2211d3e125259f1880727cf575472253072f0357e32b0",
+      "matches": true
+    },
+    {
+      "path": "signing-verification-receipt.json",
+      "sha256": "c2fbc61e30ee10f9ba8ea704e4d52832f5d465506556fae9bb886914bc63b0d3",
+      "matches": true
+    },
+    {
+      "path": "v161-observation-binding-manifest.json",
+      "sha256": "9fa4860cbad5e28e0e3f3c31feccdd9127092b7dc6694ecd3a7ed68fd72d9f8e",
+      "matches": true
+    },
+    {
+      "path": "v161-observation-binding-manifest.json.ed25519.sig",
+      "sha256": "2f4d507c2cd9e6c3789b402340629ac4ad2b779bbb21f925bd00cabf08e1c28d",
+      "matches": true
+    },
+    {
+      "path": "verify_public.py",
+      "sha256": "05634934b41fb8ad837b5b03fc4fefa218da470aa8c7fd56a8a358ddcd123e38",
+      "matches": true
+    }
+  ],
+  "checksum_entry_count": 11,
+  "checksum_coverage_missing": [],
+  "public_key": {
+    "byte_count": 32,
+    "raw_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+    "matches_expected_operational_fingerprint": true,
+    "json_encoding_matches": true,
+    "manifest_signer_matches_public_key_record": true,
+    "signing_receipt_key_matches_public_key_record": true,
+    "operational_key_separate_from_preserved_runtime_pin": true
+  },
+  "signatures": [
+    {
+      "path": "publication-observation.json",
+      "byte_count": 6763,
+      "sha256": "949cbb6d637fde547a95b40d6fa8c54b5af510effed38c74f1c9f25c37131733",
+      "receipt_size_and_hash_match": true,
+      "signature_path": "publication-observation.json.ed25519.sig",
+      "signature_byte_count": 64,
+      "signature_hex_matches_receipt": true,
+      "signature_base64_matches_receipt": true,
+      "signature_sha256_matches_receipt": true,
+      "signature_verified": true,
+      "altered_payload_rejected": true,
+      "altered_signature_rejected": true
+    },
+    {
+      "path": "v161-observation-binding-manifest.json",
+      "byte_count": 23310,
+      "sha256": "9fa4860cbad5e28e0e3f3c31feccdd9127092b7dc6694ecd3a7ed68fd72d9f8e",
+      "receipt_size_and_hash_match": true,
+      "signature_path": "v161-observation-binding-manifest.json.ed25519.sig",
+      "signature_byte_count": 64,
+      "signature_hex_matches_receipt": true,
+      "signature_base64_matches_receipt": true,
+      "signature_sha256_matches_receipt": true,
+      "signature_verified": true,
+      "altered_payload_rejected": true,
+      "altered_signature_rejected": true
+    }
+  ],
+  "provenance_bindings": [
+    {
+      "json_pointer": "/identity",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/canonical_source_commit",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/canonical_source_tree",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/site_source_commit",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/site_source_tree",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/prior_site_source_commit",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/source_delta",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/excluded_distribution_archives",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/all_other_git_blobs_identical",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/ed25519_key_id",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/classification",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/limitations",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/build",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/archive",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/saved_version",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/canonical_source_authority",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/final_publication_observation",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/signing_status",
+      "value_matches_original": true
+    },
+    {
+      "json_pointer": "/evidence_record_timing",
+      "value_matches_original": true
+    }
+  ],
+  "identity_checks": {
+    "manifest_retains_complete_original_record": true,
+    "observation_matches_repository_exact_bytes": true,
+    "signed_manifest_binds_original_observation_size_and_digest": true,
+    "signed_manifest_binds_observation_signature": true,
+    "original_git_blob_matches_fetch_receipt": true,
+    "fetch_receipt_matches_observation": true,
+    "fetch_commit_is_evidence_commit_not_build_source": true,
+    "saved_source_matches_site_source": true,
+    "saved_version_matches_deployment_version": true,
+    "version_161_matches_manifest_receipt": true,
+    "deployment_id_consistent": true,
+    "project_id_consistent": true,
+    "stored_archive_metadata_consistent": true,
+    "local_and_provider_archive_digest_scopes_distinct": true,
+    "historical_signing_booleans_preserved": true,
+    "historical_repository_key_id_preserved": true
+  },
+  "local_git_object_checks": {
+    "canonical_tree_matches_local_git_object": true,
+    "transport_tree_matches_local_git_object": true
+  },
+  "retained_local_gzip_archive_check": {
+    "path": "/workspace/scratch/numina-site-canonical-delivery.tar.gz",
+    "available": true,
+    "recorded_sha256": "555c9285eb6baae123bae0de81cf90f53ed000c3e2c3013d667c77b295b9f642",
+    "actual_sha256": "555c9285eb6baae123bae0de81cf90f53ed000c3e2c3013d667c77b295b9f642",
+    "byte_count": 39857883,
+    "hash_and_size_match": true
+  },
+  "source_and_deployment_values": {
+    "canonical_source_commit": "d1b1cd852927052b54af2b540b031d77311ccecf",
+    "site_source_commit": "76a08b2d54679238416ee87818732ac441c5f933",
+    "artifact_build_id": "0d4044e06e5a753e16cabee8c91f37a01a5e49bc923aff460b7d74a2d545a5f3",
+    "worker_sha256": "810287cd8e67e5ebc118b8caf2d05277d44ab5f2d11a3299d42801b8fcb55b49",
+    "local_gzip_archive_sha256": "555c9285eb6baae123bae0de81cf90f53ed000c3e2c3013d667c77b295b9f642",
+    "provider_stored_tar_sha256": "sha256:81a32a94c08e26c15e436008d94592139a5da05a04bf69d656202c0038a33508",
+    "deployment_id": "appgdep_6ac8d9570fb08191b1a448a40cc11923",
+    "deployment_status": "succeeded"
+  },
+  "verifier": {
+    "python_version": "3.12.14",
+    "cryptography_version": "50.0.0",
+    "method": "Ed25519PublicKey.verify over unmodified payload file bytes",
+    "bundled_verifier_executed": false,
+    "private_key_accessed": false,
+    "network_used": false
+  },
+  "unsigned_supplemental_report": true,
+  "limitations": [
+    "This verifies detached signatures over the historical observation and binding manifest, not the current manuscript PDF or the proposed operational companion message.",
+    "Identity attribution, private-key custody and trust-registry approval are not independently established by this public-only verification.",
+    "No provider archive-byte recomputation, runtime HTTP health check, new signing, source modification, rebuild, deployment or publication was performed.",
+    "The package sidecar receipts and SHA256SUMS file are unsigned; signed coverage is limited to the two exact payloads."
+  ],
+  "original_zip_unchanged": true,
+  "all_checks_passed": true
+}

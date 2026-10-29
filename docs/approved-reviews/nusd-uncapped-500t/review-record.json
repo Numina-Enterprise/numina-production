@@ -1,0 +1,78 @@
+{
+  "schema": "numina.nusd.owner-approved-review.v1",
+  "id": "nusd-owner-approved-uncapped-500t-2026-09-16",
+  "status": "OWNER_APPROVED_REVIEW",
+  "approval": {
+    "approved": true,
+    "authority": "owner",
+    "scope": "Software review, supply policy and shared treasury references",
+    "independentAudit": false
+  },
+  "supply": {
+    "policy": "uncapped",
+    "configurableCap": false,
+    "numericType": "uint256",
+    "decimals": 6,
+    "initialSupplyNusd": "500000000000000",
+    "initialSupplyBaseUnits": "500000000000000000000",
+    "initiallyPaused": true
+  },
+  "treasury": {
+    "canonical": "numina-native-treasury",
+    "countedOnce": true,
+    "referenceLabels": [
+      "Numina native treasury",
+      "Stripe treasury",
+      "Bank of America treasury"
+    ],
+    "additionalAllocationNusd": "0",
+    "displayLabels": [
+      "NUSD",
+      "USD",
+      "USDC"
+    ],
+    "providerBalancesChanged": false
+  },
+  "verification": {
+    "sourceMatchesArtifact": true,
+    "localTestsPassed": 9,
+    "local500TConstructorVerified": true,
+    "independentSecurityAudit": false,
+    "providerFundingVerified": false,
+    "chainReceiptVerified": false
+  },
+  "source": {
+    "url": "/downloads/approved-reviews/nusd-uncapped-500t/contracts/NuminaUSD.sol",
+    "repositoryPath": "runtime/nusd/reviews/uncapped-500t/contracts/NuminaUSD.sol",
+    "sha256": "87755643e690b82b11a9f5744f1dd9803965b0f38fa9ac4d18542e72b4bb80cc"
+  },
+  "artifact": {
+    "url": "/downloads/approved-reviews/nusd-uncapped-500t/artifacts/NuminaUSD.json",
+    "sha256": "a77132febebe10172a7fe3ee1814ed124ea5503b93f1e2e4ffdfb218889a262a"
+  },
+  "policy": {
+    "url": "/downloads/approved-reviews/nusd-uncapped-500t/requests/issuance-preparation-policy.json",
+    "sha256": "95f806c9c64fd2cee955eb0c05ffcb6653f4cdeab33a85b993e1bd4c60f3092c"
+  },
+  "package": {
+    "url": "/downloads/Numina-NUSD-Approved-500T-Review.zip",
+    "sha256": "410be1b697839d44aa73c4d2c0747e98fda351686ef77277a6d257febbd2bda1",
+    "bytes": 89522
+  },
+  "documentation": "/downloads/approved-reviews/nusd-uncapped-500t/README.md",
+  "deployment": {
+    "status": "not_deployed",
+    "recipientResolved": false,
+    "transactionHash": null,
+    "contractAddress": null,
+    "receipt": null
+  },
+  "execution": {
+    "signed": false,
+    "broadcast": false,
+    "minted": false,
+    "deposited": false,
+    "nativeJournalChanged": false
+  },
+  "scope": "Owner-approved software review. Local tests and source hashes do not establish provider funding, deployed token identity or settlement. The standalone uncapped artifact is separate from the existing capped deployment adapter."
+}

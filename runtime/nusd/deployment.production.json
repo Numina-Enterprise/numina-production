@@ -1,0 +1,33 @@
+{
+  "schema": "numina.nusd.deployment.request.v2",
+  "network": {
+    "chainId": 962421430,
+    "name": "Numina blockchain",
+    "finalityPolicy": "Require successful receipt plus 12 observed confirmations on the pinned genesis."
+  },
+  "supplyCapNusd": "1500000000000000",
+  "initialSupplyNusd": "1500000000000000",
+  "initialRecipient": "0x1a45671AE2ee3E52264116151924FAAcb80Fc02E",
+  "roles": {
+    "admin": "0xa7e9FB02495700ccE0d209392C0A30FbE077498e",
+    "issuer": "0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0",
+    "minter": "0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6",
+    "pauser": "0x434AB24E613055Fd2598Fd9f0558A06a94D39c81"
+  },
+  "adminDelaySeconds": 86400,
+  "issuer": {
+    "legalEntity": "SK Consulting LLC",
+    "approvedPolicyFile": "policies/issuer-policy-1500t-6d.json",
+    "policySha256": "fae9787b5a9890b7c7aa668ab0c989a1224d1d37692cd1aecf4de98841c2d6d2"
+  },
+  "reviewRecords": {
+    "independentSecurityAudit": "Outstanding: independent security audit not completed; owner authorized deployment with this risk recorded.",
+    "authorizedIssuerAndJurisdictions": "Owner authorization recorded for SK Consulting LLC; jurisdictional eligibility remains an external compliance responsibility.",
+    "custodianAndReserveEvidence": "No external reserve backing is asserted by this deployment request.",
+    "redeemabilityTermsAndOperations": "Redemption remains disabled until bank settlement operations have independent evidence.",
+    "financialCrimeAndSanctionsControls": "Activation controls remain required before third-party circulation or redemption.",
+    "independentRoleKeyCustody": "Four distinct role addresses are configured; independent human custody has not been independently verified.",
+    "incidentAndPauseRecovery": "Token starts paused; admin and pauser recovery controls are configured.",
+    "applicationSettlementAndFulfillmentReview": "Constructor issuance is isolated from external settlement; provider settlement remains separately evidence-bound."
+  }
+}

@@ -1,0 +1,637 @@
+{
+  "notice": "Implementation vectors, not the unavailable original 20 constitutional scenarios.",
+  "key": {
+    "kid": "numina-demo-eac-1",
+    "purpose": "eac-test-authorization",
+    "issuer": "numina-demo",
+    "jwk": {
+      "crv": "Ed25519",
+      "x": "i5RQlrCzD4rCOHRKkWLf_7njALDaboOfEcO4ilWiZIQ",
+      "kty": "OKP"
+    },
+    "warning": "PUBLIC TEST KEY. Never use for real authority."
+  },
+  "vectors": [
+    {
+      "name": "valid",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "XtX_kc-f_76mMosk5zd9EtKKDyLliuipkIiMROhf5CLi76HZXxX1ZJMHXGq1qjt55O8CD4Z4fG5hLTYSL_dSCg"
+        }
+      },
+      "expected": {
+        "outcome": "VALID_FOR_COMMIT",
+        "reason": "TEST_AUTHORITY_VALID"
+      }
+    },
+    {
+      "name": "wrong environment",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "production",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "caUai4dNsPOHNLaMNwcISURCrjZJe244qS-A8CxyKdn23mGyOHoALhwYjqOXrjaPCbNqNEvXpCMaDvR5YcAqCg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCOPE_DENIED"
+      }
+    },
+    {
+      "name": "wrong audience",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "other",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "jXyeP5dhLezOl2VEghKe_12j8TW90_hGX00wcLF12A-INq3mDrJLkB3mIAvktr2TiASAGcbMtFt0CsYxNZ4pBg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCOPE_DENIED"
+      }
+    },
+    {
+      "name": "wrong action",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "transfer",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "G1IZmm62_QgtRH9R1Nw2nZm1Q-uO0EVIBfi3HE8u8nIwxo3pq7CfjMjGn87uQuuYfsP2wrioLGdXiva1HgQJCQ"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCOPE_DENIED"
+      }
+    },
+    {
+      "name": "wrong resource",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "real:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "1WNSb877sAjWRVFBdLYGTR0cSHSflF6Daojk5RFCaykXPrwN0s-BnxsYJMbCQFpMk-1HnbSREoqVnDiQ_8QHCQ"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCOPE_DENIED"
+      }
+    },
+    {
+      "name": "wrong issuer",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "other",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "vnV6DgzqX2AoviBXcFA7ULDYs1HIZ_Jbg11ELQI9aFbO1NX6SQh-EcJmMmMy4K3942cdPoLyvVmxr41ZBh0BAw"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "KEY_PURPOSE_OR_ISSUER"
+      }
+    },
+    {
+      "name": "profile changed",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "other",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "YwOZ1pvgCDOML5auQRQnrspakwS5hy_F4UhEjstoifXZ-FyheckPjxV1ESHikNQ7D6-tcZoZzxjrz_OgFURzDw"
+        }
+      },
+      "expected": {
+        "outcome": "REVALIDATION_REQUIRED",
+        "reason": "PROFILE_CHANGED"
+      }
+    },
+    {
+      "name": "expired",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1799999400,
+          "notBefore": 1799999400,
+          "expiresAt": 1800000000
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "GkZRpDLH9EY_abKnL3Eb2-p34pdj9lx1VN5x0KFLUZK8VssqBg1NXz5cNKt272B8AkzwE7ZEU5LpbaxgEFk8CA"
+        }
+      },
+      "expected": {
+        "outcome": "REVALIDATION_REQUIRED",
+        "reason": "EXPIRED"
+      }
+    },
+    {
+      "name": "not yet valid",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000001,
+          "notBefore": 1800000001,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "YxLezEeCIVTui5_jU1N7NT20klnTMFDZkoLJJFrN4kvfu0G7aREQcdXqcSI_ykCL4QST1aK3GFkMxIZZ4EbrDA"
+        }
+      },
+      "expected": {
+        "outcome": "REVALIDATION_REQUIRED",
+        "reason": "NOT_YET_VALID"
+      }
+    },
+    {
+      "name": "lifetime exceeded",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000601
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "4Ckrnk21QUngR9cfPY52DMW3HloIPgg6IVhJzrxBRIFyiL2KsYAZ6F1-IYPixQw_C_odU5W2m3Mk9Bpk315_Ag"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "TIME_RANGE_INVALID"
+      }
+    },
+    {
+      "name": "inverted window",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000400,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "yyZd5p2m2IE3mw4jAZAdb5uIP9ChDuzekzvjLpNa7Hz5KORQZZmkAv7Ceop3R1t73fNeaIURawGZ7GC0PqU-BA"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "TIME_RANGE_INVALID"
+      }
+    },
+    {
+      "name": "issuance after activation",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000001,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "aQkMz6FiEhWAKFwseUlXNQ3T36AlHnVqQPznDZTo17-bEQ2gwWvobHV0H0id2M-iUW9nBhmlYe_YRlU_F6rOBg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "TIME_RANGE_INVALID"
+      }
+    },
+    {
+      "name": "short nonce",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "short",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "TBA-OSP-nqdBmtBJNVsPFed9RDd0Ez7S_qjqJAkv4C2QP4olFKQBl8dKQVbZuGCfPJPlRR2W5AqAdvBMLro9AA"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "name": "unsupported version",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.2",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "m-cyePhKhaVTtC6CtPn0xK4U4l_BrLtlGdQT8ri79z5NKYyNzDtu9v3HBp_pc9wf9HHkufsiPiG3B2Qf6hepCA"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCOPE_DENIED"
+      }
+    },
+    {
+      "name": "extra field",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300,
+          "funds": 100
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "0GSmvbfj48GBsJ_1Epk-jInHiKBCMFHe3p64-8hzPiU0NKotqGLWjO2TcyiR-O3RDXUaoaNFfJPNnUNG39pjAQ"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "name": "fractional time",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000.5,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "XtX_kc-f_76mMosk5zd9EtKKDyLliuipkIiMROhf5CLi76HZXxX1ZJMHXGq1qjt55O8CD4Z4fG5hLTYSL_dSCg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    },
+    {
+      "name": "tampered signature",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SIGNATURE_INVALID"
+      }
+    },
+    {
+      "name": "untrusted key",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "unknown",
+          "purpose": "eac-test-authorization",
+          "value": "XtX_kc-f_76mMosk5zd9EtKKDyLliuipkIiMROhf5CLi76HZXxX1ZJMHXGq1qjt55O8CD4Z4fG5hLTYSL_dSCg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "UNTRUSTED_KEY"
+      }
+    },
+    {
+      "name": "wrong key purpose",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "Ed25519",
+          "kid": "numina-demo-eac-1",
+          "purpose": "external-test-receipt",
+          "value": "XtX_kc-f_76mMosk5zd9EtKKDyLliuipkIiMROhf5CLi76HZXxX1ZJMHXGq1qjt55O8CD4Z4fG5hLTYSL_dSCg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "KEY_PURPOSE_OR_ISSUER"
+      }
+    },
+    {
+      "name": "unsupported algorithm",
+      "now": 1800000000,
+      "envelope": {
+        "credential": {
+          "version": "0.1",
+          "environment": "test",
+          "issuer": "numina-demo",
+          "subject": "demo-user",
+          "audience": "numina-demo-gateway",
+          "profile": "numina-demo-rp-0.1",
+          "action": "simulate.commit",
+          "resource": "demo:ledger",
+          "eventId": "conformance-event",
+          "nonce": "conformance-nonce-0000000001",
+          "issuedAt": 1800000000,
+          "notBefore": 1800000000,
+          "expiresAt": 1800000300
+        },
+        "signature": {
+          "alg": "none",
+          "kid": "numina-demo-eac-1",
+          "purpose": "eac-test-authorization",
+          "value": "XtX_kc-f_76mMosk5zd9EtKKDyLliuipkIiMROhf5CLi76HZXxX1ZJMHXGq1qjt55O8CD4Z4fG5hLTYSL_dSCg"
+        }
+      },
+      "expected": {
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    }
+  ]
+}

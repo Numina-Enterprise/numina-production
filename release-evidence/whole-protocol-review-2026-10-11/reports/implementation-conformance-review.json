@@ -1,0 +1,320 @@
+{
+  "schema": "numina.implementation-conformance-review.v1",
+  "observed_at_utc": "2026-10-11T04:32:27.564730+00:00",
+  "status": "bounded_conformance_gaps_confirmed",
+  "whole_protocol_correctness_established": false,
+  "unsigned_successor_observation": true,
+  "inspected_repository": "/workspace/numina-production",
+  "inspected_head": "9b744f6354c4e1259c7e0c8626c6e67fc78fe5ac",
+  "working_tree_clean": true,
+  "working_tree_status": "",
+  "source_inventory": [
+    {
+      "path": "public/runtime-release-model.js",
+      "bytes": 9001,
+      "sha256": "79abbabde542da5ff26b7b62f53ee9a20fdebb6febf3093af0627fd03b8cc58f"
+    },
+    {
+      "path": "public/runtime-contract.js",
+      "bytes": 1944,
+      "sha256": "c7c46b7dd6a8589474e01a5377c23d55b5d876531f144f172ae56813ff98653d"
+    },
+    {
+      "path": "runtime/verifier-rc27/numina_prod/signing.py",
+      "bytes": 3812,
+      "sha256": "813972c1d35da1cf91c93ea6e09518a5b2fc6d5f496c1cfb8240bb8972898be8"
+    },
+    {
+      "path": "runtime/verifier-rc27/numina/canonical.py",
+      "bytes": 705,
+      "sha256": "72429ace2385ceaec6ad782b3a46e39d99f10232fe8ae542bda118e74894a993"
+    },
+    {
+      "path": "vendor/numina-core-v1.8/numina/canonical.py",
+      "bytes": 705,
+      "sha256": "72429ace2385ceaec6ad782b3a46e39d99f10232fe8ae542bda118e74894a993"
+    },
+    {
+      "path": "scripts/trusted-release-evidence.mjs",
+      "bytes": 9005,
+      "sha256": "1967edab9b4e911cfe73c05f2bb2c799f6e3584fed40f2d0898fec04e41cd29a"
+    },
+    {
+      "path": "config/numina-universal-pair-source-ids.json",
+      "bytes": 436,
+      "sha256": "b9b47712a396961440f18ab4c3b6227e13cfa6791d5b24398c9b6c816eabb106"
+    },
+    {
+      "path": "scripts/sync-universal-pair-source-ids.mjs",
+      "bytes": 11639,
+      "sha256": "3bd74c263fed582f2eb81f1b26190dc21a926133749eab2343bd21d84327661f"
+    },
+    {
+      "path": "public/final-manifest.json",
+      "bytes": 22200,
+      "sha256": "8f68c2b90623f44e9e5afe002349962fb24cf60850dde5386e18cfd9cbbad3e0"
+    },
+    {
+      "path": "tests/runtime-rc27.test.mjs",
+      "bytes": 15823,
+      "sha256": "07730ae1b238078538d198f4e00e8ea0a985d9fe5504f78cec95ce1aa7a3e235"
+    },
+    {
+      "path": "tests/trusted-release-evidence.test.mjs",
+      "bytes": 9141,
+      "sha256": "7b6e7b681f9ee18be3cf49ad9fd2cd9781866d254c4be0e531853a1278a6df81"
+    },
+    {
+      "path": "tests/runtime-revocation.test.mjs",
+      "bytes": 3363,
+      "sha256": "40ac0ebb01f223c897a845d3900d6c067196b76e10e3b37447e09636078e9df6"
+    },
+    {
+      "path": "runtime/verifier-rc27/tests_prod/test_schema_contract.py",
+      "bytes": 3383,
+      "sha256": "47ef29f30b0f8232d9a11929ea4e351844dfd67cdbe9aea5522f1883c9653225"
+    }
+  ],
+  "source_bytes_unchanged_during_probe": true,
+  "tools": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "node": "v24.19.0"
+  },
+  "probe": {
+    "path": "/workspace/scratch/numina-whole-protocol/probe-runtime-canonicalization.py",
+    "sha256": "4268c5c03e2cca8e43c6d3a3726bafbc37961d827ba90ee019f3f3ae829e6cdf",
+    "cases": [
+      {
+        "id": "float_integral",
+        "input_json": "{\"x\":1.0}",
+        "python_runtime": {
+          "id": "float_integral",
+          "accepted": true,
+          "text": "{\"x\":1.0}",
+          "utf8_hex": "7b2278223a312e307d"
+        },
+        "browser_module_via_node": {
+          "id": "float_integral",
+          "accepted": true,
+          "text": "{\"x\":1}",
+          "utf8_hex": "7b2278223a317d"
+        },
+        "same_acceptance": true,
+        "same_canonical_bytes": false
+      },
+      {
+        "id": "negative_zero",
+        "input_json": "{\"x\":-0.0}",
+        "python_runtime": {
+          "id": "negative_zero",
+          "accepted": true,
+          "text": "{\"x\":-0.0}",
+          "utf8_hex": "7b2278223a2d302e307d"
+        },
+        "browser_module_via_node": {
+          "id": "negative_zero",
+          "accepted": true,
+          "text": "{\"x\":0}",
+          "utf8_hex": "7b2278223a307d"
+        },
+        "same_acceptance": true,
+        "same_canonical_bytes": false
+      },
+      {
+        "id": "unicode_property_order",
+        "input_json": "{\"\\uE000\":1,\"\\uD83D\\uDE00\":2}",
+        "python_runtime": {
+          "id": "unicode_property_order",
+          "accepted": true,
+          "text": "{\"\ue000\":1,\"\ud83d\ude00\":2}",
+          "utf8_hex": "7b22ee8080223a312c22f09f9880223a327d"
+        },
+        "browser_module_via_node": {
+          "id": "unicode_property_order",
+          "accepted": true,
+          "text": "{\"\ud83d\ude00\":2,\"\ue000\":1}",
+          "utf8_hex": "7b22f09f9880223a322c22ee8080223a317d"
+        },
+        "same_acceptance": true,
+        "same_canonical_bytes": false
+      },
+      {
+        "id": "unpaired_surrogate_value",
+        "input_json": "{\"x\":\"\\uD800\"}",
+        "python_runtime": {
+          "id": "unpaired_surrogate_value",
+          "accepted": false,
+          "error_type": "UnicodeEncodeError",
+          "error": "'utf-8' codec can't encode character '\\ud800' in position 6: surrogates not allowed"
+        },
+        "browser_module_via_node": {
+          "id": "unpaired_surrogate_value",
+          "accepted": true,
+          "text": "{\"x\":\"\\ud800\"}",
+          "utf8_hex": "7b2278223a225c7564383030227d"
+        },
+        "same_acceptance": false,
+        "same_canonical_bytes": null
+      },
+      {
+        "id": "escaped_duplicate_member",
+        "input_json": "{\"x\":1,\"\\u0078\":2}",
+        "python_runtime": {
+          "id": "escaped_duplicate_member",
+          "accepted": true,
+          "text": "{\"x\":2}",
+          "utf8_hex": "7b2278223a327d"
+        },
+        "browser_module_via_node": {
+          "id": "escaped_duplicate_member",
+          "accepted": true,
+          "text": "{\"x\":2}",
+          "utf8_hex": "7b2278223a327d"
+        },
+        "same_acceptance": true,
+        "same_canonical_bytes": true
+      }
+    ]
+  },
+  "bounded_search": {
+    "roots": [
+      "/workspace/numina-production/src",
+      "/workspace/numina-production/public",
+      "/workspace/numina-production/scripts",
+      "/workspace/numina-production/api",
+      "/workspace/numina-production/config",
+      "/workspace/numina-production/tests",
+      "/workspace/numina-production/runtime/verifier-rc27/numina_prod",
+      "/workspace/numina-production/runtime/verifier-rc27/numina",
+      "/workspace/numina-production/runtime/verifier-rc27/tests_prod",
+      "/workspace/numina-production/vendor/numina-core-v1.8/numina"
+    ],
+    "command": [
+      "rg",
+      "-n",
+      "--glob",
+      "*.{py,js,mjs,json,ts}",
+      "numina\\.pair-binding\\.v1|NUMINA-PAIR-BINDING/V1|genesis_ref|previous_payload_sha256|signature_b64u|public_key_b64u",
+      "/workspace/numina-production/src",
+      "/workspace/numina-production/public",
+      "/workspace/numina-production/scripts",
+      "/workspace/numina-production/api",
+      "/workspace/numina-production/config",
+      "/workspace/numina-production/tests",
+      "/workspace/numina-production/runtime/verifier-rc27/numina_prod",
+      "/workspace/numina-production/runtime/verifier-rc27/numina",
+      "/workspace/numina-production/runtime/verifier-rc27/tests_prod",
+      "/workspace/numina-production/vendor/numina-core-v1.8/numina"
+    ],
+    "exit_code": 1,
+    "matches": [],
+    "scope_limit": "Selected source/config/test roots and extensions only; no search of private stores, prior Git history, omitted binary artifacts or all external systems."
+  },
+  "domain_distinctions": {
+    "runtime_envelope": {
+      "signed_members": [
+        "artifact_type",
+        "key_id",
+        "payload"
+      ],
+      "framing": "Runtime-specific recursive JSON sorting; no companion prefix",
+      "key_id": "3a2fe594a7e10458ae89683f",
+      "raw_public_key_sha256": "3a2fe594a7e10458ae89683fdda0291af282690825be3062ef7ac2721137deff",
+      "encoding": "Standard padded base64; raw or accepted SPKI public-key form in browser verifier"
+    },
+    "proposed_companion": {
+      "schema": "numina.pair-binding.v1",
+      "envelope_members": [
+        "payload",
+        "signature_b64u"
+      ],
+      "framing": "ASCII(NUMINA-PAIR-BINDING/V1) || 0x00 || UTF8(RFC8785_JCS(payload)); pure Ed25519",
+      "key_id": "sha256: followed by full 64 lowercase hex digits of raw public key SHA-256",
+      "encoding": "Canonical unpadded base64url; exactly 32-byte public key and 64-byte signature",
+      "source_domain": "Two ordered frozen historical commitments, independently approved artifact/hash profiles and attribution; source order differs from personal display order",
+      "candidate_profile_adoption": "NOT_ADOPTED in manuscript Appendix M"
+    },
+    "current_v4_projection": {
+      "source_record": {
+        "schema": "numina.universal-pair-source-ids.v1",
+        "identity": "NUMINA",
+        "status": "FINAL",
+        "sourceIds": [
+          "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+        ],
+        "sourceIdSources": [
+          "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1"
+        ],
+        "matrix": "1x2",
+        "environments": [
+          "FRONTIER"
+        ],
+        "currentPushEnvironment": "FRONTIER",
+        "futureAdvancementAllowed": true,
+        "sourceCount": 1,
+        "bindingCount": 2
+      },
+      "observed_projection_schema": "numina.universal-pair.v4",
+      "observed_projection_source_count": 1,
+      "observed_projection_source_ids": [
+        "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+      ],
+      "comparison": "Current one-source universal-pair.v4 and historical two-source companion v1 are distinct reviewed subjects; neither correctness claim can be inferred from the other's name."
+    }
+  },
+  "findings": [
+    {
+      "id": "CANONICAL_BYTES_DISAGREE",
+      "status": "confirmed",
+      "evidence_case_ids": [
+        "float_integral",
+        "negative_zero",
+        "unicode_property_order"
+      ],
+      "closure": "Use a versioned, conformance-tested canonicalizer for the selected protocol; require cross-language equality against RFC8785 vectors and adversarial Unicode/number fixtures. Do not rewrite historical signed bytes."
+    },
+    {
+      "id": "INVALID_UNICODE_ACCEPTANCE_DIFFERS",
+      "status": "confirmed",
+      "evidence_case_ids": [
+        "unpaired_surrogate_value"
+      ],
+      "closure": "Reject invalid Unicode at the applicable decoded-string/name intake boundary and retain independently executed negative results."
+    },
+    {
+      "id": "DUPLICATES_COLLAPSE_BEFORE_CANONICALIZER",
+      "status": "confirmed_at_native_parser_probe_boundary",
+      "evidence_case_ids": [
+        "escaped_duplicate_member"
+      ],
+      "closure": "For companion intake, detect duplicate member names after escape decoding before conversion to ordinary maps; endpoint behavior was not audited by this probe."
+    },
+    {
+      "id": "COMPANION_IMPLEMENTATION_NOT_LOCATED",
+      "status": "not_observed_in_bounded_search",
+      "closure": "Identify exact accepted protocol version/source commit and locate or implement its strict byte intake, closed schema, size/depth/token/calendar/base64 rules and prefixed signature verifier, with normative-rule-to-code/test traceability."
+    },
+    {
+      "id": "COMPANION_PROFILE_AND_ED25519_POLICY_ADOPTION",
+      "status": "not_established",
+      "closure": "Retain authenticated adoption of the exact profile and point/scalar/cofactor acceptance policy; run positive, tamper and adversarial vectors across pinned independent providers. Runtime delegation to WebCrypto/cryptography is a different observation."
+    },
+    {
+      "id": "SCOPED_TRUST_CURRENT_STATE_AND_PRIVATE_MAPPING",
+      "status": "not_established",
+      "closure": "Retain independently authenticated key-role/project/release/source authorization, validity/revocation rules, accepted revision/predecessor/fork/replay evidence, original artifact/profile registry pins, and authorized opaque private-reference resolution receipt. A byte-valid operational delivery signature does not supply these facts."
+    },
+    {
+      "id": "MODEL_IMPLEMENTATION_AND_OPERATIONAL_CLOSURE",
+      "status": "not_established",
+      "closure": "Tie exact implementation/artifacts to applicable proof assumptions and execute end-to-end accepted/rejected workflows, dependency failures and recovery under the adopted policy; retain matching release/runtime/current-state receipts. Generic conditional model theorems are bounded evidence."
+    }
+  ],
+  "limitations": [
+    "The counterexamples concern the unrestricted JSON domain of existing runtime canonicalization functions; previously verified restricted ASCII/integer runtime receipts remain valid.",
+    "These probes are not complete schema-valid companion envelopes. A strictly enforced fixed-field/safe-integer profile could exclude several examples; that profile's parser/schema enforcement and restricted-domain correctness must be established separately.",
+    "No operational private companion envelope or adopted policy was verified by this review.",
+    "Current v4 projection consistency is observed metadata, not a whole-protocol correctness proof.",
+    "All signed outputs and runtime behavior remain unchanged; no signing, deployment, key generation or private-key access was performed."
+  ]
+}

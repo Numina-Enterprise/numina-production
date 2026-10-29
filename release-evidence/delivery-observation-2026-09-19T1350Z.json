@@ -1,0 +1,115 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "identity": "NUMINA",
+  "observedAt": "2026-09-19T13:50:12Z",
+  "source": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "observedCommit": "e8aed5b4ac912530aae5d8db1e480e6177f84ea7"
+  },
+  "vercel": {
+    "capacityObserved": true,
+    "projectId": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "teamId": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "deployment": {
+      "id": "dpl_Fp1BfcSNTDJGMcUFj9Uvur3RHt9E",
+      "sourceCommit": "e8aed5b4ac912530aae5d8db1e480e6177f84ea7",
+      "target": "production",
+      "state": "READY",
+      "url": "https://numina-production-ohz5fgr02-skott34-dot.vercel.app",
+      "aliases": [
+        "https://www.numinalabs.xyz",
+        "https://numinalabs.xyz",
+        "https://numina-production.vercel.app",
+        "https://numina-production-skott34-dot.vercel.app",
+        "https://numina-production-git-main-skott34-dot.vercel.app"
+      ],
+      "aliasError": null
+    },
+    "endpointVerification": {
+      "/final-build.json": {
+        "httpStatus": 200,
+        "schema": "numina.final-build.v1",
+        "status": "FINAL",
+        "cache": "MISS",
+        "embeddedVerifiedCodeCommit": null
+      },
+      "/downloads/nusd/deployment-receipt.json": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "cache": "MISS",
+        "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+      },
+      "/api/nusd/v1/status": {
+        "httpStatus": 200,
+        "schema": "numina.nusd.status.v1",
+        "cache": "MISS"
+      },
+      "/v2/network/deployment-estimate": {
+        "httpStatus": 200,
+        "schema": "numina.deployment-estimate.v1",
+        "status": "FINAL",
+        "cache": "MISS",
+        "requestId": "86d9d919-2675-4c46-9b4e-04440f2bef2a"
+      }
+    }
+  },
+  "githubActions": {
+    "usableRunnerExecutionObserved": false,
+    "canonicalRun": {
+      "runId": 35446869775,
+      "jobId": 105907202918,
+      "workflow": ".github/workflows/numina.yml",
+      "sourceCommit": "e8aed5b4ac912530aae5d8db1e480e6177f84ea7",
+      "status": "completed",
+      "conclusion": "failure",
+      "stepsObserved": false,
+      "logsObserved": false,
+      "artifactCount": 0
+    },
+    "websitePublishRun": {
+      "runId": 35446869785,
+      "workflow": ".github/workflows/publish-sites-control-source.yml",
+      "sourceCommit": "e8aed5b4ac912530aae5d8db1e480e6177f84ea7",
+      "status": "pending",
+      "jobsObserved": 0
+    },
+    "androidSigningRerunPerformed": false,
+    "iosSigningRerunPerformed": false,
+    "reason": "No usable runner-backed execution was observed on the canonical workflow, so signing workflows were not claimed or rerun as successful."
+  },
+  "remoteDesktop": {
+    "device": "VENGEANCE",
+    "online": false,
+    "lastSeen": "2026-09-15T04:39:47.909Z",
+    "fallbackUsed": false,
+    "signingIdentityChanged": false
+  },
+  "mobileDelivery": {
+    "androidSignedArtifactProduced": false,
+    "iosSignedArtifactProduced": false,
+    "googlePlaySubmissionClaimed": false,
+    "appStoreSubmissionClaimed": false
+  },
+  "scope": "Delivery observation records provider and transport receipts only. It does not establish external bank, custodian, exchange, broker, reserve, or store-provider balances or submissions beyond the receipts explicitly recorded here.",
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

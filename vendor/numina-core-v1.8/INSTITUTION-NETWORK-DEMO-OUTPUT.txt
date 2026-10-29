@@ -1,0 +1,3 @@
+recognized_surface= RecognitionSurface(right_id='R', domains=('BANK-A',), total_recognized_capacity=600000, max_single_domain_capacity=600000)
+authority_synthesis= AuthoritySynthesis(right_id='R', recognition_domain='BANK-A', intrinsic_available=1000000, recognized_capacity=600000, synthesized_ceiling=600000, source_digest='347902421a9ff4906af42db83e87ce4fdec3ff181eb1b296727adc2cd9ca9273')
+insolvency= InsolvencyAssessment(state=<InsolvencyState.OVER_COMMITTED: 'OVER_COMMITTED'>, available_capacity=900000, open_obligations=1200000, deficiency=300000, waterfall=(WaterfallAllocation(claim_id='SENIOR', allocated=700000, deficiency=0, priority=1), WaterfallAllocation(claim_id='JUNIOR', allocated=200000, deficiency=300000, priority=2)))

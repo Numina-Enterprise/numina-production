@@ -1,0 +1,61 @@
+{
+  "schema": "numina.exact-delivery-inventory.v1",
+  "public_key_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1362,
+      "sha256": "010294b439492f17a4e65668620f5b10df983081e30a462903be1ca19ff99180"
+    },
+    {
+      "path": "frozen-stage-blue-review.json",
+      "bytes": 23768,
+      "sha256": "26da2e3d9ecbd9d73f048adc86b13081bce9ebaa772406a0680ca5e2299ccadc"
+    },
+    {
+      "path": "operational-ed25519-public.raw32",
+      "bytes": 32,
+      "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+    },
+    {
+      "path": "package-commitment.json",
+      "bytes": 424,
+      "sha256": "85f59e8d5ba6e85be5f2d688e28c44c9893d4d25be65b4e7ec2cf3eab4d0f190"
+    },
+    {
+      "path": "package.sha256",
+      "bytes": 105,
+      "sha256": "04bb1b3e65275dbd13e2ce7045658b6ee8721c2cc4522ea5229cafe493f423c2"
+    },
+    {
+      "path": "primary-package-verification.json",
+      "bytes": 1289,
+      "sha256": "9e829d316445fa4642dc455f56be34bcaf9f72793e9fd52d415a2dcce2990437"
+    },
+    {
+      "path": "salesforce-migration-integration-health.json",
+      "bytes": 4027,
+      "sha256": "e048e7d168f115ff4c343cf0c4f9762df7d81c5d732701e0c44d41e5be8315d7"
+    },
+    {
+      "path": "tools/build-v162-signing-supplement.py",
+      "bytes": 6105,
+      "sha256": "69d87cbd31c0d7ca46e613d285f9c3a7db2988f568b504b1c6414d2a4338b4ae"
+    },
+    {
+      "path": "tools/verify-exact-numina-delivery.py",
+      "bytes": 13060,
+      "sha256": "ac1c9e2a5bee287012113dc44ae75392d6b3a3b86b7cb5cd188a90546fa518bd"
+    },
+    {
+      "path": "tools/verify-numina-v162-completed-wrapper.py",
+      "bytes": 16100,
+      "sha256": "855df6e0db577af08d3b4ed79c2ad7dcecc704c578f5a75635e71d80408a1146"
+    },
+    {
+      "path": "tools/verify-numina-v162-delivery.py",
+      "bytes": 16236,
+      "sha256": "064cb32e19520247d10de1f73a1323358ddf21e69fa8bffed6771c2eaf8168e0"
+    }
+  ]
+}

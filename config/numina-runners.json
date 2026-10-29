@@ -1,0 +1,83 @@
+{
+  "schema": "numina.runner-policy.v14",
+  "identity": "NUMINA",
+  "runnerIdentity": "NUMINA",
+  "allRunnerIdentities": "NUMINA",
+  "runnerTarget": "NUMINA",
+  "preserveMode": "current_runner_count",
+  "preservedRunnerCount": 34,
+  "selfHostedPolicy": "deny_execution_preserve_registration_records",
+  "futureRunnerPolicy": "deny",
+  "approvalPolicy": "NUMINA_AUTHORIZATION_REQUIRED",
+  "authorizationLiteral": "NUMINA",
+  "rules": {
+    "preserveCurrentRunners": true,
+    "preserveExistingSelfHostedRunners": false,
+    "denyFutureRunners": true,
+    "allRunnersAreNumina": true,
+    "runnerPlacementFrozen": false,
+    "hostIsNumina": true,
+    "externalSigningRequiresExplicitAuthorization": true,
+    "floatingHostedLinuxLabelsDenied": true,
+    "preserveExistingSelfHostedRunnerRegistrations": true,
+    "denySelfHostedRunnerExecution": true,
+    "denySelfHostedRunnerScheduling": true
+  },
+  "hostIdentity": "NUMINA",
+  "executionTargets": {
+    "default": "NUMINA",
+    "workflowOverrides": {
+      "numina-release.yml": "ubuntu-24.04",
+      "numina.yml": "ubuntu-24.04",
+      "verify-provider-observations.yml": "ubuntu-24.04",
+      "numina-android-release.yml": "ubuntu-24.04",
+      "numina-ios-signing.yml": "macos-latest",
+      "publish-sites-control-source.yml": "ubuntu-24.04",
+      "activate-minted-nusd.yml": "ubuntu-24.04",
+      "align-native-treasury-500t.yml": "ubuntu-24.04",
+      "check-sites-control-origin.yml": "ubuntu-24.04",
+      "deploy-nusd-contracts.yml": "ubuntu-24.04",
+      "diagnose-control-auth.yml": "ubuntu-24.04",
+      "ibm-quantum-hardware.yml": "ubuntu-24.04",
+      "ibm-quantum-smoke.yml": "ubuntu-24.04",
+      "initiate-treasury-aggregate-model.yml": "ubuntu-24.04",
+      "verify-workflow-pins.yml": "ubuntu-24.04",
+      "sync-control-key-pin.yml": "ubuntu-24.04",
+      "verify-nusd-production.yml": "ubuntu-24.04",
+      "verify-root-numina.yml": "ubuntu-24.04",
+      "numina-ci-start.yml": "ubuntu-24.04",
+      "repair-rc27-integration-manifest.yml": "ubuntu-24.04"
+    },
+    "scope": "NUMINA remains the singular logical execution identity. Canonical build, publication, Numina root verification, provider verification, privileged control/deployment checks, and declared native workflows use only their explicitly recorded GitHub-hosted Ubuntu/macOS substrates. Existing self-hosted runner registration records may be retained as historical/admin state, but self-hosted execution and scheduling are denied; no new runner or signing identity is introduced.",
+    "workflowTargetSets": {
+      "numina-mobile-release-build.yml": [
+        "ubuntu-24.04",
+        "macos-latest"
+      ],
+      "numina-mobile-store-distribution.yml": [
+        "ubuntu-24.04",
+        "macos-latest"
+      ],
+      "numina-site-builder.yml": [
+        "ubuntu-24.04",
+        "ubuntu-24.04"
+      ],
+      "numina-nusd-runtime-builder.yml": [
+        "ubuntu-24.04",
+        "ubuntu-24.04"
+      ]
+    },
+    "hostedLinuxPolicy": {
+      "pinnedTarget": "ubuntu-24.04",
+      "floatingLabelsDenied": [
+        "ubuntu-latest"
+      ],
+      "migrationNotice": {
+        "label": "ubuntu-latest",
+        "migrationBegins": "2026-10-19",
+        "target": "ubuntu-26",
+        "source": "https://github.com/actions/runner-images/issues/14748"
+      }
+    }
+  }
+}

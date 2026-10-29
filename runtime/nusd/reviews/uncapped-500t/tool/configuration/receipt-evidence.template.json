@@ -1,0 +1,14 @@
+{
+  "classification": "UNFILLED_EVIDENCE_TEMPLATE",
+  "network": {"chainId": null, "genesisHash": null},
+  "rawTransaction": null,
+  "receipt": null,
+  "canonicalBlock": null,
+  "headBlock": null,
+  "finalBlockReread": null,
+  "runtime": {"address": null, "blockHash": null, "code": null},
+  "calls": [],
+  "providerSourceReference": null,
+  "collectedAt": null,
+  "productionReceiptCreated": false
+}

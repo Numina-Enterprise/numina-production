@@ -1,0 +1,12 @@
+{
+  "runner": "unittest + zero-argument functions; pytest.raises adapted, not pytest",
+  "testsRun": 309,
+  "failures": 0,
+  "errors": 0,
+  "manifestFiles": 106,
+  "manifestMismatches": [
+    "./__pycache__/numina_core.cpython-313.pyc",
+    "./__pycache__/test_numina_core.cpython-313-pytest-9.0.2.pyc"
+  ],
+  "sourceArchiveSha256": "721df2152065a43c887c5e42910c6b86bd734338c56d20436861765f5cfc3929"
+}

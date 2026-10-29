@@ -1,0 +1,41 @@
+{
+  "schema": "numina.public-publication-readback.v1",
+  "observedAt": "2026-10-11T10:17:05.672419+00:00",
+  "source": "Supported public read-only TinyFish connector, zero cache tolerance",
+  "canonicalCommit": "ae545f4a3b59cc7151b22b2fef3e873f5fd9d057",
+  "sitesCommit": "6a3005c1c09cd05eff6bfe92b896ceb4ee0353eb",
+  "versionNumber": 162,
+  "checks": [
+    {
+      "url": "https://numinalabs.xyz/workspaces.json",
+      "source": "config/numina-workspaces.v1.json",
+      "parsedDocumentExactlyMatches": true,
+      "localSourceSha256": "b933fb0efc56c4b5f83e9fbc1c3a8e62f8850e6cb5be752b94fd4afeeaf5355e"
+    },
+    {
+      "url": "https://numinalabs.xyz/tasks.json",
+      "source": "config/numina-agentforce-tasks.v1.json",
+      "parsedDocumentExactlyMatches": true,
+      "localSourceSha256": "5152939ef13ec78ce198205a8bcf24e31319576cf37612073c835bd541f09263"
+    },
+    {
+      "url": "https://numinalabs.xyz/treasury-team.json",
+      "source": "config/numina-treasury-team.v1.json",
+      "parsedDocumentExactlyMatches": true,
+      "localSourceSha256": "487ba9e2c816f03b33692d53602e7b8e3809f4916794db8b7b85a4e4b5f2fda8"
+    },
+    {
+      "url": "https://numinalabs.xyz/v4/release/manifest",
+      "source": "dist/client/downloads/application-release-v4.json",
+      "parsedDocumentExactlyMatches": true,
+      "localSourceSha256": "15e61c46129e2789d93a27ca25092cb7648aedf50cb80ad8a70c4475003ba57c"
+    }
+  ],
+  "htmlPagesObserved": [
+    "https://numinalabs.xyz/workspaces.html",
+    "https://numinalabs.xyz/task-ledger.html"
+  ],
+  "errors": [],
+  "allParsedBindingsPassed": true,
+  "limitation": "Connector extraction establishes parsed document equality, not original HTTP byte hashes or owner authentication."
+}

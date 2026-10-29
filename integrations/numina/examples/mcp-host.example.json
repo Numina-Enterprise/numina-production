@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "numina-discovery": {
+      "command": "node",
+      "args": ["REPLACE_WITH_ABSOLUTE_PATH_TO_PLUGIN/bin/mcp-stdio.js"],
+      "env": {
+        "NUMINA_BASE_URL": "https://numinalabs.xyz",
+        "NUMINA_TOOL_PROFILE": "discovery"
+      }
+    }
+  }
+}

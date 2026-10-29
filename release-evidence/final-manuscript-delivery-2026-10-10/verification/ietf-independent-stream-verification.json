@@ -1,0 +1,32 @@
+{
+  "schema": "numina.ietf-public-status-observation.v1",
+  "checked_at_utc": "2026-10-11T04:06:16.806983+00:00",
+  "method": "Fresh read of official public pages through connected web tool",
+  "document": "draft-kott-numina-pair-binding",
+  "observed_revision": "01",
+  "observed_versions": [
+    "00",
+    "01"
+  ],
+  "document_type": "Active Internet-Draft (individual)",
+  "last_updated": "2026-10-08",
+  "rfc_stream": null,
+  "stream_state": "No stream defined",
+  "iesg_state": "I-D Exists",
+  "public_draft_posting_verified": true,
+  "independent_stream_submission": "not_established_from_checked_evidence",
+  "independent_stream_acceptance": "not_established_from_checked_evidence",
+  "revision_02_public_posting": "not_observed_in_main_record_version_list",
+  "authenticated_ise_receipt_observed": false,
+  "sources": [
+    "https://datatracker.ietf.org/doc/draft-kott-numina-pair-binding/",
+    "https://www.rfc-editor.org/authors/rfc-independent-submissions/"
+  ],
+  "procedure_check": "Independent Stream consideration requires a separate template and editorial review.",
+  "limitations": [
+    "Public status observation is not a signed IETF attestation.",
+    "No conclusion about unobserved private ISE correspondence.",
+    "Local revision 02 PDF differs from the posted revision.",
+    "No submission, message or publication performed."
+  ]
+}

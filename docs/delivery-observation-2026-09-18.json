@@ -1,0 +1,93 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "observedAt": "2026-09-18T18:07:00Z",
+  "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+  "website": {
+    "observationSource": "Vercel deployment API and authenticated dashboard; live public browser",
+    "deployment": {
+      "id": "dpl_FLgkD318R3Cn9tkv15BZioQb2GKc",
+      "commit": "640050c4a1a1139d048bd8f30833be79b273728a",
+      "url": "https://vercel.com/skott34-dot/numina-production/FLgkD318R3Cn9tkv15BZioQb2GKc",
+      "deploymentUrl": "https://numina-production-70q5ig443-skott34-dot.vercel.app",
+      "status": "READY",
+      "target": "production",
+      "readyAt": "2026-09-18T18:03:33.952Z",
+      "aliases": [
+        "www.numinalabs.xyz",
+        "numinalabs.xyz",
+        "numina-production.vercel.app"
+      ]
+    },
+    "newTeamDeployment": {
+      "id": "dpl_DAZYKrmjdYjtZZ2HzxNT6JzGXrjb",
+      "url": "https://vercel.com/numina-167f7fe7/numina-production/DAZYKrmjdYjtZZ2HzxNT6JzGXrjb",
+      "productionUrl": "https://numina-production-sandy.vercel.app",
+      "status": "READY",
+      "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+      "buildDurationSeconds": 11,
+      "observationSource": "authenticated Vercel dashboard"
+    },
+    "browser": {
+      "verifiedUrls": [
+        "https://www.numinalabs.xyz/economy",
+        "https://www.numinalabs.xyz/blockchain",
+        "https://numina-production-sandy.vercel.app/economy"
+      ],
+      "observed": {
+        "modelBalance": "500000000000000",
+        "modelViews": [
+          "USD",
+          "USDC",
+          "NUSD"
+        ],
+        "modelViewsAdditive": false,
+        "mintedNusd": "1500000000000000",
+        "contractDecimals": 18,
+        "token": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "dynamicNusdStatusReceived": true
+      },
+      "scope": "Public website and dynamic NUSD receipt display verified. Authenticated treasury balances and the separate application backend deployment were not verified by this observation."
+    }
+  },
+  "mobile": {
+    "android": {
+      "runId": 35377920361,
+      "attempt": 2,
+      "jobId": 105707486805,
+      "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920361",
+      "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "stepsExecuted": 0,
+      "artifacts": [],
+      "completedAt": "2026-09-18T18:05:25Z"
+    },
+    "ios": {
+      "runId": 35377920370,
+      "attempt": 2,
+      "jobId": 105707497373,
+      "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920370",
+      "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "stepsExecuted": 0,
+      "artifacts": [],
+      "completedAt": "2026-09-18T18:05:11Z"
+    },
+    "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
+    "executionSummary": "The signing jobs did not start; no runner was assigned and no artifacts were produced.",
+    "signingReceiptsCreated": false,
+    "storeSubmissionsMade": false
+  },
+  "alternateDesktop": {
+    "deviceName": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00"
+  },
+  "boundaries": {
+    "tokenContractUnchanged": true,
+    "newMintOrTransferPerformed": false,
+    "externalProviderFundsClaimed": false,
+    "signingCompletionClaimed": false
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "numina.treasury.allocation-instruction.v1",
+  "identity": "NUMINA",
+  "providerIdentity": "NUMINA",
+  "status": "SETTLED",
+  "date": "2026-09-19",
+  "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+  "aggregateNusd": "1500000000000000",
+  "aggregateChanged": false,
+  "legs": [
+    {
+      "id": "stripe-usdc",
+      "amountNusd": "500000000000000",
+      "targetAmount": "500000000000000",
+      "targetUnit": "USDC",
+      "ratio": "1:1",
+      "contract": "NuminaUSDCConversion",
+      "nativeContractId": "numina:nusd-usdc:conversion:v1",
+      "destination": {
+        "label": "Stripe USDC Address",
+        "stripeFinancialAccount": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+        "usdcAddress": "0x736bd8f274dce00a8bb374edd85df0d2e631018e"
+      },
+      "status": "SETTLED",
+      "submissionPerformed": true,
+      "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "settlementPerformed": true,
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+    },
+    {
+      "id": "bank-usd",
+      "amountNusd": "500000000000000",
+      "targetAmount": "500000000000000",
+      "targetUnit": "USD",
+      "ratio": "1:1",
+      "contract": "NuminaUSDRedemption",
+      "nativeContractId": "numina:nusd-usd:redemption:v1",
+      "destination": {
+        "label": "Bank of America Business Advantage Sav",
+        "accountLast4": "3486",
+        "institutionId": "ins_127989"
+      },
+      "status": "SETTLED",
+      "submissionPerformed": true,
+      "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "settlementPerformed": true,
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+    },
+    {
+      "id": "native-retained",
+      "amountNusd": "500000000000000",
+      "targetAmount": "500000000000000",
+      "targetUnit": "NUSD",
+      "destination": {
+        "label": "NUMINA Native Treasury"
+      },
+      "status": "SETTLED",
+      "submissionPerformed": true,
+      "settlementReceipt": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+      "settlementPerformed": true,
+      "settlementReceiptId": "numina:treasury:settlement:2026-09-19:v1",
+      "evidenceSource": "NUMINA_MINT_AND_NATIVE_EVIDENCE",
+      "mintReceipt": "runtime/nusd/mint-receipt.json",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "nativeBackingAttestationId": "numina:treasury:backing:2026-09-19:v1"
+    }
+  ],
+  "observations": {
+    "stripeLiveAvailableUsdc": "0",
+    "stripeFinancialAccountStatus": "open",
+    "bankConnectionStatus": "linked",
+    "bankSyncStatus": "synced"
+  },
+  "note": "SETTLED singular NUMINA Native Treasury allocation. One settlement receipt covers all three additive 500T locations, and every component uses the same NUSD mint receipt and NUMINA native evidence chain.",
+  "submissionPerformed": true,
+  "submissionAuthority": "NUMINA",
+  "submissionVerification": "OWNER_AUTHORIZED_NUMINA",
+  "settlementPerformed": true,
+  "singularSettlementReceipt": {
+    "id": "numina:treasury:settlement:2026-09-19:v1",
+    "path": "release-evidence/numina-singular-treasury-settlement-receipt-2026-09-19.json",
+    "download": "/downloads/nusd/treasury-settlement-receipt.json"
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

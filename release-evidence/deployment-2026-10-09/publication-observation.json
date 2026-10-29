@@ -1,0 +1,146 @@
+{
+  "schema": "numina.site-source-binding.v1",
+  "identity": "NUMINA",
+  "canonical_source_commit": "d1b1cd852927052b54af2b540b031d77311ccecf",
+  "canonical_source_tree": "527123206067028e9ce6589d5dfce68fad11408b",
+  "site_source_commit": "76a08b2d54679238416ee87818732ac441c5f933",
+  "site_source_tree": "cec2157c8c02c6e8a2996f303fdc46df9e5334ef",
+  "prior_site_source_commit": "037ac3dba3bf4691a2aae009205d373ae0b0ebbe",
+  "source_delta": [
+    "D\tnumina-release-v4.0.0.tar.gz",
+    "D\treleases/v4.0.0/numina-release-v4.0.0.tar.gz"
+  ],
+  "excluded_distribution_archives": [
+    {
+      "path": "numina-release-v4.0.0.tar.gz",
+      "git_blob": "9b96dbc7a844fa848fb2ae1f17779369c70cdae9",
+      "byte_count": 39783401,
+      "sha256": "72eac28a7736081971003b74cb8808c78d8cff2b05b1b56cea5ac98effc1f9d7",
+      "classification": "historical_distribution_output",
+      "retained_in_canonical_repository": true,
+      "build_input": false
+    },
+    {
+      "path": "releases/v4.0.0/numina-release-v4.0.0.tar.gz",
+      "git_blob": "c53eebf57355e0b0d85b0d8cc02ca2d4736a6545",
+      "byte_count": 39718035,
+      "sha256": "b030d88b9ab41d0c958686356c37f6989abb9c1d225174bd8f5e5c2d838c8722",
+      "classification": "historical_distribution_output",
+      "retained_in_canonical_repository": true,
+      "build_input": false
+    }
+  ],
+  "all_other_git_blobs_identical": true,
+  "ed25519_key_id": "3a2fe594a7e10458ae89683f",
+  "signed_deployment_receipt_issued": false,
+  "classification": "unsigned_source_transport_binding",
+  "limitations": [
+    "This binding record is not an Ed25519 signed deployment receipt.",
+    "Full canonical-tree tests include retained distribution archives; this downstream source transport excludes those two outputs."
+  ],
+  "build": {
+    "artifact_build_id": "0d4044e06e5a753e16cabee8c91f37a01a5e49bc923aff460b7d74a2d545a5f3",
+    "artifact_count": 317,
+    "worker_sha256": "810287cd8e67e5ebc118b8caf2d05277d44ab5f2d11a3299d42801b8fcb55b49",
+    "reproduces_canonical_build_manifest": true,
+    "canonical_packaging_clock": "2026-10-09T11:50:35.031Z",
+    "build_log": "/workspace/scratch/numina-site-delivery-build.log",
+    "delivery_source_clean": true,
+    "checks": {
+      "canonical_regression_tests_passed": 913,
+      "delivery_existing_signature_and_release_pin_tests_passed": 6,
+      "all_packaged_inventory_digests_verified": true
+    }
+  },
+  "archive": {
+    "path": "/workspace/scratch/numina-site-canonical-delivery.tar.gz",
+    "size_bytes": 39857883,
+    "sha256": "555c9285eb6baae123bae0de81cf90f53ed000c3e2c3013d667c77b295b9f642",
+    "file_count": 321,
+    "classification": "locally_hashed_deployment_build_archive",
+    "uploaded_archive_sha256_semantics": "SHA-256 of locally uploaded gzip-tar bytes; distinct from the provider-reported stored tar digest."
+  },
+  "saved_version": {
+    "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_181e2f077e20819193eb8698cb65224c",
+    "version_number": 161,
+    "source_commit": "76a08b2d54679238416ee87818732ac441c5f933",
+    "source_binding_verified": true,
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000d7bc822fad9540c99c91d2b0",
+      "content_hash": "sha256:81a32a94c08e26c15e436008d94592139a5da05a04bf69d656202c0038a33508",
+      "size_bytes": 45219840,
+      "file_count": 321
+    },
+    "file_count_matches_local_package": true,
+    "provider_archive_bytes_independently_hashed": false,
+    "archive_digest_scope": "Native save reports a stored tar archive; local uploaded gzip-tar bytes were independently hashed and its full file inventory verified. Stored tar representation differs from local gzip-tar and decompressed tar; its reported digest was not independently recomputed."
+  },
+  "canonical_source_authority": {
+    "identity": "NUMINA",
+    "root": "NUMINA",
+    "square_root": "NUMINA",
+    "source_of_record": "Numina tree",
+    "role": "ROOT_SOURCE_OF_TRUTH",
+    "update_direction": "ROOT_TO_LEAVES",
+    "archive_leaf": {
+      "transport": "github",
+      "url": "https://github.com/skott34-dot/numina-production",
+      "authoritative": false,
+      "authority_transferred": false
+    }
+  },
+  "final_publication_observation": {
+    "schema": "numina.site-publication-observation.v1",
+    "observed_at": "2026-10-09 12:10:02 UTC",
+    "source": "Authenticated Sites connector final deployment and version readback",
+    "classification": "authenticated_provider_observation_unsigned",
+    "is_signed_ed25519_receipt": false,
+    "version": {
+      "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_181e2f077e20819193eb8698cb65224c",
+      "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+      "version_number": 161,
+      "source": {
+        "commit_sha": "76a08b2d54679238416ee87818732ac441c5f933"
+      },
+      "archive_storage": {
+        "archive_format": "tar",
+        "sediment_file_id": "file_00000000d7bc822fad9540c99c91d2b0",
+        "content_hash": "sha256:81a32a94c08e26c15e436008d94592139a5da05a04bf69d656202c0038a33508",
+        "size_bytes": 45219840,
+        "file_count": 321
+      },
+      "deployment_id": "appgdep_6ac8d9570fb08191b1a448a40cc11923"
+    },
+    "deployment": {
+      "id": "appgdep_6ac8d9570fb08191b1a448a40cc11923",
+      "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+      "title": "Numina Labs",
+      "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_181e2f077e20819193eb8698cb65224c",
+      "type": "publish",
+      "status": "succeeded",
+      "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+      "has_mcp": false,
+      "screenshot_asset_pointer": null,
+      "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+      "failure_message": null,
+      "env_set_revision": 14,
+      "updated_at": "2026-10-09T12:09:11.591618+00:00"
+    },
+    "source_version_deployment_binding_passed": true,
+    "http_runtime_health_checked": false
+  },
+  "signing_status": {
+    "repository_ed25519_public_pin_unchanged": true,
+    "key_id": "3a2fe594a7e10458ae89683f",
+    "mathematical_public_point_check": "ed25519-point-check.json",
+    "historical_signatures_verified": 3,
+    "signed_deployment_receipt_present": false,
+    "operational_signature_issued": false,
+    "current_signed_runtime_state": "not_observed",
+    "private_key_custody_checked": false,
+    "separate_public_key_registry_checked": false,
+    "mathematical_public_point_check_sha256": "897db23e0dc14f4e7457915b0f906e20bf976779aa0e35be4b4b3772498c5f7c"
+  },
+  "evidence_record_timing": "Appended to the canonical tree after deployment. The canonical_source_commit field identifies the exact source snapshot used for this build; these appended observations are not build inputs or an Ed25519 signed envelope."
+}

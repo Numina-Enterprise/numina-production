@@ -1,0 +1,28 @@
+{
+  "schema": "numina.provenance-verification-policy.v1",
+  "configured": true,
+  "source_repository": "skott34-dot/numina-production",
+  "source_repository_id": 1367647143,
+  "source_ref": "refs/heads/main",
+  "source_sha": "38ba12943decfb33ad3579ed322e5f02bcd1372a",
+  "caller_workflow_path": ".github/workflows/numina-release.yml",
+  "signer_repository": "skott34-dot/numina-builder",
+  "signer_workflow_path": ".github/workflows/numina-site-builder.yml",
+  "signer_sha": "4a7210c10fcfa79436018e8ba337244402661036",
+  "run_id": 34717406980,
+  "run_attempt": 1,
+  "artifact_id": 10305336258,
+  "artifact_sha256": "daa688cd91a3a792531ee09f56129dbb8412f3c4516bc6d0da3a6d748c4e13d9",
+  "application_inventory_sha256": "30434a312366a8869b93e9f27b428ee0e5f385c1bd0e8fc877912a98fe97f792",
+  "application_build_id": "86534be2a6ea3fd513ce323932caf7381518ab45f435a4e69cad877e950d7770",
+  "application_version": "2.0.0",
+  "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+  "allowed_origins": [
+    "https://numinalabs.xyz",
+    "https://www.numinalabs.xyz"
+  ],
+  "predicate_type": "https://slsa.dev/provenance/v1",
+  "oidc_issuer": "https://token.actions.githubusercontent.com",
+  "deny_self_hosted_runners": true,
+  "slsa_level_claimed": null
+}

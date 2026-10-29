@@ -1,0 +1,3 @@
+rights: ('RIGHT-1',)
+obligations: ('C-1:OBL:0',)
+state_root: 48083667af015bc056242c749a1eaa9f1174859e1bd2a14a8c61447c83a43915

@@ -1,0 +1,6 @@
+rights_root: 095c7412cae36ff6eee24e9b3cbfd71facad4265706e709e85ae1019563673c1
+parent_available: 700000
+recognized_procurement: 300000
+obligations: 1
+institution_viable: True
+institution_mrec: 300000

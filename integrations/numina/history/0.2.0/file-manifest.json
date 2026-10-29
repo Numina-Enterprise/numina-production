@@ -1,0 +1,181 @@
+{
+  "schema": "numina.integration.files.v1",
+  "scope": "Local source distribution kit, not a production release or publication record",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 52,
+      "sha256": "bc7cec8a39b57bf810be25f3f527b61cc90a2f8a7fe787ad4487d2fa9c133d22"
+    },
+    {
+      "path": "API-CONTRACT.md",
+      "bytes": 6113,
+      "sha256": "af17a74b1e7701d07909c35edf0e8fdb22e8f2dc43f5d1efe5da50df52acc615"
+    },
+    {
+      "path": "COMPATIBILITY.md",
+      "bytes": 4138,
+      "sha256": "7860aa1442045a47da29944db90d5cb435008e6f5f1664e1c796723b5fefa7a2"
+    },
+    {
+      "path": "README.md",
+      "bytes": 12416,
+      "sha256": "fa2a16d3e69efd95d161fb62c091dfd1e0c56991ced2c853d6804847e5d811aa"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 3699,
+      "sha256": "df67bf54fe69e1a11dee39d54578390745c4cef32fb26ee4b5dea47e5367b66f"
+    },
+    {
+      "path": "VALIDATION.md",
+      "bytes": 956,
+      "sha256": "70461362034ac8c48aaac25e0aa057768bb1afebe64cb5c78afd93d02b9a2114"
+    },
+    {
+      "path": "bin/mcp-stdio.js",
+      "bytes": 502,
+      "sha256": "20345a3f4a02f43e462f16a3a94ef57413d4def6f0f9fe716ffde49a36ea197f"
+    },
+    {
+      "path": "examples/mcp-host.example.json",
+      "bytes": 275,
+      "sha256": "cc76746b45db42d1aac4dc515f10768cc0b3d516e587f8ecdcd47a538a594a4b"
+    },
+    {
+      "path": "examples/provider-roundtrips.mjs",
+      "bytes": 3336,
+      "sha256": "77cac820a30183335c62cd5013d4244f9d894496ac8576c63d1ff058f6cf6ca3"
+    },
+    {
+      "path": "package.json",
+      "bytes": 707,
+      "sha256": "b8132fa6e22423f90a1f692880c778274b49aac8117d683df43384dd819e07e6"
+    },
+    {
+      "path": "schemas/anthropic-messages-workflow.json",
+      "bytes": 4092,
+      "sha256": "a568fad664e49458d07f3b33e2053c9282ef0fe931e31d8f751102aefc139a98"
+    },
+    {
+      "path": "schemas/anthropic-messages.json",
+      "bytes": 1711,
+      "sha256": "b503b88b6ee50ab15bed9129b44f158b7f0e2857bc73d9537fa95c414cc12a2d"
+    },
+    {
+      "path": "schemas/gemini-generate-content-workflow.json",
+      "bytes": 4548,
+      "sha256": "fc2ab11aa42a00bce2c511c92723231ce65a9d3c6d381c07242efea0621f898e"
+    },
+    {
+      "path": "schemas/gemini-generate-content.json",
+      "bytes": 1903,
+      "sha256": "56bd7d05c533d79178f88394eb7d6270898a3e441d564b94c8b95cba15ad2fbe"
+    },
+    {
+      "path": "schemas/gemini-interactions-workflow.json",
+      "bytes": 4102,
+      "sha256": "df3b4e6b163329489b22cbe3a91413b362e0fe22eb0a922477641336fc111acf"
+    },
+    {
+      "path": "schemas/gemini-interactions.json",
+      "bytes": 1717,
+      "sha256": "4d8de41bc0db3f9e842b5f5866ddfb0526cf2ad0feea98215d987ff634dfea77"
+    },
+    {
+      "path": "schemas/openai-chat-completions-workflow.json",
+      "bytes": 4548,
+      "sha256": "36025fdc756705e604ccebf8d5c3ee6132c66cb88af4cc71a112c3176b481e6c"
+    },
+    {
+      "path": "schemas/openai-chat-completions.json",
+      "bytes": 1935,
+      "sha256": "cd5e2078458b693e87bd574a506fbd409a705a2fd5982e91be8acd8feb33ce63"
+    },
+    {
+      "path": "schemas/openai-responses-workflow.json",
+      "bytes": 4202,
+      "sha256": "9252f90595572153ef704bdd2d79697591ce67a7ea726fb0b6ee2681c4e94eca"
+    },
+    {
+      "path": "schemas/openai-responses.json",
+      "bytes": 1777,
+      "sha256": "6d06f2412d0e16151ad2d8f03242c6242cb234f0af243e2f35fc472f766adb47"
+    },
+    {
+      "path": "schemas/provider-neutral.json",
+      "bytes": 4719,
+      "sha256": "2a511cbbfd0fe13abab12f3d3b1e149404591dfba0680069a130f13496440be1"
+    },
+    {
+      "path": "scripts/export-tools.js",
+      "bytes": 700,
+      "sha256": "b3c518b6123b3a04768fa11cd0b57f2a084d280959b3324bb61409f1797151d4"
+    },
+    {
+      "path": "scripts/package-check.js",
+      "bytes": 5520,
+      "sha256": "2bc125e8ec0f075ee221cc022d6d07ffbaed2263f0a45aeae0e2c6286b31c3e6"
+    },
+    {
+      "path": "src/client.js",
+      "bytes": 9968,
+      "sha256": "36a5de2d74ab966c76283ad16495c5ccb5ca4297879ee6e20e2fd2883ad1b441"
+    },
+    {
+      "path": "src/index.d.ts",
+      "bytes": 2958,
+      "sha256": "2c4c30f0b7897fd4510b5fe59e9155ef4fe5da1ea8d76054b7e7f6c3856c1ff8"
+    },
+    {
+      "path": "src/index.js",
+      "bytes": 327,
+      "sha256": "116c6465975d3dc8045ec95f45fb2d911a732090ccaf00a4f14556acd9ebdcb8"
+    },
+    {
+      "path": "src/mcp.js",
+      "bytes": 4329,
+      "sha256": "2cdc7888db8f1421ffb22fdc0280a0482bb1db29539826ba2257e2cf7b15d58f"
+    },
+    {
+      "path": "src/provider-adapters.js",
+      "bytes": 5364,
+      "sha256": "cb31d254f589031efca02b60f18751b4863a7bb9f654214d05197ebc6015452f"
+    },
+    {
+      "path": "src/tools.js",
+      "bytes": 4206,
+      "sha256": "d19bdb9c409e6e5cb24ca2b08be444449efd0e1e74d6b3acfa915b72ac19e1f8"
+    },
+    {
+      "path": "tests/client.test.js",
+      "bytes": 11264,
+      "sha256": "d6d8edfb8d0d79928b1ff899402ac7afc5a0e8171f691fede789dace9867a0e3"
+    },
+    {
+      "path": "tests/discovery.test.js",
+      "bytes": 4287,
+      "sha256": "eeb96a5dbee3f712dbd19947f21933d71f09b46bcc4821c809eb998986f5f5d8"
+    },
+    {
+      "path": "tests/mcp.test.js",
+      "bytes": 5730,
+      "sha256": "7374946798f167be84be30b4899a2c791b35c9296e48bae82a9f7363124f7e59"
+    },
+    {
+      "path": "tests/providers.test.js",
+      "bytes": 11417,
+      "sha256": "2732908f774ed337a0b192fdc0950c99ecb8c4b9b4da91aba7d6476f88652f4b"
+    },
+    {
+      "path": "tests/stdio-process.test.js",
+      "bytes": 1492,
+      "sha256": "013572714931ea24754adc2a456e3bf46f457d2e2673ba0b30e1df8cd98f1485"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 1329,
+      "sha256": "f56ce397ae38cc8c4ba6cda997dbc3498b753786046a3d17b134b4e5e97e0f9f"
+    }
+  ]
+}

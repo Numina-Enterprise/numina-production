@@ -1,0 +1,47 @@
+{
+  "schema": "numina.treasury.write-dispatch.v1",
+  "authorization": "NUMINA",
+  "targetRef": "main",
+  "sourceProtectedRequired": true,
+  "softwareTreasuryWriteAuthorized": true,
+  "providerExecutionAuthorized": false,
+  "externalFundsMovementAuthorized": false,
+  "targetWorkflows": [
+    "align-native-treasury-500t.yml",
+    "initiate-treasury-aggregate-model.yml"
+  ],
+  "treasuryModel": {
+    "USD": "500000000000000",
+    "USDC": "500000000000000",
+    "NUSD": "500000000000000",
+    "aggregateNUSD": "1500000000000000"
+  },
+  "purpose": "Dispatch protected NUMINA software treasury alignment and aggregate-model journal writes only. No bank transfer, provider settlement, chain transfer, external asset movement, or provider balance override is authorized by this marker.",
+  "requestSequence": 2,
+  "requestedAt": "2026-09-20T23:11:30Z",
+  "reason": "Explicit NUMINA instruction: initiate protected software treasury writes after prior workflow_dispatch runs remained pending before job creation.",
+  "priorRuns": {
+    "nativeAlignmentRunId": 35543661331,
+    "aggregateModelRunId": 35543662435,
+    "observedState": "pending_zero_jobs"
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

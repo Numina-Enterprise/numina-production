@@ -1,0 +1,624 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://numinalabs.xyz/schemas/application-release-v2.schema.json",
+  "title": "Numina application release v2",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "version",
+    "build_id",
+    "artifacts",
+    "runtime_dependency",
+    "assurance"
+  ],
+  "properties": {
+    "recorded_release_evidence_context": {
+      "type": "object",
+      "required": ["classification", "source", "latestReleaseManifest", "currentNativeDistribution", "deploymentOfCurrentBuildVerified"],
+      "properties": {
+        "classification": {"const": "historical"},
+        "source": {"type": "string"},
+        "latestReleaseManifest": {"type": "string"},
+        "currentNativeDistribution": {"type": "string"},
+        "deploymentOfCurrentBuildVerified": {"const": false}
+      },
+      "description": "Context for retained historical receipts. They do not verify deployment of this generated build.",
+      "additionalProperties": false
+    },
+    "treasury_client_verification": {
+      "type": "object",
+      "required": ["schema", "canonicalTreasury", "accountView", "accountAlignmentSchema", "verifier", "checks", "verificationScope", "independentProviderVerification", "financialExecutionEnabled"],
+      "properties": {
+        "schema": {"const": "numina.treasury.client-verification.v1"},
+        "canonicalTreasury": {"const": "/api/control/v1/treasury"},
+        "accountView": {"const": "/api/control/v2/treasury/accounts"},
+        "accountAlignmentSchema": {"const": "numina.treasury.account-view.v1"},
+        "verifier": {
+          "type": "object",
+          "required": ["browser", "integration", "sha256"],
+          "properties": {
+            "browser": {"const": "/treasury-proof.js"},
+            "integration": {"const": "src/treasury-proof.js"},
+            "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+          },
+          "additionalProperties": false
+        },
+        "checks": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "verificationScope": {"const": "authenticated_response_internal_consistency"},
+        "independentProviderVerification": {"const": false},
+        "financialExecutionEnabled": {"const": false}
+      },
+      "description": "Exact client verifier bytes and internal consistency checks; no independent provider or deployment attestation.",
+      "additionalProperties": false
+    },
+    "procurement_usage": {
+      "type": "boolean",
+      "description": "Owner-authorized use of existing procurement workflows; separate from provider payment execution."
+    },
+    "schema": {
+      "const": "numina.application-release.v2"
+    },
+    "schema_version": {
+      "const": 2
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[234]\\.[0-9]+\\.[0-9]+$"
+    },
+    "build_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "runtime_dependency": {
+      "type": "object",
+      "required": [
+        "version",
+        "manifest"
+      ]
+    },
+    "assurance": {
+      "type": "object",
+      "required": [
+        "slsa_level_claimed",
+        "builder_signed_provenance"
+      ],
+      "properties": {
+        "slsa_level_claimed": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 3
+        },
+        "builder_signed_provenance": {
+          "type": "boolean"
+        }
+      }
+    },
+    "execution_runtime_build": {
+      "type": "object",
+      "required": [
+        "product",
+        "status",
+        "run_id",
+        "inventory",
+        "builder_signed_artifacts_verified",
+        "production_host_deployment_verified",
+        "financial_execution_established"
+      ],
+      "properties": {
+        "product": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "run_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "inventory": {
+          "type": "string"
+        },
+        "inventory_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "builder_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "builder_signed_artifacts_verified": {
+          "type": "boolean"
+        },
+        "application_started_by_build": {
+          "type": "boolean"
+        },
+        "production_host_deployment_verified": {
+          "type": "boolean"
+        },
+        "financial_execution_established": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "nusd_transaction_receipts": {
+      "type": "object",
+      "required": [
+        "schema",
+        "record_type",
+        "expected_network",
+        "deployment",
+        "settlement",
+        "scope"
+      ],
+      "properties": {
+        "schema": {
+          "const": "numina.nusd.transaction-receipt-intake.v1"
+        },
+        "record_type": {
+          "type": "string"
+        },
+        "expected_network": {
+          "type": "object",
+          "required": [
+            "name",
+            "chain_id"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "chain_id": {
+              "type": "string",
+              "pattern": "^[0-9]+$"
+            }
+          },
+          "additionalProperties": true
+        },
+        "deployment": {
+          "type": "object",
+          "required": [
+            "status",
+            "contract_address",
+            "transaction_hash",
+            "receipt",
+            "verification"
+          ],
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "contract_address": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            },
+            "transaction_hash": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            },
+            "receipt": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "verification": {
+              "type": "object",
+              "required": [
+                "status",
+                "verified_at"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "verified_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            },
+            "provider_reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "settlement": {
+          "type": "object",
+          "required": [
+            "status",
+            "contract_address",
+            "transaction_hash",
+            "receipt",
+            "verification"
+          ],
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "contract_address": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            },
+            "transaction_hash": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            },
+            "receipt": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "verification": {
+              "type": "object",
+              "required": [
+                "status",
+                "verified_at"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "verified_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            },
+            "provider_reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "scope": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "nusd_activation_readiness": {
+      "type": "object",
+      "required": [
+        "status",
+        "current_status_source",
+        "blockers",
+        "purchasing_available",
+        "scope"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "current_status_source": {
+          "type": "string"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "status",
+              "required_evidence"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "required_evidence": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "purchasing_available": {
+          "type": "boolean"
+        },
+        "scope": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "control_record_receipts": {
+      "type": "object",
+      "required": [
+        "view",
+        "source",
+        "visibility",
+        "kind",
+        "fields",
+        "scope"
+      ],
+      "properties": {
+        "view": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scope": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "distribution": {
+      "type": "object",
+      "required": [
+        "web",
+        "integration_kit",
+        "apple_app_store",
+        "google_play",
+        "microsoft_store"
+      ],
+      "properties": {
+        "web": {
+          "type": "string"
+        },
+        "integration_kit": {
+          "type": "object",
+          "required": [
+            "version",
+            "revision",
+            "archive",
+            "sha256",
+            "bytes",
+            "tools",
+            "provider_installation_verified",
+            "registry_publication_verified"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            },
+            "archive": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "tools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "provider_installation_verified": {
+              "type": "boolean"
+            },
+            "registry_publication_verified": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        },
+        "native_candidates": {
+          "type": "object",
+          "required": [
+            "record",
+            "application_version",
+            "hosted_workspace",
+            "android",
+            "ios",
+            "source_archives",
+            "store_publication_verified"
+          ],
+          "properties": {
+            "record": {
+              "type": "string"
+            },
+            "application_version": {
+              "type": "string"
+            },
+            "hosted_workspace": {
+              "type": "string"
+            },
+            "android": {
+              "type": "object",
+              "required": [
+                "status",
+                "binaries",
+                "storeSubmitted"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "binaries": {
+                  "type": "array"
+                },
+                "storeSubmitted": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            },
+            "ios": {
+              "type": "object",
+              "required": [
+                "status",
+                "compiled",
+                "signed",
+                "storeSubmitted"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "compiled": {
+                  "type": "boolean"
+                },
+                "signed": {
+                  "type": "boolean"
+                },
+                "storeSubmitted": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            },
+            "source_archives": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "file",
+                  "bytes",
+                  "sha256",
+                  "kind",
+                  "installable"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "kind": {
+                    "const": "source_archive"
+                  },
+                  "installable": {
+                    "type": "boolean"
+                  },
+                  "platform": {
+                    "enum": [
+                      "android",
+                      "ios"
+                    ]
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "store_publication_verified": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        },
+        "apple_app_store": {
+          "type": "string"
+        },
+        "google_play": {
+          "type": "string"
+        },
+        "microsoft_store": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "financial_execution_activated_by_this_release",
+        "nusd_issuance_activated_by_this_release",
+        "reserve_verification_established_by_this_release"
+      ],
+      "properties": {
+        "financial_execution_activated_by_this_release": {
+          "type": "boolean"
+        },
+        "nusd_issuance_activated_by_this_release": {
+          "type": "boolean"
+        },
+        "reserve_verification_established_by_this_release": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "description": "Structure of the Numina application release inventory. Schema validation does not establish the truth of receipt contents, financial capabilities, reserve verification, distribution or assurance claims."
+}

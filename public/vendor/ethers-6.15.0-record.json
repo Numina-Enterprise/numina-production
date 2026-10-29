@@ -1,0 +1,12 @@
+{
+  "name": "ethers",
+  "version": "6.15.0",
+  "source": "https://www.npmjs.com/package/ethers/v/6.15.0",
+  "upstream": "https://github.com/ethers-io/ethers.js",
+  "file": "ethers-6.15.0.min.js",
+  "sha256": "66580dbb32353addbbfd2c1880a29693436c2d41ebdd4bf4a4516b9ad6f5f5ea",
+  "bytes": 512985,
+  "license": "MIT",
+  "notices": "ethers-6.15.0-LICENSES.txt",
+  "purpose": "Local user-operated wallet generation and encrypted keystore backup; no provider connection"
+}

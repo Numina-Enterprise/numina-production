@@ -1,0 +1,736 @@
+{
+  "schema": "numina.final-manifest.v1",
+  "identity": "NUMINA",
+  "status": "FINAL",
+  "frontier": "NEXT_FRONTIER",
+  "frontierId": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
+  "canonicalSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
+  "applicationVersion": "4.0.0",
+  "repository": {
+    "schema": "numina.repository.v1",
+    "identity": "NUMINA",
+    "name": "NUMINA",
+    "branch": "main",
+    "role": "CANONICAL_ROOT_REPOSITORY",
+    "authoritative": true,
+    "canonical": true,
+    "sourceOfTruth": "NUMINA",
+    "updateDirection": "NUMINA",
+    "runtimeSurfaces": [
+      "website",
+      "api",
+      "mobile",
+      "runtime",
+      "receipts",
+      "treasury",
+      "release_artifacts"
+    ],
+    "appliesTo": "NUMINA",
+    "scope": "NUMINA"
+  },
+  "sourceOfTruth": "NUMINA",
+  "canonicalSource": "NUMINA",
+  "propagation": "NUMINA",
+  "runtimeSurfaces": [
+    "website",
+    "api",
+    "mobile",
+    "runtime",
+    "receipts",
+    "treasury",
+    "release_artifacts"
+  ],
+  "finalBuild": {
+    "path": "public/final-build.json",
+    "gitBlobSha1": "9830f25cfa48c4bb28ac49313cf8695a3667be45",
+    "sha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
+    "canonicalSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
+    "identity": "NUMINA",
+    "status": "FINAL",
+    "applicationVersion": "4.0.0",
+    "appliesTo": "NUMINA",
+    "scope": "NUMINA",
+    "universal": true,
+    "sha256Semantics": "IMMUTABLE_RELEASE_REFERENCE",
+    "currentContentSha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1",
+    "structure": "NUMINA",
+    "contract": "NUMINA",
+    "singular": true
+  },
+  "historicalEvidence": {
+    "immutable": true,
+    "authoritativeForCurrentRepository": false,
+    "role": "FACTUAL_PROVENANCE_ONLY"
+  },
+  "externalProviderBoundary": {
+    "providerSystemsRemainExternal": true,
+    "observationsAreSourceScoped": true,
+    "repositoryModelDoesNotCreateExternalLedgerEntries": true
+  },
+  "appliesTo": "NUMINA",
+  "scope": "NUMINA",
+  "universal": true,
+  "allSoftware": "NUMINA",
+  "allRuntimeSurfaces": true,
+  "runtimeInventory": {
+    "identity": "NUMINA",
+    "singular": true,
+    "deploymentEnvironment": "FRONTIER",
+    "carriedForward": true,
+    "liveRuntimeCount": 2,
+    "liveRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "role": "LIVE_APPLICATION_RUNTIME",
+        "status": "LIVE",
+        "version": "4.0.0",
+        "appliesTo": "NUMINA",
+        "scope": "NUMINA",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+        "role": "LIVE_RC26_RUNTIME",
+        "status": "LIVE",
+        "version": "1.9.0-rc27",
+        "appliesTo": "NUMINA",
+        "scope": "NUMINA",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      }
+    ],
+    "frontierRuntimeCount": 2,
+    "totalRuntimeRecords": 4,
+    "frontierRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "role": "FRONTIER_RUNTIME_1",
+        "status": "FINAL",
+        "appliesTo": "NUMINA",
+        "scope": "NUMINA",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "mergedRuntimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "mergedVersion": "4.0.0",
+        "mergedRecordSha256": "84e8152cb70138f6fe5c4f4b9138b32af7be8387ec0b09ed62e6f00cf78830fa",
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "role": "FRONTIER_RUNTIME_2",
+        "status": "FINAL",
+        "appliesTo": "NUMINA",
+        "scope": "NUMINA",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "mergedRuntimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+        "mergedVersion": "1.9.0-rc27",
+        "mergedRecordSha256": "095c1fdd588018406a195881fb93117312e5253d7246fff337973b86c92d1d13",
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      }
+    ]
+  },
+  "runtimeModel": {
+    "identity": "NUMINA",
+    "singular": true,
+    "universalPairBuildCount": 1,
+    "universalPairArtifacts": [
+      "public/final-build.json",
+      "public/final-manifest.json"
+    ],
+    "universalPairBuilds": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "scope": "NUMINA",
+        "appliesTo": "NUMINA",
+        "contract": "NUMINA",
+        "singular": true,
+        "role": "UNIVERSAL_PAIR_BUILD",
+        "status": "FINAL",
+        "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+        "environments": [
+          "FRONTIER"
+        ],
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "artifacts": [
+          "public/final-build.json",
+          "public/final-manifest.json"
+        ]
+      }
+    ],
+    "deploymentEnvironment": "FRONTIER",
+    "carriedForward": true,
+    "frontierRuntimeCount": 2,
+    "frontierRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "runtimeId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "role": "FRONTIER_RUNTIME_1",
+        "status": "FINAL",
+        "appliesTo": "NUMINA",
+        "scope": "NUMINA",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "mergedRuntimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+        "mergedVersion": "4.0.0",
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "runtimeId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+        "role": "FRONTIER_RUNTIME_2",
+        "status": "FINAL",
+        "appliesTo": "NUMINA",
+        "scope": "NUMINA",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "mergedRuntimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+        "mergedVersion": "1.9.0-rc27",
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      }
+    ],
+    "liveRuntimeCount": 2,
+    "liveRuntimes": [
+      {
+        "index": 1,
+        "identity": "NUMINA",
+        "role": "LIVE_APPLICATION_RUNTIME",
+        "status": "LIVE",
+        "version": "4.0.0",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      },
+      {
+        "index": 2,
+        "identity": "NUMINA",
+        "role": "LIVE_RC26_RUNTIME",
+        "status": "LIVE",
+        "version": "1.9.0-rc27",
+        "deploymentEnvironment": "FRONTIER",
+        "carriedForward": true,
+        "structure": "NUMINA",
+        "contract": "NUMINA",
+        "hashIdentity": "NUMINA",
+        "artifactPathIdentity": "NUMINA",
+        "runtimeIdIdentity": "NUMINA",
+        "securityMechanicsIdentity": "NUMINA",
+        "singular": true
+      }
+    ]
+  },
+  "universalPair": {
+    "schema": "numina.universal-pair.v4",
+    "identity": "NUMINA",
+    "scope": "NUMINA",
+    "appliesTo": "NUMINA",
+    "contract": "NUMINA",
+    "singular": true,
+    "status": "FINAL",
+    "matrix": "1x2",
+    "memberCount": 1,
+    "sourceCount": 1,
+    "environmentCount": 1,
+    "bindingCount": 2,
+    "idField": "sourceId",
+    "id": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+    ],
+    "ids": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+    ],
+    "sourceIds": [
+      "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+    ],
+    "sourceIdSources": [
+      "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1"
+    ],
+    "idMirrorsSourceIds": true,
+    "environments": [
+      "FRONTIER"
+    ],
+    "files": [
+      "/final-build.json",
+      "/final-manifest.json"
+    ],
+    "artifacts": [
+      "public/final-build.json",
+      "public/final-manifest.json"
+    ],
+    "bothReceive": [
+      "FINAL_BUILD",
+      "FINAL_MANIFEST"
+    ],
+    "everyCellReceivesBothFiles": true,
+    "members": [
+      {
+        "member": 1,
+        "identity": "NUMINA",
+        "scope": "NUMINA",
+        "appliesTo": "NUMINA",
+        "contract": "NUMINA",
+        "singular": true,
+        "role": "UNIVERSAL_PAIR_SOURCE",
+        "status": "FINAL",
+        "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+        "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "FRONTIER"
+        ],
+        "receives": {
+          "identity": "NUMINA",
+          "scope": "NUMINA",
+          "appliesTo": "NUMINA",
+          "contract": "NUMINA",
+          "singular": true,
+          "status": "FINAL",
+          "files": [
+            "/final-build.json",
+            "/final-manifest.json"
+          ],
+          "environments": [
+            "FRONTIER"
+          ],
+          "finalBuild": "/final-build.json",
+          "finalManifest": "/final-manifest.json"
+        }
+      }
+    ]
+  },
+  "currentRuntimeEnvironment": {
+    "name": "production",
+    "contract": "NUMINA",
+    "identity": "NUMINA",
+    "finalBuild": "/final-build.json",
+    "finalManifest": "/final-manifest.json"
+  },
+  "currentEnvironments": [
+    "FRONTIER"
+  ],
+  "environmentCount": 1,
+  "universalPairBuildCount": 1,
+  "universalPairArtifacts": [
+    "public/final-build.json",
+    "public/final-manifest.json"
+  ],
+  "universalPairBuilds": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "scope": "NUMINA",
+      "appliesTo": "NUMINA",
+      "contract": "NUMINA",
+      "singular": true,
+      "role": "UNIVERSAL_PAIR_BUILD",
+      "status": "FINAL",
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environments": [
+        "FRONTIER"
+      ],
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ]
+    }
+  ],
+  "currentSourceIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+  ],
+  "currentSourceCount": 1,
+  "currentBuildIds": [
+    "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+  ],
+  "universalPairSources": [
+    {
+      "member": 1,
+      "identity": "NUMINA",
+      "scope": "NUMINA",
+      "appliesTo": "NUMINA",
+      "contract": "NUMINA",
+      "singular": true,
+      "role": "UNIVERSAL_PAIR_SOURCE",
+      "status": "FINAL",
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "files": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "environments": [
+        "FRONTIER"
+      ],
+      "receives": {
+        "identity": "NUMINA",
+        "scope": "NUMINA",
+        "appliesTo": "NUMINA",
+        "contract": "NUMINA",
+        "singular": true,
+        "status": "FINAL",
+        "files": [
+          "/final-build.json",
+          "/final-manifest.json"
+        ],
+        "environments": [
+          "FRONTIER"
+        ],
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json"
+      }
+    }
+  ],
+  "environmentBindings": [
+    {
+      "bindingIndex": 1,
+      "sourceIndex": 1,
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environmentIndex": 1,
+      "environment": "FRONTIER",
+      "identity": "NUMINA",
+      "scope": "NUMINA",
+      "appliesTo": "NUMINA",
+      "contract": "NUMINA",
+      "singular": true,
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "runtimeTargetId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "runtimeTargets": [
+        "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c"
+      ]
+    },
+    {
+      "bindingIndex": 2,
+      "sourceIndex": 1,
+      "id": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "buildId": "3d5713a395933beb2efcb0e01ea47d6c0a530a5ab2719b873a0af3a506c6886c",
+      "sourceIdSource": "NUMINA_UNIVERSAL_PAIR_SOURCE_ID_1",
+      "environmentIndex": 1,
+      "environment": "FRONTIER",
+      "identity": "NUMINA",
+      "scope": "NUMINA",
+      "appliesTo": "NUMINA",
+      "contract": "NUMINA",
+      "singular": true,
+      "status": "FINAL",
+      "artifacts": [
+        "public/final-build.json",
+        "public/final-manifest.json"
+      ],
+      "routes": [
+        "/final-build.json",
+        "/final-manifest.json"
+      ],
+      "finalBuild": "public/final-build.json",
+      "finalManifest": "public/final-manifest.json",
+      "runtimeTargetId": "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52",
+      "runtimeTargets": [
+        "0a8d4f1faccc8f93a33c98576c8604aa24b70f8ab2781ccfa07da995d4b5eb52"
+      ]
+    }
+  ],
+  "architectureFrontier": {
+    "schema": "numina.architecture-frontier.v3",
+    "identity": "NUMINA",
+    "environment": "FRONTIER",
+    "status": "FINAL",
+    "gate": "CLOSED",
+    "advancement": false,
+    "frontierLayerCount": 7,
+    "frontierLayers": [
+      {
+        "id": "L1",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/api/control/v2/head",
+          "/readyz",
+          "/v2/network/status"
+        ]
+      },
+      {
+        "id": "L2",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/api/control/v2/manifest",
+          "/final-build.json"
+        ]
+      },
+      {
+        "id": "L3",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/api/control/v2/architecture",
+          "/business-core.json"
+        ]
+      },
+      {
+        "id": "L4",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/api/control/v2/discovery-mcp",
+          "/.well-known/agent-card.json"
+        ]
+      },
+      {
+        "id": "L5",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/v1/frontier/readiness",
+          "/v1/release/manifest",
+          "/downloads/nusd/deployment-receipt.json"
+        ]
+      },
+      {
+        "id": "L6",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/api/control/v1/treasury",
+          "/api/control/v2/treasury/accounts",
+          "/current-environments.json"
+        ]
+      },
+      {
+        "id": "L7",
+        "name": "NUMINA",
+        "role": "FRONTIER",
+        "identity": "NUMINA",
+        "environment": "FRONTIER",
+        "status": "FINAL",
+        "gate": "CLOSED",
+        "finalBuild": "/final-build.json",
+        "finalManifest": "/final-manifest.json",
+        "capabilities": [
+          "NUMINA"
+        ],
+        "routes": [
+          "/v4/release/manifest",
+          "/final-build.json",
+          "/final-manifest.json"
+        ]
+      }
+    ],
+    "finalBuild": "/final-build.json",
+    "finalManifest": "/final-manifest.json",
+    "applicationVersion": "4.0.0",
+    "currentPushEnvironment": "FRONTIER",
+    "futureAdvancementAllowed": true
+  },
+  "currentPush": {
+    "environment": "FRONTIER",
+    "status": "FINAL",
+    "gate": "CLOSED",
+    "futureAdvancementAllowed": true
+  },
+  "liveRuntimeCount": 2,
+  "liveRuntimes": [
+    {
+      "index": 1,
+      "identity": "NUMINA",
+      "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
+      "role": "LIVE_APPLICATION_RUNTIME",
+      "status": "LIVE",
+      "version": "4.0.0",
+      "appliesTo": "NUMINA",
+      "scope": "NUMINA",
+      "deploymentEnvironment": "FRONTIER",
+      "carriedForward": true,
+      "structure": "NUMINA",
+      "contract": "NUMINA",
+      "hashIdentity": "NUMINA",
+      "artifactPathIdentity": "NUMINA",
+      "runtimeIdIdentity": "NUMINA",
+      "securityMechanicsIdentity": "NUMINA",
+      "singular": true
+    },
+    {
+      "index": 2,
+      "identity": "NUMINA",
+      "runtimeId": "1e43b674cf71438f128b6bc3ed02a45349ac382a992c3899ba847ee6e89dbb8f",
+      "role": "LIVE_RC26_RUNTIME",
+      "status": "LIVE",
+      "version": "1.9.0-rc27",
+      "appliesTo": "NUMINA",
+      "scope": "NUMINA",
+      "deploymentEnvironment": "FRONTIER",
+      "carriedForward": true,
+      "structure": "NUMINA",
+      "contract": "NUMINA",
+      "hashIdentity": "NUMINA",
+      "artifactPathIdentity": "NUMINA",
+      "runtimeIdIdentity": "NUMINA",
+      "securityMechanicsIdentity": "NUMINA",
+      "singular": true
+    }
+  ],
+  "structure": "NUMINA",
+  "contract": "NUMINA",
+  "hashIdentity": "NUMINA",
+  "artifactPathIdentity": "NUMINA",
+  "runtimeIdIdentity": "NUMINA",
+  "securityMechanicsIdentity": "NUMINA",
+  "singular": true,
+  "immutableReleaseHashes": {
+    "finalBuildSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
+    "finalManifestSha256": "c9300f87f0ccfe1f2e2e132ecfa9e5de9a23f144dcdfa682849fe6f7bcc09b63"
+  },
+  "hashSemantics": {
+    "immutableReleaseHashes": "PRESERVED_RELEASE_REFERENCE",
+    "currentContentHashes": "COMPUTED_FROM_CURRENT_BYTES"
+  },
+  "core": "NUMINA",
+  "activeCore": "NUMINA",
+  "coreCount": 1,
+  "activeCoreCount": 1,
+  "environment": "FRONTIER",
+  "deploymentEnvironment": "FRONTIER",
+  "frontierOnly": true,
+  "frontierLayerCount": 7
+}

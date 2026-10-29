@@ -1,0 +1,31 @@
+{
+  "name": "numina",
+  "version": "4.0.0",
+  "description": "Intelligence in motion. Read Numina OS architecture, capabilities and canonical journal head.",
+  "author": {
+    "name": "Numina Labs · SK Consulting LLC"
+  },
+  "homepage": "https://numinalabs.xyz/integrations",
+  "repository": "https://github.com/skott34-dot/numina-production",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Numina",
+    "shortDescription": "One core, one root and seven final frontier layers.",
+    "longDescription": "Connect Codex to Numina OS 4 for live architecture, capability and journal-head discovery. Intelligence in motion across the website, OS and control room. Authorized operations use the separately authenticated control endpoint.",
+    "developerName": "Numina Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read"
+    ],
+    "websiteURL": "https://numinalabs.xyz",
+    "privacyPolicyURL": "https://numinalabs.xyz/privacy",
+    "defaultPrompt": [
+      "Show Numina’s current production capabilities.",
+      "Read Numina’s canonical journal head.",
+      "Explain Numina’s L1 through L7 layers."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png"
+  }
+}

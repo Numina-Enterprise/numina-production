@@ -1,0 +1,124 @@
+{
+  "schema": "numina.attribution-source-audit-readback.v1",
+  "source_sha256": "92c271842746c45b321ae9dc09d9040a1795662ac9287dd57322a4d526e42cee",
+  "named_theorems": [
+    "NCPS.AttributionClosure.check_true_iff_fixed",
+    "NCPS.AttributionClosure.check_false_iff_not_fixed",
+    "NCPS.AttributionClosure.fixed_view_valid",
+    "NCPS.AttributionClosure.fixed_view_accepted",
+    "NCPS.AttributionClosure.map_member_order_immaterial",
+    "NCPS.AttributionClosure.reversed_sources_rejected",
+    "NCPS.AttributionClosure.reversed_people_rejected",
+    "NCPS.AttributionClosure.unapproved_note_rejected",
+    "NCPS.AttributionClosure.all_seven_findings_preserved",
+    "NCPS.AttributionClosure.attribution_pass_iff_fixed",
+    "NCPS.AttributionClosure.evaluated_collection_iff",
+    "NCPS.AttributionClosure.invalid_attribution_never_accepted"
+  ],
+  "audit_commands": [
+    "NCPS.AttributionClosure.check_true_iff_fixed",
+    "NCPS.AttributionClosure.check_false_iff_not_fixed",
+    "NCPS.AttributionClosure.fixed_view_valid",
+    "NCPS.AttributionClosure.fixed_view_accepted",
+    "NCPS.AttributionClosure.map_member_order_immaterial",
+    "NCPS.AttributionClosure.reversed_sources_rejected",
+    "NCPS.AttributionClosure.reversed_people_rejected",
+    "NCPS.AttributionClosure.unapproved_note_rejected",
+    "NCPS.AttributionClosure.all_seven_findings_preserved",
+    "NCPS.AttributionClosure.attribution_pass_iff_fixed",
+    "NCPS.AttributionClosure.evaluated_collection_iff",
+    "NCPS.AttributionClosure.invalid_attribution_never_accepted"
+  ],
+  "all_names_match": true,
+  "flagged_code_tokens": [],
+  "literal_exact": true,
+  "runs": [
+    {
+      "scratch": "/private/tmp/ncps-attribution-independent-wi72af83",
+      "all_named_theorems_audited": true,
+      "axioms": {
+        "NCPS.AttributionClosure.check_true_iff_fixed": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.check_false_iff_not_fixed": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.fixed_view_valid": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.fixed_view_accepted": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.map_member_order_immaterial": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.reversed_sources_rejected": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.reversed_people_rejected": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.unapproved_note_rejected": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.all_seven_findings_preserved": [],
+        "NCPS.AttributionClosure.attribution_pass_iff_fixed": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.evaluated_collection_iff": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.invalid_attribution_never_accepted": [
+          "propext"
+        ]
+      },
+      "source_identity_match": true,
+      "trust_zero_all_units": true,
+      "stdout_sha256": "bce0ae670dd8c95337d12a0137346443ff3c83184d968f5de83ca73c13513824"
+    },
+    {
+      "scratch": "/private/tmp/ncps-attribution-independent-2fll2w27",
+      "all_named_theorems_audited": true,
+      "axioms": {
+        "NCPS.AttributionClosure.check_true_iff_fixed": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.check_false_iff_not_fixed": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.fixed_view_valid": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.fixed_view_accepted": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.map_member_order_immaterial": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.reversed_sources_rejected": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.reversed_people_rejected": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.unapproved_note_rejected": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.all_seven_findings_preserved": [],
+        "NCPS.AttributionClosure.attribution_pass_iff_fixed": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.evaluated_collection_iff": [
+          "propext"
+        ],
+        "NCPS.AttributionClosure.invalid_attribution_never_accepted": [
+          "propext"
+        ]
+      },
+      "source_identity_match": true,
+      "trust_zero_all_units": true,
+      "stdout_sha256": "bce0ae670dd8c95337d12a0137346443ff3c83184d968f5de83ca73c13513824"
+    }
+  ],
+  "whole_protocol_verified": false
+}

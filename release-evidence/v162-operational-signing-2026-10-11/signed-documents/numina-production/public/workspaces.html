@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07080c">
+  <meta name="description" content="Explore Numina's linked team rooms and 100 prepared Agentforce workspace configurations, all connected to one production tree.">
+  <title>Workspace house — Numina</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="/workspaces.css">
+  <script type="module" src="/workspaces-ui.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to workspace map</a>
+  <header class="page-header wrap">
+    <a class="brand" href="/" aria-label="Numina home"><strong>NUMINA</strong><span>Intelligence in Motion</span></a>
+    <nav aria-label="Main navigation"><a href="/frontier">Frontier</a><a href="/workspaces.html" aria-current="page">Workspaces</a><a href="/build">Build &amp; trust</a><a href="/integrations">Integrations</a></nav>
+  </header>
+  <main id="main" class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div><span class="eyebrow">ONE HOUSE. ONE PRODUCTION TREE.</span><h1 id="page-title">Room for every<br><em>kind of work.</em></h1><p class="lead">Five team rooms and 100 prepared Agentforce workspaces connect to the same Numina production tree. Follow a room or find a workspace below.</p></div>
+      <div class="hero-note"><span class="status-pill">Prepared configurations</span><p>Agentforce entries are ready for configuration. A Salesforce org, agent and deployment still need to be connected. Workspace entries do not reserve concurrent agent capacity.</p><a class="text-link" href="/integrations">Open integrations ↗</a></div>
+    </section>
+    <section class="map-section" aria-labelledby="map-title">
+      <div class="section-heading"><div><span class="eyebrow">THE WORKSPACE HOUSE</span><h2 id="map-title">A shared foundation.</h2></div><a class="text-link" href="/workspaces.json">Read the workspace manifest ↗</a></div>
+      <figure class="house" aria-describedby="house-caption">
+        <div class="roof"><a class="root-room" href="/control"><span>CANONICAL ROOT · CONTROL ROOM</span><strong>Numina production</strong><code id="root-path">/workspace/numina-production</code></a></div>
+        <div class="control-room"><div><span class="eyebrow">CONTROL ROOM</span><h3>Coordinate the house.</h3><p>Follow the assigned work and its recorded outcomes from one shared root.</p></div><nav aria-label="Control room links"><a class="text-link" href="/control">Open control panel ↗</a><a class="text-link" href="/task-ledger.html">Read tasks and receipts ↗</a></nav></div>
+        <div class="house-rooms" id="house-rooms" aria-label="Workspace rooms"></div>
+        <div class="house-foundation"><span>Every room uses the same source of record.</span><a href="#workspace-directory">Explore all workspaces ↓</a></div>
+        <figcaption id="house-caption">The rooms show prepared workspace configurations. The local workspace linker connects each folder to the production tree; these entries do not represent running Salesforce agents.</figcaption>
+      </figure>
+      <dl class="workspace-metrics"><div><dt>Team rooms</dt><dd id="team-count">—</dd></div><div><dt>Agentforce configurations</dt><dd id="agentforce-count">—</dd></div><div><dt>Canonical production trees</dt><dd>1</dd></div><div><dt>Salesforce deployments</dt><dd id="deployment-count">—</dd></div></dl>
+    </section>
+    <section class="directory-section" aria-labelledby="attribution-title">
+      <div class="section-heading"><div><span class="eyebrow">PEOPLE AND THE PAPER</span><h2 id="attribution-title">A shared authorship record.</h2></div></div>
+      <div id="attribution-cards" class="attribution-grid"></div>
+      <p class="directory-status">Personal labels 1A and 1B describe the current display order. The paper retains Lauren as source_1 / UNIVERSAL_PAIR_1 and Samuel as source_2 / UNIVERSAL_PAIR_2.</p>
+      <p id="paper-reference" class="paper-reference">Reading the retained manuscript reference…</p>
+    </section>
+    <section class="directory-section" aria-labelledby="communication-title">
+      <div class="section-heading"><div><span class="eyebrow">NUMINA LABS COMMUNICATION ROOMS</span><h2 id="communication-title">Keep work connected.</h2></div><a class="text-link" href="/control">Coordinate with the owner ↗</a></div>
+      <p id="communication-status" class="directory-status" role="status">Reading the observed room map…</p>
+      <div id="communication-rooms" class="workspace-cards"></div>
+    </section>
+    <section class="directory-section" id="workspace-directory" aria-labelledby="directory-title">
+      <div class="section-heading"><div><span class="eyebrow">WORKSPACE DIRECTORY</span><h2 id="directory-title">Find your room.</h2></div><a class="text-link" href="/task-ledger.html">Follow assigned tasks and receipts ↗</a></div>
+      <form class="filters" id="workspace-filters" role="search" aria-label="Find a workspace">
+        <div class="search-field"><label for="workspace-search">Search workspaces</label><input id="workspace-search" type="search" placeholder="Name, number or team" autocomplete="off" maxlength="160"></div>
+        <div><label for="workspace-kind">Workspace type</label><select id="workspace-kind"><option value="all">All workspaces</option><option value="team">Team rooms</option><option value="agentforce">Agentforce</option></select></div>
+        <div><label for="workspace-team">Team</label><select id="workspace-team"><option value="all">All teams</option></select></div>
+        <button class="reset-button" type="reset">Clear filters</button>
+      </form>
+      <p id="workspace-status" class="directory-status" role="status" aria-live="polite">Reading the workspace manifest…</p>
+      <div id="workspace-cards" class="workspace-cards"></div>
+      <p id="workspace-empty" class="empty-state" hidden>No matching workspaces. Try another name, number or team.</p>
+      <button id="workspace-retry" class="reset-button" type="button" hidden>Read manifest again</button>
+      <noscript><p>The interactive directory needs JavaScript. You can <a class="text-link" href="/workspaces.json">read the complete manifest</a> directly.</p></noscript>
+    </section>
+  </main>
+  <footer class="wrap"><div><strong>NUMINA</strong><p>Intelligence in Motion.<br>One core. One root.</p></div><nav aria-label="Footer navigation"><a href="/control">Control panel</a><a href="/provenance">Signing evidence</a><a href="/privacy">Privacy</a></nav><p class="footer-note">© 2026 SK Consulting LLC · Iowa, USA.<br>18+ · Adults only.</p></footer>
+</body>
+</html>

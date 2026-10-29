@@ -1,0 +1,168 @@
+{
+  "schema": "numina.metric-map.v1",
+  "version": "4.0.0",
+  "ownerEndpoint": "/api/ops/v1/telemetry",
+  "scope": "current_process_only",
+  "guide": "/downloads/Telemetry-and-Quantum.md",
+  "metrics": [
+    {
+      "signal": "traffic",
+      "field": "window.requestsPerSecond",
+      "unit": "requests_per_second",
+      "action": "size_compute_capacity"
+    },
+    {
+      "signal": "latency",
+      "field": "window.histogram",
+      "unit": "milliseconds",
+      "action": "merge_bucket_counts_before_computing_fleet_percentiles"
+    },
+    {
+      "signal": "server_errors",
+      "field": "window.errorRate",
+      "unit": "ratio",
+      "threshold": 0.01,
+      "action": "investigate_dependencies"
+    },
+    {
+      "signal": "throttling",
+      "field": "window.rateLimitedRate",
+      "unit": "ratio",
+      "threshold": 0.05,
+      "action": "review_capacity_and_rate_policy"
+    },
+    {
+      "signal": "concurrency",
+      "field": "activeRequests",
+      "unit": "requests",
+      "action": "compare_with_provider_quota"
+    },
+    {
+      "signal": "aborted",
+      "field": "window.aborted",
+      "unit": "requests",
+      "action": "investigate_incomplete_responses"
+    },
+    {
+      "signal": "logging_failures",
+      "field": "loggingFailures",
+      "unit": "events",
+      "action": "repair_log_pipeline"
+    },
+    {
+      "signal": "quantum_work",
+      "eventSchema": "numina.quantum-metric.v1",
+      "fields": [
+        "qubits",
+        "gates",
+        "shots"
+      ],
+      "action": "respect_backend_limits_and_cost_budget"
+    }
+  ],
+  "publishing": {
+    "schema": "numina.publishing-telemetry.v1",
+    "scope": "local_publishing_process",
+    "script": "scripts/publish-with-telemetry.mjs",
+    "reportDirectory": ".openai/publishing/",
+    "servedByOwnerEndpoint": false,
+    "metrics": [
+      "metrics.gitCommands",
+      "metrics.gitFailures",
+      "metrics.pushAttempts",
+      "metrics.retries",
+      "metrics.totalDurationMs"
+    ],
+    "perCommand": [
+      "steps[].stage",
+      "steps[].exitCode",
+      "steps[].durationMs",
+      "steps[].failure",
+      "steps[].timedOut"
+    ],
+    "maximumPushAttempts": 2,
+    "sourcePushRequiresMatchingRemoteCommit": true,
+    "sourcePushEstablishesDeployment": false
+  },
+  "automaticScalingEnabled": false,
+  "treasuryWrites": false,
+  "quantum": {
+    "backend": "numina-statevector",
+    "kind": "classical_simulator",
+    "endpoint": "/api/ops/v1/quantum/measure",
+    "hardwareConnected": false,
+    "ibm": {
+      "provider": "NUMINA",
+      "configurationField": "quantum.ibm",
+      "connectionEndpoint": "/api/ops/v1/quantum/ibm/connection",
+      "access": "authenticated_owner",
+      "scope": "authenticated_backend_discovery",
+      "observations": [
+        "observedAt",
+        "providerApiAuthenticated",
+        "connected",
+        "selectedBackend",
+        "backends",
+        "durationMs",
+        "failedStage",
+        "providerHttpStatus"
+      ],
+      "jobSubmissionEnabled": false,
+      "treasuryWrites": false
+    },
+    "workload": {
+      "schema": "numina.quantum-workload.v1",
+      "field": "quantum.workload",
+      "scope": "current_process_only",
+      "metrics": [
+        {
+          "signal": "active_jobs",
+          "field": "activeJobs",
+          "action": "compare_with_limits.concurrentPerProcess"
+        },
+        {
+          "signal": "minute_admissions",
+          "field": "admittedThisMinute",
+          "action": "compare_with_limits.requestsPerMinutePerProcess"
+        },
+        {
+          "signal": "concurrency_rejections",
+          "field": "window.concurrencyLimited",
+          "action": "review_compute_capacity"
+        },
+        {
+          "signal": "rate_rejections",
+          "field": "window.rateLimited",
+          "action": "review_quantum_request_rate_policy"
+        },
+        {
+          "signal": "service_failures",
+          "field": "window.failureRate",
+          "action": "investigate_quantum_failures"
+        },
+        {
+          "signal": "completed_work",
+          "fields": [
+            "window.completedQubits",
+            "window.completedGates",
+            "window.completedShots"
+          ],
+          "action": "compare_workload_size_before_changing_capacity"
+        },
+        {
+          "signal": "compute_latency",
+          "field": "window.computeHistogram",
+          "action": "merge_bucket_counts_before_computing_fleet_percentiles"
+        },
+        {
+          "signal": "logging_failures",
+          "field": "loggingFailures",
+          "action": "repair_log_pipeline"
+        }
+      ],
+      "minimumCapacitySamples": 20,
+      "automaticScalingEnabled": false,
+      "fleetAggregationRequired": true
+    }
+  }
+}

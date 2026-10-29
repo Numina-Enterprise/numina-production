@@ -1,0 +1,90 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "observed_at": "2026-09-19T11:38:19Z",
+  "canonical_repository": "skott34-dot/numina-production",
+  "observed_main_commit": "e41cc9e2d6cad230b8827084791d1f266c994cb8",
+  "github_actions": {
+    "capacity": "UNAVAILABLE_FOR_RUNNER_BACKED_EXECUTION",
+    "workflow_run_id": 35440259574,
+    "rerun_attempt": 2,
+    "job_id": 105890891682,
+    "job_name": "verify",
+    "status": "completed",
+    "conclusion": "failure",
+    "executed_steps": 0,
+    "artifact_claim": "NONE"
+  },
+  "vercel": {
+    "connected_scope": "skott34-dot",
+    "project_id": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "build_capacity": "AVAILABLE_BUT_BUILD_FAILING",
+    "observed_commit_deployment_id": "dpl_J3hib2qc87XEjfxW5V9C4aKteRbz",
+    "observed_commit_deployment_source_sha": "e41cc9e2d6cad230b8827084791d1f266c994cb8",
+    "observed_commit_deployment_target": null,
+    "observed_commit_deployment_state": "ERROR",
+    "observed_error": "npm run build exited with 1",
+    "latest_ready_production_deployment_id": "dpl_HxWFxjCzSeXRbcY25J3vyFpf1s1j",
+    "latest_ready_production_source_sha": "ed17788bfda388c72bf2c9270773a19a89268de9",
+    "current_main_deployed_claim": false
+  },
+  "live_production_continuity": {
+    "base_url": "https://numina-production.vercel.app",
+    "final_build": {
+      "path": "/final-build.json",
+      "http_reachable": true,
+      "schema": "numina.final-build.v1",
+      "status": "FINAL",
+      "embedded_verified_source_commit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c"
+    },
+    "nusd_deployment_receipt": {
+      "path": "/downloads/nusd/deployment-receipt.json",
+      "http_reachable": true,
+      "token_receipt": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "settlement_receipt": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+    },
+    "nusd_status": {
+      "path": "/api/nusd/v1/status",
+      "http_reachable": true,
+      "schema": "numina.nusd.status.v1"
+    },
+    "deployment_estimate": {
+      "path": "/v2/network/deployment-estimate",
+      "http_reachable": true,
+      "schema": "numina.deployment-estimate.v1",
+      "status": "FINAL"
+    },
+    "binding_note": "These are continuity observations from the existing READY production alias and are not evidence that observed_main_commit is deployed."
+  },
+  "remote_desktop": {
+    "device": "VENGEANCE",
+    "status": "OFFLINE",
+    "last_seen": "2026-09-15T04:39:47.909Z",
+    "fallback_used": false
+  },
+  "mobile_delivery": {
+    "new_signed_android_artifact": false,
+    "new_signed_ios_artifact": false,
+    "google_play_submission_claimed": false,
+    "app_store_submission_claimed": false,
+    "signing_identity_created_or_rotated": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "chainId": "962421430",
+  "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+  "genesisPinBasis": "Provider-observed candidate; independent approval not recorded",
+  "sender": null,
+  "nonce": null,
+  "minimumConfirmations": "12",
+  "maximumTotalFeeBaseUnits": null,
+  "feeAsset": null,
+  "ownerTransactionReviewRecorded": false
+}

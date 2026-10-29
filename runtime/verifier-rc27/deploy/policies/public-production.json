@@ -1,0 +1,34 @@
+{
+  "accepted_builder_ids": [
+    "urn:numina:builder:release-gate:v1"
+  ],
+  "accepted_predicate_types": [
+    "https://slsa.dev/provenance/v1"
+  ],
+  "allow_reference_attestation_in_production": false,
+  "allowed_environments": [
+    "production"
+  ],
+  "allowed_providers": [
+    "docker",
+    "oci",
+    "kubernetes",
+    "k8s",
+    "https",
+    "remote"
+  ],
+  "allowed_public_domains": [
+    "numinalabs.xyz",
+    "www.numinalabs.xyz"
+  ],
+  "allowed_roles": [
+    "public-verifier"
+  ],
+  "allowed_targets": [],
+  "expected_sbom_sha256": null,
+  "hosted_attestation_backend": "cosign",
+  "minimum_hosted_attestations": 0,
+  "policy_id": "numina-public-production-v1",
+  "require_persistent_signing_key": true,
+  "require_sbom": true
+}

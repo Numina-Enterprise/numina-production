@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: numina-verifier-default-deny, namespace: numina}
+spec:
+  podSelector: {matchLabels: {app: numina-verifier}}
+  policyTypes: [Ingress, Egress]
+  ingress:
+  - from: []
+    ports: [{protocol: TCP, port: 8080}]
+  egress:
+  - to: []
+    ports:
+    - {protocol: UDP, port: 53}
+    - {protocol: TCP, port: 53}

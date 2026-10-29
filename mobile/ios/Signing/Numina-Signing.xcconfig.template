@@ -1,0 +1,9 @@
+// Template only. Copy to Numina-Signing.local.xcconfig in this folder.
+// Replace every *_REQUIRED value with verified Apple account/profile values.
+#include "../Configuration/Numina.xcconfig"
+CODE_SIGNING_ALLOWED = YES
+CODE_SIGN_STYLE = Manual
+DEVELOPMENT_TEAM = APPLE_TEAM_ID_REQUIRED
+CODE_SIGN_IDENTITY = Apple Distribution
+PROVISIONING_PROFILE_SPECIFIER = APP_STORE_PROFILE_NAME_REQUIRED
+// Select this override explicitly on the authorized Mac; it is not auto-loaded.

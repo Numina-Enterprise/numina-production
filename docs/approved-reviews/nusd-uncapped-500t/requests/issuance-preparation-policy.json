@@ -1,0 +1,69 @@
+{
+  "schema": "numina.nusd.issuance-preparation-policy.v2",
+  "policyId": "nusd-owner-approved-uncapped-500t-2026-09-16",
+  "status": "OWNER_APPROVED_REVIEW",
+  "basis": "Owner explicitly approved one initial 500T NUSD supply, uncapped policy, referenced across the treasuries and counted once.",
+  "operator": "SK Consulting LLC",
+  "token": {
+    "name": "Numina USD",
+    "symbol": "NUSD",
+    "decimals": 6,
+    "supplyPolicy": "uncapped",
+    "configurableCap": false,
+    "numericRepresentation": "uint256",
+    "maximumRepresentableBaseUnits": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+    "infiniteBalanceRepresentable": false,
+    "initialSupplyNusd": "500000000000000",
+    "initialSupplyBaseUnits": "500000000000000000000",
+    "initialRecipient": null,
+    "initialRecipientStatus": "NUSD_NATIVE_TREASURY_PUBLIC_WALLET_REQUIRED",
+    "constructorSequence": [
+      "Mint finite initial supply to the explicitly selected recipient",
+      "Pause before construction completes"
+    ],
+    "initiallyPaused": true
+  },
+  "roles": {
+    "admin": "0xa7e9FB02495700ccE0d209392C0A30FbE077498e",
+    "issuer": "0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0",
+    "minter": "0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6",
+    "pauser": "0x434AB24E613055Fd2598Fd9f0558A06a94D39c81"
+  },
+  "adminDelaySeconds": "86400",
+  "denomination": {
+    "canonicalUnit": "NUSD",
+    "countedOnce": true,
+    "displayLabels": [
+      "NUSD",
+      "USD",
+      "USDC"
+    ],
+    "displayPolicyStatus": "OWNER_FINALIZED",
+    "declaredTarget": {
+      "NUSD": "1",
+      "USD": "1",
+      "USDC": "1"
+    },
+    "ownerReportsVerified": true,
+    "providerEvidenceVerifiedByThisPackage": false,
+    "usdOrUsdcCreatedByIssuance": false
+  },
+  "nativeJournal": {
+    "writePerformed": false,
+    "existingJournalIsNotUpdatedByThisProposal": true
+  },
+  "approvals": {
+    "preparationRequested": true,
+    "ownerFinalizedDisplayPolicyAndAllocation": false,
+    "submissionApproved": false,
+    "policySigned": false,
+    "ownerReviewApproved": true,
+    "approvalScope": "Software review, supply policy and shared-reference plan; not an external audit, provider receipt or executed transaction.",
+    "ownerFinalizedSharedReferencePlan": true
+  },
+  "signature": null,
+  "supersedes": {
+    "policyId": "nusd-uncapped-1500t-review-2026-09-16",
+    "reason": "Initial supply revised from1500T to500T total; separate500T allocations replaced with references to one shared amount."
+  }
+}

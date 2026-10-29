@@ -1,0 +1,12 @@
+from numina import *
+r=RightsRuntime()
+r.add_creation_authority(RightCreationAuthority('BUYER_CREATE','BUYER','NUMINA',('CLAIM',),1_000_000,5_000_000,True))
+r.add_creation_authority(RightCreationAuthority('SELLER_CREATE','SELLER','NUMINA',('CLAIM',),1_000_000,5_000_000,True))
+f=RightsFoundry(r,1)
+f.register_template(RightTemplate('PAYMENT_CLAIM','CLAIM',RightKind.CLAIM,BackingKind.CONTRACTUAL,1_000_000))
+c=AutonomousContract('C-1',(ContractParty('BUYER','buyer','BUYER_CREATE'),ContractParty('SELLER','seller','SELLER_CREATE')),(ContractTerm('RIGHT-1','PAYMENT_CLAIM','SELLER','BUYER',250_000),),('BUYER','SELLER'),1)
+p=ContractCommitProof(c.digest,('BUYER','SELLER'),1)
+out=f.execute_contract(c,p)
+print('rights:', out.created_right_ids)
+print('obligations:', out.created_obligation_ids)
+print('state_root:', out.post_root)

@@ -1,0 +1,64 @@
+// Delivery-trigger marker: downstream finance mutation synchronized 2026-09-20T03:52Z.
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import {resetBuildOutput} from './build-output.mjs';
+const root=new URL('../',import.meta.url);process.chdir(fileURLToPath(root));
+execFileSync(process.execPath,['scripts/apply-numina-manifest-metadata.mjs','--update-final-artifacts'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/sync-universal-pair-source-ids.mjs'],{stdio:'inherit'});
+const FINAL_BUILD_MANIFEST_PATH='public/final-build.json';
+const finalBuildBytes=readFileSync(FINAL_BUILD_MANIFEST_PATH);
+const finalBuildSha256=createHash('sha256').update(finalBuildBytes).digest('hex');
+const finalBuildMetadata=JSON.parse(readFileSync('package.json','utf8')).numina?.finalBuildManifest;
+if(finalBuildSha256!==finalBuildMetadata?.currentContentSha256)throw Error('Current FINAL build content SHA-256 mismatch');
+if(finalBuildMetadata?.sha256!=='996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa')throw Error('Immutable FINAL build release hash changed');
+execFileSync(process.execPath,['scripts/check-final-build.mjs'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/check-final-manifest.mjs'],{stdio:'inherit'});
+const finalBuild=JSON.parse(finalBuildBytes);
+if(finalBuild.identity!=='NUMINA'||finalBuild.status!=='FINAL'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v2'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.singular!==true)throw Error('Preserved FINAL NUMINA build manifest contract mismatch');
+execFileSync(process.execPath,['scripts/nusd-contract-record.mjs'],{stdio:'inherit'});
+// Fail before producing web artifacts if the iOS/runtime release binding has drifted.
+execFileSync(process.execPath,['scripts/ios-release.mjs','check'],{stdio:'inherit'});
+// Source safeguards can pass while Play upload, declarations and device checks remain blocked.
+execFileSync(process.execPath,['scripts/check-play-readiness.mjs','--source-only'],{stdio:'inherit'});
+// Regenerate the canonical integration manifest and its dependent metadata from current same-repo source before validating or copying it.
+execFileSync(process.execPath,['integrations/numina/scripts/package-distribution.js'],{stdio:'inherit'});
+if(readFileSync('public/runtime-contract.js','utf8')!==readFileSync('integrations/numina/src/runtime-contract.js','utf8'))throw Error('Integration runtime contract is stale; sync and repackage the integration kit before building');
+// Rebuild from current source so retired assets and migrations cannot survive an overlay.
+resetBuildOutput(fileURLToPath(root));
+for(const p of ['dist/client','dist/server','dist/.openai','dist/client/downloads'])mkdirSync(p,{recursive:true});
+function copy(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=from+'/'+n,b=to+'/'+n;statSync(a).isDirectory()?copy(a,b):copyFileSync(a,b);}}
+copy('public','dist/client');copy('docs','dist/client/downloads');
+copyFileSync('config/numina-workspaces.v1.json','dist/client/workspaces.json');
+copyFileSync('config/numina-agentforce-tasks.v1.json','dist/client/tasks.json');
+copyFileSync('config/numina-treasury-team.v1.json','dist/client/treasury-team.json');
+// Publish the reviewed proof packet after metadata normalization so detached
+// signatures continue to bind the exact retained source bytes.
+copy('release-evidence/decoded-attribution-closure-2026-10-11','dist/client/downloads/provenance/decoded-attribution-closure-2026-10-11');
+// Sites serves matching static files before Worker routes. Let the Worker own
+// the old pricing address so its redirect retains query parameters.
+unlinkSync('dist/client/pricing.html');
+// Keep the institutional homepage distinct from the operational Frontier workspace.
+// `/frontier` continues to resolve to `frontier.html` in the Worker router.
+copyFileSync('mobile/signing/release-identities.json','dist/client/identity.json');
+copyFileSync('mobile/signing/distribution-policy.json','dist/client/downloads/distribution-policy.json');
+copyFileSync('integrations/numina/file-manifest.json','dist/client/downloads/integration-manifest.json');
+for(const name of ['release-identities.json','numina-android-release.pem','numina-android-upload.pem','numina-ios-distribution.csr'])copyFileSync('mobile/signing/'+name,'dist/client/downloads/'+name);
+for(const name of ['site.js','release-ui.js','release-model.js','downloads/RC26-ALIGNMENT.md']){try{unlinkSync('dist/client/'+name);}catch(error){if(error.code!=='ENOENT')throw error;}}
+// Remove only explicitly retired generated assets; preserve release and customer artifacts.
+for(const name of ['authority.js','core-ui.js','authority-core.js','economy-ui.js','economy-model.js','terminal.js','operations.js','operations-model.js','downloads/demo-test-key.json','downloads/conformance-vectors.json','downloads/conformance.mjs','downloads/core-v1.8-eac.json','downloads/Conformance-v0.1.md','downloads/EAC-v0.1.md','downloads/Recognition-Profile-v0.1.md','downloads/Operations-v0.1.md','downloads/Clearing-Stability-v1.8.md']){try{unlinkSync('dist/client/'+name);}catch(error){if(error.code!=='ENOENT')throw error;}}
+const report=JSON.parse(readFileSync('fixtures/conformance-report.json'));
+const key=JSON.parse(readFileSync('fixtures/demo-test-key.json'));delete key.privateJwk;
+writeFileSync('src/generated.js','export const DEMO_KEY='+JSON.stringify(key)+';\nexport const CONFORMANCE='+JSON.stringify(report)+';\n');
+for(const n of ['core-v1.8-manifest.json','core-v1.8-context.json'])copyFileSync('fixtures/'+n,'dist/client/downloads/'+n);
+let source='const TREASURY_SUBMISSION_REQUESTS='+readFileSync('release-evidence/treasury-submission-requests-2026-09-18.json','utf8')+';\n'+readFileSync('public/treasury-connection-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/owner-approval.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/wallet-execution-policy.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/financial-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/nusd-contract-record.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/treasury-valuation.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/architecture-layers.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'')+'\n'+readFileSync('public/runtime-contract.js','utf8').replace(/export /g,'')+'\n'+readFileSync('runtime/vercel-production/lib/network-observation.mjs','utf8').replace(/export /g,'')+'\n'+readFileSync('integrations/numina/src/quantum.js','utf8').replace(/export /g,'')+'\n'+['telemetry','quantum-backend','quantum-telemetry','ibm-quantum','core','store','generated','core-generated','core-v18','numina-root','native-treasury-model','treasury-policy','treasury-alignment','frontier','control','control-store','native-treasury','treasury-documents','stripe-treasury','ach-receipt-verifier','usdc-receipt-verifier','wallet-execution-store','control-http','telemetry-http','quantum-http','rc20','runtime-revocation','runtime-release-local','runtime-http','app-core','app-http','nusd-http','treasury-evidence','bank-route-model','treasury-connection-http','connections-http','frontier-http','sites-mcp-http','reviewer','financial-evidence','transfer-receipts','worker'].map(n=>readFileSync('src/'+n+'.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export \{.*\};\r?\n/gm,'').replace(/export (?!default)/g,'')).join('\n');
+writeFileSync('dist/server/index.js',readFileSync('public/connection-model.js','utf8').replace(/export /g,'')+'\n'+readFileSync('public/treasury-amount.js','utf8').replace(/export /g,'')+'\n'+source);
+// Match the Sites packager's canonical formatting before inventory hashing.
+writeFileSync('dist/.openai/hosting.json',JSON.stringify(JSON.parse(readFileSync('.openai/hosting.json','utf8')),null,2)+'\n');
+if(readdirSync('.').includes('drizzle'))copy('drizzle','dist/.openai/drizzle');
+execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/source-alignment.mjs'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/release-manifest.mjs'],{stdio:'inherit'});
+execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});
+console.log('Built static site and Worker; no third-party runtime dependencies.');

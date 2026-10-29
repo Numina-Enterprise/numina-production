@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-053",
+  "configurationId": "agentforce-053",
+  "team": "proofs",
+  "title": "Inspect signature acceptance policy",
+  "nextBestAction": "Record the exact candidate accepted-set/scalar/point/cofactor rules and whether an operational profile adopted them.",
+  "target": "ED25519-01",
+  "priority": 11,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-053",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "companion_policy",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-053.json",
+    "passCondition": "Receipt separates historic finite-vector evidence from a selected universal policy and concrete bridge.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

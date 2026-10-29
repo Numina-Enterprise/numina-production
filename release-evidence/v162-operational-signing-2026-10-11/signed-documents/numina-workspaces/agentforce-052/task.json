@@ -1,0 +1,57 @@
+{
+  "id": "agentforce-052",
+  "configurationId": "agentforce-052",
+  "team": "deployment",
+  "title": "Read workspace and ledger downloads",
+  "nextBestAction": "Read /workspaces.json and /tasks.json for the publication and compare their exact config identities.",
+  "target": "/workspaces.json and /tasks.json",
+  "priority": 11,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/blue_team_deployment",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-052",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "publication_receipt",
+      "status": "pending_provider_readback"
+    },
+    {
+      "id": "task_ledger",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-052.json",
+    "passCondition": "Receipt matches 100 task IDs to 100 prepared Agentforce configuration IDs.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

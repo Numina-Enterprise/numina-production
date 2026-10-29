@@ -1,0 +1,61 @@
+{
+  "id": "/app",
+  "name": "Numina OS 4 \u2014 One connected operating system",
+  "short_name": "Numina OS",
+  "description": "Intelligence in Motion. One Numina workspace for service work, agent authority, treasury records and integrations.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07080c",
+  "theme_color": "#07080c",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Service work",
+      "short_name": "Work",
+      "url": "/app#service-work"
+    },
+    {
+      "name": "Agent control",
+      "short_name": "Agents",
+      "url": "/frontier"
+    },
+    {
+      "name": "Treasury records",
+      "short_name": "Treasury",
+      "url": "/control#native-treasury-panel"
+    },
+    {
+      "name": "Apps and plugins",
+      "short_name": "Integrations",
+      "url": "/integrations"
+    }
+  ]
+}

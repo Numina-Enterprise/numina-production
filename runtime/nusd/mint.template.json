@@ -1,0 +1,11 @@
+{
+  "schema": "numina.nusd.mint.request.v1",
+  "network": { "chainId": 962421430 },
+  "tokenAddress": null,
+  "issuer": null,
+  "minter": null,
+  "recipient": null,
+  "amountNusd": null,
+  "reserveReference": null,
+  "expiresAt": null
+}

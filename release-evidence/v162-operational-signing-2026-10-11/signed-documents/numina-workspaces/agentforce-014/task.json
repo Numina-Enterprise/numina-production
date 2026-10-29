@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-014",
+  "configurationId": "agentforce-014",
+  "team": "signatures",
+  "title": "Pin preserved final PDF",
+  "nextBestAction": "Read the exact final PDF byte count/hash and retained detached-signature receipt; do not amend it.",
+  "target": "final107-page PDF",
+  "priority": 3,
+  "status": "queued",
+  "readiness": "ready_for_cloud_review",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/signature_delivery_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-014",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "signature_records",
+      "status": "available"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-014.json",
+    "passCondition": "Receipt retains 808496 bytes /3e5db9f5…96f3ce9 and no fresh signature claim.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

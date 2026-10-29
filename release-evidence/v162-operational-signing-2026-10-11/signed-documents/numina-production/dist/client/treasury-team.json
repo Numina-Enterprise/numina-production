@@ -1,0 +1,177 @@
+{
+  "schema": "numina.treasury-alignment-team.v1",
+  "identity": "NUMINA",
+  "canonicalRoot": "/workspace/numina-production",
+  "recordedAt": "2026-10-11T09:36:12Z",
+  "configurationStatus": "assigned",
+  "executionEnvironment": "managed_cloud",
+  "teamType": "task_based_review_and_alignment",
+  "continuousExecutionEstablished": false,
+  "salesforceAgentsActivated": false,
+  "treasury": {
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "journal": "/api/control/v1/treasury",
+    "treasuryCount": 1,
+    "journalCount": 1,
+    "componentCount": 3,
+    "componentsAreSeparateTreasuries": false,
+    "aggregateModeledValue": "1500000000000000",
+    "aggregateModeledUnit": "NUSD",
+    "componentRoles": [
+      {
+        "id": "usd-ach",
+        "unit": "USD",
+        "modeledValue": "500000000000000",
+        "evidenceRoute": "/api/treasury/v1/bank-route"
+      },
+      {
+        "id": "usdc-provider",
+        "unit": "USDC",
+        "modeledValue": "500000000000000",
+        "evidenceRoute": "/api/control/v1/stripe-treasury"
+      },
+      {
+        "id": "nusd-native",
+        "unit": "NUSD",
+        "modeledValue": "500000000000000",
+        "evidenceRoute": "/api/control/v1/treasury"
+      }
+    ],
+    "observedProviderAmountsReplaceModeledAmounts": false,
+    "modeledAmountsAuthorizeSpending": false,
+    "primarySettlementRail": {
+      "network": "base",
+      "chainId": 8453,
+      "asset": "USDC",
+      "tokenContract": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "decimals": 6,
+      "selectionBasis": "owner_instruction",
+      "receivingRouteObserved": "active_provider_route",
+      "source": "Authenticated Stripe read-only connector observation, 2026-10-11",
+      "sourceIssuanceNetworkIsDifferent": true,
+      "routeAvailabilityEstablishesFunding": false
+    },
+    "retainedIssuance": {
+      "asset": "NUSD",
+      "chainId": "962421430",
+      "provider": "NUMINA",
+      "networkType": "permissioned",
+      "protocol": "Hyperledger Besu / IBFT",
+      "genesisHash": "0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1",
+      "tokenContract": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "decimals": 18,
+      "amountNusd": "1500000000000000",
+      "mintTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "record": "runtime/nusd/mint-receipt.json",
+      "scope": "Retained constructor issuance and dated network records; not a new chain read or Base USDC funding receipt"
+    }
+  },
+  "roles": [
+    {
+      "id": "dedicated-treasurer",
+      "assignedAgent": "/root/treasury_alignment",
+      "responsibility": "Maintain the source-scoped treasury evidence register, preserve native journal identity, reconcile receipt bindings and record explicit closure conditions."
+    },
+    {
+      "id": "engineering",
+      "assignedAgent": "/root/engineering_release",
+      "responsibility": "Maintain cloud adapters and canonical build inclusion without changing receipt history or creating financial effects."
+    },
+    {
+      "id": "blue-review",
+      "assignedAgent": "/root/blue_team_deployment",
+      "responsibility": "Read back current journal/export and deployment identities, disclose incomplete connector projections and verify retained byte commitments."
+    },
+    {
+      "id": "red-review",
+      "assignedAgent": "/root/red_team_release",
+      "responsibility": "Review authorization, evidence labels and visible failure handling; preserve private financial records."
+    },
+    {
+      "id": "release-coordinator",
+      "assignedAgent": "/root",
+      "responsibility": "Integrate reviewed changes and record matching publication and delivery receipts."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "treasury-issuance-binding",
+      "ownerRole": "dedicated-treasurer",
+      "status": "complete_for_retained_records",
+      "acceptance": "Source, compiled artifact, deployment and mint receipt identifiers agree for the retained 18-decimal constructor issuance.",
+      "evidence": "runtime/nusd/mint-receipt.json"
+    },
+    {
+      "id": "treasury-current-chain-state",
+      "ownerRole": "dedicated-treasurer",
+      "status": "verification_pending",
+      "acceptance": "A fresh authorized chain observation identifies the exact chain, genesis, token address, block and pause state; any unpause receipt matches that token.",
+      "evidence": null
+    },
+    {
+      "id": "treasury-complete-journal-export",
+      "ownerRole": "blue-review",
+      "status": "incomplete_projection",
+      "acceptance": "An authenticated complete snapshot supplies every event and the exact manifest bytes without truncation, with matching revision/head and read-only export history.",
+      "evidence": null
+    },
+    {
+      "id": "treasury-provider-reconciliation",
+      "ownerRole": "dedicated-treasurer",
+      "status": "verification_pending",
+      "acceptance": "Authenticated provider-issued records preserve asset, amount, precision, available/pending bucket, timestamp and allocation to the singular treasury.",
+      "evidence": null
+    },
+    {
+      "id": "treasury-owner-evidence-snapshot",
+      "ownerRole": "engineering",
+      "status": "verification_pending",
+      "acceptance": "The supported owner-authenticated treasury evidence route returns a snapshot whose native head is stable during capture and whose retained signature verifies against the established public pin.",
+      "evidence": null
+    },
+    {
+      "id": "treasury-publication-readback",
+      "ownerRole": "release-coordinator",
+      "status": "implementation_pending_publication",
+      "acceptance": "The saved publication exposes this reviewed alignment document and configuration with matching source and artifact commitments.",
+      "evidence": null
+    },
+    {
+      "id": "treasury-usable-capital-allocation",
+      "ownerRole": "dedicated-treasurer",
+      "status": "provider_observed_allocation_pending",
+      "acceptance": "Match exact available business provider funds to the singular treasury allocation and explicitly authorized spend. A Base USDC receiving route or native NUSD mint alone does not authorize or fund a purchase. Personal funding is excluded.",
+      "evidence": null
+    }
+  ],
+  "authority": {
+    "scope": "Review, readback, adapter implementation and source publication within the existing authorization",
+    "financialMovementPerformed": false,
+    "financialMovementDelegated": false,
+    "paymentRightsOrLimitsInferred": false,
+    "newTreasuryCreated": false,
+    "newSigningKeyCreated": false,
+    "privateKeyExported": false
+  },
+  "report": "docs/Numina-Treasury-Alignment-2026-10-11.md",
+  "nextVerifiableStep": "Obtain the supported owner-authenticated treasury evidence snapshot for the exact current journal head; preserve provider evidence in its original currency and recorded scope.",
+  "fundingPolicy": {
+    "recordedAt": "2026-10-11T09:48:00Z",
+    "fundingSource": "NUMINA_NATIVE_TREASURY_ONLY",
+    "personalFundsAllowed": false,
+    "personalAccountsOrCardsAllowed": false,
+    "automaticPersonalFundingFallback": false,
+    "nativeIssuanceCreatesExternalFunds": false,
+    "modeledTreasuryValuesAuthorizeSpending": false,
+    "providerAvailableBalanceProvesTreasuryAllocation": false,
+    "meteredServiceAuthorizationInferred": false,
+    "requiredBeforeBusinessSpend": [
+      "Verified business treasury ownership and available source asset",
+      "Exact source currency, network and amount",
+      "Verified allocation and eligible destination/rail",
+      "Explicit authorized spend scope and amount",
+      "Durable transaction identification and provider reconciliation"
+    ],
+    "onMissingVerifiedCapital": "Record the funding dependency visibly; do not charge personal funds or silently substitute another funding source"
+  }
+}

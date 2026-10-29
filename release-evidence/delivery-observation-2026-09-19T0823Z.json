@@ -1,0 +1,97 @@
+{
+  "schema": "numina.external-delivery-observation.v1",
+  "observed_at": "2026-09-19T08:23:21Z",
+  "canonical_repository": "skott34-dot/numina-production",
+  "canonical_branch": "main",
+  "observed_main_before_evidence_commit": "8b810467d5a99470af35ccde21efb72168fd1a63",
+  "github_actions": {
+    "runner_allocation_verified": false,
+    "run_id": 35430935290,
+    "job_id": 105865253129,
+    "workflow": "Verify root Vercel adapter",
+    "status": "queued",
+    "runner_backed_execution_observed": false,
+    "executed_steps_observed": false
+  },
+  "vercel": {
+    "team_id": "team_8bJOKLq941ouBmsFMEXAERfD",
+    "project_id": "prj_WY1kKgo522ufsymotnArIUee01uO",
+    "build_capacity_observed": true,
+    "latest_observed_canonical_production_attempt": {
+      "deployment_id": "dpl_DSSeJbGL9TCM9JygYpptdFkEMXzE",
+      "source_commit": "17c52eac76e5323915311d5af2664761bb95c062",
+      "state": "ERROR",
+      "error_code": "syntax_error",
+      "error_message": "Command \"npm run build\" exited with 1"
+    },
+    "latest_observed_ready_production": {
+      "deployment_id": "dpl_HxWFxjCzSeXRbcY25J3vyFpf1s1j",
+      "source_commit": "ed17788bfda388c72bf2c9270773a19a89268de9",
+      "state": "READY"
+    },
+    "current_main_deployment_receipt_observed": false
+  },
+  "live_production_verification": {
+    "base_url": "https://numina-production.vercel.app",
+    "final_build": {
+      "path": "/final-build.json",
+      "http_verified": true,
+      "schema": "numina.final-build.v1",
+      "status": "FINAL",
+      "embedded_source_commit": "ae3cd629f8fc62e1f21bf90a3bf05db23767fe9c"
+    },
+    "nusd_deployment_receipt": {
+      "path": "/downloads/nusd/deployment-receipt.json",
+      "http_verified": true,
+      "schema": "numina.nusd.production-deployment-receipt.v1",
+      "status": "FINAL",
+      "token_deployment_receipt": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "settlement_receipt": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+    },
+    "nusd_status": {
+      "path": "/api/nusd/v1/status",
+      "http_verified": true,
+      "schema": "numina.nusd.status.v1"
+    },
+    "deployment_estimate": {
+      "path": "/v2/network/deployment-estimate",
+      "http_verified": true,
+      "schema": "numina.deployment-estimate.v1",
+      "status": "FINAL",
+      "request_id": "d5f1d9aa-8b16-4786-a2c0-1aa43d23a006"
+    },
+    "current_main_binding_claimed": false
+  },
+  "fallback": {
+    "device": "VENGEANCE",
+    "online": false,
+    "last_seen_at": "2026-09-15T04:39:47.909Z",
+    "used": false,
+    "signing_identity_created_or_rotated": false
+  },
+  "mobile_delivery": {
+    "new_signed_android_artifact_observed": false,
+    "new_signed_ios_artifact_observed": false,
+    "google_play_submission_claimed": false,
+    "app_store_submission_claimed": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}

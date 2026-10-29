@@ -1,0 +1,71 @@
+import {requestJson,createViewScope} from './http-client.js';
+import {isTreasuryMinorInteger,formatTreasuryProviderDisplayAmount,formatTreasuryModelWholeAmount} from './treasury-amount.js';
+import {NUMINA_TREASURY_CONNECTION} from './treasury-connection-model.js';
+const stripeElement=id=>document.getElementById(id),stripeScope=createViewScope();
+const stripeNode=(tag,text)=>{const node=document.createElement(tag);node.textContent=text;return node;};
+function stripeProviderRouteControl(generation){
+  const container=stripeNode('dd',''),button=stripeNode('button','Check deposit routes'),result=stripeNode('div','');
+  button.type='button';
+  button.onclick=async()=>{
+    button.disabled=true;result.replaceChildren(stripeNode('p','Checking current Stripe destinations…'));
+    try{
+      const data=await requestJson('/api/control/v2/treasury/provider-routes',{signal:stripeScope.signal,timeoutMs:12000});
+      if(!stripeScope.isCurrent(generation))return;
+      if(data.schema!=='numina.treasury.provider-routes.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='NUMINA'||data.connection!=='read_only'||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd?.provider_acceptance_verified!==false||!['NOT_REPORTED','OBSERVATION_INCOMPLETE','ASSET_IDENTITY_NOT_VERIFIED'].includes(data.nusd.status)||typeof data.complete!=='boolean'||!Array.isArray(data.routes)||data.routes.length>50)throw Error('Invalid provider routes');
+      const nodes=[stripeNode('p',data.nusd.status==='NOT_REPORTED'?'Stripe has not listed an NUSD deposit route.':data.nusd.status==='OBSERVATION_INCOMPLETE'?'The provider route list is incomplete; NUSD acceptance is unverified.':'Stripe reports an NUSD label; the token identity still requires verification.')];
+      for(const route of data.routes){
+        if(!['currency','network','address','status'].every(key=>typeof route[key]==='string'&&route[key].length<=256)||!(route.memo===null||typeof route.memo==='string'&&route.memo.length<=256)||typeof route.provider_reported_active!=='boolean')throw Error('Invalid route');
+        nodes.push(stripeNode('p',route.currency.toUpperCase()+' · '+route.network+' · '+(route.provider_reported_active?'Provider reports active':'Unavailable')+' · '+route.address+(route.memo===null?'':' · Memo: '+route.memo)));
+      }
+      nodes.push(stripeNode('p','Destination information only. Source funds and conversion require separate verification. No deposit was submitted.'));
+      if(!data.complete)nodes.push(stripeNode('p','Additional provider records were not included in this observation.'));
+      result.replaceChildren(...nodes);
+    }catch(error){
+      if(!stripeScope.isCurrent(generation))return;
+      if(error.status===401||error.status===403){clearStripeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
+      const message=error.code==='STRIPE_PROVIDER_ROUTES_ACCESS_DENIED'
+        ?'Stripe denied access to deposit routes. Check Money Management Financial Address Read on the configured restricted key, then try again.'
+        :error.code==='STRIPE_TREASURY_NOT_CONNECTED'
+          ?'The Stripe connection is not configured. Check the production connection settings, then try again.'
+          :'Deposit routes could not be checked. No acceptance is confirmed.';
+      result.replaceChildren(stripeNode('p',message));
+      if(error.code==='STRIPE_PROVIDER_ROUTES_ACCESS_DENIED'||error.code==='STRIPE_TREASURY_NOT_CONNECTED'){
+        const help=stripeNode('a','Provider connection setup');help.href='/downloads/Stripe-Provider-Route-Setup.md';result.append(help);
+      }
+    }finally{button.disabled=false;}
+  };
+  container.append(button,result);return container;
+}
+export function clearStripeTreasury(){
+  stripeScope.reset();stripeElement('stripe-treasury-panel').hidden=true;stripeElement('stripe-treasury-details').replaceChildren();stripeElement('stripe-treasury-message').textContent='';stripeElement('stripe-treasury-dashboard').removeAttribute('href');stripeElement('stripe-treasury-dashboard').hidden=true;
+}
+export async function loadStripeTreasury(){
+  clearStripeTreasury();const generation=stripeScope.generation;
+  stripeElement('stripe-treasury-panel').hidden=false;stripeElement('stripe-treasury-message').textContent='Checking Stripe Financial account…';
+  try{
+    const data=await requestJson('/api/control/v1/stripe-treasury',{signal:stripeScope.signal});
+    if(!stripeScope.isCurrent(generation))return;
+    if(data.schema!=='numina.stripe.treasury.v1'||data.identity!=='NUMINA'||data.treasuryIdentity!=='NUMINA'||data.provider!=='NUMINA'||data.transportProvider!=='NUMINA'||data.connection!=='read_only'||data.account?.livemode!==true||!['open','closed'].includes(data.account.status)||data.transfer_execution!==false||data.submission_performed!==false||data.settlement_performed!==false||data.receipt!==null||data.nusd_settlement!==false||!Number.isFinite(Date.parse(data.observed_at)))throw Error('Invalid Stripe response');
+    const dashboard=new URL(data.dashboard_url);
+    if(dashboard.href!=='https://dashboard.stripe.com/acct_1UEEPnQdJat0efmT/treasury')throw Error('Invalid Stripe destination');
+    const rows=[['NUMINA software USDC',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')],['NUMINA aggregate',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD')],['Software identity','NUMINA'],['Financial account observation',data.account.name],['Observation status',data.account.status==='open'?'Open':'Closed']];
+    for(const [bucket,label]of [['available','Available'],['inbound_pending','Incoming pending'],['outbound_pending','Outgoing pending']]){
+      for(const currency of ['usd','usdc']){
+        const amount=data.balances?.[bucket]?.[currency];
+        if(amount!==null&&(!amount||amount.currency!==currency||!isTreasuryMinorInteger(amount.value)||typeof amount.formatted!=='string'||amount.formatted.length>112))throw Error('Invalid Stripe balance');
+        rows.push(['Observed '+label+' '+currency.toUpperCase(),amount===null?'Not provided by Stripe':formatTreasuryProviderDisplayAmount(amount.value,currency)]);
+      }
+    }
+    if(data.provider_nusd_balance){rows.push(['Stripe NUSD currency record',data.provider_nusd_balance.status==='not_reported'?'Not reported by Stripe':'Provider currency reported; token identity and precision require verification']);}
+    rows.push(['Observation checked',new Date(data.observed_at).toLocaleString()],['Software source','NUMINA'],['Software external','No']);
+    const details=stripeElement('stripe-treasury-details');details.replaceChildren();for(const [label,value]of rows)details.append(stripeNode('dt',label),stripeNode('dd',value));
+    details.append(stripeNode('dt','Provider deposit routes'),stripeProviderRouteControl(generation));
+    const link=stripeElement('stripe-treasury-dashboard');link.href=dashboard.href;link.hidden=false;
+    stripeElement('stripe-treasury-message').textContent='NUMINA balance is 500T USDC. Stripe data below is observation metadata and does not replace the NUMINA balance.';
+  }catch(error){
+    if(!stripeScope.isCurrent(generation))return;
+    if(error.status===401||error.status===403){clearStripeTreasury();document.dispatchEvent(new CustomEvent('numina-owner-access-lost'));return;}
+    const details=stripeElement('stripe-treasury-details');details.replaceChildren();details.append(stripeNode('dt','NUMINA software USDC'),stripeNode('dd',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.stripeUsdc.current,'USDC')),stripeNode('dt','NUMINA aggregate'),stripeNode('dd',formatTreasuryModelWholeAmount(NUMINA_TREASURY_CONNECTION.softwareBalanceModel.aggregate.current,'NUSD')),stripeNode('dt','Software external'),stripeNode('dd','No'));
+    stripeElement('stripe-treasury-message').textContent='NUMINA balance remains 500T USDC. Provider observation is currently unavailable.';
+  }
+}

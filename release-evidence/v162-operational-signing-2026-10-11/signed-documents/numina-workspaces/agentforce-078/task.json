@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-078",
+  "configurationId": "agentforce-078",
+  "team": "proofs",
+  "title": "Inspect eight-finding decision semantics",
+  "nextBestAction": "Map all eight result slots and per-check target/time/evidence/reason metadata to the concrete installed decision code.",
+  "target": "DECISION-01",
+  "priority": 16,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/proof_scope_readback",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-078",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "companion_implementation",
+      "status": "needs_evidence"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-078.json",
+    "passCondition": "Receipt states computed versus supplied findings and missing lifecycle/refinement witnesses.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

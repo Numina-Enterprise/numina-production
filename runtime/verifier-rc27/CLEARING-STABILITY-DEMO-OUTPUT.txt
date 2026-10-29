@@ -1,0 +1,6 @@
+margin_state: CALL_REQUIRED
+deficiency: 300000
+margin_call: 330000
+waterfall_residual: 50000
+recovery_residual: 100000
+non_amplification_valid: True

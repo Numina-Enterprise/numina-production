@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-025",
+  "configurationId": "agentforce-025",
+  "team": "review",
+  "title": "Review runtime route status presentation",
+  "nextBestAction": "Ensure static fallback, missing /healthz and /readyz dependency errors are not displayed as healthy services.",
+  "target": "public readiness/route records",
+  "priority": 5,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/red_team_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-025",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "publication_receipt",
+      "status": "pending_provider_readback"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-025.json",
+    "passCondition": "Receipt identifies the actual route/status source and any unavailable runtime condition.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

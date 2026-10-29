@@ -1,0 +1,338 @@
+{
+  "schema": "numina.final-deployment-receipt.scoped-verification.v1",
+  "checked_at_utc": "2026-10-11T04:07:55.309036+00:00",
+  "status": "exact_requested_receipt_not_observed",
+  "scope": "Read-only lookup of final-deployment-receipt and v156 records; public historical artifact verification only",
+  "requested_exact_artifact": "final-deployment-receipt(.json)",
+  "exact_requested_artifact_observed": false,
+  "source_scopes": {
+    "canonical_tree": "/workspace/numina-production",
+    "canonical_history_paths": [
+      "public",
+      "docs",
+      "release-evidence",
+      "runtime/nusd"
+    ],
+    "matching_history_paths": [],
+    "remote_search_evidence": "/workspace/scratch/final-deployment-receipt-mac-search.json",
+    "remote_device": "Samuels-MacBook-Pro.local",
+    "remote_device_id": "e0603b5a-7955-455a-89dd-63bd7406f77b",
+    "remote_hidden_and_sensitive_directories_excluded": true
+  },
+  "v156": {
+    "classification": "authenticated_provider_metadata_unsigned",
+    "fresh_provider_observation": "/workspace/scratch/v156-provider-observation-2026-10-11.json",
+    "observed_at_utc": "2026-10-11 04:05:28 UTC",
+    "saved_version": {
+      "id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_eca729611498819187ec1788038df2f5",
+      "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+      "version_number": 156,
+      "source": {
+        "commit_sha": "df099d3ae4952a9966cf3b9e4ef299626dc7d338"
+      },
+      "archive_storage": {
+        "archive_format": "tar",
+        "sediment_file_id": "file_00000000e7a8822f9810515788e20eae",
+        "content_hash": "sha256:0c3119a6dd28e921c80b0bf1ca00f280859af040e1e1b43868872b22d2925101",
+        "size_bytes": 49070080,
+        "file_count": 378
+      },
+      "deployment_id": "appgdep_6ac5cfad4a708191916da7ec25bf01eb"
+    },
+    "deployment": {
+      "id": "appgdep_6ac5cfad4a708191916da7ec25bf01eb",
+      "project_id": "appgprj_6aa1a5988258819196abc45e9ac02796",
+      "title": "Numina Labs",
+      "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_eca729611498819187ec1788038df2f5",
+      "type": "publish",
+      "status": "succeeded",
+      "url": "https://personal-space-m7q9.skott34.chatgpt.site",
+      "has_mcp": true,
+      "screenshot_asset_pointer": "sediment://file_00000000e71c81f8b6d5c692849177c1",
+      "provider_deployment_id": "site---6aa1a5988258819196abc45e9ac02796",
+      "failure_message": null,
+      "env_set_revision": 14,
+      "updated_at": "2026-10-07T04:51:50.230086+00:00"
+    },
+    "source_version_deployment_binding_passed": true,
+    "local_source_commit_available": true,
+    "local_source_tree": "a4b2cab2b45c460aa6b54f877f9d8969e7a68a92",
+    "provider_archive_bytes_retrieved_or_verified": false,
+    "http_runtime_health_checked": false,
+    "ed25519_signed_receipt_observed": false,
+    "different_scope_source_receipts": [
+      {
+        "git_object_source": "df099d3ae4952a9966cf3b9e4ef299626dc7d338:docs/nusd/deployment-receipt.json",
+        "preserved_path": "/workspace/scratch/final-deployment-receipt-evidence/v156-docs--nusd--deployment-receipt.json",
+        "byte_count": 3825,
+        "sha256": "354733245c39b66219232e57ce72ab0d894cc437f02ea4c034e921703cec8ff3",
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finalized_at": "2026-09-18T15:31:26.425Z",
+        "chain_id": "962421430",
+        "scope": "Historical NUSD blockchain contract deployment, not Sites publication or manuscript signature",
+        "has_ed25519_signature_field": false,
+        "substituted_for_requested_receipt": false
+      },
+      {
+        "git_object_source": "df099d3ae4952a9966cf3b9e4ef299626dc7d338:runtime/nusd/deployment-receipt.json",
+        "preserved_path": "/workspace/scratch/final-deployment-receipt-evidence/v156-runtime--nusd--deployment-receipt.json",
+        "byte_count": 3812,
+        "sha256": "6d7d2a3c3f4ee9fe2b95f02a5abf000626bd2e66735bedb0ab78f81883b86e53",
+        "schema": "numina.nusd.production-deployment-receipt.v1",
+        "finalized_at": "2026-09-18T15:31:26.425Z",
+        "chain_id": "962421430",
+        "scope": "Historical NUSD blockchain contract deployment, not Sites publication or manuscript signature",
+        "has_ed25519_signature_field": false,
+        "substituted_for_requested_receipt": false
+      }
+    ],
+    "selected_source_commitment_verification": {
+      "receipt_path": "/workspace/scratch/v156-source-commitment-verification.json",
+      "receipt_sha256": "a19d2e549688f700bd7201ed0fbee394ddcf0452624fff14031266f3bbf405f2",
+      "result": {
+        "schema": "numina.v156.source-commitment-verification.v1",
+        "checked_at_utc": "2026-10-11T04:07:41.357Z",
+        "source_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+        "verification_scope": "Exact historical public final-build/final-manifest selected software source commitments and recorded four-cell binding consistency",
+        "original_digest_function": "scripts/production-pair.mjs#pairSourceHash (unmodified v156 bytes)",
+        "original_script_sha256": "75848f17d8e285c6b76def0da424cfc8b62cac1cc479ebdf8d45620869db54a8",
+        "original_digest_function_executed": true,
+        "regeneration_or_full_verifier_executed": false,
+        "source_digest_scope": "sorted-json-source-payload-excluding-derived-bindings-and-cross-file-pins",
+        "sources": [
+          {
+            "path": "public/final-build.json",
+            "sha256": "1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b"
+          },
+          {
+            "path": "public/final-manifest.json",
+            "sha256": "1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a"
+          }
+        ],
+        "components": [
+          {
+            "path": "public/final-build.json",
+            "source_commitment_match": true,
+            "four_binding_cells_match": true,
+            "declared_bound": true,
+            "declared_status": "SOURCE_BOUND",
+            "provider_execution_verified": false
+          },
+          {
+            "path": "public/final-manifest.json",
+            "source_commitment_match": true,
+            "four_binding_cells_match": true,
+            "declared_bound": true,
+            "declared_status": "SOURCE_BOUND",
+            "provider_execution_verified": false
+          },
+          {
+            "path": "public/current-environments.json",
+            "source_commitment_match": true,
+            "four_binding_cells_match": true,
+            "declared_bound": true,
+            "declared_status": "SOURCE_BOUND",
+            "provider_execution_verified": false
+          }
+        ],
+        "final_build_raw_sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+        "final_build_git_blob_sha1": "33adbedc600835207f90d68a1b6c6b1058fb83f9",
+        "cross_file_final_build_pins_match": true,
+        "docs_exact_public_byte_copies_match": true,
+        "selected_source_commitments_verified": true,
+        "protocol_profile_is_numina_pair_binding_v1": false,
+        "whole_v156_pass": false,
+        "provider_execution_verified": false,
+        "archive_bytes_retrieved_or_verified": false,
+        "external_or_current_state_attestation_verified": false,
+        "limitations": [
+          "Verification covers the historical sorted source-payload projection; it does not claim RFC8785 canonical JSON conformance.",
+          "The universal-pair.production.v1 metadata is distinct from the requested numina.pair-binding.v1 artifact profile.",
+          "The original full production verifier and release checks were not run; no regeneration or build occurred.",
+          "No provider archive-byte equality, current-state attestation, runtime behavior, operational Ed25519 deployment receipt or manuscript signature is established."
+        ]
+      }
+    },
+    "exact_public_source_byte_manifest": {
+      "manifest_path": "/workspace/scratch/v156-source-public-evidence/recovered-byte-manifest.json",
+      "manifest_sha256": "110ec6b2845c01e98cc5dd377170961a720c906c1d4a1f969816dc1765c617fe",
+      "files": [
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "public/final-build.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/public/final-build.json",
+          "byte_count": 157956,
+          "sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+          "git_blob_sha1": "33adbedc600835207f90d68a1b6c6b1058fb83f9"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "public/final-manifest.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/public/final-manifest.json",
+          "byte_count": 38684,
+          "sha256": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762",
+          "git_blob_sha1": "d942f54a0a415b9a5ab73d073f82e8b766a6eecd"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "public/current-environments.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/public/current-environments.json",
+          "byte_count": 35975,
+          "sha256": "5b25518639e7b5648bfc9825f38c68a55d5993650981961ec1103f40e8550caf",
+          "git_blob_sha1": "3edee5184dad3cbee6abe97ee83c20b8cb75989b"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "docs/NUMINA-FINAL-BUILD.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/docs/NUMINA-FINAL-BUILD.json",
+          "byte_count": 157956,
+          "sha256": "2824c267ffa892d4c8013473b4236fd75571700da62f948cbf74975af0a6d2f2",
+          "git_blob_sha1": "33adbedc600835207f90d68a1b6c6b1058fb83f9"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "docs/NUMINA-FINAL-MANIFEST.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/docs/NUMINA-FINAL-MANIFEST.json",
+          "byte_count": 38684,
+          "sha256": "b7aac505fde953ad99ff03e4523f21eef17b667d767cbfe30816c91a2d045762",
+          "git_blob_sha1": "d942f54a0a415b9a5ab73d073f82e8b766a6eecd"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "scripts/production-pair.mjs",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/scripts/production-pair.mjs",
+          "byte_count": 6950,
+          "sha256": "75848f17d8e285c6b76def0da424cfc8b62cac1cc479ebdf8d45620869db54a8",
+          "git_blob_sha1": "7638416d0011454e13707b550da6f86ef5da3dfc"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "config/numina-production-bound-state.v1.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/config/numina-production-bound-state.v1.json",
+          "byte_count": 225,
+          "sha256": "cc2107f38a5b9c64a5326be7f3d7a1ed6a2602890259ee60ad0e2b0f9f020c4b",
+          "git_blob_sha1": "d95cb53d0ab28b2589ed01e24f282e7aac9292b8"
+        },
+        {
+          "source_git_commit": "df099d3ae4952a9966cf3b9e4ef299626dc7d338",
+          "source_git_path": "config/numina-manifest.v2.json",
+          "preserved_path": "/workspace/scratch/v156-source-public-evidence/config/numina-manifest.v2.json",
+          "byte_count": 28227,
+          "sha256": "e307b3ffda5fb6da9ee49bdc37ae911196e27941053a45e2e5bd03f82e7feae3",
+          "git_blob_sha1": "4fba07d8e95834a9398b710e87fbcb8abb952a99"
+        }
+      ]
+    },
+    "whole_version_pass": false
+  },
+  "recovered_v161": {
+    "classification": "historical_signed_publication_observation_and_binding_manifest",
+    "original_zip": "/workspace/outputs/Numina-v161-operational-observation-binding-2026-10-09.zip",
+    "byte_count": 19783,
+    "sha256": "e999eff016e49fe789504f62cd3dda5a5aa66a824fb918eb4d49fced506f2a37",
+    "matches_recovered_original_zip_identity": true,
+    "version_number": 161,
+    "version_id": "appgprj_6aa1a5988258819196abc45e9ac02796~appgver_181e2f077e20819193eb8698cb65224c",
+    "source_commit": "76a08b2d54679238416ee87818732ac441c5f933",
+    "deployment_id": "appgdep_6ac8d9570fb08191b1a448a40cc11923",
+    "recorded_deployment_status": "succeeded",
+    "recorded_deployment_updated_at": "2026-10-09T12:09:11.591618+00:00",
+    "public_key_raw_sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f",
+    "public_key_record_fingerprint_matches": true,
+    "claimed_public_key_role": "Separate retained operational Ed25519 key on Sam's Mac",
+    "signatures": [
+      {
+        "payload": "publication-observation.json",
+        "byte_count": 6763,
+        "sha256": "949cbb6d637fde547a95b40d6fa8c54b5af510effed38c74f1c9f25c37131733",
+        "signature": "publication-observation.json.ed25519.sig",
+        "signature_byte_count": 64,
+        "signature_sha256": "60597b344025cc660dd2211d3e125259f1880727cf575472253072f0357e32b0",
+        "signature_verified": true,
+        "tampered_payload_rejected": true,
+        "tampered_signature_rejected": true
+      },
+      {
+        "payload": "v161-observation-binding-manifest.json",
+        "byte_count": 23310,
+        "sha256": "9fa4860cbad5e28e0e3f3c31feccdd9127092b7dc6694ecd3a7ed68fd72d9f8e",
+        "signature": "v161-observation-binding-manifest.json.ed25519.sig",
+        "signature_byte_count": 64,
+        "signature_sha256": "2f4d507c2cd9e6c3789b402340629ac4ad2b779bbb21f925bd00cabf08e1c28d",
+        "signature_verified": true,
+        "tampered_payload_rejected": true,
+        "tampered_signature_rejected": true
+      }
+    ],
+    "preserved_exact_public_bytes": [
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-publication-observation.json",
+        "zip_member": "publication-observation.json",
+        "byte_count": 6763,
+        "sha256": "949cbb6d637fde547a95b40d6fa8c54b5af510effed38c74f1c9f25c37131733"
+      },
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-publication-observation.json.ed25519.sig",
+        "zip_member": "publication-observation.json.ed25519.sig",
+        "byte_count": 64,
+        "sha256": "60597b344025cc660dd2211d3e125259f1880727cf575472253072f0357e32b0"
+      },
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-v161-observation-binding-manifest.json",
+        "zip_member": "v161-observation-binding-manifest.json",
+        "byte_count": 23310,
+        "sha256": "9fa4860cbad5e28e0e3f3c31feccdd9127092b7dc6694ecd3a7ed68fd72d9f8e"
+      },
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-v161-observation-binding-manifest.json.ed25519.sig",
+        "zip_member": "v161-observation-binding-manifest.json.ed25519.sig",
+        "byte_count": 64,
+        "sha256": "2f4d507c2cd9e6c3789b402340629ac4ad2b779bbb21f925bd00cabf08e1c28d"
+      },
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-operational-ed25519-public.raw",
+        "zip_member": "operational-ed25519-public.raw",
+        "byte_count": 32,
+        "sha256": "b217cc5bae08acbfdb9f8cd20f420f0bee2ae39fb6f0b178ce060284c76f8e9f"
+      },
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-public-key.json",
+        "zip_member": "public-key.json",
+        "byte_count": 569,
+        "sha256": "84312927ba40599603a1acfcac39b1f0a510502e2fc497703ca107a6f9aadf7e"
+      },
+      {
+        "path": "/workspace/scratch/final-deployment-receipt-evidence/v161-signing-verification-receipt.json",
+        "zip_member": "signing-verification-receipt.json",
+        "byte_count": 5467,
+        "sha256": "c2fbc61e30ee10f9ba8ea704e4d52832f5d465506556fae9bb886914bc63b0d3"
+      }
+    ],
+    "signs_v156": false,
+    "signs_current_manuscript": false,
+    "is_requested_named_receipt": false,
+    "source_record_original_unsigned_labels_preserved": true,
+    "signer_custody_or_attribution_verified": false
+  },
+  "v156_and_v161_are_distinct": true,
+  "actions_performed": [
+    "Public filename/history lookup",
+    "Authenticated provider metadata readback",
+    "Exact public evidence preservation",
+    "Ed25519 detached signature verification",
+    "In-memory tamper-negative checks"
+  ],
+  "new_signing_performed": false,
+  "private_material_accessed": false,
+  "deploy_or_publish_performed": false,
+  "originals_modified": false,
+  "limitations": [
+    "No exact final-deployment-receipt artifact appeared in the checked canonical tree/history or remote scoped filenames/archive inventories.",
+    "The authenticated v156 provider record establishes a succeeded publish attempt and source identity; its archive digest is provider-reported.",
+    "The recovered v161 detached signatures cover only the unchanged v161 observation and binding manifest.",
+    "The v161 evidence does not substitute for v156 evidence, a current manuscript signature or the proposed Numina pair-binding artifact.",
+    "Public signature verification does not establish current signer access, approved custody or identity attribution.",
+    "Fresh v156 source1/source2 and four-cell software-projection checks passed; this does not verify the distinct numina.pair-binding.v1 profile or establish whole-version acceptance."
+  ],
+  "next_verifiable_step": "Bind the exact requested final-deployment-receipt artifact when it becomes observable; retain the independently scoped v156 provenance and v161 signed evidence without relabeling them."
+}

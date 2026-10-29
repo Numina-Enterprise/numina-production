@@ -1,0 +1,1143 @@
+{
+  "schema": "numina.workspaces.v1",
+  "identity": "NUMINA",
+  "canonicalRoot": "/workspace/numina-production",
+  "workspaceBase": "/workspace/numina-workspaces",
+  "linkName": "numina-production",
+  "configurationStatus": "prepared",
+  "agentExecution": {
+    "workspaceCountIsConcurrency": false,
+    "runningAgentsEstablished": false,
+    "executionCapacityReserved": false
+  },
+  "salesforce": {
+    "deploymentStatus": "not_deployed",
+    "orgConfigured": false,
+    "agentConfigured": false,
+    "licenseOrQuotaEstablished": false
+  },
+  "workspaces": [
+    {
+      "id": "engineering",
+      "name": "Engineering",
+      "description": "Build and maintain Numina software.",
+      "destination": "/build",
+      "kind": "team",
+      "team": "engineering",
+      "status": "prepared"
+    },
+    {
+      "id": "deployment",
+      "name": "Deployment",
+      "description": "Prepare publication and inspect deployment evidence.",
+      "destination": "/deployment-readiness",
+      "kind": "team",
+      "team": "deployment",
+      "status": "prepared"
+    },
+    {
+      "id": "proofs",
+      "name": "Proofs",
+      "description": "Read the retained proof packet and its verification scope.",
+      "destination": "/downloads/provenance/decoded-attribution-closure-2026-10-11/README.md",
+      "kind": "team",
+      "team": "proofs",
+      "status": "prepared"
+    },
+    {
+      "id": "signatures",
+      "name": "Signatures",
+      "description": "Inspect public signing identities and preserved receipts.",
+      "destination": "/provenance",
+      "kind": "team",
+      "team": "signatures",
+      "status": "prepared"
+    },
+    {
+      "id": "review",
+      "name": "Review",
+      "description": "Review requests, decisions and acceptance evidence.",
+      "destination": "/control",
+      "kind": "team",
+      "team": "review",
+      "status": "prepared"
+    },
+    {
+      "id": "agentforce-001",
+      "name": "Agentforce 001",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-002",
+      "name": "Agentforce 002",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-003",
+      "name": "Agentforce 003",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-004",
+      "name": "Agentforce 004",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-005",
+      "name": "Agentforce 005",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-006",
+      "name": "Agentforce 006",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-007",
+      "name": "Agentforce 007",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-008",
+      "name": "Agentforce 008",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-009",
+      "name": "Agentforce 009",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-010",
+      "name": "Agentforce 010",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-011",
+      "name": "Agentforce 011",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-012",
+      "name": "Agentforce 012",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-013",
+      "name": "Agentforce 013",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-014",
+      "name": "Agentforce 014",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-015",
+      "name": "Agentforce 015",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-016",
+      "name": "Agentforce 016",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-017",
+      "name": "Agentforce 017",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-018",
+      "name": "Agentforce 018",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-019",
+      "name": "Agentforce 019",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-020",
+      "name": "Agentforce 020",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-021",
+      "name": "Agentforce 021",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-022",
+      "name": "Agentforce 022",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-023",
+      "name": "Agentforce 023",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-024",
+      "name": "Agentforce 024",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-025",
+      "name": "Agentforce 025",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-026",
+      "name": "Agentforce 026",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-027",
+      "name": "Agentforce 027",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-028",
+      "name": "Agentforce 028",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-029",
+      "name": "Agentforce 029",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-030",
+      "name": "Agentforce 030",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-031",
+      "name": "Agentforce 031",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-032",
+      "name": "Agentforce 032",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-033",
+      "name": "Agentforce 033",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-034",
+      "name": "Agentforce 034",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-035",
+      "name": "Agentforce 035",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-036",
+      "name": "Agentforce 036",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-037",
+      "name": "Agentforce 037",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-038",
+      "name": "Agentforce 038",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-039",
+      "name": "Agentforce 039",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-040",
+      "name": "Agentforce 040",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-041",
+      "name": "Agentforce 041",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-042",
+      "name": "Agentforce 042",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-043",
+      "name": "Agentforce 043",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-044",
+      "name": "Agentforce 044",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-045",
+      "name": "Agentforce 045",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-046",
+      "name": "Agentforce 046",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-047",
+      "name": "Agentforce 047",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-048",
+      "name": "Agentforce 048",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-049",
+      "name": "Agentforce 049",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-050",
+      "name": "Agentforce 050",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-051",
+      "name": "Agentforce 051",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-052",
+      "name": "Agentforce 052",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-053",
+      "name": "Agentforce 053",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-054",
+      "name": "Agentforce 054",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-055",
+      "name": "Agentforce 055",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-056",
+      "name": "Agentforce 056",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-057",
+      "name": "Agentforce 057",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-058",
+      "name": "Agentforce 058",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-059",
+      "name": "Agentforce 059",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-060",
+      "name": "Agentforce 060",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-061",
+      "name": "Agentforce 061",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-062",
+      "name": "Agentforce 062",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-063",
+      "name": "Agentforce 063",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-064",
+      "name": "Agentforce 064",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-065",
+      "name": "Agentforce 065",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-066",
+      "name": "Agentforce 066",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-067",
+      "name": "Agentforce 067",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-068",
+      "name": "Agentforce 068",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-069",
+      "name": "Agentforce 069",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-070",
+      "name": "Agentforce 070",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-071",
+      "name": "Agentforce 071",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-072",
+      "name": "Agentforce 072",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-073",
+      "name": "Agentforce 073",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-074",
+      "name": "Agentforce 074",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-075",
+      "name": "Agentforce 075",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-076",
+      "name": "Agentforce 076",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-077",
+      "name": "Agentforce 077",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-078",
+      "name": "Agentforce 078",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-079",
+      "name": "Agentforce 079",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-080",
+      "name": "Agentforce 080",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-081",
+      "name": "Agentforce 081",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-082",
+      "name": "Agentforce 082",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-083",
+      "name": "Agentforce 083",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-084",
+      "name": "Agentforce 084",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-085",
+      "name": "Agentforce 085",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-086",
+      "name": "Agentforce 086",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-087",
+      "name": "Agentforce 087",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-088",
+      "name": "Agentforce 088",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-089",
+      "name": "Agentforce 089",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-090",
+      "name": "Agentforce 090",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-091",
+      "name": "Agentforce 091",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-092",
+      "name": "Agentforce 092",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-093",
+      "name": "Agentforce 093",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-094",
+      "name": "Agentforce 094",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-095",
+      "name": "Agentforce 095",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-096",
+      "name": "Agentforce 096",
+      "kind": "agentforce",
+      "team": "engineering",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-097",
+      "name": "Agentforce 097",
+      "kind": "agentforce",
+      "team": "deployment",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-098",
+      "name": "Agentforce 098",
+      "kind": "agentforce",
+      "team": "proofs",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-099",
+      "name": "Agentforce 099",
+      "kind": "agentforce",
+      "team": "signatures",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    },
+    {
+      "id": "agentforce-100",
+      "name": "Agentforce 100",
+      "kind": "agentforce",
+      "team": "review",
+      "status": "prepared",
+      "description": "Prepared workspace configuration for a future Salesforce Agentforce connection.",
+      "destination": "/integrations"
+    }
+  ],
+  "attribution": {
+    "schema": "numina.workspace-attribution.v1",
+    "classification": "current_user_declared_personal_labels_aligned_with_retained_manuscript",
+    "personalOrder": [
+      {
+        "name": "Samuel J. Kott",
+        "label": "1A",
+        "role": "Author",
+        "paperDisplayName": "Sam Kott",
+        "retainedSourceId": "source_2",
+        "retainedSourceAlias": "UNIVERSAL_PAIR_2"
+      },
+      {
+        "name": "Lauren J. Anderson",
+        "label": "1B",
+        "role": "Human contributor",
+        "paperDisplayName": "Lauren Anderson",
+        "retainedSourceId": "source_1",
+        "retainedSourceAlias": "UNIVERSAL_PAIR_1"
+      }
+    ],
+    "paperReference": {
+      "filename": "draft-kott-numina-pair-binding-02-final.pdf",
+      "sha256": "3e5db9f5ef29b7adb7ce408488b6c78cdd7121732d92efa638157de7a96f3ce9",
+      "pages": [
+        76,
+        77
+      ],
+      "section": "Appendix F: attribution wording, person-to-alias map and software attribution note"
+    },
+    "boundary": "Personal order is Samuel1A, then Lauren1B. Retained source order is source_1/UNIVERSAL_PAIR_1 for Lauren and source_2/UNIVERSAL_PAIR_2 for Samuel. Personal labels and source aliases are separate dimensions.",
+    "historicalSignedAliasesChanged": false,
+    "signedManuscriptChanged": false,
+    "signingAuthorityGrantedByAttribution": false
+  },
+  "controlRoom": {
+    "id": "control-room",
+    "name": "Numina control room",
+    "canonicalRoot": "/workspace/numina-production",
+    "destination": "/control",
+    "taskLedgerDestination": "/task-ledger.html",
+    "configurationStatus": "prepared_for_cloud_coordination",
+    "scope": "Canonical task coordination and recorded outcomes; actual external activation remains independently evidenced.",
+    "personalMoneyActionsEnabled": false
+  },
+  "communicationRooms": {
+    "schema": "numina.communication-room-map.v1",
+    "workspaceName": "Numina Labs",
+    "observedAtUtc": "2026-10-11 09:19:19 UTC",
+    "roomCount": 17,
+    "publicRoomCount": 13,
+    "privateRoomCount": 4,
+    "classification": "retained_authenticated_slack_room_enumeration",
+    "privateRoomDetailsPublished": false,
+    "sourceReportSha256": "b3554796fa2593c1e88090a80c989c788f5ecf0b03bfb2b1a29b278b9dc2188e",
+    "rooms": [
+      {
+        "id": "slack-numina-strategy",
+        "name": "numina-strategy",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C55MZJHRV",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-engineering",
+        "name": "numina-engineering",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C55N1JUCF",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina",
+        "name": "numina",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5EPW2A83",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-compliance-risk",
+        "name": "numina-compliance-risk",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5ESG7QDR",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-publicity-narrative",
+        "name": "numina-publicity-narrative",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5ESH7MQB",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-partnerships-sales",
+        "name": "numina-partnerships-sales",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5ESHC64T",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-general",
+        "name": "general",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5K2D9HPY",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-federal-capture",
+        "name": "numina-federal-capture",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5LULU5D0",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-market-intel",
+        "name": "numina-market-intel",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5LUPJC8J",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-random",
+        "name": "random",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5NUH262D",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-product",
+        "name": "numina-product",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5P1W7CRF",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "private-slack-room-01",
+        "name": "Private Slack room 1",
+        "visibility": "private",
+        "destination": "/control",
+        "description": "Room details are available through authorized owner coordination."
+      },
+      {
+        "id": "private-slack-room-02",
+        "name": "Private Slack room 2",
+        "visibility": "private",
+        "destination": "/control",
+        "description": "Room details are available through authorized owner coordination."
+      },
+      {
+        "id": "slack-posthog-inbox",
+        "name": "posthog-inbox",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C5ZC4J6CC",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "slack-numina-finance-treasury",
+        "name": "numina-finance-treasury",
+        "visibility": "public",
+        "destination": "https://numina-labs.slack.com/archives/C0C6FEGC0SC",
+        "description": "Observed Numina Labs Slack room; open it with your workspace access."
+      },
+      {
+        "id": "private-slack-room-03",
+        "name": "Private Slack room 3",
+        "visibility": "private",
+        "destination": "/control",
+        "description": "Room details are available through authorized owner coordination."
+      },
+      {
+        "id": "private-slack-room-04",
+        "name": "Private Slack room 4",
+        "visibility": "private",
+        "destination": "/control",
+        "description": "Room details are available through authorized owner coordination."
+      }
+    ]
+  }
+}

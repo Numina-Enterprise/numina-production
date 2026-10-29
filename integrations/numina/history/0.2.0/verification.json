@@ -1,0 +1,49 @@
+{
+  "schema": "numina.integration.validation.v1",
+  "checkedAtUtc": "2026-09-12T16:48:29.372Z",
+  "package": {
+    "name": "@numina/nusd-integration",
+    "version": "0.2.0",
+    "private": true
+  },
+  "node": "v24.19.0",
+  "platform": "win32",
+  "baselineTests": 26,
+  "tests": {
+    "total": 50,
+    "pass": 50,
+    "fail": 0,
+    "skipped": 0
+  },
+  "testScope": "Injected HTTP and SDK fixtures plus an actual local stdio subprocess initialize/list exchange; no live provider, Numina HTTP or blockchain calls",
+  "providerFormats": [
+    "openai-responses",
+    "openai-chat-completions",
+    "anthropic-messages",
+    "gemini-interactions",
+    "gemini-generate-content"
+  ],
+  "schemaExportsChecked": 10,
+  "mcpProtocolsImplemented": [
+    "2025-11-25",
+    "2025-06-18"
+  ],
+  "mcp20260728Implemented": false,
+  "defaultProfile": "discovery",
+  "defaultTools": [
+    "numina_nusd_status",
+    "numina_nusd_network",
+    "numina_service_catalog"
+  ],
+  "dependenciesAdded": 0,
+  "typeScriptCompilerChecked": false,
+  "liveProviderAcceptanceVerified": false,
+  "remoteMcpHosted": false,
+  "providerInstallationPerformed": false,
+  "registryPublicationPerformed": false,
+  "appStoreSubmissionPerformed": false,
+  "nusdActivated": false,
+  "mintPerformed": false,
+  "transferPerformed": false,
+  "settlementConnected": false
+}

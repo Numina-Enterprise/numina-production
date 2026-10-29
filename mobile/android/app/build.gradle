@@ -1,0 +1,31 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'xyz.numinalabs.app'
+    compileSdk 36
+
+    defaultConfig {
+        // Registered Google Play package identity; provider submission remains separately receipt-bound.
+        applicationId 'xyz.numinalabs.app'
+        minSdk 23
+        targetSdk 36
+        versionCode 4
+        versionName '4.0.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes {
+        release {
+            // The production release workflow applies the persistent owner
+            // signing identities after compilation; secrets are never in Gradle.
+            minifyEnabled false
+            debuggable false
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.7.3'
+}

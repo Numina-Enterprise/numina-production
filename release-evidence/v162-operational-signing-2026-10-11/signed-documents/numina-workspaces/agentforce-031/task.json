@@ -1,0 +1,53 @@
+{
+  "id": "agentforce-031",
+  "configurationId": "agentforce-031",
+  "team": "engineering",
+  "title": "Inspect MCP error replies",
+  "nextBestAction": "Record the implemented JSON-RPC parse, method, params, authorization and dependency error paths.",
+  "target": "src/worker.js",
+  "priority": 7,
+  "status": "queued",
+  "readiness": "needs_evidence",
+  "workerAssignment": {
+    "type": "cloud_team_executor",
+    "agentTask": "/root/engineering_release",
+    "salesforceAgentActivated": false
+  },
+  "canonicalRoot": "/workspace/numina-production",
+  "workspacePath": "/workspace/numina-workspaces/agentforce-031",
+  "executionMode": "bounded_cloud_review",
+  "dependencies": [
+    {
+      "id": "mcp_source",
+      "status": "pending_source_receipt"
+    }
+  ],
+  "acceptance": {
+    "receiptPath": "release-evidence/agentforce-execution/<run-id>/agentforce-031.json",
+    "passCondition": "Receipt names each explicit error path and absent case rather than silently reporting success.",
+    "requiredFields": [
+      "taskId",
+      "runId",
+      "canonicalRoot",
+      "canonicalCommit",
+      "preparedManifestSha256",
+      "target",
+      "inputIdentities",
+      "observedAtUtc",
+      "method",
+      "result",
+      "scopeLimits",
+      "outputIdentities"
+    ],
+    "requiresMatchingReceipt": true
+  },
+  "lastReceipt": null,
+  "attempts": 0,
+  "onFailure": {
+    "status": "failed",
+    "showMessage": true,
+    "receiptRequired": true,
+    "retryPolicy": "one_read_only_transient_retry",
+    "manualHandoff": "Report missing access, exact input or action owner in the existing canonical task; preserve the failed receipt. Never claim completion from a queued item."
+  }
+}

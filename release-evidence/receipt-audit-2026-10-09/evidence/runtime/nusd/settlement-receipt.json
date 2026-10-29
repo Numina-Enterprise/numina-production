@@ -1,0 +1,99 @@
+{
+  "schema": "numina.settlement-receipt.v1",
+  "identity": "NUMINA",
+  "canonical": {
+    "repository": "skott34-dot/numina-production",
+    "branch": "main",
+    "sourceCommit": "ccff49d3ee96f0353d8a5b30208639d3ecab0c75"
+  },
+  "settlement": {
+    "declared": true,
+    "externallyVerified": false,
+    "usdVerified": false,
+    "usdcVerified": false,
+    "reservesVerified": false,
+    "bankReceipt": null,
+    "providerReceipt": null,
+    "providerSettlementReceipts": []
+  },
+  "numinaChainEvidence": {
+    "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+    "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b",
+    "tokenReceiptVerified": true,
+    "settlementContractReceiptVerified": true
+  },
+  "interpretation": "Singular NUMINA settlement receipt. 1,500T NUSD is recorded as minted in the NUMINA-native system with 0 burned. The NUMINA-native allocation records 500T for the NUSD/USD Bank of America savings rail, 500T for the NUSD/USDC Stripe Treasury rail, and 500T remaining in the NUMINA native treasury. The Stripe rail is bound to the live Numina Labs Stripe financial account and provider-reported USDC receiving routes. Bank of America and Stripe external settlement remain unverified until those external systems report factual settled funds.",
+  "aggregate": {
+    "asset": "NUSD",
+    "display": "1,500T NUSD",
+    "wholeUnits": "1500000000000000",
+    "decimals": 18,
+    "baseUnits": "1500000000000000000000000000000000",
+    "singular": true
+  },
+  "mint": {
+    "asset": "NUSD",
+    "amountDisplay": "1,500T NUSD",
+    "wholeUnits": "1500000000000000",
+    "decimals": 18,
+    "baseUnits": "1500000000000000000000000000000000",
+    "minted": true,
+    "burnedWholeUnits": "0",
+    "burnedBaseUnits": "0"
+  },
+  "allocation": {
+    "aggregateWholeUnits": "1500000000000000",
+    "aggregateBaseUnits": "1500000000000000000000000000000000",
+    "rails": [
+      {
+        "id": "bank_of_america_savings",
+        "rail": "NUSD/USD",
+        "amountDisplay": "500T NUSD",
+        "wholeUnits": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "mechanism": "smart_contract",
+        "numinaNativeStatus": "ALLOCATED",
+        "destination": "Bank of America savings",
+        "externallyVerified": false,
+        "externalReceipt": null
+      },
+      {
+        "id": "stripe_treasury",
+        "rail": "NUSD/USDC",
+        "amountDisplay": "500T NUSD",
+        "wholeUnits": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "mechanism": "smart_contract",
+        "numinaNativeStatus": "ALLOCATED",
+        "destination": "Stripe Treasury — Numina Treasury — SK Consulting LLC",
+        "externallyVerified": false,
+        "externalReceipt": null,
+        "provider": "Stripe",
+        "providerAccountReference": "fa_65VNd6QL3zznqY5FOV916VNcN9EZSQiQliazWdBc8FkXMu",
+        "providerAccountBindingVerified": true,
+        "providerBalanceRoute": "/api/control/v1/stripe-treasury",
+        "providerRoutes": "/api/control/v2/treasury/provider-routes",
+        "bindingEvidence": "/release-evidence/stripe-usdc-treasury-binding-2026-09-18.json"
+      },
+      {
+        "id": "numina_native_treasury",
+        "rail": "NUSD",
+        "amountDisplay": "500T NUSD",
+        "wholeUnits": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "mechanism": "native_treasury",
+        "numinaNativeStatus": "REMAINS_NATIVE",
+        "destination": "NUMINA native treasury",
+        "externallyVerified": true,
+        "externalReceipt": "numina-native"
+      }
+    ],
+    "conservation": {
+      "mintedWholeUnits": "1500000000000000",
+      "burnedWholeUnits": "0",
+      "allocatedWholeUnits": "1000000000000000",
+      "remainingNativeWholeUnits": "500000000000000",
+      "balanced": true
+    }
+  }
+}

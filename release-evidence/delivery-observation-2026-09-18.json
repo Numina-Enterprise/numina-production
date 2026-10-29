@@ -1,0 +1,163 @@
+{
+  "schema": "numina.delivery-observation.v1",
+  "observedAt": "2026-09-19T01:24:19Z",
+  "sourceCommit": "21b3715e3b527132d4742da4be0e64662eacc2d9",
+  "website": {
+    "observationSource": "GitHub canonical-main status, Vercel deployment API, and authenticated Vercel HTTP fetch",
+    "connectedScopeLatestReadyDeployment": {
+      "id": "dpl_8vLQzhW1eM5RYuMaE7CvmKFojivF",
+      "commit": "91cde4abd8afc86f9610053c0588e5f230db77e0",
+      "deploymentUrl": "https://numina-production-icilhgvbv-skott34-dot.vercel.app",
+      "status": "READY",
+      "target": "production",
+      "scope": "skott34-dot"
+    },
+    "connectedScopeLatestFailedAttempt": {
+      "id": "dpl_DoXZXPFqw73zXsrkLSpwuSxtb4UJ",
+      "commit": "ec66f6a08dae17b7aac64a40cf4091d61bdc263b",
+      "deploymentUrl": "https://numina-production-leru0g2m4-skott34-dot.vercel.app",
+      "status": "ERROR",
+      "target": "production",
+      "errorCode": "BUILD_UTILS_SPAWN_1",
+      "errorMessage": "Command \"npm run build\" exited with 1",
+      "errorStep": "buildStep"
+    },
+    "proVercelDelivery": {
+      "sourceCommit": "21b3715e3b527132d4742da4be0e64662eacc2d9",
+      "statusContext": "Vercel – numina-production",
+      "status": "success",
+      "description": "Deployment has completed",
+      "observedAt": "2026-09-19T01:24:19Z",
+      "teamScope": "numina-167f7fe7",
+      "project": "numina-production",
+      "deploymentId": "rKMFZdZ8srfbnoW2RSf1nTcDPqAw",
+      "dashboardUrl": "https://vercel.com/numina-167f7fe7/numina-production/rKMFZdZ8srfbnoW2RSf1nTcDPqAw",
+      "providerReceiptSource": "GitHub commit status posted by Vercel",
+      "connectedVercelReadScopeAvailable": false,
+      "readScopeBlocker": "Connected Vercel credential is authorized only for skott34-dot; reads against numina-167f7fe7 return 403 and require re-authentication to that scope."
+    },
+    "capacityObservation": "Vercel build capacity is available: the Pro-scope Vercel Git integration reported a successful completed deployment for canonical main commit 21b3715e3b527132d4742da4be0e64662eacc2d9.",
+    "buildBlockerRepair": {
+      "status": "COMMITTED_AND_DEPLOYED_IN_PRO_SCOPE",
+      "commit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
+      "reason": "Canonical trusted-build workflows use the pinned GitHub-hosted label ubuntu-24.04; the NUMINA runner policy only admitted ubuntu-latest, macos-latest and windows-latest.",
+      "change": "Added ubuntu-24.04 as an allowed canonical Linux execution label while preserving singular NUMINA identity and self-hosted denial."
+    },
+    "liveEndpointVerification": {
+      "origin": "https://numina-production.vercel.app",
+      "deployedCommit": "91cde4abd8afc86f9610053c0588e5f230db77e0",
+      "deploymentId": "dpl_8vLQzhW1eM5RYuMaE7CvmKFojivF",
+      "verifiedFrom": "2026-09-19T01:22:46Z",
+      "verifiedThrough": "2026-09-19T01:23:10Z",
+      "endpoints": [
+        {
+          "path": "/final-build.json",
+          "status": 200,
+          "schema": "numina.final-build.v1",
+          "reportedStatus": "FINAL"
+        },
+        {
+          "path": "/downloads/nusd/deployment-receipt.json",
+          "status": 200,
+          "schema": "numina.nusd.production-deployment-receipt.v1",
+          "finality": "FINAL",
+          "tokenTransactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+          "settlementTransactionHash": "0xe63dec1d443ccb15c87b3fb599bc868ef9b5919b6ef996ddb1c8aade4a6dba9b"
+        },
+        {
+          "path": "/api/nusd/v1/status",
+          "status": 200,
+          "schema": "numina.nusd.status.v1"
+        },
+        {
+          "path": "/v2/network/deployment-estimate",
+          "status": 200,
+          "schema": "numina.deployment-estimate.v1",
+          "reportedStatus": "FINAL"
+        }
+      ],
+      "scope": "These HTTP receipts verify the currently public Vercel production alias in the connected skott34-dot scope. Endpoint-level verification of the newer Pro-scope deployment requires read access to numina-167f7fe7."
+    }
+  },
+  "githubActions": {
+    "runnerProbe": {
+      "workflow": "NUMINA prebuilt production deploy",
+      "runId": 35412342929,
+      "attempt": 1,
+      "jobId": 105814281149,
+      "sourceCommit": "3a1f4530797e05ccf666acb7b66e4f9b7324fed2",
+      "status": "completed",
+      "conclusion": "failure",
+      "runnerLabels": [
+        "ubuntu-latest"
+      ],
+      "runnerId": 0,
+      "runnerName": "",
+      "stepsExecuted": 0,
+      "startedAt": "2026-09-19T01:20:25Z",
+      "completedAt": "2026-09-19T01:20:27Z"
+    },
+    "blocker": "GITHUB_ACTIONS_JOB_NOT_STARTED",
+    "executionSummary": "The current-main GitHub-hosted deploy job was accepted by GitHub Actions but no runner was assigned and no workflow steps executed."
+  },
+  "mobile": {
+    "android": {
+      "lastVerifiedRunId": 35377920361,
+      "attempt": 2,
+      "jobId": 105707486805,
+      "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920361",
+      "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "stepsExecuted": 0,
+      "artifacts": [],
+      "completedAt": "2026-09-18T18:05:25Z"
+    },
+    "ios": {
+      "lastVerifiedRunId": 35377920370,
+      "attempt": 2,
+      "jobId": 105707497373,
+      "runUrl": "https://github.com/skott34-dot/numina-production/actions/runs/35377920370",
+      "sourceCommit": "640050c4a1a1139d048bd8f30833be79b273728a",
+      "conclusion": "failure",
+      "runnerId": 0,
+      "stepsExecuted": 0,
+      "artifacts": [],
+      "completedAt": "2026-09-18T18:05:11Z"
+    },
+    "blocker": "GITHUB_ACTIONS_RUNNER_UNAVAILABLE",
+    "signingReceiptsCreated": false,
+    "storeSubmissionsMade": false
+  },
+  "alternateDesktop": {
+    "deviceName": "VENGEANCE",
+    "status": "offline",
+    "lastSeen": "2026-09-15T04:39:47.909+00:00"
+  },
+  "boundaries": {
+    "releaseEvidenceUpdatedOnlyFromObservedReceipts": true,
+    "newMintOrTransferPerformed": false,
+    "externalProviderFundsClaimed": false,
+    "signingCompletionClaimed": false,
+    "storeSubmissionClaimed": false
+  },
+  "numinaMetadata": {
+    "identity": "NUMINA",
+    "manifest": "NUMINA",
+    "authority": "NUMINA",
+    "namespace": "NUMINA",
+    "sourceOfTruth": "NUMINA",
+    "singular": true,
+    "manifestEqualsNumina": true,
+    "numinaEqualsManifest": true,
+    "manifestStatus": "FINAL",
+    "nativeEvidenceStatus": "FINAL",
+    "scope": [
+      "historical",
+      "current",
+      "canonical"
+    ],
+    "rawEvidenceImmutable": true,
+    "sourceScopedObservationsRetained": true
+  }
+}
