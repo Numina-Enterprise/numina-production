@@ -1,0 +1,4 @@
+qiskit~=2.5.2
+qiskit-ibm-runtime~=0.47.0
+aiohttp~=3.10.5
+pydantic~=2.8.2
