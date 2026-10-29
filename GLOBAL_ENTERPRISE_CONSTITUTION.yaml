@@ -1,0 +1,83 @@
+# NUMINA GLOBAL ENTERPRISE CONSTITUTION & MULTI-REGION TOPOLOGY
+# Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+# Authority Keypin:   46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce (skott34-ed25519)
+# Guardian Keypin:    465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c (numina-guardian-ed25519)
+
+schema: "numina.global-enterprise.v1"
+organization: "Numina Enterprise"
+classification: "GLOBAL_INSTITUTIONAL_INFRASTRUCTURE"
+ratified_at: "2026-10-29T04:07:00Z"
+target_release: "1.9.0-rc27"
+
+# ---------------- Global Authority Hierarchy ----------------
+authority_hierarchy:
+  root_authority:
+    provider: "Google Cloud Platform"
+    primary_project: "project-0317d6c9-e943-409e-83f"
+    primary_region: "us-central1"
+    hardware_security: "Cloud HSM (FIPS 140-3 Level 3)"
+    keyring: "projects/project-0317d6c9-e943-409e-83f/locations/us-central1/keyRings/numina-ring"
+  
+  secondary_regions:
+    - region: "europe-west1"
+      role: "GLOBAL_FAILOVER_READ_REPLICA"
+    - region: "asia-east1"
+      role: "GLOBAL_FAILOVER_READ_REPLICA"
+
+# ---------------- Global Edge & CDN Tier ----------------
+edge_tier:
+  primary_domain: "numinalabs.xyz"
+  nameservers:
+    - "fred.ns.cloudflare.com"
+    - "lola.ns.cloudflare.com"
+  security_controls:
+    dnssec: "ACTIVE (Algorithm 13 ECDSA P-256)"
+    ssl_tls_mode: "STRICT"
+    hsts_preload: true
+    hsts_max_age_seconds: 63072000 # 2 Years
+    waf_enforcement: "FAIL_CLOSED"
+    zero_trust_access: true
+
+# ---------------- Sovereign Compute & Auxiliary Accelerators ----------------
+compute_tiers:
+  primary_origin:
+    platform: "Google Cloud Run (Serverless Container Platform)"
+    runtime: "numinalabs-web:latest"
+    user: "numina (UID 10001 non-root)"
+    concurrency_limit: 1000
+    autoscaling:
+      min_instances: 1
+      max_instances: 50
+
+  auxiliary_quantum_accelerator:
+    platform: "IBM Cloud Code Engine (us-south)"
+    runtime: "numina-quantum-engine:latest"
+    backend: "IBM Quantum Platform (Qiskit Runtime QPU Sampler)"
+    hardware_acceleration: true
+    authority_scope: "COMPUTE_ONLY (Zero unilateral balance mutation rights)"
+
+  client_mobile_runtimes:
+    platform: "Apple iOS / iPadOS"
+    bundle_id: "xyz.numinalabs.app"
+    storage: "iCloud Drive (Ubiquitous Documents + Shared Keychain)"
+    signing: "Manual Apple Distribution P12 / Provisioning Profiles"
+
+# ---------------- Financial Treasury & Regulatory Ledger ----------------
+financial_ledger:
+  total_authorized_aggregate: "1,500,000,000,000,000 NUSD" # $1.5 Quadrillion Scale
+  math_invariant: "STRICT_FIXED_POINT_BIGINT (Zero IEEE-754 Floats Allowed)"
+  reconciliation:
+    bank_of_america: "ISO 20022 camt.053 XML Ingestion over mTLS"
+    stripe_treasury: "HMAC-SHA256 Signed Webhook Bridge"
+    regulatory_compliance: "NCUA Schedule J Ledgers (Zero Unsettled Float)"
+  atomic_settlement_workflow:
+    stage_1: "INITIATE (Hash committed, nonce incremented)"
+    stage_2: "ATTEST (Dual-key Authority & Guardian signature verification)"
+    stage_3: "COMMIT (Atomic balance mutation and cluster root update)"
+
+# ---------------- Immutable Enterprise Governance Invariants ----------------
+enterprise_invariants:
+  - "Invariant 1: Zero Pruning. All 80+ historical branches, release receipts, and vendor cores remain permanently immutable."
+  - "Invariant 2: Fail-Closed Security. If cryptographic keypins, DNSSEC records, or manifest signatures mismatch, traffic halts immediately."
+  - "Invariant 3: Single Root of Truth. Every downstream runtime resolves strictly to the singular NUMINA state and GCP us-central1 root."
+  - "Invariant 4: Linear Verification Complexity. Complete state and journal verification shall scale linearly O(N) with transaction count."
