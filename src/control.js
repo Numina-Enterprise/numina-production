@@ -4,6 +4,11 @@ import {reduceFrontier,frontierManifestView} from './frontier.js';
 export const CONTROL_VERSION = '1.0.0';
 export const CONTROL_SCOPES = ['request.create','evidence.attest','evidence.resolve','record.write','authority.delegate'];
 export const CONTROL_ADAPTER = {id:'internal.record.v1',version:1,action:'record.write',externalExecution:false};
+// Commitment-only records carry an opaque, independently prepared digest, never the underlying private content.
+export const CONTROL_COMMITMENT_ADAPTER = Object.freeze({id:'internal.commitment.v1',version:1,action:'record.write',externalExecution:false,disclosure:'client_prepared_commitment_only'});
+const OPAQUE_ID_RE=/^[0-9a-f]{32}$/;
+const PRIVATE_RESOURCE_RE=/^record:private\/[0-9a-f]{32}$/;
+const PRIVATE_COMMITMENT_RE=/^sha256:[0-9a-f]{64}$/;
 export function stable(value) {
   if(value===null || typeof value==='boolean') return JSON.stringify(value);
   if(typeof value==='number' && Number.isSafeInteger(value) && !Object.is(value,-0)) return String(value);
@@ -32,7 +37,15 @@ export function authorizeControl(manifest,actor,scope,resource,now,grantId) {
   return manifest.grants.find(g=>(!grantId||g.id===grantId)&&g.subject===actor&&g.scopes.includes(scope)&&resourceWithin(resource,g.resourcePrefix)&&grantValid(manifest,g,now))||null;
 }
 function authorized(manifest,actor,scope,resource,now,grantId){const grant=authorizeControl(manifest,actor,scope,resource,now,grantId);demand(grant,'AUTHORITY_DENIED',403);return grant;}
-export function normalizeRecord(input) {
+export function normalizeRecord(input,route=CONTROL_ADAPTER.id) {
+  if(route===CONTROL_COMMITMENT_ADAPTER.id){
+    controlExact(input,['resource','commitment']);
+    demand(Object.keys(input).length===2,'PRIVATE_COMMITMENT_REQUIRED');
+    demand(typeof input.resource==='string'&&PRIVATE_RESOURCE_RE.test(input.resource),'PRIVATE_OPAQUE_RESOURCE_REQUIRED');
+    demand(typeof input.commitment==='string'&&PRIVATE_COMMITMENT_RE.test(input.commitment),'PRIVATE_COMMITMENT_REQUIRED');
+    const canonical={resource:input.resource,commitment:input.commitment};
+    demand(stable(JSON.parse(stable(canonical)))===stable(input),'ADAPTER_SEMANTIC_LOSS');return canonical;
+  }
   controlExact(input,['resource','payload']);demand(textField(input.resource,160)&&/^record:[a-zA-Z0-9_.:/-]+$/.test(input.resource),'INVALID_RESOURCE');
   demand(textField(input.payload,4000),'INVALID_PAYLOAD');
   const canonical={resource:input.resource,payload:input.payload};
@@ -60,7 +73,7 @@ export function reconcileControl(manifest,now) {
   return manifest.requests.map(request=>{
     if(executionStatus(request)==='committed')return {requestId:request.id,outcome:'ALLOW',reason:'INTERNAL_RECORD_COMMITTED',action:null};
     if(!authorizeControl(manifest,request.who,'record.write',request.wants.resource,now,request.authority))return {requestId:request.id,outcome:'DENY',reason:'AUTHORITY_UNAVAILABLE',action:null};
-    if(request.route!==CONTROL_ADAPTER.id)return {requestId:request.id,outcome:'ESCALATE',reason:'UNSUPPORTED_ADAPTER',action:null};
+    if(request.route!==CONTROL_ADAPTER.id&&request.route!==CONTROL_COMMITMENT_ADAPTER.id)return {requestId:request.id,outcome:'ESCALATE',reason:'UNSUPPORTED_ADAPTER',action:null};
     for(const key of request.policy.requiredEvidence){const result=selectedEvidence(manifest,request,key,now);if(result.reason)return {requestId:request.id,outcome:'ESCALATE',reason:result.reason,action:null};}
     return {requestId:request.id,outcome:'ALLOW',reason:'BOUNDS_AND_EVIDENCE_VERIFIED',action:'record.write'};
   });
@@ -70,7 +83,7 @@ export async function verifiedActions(manifest,revision,now,actor) {
   return Promise.all(decisions.map(async d=>{
     const request=manifest.requests.find(r=>r.id===d.requestId);
     const canAct=!!authorizeControl(manifest,actor,'record.write',request.wants.resource,now);
-    const next=d.action&&canAct?{kind:d.action,requestId:request.id,expectedRevision:revision,adapter:CONTROL_ADAPTER.id,actionId:await controlHash({revision,manifestHash,requestId:request.id,actor,kind:d.action})}:null;
+    const next=d.action&&canAct?{kind:d.action,requestId:request.id,expectedRevision:revision,adapter:request.route,actionId:await controlHash({revision,manifestHash,requestId:request.id,actor,kind:d.action})}:null;
     return {...d,nextAction:next};
   }));
 }
@@ -80,9 +93,13 @@ export async function reduceControl(current,command,actor,revision,now) {
   const manifest=structuredClone(current),data=command.data;let result={};let parentIds=[];
   demand(data&&Object.getPrototypeOf(data)===Object.prototype,'INVALID_COMMAND');
   if(command.type==='request'){
-    controlExact(data,['id','route','wants','requiredEvidence','grantId']);const wants=normalizeRecord(data.wants);
+    controlExact(data,['id','route','wants','requiredEvidence','grantId']);const wants=normalizeRecord(data.wants,data.route);
     demand(textField(data.id,100)&&!manifest.requests.some(r=>r.id===data.id),'REQUEST_ID_CONFLICT');demand(textField(data.route,100),'INVALID_ROUTE');
     demand(Array.isArray(data.requiredEvidence)&&data.requiredEvidence.length<=10&&data.requiredEvidence.every(k=>textField(k,80))&&new Set(data.requiredEvidence).size===data.requiredEvidence.length,'INVALID_EVIDENCE_REQUIREMENTS');
+    if(data.route===CONTROL_COMMITMENT_ADAPTER.id){
+      demand(OPAQUE_ID_RE.test(command.id)&&OPAQUE_ID_RE.test(data.id),'PRIVATE_OPAQUE_ID_REQUIRED');
+      demand(data.requiredEvidence.length===0,'PRIVATE_EVIDENCE_NOT_SUPPORTED');
+    }
     authorized(manifest,actor,'request.create',wants.resource,now,data.grantId);const grant=authorized(manifest,actor,'record.write',wants.resource,now,data.grantId);
     manifest.requests.push({id:data.id,who:actor,wants,authority:grant.id,policy:{requiredEvidence:data.requiredEvidence},route:data.route,evidence:[],execution:{status:'pending'},settlement:{status:'not_applicable'},verifiedOutcome:null,createdAt:now});result={requestId:data.id};
   }else if(command.type==='attest'){
@@ -111,10 +128,11 @@ export async function reduceControl(current,command,actor,revision,now) {
   }else if(command.type==='execute'){
     controlExact(data,['requestId','actionId']);const request=manifest.requests.find(r=>r.id===data.requestId);demand(request,'REQUEST_NOT_FOUND',404);authorized(manifest,actor,'record.write',request.wants.resource,now);
     const projected=(await verifiedActions(manifest,revision,now,actor)).find(d=>d.requestId===request.id);demand(projected.nextAction&&projected.nextAction.actionId===data.actionId,'NEXT_ACTION_NOT_VERIFIED',409);
-    const normalized=normalizeRecord(request.wants);demand(!manifest.records.some(r=>r.requestId===request.id),'ALREADY_COMMITTED',409);
-    const node={id:command.id,sequence:revision+1,kind:'execution',requestId:request.id,actor,at:now,adapter:CONTROL_ADAPTER.id,adapterVersion:1,parents:[...request.evidence],inputHash:await controlHash(normalized),outcome:'INTERNAL_RECORD_COMMITTED'};
+    if(request.route===CONTROL_COMMITMENT_ADAPTER.id)demand(OPAQUE_ID_RE.test(command.id),'PRIVATE_OPAQUE_ID_REQUIRED');
+    const normalized=normalizeRecord(request.wants,request.route);demand(!manifest.records.some(r=>r.requestId===request.id),'ALREADY_COMMITTED',409);
+    const node={id:command.id,sequence:revision+1,kind:'execution',requestId:request.id,actor,at:now,adapter:request.route,adapterVersion:1,parents:[...request.evidence],inputHash:await controlHash(normalized),outcome:'INTERNAL_RECORD_COMMITTED'};
     node.hash=await controlHash(node);manifest.evidence.push(node);request.evidence.push(node.id);manifest.records.push({...normalized,requestId:request.id,evidenceId:node.id,at:now});
-    request.execution={status:'committed',recordId:request.id};request.verifiedOutcome={scope:'internal.record.v1',evidenceId:node.id,externalExecution:false};parentIds=[node.id];result={requestId:request.id,recordId:request.id,evidenceId:node.id};
+    request.execution={status:'committed',recordId:request.id};request.verifiedOutcome={scope:request.route,evidenceId:node.id,externalExecution:false};parentIds=[node.id];result={requestId:request.id,recordId:request.id,evidenceId:node.id};
   }else if(command.type==='treasury'){
     demand(actor===manifest.root&&grantValid(manifest,manifest.grants.find(grant=>grant.id==='root'),now),'TREASURY_AUTHORITY_DENIED',403);
     const treasury=reduceTreasuryProjection(manifest.nativeTreasury,data,actor,command.id);

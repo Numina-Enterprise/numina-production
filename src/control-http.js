@@ -4,7 +4,7 @@ import {NUMINA_TREASURY_INITIAL_BALANCE} from './native-treasury-model.js';
 import {createNuminaTreasury} from './native-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {readStripeTreasury} from './stripe-treasury.js';
-import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
+import {CONTROL_VERSION,CONTROL_ADAPTER,CONTROL_COMMITMENT_ADAPTER,stable,controlHash,controlError} from './control.js';
 import {readControl,bootstrapControl,controlManifestView,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
@@ -147,7 +147,7 @@ async function controlNuminaManifest(req,env){
     provider_verification:NUMINA_PROVIDER_VERIFICATION,
     denomination_policy:NUMINA_LAYERS.denomination_policy,
     procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,
-    adapters:[CONTROL_ADAPTER],unsupportedAdapters:'ESCALATE',
+    adapters:[CONTROL_ADAPTER,CONTROL_COMMITMENT_ADAPTER],unsupportedAdapters:'ESCALATE',
     verificationScope:'NUMINA',financialVerification:false,externalExecution:false
   });
 }
@@ -160,7 +160,7 @@ export async function controlHttp(req,env){
       const row=await readControl(env.DB);const count={n:row.eventCount};
       const configured=!!env.NUMINA_CONTROL_OWNER&&env.NUMINA_CONTROL_OWNER===row.manifest.root;
       const healthy=configured&&count.n===row.revision+1;
-      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],storage:'D1',interoperability:[CONTROL_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.manifest_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
+      return controlResponse({root:NUMINA,manifest:NUMINA,identity:NUMINA,authority:NUMINA,source:NUMINA,evidence:NUMINA,provider:NUMINA,provider_verification:true,status:healthy?'ready':'degraded',version:CONTROL_VERSION,architecture:'singular',source_of_truth_model:SOURCE_OF_TRUTH_MODEL,worker_identity:CONTROL_WORKER_IDENTITY,authority_identity:AUTHORITY_IDENTITY,owner_authority_model:OWNER_AUTHORITY_MODEL,environment_model:ENVIRONMENT_MODEL,delivery_surface_model:DELIVERY_SURFACE_MODEL,authentication:['github-actions-oidc','pinned-bearer','sites-identity'],storage:'D1',interoperability:[CONTROL_ADAPTER,CONTROL_COMMITMENT_ADAPTER],reconciliation:'event-driven-single-reducer',nextAction:'revision-and-evidence-bound',checks:{storage:true,manifestIntegrity:true,evidenceHead:true,journalContinuity:count.n===row.revision+1,authorityConfigured:configured},revision:row.revision,eventCount:count.n,manifestHash:row.manifest_hash,evidenceHead:row.head_hash,verificationScope:'NUMINA',financialVerification:false,executionScope:'internal_record_commit',settlementScope:'not_connected',externalExecution:false,fullCoreConstitutionCertification:false},healthy?200:503);
     }
     if(req.method==='GET'&&path==='/api/control/v1/manifest'){if(new URL(req.url).search)return controlResponse({error:'MANIFEST_QUERY_NOT_ALLOWED'},400);return controlResponse(await controlNuminaManifest(req,env));}
     if(!['GET','POST'].includes(req.method))return controlResponse({error:'METHOD_NOT_ALLOWED'},405);
