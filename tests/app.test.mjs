@@ -85,3 +85,94 @@ test('same-second conflicting disputes cannot permit work based on event-ID orde
   facts.push({...facts[0],status:'won',event_created:11,event_id:'evt_new'});assert.equal(appPaymentSummary(payments,facts).status,'paid');
  }
 });
+
+const computeLinks=[
+ ['plink_1UEKGpQdJat0efmTcDcvJf0A',1000,10000],
+ ['plink_1UEKCFQdJat0efmTvmaqJNcj',10000,100000],
+ ['plink_1UEJfdQdJat0efmTXjcDwi3H',100000,1000000]
+];
+function computePayment(index=0,overrides={}){
+ const [link,amount]=computeLinks[index];
+ return payment({id:null},{client_reference_id:null,payment_link:link,amount_total:amount,...overrides});
+}
+test('all existing compute packs retain signed unbound payments without credit grants',async()=>{
+ const env=await fixture();try{
+  for(let i=0;i<computeLinks.length;i++){
+   const result=await webhook(env,computePayment(i));assert.equal(result.status,200);
+   assert.equal(result.body.reconciliationRequired,true);assert.equal(result.body.creditsGranted,0);
+  }
+  const review=await call(env,'compute-payments',undefined,owner);assert.equal(review.status,200);
+  assert.deepEqual(review.body.payments.map(p=>p.creditPackSize).sort((a,b)=>a-b),[10000,100000,1000000]);
+  assert.ok(review.body.payments.every(p=>p.payment.status==='paid'&&p.creditsGranted===0&&p.fulfillment==='review_required'));
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_service_orders').first()).n,0);
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_webhook_events').first()).n,3);
+ }finally{env.DB.close();}
+});
+test('unbound compute review requires operator identity and never trusts customer metadata',async()=>{
+ const env=await fixture();try{
+  const event=computePayment(0,{client_reference_id:'n_'+crypto.randomUUID(),metadata:{customer:'user-customer',credits:'999999999'}});
+  assert.equal((await webhook(env,event)).status,200);
+  assert.equal((await call(env,'compute-payments',undefined,customer)).status,403);
+  assert.equal((await call(env,'compute-payments',undefined,other)).status,403);
+  assert.equal((await call(env,'compute-payments',undefined,{})).status,401);
+  const review=await call(env,'compute-payments',undefined,owner);
+  assert.equal(review.body.payments[0].creditPackSize,10000);
+  assert.equal(review.body.payments[0].creditsGranted,0);
+  env.NUMINA_REVIEW_SESSION=true;
+  assert.equal((await call(env,'compute-payments',undefined,owner)).status,403);
+ }finally{env.DB.close();}
+});
+test('unbound compute rejects signatures, currency, amount, mode and session mismatches',async()=>{
+ const env=await fixture();try{
+  assert.equal((await webhook(env,computePayment(),{signature:'0'.repeat(64)})).status,400);
+  for(const change of [{amount_total:1},{currency:'eur'},{mode:'subscription'},{livemode:false},{id:'cs_test_fake'},{payment_intent:null}]){
+   assert.equal((await webhook(env,computePayment(0,change))).status,422);
+  }
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_payments').first()).n,0);
+ }finally{env.DB.close();}
+});
+test('concurrent compute retries and conflicting payloads cannot duplicate payment evidence',async()=>{
+ const env=await fixture();try{
+  const event=computePayment(),results=await Promise.all([webhook(env,event),webhook(env,event)]);
+  assert.ok(results.every(r=>r.status===200));assert.equal(results.filter(r=>r.body.replayed).length,1);
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_payments').first()).n,1);
+  const altered=structuredClone(event);altered.data.object.payment_intent='pi_conflict';
+  assert.equal((await webhook(env,altered)).status,409);
+  const another=computePayment(0,{id:event.data.object.id,payment_intent:'pi_another'});
+  assert.equal((await webhook(env,another)).status,409);
+ }finally{env.DB.close();}
+});
+test('compute review reflects delayed payment, preexisting refunds and disputes',async()=>{
+ const env=await fixture();try{
+  const pending=computePayment(0,{payment_status:'unpaid'}),session=pending.data.object;
+  await webhook(env,pending);
+  const review=async()=>((await call(env,'compute-payments',undefined,owner)).body.payments[0]);
+  assert.equal((await review()).payment.status,'pending');
+  const refund={id:'evt_computerefund',type:'charge.refunded',livemode:true,created:pending.created+2,data:{object:{id:'ch_computerefund',payment_intent:session.payment_intent,currency:'usd',amount_refunded:1000}}};
+  await webhook(env,refund);
+  const paid=structuredClone(pending);paid.id='evt_computepaid';paid.type='checkout.session.async_payment_succeeded';paid.created+=1;paid.data.object.payment_status='paid';
+  await webhook(env,paid);assert.equal((await review()).payment.status,'refunded');
+  const failed=structuredClone(pending);failed.id='evt_computefailed';failed.type='checkout.session.async_payment_failed';await webhook(env,failed);
+  assert.equal((await review()).payment.status,'refunded');
+  const dispute={id:'evt_computedispute',type:'charge.dispute.created',livemode:true,created:paid.created+3,data:{object:{id:'dp_computedispute',payment_intent:session.payment_intent,currency:'usd',amount:1000,status:'needs_response'}}};
+  await webhook(env,dispute);assert.equal((await review()).payment.status,'disputed');
+  assert.equal((await review()).creditsGranted,0);
+ }finally{env.DB.close();}
+});
+test('compute receipt transaction failure rolls back evidence and allows retry',async()=>{
+ const env=await fixture();try{
+  const event=computePayment(),original=env.DB.batch.bind(env.DB);
+  env.DB.batch=statements=>original([...statements.slice(0,-2),env.DB.prepare('INSERT INTO missing_event_table (id) VALUES (?)').bind(event.id)]);
+  assert.equal((await webhook(env,event)).status,503);
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_payments').first()).n,0);
+  env.DB.batch=original;assert.equal((await webhook(env,event)).status,200);
+ }finally{env.DB.close();}
+});
+test('compute links cannot pay consulting orders and unknown checkouts remain ignored',async()=>{
+ const env=await fixture();try{
+  const order=await create(env);
+  assert.equal((await webhook(env,computePayment(0,{client_reference_id:order.id}))).status,422);
+  assert.equal((await webhook(env,computePayment(0,{payment_link:'plink_unknown'}))).body.ignored,true);
+  assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM numina_app_payments').first()).n,0);
+ }finally{env.DB.close();}
+});

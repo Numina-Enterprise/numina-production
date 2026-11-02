@@ -8,6 +8,13 @@ export const APP_OFFERS={
  result_access:{name:'Numina Result Access',amount:null,currency:'nusd',requestOnly:true,description:'Describe the API result, its intended use and the access you need. Scope and intended NUSD pricing are reviewed before any paid entitlement. Payment and result unlocking are not activated.'},
  workflow_delivery:{name:'Verified workflow delivery',amount:null,currency:'nusd',requestOnly:true,description:'Define the workflow, measurable outcome and delivery evidence for scope review. Intended pricing: NUSD per accepted outcome; payment and execution are not activated.'}
 };
+// Existing USD compute packs. These identify unbound payments for operator review only.
+// They are not customer entitlements, NUSD balances, or new public service offers.
+export const APP_COMPUTE_RECONCILIATION=Object.freeze({
+ plink_1UEKGpQdJat0efmTcDcvJf0A:{amount:1000,credits:10000,queueId:'compute_unbound:10000'},
+ plink_1UEKCFQdJat0efmTvmaqJNcj:{amount:10000,credits:100000,queueId:'compute_unbound:100000'},
+ plink_1UEJfdQdJat0efmTXjcDwi3H:{amount:100000,credits:1000000,queueId:'compute_unbound:1000000'}
+});
 export function appFail(code,status=400){throw Object.assign(new Error(code),{code,status});}
 export async function appDigest(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))).map(x=>x.toString(16).padStart(2,'0')).join('');}
 export function appText(value,min,max){if(typeof value!=='string'||value.trim().length<min||value.trim().length>max||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value))appFail('INVALID_INPUT');return value.trim();}
