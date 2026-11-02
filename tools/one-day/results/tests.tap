@@ -1,0 +1,400 @@
+TAP version 13
+# Subtest: orphan gitlink breaks checkout cleanup; removing its index reference restores it
+ok 1 - orphan gitlink breaks checkout cleanup; removing its index reference restores it
+  ---
+  duration_ms: 287.889887
+  type: 'test'
+  ...
+# Subtest: source snapshot collection verifies git blobs, inventory and blocked release status
+ok 2 - source snapshot collection verifies git blobs, inventory and blocked release status
+  ---
+  duration_ms: 70.648392
+  type: 'test'
+  ...
+# Subtest: candidate boundary includes all 20 families and cannot self-approve
+ok 3 - candidate boundary includes all 20 families and cannot self-approve
+  ---
+  duration_ms: 1.855412
+  type: 'test'
+  ...
+# Subtest: duplicate families and malformed applicability are rejected
+ok 4 - duplicate families and malformed applicability are rejected
+  ---
+  duration_ms: 0.946247
+  type: 'test'
+  ...
+# Subtest: dependency inventory is exact-version evidence and never a vulnerability clearance
+ok 5 - dependency inventory is exact-version evidence and never a vulnerability clearance
+  ---
+  duration_ms: 0.616484
+  type: 'test'
+  ...
+# Subtest: imported vulnerability observations require lock binding, freshness and installed names
+ok 6 - imported vulnerability observations require lock binding, freshness and installed names
+  ---
+  duration_ms: 1.28779
+  type: 'test'
+  ...
+# Subtest: a fresh full-key challenge verifies possession but never proves KMS or deployment origin
+ok 7 - a fresh full-key challenge verifies possession but never proves KMS or deployment origin
+  ---
+  duration_ms: 10.060563
+  type: 'test'
+  ...
+# Subtest: key fragments, HSM claims, wrong fingerprints and altered payloads fail closed
+ok 8 - key fragments, HSM claims, wrong fingerprints and altered payloads fail closed
+  ---
+  duration_ms: 1.828791
+  type: 'test'
+  ...
+# Subtest: expired challenges and audience/key-version substitution are rejected
+ok 9 - expired challenges and audience/key-version substitution are rejected
+  ---
+  duration_ms: 2.37138
+  type: 'test'
+  ...
+# Subtest: public-key reader rejects private material and non-Ed25519 keys
+ok 10 - public-key reader rejects private material and non-Ed25519 keys
+  ---
+  duration_ms: 80.8392
+  type: 'test'
+  ...
+# Subtest: canonical serialization has stable order and rejects malformed values
+ok 11 - canonical serialization has stable order and rejects malformed values
+  ---
+  duration_ms: 0.664916
+  type: 'test'
+  ...
+# Subtest: artifact reader rejects path traversal and symlink escapes
+ok 12 - artifact reader rejects path traversal and symlink escapes
+  ---
+  duration_ms: 27.67137
+  type: 'test'
+  ...
+# Subtest: tampered source bytes cannot be presented under the pinned Git blob identity
+ok 13 - tampered source bytes cannot be presented under the pinned Git blob identity
+  ---
+  duration_ms: 10.030993
+  type: 'test'
+  ...
+# Subtest: pinned ES256 access token permits only a scoped read-only adapter decision
+ok 14 - pinned ES256 access token permits only a scoped read-only adapter decision
+  ---
+  duration_ms: 19.246363
+  type: 'test'
+  ...
+# Subtest: wrong issuer, resource, scope and lifetime fail closed
+ok 15 - wrong issuer, resource, scope and lifetime fail closed
+  ---
+  duration_ms: 8.745673
+  type: 'test'
+  ...
+# Subtest: token-selected keys, algorithms, type and tampered bytes cannot authorize
+ok 16 - token-selected keys, algorithms, type and tampered bytes cannot authorize
+  ---
+  duration_ms: 3.950265
+  type: 'test'
+  ...
+# Subtest: duplicate JSON authority claims reject despite a valid signature
+ok 17 - duplicate JSON authority claims reject despite a valid signature
+  ---
+  duration_ms: 1.455685
+  type: 'test'
+  ...
+# Subtest: write tools, unknown tools and caller resource changes never dispatch
+ok 18 - write tools, unknown tools and caller resource changes never dispatch
+  ---
+  duration_ms: 2.667161
+  type: 'test'
+  ...
+# Subtest: protected resource metadata uses pinned issuer/resource only
+ok 19 - protected resource metadata uses pinned issuer/resource only
+  ---
+  duration_ms: 2.351405
+  type: 'test'
+  ...
+# Subtest: PKCE is S256 and authorization callback validates exact state and issuer
+ok 20 - PKCE is S256 and authorization callback validates exact state and issuer
+  ---
+  duration_ms: 4.833497
+  type: 'test'
+  ...
+# Subtest: actual PR127 ES256 verdict verifier uses durable adapter and blocks replay after restart
+ok 21 - actual PR127 ES256 verdict verifier uses durable adapter and blocks replay after restart
+  ---
+  duration_ms: 28.70788
+  type: 'test'
+  ...
+# Subtest: durable nonce, token ID and budget survive database close/reopen
+ok 22 - durable nonce, token ID and budget survive database close/reopen
+  ---
+  duration_ms: 25.979926
+  type: 'test'
+  ...
+# Subtest: separate workers cannot consume one nonce twice
+ok 23 - separate workers cannot consume one nonce twice
+  ---
+  duration_ms: 233.596481
+  type: 'test'
+  ...
+# Subtest: separate workers reserve the cumulative limit atomically
+ok 24 - separate workers reserve the cumulative limit atomically
+  ---
+  duration_ms: 138.454672
+  type: 'test'
+  ...
+# Subtest: invalid, expired and wrong-bound input cannot consume a nonce or budget
+ok 25 - invalid, expired and wrong-bound input cannot consume a nonce or budget
+  ---
+  duration_ms: 11.108868
+  type: 'test'
+  ...
+# Subtest: policy changes cannot reset a durable running limit and memory stores reject
+ok 26 - policy changes cannot reset a durable running limit and memory stores reject
+  ---
+  duration_ms: 9.135334
+  type: 'test'
+  ...
+# Subtest: financial integer units retain precision above Number safe integer
+ok 27 - financial integer units retain precision above Number safe integer
+  ---
+  duration_ms: 10.924821
+  type: 'test'
+  ...
+# Subtest: PR127 reproduction uses exact captured Git blobs and SHA256 bytes
+ok 28 - PR127 reproduction uses exact captured Git blobs and SHA256 bytes
+  ---
+  duration_ms: 2.877838
+  type: 'test'
+  ...
+# Subtest: valid signed allow is only an authorization to attempt
+ok 29 - valid signed allow is only an authorization to attempt
+  ---
+  duration_ms: 21.869848
+  type: 'test'
+  ...
+# Subtest: reject unknown top-level authority claim, even when signed by issuer
+ok 30 - reject unknown top-level authority claim, even when signed by issuer
+  ---
+  duration_ms: 6.095086
+  type: 'test'
+  ...
+# Subtest: single-use token without persistent atomic consumption store fails closed
+ok 31 - single-use token without persistent atomic consumption store fails closed
+  ---
+  duration_ms: 8.974463
+  type: 'test'
+  ...
+# Subtest: field stripping/reordering and reserialization invalidates signature over exact bytes
+ok 32 - field stripping/reordering and reserialization invalidates signature over exact bytes
+  ---
+  duration_ms: 20.233111
+  type: 'test'
+  ...
+# Subtest: incorrect payer/operator, audience, endpoint, recipient, amount and policy digest all fail
+ok 33 - incorrect payer/operator, audience, endpoint, recipient, amount and policy digest all fail
+  ---
+  duration_ms: 25.77526
+  type: 'test'
+  ...
+# Subtest: proof-of-possession binds token, endpoint and nonce
+ok 34 - proof-of-possession binds token, endpoint and nonce
+  ---
+  duration_ms: 7.408544
+  type: 'test'
+  ...
+# Subtest: signed historic key metadata is required, cannot self-select a token key
+ok 35 - signed historic key metadata is required, cannot self-select a token key
+  ---
+  duration_ms: 2.598589
+  type: 'test'
+  ...
+# Subtest: reject replay and enforce cumulative amount in the same atomic consumption operation
+ok 36 - reject replay and enforce cumulative amount in the same atomic consumption operation
+  ---
+  duration_ms: 11.012608
+  type: 'test'
+  ...
+# Subtest: deny and expired verdicts cannot unlock execution
+ok 37 - deny and expired verdicts cannot unlock execution
+  ---
+  duration_ms: 5.901353
+  type: 'test'
+  ...
+# Subtest: different key environments never pass signed production history policy
+ok 38 - different key environments never pass signed production history policy
+  ---
+  duration_ms: 3.007115
+  type: 'test'
+  ...
+# Subtest: duplicate JSON members and escaped aliases are always rejected, even with valid issuer signatures
+ok 39 - duplicate JSON members and escaped aliases are always rejected, even with valid issuer signatures
+  ---
+  duration_ms: 8.721341
+  type: 'test'
+  ...
+# Subtest: 26 internal placeholders have 8/9/5/4 distribution and no NCUA code
+ok 40 - 26 internal placeholders have 8/9/5/4 distribution and no NCUA code
+  ---
+  duration_ms: 4.6251
+  type: 'test'
+  ...
+# Subtest: proposed dates, scope and applicability are never promoted to final requirements
+ok 41 - proposed dates, scope and applicability are never promoted to final requirements
+  ---
+  duration_ms: 0.329369
+  type: 'test'
+  ...
+# Subtest: no source verifier, spoofed verified flag or incomplete official definition can promote mapping
+ok 42 - no source verifier, spoofed verified flag or incomplete official definition can promote mapping
+  ---
+  duration_ms: 2.240865
+  type: 'test'
+  ...
+# Subtest: independent source match only stages mapping; does not attest compliance or deployment
+ok 43 - independent source match only stages mapping; does not attest compliance or deployment
+  ---
+  duration_ms: 0.593219
+  type: 'test'
+  ...
+# Subtest: internal receipts and provider observations never become independent settlement verification
+ok 44 - internal receipts and provider observations never become independent settlement verification
+  ---
+  duration_ms: 0.732307
+  type: 'test'
+  ...
+# Subtest: commit fixes subject majority and refuses cancellable shares
+ok 45 - commit fixes subject majority and refuses cancellable shares
+  ---
+  duration_ms: 3.524542
+  type: 'test'
+  ...
+# Subtest: cancellation, expiration and reductions fail closed even after aging
+ok 46 - cancellation, expiration and reductions fail closed even after aging
+  ---
+  duration_ms: 1.154696
+  type: 'test'
+  ...
+# Subtest: initial destination and rotation require authenticating the beneficiary authority
+ok 47 - initial destination and rotation require authenticating the beneficiary authority
+  ---
+  duration_ms: 0.867053
+  type: 'test'
+  ...
+# Subtest: hold blocks submission, and releasing hold preserves irrevocable obligation
+ok 48 - hold blocks submission, and releasing hold preserves irrevocable obligation
+  ---
+  duration_ms: 0.690936
+  type: 'test'
+  ...
+# Subtest: duplicate POST idempotency key has one journal effect; collisions and ambiguous retry fail
+ok 49 - duplicate POST idempotency key has one journal effect; collisions and ambiguous retry fail
+  ---
+  duration_ms: 1.037416
+  type: 'test'
+  ...
+# Subtest: missing/forged finality evidence cannot mark payment as settled
+ok 50 - missing/forged finality evidence cannot mark payment as settled
+  ---
+  duration_ms: 1.261809
+  type: 'test'
+  ...
+# Subtest: verified finality and separate reconciliation produce distinct receipts
+ok 51 - verified finality and separate reconciliation produce distinct receipts
+  ---
+  duration_ms: 1.754105
+  type: 'test'
+  ...
+# Subtest: third-party reconstruction detects tampering and distinguishes internal hashes from external anchors
+ok 52 - third-party reconstruction detects tampering and distinguishes internal hashes from external anchors
+  ---
+  duration_ms: 6.117746
+  type: 'test'
+  ...
+# Subtest: fixed independent CCSDS header vector decodes exact six-octet header
+ok 53 - fixed independent CCSDS header vector decodes exact six-octet header
+  ---
+  duration_ms: 3.143997
+  type: 'test'
+  ...
+# Subtest: CCSDS rejects incomplete, incorrect-length and unsupported profiles
+ok 54 - CCSDS rejects incomplete, incorrect-length and unsupported profiles
+  ---
+  duration_ms: 1.428354
+  type: 'test'
+  ...
+# Subtest: standalone CCSDS parser rejects invalid payload limit configuration
+ok 55 - standalone CCSDS parser rejects invalid payload limit configuration
+  ---
+  duration_ms: 0.826443
+  type: 'test'
+  ...
+# Subtest: stream accepts arbitrary chunk boundaries and multiple packets
+ok 56 - stream accepts arbitrary chunk boundaries and multiple packets
+  ---
+  duration_ms: 2.308829
+  type: 'test'
+  ...
+# Subtest: stream fails closed on oversized declared frame/chunk and truncated final input
+ok 57 - stream fails closed on oversized declared frame/chunk and truncated final input
+  ---
+  duration_ms: 0.512021
+  type: 'test'
+  ...
+# Subtest: sequence policy detects replay, gaps, old data and modulo wrap per APID
+ok 58 - sequence policy detects replay, gaps, old data and modulo wrap per APID
+  ---
+  duration_ms: 0.972941
+  type: 'test'
+  ...
+# Subtest: STAC profile preserves source digest and core-compatible serialized payload
+ok 59 - STAC profile preserves source digest and core-compatible serialized payload
+  ---
+  duration_ms: 3.263349
+  type: 'test'
+  ...
+# Subtest: STAC rejects invalid dates, geometry bounds, unsafe URLs, extensions and oversized records
+ok 60 - STAC rejects invalid dates, geometry bounds, unsafe URLs, extensions and oversized records
+  ---
+  duration_ms: 4.850999
+  type: 'test'
+  ...
+# Subtest: STAC null geometry/time interval and collection rules are explicit
+ok 61 - STAC null geometry/time interval and collection rules are explicit
+  ---
+  duration_ms: 3.636919
+  type: 'test'
+  ...
+# Subtest: policy denies unauthorized/action/replay and escalates tasking without dispatch
+ok 62 - policy denies unauthorized/action/replay and escalates tasking without dispatch
+  ---
+  duration_ms: 1.768099
+  type: 'test'
+  ...
+# Subtest: receipt signatures bind run, key, normalized record, decision and chain order
+ok 63 - receipt signatures bind run, key, normalized record, decision and chain order
+  ---
+  duration_ms: 7.547744
+  type: 'test'
+  ...
+# Subtest: canonicalizer rejects invalid numbers, types, Unicode and excessive nesting
+ok 64 - canonicalizer rejects invalid numbers, types, Unicode and excessive nesting
+  ---
+  duration_ms: 0.587515
+  type: 'test'
+  ...
+# Subtest: canonicalizer rejects array holes and enumerable, hidden or symbol extensions
+ok 65 - canonicalizer rejects array holes and enumerable, hidden or symbol extensions
+  ---
+  duration_ms: 0.415904
+  type: 'test'
+  ...
+1..65
+# tests 65
+# suites 0
+# pass 65
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 630.46363

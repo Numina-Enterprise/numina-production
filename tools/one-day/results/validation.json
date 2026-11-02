@@ -1,0 +1,63 @@
+{
+  "schema": "numina.one-day-sprint.validation.v1",
+  "recordedAt": "2026-11-02T11:39:33.294Z",
+  "sourceBase": "23c38e1e3a15e8f6559486ca024edb2faa3244cb",
+  "runtime": "v24.22.1",
+  "platform": "linux",
+  "classification": "local_or_ci_test_execution",
+  "durationMs": 735,
+  "exitCode": 0,
+  "signal": null,
+  "errorCode": null,
+  "tests": 65,
+  "passed": 65,
+  "failed": 0,
+  "skipped": 0,
+  "files": [
+    {
+      "path": "tools/one-day/ksi/evidence-engine.test.mjs",
+      "sha256": "2e89fcac29da922166a3fc5bab4c02ecc1eb752af3fc300336d59befedd3a2ac"
+    },
+    {
+      "path": "tools/one-day/mcp/tests/authorization-boundary.test.mjs",
+      "sha256": "c3f7d49ec7a7b2d3994e332c8b7f0c05f59162869cc6c95a82446904f6be5f31"
+    },
+    {
+      "path": "tools/one-day/mcp/tests/pr127-adapter-integration.test.mjs",
+      "sha256": "00152eb0e406ddd6dc2f5a56c5c3802edc6d53b59789f044e3404bc00c2a462c"
+    },
+    {
+      "path": "tools/one-day/mcp/tests/reservation-store.test.mjs",
+      "sha256": "a9414ad3729a54fcb196b97b1b9049ad1464eba4b84d345b8acdcd293bb58eb7"
+    },
+    {
+      "path": "tools/one-day/mcp/tests/vendor-integrity.test.mjs",
+      "sha256": "ae4f6228182e4ee22f2a4fd8e510599543e5bd5ac2c49e9b5aaff44a5a19959d"
+    },
+    {
+      "path": "tools/one-day/mcp/vendor/pr127/tests/payment-authorization-gates.test.mjs",
+      "sha256": "2d0e017c5a81cc301fe7e98fb66e0b6bc8812422de4e328a5e10277df65572e1"
+    },
+    {
+      "path": "tools/one-day/mcp/vendor/pr127/tests/schedule-j-evidence.test.mjs",
+      "sha256": "fe4997150aa73a9b82cbaba8ce8ee9c706bedbd2b85ef8ab7afcdf10a5d8a4bc"
+    },
+    {
+      "path": "tools/one-day/mcp/vendor/pr127/tests/settlement-evidence-gates.test.mjs",
+      "sha256": "b0281a0e7f859ce1f47010830388753d847917c7cf91d571951776a418855892"
+    },
+    {
+      "path": "tools/one-day/telemetry/telemetry.test.mjs",
+      "sha256": "6b5311b43888ccbc8b5c27e7835c8622db841fd43872a98b52f877e153fe2e02"
+    },
+    {
+      "path": "tools/one-day/checkout.test.mjs",
+      "sha256": "fd53ccc79e1bfa2b66392bdc39da3f39c994249e9e5ba0a2da4199148c0a8790"
+    }
+  ],
+  "logSha256": "7f4992f5a68592ea6d0afde87111529c3928b5d96f6c586eea68129515bc9319",
+  "liveRuntimeVerified": false,
+  "providerExecutionVerified": false,
+  "hardwareInLoopVerified": false,
+  "complianceAuthorizationEstablished": false
+}

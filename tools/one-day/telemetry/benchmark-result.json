@@ -1,0 +1,117 @@
+{
+  "schema": "numina.telemetry.benchmark.v1",
+  "classification": "LOCAL_SIMULATION",
+  "observedAt": "2026-11-02T11:39:18.577Z",
+  "baselineRepositoryRevision": "23c38e1e3a15e8f6559486ca024edb2faa3244cb",
+  "sourceHashes": {
+    "adapters.mjs": "b59879c320eb6c70f2f09277f00534134552ab073578c3e326de0828485b8e1d",
+    "provenance.mjs": "511f187563c975021951f8dad1933b50a387d93ca775817c921ccc5c4ecb87cc",
+    "fixtures.mjs": "fcbe9683c06a62524c8eab3031c2a17d749274b653f2aa126192900b173da72d",
+    "benchmark.mjs": "0cec2463e8b521047cdc869f838d195a39c3dc07e33224f1dc9117c36cdb854c"
+  },
+  "fixtureClassification": "generated_no_mission_data",
+  "fixtureSha256": "3e0a279feca6089746f556203c29755360e5034529af47e2c181cd249f2e2f40",
+  "count": 1200,
+  "counts": {
+    "ALLOW": 201,
+    "DENY": 400,
+    "ESCALATE": 599
+  },
+  "verifiedReceipts": 1200,
+  "metrics": {
+    "elapsedMs": 545.957408,
+    "itemsPerSecond": 2197.973655849725,
+    "p50Ms": 0.355809000000022,
+    "p95Ms": 0.9218130000000002,
+    "p99Ms": 1.6878710000000012,
+    "maxMs": 7.676743999999985
+  },
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "x64",
+    "cpuModel": "unavailable"
+  },
+  "signing": {
+    "algorithm": "Ed25519",
+    "keyScope": "ephemeral_test_key_in_memory",
+    "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAgEVK3zThsDxg+5PHwAtENoe1FMgQ1kGkKa7q7kRCG3E=\n-----END PUBLIC KEY-----\n",
+    "publicKeySpkiSha256": "fc8977f0a699bcc6182d0a3a514f2bf52b0085d50efda48e564d668bf0c8c8ed",
+    "operationalAuthority": false
+  },
+  "receiptExamples": [
+    {
+      "body": {
+        "schema": "numina.telemetry.receipt.v1",
+        "classification": "LOCAL_SIMULATION",
+        "operationalAuthority": false,
+        "runId": "generated-telemetry-benchmark",
+        "index": 0,
+        "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+        "keyId": "fc8977f0a699bcc6182d0a3a514f2bf52b0085d50efda48e564d668bf0c8c8ed",
+        "record": {
+          "resource": "record:telemetry:ccsds:apid:42",
+          "payload": "{\"apid\":42,\"dataBytes\":3,\"inputSha256\":\"3ed226c964b87c729e7bfe35aacb5f999704a7d1a274cdf0e98cbc1a770e8e06\",\"payloadSha256\":\"039058c6f2c0cb492c533b0a4d14ef77cc0f78abccced5287d84a1a2011cfb81\",\"profile\":\"numina.telemetry.simulation-profile.v1\",\"sequence\":0,\"source\":\"ccsds\"}"
+        },
+        "decision": {
+          "decision": "DENY",
+          "reason": "principal_not_authorized"
+        }
+      },
+      "signature": "66thi1wXAYYPJGDUjqUaCjUjQUG8ZJfhlD/DXmevD5a7t2KnQgqkIDZaFXzVXRbr/ObnPxEF5n0MVxyamynRBQ=="
+    },
+    {
+      "body": {
+        "schema": "numina.telemetry.receipt.v1",
+        "classification": "LOCAL_SIMULATION",
+        "operationalAuthority": false,
+        "runId": "generated-telemetry-benchmark",
+        "index": 1,
+        "previous": "504de4b5ed04bd7495b92a73342baef0d11fc03f5a8ec35dd3e195173b0f7ae9",
+        "keyId": "fc8977f0a699bcc6182d0a3a514f2bf52b0085d50efda48e564d668bf0c8c8ed",
+        "record": {
+          "resource": "record:telemetry:stac:04a0907a7b4e083f22ab9822d03246009f5283c5fdc2a1b34e6690a0462188fb",
+          "payload": "{\"assetCount\":1,\"collection\":null,\"geometry\":{\"coordinates\":[-94.58,39.1],\"type\":\"Point\"},\"id\":\"generated-point-1\",\"inputSha256\":\"4e29cff210796c904e6655859c18145c8d396f0e03fc0a645c83e8e8d9322f22\",\"profile\":\"numina.telemetry.simulation-profile.v1\",\"source\":\"stac\",\"time\":{\"datetime\":\"2026-11-02T00:00:00Z\"}}"
+        },
+        "decision": {
+          "decision": "ESCALATE",
+          "reason": "human_review_required_no_dispatch"
+        }
+      },
+      "signature": "KQUHKzCouQIOTyUM/iti7CuuImiYiKnMDhfx6uIV+r+EoKRPn9iHzxpjz4aXkqKgf6teqFkssMUAne1cnAgOBg=="
+    },
+    {
+      "body": {
+        "schema": "numina.telemetry.receipt.v1",
+        "classification": "LOCAL_SIMULATION",
+        "operationalAuthority": false,
+        "runId": "generated-telemetry-benchmark",
+        "index": 2,
+        "previous": "3bff1058659e363ad5985b3d5270f3ee5cd353d6d6868a84b3a9088cd1554cf1",
+        "keyId": "fc8977f0a699bcc6182d0a3a514f2bf52b0085d50efda48e564d668bf0c8c8ed",
+        "record": {
+          "resource": "record:telemetry:ccsds:apid:42",
+          "payload": "{\"apid\":42,\"dataBytes\":3,\"inputSha256\":\"b387f48c6e73a64371cfd596b03949f719191987c3b8a92e5488bcce6f108d96\",\"payloadSha256\":\"039058c6f2c0cb492c533b0a4d14ef77cc0f78abccced5287d84a1a2011cfb81\",\"profile\":\"numina.telemetry.simulation-profile.v1\",\"sequence\":1,\"source\":\"ccsds\"}"
+        },
+        "decision": {
+          "decision": "ALLOW",
+          "reason": "first_observation"
+        }
+      },
+      "signature": "izHigT7fUseuJinHbO54WPxh731850lgY+g94bmvrVAjfUTunhIgbqX72xnf1P/A22OtNyCL2IUz8WbDLAS7Bw=="
+    }
+  ],
+  "acceptance": {
+    "localProfileTests": "separate_test_run_required",
+    "productionRuntime": "unverified",
+    "hardwareInLoop": "not_present",
+    "missionEnvironment": "not_evaluated",
+    "deployment": "not_performed"
+  },
+  "limitations": [
+    "Local sequential microbenchmark, not mission latency or throughput.",
+    "Input bytes and policies are generated fixtures.",
+    "Replay tracking is in-memory for one run; not persistent production enforcement.",
+    "No provider calls or command transmission."
+  ]
+}
