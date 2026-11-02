@@ -1,0 +1,22 @@
+{
+  "repository": "Numina-Enterprise/numina-production",
+  "commit": "23c38e1e3a15e8f6559486ca024edb2faa3244cb",
+  "files": [
+    {
+      "path": "runtime/nusd/package-lock.json",
+      "local": "reference/runtime-nusd.package-lock.json",
+      "gitBlobSha": "5c2607da61a209af2c6029e5004e7ec17356c7cf"
+    },
+    {
+      "path": "public/runtime-contract.js",
+      "local": "reference/runtime-contract.js.txt",
+      "gitBlobSha": "df17b6a3a31bfa6acc50fa5b3c0f09172d7cc686"
+    },
+    {
+      "path": "src/runtime-release-local.js",
+      "local": "reference/runtime-release-local.js.txt",
+      "gitBlobSha": "60ab32a9ef18948f9c4374a794d8df58a1eaa0fe"
+    }
+  ]
+}
+
