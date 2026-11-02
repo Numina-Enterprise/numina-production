@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: numina-verifier, namespace: numina}
+data:
+  NUMINA_ENV: production
+  NUMINA_ROLE: public-verifier
+  NUMINA_ALLOW_EPHEMERAL_KEY: "false"
+  NUMINA_REQUIRE_FROZEN_CORE: "true"
+  NUMINA_PUBLIC_URL: "https://www.numinalabs.xyz"
+  NUMINA_TRUSTED_HOSTS: "www.numinalabs.xyz,numinalabs.xyz,localhost,127.0.0.1"

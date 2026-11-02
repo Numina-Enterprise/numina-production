@@ -8,7 +8,8 @@ export const RUNTIME_READ_PATHS = new Set([
   '/v1/release/attestation', '/v1/release/supply-chain', '/v1/execution/providers',
   '/v2/network/status', '/v2/network/deployment-estimate', '/readyz', '/v1/preflight', '/v1/bootstrap/attestation',
   '/v1/frontier/readiness', '/v1/deployment/provenance',
-  '/v1/release/sbom', '/v1/release/build-provenance', '/v1/release/core-binding'
+  '/v1/release/sbom', '/v1/release/build-provenance', '/v1/release/core-binding',
+  '/v4/runtime/readback'
 ]);
 const VERSIONED_RUNTIME_PATHS = new Set(['/v1/status','/v1/control/state','/v1/release/manifest','/v1/release/attestation','/v1/execution/providers']);
 const RELEASE_IDENTITY_PATHS = new Set(['/v1/status','/v1/release/manifest','/v1/release/attestation']);

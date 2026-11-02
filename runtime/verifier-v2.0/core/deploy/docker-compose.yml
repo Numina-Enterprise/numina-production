@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: numina
+      POSTGRES_USER: numina
+      POSTGRES_PASSWORD: ${NUMINA_POSTGRES_PASSWORD:?set NUMINA_POSTGRES_PASSWORD}
+    volumes: [numina_pg:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U numina -d numina"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  verifier:
+    build: ..
+    read_only: true
+    tmpfs: [/tmp]
+    environment:
+      NUMINA_ENV: production
+      NUMINA_ROLE: public-verifier
+      NUMINA_SIGNING_KEY_FILE: /run/secrets/numina_signing_key
+      NUMINA_TRUSTED_HOSTS: localhost,127.0.0.1
+    secrets: [numina_signing_key]
+    ports: ["8080:8080"]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+  authority-node:
+    build: ..
+    # Local compose is an integration/staging topology. Production authority
+    # nodes require verified PostgreSQL TLS and externally managed secrets.
+    environment:
+      NUMINA_ENV: staging
+      NUMINA_ROLE: authority-node
+      NUMINA_DATABASE_URL: postgresql+psycopg://numina:${NUMINA_POSTGRES_PASSWORD:?set NUMINA_POSTGRES_PASSWORD}@postgres:5432/numina
+      NUMINA_SIGNING_KEY_FILE: /run/secrets/numina_signing_key
+      NUMINA_TRUSTED_HOSTS: authority-node
+    secrets: [numina_signing_key]
+    depends_on:
+      postgres: {condition: service_healthy}
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: ["ALL"]
+secrets:
+  numina_signing_key: {file: ./secrets/numina-signing.pem}
+volumes:
+  numina_pg: {}

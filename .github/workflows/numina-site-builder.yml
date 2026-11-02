@@ -56,7 +56,7 @@ jobs:
       - name: Select the reviewed Node release without dependency caches
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.0.0
         with:
-          node-version: '24.21.0'
+          node-version: '26.13.0'
           architecture: x64
           check-latest: false
           package-manager-cache: false

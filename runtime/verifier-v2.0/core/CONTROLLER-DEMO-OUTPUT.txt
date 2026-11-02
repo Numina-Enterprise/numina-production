@@ -1,0 +1,4 @@
+automatic hold False
+expansion_authorized True
+shadow_universes [('network-lag', True), ('uncertainty', False)]
+chaos_passed True

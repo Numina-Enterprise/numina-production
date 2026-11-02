@@ -1,0 +1,2 @@
+decision: (<Decision.ALLOW: 'ALLOW'>, 'WITHIN_AUTHORITY')
+{'operation_id': 'demo-buy', 'authorization_id': 'auth-demo-buy', 'lifecycle': 'FINAL', 'legitimacy': 'VALID', 'certainty': 'KNOWN', 'cumulative_fill_wei': 1000000000000000000, 'cumulative_fill_notional_usd_minor': 300000, 'state_digest': '24115e00991023f7d45cde6efc5140877c229341a4077f3f318c707a90360cf4', 'sequence': 5, 'receipt_digest': 'b03b3d3d2d1d3bd0293660fe31e0beb02ed19299ee91a2781146cbb624cbd1cf'}

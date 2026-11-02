@@ -1,6 +1,6 @@
 // Verified rc27 runtime mechanics. Identity, source, evidence, journal, runtime and artifact all resolve to NUMINA.
 export const RUNTIME_ORIGIN = 'https://numinalabs.xyz';
-export const RUNTIME_VERSION = '1.9.0-rc27';
+export const RUNTIME_VERSION = '2.0.0-rc27';
 export const EXPECTED_RELEASE = Object.freeze({
   "singular": true,
   "identity": "NUMINA",
@@ -15,18 +15,18 @@ export const EXPECTED_RELEASE = Object.freeze({
   "canonical_repository_role": "CANONICAL_ROOT_REPOSITORY",
   "canonical_repository_authoritative": true,
   "canonical_branch": "main",
-  "release": "core-v1.8+prod-v1.9.0-rc27",
+  "release": "core-v2.0+prod-v2.0.0-rc27",
   "core": "NUMINA",
-  "core_version": "1.8.0",
-  "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
-  "production_version": "1.9.0-rc27",
+  "core_version": "2.0.0",
+  "frozen_core_manifest_root": "3bf4d1259c9a60a759597e36e20ceff4f0b0352e5ede614cf068c56ac15de1a8",
+  "production_version": "2.0.0-rc27",
   "environment": "FRONTIER",
   "final_build": "/final-build.json",
   "final_manifest": "/final-manifest.json",
   "compatibility": {
-    "release": "core-v1.8+prod-v1.9.0-rc27",
-    "core_version": "1.8.0",
-    "frozen_core_manifest_root": "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67"
+    "release": "core-v2.0+prod-v2.0.0-rc27",
+    "core_version": "2.0.0",
+    "frozen_core_manifest_root": "3bf4d1259c9a60a759597e36e20ceff4f0b0352e5ede614cf068c56ac15de1a8"
   },
   "production_files_root": "2bd0774d33070735791c6f971cf76e826124577a96667488498bc45288ca0aba",
   "build_id": "424f660e35e6f48f72cb53d6c0241702c35358dac48322477343b9103178113e",

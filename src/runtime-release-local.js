@@ -91,7 +91,7 @@ async function selfHostedRuntimeSignedPayload(path,signer){
     return {bootstrap,receipt:await selfHostedRuntimeSign(signer,bootstrap,'NUMINA_BOOTSTRAP_ATTESTATION')};
   }
   if(path==='/v1/release/core-binding'){
-    const binding={schema:'numina.core-binding.v1',root:'NUMINA',identity:'NUMINA',core:'NUMINA',core_version:'1.8.0',
+    const binding={schema:'numina.core-binding.v1',root:'NUMINA',identity:'NUMINA',core:'NUMINA',core_version:'2.0.0',
       runtime_version:RUNTIME_VERSION,frozen_core_manifest_root:EXPECTED_RELEASE.compatibility.frozen_core_manifest_root,
       release:structuredClone(EXPECTED_RELEASE),historical_predecessor:'1.9.0-rc27'};
     return {binding,receipt:await selfHostedRuntimeSign(signer,binding,'NUMINA_CORE_BINDING')};
@@ -111,6 +111,25 @@ export async function routeLocalRuntime(request,env={},pins={}){
     });
   }
   if(path==='/v2/network/deployment-estimate')return selfHostedRuntimeResponse(request,{error:'NETWORK_ESTIMATE_UNAVAILABLE',release:RUNTIME_VERSION},503);
+  // Public readback: bypasses the signer, like /v1/execution/providers above.
+  // No runtime signing key is available (RUNTIME_SIGNER_UNAVAILABLE), so a signed
+  // readback would 503. This returns the corrected application-release values, unsigned.
+  if(path==='/v4/runtime/readback')return selfHostedRuntimeResponse(request,{
+    schema:'numina.runtime.readback.v1',
+    path:'/v4/runtime/readback',
+    identity:'NUMINA',
+    release:RUNTIME_VERSION,
+    environment:EXPECTED_RELEASE.environment,
+    runtime_surface:'numina-self-hosted-worker',
+    blockchain:'962421430',
+    chainIdentity:'962421430',
+    blockchainIdentity:'0xea95dac2ad854c835bc526d6be70a5a4614ccd47412a4bc710308b41010b53e1',
+    manifestIdentity:'1a17f584e23279684574022f39e533966ad09919f484e005c03948178a46aa0a',
+    softwareIdentity:'1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b',
+    signed:false,
+    signer:null,
+    source:'dist/client/downloads/application-release-v4.json'
+  });
   if(!SELF_HOSTED_SIGNER_PATHS.has(path))return selfHostedRuntimeResponse(request,{error:'RUNTIME_LOCAL_ROUTE_UNAVAILABLE',release:RUNTIME_VERSION},503);
   try{
     const signer=await selfHostedRuntimeSigner(env,pins);

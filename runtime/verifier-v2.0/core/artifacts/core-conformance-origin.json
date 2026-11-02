@@ -1,0 +1,8 @@
+{
+    "schema":  "numina.historical-evidence-origin.v1",
+    "source":  "fixtures/public-release-evidence.json",
+    "sourceSha256":  "266e684cde618801f3845869610a53479b8a18056d56a65132ed950349769e68",
+    "sourceProductionVersion":  "1.9.0-rc20",
+    "capturedAt":  1789145310,
+    "scope":  "Previously captured frozen-core conformance. No new test execution or rc27 conformance is asserted."
+}

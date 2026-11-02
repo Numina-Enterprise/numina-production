@@ -71,6 +71,7 @@ export default {
    if(path==='/api/core/v1.8/manifest'&&req.method==='GET')return finish(response(CORE_MANIFEST));
    if(path==='/api/core/v1.8/context'&&req.method==='GET')return finish(response(CORE_CONTEXT));
    if(path.startsWith('/api/'))return finish(response({error:'NOT_FOUND'},404));
+   if(path.startsWith('/v4/'))return finish(response({error:'NOT_FOUND',path},404));
    return finish(await env.ASSETS.fetch(req));
   }catch(error){
    const exceptionTypes=new Set(['Error','TypeError','ReferenceError','RangeError','URIError','SyntaxError','AggregateError']);
