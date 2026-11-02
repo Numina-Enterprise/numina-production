@@ -46,3 +46,11 @@ The candidate removes only that orphan index/tree reference, preserving its exac
 No production signer, trust anchor, root authority, secret, IAM grant, trading account, payment, satellite command or treasury state is changed. No external evaluator has accepted these results. Project-specific READMEs enumerate exact commands, primary sources, observations and remaining gaps.
 
 All results must retain their classification: source observation, local test, simulation, hosted CI or independently verified runtime evidence. Do not promote one class to another.
+
+## Observed hosted validation
+
+At commit `c1100df61ac389ba03313883e695f5b712f07ea2`, GitHub-hosted run [41438838027](https://github.com/Numina-Enterprise/numina-production/actions/runs/41438838027) completed checkout, Node 26.13.0 setup, all 65 tests, source evidence collection and artifact upload successfully. The artifact digest and exact observations are recorded in `results/hosted-observation.json`.
+
+The overall run failed later in the existing full build: `scripts/source-alignment.mjs` attempts to open missing `runtime/verifier-v2.0/core/.pytest_cache/.gitignore`. This is not a sprint test failure and has not been bypassed.
+
+The separate immutable-dependency policy run [41438838114](https://github.com/Numina-Enterprise/numina-production/actions/runs/41438838114) passed the preserved-runner policy but reported 32 action-reference mismatches against `action-pins.json`. The follow-up revision aligns the three setup/upload references in the touched NUMINA workflow to the already reviewed manifest pins, whose official action metadata was read. Remaining unrelated workflow mismatches are still release blockers. No allowlist or enforcement check was weakened.
