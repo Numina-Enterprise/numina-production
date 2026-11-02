@@ -26,7 +26,7 @@ jobs:
       - name: Use Node 26
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
-          node-version: '26.11.1'
+          node-version: '26.13.0'
           architecture: x64
           check-latest: false
           package-manager-cache: false

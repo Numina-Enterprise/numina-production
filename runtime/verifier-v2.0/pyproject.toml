@@ -1,0 +1,9 @@
+[project]
+name = "numina-core-v2.0"
+version = "2.0.0"
+description = "Numina Core V2.0 — unified, frozen working core (v1.8 verifier merged with financial core v1.0.0). Read-only / dry-run only."
+requires-python = ">=3.11"
+dependencies = ["cryptography>=41"]
+
+[project.scripts]
+numina-v2 = "numina.cli:main"

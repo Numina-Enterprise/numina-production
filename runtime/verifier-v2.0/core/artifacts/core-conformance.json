@@ -1,0 +1,19 @@
+{
+    "captured_at":  1789145310,
+    "command":  [
+                    "/opt/pyvenv/bin/python",
+                    "-m",
+                    "pytest",
+                    "-q",
+                    "test_numina_core.py",
+                    "tests"
+                ],
+    "core_version":  "1.8.0",
+    "duration_ms":  2015,
+    "frozen_core_valid":  true,
+    "frozen_manifest_root":  "5852f48baa66036cbac5351f3df4805c8e3a103ce014a4508a9e7d3d6eba5b67",
+    "passing_tests":  309,
+    "production_version":  "1.9.0-rc20",
+    "return_code":  0,
+    "valid":  true
+}
