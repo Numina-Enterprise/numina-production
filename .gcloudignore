@@ -1,0 +1,8 @@
+# Cloud Run source upload ignore list for numina-production.
+# Do NOT add #!include:.gitignore here: .gitignore line 21 excludes dist/,
+# and the Dockerfile needs dist/ in the build context (COPY dist ./dist).
+# Do NOT add dist/ to this file.
+.gcloudignore
+.git
+.gitignore
+manifest-verifier/.venv312/
