@@ -78,6 +78,7 @@ final class HostedAppModel: NSObject, ObservableObject, WKNavigationDelegate, WK
 
     func retry() { load(retryPageURL) }
     func home() { load(AppConfiguration.startURL) }
+    func services() { load(AppConfiguration.servicesURL) }
     func frontier() { load(AppConfiguration.frontierURL) }
     func openRuntimeMetrics() { load(AppConfiguration.runtimeMetricsURL) }
     func openBrowserRuntimeMetrics() { openExternal(AppConfiguration.runtimeMetricsURL) }

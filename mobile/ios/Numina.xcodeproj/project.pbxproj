@@ -12,6 +12,8 @@
         A10000000000000000000004 /* HostedAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004; };
         A10000000000000000000005 /* HostedWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005; };
         A10000000000000000000006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009; };
+        B00000000000000000000001 /* NuminaSecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000B; };
+        B00000000000000000000002 /* NuminaNavigationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000C; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,16 +26,27 @@
         A20000000000000000000007 = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Numina.xcconfig; sourceTree = "<group>"; };
         A20000000000000000000008 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Numina.app; sourceTree = BUILT_PRODUCTS_DIR; };
         A20000000000000000000009 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+        B0000000000000000000000B /* NuminaSecurityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuminaSecurityTests.swift; sourceTree = "<group>"; };
+        B0000000000000000000000C /* NuminaNavigationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NuminaNavigationUITests.swift; sourceTree = "<group>"; };
+        B0000000000000000000000D /* NuminaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NuminaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+        B0000000000000000000000E /* NuminaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NuminaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXContainerItemProxy section */
+        B00000000000000000000051 = {isa = PBXContainerItemProxy; containerPortal = A60000000000000000000001; proxyType = 1; remoteGlobalIDString = A50000000000000000000001; remoteInfo = Numina; };
+        B00000000000000000000052 = {isa = PBXContainerItemProxy; containerPortal = A60000000000000000000001; proxyType = 1; remoteGlobalIDString = A50000000000000000000001; remoteInfo = Numina; };
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFrameworksBuildPhase section */
         A30000000000000000000001 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+        B00000000000000000000015 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+        B00000000000000000000016 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
         A40000000000000000000001 = {
             isa = PBXGroup;
-            children = (A40000000000000000000002, A40000000000000000000003, A40000000000000000000004);
+            children = (A40000000000000000000002, A40000000000000000000003, B0000000000000000000001F, B00000000000000000000020, A40000000000000000000004);
             sourceTree = "<group>";
         };
         A40000000000000000000002 = {
@@ -43,7 +56,9 @@
             sourceTree = "<group>";
         };
         A40000000000000000000003 = {isa = PBXGroup; children = (A20000000000000000000007); path = Configuration; sourceTree = "<group>"; };
-        A40000000000000000000004 = {isa = PBXGroup; children = (A20000000000000000000008); name = Products; sourceTree = "<group>"; };
+        A40000000000000000000004 = {isa = PBXGroup; children = (A20000000000000000000008, B0000000000000000000000D, B0000000000000000000000E); name = Products; sourceTree = "<group>"; };
+        B0000000000000000000001F = {isa = PBXGroup; children = (B0000000000000000000000B); path = NuminaTests; sourceTree = "<group>"; };
+        B00000000000000000000020 = {isa = PBXGroup; children = (B0000000000000000000000C); path = NuminaUITests; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -58,12 +73,34 @@
             productReference = A20000000000000000000008;
             productType = "com.apple.product-type.application";
         };
+        B00000000000000000000029 /* NuminaTests */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = B00000000000000000000047;
+            buildPhases = (B00000000000000000000033, B00000000000000000000015);
+            buildRules = ();
+            dependencies = (B0000000000000000000005B);
+            name = NuminaTests;
+            productName = NuminaTests;
+            productReference = B0000000000000000000000D;
+            productType = "com.apple.product-type.bundle.unit-test";
+        };
+        B0000000000000000000002A /* NuminaUITests */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = B00000000000000000000048;
+            buildPhases = (B00000000000000000000034, B00000000000000000000016);
+            buildRules = ();
+            dependencies = (B0000000000000000000005C);
+            name = NuminaUITests;
+            productName = NuminaUITests;
+            productReference = B0000000000000000000000E;
+            productType = "com.apple.product-type.bundle.ui-testing";
+        };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
         A60000000000000000000001 = {
             isa = PBXProject;
-            attributes = {BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; TargetAttributes = {A50000000000000000000001 = {CreatedOnToolsVersion = 16.0; }; }; };
+            attributes = {BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; TargetAttributes = {A50000000000000000000001 = {CreatedOnToolsVersion = 16.0; }; B00000000000000000000029 = {CreatedOnToolsVersion = 16.0; TestTargetID = A50000000000000000000001; }; B0000000000000000000002A = {CreatedOnToolsVersion = 16.0; TestTargetID = A50000000000000000000001; }; }; };
             buildConfigurationList = A90000000000000000000001;
             compatibilityVersion = "Xcode 14.0";
             developmentRegion = en;
@@ -73,7 +110,7 @@
             productRefGroup = A40000000000000000000004;
             projectDirPath = "";
             projectRoot = "";
-            targets = (A50000000000000000000001);
+            targets = (A50000000000000000000001, B00000000000000000000029, B0000000000000000000002A);
         };
 /* End PBXProject section */
 
@@ -84,16 +121,23 @@
             files = (A10000000000000000000001, A10000000000000000000002, A10000000000000000000003, A10000000000000000000004, A10000000000000000000005);
             runOnlyForDeploymentPostprocessing = 0;
         };
+        B00000000000000000000033 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000001); runOnlyForDeploymentPostprocessing = 0; };
+        B00000000000000000000034 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000002); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXResourcesBuildPhase section */
         A80000000000000000000001 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000006); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+        B0000000000000000000005B = {isa = PBXTargetDependency; target = A50000000000000000000001; targetProxy = B00000000000000000000051; };
+        B0000000000000000000005C = {isa = PBXTargetDependency; target = A50000000000000000000001; targetProxy = B00000000000000000000052; };
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
         AA0000000000000000000001 = {
             isa = XCBuildConfiguration;
-            buildSettings = {CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = NO; GCC_OPTIMIZATION_LEVEL = 0; ONLY_ACTIVE_ARCH = YES; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; };
+            buildSettings = {CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GCC_OPTIMIZATION_LEVEL = 0; ONLY_ACTIVE_ARCH = YES; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; };
             name = Debug;
         };
         AA0000000000000000000002 = {
@@ -113,11 +157,79 @@
             buildSettings = {LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks"); };
             name = Release;
         };
+        B0000000000000000000003D = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                CODE_SIGNING_ALLOWED = NO;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+                PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app.tests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = iphoneos;
+                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+                SWIFT_VERSION = 5.0;
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Numina.app/Numina";
+                BUNDLE_LOADER = "$(TEST_HOST)";
+            };
+            name = Debug;
+        };
+        B0000000000000000000003E = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                CODE_SIGNING_ALLOWED = NO;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+                PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app.tests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = iphoneos;
+                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+                SWIFT_VERSION = 5.0;
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Numina.app/Numina";
+                BUNDLE_LOADER = "$(TEST_HOST)";
+            };
+            name = Release;
+        };
+        B0000000000000000000003F = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                CODE_SIGNING_ALLOWED = NO;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+                PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app.uitests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = iphoneos;
+                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+                SWIFT_VERSION = 5.0;
+                TEST_TARGET_NAME = Numina;
+            };
+            name = Debug;
+        };
+        B00000000000000000000040 = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                CODE_SIGNING_ALLOWED = NO;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+                PRODUCT_BUNDLE_IDENTIFIER = xyz.numinalabs.app.uitests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = iphoneos;
+                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+                SWIFT_VERSION = 5.0;
+                TEST_TARGET_NAME = Numina;
+            };
+            name = Release;
+        };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
         A90000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (AA0000000000000000000001, AA0000000000000000000002); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
         A90000000000000000000002 = {isa = XCConfigurationList; buildConfigurations = (AA0000000000000000000003, AA0000000000000000000004); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+        B00000000000000000000047 = {isa = XCConfigurationList; buildConfigurations = (B0000000000000000000003D, B0000000000000000000003E); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+        B00000000000000000000048 = {isa = XCConfigurationList; buildConfigurations = (B0000000000000000000003F, B00000000000000000000040); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
     };
     rootObject = A60000000000000000000001;
