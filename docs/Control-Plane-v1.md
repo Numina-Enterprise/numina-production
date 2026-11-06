@@ -8,7 +8,7 @@ One `DB` binding holds a single authoritative `numina_control_state` row. Every 
 
 One authority model uses a root identity and attenuated grants. Authentication maps the Sites dispatch identity or the owner's API credential to that same principal. The root is bound to `NUMINA_CONTROL_OWNER`; changing the configured root does not rewrite stored authority and instead makes the service unavailable. Delegation narrows scopes, record prefixes, and expiration. Revocation and expiry affect every descendant. Private state is filtered by the caller's authority; only the root can export the entire journal.
 
-One interoperability registry currently supports **internal.record.v1**. It round-trips the exact canonical resource and payload without changing semantics. Unsupported routes return `ESCALATE` and cannot execute. No external payment, trading, custody, or settlement adapter is connected. This release does not claim complete hosted certification of the preserved Core C1–C14 economic invariants.
+One interoperability registry supports **internal.record.v1** (legacy exact resource + plaintext payload) and **internal.commitment.v1** (opaque resource + client-prepared SHA-256 commitment, with no plaintext payload field). Both record only internal effects. The commitment route rejects unexpected fields, freeform IDs, non-opaque resources, and attestations. Unsupported external routes return `ESCALATE` and cannot execute. No external payment, trading, custody, or settlement adapter is connected. This release does not claim complete hosted certification of the preserved Core C1–C14 economic invariants.
 
 One evidence graph records immutable operator attestations, explicit resolutions, dependencies, and committed record effects. Every node is hashed. Every state read validates the complete journal's revision sequence, hashes and links, its binding to the current state, and the evidence-node hashes. Contradictions, revoked resolvers, expired attestations, and invalidated parent evidence block pending execution. Operator testimony is labeled as testimony, not external system verification. Hashes detect inconsistency; privileged database administrators remain outside this application's security boundary.
 
@@ -29,6 +29,22 @@ All mutation bodies are exact canonical JSON: UTF-8, sorted object keys, no extr
 - `POST /api/control/v1/bootstrap`: root-only explicit initialization, `{initialize:true}`. Available only for an empty journal and absent state. A missing state during normal operation returns 503 and is never implicitly recreated.
 
 The journal stores canonical commands, actor, event time, prior hash, resulting state hash, and decision hash, allowing deterministic replay. Dependency provenance and exact adapter version are retained. Production commits are internal records in the same transaction as state/evidence; there is no external dual-write.
+
+### Optional commitment-only private record route (draft, no production approval)
+
+`internal.commitment.v1` accepts an opaque request ID and command ID (each exactly 32 lowercase hexadecimal characters) and a private resource `record:private/<32-lowercase-hex>`. The only `wants` keys are `resource` and `commitment`. The commitment is the text `sha256:<64-lowercase-hex>`. `requiredEvidence` **must be an empty list**. A valid commitment-only request may be committed to an internal record using the same revision- and actor-bound next-action protocol as the legacy adapter; its execution command ID must also be an opaque 32-character hexadecimal value. No external activity is permitted.
+
+For confidential data, the **client** must generate a fresh high-entropy secret salt, compute a commitment over an unambiguous versioned encoding containing the salt and confidential content, and submit **only the commitment**. Preserve the salt and source payload separately under appropriately restricted access for a later authorized reviewer. Numina does not receive, encrypt, store, or verify that private payload, and cannot verify salt quality from a digest alone. Unsalted hashing of low-entropy identifiers is vulnerable to guessing and should not be used for privacy. A SHA-256 digest is **not encryption, selective disclosure, a zero-knowledge proof, BBS+ credential, or a signed receipt**.
+
+This route reduces *content* stored for that class of record; it **does not eliminate identity information** about authenticated actors or grants, and it does not protect against a compromised client, a caller encoding personal details into other allowed fields, or privileged database access. Legacy `internal.record.v1` requests and historical journals still contain exact plaintext payloads. There is **no retroactive redaction**; do not rewrite historical journal bytes or delete nonce/replay evidence to force privacy.
+
+Example synthetic command with no customer data:
+
+```json
+{"data":{"id":"11111111111111111111111111111111","requiredEvidence":[],"route":"internal.commitment.v1","wants":{"commitment":"sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef","resource":"record:private/22222222222222222222222222222222"}},"expectedRevision":0,"id":"33333333333333333333333333333333","type":"request"}
+```
+
+Example uses a placeholder digest, **not** evidence of a real commitment. An actual client should compute the digest locally.
 
 ## Deployment and recovery
 
