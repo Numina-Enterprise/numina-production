@@ -1,0 +1,17 @@
+{
+  "schema": "numina.one-day-project-status.v1",
+  "project": "ksi-and-supply-chain-evidence",
+  "owner": "ksi_engine",
+  "implementation": "reviewable",
+  "tests": {"passed": 12, "failed": 0, "nodeObserved": "24.22.1"},
+  "testCommand": "node --test tools/one-day/ksi/evidence-engine.test.mjs",
+  "collectorCommand": "node tools/one-day/ksi/evidence-engine.mjs collect --root tools/one-day/ksi --config collector-config.json --output NEW_OUTPUT_PATH",
+  "evidence": "tools/one-day/ksi/observed-evidence.json",
+  "productionDeployment": "not_performed",
+  "runtimeSignerBinding": "blocked",
+  "s0BoundaryApproval": "blocked",
+  "dependencyVulnerabilityScan": "blocked_missing_fresh_report",
+  "validatedKsis": 0,
+  "certificationClaim": false,
+  "providerOrFinancialWrites": false
+}

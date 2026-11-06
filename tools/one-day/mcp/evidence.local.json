@@ -1,0 +1,39 @@
+{
+  "schema": "numina.one-day.mcp-evidence.v1",
+  "generatedAt": "2026-11-02T11:37:52.059Z",
+  "node": "v24.22.1",
+  "classification": "LOCAL_FIXTURE_AND_DURABILITY_TESTS",
+  "sourceCommit": "23c38e1e3a15e8f6559486ca024edb2faa3244cb",
+  "pr127SnapshotCommit": "b4181eb325b89f541ba8cf96cc2568c7ac750ea4",
+  "tests": {
+    "exitCode": 0,
+    "passed": 39,
+    "failed": 0,
+    "outputSha256": "727a1330b616ec715945c41ad323123b47ed6143c6677096e0cceb530dd4bc2f"
+  },
+  "files": [
+    {
+      "path": "authorization-boundary.mjs",
+      "sha256": "c5a971ae69d9a1fa5511925b77d55e89bfc986cb482930227b57b738229254de"
+    },
+    {
+      "path": "reservation-store.mjs",
+      "sha256": "45bdb022857c97018432c9c5b531cc22800ebce6d412dd0858f01a5748d8bc34"
+    },
+    {
+      "path": "vendor/pr127/provenance.json",
+      "sha256": "905b140ed6ae10978a424297932cbd85497c03942e09f3d66b90a78152b5431a"
+    }
+  ],
+  "providerConnected": false,
+  "liveActionsEnabled": false,
+  "deploymentVerified": false,
+  "productionSignerBound": false,
+  "blockers": [
+    "TRUSTED_AUTHORIZATION_SERVER_AND_KEYS_NOT_CONFIGURED",
+    "LIVE_PROVIDER_OAUTH_NOT_EXERCISED",
+    "SQLITE_SHARED_DISK_ONLY_NOT_DISTRIBUTED",
+    "DURABLE_PKCE_CALLBACK_SESSION_INTEGRATION_REQUIRED",
+    "PRODUCTION_DEPLOYMENT_AND_SIGNED_RUNTIME_RECEIPT_NOT_VERIFIED"
+  ]
+}

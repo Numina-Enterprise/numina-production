@@ -1,0 +1,39 @@
+{
+  "schema": "numina.pr127.snapshot.v1",
+  "repository": "Numina-Enterprise/numina-production",
+  "pullRequest": 127,
+  "sourceCommit": "b4181eb325b89f541ba8cf96cc2568c7ac750ea4",
+  "sourceState": "unmerged_review_snapshot",
+  "files": [
+    {
+      "path": "src/payment-authorization-gates.js",
+      "gitBlobSha": "b50108d02284820a37186836b991318072f11648",
+      "sha256": "c9792e7ad45431741c3ba562104064d0471d649aafb5c20dd577a62e1dfe07e0"
+    },
+    {
+      "path": "src/schedule-j-evidence.js",
+      "gitBlobSha": "256d9eae0e78f870233cd220c5e0749982cb9be6",
+      "sha256": "a494088566d125f3bc4ec51ee8385728dda181669d60d7ee7368429006d3e952"
+    },
+    {
+      "path": "src/settlement-evidence-gates.js",
+      "gitBlobSha": "4e861ed7e536411d1077c789994f34412cadda9a",
+      "sha256": "cf21baed90381a17745eb39f6d45bae3c2fa5053d674c6c5051034b8a4f026fd"
+    },
+    {
+      "path": "tests/payment-authorization-gates.test.mjs",
+      "gitBlobSha": "a4b98fa31743e3d07dc674e5485a0e88d67dfe3f",
+      "sha256": "2d0e017c5a81cc301fe7e98fb66e0b6bc8812422de4e328a5e10277df65572e1"
+    },
+    {
+      "path": "tests/schedule-j-evidence.test.mjs",
+      "gitBlobSha": "0bd61299c449e0a22189ae7223722af1ae02f3a3",
+      "sha256": "fe4997150aa73a9b82cbaba8ce8ee9c706bedbd2b85ef8ab7afcdf10a5d8a4bc"
+    },
+    {
+      "path": "tests/settlement-evidence-gates.test.mjs",
+      "gitBlobSha": "dd055f67b960b42b9f86f0c994db62aa20836fd4",
+      "sha256": "b0281a0e7f859ce1f47010830388753d847917c7cf91d571951776a418855892"
+    }
+  ]
+}

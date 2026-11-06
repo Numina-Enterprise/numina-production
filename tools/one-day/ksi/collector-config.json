@@ -1,0 +1,146 @@
+{
+  "schema": "numina.ksi-collector-config.v1",
+  "sourceManifest": "reference/source.json",
+  "lockfile": "reference/runtime-nusd.package-lock.json",
+  "signerPins": {
+    "audience": "https://numinalabs.xyz",
+    "keyVersion": null,
+    "spkiSha256": "566684c7b0915d3eac8b59642ccb06e798165ad476f2241d931fb839ca804bde",
+    "sourceKeyId": "3a2fe594a7e10458ae89683f",
+    "sourceRawPublicKeyBase64": "UvvCGLBZUbCPJaDHqq0Ef0mkhMeA4CoPPe2GoWgkTr8=",
+    "trustState": "source_pin_only_not_runtime_verified",
+    "sourceRawSha256": "3a2fe594a7e10458ae89683fdda0291af282690825be3062ef7ac2721137deff"
+  },
+  "boundary": {
+    "schema": "numina.s0-boundary.v1",
+    "freezeState": "candidate",
+    "owner": "Samuel J. Kott",
+    "scope": "Backup-control boundary candidate; applicability and custody approvals remain unverified.",
+    "sourceReference": "docs/Numina-Security.md at 23c38e1e3a15e8f6559486ca024edb2faa3244cb",
+    "surfaces": [
+      {
+        "name": "Mac",
+        "status": "restore_evidence_required"
+      },
+      {
+        "name": "VENGEANCE",
+        "status": "restore_evidence_required"
+      },
+      {
+        "name": "Google Drive",
+        "status": "restore_evidence_required"
+      },
+      {
+        "name": "iCloud",
+        "status": "restore_evidence_required"
+      },
+      {
+        "name": "Neon-to-Galera",
+        "status": "provider_and_restore_evidence_required"
+      }
+    ],
+    "controlFamilies": [
+      {
+        "family": "AC",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "AT",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "AU",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "CA",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "CM",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "CP",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "IA",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "IR",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "MA",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "MP",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "PE",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "PL",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "PM",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "PS",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "PT",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "RA",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "SA",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "SC",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "SI",
+        "applicability": "unreviewed",
+        "evidence": []
+      },
+      {
+        "family": "SR",
+        "applicability": "unreviewed",
+        "evidence": []
+      }
+    ],
+    "approval": null
+  }
+}

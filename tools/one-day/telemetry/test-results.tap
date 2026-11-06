@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: fixed independent CCSDS header vector decodes exact six-octet header
+ok 1 - fixed independent CCSDS header vector decodes exact six-octet header
+  ---
+  duration_ms: 1.953925
+  type: 'test'
+  ...
+# Subtest: CCSDS rejects incomplete, incorrect-length and unsupported profiles
+ok 2 - CCSDS rejects incomplete, incorrect-length and unsupported profiles
+  ---
+  duration_ms: 0.997828
+  type: 'test'
+  ...
+# Subtest: standalone CCSDS parser rejects invalid payload limit configuration
+ok 3 - standalone CCSDS parser rejects invalid payload limit configuration
+  ---
+  duration_ms: 0.559116
+  type: 'test'
+  ...
+# Subtest: stream accepts arbitrary chunk boundaries and multiple packets
+ok 4 - stream accepts arbitrary chunk boundaries and multiple packets
+  ---
+  duration_ms: 1.929887
+  type: 'test'
+  ...
+# Subtest: stream fails closed on oversized declared frame/chunk and truncated final input
+ok 5 - stream fails closed on oversized declared frame/chunk and truncated final input
+  ---
+  duration_ms: 0.396833
+  type: 'test'
+  ...
+# Subtest: sequence policy detects replay, gaps, old data and modulo wrap per APID
+ok 6 - sequence policy detects replay, gaps, old data and modulo wrap per APID
+  ---
+  duration_ms: 0.890323
+  type: 'test'
+  ...
+# Subtest: STAC profile preserves source digest and core-compatible serialized payload
+ok 7 - STAC profile preserves source digest and core-compatible serialized payload
+  ---
+  duration_ms: 3.920847
+  type: 'test'
+  ...
+# Subtest: STAC rejects invalid dates, geometry bounds, unsafe URLs, extensions and oversized records
+ok 8 - STAC rejects invalid dates, geometry bounds, unsafe URLs, extensions and oversized records
+  ---
+  duration_ms: 2.494593
+  type: 'test'
+  ...
+# Subtest: STAC null geometry/time interval and collection rules are explicit
+ok 9 - STAC null geometry/time interval and collection rules are explicit
+  ---
+  duration_ms: 1.10949
+  type: 'test'
+  ...
+# Subtest: policy denies unauthorized/action/replay and escalates tasking without dispatch
+ok 10 - policy denies unauthorized/action/replay and escalates tasking without dispatch
+  ---
+  duration_ms: 0.619435
+  type: 'test'
+  ...
+# Subtest: receipt signatures bind run, key, normalized record, decision and chain order
+ok 11 - receipt signatures bind run, key, normalized record, decision and chain order
+  ---
+  duration_ms: 4.586218
+  type: 'test'
+  ...
+# Subtest: canonicalizer rejects invalid numbers, types, Unicode and excessive nesting
+ok 12 - canonicalizer rejects invalid numbers, types, Unicode and excessive nesting
+  ---
+  duration_ms: 0.43634
+  type: 'test'
+  ...
+# Subtest: canonicalizer rejects array holes and enumerable, hidden or symbol extensions
+ok 13 - canonicalizer rejects array holes and enumerable, hidden or symbol extensions
+  ---
+  duration_ms: 0.327387
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 205.11519
