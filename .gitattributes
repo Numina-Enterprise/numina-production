@@ -53,3 +53,5 @@ release-evidence/** -text
 *.ed25519.sig64 binary
 *.raw32 binary
 scripts/build-numina-correctness-reports.py -text
+
+.github/workflows/*.lock.yml linguist-generated=true
