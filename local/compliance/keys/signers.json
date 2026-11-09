@@ -5,7 +5,7 @@
     {
       "label": "SKOTT34-Ed25519",
       "owner": "Sam Kott",
-      "role": "Owner, S K Consulting LLC dba Numina Labs",
+      "role": "Owner, SK Consulting LLC dba Numina Labs",
       "alg": "Ed25519",
       "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAxqpbjMTzgULVeNq/W0tdU1RzPKmkuldC2U4DDI5g6yI=\n-----END PUBLIC KEY-----\n",
       "publicKeySha256": "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce",

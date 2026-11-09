@@ -18,7 +18,7 @@ import {FAKE_LISTS, FAKE_MANIFEST, fakeBusiness, fakePayments, fakeKycMap, EXPEC
 import {loadConfig, MODULE_ROOT, REPO_ROOT} from './util.mjs';
 import {checkComposeFiles, checkChecklistAndMapping, COMPOSE_FILES} from './configs.mjs';
 
-const NUMINA_OFFERING = 'Numina Labs (S K Consulting LLC) offers AI and software consulting engagements: a $1,500 diagnostic and an optional $7,500 implementation engagement, paid by card through Stripe Checkout.';
+const NUMINA_OFFERING = 'Numina Labs (SK Consulting LLC) offers AI and software consulting engagements: a $1,500 diagnostic and an optional $7,500 implementation engagement, paid by card through Stripe Checkout.';
 
 function walk(dir, out = []) {
   if (!existsSync(dir)) return out;

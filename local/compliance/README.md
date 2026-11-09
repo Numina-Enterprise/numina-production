@@ -1,6 +1,6 @@
 # Numina Labs local compliance module (KYC / sanctions / AML)
 
-For **S K Consulting LLC dba Numina Labs**. This module runs **only on Sam's machine**. Nothing in `src/`,
+For **SK Consulting LLC dba Numina Labs**. This module runs **only on Sam's machine**. Nothing in `src/`,
 `scripts/`, `public/` or the Cloudflare Worker imports it, and the gate fails if anything does.
 
 > **Limits.** This is a screening and record-keeping aid. It is **not legal advice**. It does **not**

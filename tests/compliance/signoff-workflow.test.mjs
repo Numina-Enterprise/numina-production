@@ -180,7 +180,7 @@ test('review packet: Markdown and print-ready HTML with an unsigned signature bl
     const {s, c} = await screenedBusiness(t);
     const {markdown, blockers} = buildPacket(c, {config, signers: s.signers, store: s});
     assert.ok(blockers.length > 0);
-    assert.match(markdown, /Signer: \*\*Sam Kott\*\*, Owner, S K Consulting LLC dba Numina Labs/);
+    assert.match(markdown, /Signer: \*\*Sam Kott\*\*, Owner, SK Consulting LLC dba Numina Labs/);
     assert.match(markdown, /Signature: _{10,}/);
     assert.match(markdown, /signature: _unsigned_/);
     assert.match(markdown, /npm run compliance:signoff -- --case cp_[0-9a-f]{16} --key/);

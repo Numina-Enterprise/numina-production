@@ -63,7 +63,7 @@ export function createSignoff({caseRecord, decision, privateKey, signers, label 
   const payload = {
     schema: SIGNOFF_SCHEMA, caseId: caseRecord.id, caseType: caseRecord.caseType, decision,
     outputSha256: outputSha256(caseRecord), signer: label, publicKeySha256: fp, signedAt: now.toISOString(),
-    organization: org ?? 'S K Consulting LLC dba Numina Labs',
+    organization: org ?? 'SK Consulting LLC dba Numina Labs',
   };
   const signature = sign(null, Buffer.from(canonicalJson(payload)), privateKey).toString('base64');
   return {payload, signature, alg: 'Ed25519'};

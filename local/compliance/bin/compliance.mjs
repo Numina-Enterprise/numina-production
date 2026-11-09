@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Local-only compliance CLI for S K Consulting LLC dba Numina Labs. Never imported by src/ or the Worker.
+// Local-only compliance CLI for SK Consulting LLC dba Numina Labs. Never imported by src/ or the Worker.
 import {readFileSync, writeFileSync, readdirSync, statSync} from 'node:fs';
 import {join, resolve, extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
