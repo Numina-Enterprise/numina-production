@@ -34,7 +34,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          [[ "${{ github.repository }}" == "skott34-dot/numina-production" ]]
+          [[ "${{ github.repository }}" == "Numina-Enterprise/numina-production" ]]
+          [[ "${{ github.repository_id }}" == "1367647143" ]]
           [[ "$(git rev-parse HEAD)" == "${{ github.sha }}" ]]
           node --version
       - name: Install pinned dependencies
