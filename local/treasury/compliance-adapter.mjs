@@ -22,4 +22,4 @@ export function createComplianceAdapter({repo,module:injected}={}){
     }catch(e){return {status:'error',blocking:false,error:String(e?.message||e).slice(0,200)};}
   };
 }
-const summarize=r=>r&&typeof r==='object'?{pass:r.pass??r.ok??null,score:r.score??null,reasons:Array.isArray(r.reasons)?r.reasons.slice(0,10):undefined}:{value:r};
+const summarize=r=>{if(!(r&&typeof r==='object'))return {value:r};const out={pass:r.pass??r.ok??null,score:r.score??null};if(Array.isArray(r.reasons))out.reasons=r.reasons.slice(0,10);return out;};

@@ -19,7 +19,10 @@ export function redact(value,extra=[],depth=0){
   if(Array.isArray(value))return value.map(v=>redact(v,extra,depth+1));
   if(value&&typeof value==='object'){
     const out={};
-    for(const [k,v] of Object.entries(value))out[k]=isSecretKeyName(k)?'[REDACTED]':redact(v,extra,depth+1);
+    for(const [k,v] of Object.entries(value)){
+      if(v===undefined)continue;
+      out[k]=isSecretKeyName(k)?'[REDACTED]':redact(v,extra,depth+1);
+    }
     return out;
   }
   return value;
