@@ -17,13 +17,17 @@ concurrency:
   cancel-in-progress: false
 jobs:
   release:
-    if: github.repository == 'skott34-dot/numina-production' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.numina_authorization == 'NUMINA')
+    if: github.repository == 'Numina-Enterprise/numina-production' && github.repository_id == '1367647143' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.numina_authorization == 'NUMINA')
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '26.13.0'
+          package-manager-cache: false
       - name: Verify NUMINA authorization
         if: github.event_name == 'workflow_dispatch'
         run: test "${{ inputs.numina_authorization }}" = "NUMINA"
