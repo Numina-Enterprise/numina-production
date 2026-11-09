@@ -33,7 +33,9 @@
     "release:statement": "node scripts/release-statement.mjs",
     "release:sign": "node scripts/release-sign.mjs",
     "release:verify": "node scripts/release-verify.mjs",
-    "release:pq-keygen": "node scripts/release-pq-keygen.mjs"
+    "release:pq-keygen": "node scripts/release-pq-keygen.mjs",
+    "test:vitest": "vitest run",
+    "test:ed25519": "vitest run tests/ed25519-decode.test.js"
   },
   "license": "BSD-3-Clause",
   "author": "Numina · SK Consulting LLC",
@@ -2484,6 +2486,7 @@
     }
   },
   "devDependencies": {
-    "@noble/post-quantum": "0.7.1"
+    "@noble/post-quantum": "0.7.1",
+    "vitest": "^3.2.4"
   }
 }
