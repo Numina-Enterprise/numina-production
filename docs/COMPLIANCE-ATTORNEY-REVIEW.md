@@ -1,4 +1,4 @@
-# Compliance review packet: S K Consulting LLC dba Numina Labs
+# Compliance review packet: SK Consulting LLC dba Numina Labs
 
 **UNSIGNED. Not legal advice.** Prepared Nov 9 2026 as a working packet. Any financial service
 launch (treasury, token, NUSD, custody, money movement for others) is **blocked** until the
@@ -43,7 +43,7 @@ been engaged or named in this packet.
 I have read this packet. I understand that it is not legal advice and that no financial service
 may launch until section 4 is closed.
 
-Signer: Sam Kott, owner, S K Consulting LLC dba Numina Labs
+Signer: Sam Kott, owner, SK Consulting LLC dba Numina Labs
 
 Signature: ______________________________
 

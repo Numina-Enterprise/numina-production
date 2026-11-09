@@ -3,7 +3,7 @@
 
 **DRAFT for attorney review — not in effect, not published.** Prepared 2026-11-09.
 
-These terms are between you and **S K Consulting LLC, doing business as Numina Labs** ("Numina Labs", "we", "us").
+These terms are between you and **SK Consulting LLC, doing business as Numina Labs** ("Numina Labs", "we", "us").
 Structure and plain-language "short version" approach adapted from the GitHub Terms of Service
 (https://github.com/github/site-policy, CC0 1.0). Wording is Numina's own and must be reviewed by counsel.
 
@@ -122,4 +122,4 @@ We may update these terms and will post the updated version with a new date. Mat
 3. Contact: via https://numinalabs.xyz/contact.
 
 ---
-DRAFT · S K Consulting LLC dba Numina Labs · structure adapted from GitHub site-policy (CC0 1.0) · attorney review pending.
+DRAFT · SK Consulting LLC dba Numina Labs · structure adapted from GitHub site-policy (CC0 1.0) · attorney review pending.

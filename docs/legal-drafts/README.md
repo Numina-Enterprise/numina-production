@@ -1,6 +1,6 @@
 # Legal drafts — DRAFT, NOT PUBLISHED, ATTORNEY REVIEW REQUIRED
 
-Status: **DRAFT** · prepared 2026-11-09 · for S K Consulting LLC, doing business as Numina Labs.
+Status: **DRAFT** · prepared 2026-11-09 · for SK Consulting LLC, doing business as Numina Labs.
 
 These files are working drafts for counsel. They are **not** linked from, built into or published on
 numinalabs.xyz, and the site build must not copy `docs/legal-drafts/`. Nothing here takes effect until an

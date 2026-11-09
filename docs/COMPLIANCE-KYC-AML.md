@@ -1,4 +1,4 @@
-# KYC / AML working checklist: S K Consulting LLC dba Numina Labs
+# KYC / AML working checklist: SK Consulting LLC dba Numina Labs
 
 **Working checklist, not legal advice.** Prepared Nov 9 2026 from public sources fetched that
 day (listed below). It has not been reviewed by counsel. Attorney review packet:

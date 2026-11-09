@@ -16,7 +16,7 @@
 
 ## Who we are and what this policy covers
 
-We are **S K Consulting LLC, doing business as Numina Labs**, a consulting practice. This policy applies to information we collect when you visit numinalabs.xyz, contact us, or engage us for consulting work. Below we explain what we collect, how we use and share it, how long we keep it, and the choices you have.
+We are **SK Consulting LLC, doing business as Numina Labs**, a consulting practice. This policy applies to information we collect when you visit numinalabs.xyz, contact us, or engage us for consulting work. Below we explain what we collect, how we use and share it, how long we keep it, and the choices you have.
 
 ## Information we collect
 
@@ -61,10 +61,10 @@ KYC records are stored encrypted (AES-256-GCM) on systems we control and are not
 You may ask to access, correct or delete your information, or ask how it is used, by contacting us. Some records must be kept for legal reasons (for example screening records) and we will tell you if that applies. Depending on where you live you may have additional rights under laws such as the GDPR or U.S. state privacy laws; you may also appeal a decision on a request by replying to our response. [ATTORNEY: confirm which laws apply.]
 
 ## How to reach us
-Via https://numinalabs.xyz/contact. Controller: S K Consulting LLC dba Numina Labs. [ATTORNEY: confirm postal address disclosure requirements.]
+Via https://numinalabs.xyz/contact. Controller: SK Consulting LLC dba Numina Labs. [ATTORNEY: confirm postal address disclosure requirements.]
 
 ## Changes to this policy
 We will post any change here with a new date and notify engagement clients of material changes.
 
 ---
-DRAFT · S K Consulting LLC dba Numina Labs · adapted from Automattic Legalmattic, CC BY-SA 4.0 · this adaptation is licensed CC BY-SA 4.0 · attorney review pending.
+DRAFT · SK Consulting LLC dba Numina Labs · adapted from Automattic Legalmattic, CC BY-SA 4.0 · this adaptation is licensed CC BY-SA 4.0 · attorney review pending.

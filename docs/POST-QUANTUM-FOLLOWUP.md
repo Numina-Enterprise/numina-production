@@ -1,6 +1,6 @@
 # Post-quantum follow-up plan (dated)
 
-Created Nov 9 2026. Owner for every item: Sam Kott (owner, S K Consulting LLC dba Numina Labs)
+Created Nov 9 2026. Owner for every item: Sam Kott (owner, SK Consulting LLC dba Numina Labs)
 unless reassigned. Dates are proposed targets, not commitments.
 
 | # | Item | Proposed date | Acceptance test |
