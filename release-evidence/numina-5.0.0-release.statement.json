@@ -40,7 +40,7 @@
     {
       "name": "dist/client/about.html",
       "digest": {
-        "sha256": "a2b217740848a2fb181bd8103a289a1fe82ab50248c7ee741b47725ebdeeed86"
+        "sha256": "4cd31c933d3197c165eef9c469f169a46916df21ef0151a721005983bbc7fbfd"
       }
     },
     {
@@ -52,19 +52,19 @@
     {
       "name": "dist/client/app.html",
       "digest": {
-        "sha256": "b6e1a2bf8cfe318771bc85daba88c77dca024bb516d9a860c628cab419b3db09"
+        "sha256": "6efae50f50feb86d2b7d696f87ae0b7a4daf2de5459eb02369a7a78b78b78933"
       }
     },
     {
       "name": "dist/client/blockchain.html",
       "digest": {
-        "sha256": "18a2f6b12751b63c6c13676e4cb93688d62e0aff709e870f9c7c32ebc7c86e69"
+        "sha256": "59577af5e1e56390d395dc65723bcc96c6327d1aab9b65be53baf5a1ca29b15c"
       }
     },
     {
       "name": "dist/client/build.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
@@ -76,7 +76,7 @@
     {
       "name": "dist/client/connections.html",
       "digest": {
-        "sha256": "2d108ae35678cbfb2ffc0dc156fe4d04bcdbc9d388b9c463424acadd0ace7809"
+        "sha256": "16cd241ea176a9afed42ee9ba0f0e18974b2d1d0580bb9bd62f86317ffdf76ba"
       }
     },
     {
@@ -88,19 +88,19 @@
     {
       "name": "dist/client/control.html",
       "digest": {
-        "sha256": "a452754a74f92fe550b2ed7df2b8ab37084735c1fda7f46fa8f85d60f21e3fcf"
+        "sha256": "902aa181dd696f9da3213f5cbeb8ee87a3a80f6516b1b2b9597232372020c080"
       }
     },
     {
       "name": "dist/client/core.html",
       "digest": {
-        "sha256": "fd682cd567fe3ea8194e8075e8e8f06cc4f987f9038f48de3272a89cbaf70788"
+        "sha256": "01f58fa34679f498e69fd70bb00d32fa21593613cd4566a0631d196b7ba2f236"
       }
     },
     {
       "name": "dist/client/deployment-readiness.html",
       "digest": {
-        "sha256": "2fe0dd3ba88de3f699a5408d423bdc73782a88aebe12a0da84ac0af0a754b5c6"
+        "sha256": "c93ecfb4534e3906b38f9e8b1fbbf7bb0b9ff31d3affe54f82a154926e86b1d5"
       }
     },
     {
@@ -118,7 +118,7 @@
     {
       "name": "dist/client/economy.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
@@ -148,13 +148,13 @@
     {
       "name": "dist/client/financial-services.html",
       "digest": {
-        "sha256": "b8d6225426260408e5716e9c8847574dca528e5578860de28116772c1f224442"
+        "sha256": "1f70f99ea489eabff1eef540ce355a37f63bf06df231696b8a0c9f227ae3067c"
       }
     },
     {
       "name": "dist/client/frontier.html",
       "digest": {
-        "sha256": "05f93734fab239d4577ab4d68e506bd7baf9fd07799d165c6d0f4cd71f6b760e"
+        "sha256": "1af82c2526b795290f3b9e388d19ecdb977b058503fe4a319c5c268bc2aca569"
       }
     },
     {
@@ -166,19 +166,19 @@
     {
       "name": "dist/client/index.html",
       "digest": {
-        "sha256": "8a7520567a6ba75e8d863c2bdfc290a19714d32f0111745cf4b4150a2e3b2cd1"
+        "sha256": "338186cd9fddd896658ea5962006ec222eee4d3b889287515c0b961692b6d88b"
       }
     },
     {
       "name": "dist/client/integrations.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
       "name": "dist/client/labs.html",
       "digest": {
-        "sha256": "75fa2a210ae26da725ceff19bfcb2e6fa205fbd0d5139bd1a5b788cf7aabe027"
+        "sha256": "043a1fba239f7e292e6f29ae9eee1b269ddfbbb0f24d114144d8c0d3adb5cbf6"
       }
     },
     {
@@ -196,7 +196,7 @@
     {
       "name": "dist/client/numina-5.css",
       "digest": {
-        "sha256": "4d9b3ea060d68aa5b87bf2fc4150ba570d15b4c61bef975a5a888e0e921af735"
+        "sha256": "2a82b45dace8e06b5ee3b0d955f2b8860198892d1005a6bdb8b171e94f51153e"
       }
     },
     {
@@ -214,7 +214,7 @@
     {
       "name": "dist/client/ownership.html",
       "digest": {
-        "sha256": "853e7e1d353a85192ed9de3d2b5caa08f798034c7c40ee5b880fdc9c934d3554"
+        "sha256": "b0eb04b95a6e80efb18bed74c5037128aa30fbf4454e9c4c08358dec68375d1c"
       }
     },
     {
@@ -226,31 +226,31 @@
     {
       "name": "dist/client/platform.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
       "name": "dist/client/privacy.html",
       "digest": {
-        "sha256": "2b52fe6988b9782af3ad203b4388ea6a2f48afd95f3bd8a25a7f46767930435b"
+        "sha256": "37480e23d81cb4106f1096ac400d8b207aa1120b6a3ffde2b96d2325545741fb"
       }
     },
     {
       "name": "dist/client/provenance.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
       "name": "dist/client/redemption.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
       "name": "dist/client/reviewer.html",
       "digest": {
-        "sha256": "b483f3d111287a50aae3e9bd0f9a8d1944e8740974266b4793559f310aaf55c1"
+        "sha256": "ef86f5b9ea6d266a433c179afe6b2e06fa4a858c537cecac9ae26942cd1e760e"
       }
     },
     {
@@ -268,7 +268,7 @@
     {
       "name": "dist/client/security.html",
       "digest": {
-        "sha256": "ff8733fd3ce712928bd1a90f545c9c7a72c22cab52e656945a7afe0330f02fc4"
+        "sha256": "5b6d44767fe5651ee7a3b55568c64c2142ccefeeb3e5d547ac5d8a405f2ad470"
       }
     },
     {
@@ -280,7 +280,7 @@
     {
       "name": "dist/client/services.html",
       "digest": {
-        "sha256": "d432f98c0eef06f7aaaf64a03ad6d559fbf6ea282aa2dc6bcfe44e1607ce0d19"
+        "sha256": "72452a1b055e6b153ec5667798d30b48dfa0bb6fbab447e5c5d5acc21d2bad5f"
       }
     },
     {
@@ -304,13 +304,13 @@
     {
       "name": "dist/client/status.html",
       "digest": {
-        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
       }
     },
     {
       "name": "dist/client/task-ledger.html",
       "digest": {
-        "sha256": "e7790493c6151c99ef062e8f4f6a57ff5aa5e99ece9634877dd3ea84469eba7c"
+        "sha256": "24a9bcc6eea7a1195e65f1f3b781709a532484ff487ad22f72c421ccff5f2453"
       }
     },
     {
@@ -328,25 +328,25 @@
     {
       "name": "dist/client/topology.html",
       "digest": {
-        "sha256": "085bc91443bb6cd93807db1e14003c0df4b31344731d2cad567efeb11e6b9086"
+        "sha256": "a6accd80123c6de86ed4d27ab3d0e6e9c1be8760e282297faed5dbf41fea8e2c"
       }
     },
     {
       "name": "dist/client/transfer-receipts.html",
       "digest": {
-        "sha256": "6fa8f7e1a27851f53a225ec76aa2421265967cd2c330eb0bbcf9fce724256ac8"
+        "sha256": "25961355af73aaf97408f87bbbd859b340321c343110a0b77889e149ad1abb7d"
       }
     },
     {
       "name": "dist/client/treasury-simulation.html",
       "digest": {
-        "sha256": "d1730c8745a0f40859c4836c7fbe21504e36b3314ba89c26ae04cc3efa1f71a4"
+        "sha256": "f817706fabda07b166ad9e8bbfa7f257fe44f8ac5215ed21707d3e1bb71d7e55"
       }
     },
     {
       "name": "dist/client/treasury.html",
       "digest": {
-        "sha256": "d3b965d95f7f342100b37d25fe1d22007ead0db986a0ccc334a40a2c1d8ab8da"
+        "sha256": "fcd4712e93688032aab5ce2b8eb49876fd0b93b55b9ed26a9d14d4422304f545"
       }
     },
     {
@@ -364,7 +364,7 @@
     {
       "name": "dist/client/wallet-signing.html",
       "digest": {
-        "sha256": "12cbf6f15fa270f7c01c58e6f3b3f390d6edd9741b6cb05bd5514c8cca5c0917"
+        "sha256": "bedbf2d33b9a6e983e9d220f1c33f6c233674c34c3b778415c38444da9d6efd0"
       }
     },
     {
@@ -376,13 +376,13 @@
     {
       "name": "dist/client/workspaces.html",
       "digest": {
-        "sha256": "084e4a8841252ccccab888f5f4d036b701e710ba6208cfed0e919e067fcd3e3c"
+        "sha256": "582630fd3f1fb13fdbc7da2001c9887eb11b6de8e4926702282dc7a42eec2e0a"
       }
     },
     {
       "name": "dist/server/index.js",
       "digest": {
-        "sha256": "7b161dfee61c05280fba7199273c388cd0c2adbc4a8e57016b04b117fd6961b1"
+        "sha256": "2f28dca9560f9133756746da5cea46c849e535ab1d91d70875d4d6ce842786ae"
       }
     }
   ],
@@ -394,12 +394,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-09T18:29:40.946Z",
+    "timestamp": "2026-11-09T19:00:18.731Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "998d6e19dac9005ca5c12d1d37ba4646dd84ec7eab9b5d92ab3fddedf78a11de",
-      "gitCommit": "6f87cce4409337ac97e40089cc132ebee48379a6",
-      "gitTree": "9bced0f2f4e3659574e7de08132851d2237bef4c"
+      "sha256": "fd7b41732d33fbf18eda4997e869b83983e3db414910aa40e28880686a6b3431",
+      "gitCommit": "15f02a246bd1e353ee899af87d9fa8c77fc42d43",
+      "gitTree": "625a588143fa7fb8979ccab18e733dd3955e140a"
     },
     "subjectRoots": [
       "dist/client",
