@@ -52,3 +52,143 @@ body.n5-page{background:radial-gradient(ellipse at 85% 0%,#152c3538,transparent 
 @media(max-width:1100px){.n5-page .hero-home{min-height:640px}.provider-grid{grid-template-columns:1fr 1fr}.home-services .service-pane{gap:0 35px}.home-services .service-list{grid-template-columns:1fr}}
 @media(max-width:760px){.n5-page .hero-home{grid-template-columns:1fr;gap:0;min-height:0}.n5-page .hero-home h1{font-size:clamp(3.6rem,14vw,6rem)}.n5-page .hero-copy{padding-bottom:10px}.hero-visual{min-height:350px;max-height:470px}.numina-orbit{width:95%;max-width:520px;margin-top:-25px}.visual-label{bottom:5%;font-size:9px}.release-band{align-items:flex-start;flex-direction:column;gap:8px}.home-services{padding:50px 0}.home-services .service-pane{display:block}.home-services .service-pane h2{margin:25px 0 30px}.home-services .service-list{display:block}.home-services .service-list a{min-height:78px}.topology-map{grid-template-columns:1fr}.topology-map>div{padding:25px}.topology-map .map-arrow{transform:rotate(90deg)}.provider-grid{grid-template-columns:1fr}.provider-card{padding:25px}.n5-page .release-pill{max-width:100%;font-size:9px;letter-spacing:.08em;white-space:normal}.n5-page footer a{min-height:36px;display:inline-flex;align-items:center}}
 @media(prefers-reduced-motion:reduce){.n5-page *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ===== Numina 5 visual refresh (Nov 2026) =====
+   Layered on top of enterprise.css and the Labs theme so both page families share one system.
+   CSS-only: no scripts, no inline styles, no external images. Imagery is gradients and the
+   self-hosted numina-orbit.svg. Contrast targets WCAG 2.2 AA on #070a0f. */
+:root{
+  --n5-font:"Inter","InterVariable","Segoe UI Variable","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --n5-mono:ui-monospace,"SF Mono",SFMono-Regular,"Cascadia Mono",Menlo,Consolas,monospace;
+  --n5-bg:#070a0f;--n5-surface:#0c121b;--n5-surface-2:#111a26;
+  --n5-ink:#f3f7fc;--n5-body:#c2ccd8;--n5-muted:#a7b3c2;--n5-quiet:#8a98aa;
+  --n5-line:#223041;--n5-line-2:#33465b;
+  --n5-accent:#b9edf2;--n5-accent-2:#8fd8e6;--n5-violet:#b7a8f0;
+  --n5-radius:14px;--n5-radius-sm:10px;
+  --n5-shadow:0 1px 0 #ffffff08 inset,0 18px 50px -24px #000000c0;
+  --n5-ring:0 0 0 2px var(--n5-bg),0 0 0 4px var(--n5-accent);
+  --n5-step--1:clamp(.8rem,.77rem + .12vw,.88rem);
+  --n5-step-0:clamp(1rem,.96rem + .2vw,1.125rem);
+  --n5-step-1:clamp(1.15rem,1.06rem + .42vw,1.4rem);
+  --n5-step-2:clamp(1.4rem,1.22rem + .8vw,1.95rem);
+  --n5-step-3:clamp(1.85rem,1.5rem + 1.5vw,2.9rem);
+  --n5-step-4:clamp(2.6rem,1.9rem + 3.2vw,5rem);
+  --n5-step-5:clamp(3rem,2rem + 4.6vw,6.6rem);
+  --n5-space:clamp(64px,7vw,128px);
+}
+body.n5-page{
+  font-family:var(--n5-font);font-size:var(--n5-step-0);line-height:1.65;letter-spacing:-.006em;
+  color:var(--n5-ink);font-feature-settings:"ss01","cv11";font-optical-sizing:auto;
+  background:
+    radial-gradient(900px 520px at 88% -8%,#1a3f4a40,transparent 70%),
+    radial-gradient(700px 480px at -10% 30%,#2a215033,transparent 70%),
+    var(--n5-bg);
+  background-attachment:fixed;
+}
+.n5-page :is(h1,h2,h3,h4){font-family:var(--n5-font);color:var(--n5-ink)}
+.n5-page h1{font-size:var(--n5-step-5);line-height:1.02;letter-spacing:-.045em;font-weight:560}
+.n5-page h2{font-size:var(--n5-step-3);line-height:1.1;letter-spacing:-.03em;font-weight:560}
+.n5-page h3{font-size:var(--n5-step-1);line-height:1.3;letter-spacing:-.015em;font-weight:600}
+.n5-page p{color:var(--n5-muted);line-height:1.7}
+.n5-page :is(.section-content,main)>p,.n5-page .section>p{max-width:68ch}
+.n5-page .lead{color:var(--n5-body);font-size:var(--n5-step-1);line-height:1.55;max-width:58ch}
+.n5-page :is(.eyebrow,.section-label,.pane-kicker,.index-number,.capability-number,.slogan){font-family:var(--n5-mono);color:var(--n5-quiet);letter-spacing:.14em}
+.n5-page .eyebrow{display:inline-flex;align-items:center;gap:10px;color:#9fd9e2;font-size:var(--n5-step--1)}
+.n5-page .eyebrow::before{content:"";width:22px;height:1px;background:linear-gradient(90deg,var(--n5-accent),transparent)}
+.n5-page .service-number{color:var(--n5-quiet);font-family:var(--n5-mono)}
+.n5-page a{text-underline-offset:.25em}
+.n5-page ::selection{background:var(--n5-accent);color:#061016}
+
+/* Header: quiet, sticky, translucent. */
+.n5-page>.wrap>header,.n5-page .site-header{position:sticky;top:0;z-index:20;background:#070a0fcc;-webkit-backdrop-filter:saturate(140%) blur(14px);backdrop-filter:saturate(140%) blur(14px);border-bottom:1px solid var(--n5-line)}
+.n5-page>.wrap>header{min-height:92px}
+.n5-page .brand{letter-spacing:.22em;font-weight:700}
+.n5-page :is(nav,.desktop-nav) a{color:var(--n5-muted);font-size:.9rem;font-weight:500}
+.n5-page :is(nav,.desktop-nav) a:hover,.n5-page :is(nav,.desktop-nav) a[aria-current]{color:var(--n5-ink)}
+.n5-page :is(nav,.desktop-nav) a::after{background:linear-gradient(90deg,var(--n5-accent),var(--n5-violet))}
+
+/* Hero: stronger type, gradient wash, fine grid and orbit glow. */
+.n5-page .hero,.n5-page .page-hero{position:relative;isolation:isolate}
+.n5-page .hero::before,.n5-page .page-hero::before{content:"";position:absolute;z-index:-1;inset:0 calc(-1 * var(--gutter,5vw));pointer-events:none;
+  background:
+    linear-gradient(#ffffff06 1px,transparent 1px) 0 0/56px 56px,
+    linear-gradient(90deg,#ffffff06 1px,transparent 1px) 0 0/56px 56px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 80% at 70% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 70% 80% at 70% 40%,#000 20%,transparent 75%)}
+.n5-page .hero h1,.n5-page .page-hero h1{background:linear-gradient(100deg,#ffffff 0%,#e8f6fa 45%,#b9edf2 80%,#c9bff5 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+.n5-page .hero-home h1{font-size:clamp(3rem,1.6rem + 4.9vw,7.4rem);font-weight:560;letter-spacing:-.05em;max-width:12ch;line-height:1}
+.n5-page .hero-home .lead{max-width:44ch;margin-bottom:18px}
+.n5-page .hero-home .hero-copy>p:not(.lead){max-width:58ch}
+.n5-page .hero-visual::before{inset:8% -4%;background:radial-gradient(closest-side,#5fd1dc33,transparent 70%),radial-gradient(closest-side at 65% 60%,#8c7be533,transparent 70%);filter:blur(30px)}
+.n5-page .numina-orbit{filter:drop-shadow(0 0 40px #8de8e324) saturate(115%)}
+@media(prefers-reduced-motion:no-preference){
+  .n5-page .numina-orbit{animation:n5-float 14s ease-in-out infinite}
+  @keyframes n5-float{50%{transform:translateY(-10px) rotate(2deg)}}
+}
+.n5-page .visual-label{border-top-color:var(--n5-line-2);color:var(--n5-muted)}
+
+/* Buttons. */
+.n5-page :is(.button,.btn){min-height:48px;padding:12px 22px;border-radius:999px;font-weight:600;font-size:.95rem;letter-spacing:-.005em;gap:8px;transition:transform .18s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease}
+.n5-page .button:not(.secondary){background:linear-gradient(135deg,#d6f6f9,#9fe0ea);border-color:transparent;color:#061016;box-shadow:0 8px 30px -10px #8fd8e680}
+.n5-page .button:not(.secondary):hover{background:linear-gradient(135deg,#ffffff,#b9edf2);box-shadow:0 12px 36px -10px #8fd8e6a0;transform:translateY(-1px)}
+.n5-page .button.secondary{background:#ffffff06;border:1px solid var(--n5-line-2);color:var(--n5-ink)}
+.n5-page .button.secondary:hover{border-color:var(--n5-accent);color:var(--n5-accent);background:#b9edf20d;transform:translateY(-1px)}
+
+/* Cards and panels. */
+.n5-page .grid{gap:16px;border-bottom:0;padding:var(--n5-space) 0 0}
+.n5-page .grid article,.n5-page .grid article:first-child,.n5-page .grid article:last-child{min-height:0;padding:clamp(26px,2.6vw,40px);border:1px solid var(--n5-line);border-radius:var(--n5-radius);background:linear-gradient(160deg,var(--n5-surface-2),var(--n5-surface) 70%);box-shadow:var(--n5-shadow);transition:border-color .2s ease,transform .2s ease}
+.n5-page .grid article:hover{border-color:var(--n5-line-2);transform:translateY(-2px)}
+.n5-page .grid article h2{margin-top:clamp(28px,2.6vw,44px);font-size:var(--n5-step-2);max-width:18ch}
+.n5-page .grid .index-number{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--n5-line-2);color:var(--n5-accent);letter-spacing:.04em;background:#b9edf20a}
+.n5-page :is(.cards article,.hub-grid article,.contact-options article,.plan,.program-card,.foundation-card,.capability-grid>*,.value-grid>*){border-radius:var(--n5-radius);border:1px solid var(--n5-line);box-shadow:var(--n5-shadow)}
+.n5-page :is(.cards article,.hub-grid article,.contact-options article):hover{background:var(--n5-surface-2);border-color:var(--n5-line-2)}
+.n5-page .hub-grid,.n5-page .contact-grid{gap:16px;background:transparent;border:0}
+.n5-page .contact-grid a{border:1px solid var(--n5-line);border-radius:var(--n5-radius);background:linear-gradient(160deg,var(--n5-surface-2),var(--n5-surface) 70%);transition:border-color .2s ease,transform .2s ease}
+.n5-page .contact-grid a:hover{border-color:var(--n5-accent);transform:translateY(-2px)}
+.n5-page .contact-grid span{color:var(--n5-muted)}
+
+/* Homepage services list as a rounded panel. */
+.n5-page .home-services{padding:var(--n5-space) 0;border-bottom:0}
+.n5-page .home-services .service-pane{padding:clamp(28px,3.4vw,56px);border:1px solid var(--n5-line);border-radius:calc(var(--n5-radius) + 6px);background:radial-gradient(600px 300px at 100% 0%,#173a4433,transparent 70%),linear-gradient(160deg,var(--n5-surface-2),var(--n5-surface) 70%);box-shadow:var(--n5-shadow)}
+.n5-page .home-services .service-list{border-top:0}
+.n5-page .home-services .service-list li{border-bottom:1px solid var(--n5-line)}
+.n5-page .home-services .service-list a{color:var(--n5-ink);font-size:.98rem;font-weight:500;border-radius:8px}
+.n5-page .home-services .service-list a:hover{color:var(--n5-accent);padding-left:8px}
+
+/* Sections, callouts, notes. */
+.n5-page .section{padding-block:var(--n5-space);border-bottom-color:var(--n5-line)}
+.n5-page .ecosystem-callout{margin-top:var(--n5-space);padding:clamp(30px,4vw,64px);border:1px solid var(--n5-line);border-radius:calc(var(--n5-radius) + 6px);background:linear-gradient(120deg,#13232d,#0d121d 55%,#17142a);box-shadow:var(--n5-shadow)}
+.n5-page .note{border:1px solid var(--n5-line);border-left:3px solid var(--n5-accent);border-radius:var(--n5-radius-sm);background:linear-gradient(90deg,#b9edf20d,var(--n5-surface) 40%)}
+.n5-page .note strong{color:var(--n5-ink)}
+.n5-page .regions a{color:var(--n5-ink);text-decoration-color:var(--n5-line-2)}
+.n5-page .regions a:hover{color:var(--n5-accent);text-decoration-color:currentColor}
+
+/* Footer. */
+.n5-page footer,.n5-page .site-footer{border-top:1px solid var(--n5-line)}
+.n5-page footer a{color:var(--n5-muted)}
+.n5-page footer a:hover{color:var(--n5-accent)}
+.n5-page footer p,.n5-page .footer-note{color:var(--n5-quiet)}
+
+/* Focus: visible ring that holds on any background. */
+.n5-page :is(a,button,summary,input,select,textarea):focus-visible{outline:2px solid var(--n5-accent);outline-offset:3px;border-radius:6px;box-shadow:0 0 0 6px #b9edf226}
+.n5-page :is(.button,.btn):focus-visible{outline-offset:3px;border-radius:999px}
+.n5-page .skip:focus{border-radius:8px;box-shadow:var(--n5-ring)}
+
+/* Responsive. */
+@media(max-width:1180px){.n5-page>.wrap>header{position:relative}}
+@media(max-width:760px){
+  body.n5-page{background-attachment:scroll}
+  .n5-page .hero-home h1{font-size:clamp(2.6rem,11.5vw,4rem)}
+  .n5-page h2{font-size:clamp(1.6rem,7vw,2.2rem)}
+  .n5-page .lead{font-size:1.12rem}
+  .n5-page .actions{flex-direction:column;align-items:stretch}
+  .n5-page .actions .button{width:100%}
+  .n5-page .grid{gap:12px;padding-top:48px}
+  .n5-page .grid article,.n5-page .grid article:first-child,.n5-page .grid article:last-child{padding:24px;border-bottom:1px solid var(--n5-line)}
+  .n5-page .home-services{padding:48px 0}
+  .n5-page .home-services .service-pane{padding:22px}
+  .n5-page .ecosystem-callout{flex-direction:column;align-items:stretch;padding:26px;margin-top:48px}
+  .n5-page .section{padding-block:56px}
+  .n5-page .hero::before,.n5-page .page-hero::before{background-size:40px 40px}
+}
+@media(prefers-reduced-motion:reduce){.n5-page .numina-orbit{animation:none}.n5-page :is(.button,.grid article,.contact-grid a):hover{transform:none}}
+@media(forced-colors:active){.n5-page .hero h1,.n5-page .page-hero h1{background:none;color:CanvasText;-webkit-text-fill-color:CanvasText}}
