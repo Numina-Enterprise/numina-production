@@ -87,8 +87,8 @@ jobs:
               bankAmount:'500000000000000',
               stripeAmount:'500000000000000',
               nativeAmount:'500000000000000',
-              numinaAttestedExternalFundsMoved:true,
-              numinaAttestedExternalFundsVerified:true,
+              numinaAttestedExternalFundsMoved:false,
+              numinaAttestedExternalFundsVerified:false,
               reason:'Owner-authorized singular Numina aggregate settlement; burn is zero by absence of any burn operation. Provider verification remains separately evidence-bound.'
             }
           };
