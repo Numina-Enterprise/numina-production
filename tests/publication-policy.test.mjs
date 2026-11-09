@@ -15,7 +15,7 @@ test('canonical repository release is bound to the tagged source and exact bytes
   assert.equal(release.identity,'NUMINA');
   assert.equal(release.version,'4.0.0');
   assert.equal(release.tag,'v4.0.0');
-  assert.equal(release.sourceCommit,'c57106e8bafd8078873b777587f748da6be86a32');
+  assert.equal(release.sourceCommit,'d24a544cfa1522a1f59f4d5e8c474b8006def833');
   assert.equal(release.githubReleaseObjectRequired,false);
   assert.equal(archive.length,release.bytes);
   assert.equal(createHash('sha256').update(archive).digest('hex'),release.sha256);
