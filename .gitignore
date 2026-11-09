@@ -35,3 +35,9 @@ packages/
 
 # Local-only admin data (private downloads, local route config)
 local-data/
+
+# Cloudflare Tunnel credential files, including quarantined copies
+**/.cloudflared/*.json
+**/.cloudflared/cert.pem
+**/.cloudflared_isolated/*.json
+**/.cloudflared_isolated/cert.pem
