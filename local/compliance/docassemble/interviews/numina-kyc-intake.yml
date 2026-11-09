@@ -1,0 +1,174 @@
+# Numina Labs KYC intake — Docassemble interview (DRAFT, local-only).
+# Produces intake.json in exactly the shape accepted by:
+#   npm run compliance:kyc -- new --file intake.json
+# The CLI re-validates everything (local/compliance/lib/kyc-schema.mjs); this interview is a front end only.
+# Collects ONLY the last 4 digits of an EIN/TIN. Does NOT verify identity (licensed IDV provider required).
+# Not legal advice; does not create attorney-client privilege.
+metadata:
+  title: Numina Labs KYC intake (local, DRAFT)
+  short title: KYC intake
+  documentation: local/compliance/README.md
+---
+features:
+  navigation back button: True
+---
+imports:
+  - json
+---
+objects:
+  - owners: DAList.using(object_type=DAObject, complete_attribute='ownershipPct')
+---
+mandatory: True
+code: |
+  intake_notice_seen
+  intake = dict(type=cp_type, legalName=legalName.strip())
+  if dba:
+    intake['dba'] = dba.strip()
+  addr = dict(line1=addr_line1.strip(), city=addr_city.strip(), country=addr_country)
+  if addr_line2:
+    addr['line2'] = addr_line2.strip()
+  if addr_region:
+    addr['region'] = addr_region.strip().upper()
+  if addr_postal:
+    addr['postalCode'] = addr_postal.strip()
+  intake['address'] = addr
+  intake['country'] = country
+  intake['email'] = email.strip()
+  if website:
+    intake['website'] = website.strip()
+  if cp_type == 'individual':
+    intake['dob'] = format_date(dob, format='yyyy-MM-dd')
+    if tinLast4:
+      intake['tinLast4'] = tinLast4
+  else:
+    intake['incorporationDate'] = format_date(incorporationDate, format='yyyy-MM-dd')
+    intake['incorporationCountry'] = incorporationCountry
+    intake['einLast4'] = einLast4
+    intake['controlPerson'] = dict(legalName=cp_name.strip(), dob=format_date(cp_dob, format='yyyy-MM-dd'), country=cp_country, title=cp_title.strip())
+    owners.gather()
+    intake['beneficialOwners'] = [dict(legalName=o.legalName.strip(), dob=format_date(o.dob, format='yyyy-MM-dd'), country=o.country, ownershipPct=float(o.ownershipPct)) for o in owners]
+    if len(owners) == 0:
+      intake['noBeneficialOwnersAttestation'] = bool(no_bo_attestation)
+  if stripe_customer_id:
+    intake['externalIds'] = [stripe_customer_id.strip()]
+  intake_json = DAFile('intake_json')
+  intake_json.initialize(filename='intake.json')
+  intake_json.write(json.dumps(intake, indent=2, sort_keys=True))
+  intake_json.commit()
+  final_screen
+---
+question: Before you start
+subquestion: |
+  This local form collects the information Numina Labs needs to screen a counterparty
+  against U.S. sanctions lists before doing business.
+
+  * Only the **last 4 digits** of an EIN/SSN/TIN are collected. Do not enter a full number.
+  * This form does **not** verify identity. A licensed identity-verification provider is required for that.
+  * Not legal advice. Attorney review is pending before any financial service is launched.
+field: intake_notice_seen
+---
+question: Counterparty type
+field: cp_type
+choices:
+  - Business (LLC, corporation, partnership): business
+  - Individual: individual
+---
+question: Legal name
+fields:
+  - Legal name (exactly as registered or on government ID): legalName
+  - DBA / trade name: dba
+    required: False
+  - Email: email
+    datatype: email
+  - Website: website
+    datatype: url
+    required: False
+  - Stripe customer id (cus_...), if any: stripe_customer_id
+    required: False
+---
+question: Street address
+subquestion: A residential or business street address is required. PO boxes are not accepted.
+fields:
+  - Address line 1: addr_line1
+    validate: |
+      lambda y: True if not __import__('re').search(r'\bP\.?\s*O\.?\s*Box\b', y, __import__('re').I) else validation_error("No PO boxes, please.")
+  - Address line 2: addr_line2
+    required: False
+  - City: addr_city
+  - State / region (2-letter code for US): addr_region
+    required: False
+  - ZIP / postal code: addr_postal
+    required: False
+  - Address country: addr_country
+    code: countries_list()
+  - Country of residence / principal place of business: country
+    code: countries_list()
+---
+question: Individual details
+fields:
+  - Date of birth: dob
+    datatype: date
+  - Last 4 digits of SSN/TIN (optional): tinLast4
+    required: False
+    validate: |
+      lambda y: True if __import__('re').fullmatch(r'\d{4}', y) else validation_error("Exactly 4 digits. Never enter the full number.")
+---
+question: Business details
+fields:
+  - Date of incorporation / formation: incorporationDate
+    datatype: date
+  - Country of incorporation: incorporationCountry
+    code: countries_list()
+  - Last 4 digits of EIN: einLast4
+    validate: |
+      lambda y: True if __import__('re').fullmatch(r'\d{4}', y) else validation_error("Exactly 4 digits. Never enter the full EIN.")
+---
+question: Control person
+subquestion: One individual with significant responsibility to control or manage the business (for example CEO, managing member).
+fields:
+  - Legal name: cp_name
+  - Title: cp_title
+  - Date of birth: cp_dob
+    datatype: date
+  - Country of residence: cp_country
+    code: countries_list()
+---
+question: Does any individual own 25% or more of the business, directly or indirectly?
+yesno: owners.there_are_any
+---
+question: Beneficial owner ${ i + 1 } (25% or more)
+fields:
+  - Legal name: owners[i].legalName
+  - Date of birth: owners[i].dob
+    datatype: date
+  - Country of residence: owners[i].country
+    code: countries_list()
+  - Ownership percentage: owners[i].ownershipPct
+    datatype: number
+    min: 25
+    max: 100
+---
+question: Is there another individual who owns 25% or more?
+yesno: owners.there_is_another
+---
+question: No 25% owners
+subquestion: You said no individual owns 25% or more. Please confirm.
+fields:
+  - I attest that no individual owns 25% or more of this business: no_bo_attestation
+    datatype: yesnowide
+---
+event: final_screen
+question: Intake ready
+subquestion: |
+  [Download intake.json](${ intake_json.url_for(attachment=True) })
+
+  Next steps, run locally on Sam's machine (nothing is sent anywhere):
+
+  1. `npm run compliance:kyc -- new --file intake.json`
+  2. `npm run compliance:kyc -- submit --case <id>` and `npm run compliance:kyc -- screen --case <id>`
+  3. Manual cross-check in OFAC Sanctions List Search: https://ofac.treasury.gov/sanctions-list-search-tool
+  4. `npm run compliance:signoff -- --case <id> --key <path-to-ed25519.pem>` (Sam Kott only)
+
+  Delete intake.json after import; the compliance store keeps it encrypted.
+buttons:
+  - Start over: restart

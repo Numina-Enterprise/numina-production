@@ -1,0 +1,27 @@
+# Moov Watchman (Apache-2.0) local-only configuration for Numina Labs compliance screening.
+# Docker variant: listens on the container interface; the host publishes 127.0.0.1:8084 only. Watchman's API is unauthenticated by design: never expose it publicly.
+Watchman:
+  Servers:
+    BindAddress: ":8084"   # inside the container only; compose publishes it on 127.0.0.1
+    AdminAddress: "127.0.0.1:9094"   # never published
+    Pprof:
+      Enabled: false
+  Telemetry:
+    ServiceName: "watchman-numina-local"
+  Download:
+    RefreshInterval: "12h"
+    InitialDataDirectory: ""
+    # Free government lists only. OpenSanctions / Senzing lists are intentionally NOT configured
+    # (business use needs a paid OpenSanctions licence).
+    IncludedLists:
+      - "us_ofac"        # OFAC SDN
+      - "us_non_sdn"     # OFAC consolidated non-SDN lists
+      - "us_csl"         # US Consolidated Screening List (Commerce/State/Treasury)
+      - "us_fincen_311"  # FinCEN Section 311 special measures
+      - "uk_csl"         # UK sanctions list
+      - "eu_csl"         # EU consolidated financial sanctions list
+      - "un_csl"         # UN Security Council consolidated list
+    # A flaky government endpoint should not take the whole screener down; failures are logged
+    # and the Numina client records which lists were loaded (from /v2/listinfo) on every screen.
+    IgnoredDownloadErrors: ["us_csl", "us_fincen_311", "uk_csl", "eu_csl", "un_csl"]
+    ErrorOnEmptyList: false

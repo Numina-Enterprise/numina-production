@@ -1,0 +1,19 @@
+# Moov Watchman (Apache-2.0, https://github.com/moov-io/watchman) — local-only sanctions screener.
+# Ports are published on 127.0.0.1 only. Watchman's API is unauthenticated by design: never expose it.
+# Start:  docker compose -f local/compliance/watchman/docker-compose.yml up -d
+# Check:  curl -s http://127.0.0.1:8084/v2/listinfo
+services:
+  watchman:
+    image: moov/watchman:v1.2.2@sha256:a8267114bc6475e958946cf0d2cdc41926b13677e1cb4df946a5c81f9cd9d4cf
+    container_name: numina-watchman
+    restart: unless-stopped
+    environment:
+      APP_CONFIG: /config/watchman.yml
+    volumes:
+      - ./watchman.docker.yml:/config/watchman.yml:ro
+    ports:
+      - "127.0.0.1:8084:8084"
+    # Admin port (metrics/version) is not published at all.
+    read_only: true
+    security_opt:
+      - no-new-privileges:true

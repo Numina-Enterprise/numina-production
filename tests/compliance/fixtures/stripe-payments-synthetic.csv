@@ -1,0 +1,6 @@
+id,Created (UTC),Amount,Amount Refunded,Currency,Status,Customer ID,Customer Email,Card Name,Card Issue Country,Card Fingerprint,Payment Method Type,Disputed Amount,Dispute Status
+ch_FAKE_0001,2026-10-01 12:00:00,9500.00,0.00,usd,Paid,cus_FAKE_A,ops@fakeco.example,Fakeco Consulting LLC,US,fp_FAKE_1,card,0,
+ch_FAKE_0002,2026-10-03 12:00:00,9800.00,0.00,usd,Paid,cus_FAKE_A,ops@fakeco.example,Fakeco Consulting LLC,US,fp_FAKE_1,card,0,
+ch_FAKE_0003,2026-10-04 12:00:00,9900.00,0.00,usd,Paid,cus_FAKE_A,ops@fakeco.example,Someone Else Entirely,US,fp_FAKE_2,card,0,
+ch_FAKE_0004,2026-10-05 12:00:00,1500.00,1500.00,usd,Refunded,cus_FAKE_Z,z@placeholder.example,Zed Placeholder,US,fp_FAKE_3,card,1500.00,lost
+ch_FAKE_0005,2026-10-06 12:00:00,1500.00,0.00,usd,Failed,cus_FAKE_Z,z@placeholder.example,Zed Placeholder,US,fp_FAKE_3,card,0,

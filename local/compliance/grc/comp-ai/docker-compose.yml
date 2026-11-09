@@ -1,0 +1,67 @@
+# Comp AI Community Edition (AGPL-3.0, https://github.com/trycompai/comp) — local-only compliance workspace.
+# AGPL NOTICE: Comp AI CE is AGPLv3. Running it privately for Numina Labs is fine; if a MODIFIED Comp AI is
+# offered to others over a network (e.g. clients log in to it), AGPL section 13 requires offering those users
+# the complete corresponding source of the modified version. Do not expose this instance.
+# Upstream has no published image: build from a local clone pinned to the reviewed commit:
+#   git clone https://github.com/trycompai/comp "$COMP_SRC" && git -C "$COMP_SRC" checkout 150fed5ade35be5c37f142b126aa10b1859aa26e
+# CONFIG ONLY: not run on the build box (no Docker there).
+# Third-party integrations (Resend email, OpenAI/Anthropic/Groq, Upstash, Trigger.dev, PostHog, Vercel, AWS,
+# Firecrawl, Novu, Stripe, Google/GitHub/Microsoft OAuth) all need accounts; leave them EMPTY. In particular
+# never set STRIPE_SECRET_KEY. Without RESEND_API_KEY, email sign-in links will not be delivered; see README.
+services:
+  db:
+    image: postgres:17.6-alpine
+    environment:
+      POSTGRES_USER: comp
+      POSTGRES_PASSWORD: "${COMP_PG_PASSWORD:?set COMP_PG_PASSWORD in .env}"
+      POSTGRES_DB: comp
+    volumes:
+      - comp-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U comp"]
+      interval: 5s
+      retries: 10
+  migrator:
+    build: {context: "${COMP_SRC:?set COMP_SRC to the pinned clone}", dockerfile: Dockerfile, target: migrator}
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgresql://comp:${COMP_PG_PASSWORD}@db:5432/comp"
+    depends_on: {db: {condition: service_healthy}}
+    profiles: ["setup"]
+  app:
+    build:
+      context: "${COMP_SRC:?set COMP_SRC to the pinned clone}"
+      dockerfile: Dockerfile
+      target: app
+      args:
+        NEXT_PUBLIC_BETTER_AUTH_URL: "http://127.0.0.1:3000"
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgresql://comp:${COMP_PG_PASSWORD}@db:5432/comp"
+      BETTER_AUTH_URL: "http://127.0.0.1:3000"
+      NEXT_PUBLIC_BETTER_AUTH_URL: "http://127.0.0.1:3000"
+      NEXT_PUBLIC_PORTAL_URL: "http://127.0.0.1:3002"
+      NEXT_PUBLIC_SELF_HOSTED: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on: {db: {condition: service_healthy}}
+    command: sh -lc "node apps/app/server.js"
+    security_opt: ["no-new-privileges:true"]
+  portal:
+    build:
+      context: "${COMP_SRC:?set COMP_SRC to the pinned clone}"
+      dockerfile: Dockerfile
+      target: portal
+      args:
+        NEXT_PUBLIC_BETTER_AUTH_URL: "http://127.0.0.1:3002"
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgresql://comp:${COMP_PG_PASSWORD}@db:5432/comp"
+      BETTER_AUTH_URL: "http://127.0.0.1:3002"
+      NEXT_PUBLIC_BETTER_AUTH_URL: "http://127.0.0.1:3002"
+    ports:
+      - "127.0.0.1:3002:3000"
+    depends_on: {db: {condition: service_healthy}}
+    security_opt: ["no-new-privileges:true"]
+volumes:
+  comp-db:

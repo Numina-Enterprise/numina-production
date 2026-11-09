@@ -1,0 +1,81 @@
+# Probo (MIT, https://github.com/getprobo/probo) — local-only GRC console for Numina Labs.
+# Adapted from upstream compose.prod.yaml @ 99c5833304d4fbf45418b3ab8582317cac2fd0d0 (MIT, (c) Probo Inc.).
+# Changes: every published port bound to 127.0.0.1; Postgres, SeaweedFS and Chrome are NOT published;
+# secrets come from a local .env (gitignored; see .env.example); SMTP left unconfigured; image tag pinned.
+# CONFIG ONLY: not run on the build box (no Docker there). The Probo image tag below is upstream's latest git
+# tag at the time of writing and has not been pulled/verified against artifact.probo.inc.
+# Start: cp .env.example .env  (fill in generated secrets)  &&  docker compose up -d
+services:
+  probo:
+    image: "artifact.probo.inc/probo/probo:${PROBO_TAG:-v0.216.1}"
+    env_file: .env
+    environment:
+      PROBOD_BASE_URL: "http://127.0.0.1:8080"
+      PROBOD_API_ADDR: ":8080"
+      PROBOD_API_CORS_ALLOWED_ORIGINS: "http://127.0.0.1:8080"
+      PROBOD_PG_ADDR: "postgres:5432"
+      PROBOD_PG_USERNAME: "postgres"
+      PROBOD_PG_PASSWORD: "${PROBO_PG_PASSWORD:?set PROBO_PG_PASSWORD in .env}"
+      PROBOD_PG_DATABASE: "probod"
+      PROBOD_PG_POOL_SIZE: "20"
+      PROBOD_AWS_REGION: "us-east-1"
+      PROBOD_AWS_BUCKET: "probod"
+      PROBOD_AWS_ACCESS_KEY_ID: "probod"
+      PROBOD_AWS_SECRET_ACCESS_KEY: "${PROBO_S3_SECRET:?set PROBO_S3_SECRET in .env}"
+      PROBOD_AWS_ENDPOINT: "http://seaweedfs:8333"
+      PROBOD_AWS_USE_PATH_STYLE: "true"
+      PROBOD_METRICS_ADDR: "probo:8081"
+      PROBOD_TRACING_ADDR: ""
+      # No outbound mail: leave SMTP unset/unreachable. Invitations must be handled locally.
+      PROBOD_SMTP_ADDR: "127.0.0.1:1"
+      PROBOD_SMTP_TLS_REQUIRED: "false"
+      PROBOD_MAILER_SENDER_NAME: "Probo (local)"
+      PROBOD_MAILER_SENDER_EMAIL: "no-reply@localhost"
+      PROBOD_CHROME_DP_ADDR: "chrome:9222"
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - "probo-data:/data"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seaweedfs:
+        condition: service_started
+      chrome:
+        condition: service_started
+    security_opt:
+      - no-new-privileges:true
+
+  postgres:
+    # postgres:18.6 (digest as pinned upstream)
+    image: "postgres@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "${PROBO_PG_PASSWORD:?set PROBO_PG_PASSWORD in .env}"
+      POSTGRES_DB: "probod"
+    volumes:
+      - "./postgres-init:/docker-entrypoint-initdb.d:ro"
+      - "postgres-data:/var/lib/postgresql:rw"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  seaweedfs:
+    image: "chrislusf/seaweedfs@sha256:cea8339d21dad1b200adce581dd7434d254b8f5975f142c3b4c930ba78647eef"
+    command: >
+      server -s3 -s3.config=/etc/seaweedfs/s3.json -s3.port=8333
+      -volume.max=100 -master.volumeSizeLimitMB=1024 -dir=/data
+    volumes:
+      - "./seaweedfs-s3.json:/etc/seaweedfs/s3.json:ro"
+      - "seaweedfs-data:/data:rw"
+
+  chrome:
+    image: "chromedp/headless-shell@sha256:b24482ae166e2c67135f5a8ba9575c257efdd8e2fd6b2e931f9d88ede3d72f3b"
+    command: ["--headless", "--disable-gpu", "--disable-dev-shm-usage", "--no-first-run", "--disable-background-networking", "--disable-extensions"]
+
+volumes:
+  probo-data:
+  postgres-data:
+  seaweedfs-data:

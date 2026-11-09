@@ -1,0 +1,10 @@
+# Local-only compliance data: never commit records, lists, packets or private keys.
+data/
+*.private.pem
+*-private.pem
+*.key
+*.enc
+.env
+grc/probo/seaweedfs-s3.json
+*.pem
+!keys/*.pub.pem

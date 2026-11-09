@@ -1,0 +1,43 @@
+# Numina Labs compliance review packet -> PDF (Docassemble, DRAFT, local-only).
+# Input: the Markdown written by `npm run compliance:packet -- --case <id> --out packet.md`.
+# Output: a PDF of that packet. The signature block stays UNSIGNED: Sam Kott signs on paper or with the
+# Ed25519 sign-off (`npm run compliance:signoff`). This interview never signs, sends or stores anything else.
+metadata:
+  title: Numina Labs compliance packet PDF (local, DRAFT)
+  short title: Compliance packet
+---
+mandatory: True
+code: |
+  packet_md = packet_upload[0].slurp()
+  if 'Signature: ____' not in packet_md:
+    raise Exception('This does not look like a Numina compliance packet (unsigned signature block missing).')
+  if 'Attorney review' not in packet_md:
+    raise Exception('Packet is missing the attorney-review line.')
+  packet_ready
+---
+question: Upload the compliance packet
+subquestion: |
+  Generate it locally first:
+  `npm run compliance:packet -- --case <id> --out packet.md`
+  (add `--redact` for a copy without identity details).
+fields:
+  - Packet (Markdown): packet_upload
+    datatype: file
+    accept: |
+      ".md,text/markdown,text/plain"
+---
+event: packet_ready
+question: Compliance packet
+subquestion: |
+  Download the PDF below. The signature block is intentionally left unsigned.
+
+  Attorney review is PENDING. It blocks any financial service launch, not the site push.
+attachment:
+  name: Numina Labs compliance review packet
+  filename: numina-compliance-packet
+  valid formats:
+    - pdf
+  content: |
+    ${ packet_md }
+buttons:
+  - Start over: restart

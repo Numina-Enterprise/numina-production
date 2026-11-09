@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "probod",
+      "credentials": [{"accessKey": "probod", "secretKey": "REPLACE_WITH_PROBO_S3_SECRET"}],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging", "Lock"]
+    }
+  ]
+}

@@ -9,6 +9,15 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs",
+    "compliance": "node local/compliance/bin/compliance.mjs",
+    "compliance:update-sdn": "node local/compliance/bin/compliance.mjs update-sdn",
+    "compliance:screen": "node local/compliance/bin/compliance.mjs screen",
+    "compliance:kyc": "node local/compliance/bin/compliance.mjs kyc",
+    "compliance:aml": "node local/compliance/bin/compliance.mjs aml",
+    "compliance:signoff": "node local/compliance/bin/compliance.mjs signoff",
+    "compliance:packet": "node local/compliance/bin/compliance.mjs packet",
+    "compliance:verify": "node local/compliance/bin/compliance.mjs verify",
+    "compliance:gate": "node local/compliance/bin/gate.mjs",
     "start": "bash scripts/numina-cloud-preview.sh",
     "conformance": "node scripts/conformance-current.mjs",
     "check:runtime": "node scripts/check-runtime.mjs",
@@ -23,7 +32,7 @@
     "release:pq-keygen": "node scripts/release-pq-keygen.mjs"
   },
   "license": "BSD-3-Clause",
-  "author": "Numina · SK Consulting LLC",
+  "author": "Numina \u00b7 SK Consulting LLC",
   "numina": {
     "identity": "NUMINA",
     "self": "NUMINA",

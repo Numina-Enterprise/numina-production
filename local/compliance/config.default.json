@@ -1,0 +1,123 @@
+{
+  "schema": "numina.compliance.config/v1",
+  "screening": {
+    "review_threshold": 0.85,
+    "block_threshold": 0.97,
+    "weak_alias_cap": 0.9,
+    "max_hits": 25,
+    "max_list_age_days": 7,
+    "dob_mismatch_penalty": 0.12,
+    "dob_match_bonus": 0.03,
+    "type_mismatch_penalty": 0.1,
+    "country_match_bonus": 0.02,
+    "country_mismatch_penalty": 0.04,
+    "max_screen_age_days": 30,
+    "engine": "auto",
+    "watchman_min_match": 0.8
+  },
+  "kyc": {
+    "min_age_years": 18,
+    "beneficial_owner_threshold_pct": 25,
+    "require_idv": false,
+    "require_manual_ofac_check": true
+  },
+  "aml": {
+    "reporting_threshold": 10000,
+    "secondary_thresholds": [
+      3000,
+      5000
+    ],
+    "structuring": {
+      "window_days": 7,
+      "floor_pct": 0.8,
+      "min_count": 2
+    },
+    "threshold_adjacent": {
+      "band_pct": 0.05
+    },
+    "velocity": {
+      "window_days": 7,
+      "baseline_days": 90,
+      "count_multiplier": 3,
+      "min_count": 4,
+      "amount_multiplier": 5,
+      "min_baseline_payments": 3
+    },
+    "round_amount": {
+      "unit": 1000,
+      "min_amount": 1000,
+      "min_count": 3,
+      "min_share": 0.6
+    },
+    "refund_churn": {
+      "window_days": 30,
+      "min_count": 2,
+      "min_ratio": 0.3
+    },
+    "rapid_in_out": {
+      "window_hours": 72,
+      "amount_tolerance_pct": 0.1
+    },
+    "fan_in": {
+      "window_days": 14,
+      "min_distinct_payers": 3
+    },
+    "dormant": {
+      "dormant_days": 180,
+      "min_amount": 2500
+    },
+    "payer_mismatch": {
+      "min_similarity": 0.85
+    },
+    "high_risk_jurisdictions": {
+      "comprehensive_sanctions": [
+        "CU",
+        "IR",
+        "KP",
+        "SY"
+      ],
+      "fatf_call_for_action": [
+        "KP",
+        "IR",
+        "MM"
+      ],
+      "elevated": [
+        "RU",
+        "BY",
+        "VE",
+        "AF",
+        "IQ",
+        "LY",
+        "SO",
+        "SS",
+        "SD",
+        "YE",
+        "ML",
+        "CF",
+        "CD",
+        "ZW",
+        "NI"
+      ],
+      "as_of": "2026-11-09",
+      "note": "Review against current OFAC program pages and the FATF high-risk / increased-monitoring lists before relying on this list."
+    }
+  },
+  "risk": {
+    "bands": {
+      "low": 0,
+      "medium": 35,
+      "high": 65
+    }
+  },
+  "attorney_review": {
+    "status": "PENDING",
+    "follow_up_due": "2026-12-09",
+    "scope": "Blocks the launch of any financial service (payments beyond ordinary consulting engagement invoicing, treasury, custody, money transmission or token offerings). Does not block the numinalabs.xyz site push."
+  },
+  "organization": {
+    "legal_name": "S K Consulting LLC",
+    "dba": "Numina Labs",
+    "owner": "Sam Kott",
+    "owner_title": "Owner"
+  }
+}

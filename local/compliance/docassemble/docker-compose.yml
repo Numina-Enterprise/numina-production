@@ -1,0 +1,26 @@
+# Docassemble (MIT, https://github.com/jhpyle/docassemble) — local-only interview server for the
+# Numina Labs KYC intake and compliance-packet PDF. CONFIG ONLY: not run on the build box (no Docker there).
+# Bound to 127.0.0.1 only. Data stays in the named volume; never commit exports.
+# Start:  docker compose -f local/compliance/docassemble/docker-compose.yml up -d
+# Then open http://127.0.0.1:8090, sign in with the local default admin and change its password
+# immediately, and upload interviews/*.yml through the Playground. No email/SMS/cloud features configured.
+services:
+  docassemble:
+    image: jhpyle/docassemble:1.10.15@sha256:aaa4a57e7d06ab6ef3b4ae89bffa3747fa4a7339716b9831af55382537bd5326
+    container_name: numina-docassemble
+    restart: "no"
+    stop_grace_period: 1m30s
+    environment:
+      DAHOSTNAME: 127.0.0.1
+      TIMEZONE: America/Chicago
+      USEHTTPS: "false"
+      USELETSENCRYPT: "false"
+      # No mail server, S3/Azure storage or other cloud integrations are configured.
+    ports:
+      - "127.0.0.1:8090:80"
+    volumes:
+      - numina-docassemble-data:/usr/share/docassemble/backup
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  numina-docassemble-data:
