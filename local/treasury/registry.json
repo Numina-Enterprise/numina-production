@@ -1,0 +1,219 @@
+{
+ "schema": "numina.local-treasury.tool-registry.v1",
+ "server": "https://mcp.stripe.com",
+ "sourcesReadAt": "2026-11-09T09:45:00-06:00",
+ "notes": [
+  "Single source of truth for adapters. Run `node local/treasury/generate-adapters.mjs` after editing; tests fail when adapters drift from this file.",
+  "Argument shapes are NOT hardcoded here. Every call is validated against the inputSchema returned by tools/list from the server at call time.",
+  "permissions lists only what Stripe documents publicly. An empty list means the docs do not name permissions for that tool."
+ ],
+ "tools": [
+  {
+   "name": "stripe_api_search",
+   "group": "API tools",
+   "description": "Search for Stripe API methods by keyword",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/mcp#tools"
+  },
+  {
+   "name": "stripe_api_details",
+   "group": "API tools",
+   "description": "Get detailed parameter information for a specific Stripe API method",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/mcp#tools"
+  },
+  {
+   "name": "stripe_api_read",
+   "group": "API tools",
+   "description": "Read data with any Stripe API GET method",
+   "status": "GA (no preview label)",
+   "permissions": [
+    "Depends on the API method (read permission for that resource)"
+   ],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/mcp#tools"
+  },
+  {
+   "name": "stripe_api_write",
+   "group": "API tools",
+   "description": "Write data with any Stripe API POST, PATCH, PUT and DELETE method",
+   "status": "GA (no preview label)",
+   "permissions": [
+    "Depends on the API method (write permission for that resource)"
+   ],
+   "access": "write",
+   "movesMoney": true,
+   "stripeHumanConfirmation": "action_dependent (Create refund is marked Human confirmation)",
+   "source": "https://docs.stripe.com/mcp#supported-api-methods",
+   "movesMoneyNote": "Action-dependent; treated as money-moving because Create refund and other write methods can move funds"
+  },
+  {
+   "name": "get_stripe_account_info",
+   "group": "Account",
+   "description": "Retrieve account",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/mcp#tools"
+  },
+  {
+   "name": "atlas_company_formation",
+   "group": "Atlas",
+   "description": "Prepare or resume an Atlas application for a Delaware C corporation or LLC (lists, creates, retrieves and advances drafts; payment, signing and submission happen only in the Dashboard)",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "write",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/atlas/agents"
+  },
+  {
+   "name": "stripe_analytics",
+   "group": "Analytics",
+   "description": "Query metrics, analyze subscriptions and billing, run financial reports, build SQL queries from natural language (metric queries are private preview; templates public preview)",
+   "status": "Preview (metric queries: private preview; subscription/billing templates: public preview)",
+   "permissions": [
+    "Data > Metrics: Read",
+    "Data > Queries: Read",
+    "Data > Reports: Read"
+   ],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/data/analyze-with-ai"
+  },
+  {
+   "name": "stripe_reports",
+   "group": "Analytics",
+   "description": "Searches financial report types and creates report runs (balance, payouts, activity, tax, Revenue Recognition) that produce CSV files",
+   "status": "Unconfirmed: named only in a search-index snapshot of docs.stripe.com/data/analyze-with-ai; absent from the current /mcp tools table. Adapter activates only if tools/list returns it.",
+   "permissions": [
+    "Data > Reports: Read"
+   ],
+   "access": "write",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/data/analyze-with-ai"
+  },
+  {
+   "name": "get_balance_summary",
+   "group": "Treasury",
+   "description": "Displays an interactive balance summary across the Stripe balance and Treasury accounts",
+   "status": "Public preview",
+   "permissions": [
+    "Balance: Read",
+    "Money Management Financial Accounts: Read"
+   ],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/treasury/agents#supported-tools"
+  },
+  {
+   "name": "convert_currency",
+   "group": "Treasury",
+   "description": "Converts funds between currencies within a Treasury account",
+   "status": "Public preview",
+   "permissions": [
+    "Currency Conversions: Write"
+   ],
+   "access": "write",
+   "movesMoney": true,
+   "stripeHumanConfirmation": true,
+   "source": "https://docs.stripe.com/treasury/agents#supported-tools"
+  },
+  {
+   "name": "send_money",
+   "group": "Treasury",
+   "description": "Sends money from a Treasury account to a recipient",
+   "status": "Public preview",
+   "permissions": [
+    "Money Management Outbound Payments: Write"
+   ],
+   "access": "write",
+   "movesMoney": true,
+   "stripeHumanConfirmation": true,
+   "source": "https://docs.stripe.com/treasury/agents#supported-tools"
+  },
+  {
+   "name": "setup_recipient",
+   "group": "Treasury",
+   "description": "Sets up a recipient account for sending money from a Treasury account",
+   "status": "Public preview",
+   "permissions": [
+    "Recipient Configuration: Write"
+   ],
+   "access": "write",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/treasury/agents#supported-tools"
+  },
+  {
+   "name": "transfer_money",
+   "group": "Treasury",
+   "description": "Transfers money between supported Stripe balances",
+   "status": "Public preview",
+   "permissions": [
+    "Money Management Outbound Transfers: Write",
+    "Payouts: Write"
+   ],
+   "access": "write",
+   "movesMoney": true,
+   "stripeHumanConfirmation": true,
+   "source": "https://docs.stripe.com/treasury/agents#supported-tools"
+  },
+  {
+   "name": "search_stripe_documentation",
+   "group": "Others",
+   "description": "Search the Stripe documentation for the given question and language",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/mcp#tools"
+  },
+  {
+   "name": "stripe_implementation_planner",
+   "group": "Others",
+   "description": "Guides the user through Stripe products to accept payments, sell online, set up billing or build an integration",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "read",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "source": "https://docs.stripe.com/mcp#tools"
+  },
+  {
+   "name": "send_stripe_feedback",
+   "group": "Others",
+   "description": "Share feedback about Stripe's products (sends a message to Stripe)",
+   "status": "GA (no preview label)",
+   "permissions": [],
+   "access": "write",
+   "movesMoney": false,
+   "stripeHumanConfirmation": false,
+   "contactsStripe": true,
+   "source": "https://docs.stripe.com/mcp#tools"
+  }
+ ],
+ "reconciledWith": {
+  "path": "/workspace/stripe-docs-inventory/inventory.json",
+  "result": "15 of 15 inventory tools present; registry adds stripe_reports as UNCONFIRMED; inventory labels the general tools public_preview but docs.stripe.com/mcp shows no preview label on them (only Treasury and stripe_analytics)"
+ },
+ "notices": [
+  "Stripe MCP stops accepting full-access secret keys and restricted keys without the Agent tag in December 2026: migrate to agent API keys or OAuth by 2026-11-30 (https://docs.stripe.com/mcp#authenticate-stripe-mcp)"
+ ]
+}
