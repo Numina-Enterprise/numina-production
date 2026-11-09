@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import worker from '../src/worker.js';
 const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8');
-const routes=['/app','/frontier','/economy','/services','/integrations','/build','/control','/labs'];
+const routes=['/services','/labs'];
 const institutionalPages=new Set(['index.html','government.html','financial-institutions.html','partners.html','developers.html','trust.html','uk-eu.html','mena.html','apac.html','contact.html']);
 const institutionalRoutes=['/government','/financial-institutions','/partners','/ecosystem','/developers','/trust','/contact'];
 
@@ -29,20 +29,27 @@ test('every website page shares the Numina design and complete primary navigatio
     for(const label of ['Main navigation','Mobile navigation']){
       const nav=header.match(new RegExp('<nav[^>]*aria-label="'+label+'"[^>]*>(.*?)</nav>','s'))?.[1];
       assert.ok(nav,file+' '+label);assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),routes,file);
-      assert.equal([...nav.matchAll(/aria-current="page"/g)].length,1,file);
+      assert.ok([...nav.matchAll(/aria-current="page"/g)].length<=1,file);
     }
     assert.doesNotMatch(html,/<a[^>]*href="(?:https:\/\/(?:www\.)?numinalabs.xyz)?\/pricing(?:["#?])/);
   }
   assert.notEqual(read('index.html'),read('frontier.html'));
   assert.match(read('index.html'),/class="service-pane"/);
   assert.match(read('index.html'),/Accountable intelligence/);
+  for(const name of readdirSync(new URL('../public/',import.meta.url)).filter(n=>n.endsWith('.html'))){
+    const html=read(name);
+    assert.doesNotMatch(html,/1,500T|\b500T|NUSD|Numina USD|Bank of America|Stripe Treasury|treasury|designated account|block height|root fingerprint|production head|chatgpt\.site|Iowa, USA|SK Consulting/i,name);
+    // KYC/AML gate: no KYC, custody, deposit, yield or investment offers on public pages.
+    assert.doesNotMatch(html,/\bKYC\b|\b(?:we|numina(?: labs)?)\s+(?:offer|offers|provide|provides)\s+[^.<]{0,40}\b(?:custody|custodial|deposits?|yields?|investments?)\b|\b(?:earn|guaranteed)\s+[^.<]{0,30}\b(?:yield|returns?|interest)\b|\d+(?:\.\d+)?\s?%\s?(?:APY|APR|yield|returns?)\b|\b(?:deposit|send|transfer)\s+(?:your\s+)?(?:funds|money|crypto|USD|USDC)\s+(?:to|with)\s+(?:us|numina)\b|\binvest\s+(?:with|in)\s+(?:us|numina)\b|\btoken\s+(?:sale|offering|presale)\b/i,name);
+    assert.doesNotMatch(html,/href="\/(?:app|control|economy|blockchain|redemption|wallet-signing|financial-services|treasury|treasury-simulation|deployment-readiness|transfer-receipts|status)(?:[#?"])/,name);
+  }
 });
 
 test('services and pricing combine scope, terms and the existing enterprise request routes once',()=>{
   const html=read('services.html');
   for(const id of ['pricing','book','implementation','delivery'])assert.equal([...html.matchAll(new RegExp('id="'+id+'"','g'))].length,1,id);
-  for(const service of ['diagnostic_enterprise','audit_enterprise'])assert.equal([...html.matchAll(new RegExp('/app\\?service='+service+'#request-form','g'))].length,1,service);
-  for(const text of ['$5,000','$25,000','International requests are reviewed before checkout','customer acceptance','Enterprise Integration','Frontier Program'])assert.ok(html.includes(text),text);
+  assert.doesNotMatch(html,/\/app\?service=/);assert.ok(html.includes('href="/contact">Start a diagnostic')&&html.includes('href="/contact">Start an audit'));
+  for(const text of ['$1,500','$7,500','International requests are reviewed before checkout','customer acceptance','Enterprise Integration','Frontier Program'])assert.ok(html.includes(text),text);
   assert.doesNotMatch(read('sitemap.xml'),/numinalabs.xyz\/pricing/);
 });
 

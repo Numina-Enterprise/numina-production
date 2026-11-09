@@ -27,13 +27,13 @@ test('all public layers and discovery tools carry the same declared policy witho
       assert.deepEqual(JSON.parse(result.content[0].text).denomination_policy,policy);
     }
     const after=await readControl(db);assert.equal(after.revision,before.revision);assert.equal(after.head_hash,before.head_hash);
-    for(const file of ['dist/client/source-alignment.json','dist/client/downloads/application-release-v5.json','public/business-core.json','integrations/numina/distribution.json'])assert.deepEqual(json(file).denomination_policy,policy,file);
-    const release=json('dist/client/downloads/application-release-v5.json');assert.equal(release.nusd_denomination_policy.statement,policy.expression);assert.equal(release.nusd_denomination_policy.executable_conversion_verified,false);
+    for(const file of ['dist/private-downloads/source-alignment.json','dist/private-downloads/downloads/application-release-v5.json','public/business-core.json','integrations/numina/distribution.json'])assert.deepEqual(json(file).denomination_policy,policy,file);
+    const release=json('dist/private-downloads/downloads/application-release-v5.json');assert.equal(release.nusd_denomination_policy.statement,policy.expression);assert.equal(release.nusd_denomination_policy.executable_conversion_verified,false);
   }finally{db.close();}
 });
 
 test('integration projections retain optional server policy without claiming provider verification',async()=>{
-  const release=json('dist/client/downloads/application-release-v5.json'),calls=[];let include=true;
+  const release=json('dist/private-downloads/downloads/application-release-v5.json'),calls=[];let include=true;
   release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async(url,options)=>{calls.push({url,method:options.method});return Response.json(url.endsWith('/status')?{schema:'numina.nusd.status.v1',...(include?{denomination_policy:policy}:{})}:{...release,...(include?{}:{denomination_policy:undefined})});}});
   assert.deepEqual((await client.network()).data.denomination_policy,policy);

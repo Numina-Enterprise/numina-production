@@ -1,7 +1,7 @@
 import {readFileSync} from 'node:fs';
 
 export function applicationReleaseAssets(){
-  const bytes=readFileSync(new URL('../../dist/client/downloads/application-release-v5.json',import.meta.url));
+  const bytes=readFileSync(new URL('../../dist/private-downloads/downloads/application-release-v5.json',import.meta.url));
   return {async fetch(request){
     return new URL(request.url).pathname==='/downloads/application-release-v5.json'
       ?new Response(bytes,{headers:{'Content-Type':'application/json'}})

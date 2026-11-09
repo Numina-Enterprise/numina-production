@@ -41,6 +41,12 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Verify signed release attestation
+        # Fails the deploy unless release-evidence/numina-<version>-release.dsse.json and
+        # release-evidence/pubkeys/SKOTT34-Ed25519.pub.pem exist, every dist/client and
+        # dist/server digest matches the signed statement, and every committed key verifies.
+        run: node scripts/release-verify.mjs
+
       - name: Verify release pins and tests
         run: |
           node scripts/sync-application-release-pin.mjs

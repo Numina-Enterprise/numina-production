@@ -11,7 +11,7 @@ import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
 const digest=value=>createHash('sha256').update(value).digest('hex');
-const releasePath='dist/client/downloads/application-release-v5.json';
+const releasePath='dist/private-downloads/downloads/application-release-v5.json';
 
 test('one owner approval binds both runtime manifests without manufacturing financial evidence',()=>{
  const release=json(releasePath),approval=release.owner_approval;
@@ -50,7 +50,7 @@ test('root release manifest binds the owner workflow, additive migration and act
 test('application manifest aliases contain the same current release bytes',()=>{
   const current=bytes(releasePath),release=JSON.parse(current);
   for(const name of ['release.json','application-release-v2.json','application-release-v3.json']){
-    assert.deepEqual(bytes('dist/client/downloads/'+name),current,name);
+    assert.deepEqual(bytes('dist/private-downloads/downloads/'+name),current,name);
   }
   assert.equal(release.version,'5.0.0');
   assert.equal(release.release,'numina-v5.0.0');
@@ -104,7 +104,7 @@ test('current release preserves historical publication evidence and labels its s
 });
 
 test('release and client manifests bind the identical treasury verifier without provider claims',()=>{
-  const release=json(releasePath),alignment=json('dist/client/source-alignment.json');
+  const release=json(releasePath),alignment=json('dist/private-downloads/source-alignment.json');
   const distribution=json('integrations/numina/distribution.json');
   const binding=release.treasury_client_verification;
   assert.ok(binding,'Current release must declare its treasury client verification binding');

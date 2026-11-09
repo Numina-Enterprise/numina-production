@@ -35,5 +35,5 @@ test('private bank configuration does not turn routing or native settlement into
 test('built web and downloadable FINAL projections carry identical scoped instruction',()=>{
   const json=path=>JSON.parse(readFileSync(new URL('../'+path,import.meta.url)));
   const source=json('public/final-build.json');
-  for(const path of ['dist/client/final-build.json','dist/client/downloads/NUMINA-FINAL-BUILD.json'])assert.deepEqual(json(path),source,path);
+  for(const path of ['dist/private-downloads/final-build.json','dist/private-downloads/downloads/NUMINA-FINAL-BUILD.json'])assert.deepEqual(json(path),source,path);
 });

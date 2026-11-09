@@ -1,5 +1,5 @@
 // Delivery-trigger marker: downstream finance mutation synchronized 2026-09-20T03:52Z.
-import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,readdirSync,statSync,unlinkSync,renameSync,rmdirSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
@@ -41,6 +41,18 @@ copy('release-evidence/decoded-attribution-closure-2026-10-11','dist/client/down
 // Sites serves matching static files before Worker routes. Let the Worker own
 // the old pricing address so its redirect retains query parameters.
 unlinkSync('dist/client/pricing.html');
+// Public-safe asset bundle: publish only scripts that remaining public pages load (directly or
+// via relative imports). Private workspace, wallet, treasury, control and telemetry UIs stay
+// out of dist/client; the Worker bundle above is still assembled from source.
+{
+  const pageRefs=new Set();
+  for(const n of readdirSync('dist/client'))if(n.endsWith('.html'))for(const m of readFileSync('dist/client/'+n,'utf8').matchAll(/(?:src|href)="\/([^"#?]+\.js)"/g))pageRefs.add(m[1]);
+  const pending=[...pageRefs];
+  while(pending.length){const name=pending.pop();let text;try{text=readFileSync('dist/client/'+name,'utf8');}catch{continue;}
+    for(const m of text.matchAll(/(?:import|from)\s*['"]\.\/([^'"]+\.js)['"]/g))if(!pageRefs.has(m[1])){pageRefs.add(m[1]);pending.push(m[1]);}}
+  for(const n of readdirSync('dist/client'))if(n.endsWith('.js')&&!pageRefs.has(n))unlinkSync('dist/client/'+n);
+  for(const n of ['treasury-team.json','wallet-signing-review.json','deployment-readiness-inputs.json']){try{unlinkSync('dist/client/'+n);}catch(error){if(error.code!=='ENOENT')throw error;}}
+}
 // Keep the institutional homepage distinct from the operational Frontier workspace.
 // `/frontier` continues to resolve to `frontier.html` in the Worker router.
 copyFileSync('mobile/signing/release-identities.json','dist/client/identity.json');
@@ -61,6 +73,20 @@ writeFileSync('dist/.openai/hosting.json',JSON.stringify(JSON.parse(readFileSync
 if(readdirSync('.').includes('drizzle'))copy('drizzle','dist/.openai/drizzle');
 execFileSync(process.execPath,['--check','dist/server/index.js'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/source-alignment.mjs'],{stdio:'inherit'});
+// Public-safe publication (Nov 2026): dist/client is the only directory Cloudflare serves.
+// Downloads, data records, vendor bundles and schemas move to dist/private-downloads (same
+// relative paths, never uploaded as assets) so local tools and tests can still read them.
+{
+  const PUBLISHED_FILES=new Set(['robots.txt','sitemap.xml','_headers','_redirects','LICENSE.md','NOTICE.md','1317faaa99cf1272fa36ee6ba288abf2.txt','.well-known/assetlinks.json']);
+  const PUBLISHED_EXTENSIONS=/\.(html|css|png|jpe?g|svg|ico|webp)$/;
+  const published=rel=>PUBLISHED_FILES.has(rel)||(!rel.includes('/')&&PUBLISHED_EXTENSIONS.test(rel));
+  const walk=(rel='')=>readdirSync('dist/client'+(rel?'/'+rel:'')).flatMap(n=>{const r=rel?rel+'/'+n:n;return statSync('dist/client/'+r).isDirectory()?walk(r):[r];});
+  for(const rel of walk())if(!published(rel)){const to='dist/private-downloads/'+rel;mkdirSync(to.slice(0,to.lastIndexOf('/')),{recursive:true});renameSync('dist/client/'+rel,to);}
+  // Styles and images that no published page or stylesheet references are not published either.
+  const pages=readdirSync('dist/client').filter(n=>/\.(html|css)$/.test(n)).map(n=>[n,readFileSync('dist/client/'+n,'utf8')]);
+  for(const n of readdirSync('dist/client'))if(/\.(css|png|jpe?g|svg|webp)$/.test(n)&&n!=='favicon.svg'&&!pages.some(([page,text])=>page!==n&&text.includes(n)))renameSync('dist/client/'+n,'dist/private-downloads/'+n);
+  const prune=dir=>{for(const n of readdirSync(dir)){const p=dir+'/'+n;if(statSync(p).isDirectory()){prune(p);if(!readdirSync(p).length)rmdirSync(p);}}};prune('dist/client');
+}
 execFileSync(process.execPath,['scripts/release-manifest.mjs'],{stdio:'inherit'});
 execFileSync(process.execPath,['scripts/sync-application-release-pin.mjs','--write'],{stdio:'inherit'});
 console.log('Built static site and Worker; no third-party runtime dependencies.');

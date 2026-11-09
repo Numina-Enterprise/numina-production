@@ -16,8 +16,8 @@ test('iOS routes to the existing Frontier panel and canonical metrics client', (
   assert.match(configuration, /static let origin = URL\(string: "https:\/\/numinalabs\.xyz"\)!/);
   assert.match(configuration, /frontierURL = origin\.appendingPathComponent\("frontier"\)/);
   assert.match(configuration, /components\.fragment = "runtime-metrics"/);
-  assert.match(read('public/frontier.html'), /id="runtime-metrics"/);
-  assert.match(read('public/frontier.html'), /src="\/telemetry-ui\.js"/);
+  assert.match(read('private-pages/frontier.html'), /id="runtime-metrics"/);
+  assert.match(read('private-pages/frontier.html'), /src="\/telemetry-ui\.js"/);
   assert.match(read('public/telemetry-ui.js'), /requestJson\('\/api\/ops\/v1\/telemetry'/);
   assert.match(model, /func openRuntimeMetrics\(\) \{ load\(AppConfiguration\.runtimeMetricsURL\) \}/);
   assert.match(model, /func openBrowserRuntimeMetrics\(\) \{ openExternal\(AppConfiguration\.runtimeMetricsURL\) \}/);

@@ -45,7 +45,11 @@
       "/pricing*",
       "/platform*",
       "/favicon.ico",
-      "/robots.txt"
+      "/robots.txt",
+      "/downloads",
+      "/downloads/*",
+      "/mcp",
+      "/mcp/*"
     ],
     "not_found_handling": "404-page",
     "html_handling": "drop-trailing-slash"

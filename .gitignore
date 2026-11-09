@@ -32,3 +32,6 @@ dist/
 *.local.xcconfig
 packages/
 *.xcarchive/
+
+# Local-only admin data (private downloads, local route config)
+local-data/

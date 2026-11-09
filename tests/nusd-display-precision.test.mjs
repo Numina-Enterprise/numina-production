@@ -58,7 +58,7 @@ test('public issuance copy agrees with the existing receipt without changing con
   const verification=JSON.parse(read('runtime/nusd/deployment-verification.json'));
   assert.equal(receipt.issuance.decimals,18);
   assert.equal(BigInt(receipt.issuance.amountNusd)*10n**18n,BigInt(receipt.issuance.baseUnits));
-  for(const path of ['public/economy.html','public/blockchain.html']){
+  for(const path of ['private-pages/economy.html','private-pages/blockchain.html']){
     const html=read(path);
     assert.ok(html.includes(receipt.token.address));
     assert.ok(html.includes(receipt.chainId));

@@ -39,7 +39,7 @@ test('website and owner API share the unchanged singular treasury allocation mod
   assert.equal(result.fundableTargets.additive,true);
   assert.equal(result.treasuryAlignmentPlan.nonAdditive,false);
   assert.equal(model.allocations.reduce((sum,value)=>sum+BigInt(value.amount),0n).toString(),model.aggregateModeledValue);
-  const page=read('public/treasury.html');
+  const page=read('private-pages/treasury.html');
   assert.match(page,/1,500,000,000,000,000\.00 NUSD owner-designated equivalent/);
   assert.match(page,/1,500T owner-designated aggregate/);
   assert.equal(NUMINA_NATIVE_TREASURY_SYNC.sourceOfRecord,'NUMINA_NATIVE_TREASURY');
@@ -102,7 +102,7 @@ test('one shared backing statement preserves its declared policy and verificatio
 });
 
 test('historical simulation is labeled separately without changing either treasury model',()=>{
-  const page=read('public/treasury-simulation.html'),ui=read('public/treasury-simulation-ui.js');
+  const page=read('private-pages/treasury-simulation.html'),ui=read('public/treasury-simulation-ui.js');
   assert.match(page,/HISTORICAL SIMULATION/);assert.match(page,/500,000,000,000,000\.00/);
   assert.match(page,/existing deployed NUSD contract retains 18 decimals/);
   assert.match(page,/href="\/treasury"/);assert.match(ui,/Historical review matched/);

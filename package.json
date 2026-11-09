@@ -15,7 +15,12 @@
     "publish:source": "node scripts/publish-with-telemetry.mjs",
     "release:numina": "node scripts/package-numina-release.mjs",
     "runner:activate": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1",
-    "runner:status": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1 -StatusOnly"
+    "runner:status": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/activate-numina-runner.ps1 -StatusOnly",
+    "local-admin": "node src/local/server.mjs",
+    "release:statement": "node scripts/release-statement.mjs",
+    "release:sign": "node scripts/release-sign.mjs",
+    "release:verify": "node scripts/release-verify.mjs",
+    "release:pq-keygen": "node scripts/release-pq-keygen.mjs"
   },
   "license": "BSD-3-Clause",
   "author": "Numina · SK Consulting LLC",
@@ -2464,5 +2469,8 @@
       "externalReceiptRecorded": false,
       "onChainObserved": false
     }
+  },
+  "devDependencies": {
+    "@noble/post-quantum": "0.7.1"
   }
 }

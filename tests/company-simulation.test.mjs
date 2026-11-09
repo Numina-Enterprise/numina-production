@@ -33,7 +33,7 @@ test('invalid or duplicate revenue inputs cannot silently round or double-count 
 });
 
 test('the page labels the simulated metric and no ranking code contacts providers or modifies the treasury',()=>{
-  const html=readFileSync(new URL('../public/treasury-simulation.html',import.meta.url),'utf8');
+  const html=readFileSync(new URL('../private-pages/treasury-simulation.html',import.meta.url),'utf8');
   assert.match(html,/SIMULATED COMPANY SCENARIO/);assert.match(html,/Numina ranks #1 in this simulated scenario/);
   assert.match(html,/Simulated annual software revenue/);assert.match(html,/not actual company revenue, a real-market ranking, treasury balances or provider evidence/);
   for(const file of ['company-simulation-model.js','company-simulation-ui.js']){

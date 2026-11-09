@@ -12,11 +12,11 @@ import worker from '../src/worker.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
 test('published control and release records bind the same security document and surface inventory',async()=>{
   const digest=path=>createHash('sha256').update(readFileSync(resolve(root,path))).digest('hex');
-  const alignment=JSON.parse(readFileSync(resolve(root,'dist/client/source-alignment.json')));
-  const release=JSON.parse(readFileSync(resolve(root,'dist/client/downloads/release.json')));
+  const alignment=JSON.parse(readFileSync(resolve(root,'dist/private-downloads/source-alignment.json')));
+  const release=JSON.parse(readFileSync(resolve(root,'dist/private-downloads/downloads/release.json')));
   assert.deepEqual(release.security,alignment.security);
-  assert.equal(release.security.sha256,digest('dist/client/downloads/Numina-Security.md'));
-  assert.equal(release.security.surfacesSha256,digest('dist/client/security-surfaces.json'));
+  assert.equal(release.security.sha256,digest('dist/private-downloads/downloads/Numina-Security.md'));
+  assert.equal(release.security.surfacesSha256,digest('dist/private-downloads/security-surfaces.json'));
   assert.equal(release.security.sha256,digest('docs/Numina-Security.md'));
   assert.equal(release.security.surfacesSha256,digest('public/security-surfaces.json'));
   const response=await worker.fetch(new Request('https://numina.test/api/control/v2/manifest'),{NUMINA_TELEMETRY_LOGS:'false'});

@@ -30,7 +30,7 @@ class Element{
 function harness(fetcher,{control=false}={}){
  const nodes=new Map(),events=new Map(),dispatched=[];
  if(control){
-  const html=readFileSync(new URL('../public/control.html',import.meta.url),'utf8');
+  const html=readFileSync(new URL('../private-pages/control.html',import.meta.url),'utf8');
   for(const match of html.matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g)){const node=new Element(match[1]);node.hidden=/\bhidden\b/.test(match[0]);nodes.set(match[2],node);}
  }else for(const [id,tag]of [['stripe-treasury-panel','section'],['stripe-treasury-details','dl'],['stripe-treasury-message','p'],['stripe-treasury-dashboard','a']])nodes.set(id,new Element(tag));
  const get=id=>{assert.ok(nodes.has(id),'Unknown UI node '+id);return nodes.get(id);};

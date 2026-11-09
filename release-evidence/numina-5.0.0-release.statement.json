@@ -1,0 +1,416 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "dist/client/.well-known/assetlinks.json",
+      "digest": {
+        "sha256": "eb7f9ed9437e48aa8656deb42c531140b48dadd208c87865b648d4ced6444835"
+      }
+    },
+    {
+      "name": "dist/client/1317faaa99cf1272fa36ee6ba288abf2.txt",
+      "digest": {
+        "sha256": "1f5efa914ce92a9b85cf83ea00ea8ddf564b1fe3c1bd88f69fd49ee67a5b2c15"
+      }
+    },
+    {
+      "name": "dist/client/LICENSE.md",
+      "digest": {
+        "sha256": "246cc52690759ec767d86ec0eecf5c2cb25ec26bebfb0331b2b754a12ab73628"
+      }
+    },
+    {
+      "name": "dist/client/NOTICE.md",
+      "digest": {
+        "sha256": "2fadc774fc42b69c20a8f35cdb71860cfad65d83e70503cb3d4505d000354498"
+      }
+    },
+    {
+      "name": "dist/client/_headers",
+      "digest": {
+        "sha256": "023cd0daf215bd94b4013d1034f76d0e6308436884ce08f9fea75eb5868f02d5"
+      }
+    },
+    {
+      "name": "dist/client/_redirects",
+      "digest": {
+        "sha256": "410009857735112953f381916ef72a4dccc4baff4d852d81612c1bfb76bcd3b2"
+      }
+    },
+    {
+      "name": "dist/client/about.html",
+      "digest": {
+        "sha256": "1a61c73f9997ee2ecfd4d6e2657588d5563dc3e65b2fab0b29ba5c40095246df"
+      }
+    },
+    {
+      "name": "dist/client/apac.html",
+      "digest": {
+        "sha256": "bc4e854a72a09e24b2703450d1cd3d5a8270c755464b309cde987f0528e57568"
+      }
+    },
+    {
+      "name": "dist/client/app.html",
+      "digest": {
+        "sha256": "b6e1a2bf8cfe318771bc85daba88c77dca024bb516d9a860c628cab419b3db09"
+      }
+    },
+    {
+      "name": "dist/client/blockchain.html",
+      "digest": {
+        "sha256": "18a2f6b12751b63c6c13676e4cb93688d62e0aff709e870f9c7c32ebc7c86e69"
+      }
+    },
+    {
+      "name": "dist/client/build.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/connections.css",
+      "digest": {
+        "sha256": "a27b779f1d25aa79896c1a22f24323a70bf93da09dc92347af54bf491b79137b"
+      }
+    },
+    {
+      "name": "dist/client/connections.html",
+      "digest": {
+        "sha256": "2d108ae35678cbfb2ffc0dc156fe4d04bcdbc9d388b9c463424acadd0ace7809"
+      }
+    },
+    {
+      "name": "dist/client/contact.html",
+      "digest": {
+        "sha256": "fb67b396f8435949bcb43f536740ef8e51638c8289a0106ce68e55351c166ccd"
+      }
+    },
+    {
+      "name": "dist/client/control.html",
+      "digest": {
+        "sha256": "a452754a74f92fe550b2ed7df2b8ab37084735c1fda7f46fa8f85d60f21e3fcf"
+      }
+    },
+    {
+      "name": "dist/client/core.html",
+      "digest": {
+        "sha256": "fd682cd567fe3ea8194e8075e8e8f06cc4f987f9038f48de3272a89cbaf70788"
+      }
+    },
+    {
+      "name": "dist/client/deployment-readiness.html",
+      "digest": {
+        "sha256": "2fe0dd3ba88de3f699a5408d423bdc73782a88aebe12a0da84ac0af0a754b5c6"
+      }
+    },
+    {
+      "name": "dist/client/developers.html",
+      "digest": {
+        "sha256": "3eecca8b49e292d731b5e53e3b570f68b9503683b97a7d33c20daf814835d743"
+      }
+    },
+    {
+      "name": "dist/client/economy.css",
+      "digest": {
+        "sha256": "c8802f759ba20077f813d5b3f1d0436964ed95d513b7d0ec6f45df6e7351c3c2"
+      }
+    },
+    {
+      "name": "dist/client/economy.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/ecosystem.html",
+      "digest": {
+        "sha256": "2b03ebe68a54e28c16e169ee1010dcf45283134c5bddfbc3dd43cf879208270c"
+      }
+    },
+    {
+      "name": "dist/client/enterprise.css",
+      "digest": {
+        "sha256": "d698fd766182a4dd5ddf9e26ee55d8eb99744a93bd123db9adf3a955eca6f15a"
+      }
+    },
+    {
+      "name": "dist/client/favicon.svg",
+      "digest": {
+        "sha256": "a1213748f8780b72a930929c39d0bdc99ea001c95e02d1b747123aa609e250c6"
+      }
+    },
+    {
+      "name": "dist/client/financial-institutions.html",
+      "digest": {
+        "sha256": "3f764dd76181044c2e7e5c99331cb92d78192ea5c0c4a6a4f401432ae017225c"
+      }
+    },
+    {
+      "name": "dist/client/financial-services.html",
+      "digest": {
+        "sha256": "b8d6225426260408e5716e9c8847574dca528e5578860de28116772c1f224442"
+      }
+    },
+    {
+      "name": "dist/client/frontier.html",
+      "digest": {
+        "sha256": "05f93734fab239d4577ab4d68e506bd7baf9fd07799d165c6d0f4cd71f6b760e"
+      }
+    },
+    {
+      "name": "dist/client/government.html",
+      "digest": {
+        "sha256": "57c320b747c135d601f5aacaf8955ceeb06f2b08dd1615a12f6bff3b785c9ce2"
+      }
+    },
+    {
+      "name": "dist/client/index.html",
+      "digest": {
+        "sha256": "8a7520567a6ba75e8d863c2bdfc290a19714d32f0111745cf4b4150a2e3b2cd1"
+      }
+    },
+    {
+      "name": "dist/client/integrations.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/labs.html",
+      "digest": {
+        "sha256": "75fa2a210ae26da725ceff19bfcb2e6fa205fbd0d5139bd1a5b788cf7aabe027"
+      }
+    },
+    {
+      "name": "dist/client/mena.html",
+      "digest": {
+        "sha256": "5584cb35ec88dfc4c90f651d5b3b4d751767f315e2eb1fb0c359b8137edb20de"
+      }
+    },
+    {
+      "name": "dist/client/motion.css",
+      "digest": {
+        "sha256": "6bfe1244883e6d0f875f19ef7b3580c94332d1fd6bb6eec9e864158ee8e45731"
+      }
+    },
+    {
+      "name": "dist/client/numina-5.css",
+      "digest": {
+        "sha256": "4d9b3ea060d68aa5b87bf2fc4150ba570d15b4c61bef975a5a888e0e921af735"
+      }
+    },
+    {
+      "name": "dist/client/numina-labs-dark-logo.png",
+      "digest": {
+        "sha256": "73f55c323742f82b0a2fc96d2a7a66912c6b127461e733a72f48ca4999211ce9"
+      }
+    },
+    {
+      "name": "dist/client/numina-orbit.svg",
+      "digest": {
+        "sha256": "12519888beca4ee8387a9271ee9da9eba64ad7ce7037f989b1b5713a20a4a56d"
+      }
+    },
+    {
+      "name": "dist/client/ownership.html",
+      "digest": {
+        "sha256": "853e7e1d353a85192ed9de3d2b5caa08f798034c7c40ee5b880fdc9c934d3554"
+      }
+    },
+    {
+      "name": "dist/client/partners.html",
+      "digest": {
+        "sha256": "9be06afb4118ea560a5fb7dcb75773a05a3612d5267395d42d5ac5478a00c037"
+      }
+    },
+    {
+      "name": "dist/client/platform.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/privacy.html",
+      "digest": {
+        "sha256": "2b52fe6988b9782af3ad203b4388ea6a2f48afd95f3bd8a25a7f46767930435b"
+      }
+    },
+    {
+      "name": "dist/client/provenance.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/redemption.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/reviewer.html",
+      "digest": {
+        "sha256": "b483f3d111287a50aae3e9bd0f9a8d1944e8740974266b4793559f310aaf55c1"
+      }
+    },
+    {
+      "name": "dist/client/robots.txt",
+      "digest": {
+        "sha256": "9280e05ed9673e64e61bbc2f3e517994fe02934a084dce21aa6b0a97bda77af5"
+      }
+    },
+    {
+      "name": "dist/client/sam-kott.jpg",
+      "digest": {
+        "sha256": "7b5abe326f0b3b19b7dbc028ac43f091fa70cf744775a065cdc7abb5499f8db8"
+      }
+    },
+    {
+      "name": "dist/client/security.html",
+      "digest": {
+        "sha256": "ff8733fd3ce712928bd1a90f545c9c7a72c22cab52e656945a7afe0330f02fc4"
+      }
+    },
+    {
+      "name": "dist/client/services.css",
+      "digest": {
+        "sha256": "0f7db656977c04b3afb7605411f038a75d0ed24919a97aae6efabfd2fed59beb"
+      }
+    },
+    {
+      "name": "dist/client/services.html",
+      "digest": {
+        "sha256": "d432f98c0eef06f7aaaf64a03ad6d559fbf6ea282aa2dc6bcfe44e1607ce0d19"
+      }
+    },
+    {
+      "name": "dist/client/site-shell.css",
+      "digest": {
+        "sha256": "a6aaed42b44c4127db8d506db43f694f1cdf85ef25c6d28d2c3c822499401f7c"
+      }
+    },
+    {
+      "name": "dist/client/sitemap.xml",
+      "digest": {
+        "sha256": "e73abd2fad9bc760ace7c28f5482f8a32d3e551f672ea4a00190efde27bb7aec"
+      }
+    },
+    {
+      "name": "dist/client/spectrum-cover.png",
+      "digest": {
+        "sha256": "a84daf6ecdae34f014136dc3d59bcefe04c92afdf3059cdbce092369a8a3752e"
+      }
+    },
+    {
+      "name": "dist/client/status.html",
+      "digest": {
+        "sha256": "8482fb343ce2a16830232f106aa7d04618ec37ef47e45fa698a497435381cf28"
+      }
+    },
+    {
+      "name": "dist/client/task-ledger.html",
+      "digest": {
+        "sha256": "e7790493c6151c99ef062e8f4f6a57ff5aa5e99ece9634877dd3ea84469eba7c"
+      }
+    },
+    {
+      "name": "dist/client/terminal.css",
+      "digest": {
+        "sha256": "632c002606f0715d80e0a5395df9ec3666c217e170e9effbacb810ef5184f4a9"
+      }
+    },
+    {
+      "name": "dist/client/theme.css",
+      "digest": {
+        "sha256": "1e38259ae3fee50ee49867993c836f23a5a76cebb6a7c66bb4341827e52794ca"
+      }
+    },
+    {
+      "name": "dist/client/topology.html",
+      "digest": {
+        "sha256": "085bc91443bb6cd93807db1e14003c0df4b31344731d2cad567efeb11e6b9086"
+      }
+    },
+    {
+      "name": "dist/client/transfer-receipts.html",
+      "digest": {
+        "sha256": "6fa8f7e1a27851f53a225ec76aa2421265967cd2c330eb0bbcf9fce724256ac8"
+      }
+    },
+    {
+      "name": "dist/client/treasury-simulation.html",
+      "digest": {
+        "sha256": "d1730c8745a0f40859c4836c7fbe21504e36b3314ba89c26ae04cc3efa1f71a4"
+      }
+    },
+    {
+      "name": "dist/client/treasury.html",
+      "digest": {
+        "sha256": "d3b965d95f7f342100b37d25fe1d22007ead0db986a0ccc334a40a2c1d8ab8da"
+      }
+    },
+    {
+      "name": "dist/client/trust.html",
+      "digest": {
+        "sha256": "37ee8ea972f21675992d0786335a52517abac76661d89d7eeb0e50dc8cfcdd6a"
+      }
+    },
+    {
+      "name": "dist/client/uk-eu.html",
+      "digest": {
+        "sha256": "816d82e65ba4284fbf3b0b1a5044f55e2dfe15be326151fdeb86f335fcef2963"
+      }
+    },
+    {
+      "name": "dist/client/wallet-signing.html",
+      "digest": {
+        "sha256": "12cbf6f15fa270f7c01c58e6f3b3f390d6edd9741b6cb05bd5514c8cca5c0917"
+      }
+    },
+    {
+      "name": "dist/client/workspaces.css",
+      "digest": {
+        "sha256": "e853f15ec9f76ba574d7edea89f46788b213c4895f9d4d793e0f1a28a9198002"
+      }
+    },
+    {
+      "name": "dist/client/workspaces.html",
+      "digest": {
+        "sha256": "084e4a8841252ccccab888f5f4d036b701e710ba6208cfed0e919e067fcd3e3c"
+      }
+    },
+    {
+      "name": "dist/server/index.js",
+      "digest": {
+        "sha256": "3726e745e641afdc1a322d659cde20be83902f2add0e00036eacfec3a34d64a9"
+      }
+    }
+  ],
+  "predicateType": "https://numinalabs.xyz/attestations/release/v1",
+  "predicate": {
+    "product": "numina-production",
+    "version": "5.0.0",
+    "release": "numina-v5.0.0",
+    "builder": {
+      "id": "local"
+    },
+    "timestamp": "2026-11-09T15:50:29.291Z",
+    "sourceTree": {
+      "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
+      "sha256": "0c21ef82c00d2d188879758b2fe3c2ea5e344fbce11251453be4e12123aaa3f8",
+      "gitCommit": "53e052e1aa777af1fc0edc86a0461369997ed187",
+      "gitTree": "24f1f7f9d92911df0b6d645c6bfdf7294cfc5a27"
+    },
+    "subjectRoots": [
+      "dist/client",
+      "dist/server"
+    ],
+    "keyLabel": "SKOTT34-Ed25519",
+    "keyLabelNote": "A label only. A valid signature proves possession of the private key, not the identity of the holder.",
+    "excluded": [
+      "release-evidence/",
+      "dist/private-downloads/ (not published)"
+    ],
+    "attestation": "release-evidence/RELEASE-ATTESTATION.md"
+  }
+}

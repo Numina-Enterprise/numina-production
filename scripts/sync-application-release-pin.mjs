@@ -9,8 +9,8 @@ const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 export function syncApplicationReleasePin({write=false}={}){
   const version=JSON.parse(readFileSync(path.join(root,'package.json'))).version,major=version.split('.')[0];
   const aliases=['release.json',...new Set(['2','3','4',major])].map(name=>name==='release.json'?name:'application-release-v'+name+'.json');
-  const excluded=new Set(aliases.map(name=>'client/downloads/'+name));
-  const release=JSON.parse(readFileSync(path.join(root,'dist/client/downloads/application-release-v'+major+'.json')));
+  const excluded=new Set(aliases.map(name=>'private-downloads/downloads/'+name));
+  const release=JSON.parse(readFileSync(path.join(root,'dist/private-downloads/downloads/application-release-v'+major+'.json')));
   const collect=(relative='')=>readdirSync(path.join(root,'dist',relative)).flatMap(name=>{
     const file=relative?relative+'/'+name:name,absolute=path.join(root,'dist',file),metadata=lstatSync(absolute);
     if(metadata.isSymbolicLink())throw Error('Application inventory contains a symbolic link: '+file);
@@ -22,7 +22,7 @@ export function syncApplicationReleasePin({write=false}={}){
   const buildId=digest(artifacts.map(({path,sha256})=>sha256+'  '+path+'\n').join(''));
   if(release.schema!=='numina.application-release.v2'||release.version!==version||release.release!=='numina-v'+version||
     release.build_id!==buildId||JSON.stringify(release.artifacts)!==JSON.stringify(artifacts))throw Error('Generated application inventory does not match distribution bytes');
-  for(const alias of aliases)if(JSON.stringify(JSON.parse(readFileSync(path.join(root,'dist/client/downloads',alias))))!==JSON.stringify(release))throw Error('Application release aliases differ');
+  for(const alias of aliases)if(JSON.stringify(JSON.parse(readFileSync(path.join(root,'dist/private-downloads/downloads',alias))))!==JSON.stringify(release))throw Error('Application release aliases differ');
   const contractPath=path.join(root,'src/application-release-contract.js'),source=readFileSync(contractPath,'utf8');
   const buildPin=/export const EXPECTED_APPLICATION_ARTIFACT_BUILD_ID='([a-f0-9]{64})';/;
   const clientPin=/export const EXPECTED_APPLICATION_CLIENT_SHA256='([a-f0-9]{64})';/;

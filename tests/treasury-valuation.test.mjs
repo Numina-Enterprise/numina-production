@@ -26,7 +26,7 @@ test('declared parity rejects floating, negative and noncanonical native quantit
 
 test('public status and built release share the valuation declaration while execution stays evidence-bound',async()=>{
   const status=await (await nusdHttp(new Request('https://numina.test/api/nusd/v1/status'))).json();
-  const release=JSON.parse(readFileSync(new URL('../dist/client/downloads/application-release-v5.json',import.meta.url)));
+  const release=JSON.parse(readFileSync(new URL('../dist/private-downloads/downloads/application-release-v5.json',import.meta.url)));
   assert.deepEqual(status.denomination_policy,NUMINA_DENOMINATION_POLICY);
   assert.deepEqual(release.denomination_policy,NUMINA_DENOMINATION_POLICY);
   assert.equal(NUSD_POLICY.capabilities.settlement,false);assert.equal(NUSD_POLICY.redemption_policy.redemption_available,false);

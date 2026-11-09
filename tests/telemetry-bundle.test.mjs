@@ -18,10 +18,10 @@ test('assembled Worker exposes authenticated telemetry and simulator without tre
 });
 test('packaged ownership notices and metric mappings remain aligned',()=>{
  const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
- for(const name of ['OWNERSHIP.md','LICENSE.md','NOTICE.md'])assert.equal(read(name),read('dist/client/downloads/'+name));
- const alignment=JSON.parse(read('dist/client/source-alignment.json'));
+ for(const name of ['OWNERSHIP.md','LICENSE.md','NOTICE.md'])assert.equal(read(name),read('dist/private-downloads/downloads/'+name));
+ const alignment=JSON.parse(read('dist/private-downloads/source-alignment.json'));
  assert.equal(alignment.intellectualProperty.statedOwner,'SK Consulting LLC');assert.equal(alignment.intellectualProperty.registrationVerified,false);
  assert.equal(alignment.treasury.balanceCount,1);assert.equal(alignment.quantum.hardwareExecutionVerified,false);
- assert.ok(read('dist/client/frontier.html').includes('id="runtime-metrics"'));
+ assert.ok(read('private-pages/frontier.html').includes('id="runtime-metrics"'));
  assert.doesNotMatch(read('OWNERSHIP.md'),/Â|Ã|â€/);
 });

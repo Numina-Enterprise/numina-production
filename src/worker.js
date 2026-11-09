@@ -16,6 +16,26 @@ import {telemetryHttp} from './telemetry-http.js';
 import {quantumHttp} from './quantum-http.js';
 const security={"X-Numina-Version":"5.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"scoped-source-projection","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-2tAXL0MXpCFnUKMHj8NnmeDpoQYsECCkLLQ/5ws1dSQ=' 'sha256-B614+Jd2Qyoz2jrBrfvjNUorkR18LMC2w45LXD2waAE=' 'sha256-FYSuNbIYOxc2S1vlP/19PJWXJntuyIBQ9PzxUtGyTEU=' 'sha256-I/H2ZPFKVhmDF+CM87wHkphMgVT/M6hwxRlelT7Alhw=' 'sha256-RcOFH39j5uVKsEQAvdZI1zGIvAa25fcpsgllenb3lb4=' 'sha256-V8yJ6CdISENxNroOdy82yZEriLWfeMZ1hXWGtJo8XQc=' 'sha256-Z5BSm8bAtD76g/G6U2qqxQ6s7i+0+sjk8pXpl58dM3M=' 'sha256-eW+UgFbXXgT02Iws6T53oI2TrZpLDzfKKbIfvAf7eIk=' 'sha256-rTsFNRymltQmGrw583C05AZm9oKE0XJcfoKWCjGAQQU=' 'sha256-uFq9Xo1APyhQai8mlGYU8F+SEV0VxD8ecq23vhtgdt0='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
 
+// Public-host gate (Nov 2026): numinalabs.xyz and www.numinalabs.xyz serve only public-safe
+// pages. MCP, MCP discovery, control, treasury, NUSD, financial, ops, app, reviewer,
+// runtime/signing and download routes answer with one private-section notice (403) there.
+// The handlers below stay in place for the local-only server (src/local/).
+export const PUBLIC_SITE_HOSTS=Object.freeze(['numinalabs.xyz','www.numinalabs.xyz']);
+export const PUBLIC_BLOCKED_PREFIXES=Object.freeze(['/mcp','/api/','/.well-known/','/downloads/','/v1/','/v2/','/v3/','/v4/','/v5/']);
+export const PUBLIC_ALLOWED_PATHS=Object.freeze(['/readyz','/robots.txt','/favicon.ico','/favicon.svg','/.well-known/assetlinks.json']);
+export function isPublicSiteHost(hostname){return PUBLIC_SITE_HOSTS.includes(String(hostname||'').toLowerCase());}
+export function publicGateBlocks(hostname,path){
+ if(!isPublicSiteHost(hostname)||PUBLIC_ALLOWED_PATHS.includes(path))return false;
+ return path==='/mcp'||path.startsWith('/mcp/')||path==='/downloads'||PUBLIC_BLOCKED_PREFIXES.some(prefix=>prefix!=='/mcp'&&path.startsWith(prefix));
+}
+export const PRIVATE_NOTICE_JSON=Object.freeze({error:'private',message:'This endpoint is private and available on request or on the local network only.',contact:'https://www.numinalabs.xyz/contact'});
+export const PRIVATE_NOTICE_HTML='<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Private section — Numina Labs</title><meta name="robots" content="noindex, nofollow"><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/site-shell.css"><link rel="stylesheet" href="/motion.css"><link rel="stylesheet" href="/numina-5.css"></head>\n<body class="n5-page motion-site"><header class="header wrap site-header motion-header"><a class="brand motion-brand" href="/" aria-label="Numina home"><strong>NUMINA</strong><span>Intelligence in Motion</span></a></header>\n<main id="main"><section class="section"><div class="section-label">NUMINA LABS</div><div class="section-content"><h1>This section is private.</h1><p class="lead">It\u2019s available on request or on the Numina Labs local network only.</p><div class="actions"><a class="button" href="/contact">Contact Numina Labs \u2197</a><a class="button secondary" href="/">Numina Labs home</a></div></div></section></main>\n<footer class="wrap site-footer motion-footer"><p class="footer-note">\u00a9 2026 S K Consulting LLC, doing business as Numina Labs.</p></footer></body></html>\n';
+export function privateSectionNotice(req){
+ const html=/\btext\/html\b/i.test(req.headers.get('Accept')||'');
+ const headers={'Cache-Control':'no-store','X-Robots-Tag':'noindex','Content-Type':html?'text/html; charset=utf-8':'application/json'};
+ return new Response(req.method==='HEAD'?null:html?PRIVATE_NOTICE_HTML:JSON.stringify(PRIVATE_NOTICE_JSON),{status:403,headers});
+}
+
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
  async fetch(req,env){
@@ -30,6 +50,7 @@ export default {
   const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   if(publicGateBlocks(url.hostname,path))return finish(privateSectionNotice(req));
    if(path==='/favicon.ico'){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
     return finish(new Response(null,{status:308,headers:{Location:'/favicon.svg'}}));

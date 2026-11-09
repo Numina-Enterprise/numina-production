@@ -11,7 +11,10 @@ test('historical rc20 runtime route is retired without external network access',
   let called=false;
   globalThis.fetch=async()=>{called=true;throw new Error('network must not be used');};
   try{
-    const r=await worker.fetch(request('/v1/archive/rc20/status'),{});
+    // The public host answers with the private-section notice; the local host keeps the 410.
+    const pub=await worker.fetch(request('/v1/archive/rc20/status',{headers:{Accept:'application/json'}}),{});
+    assert.equal(pub.status,403);assert.equal((await pub.json()).error,'private');
+    const r=await worker.fetch(new Request('http://127.0.0.1/v1/archive/rc20/status'),{});
     assert.equal(r.status,410);
     assert.equal(r.headers.get('X-Numina-Release-Context'),'historical-rc20');
     assert.equal((await r.json()).error,'RC20_RUNTIME_RETIRED');
@@ -48,13 +51,13 @@ test('old control plane remains reachable as a local compatibility view',async()
 
 test('packaged institutional homepage and Frontier runtime preserve their distinct roles',()=>{
   const home=readFileSync(new URL('../dist/client/index.html',import.meta.url),'utf8');
-  const frontier=readFileSync(new URL('../dist/client/frontier.html',import.meta.url),'utf8');
-  const control=readFileSync(new URL('../dist/client/control.html',import.meta.url),'utf8');
+  const frontier=readFileSync(new URL('../private-pages/frontier.html',import.meta.url),'utf8');
+  const control=readFileSync(new URL('../private-pages/control.html',import.meta.url),'utf8');
   assert.match(home,/href="\/enterprise[.]css"/);
   assert.match(home,/class="service-pane"/);
   assert.match(frontier,/frontier-ui[.]js/);
   assert.match(frontier,/href="\/build"/);
-  const build=readFileSync(new URL('../dist/client/build.html',import.meta.url),'utf8');
+  const build=readFileSync(new URL('../private-pages/build.html',import.meta.url),'utf8');
   assert.match(build,/runtime-release-ui[.]js/);
   assert.match(build,/data-conformance>Checking…/);
   assert.match(frontier,/href="\/control"/);
@@ -62,7 +65,8 @@ test('packaged institutional homepage and Frontier runtime preserve their distin
   assert.ok(control.includes('<title>Numina '+applicationMajor+' — Control plane</title>'));
   assert.match(control,/href="\/control" aria-current="page"/);
   assert.match(control,/src="\/control.js"/);
-  for(const asset of ['theme.css','site-shell.css','runtime-release-ui.js','runtime-release-model.js','runtime-contract.js'])assert.ok(readFileSync(new URL('../dist/client/'+asset,import.meta.url)).length>0);
+  for(const asset of ['theme.css','site-shell.css'])assert.ok(readFileSync(new URL('../dist/client/'+asset,import.meta.url)).length>0);
+  for(const asset of ['runtime-release-ui.js','runtime-release-model.js','runtime-contract.js'])assert.ok(readFileSync(new URL('../public/'+asset,import.meta.url)).length>0);
 });
 
 test('homepage and manifest stay in the shared local design when Worker handles the request',async()=>{

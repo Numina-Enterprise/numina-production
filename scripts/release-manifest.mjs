@@ -42,7 +42,7 @@ for(const artifact of nativePackage.sourceArchives){
  const bytes=readFileSync('docs/'+artifact.file);
  if(bytes.length!==artifact.bytes||digest(bytes)!==artifact.sha256)throw Error('Native source package digest mismatch');
 }
-const excluded=new Set(manifestAliases.map(file=>'client/downloads/'+file));
+const excluded=new Set(manifestAliases.map(file=>'private-downloads/downloads/'+file));
 function collect(base='dist',relative=''){
  return readdirSync(base).flatMap(name=>{
   const path=relative?relative+'/'+name:name,absolute=base+'/'+name;
@@ -129,5 +129,5 @@ const record={
 };
 record.security={connections:'/connections',connectionManifest:'/api/connections/v1/manifest',surfaces:'/security-surfaces.json',surfacesSha256:digest(readFileSync('public/security-surfaces.json')),documentation:'/security',controlModel:'/downloads/Numina-Security.md',sha256:digest(readFileSync('docs/Numina-Security.md')),scope:'one canonical Numina security and financial control model',independentCertificationEstablished:false};
 record.security.financialEvidence={workspace:'/financial-services',manifest:'/api/financial/v1/manifest',approvalPack:'/downloads/Numina-Financial-Approval-Evidence.md',approvalPackSha256:digest(readFileSync('docs/Numina-Financial-Approval-Evidence.md')),classification:'software_evidence_not_financial_approval'};
-for(const file of manifestAliases)writeFileSync('dist/client/downloads/'+file,JSON.stringify(record,null,2)+'\n');
+for(const file of manifestAliases)writeFileSync('dist/private-downloads/downloads/'+file,JSON.stringify(record,null,2)+'\n');
 console.log('Generated Numina '+record.version+' application release identity: '+record.build_id);

@@ -25,7 +25,7 @@ class Element{
  async fire(name,extra={}){return this.listeners[name]?.({preventDefault(){},...extra});}
 }
 function harness(kind,fetcher){
- const nodes=new Map(),events={};const html=readFileSync(new URL('../public/'+(kind==='app'?'app':'control')+'.html',import.meta.url),'utf8');
+ const nodes=new Map(),events={};const html=readFileSync(new URL('../private-pages/'+(kind==='app'?'app':'control')+'.html',import.meta.url),'utf8');
  for(const match of html.matchAll(/<(\w+)[^>]*\bid="([^"]+)"[^>]*>/g)){const node=new Element(match[1]);node.hidden=/\bhidden\b/.test(match[0]);nodes.set(match[2],node);}
  const get=id=>{assert.ok(nodes.has(id),'Unknown UI node '+id);return nodes.get(id);};
  if(kind==='app'){
