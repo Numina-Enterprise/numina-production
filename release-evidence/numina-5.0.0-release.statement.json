@@ -40,7 +40,7 @@
     {
       "name": "dist/client/about.html",
       "digest": {
-        "sha256": "4cd31c933d3197c165eef9c469f169a46916df21ef0151a721005983bbc7fbfd"
+        "sha256": "658706a251d5eec433fd15299592fec015dd1ef8b21acfc4cf34a50dd399622d"
       }
     },
     {
@@ -166,7 +166,7 @@
     {
       "name": "dist/client/index.html",
       "digest": {
-        "sha256": "338186cd9fddd896658ea5962006ec222eee4d3b889287515c0b961692b6d88b"
+        "sha256": "9dbd7a5a62ee85d331290e4bdbaee1ace190b939a68041ee3a05b1507fb1ffb6"
       }
     },
     {
@@ -394,12 +394,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-09T19:00:18.731Z",
+    "timestamp": "2026-11-09T19:42:58.033Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "fd7b41732d33fbf18eda4997e869b83983e3db414910aa40e28880686a6b3431",
-      "gitCommit": "15f02a246bd1e353ee899af87d9fa8c77fc42d43",
-      "gitTree": "625a588143fa7fb8979ccab18e733dd3955e140a"
+      "sha256": "2357d595eb475526cf6d9b126ff59bf2073b19fa736d89620c4d14445e818bb6",
+      "gitCommit": "a17fcbac35f5c3e44d37b51ed258f512c2288716",
+      "gitTree": "a4031fab75c2d488f113a1e1cfbfac3aa1a57bf9"
     },
     "subjectRoots": [
       "dist/client",
