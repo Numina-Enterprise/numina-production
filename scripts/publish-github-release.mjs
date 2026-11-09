@@ -5,7 +5,7 @@ const token=process.env.GITHUB_TOKEN;
 const repository=process.env.GITHUB_REPOSITORY;
 const sourceCommit=process.env.GITHUB_SHA;
 if(!token)throw Error('GITHUB_TOKEN is required');
-if(repository!=='skott34-dot/numina-production')throw Error('Unexpected repository');
+if(repository!=='Numina-Enterprise/numina-production'&&repository!=='skott34-dot/numina-production')throw Error('Unexpected repository');
 if(!/^[0-9a-f]{40}$/i.test(sourceCommit||''))throw Error('GITHUB_SHA is required');
 
 const pkg=JSON.parse(readFileSync('package.json','utf8'));

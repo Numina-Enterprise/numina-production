@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import {evidenceReleaseTag,publishEvidence,sha256Hex} from '../scripts/publish-github-evidence.mjs';
 
 test('GitHub evidence publisher uses a commit-bound release and verifies read-back bytes',async()=>{
-  const sourceCommit='a'.repeat(40),repository='skott34-dot/numina-production',token='test-token';
+  const sourceCommit='a'.repeat(40),repository='Numina-Enterprise/numina-production',token='test-token';
   const dir=mkdtempSync(join(tmpdir(),'numina-evidence-'));
   try{
     const file=join(dir,'provider-observation-1-1.json'),bytes=Buffer.from('{"identity":"NUMINA"}\n');

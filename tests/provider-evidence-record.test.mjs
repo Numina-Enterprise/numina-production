@@ -52,7 +52,7 @@ test('quota-failed Actions storage still yields a source-bound canonical record 
     if(assets.has(url))return new Response(assets.get(url));
     throw Error('Unexpected request '+url);
   };
-  const receipt=await publishEvidence({token:'test',repository:'skott34-dot/numina-production',sourceCommit:source,files:[input,output],fetchFn,runId:'123',runAttempt:'2'});
+  const receipt=await publishEvidence({token:'test',repository:'Numina-Enterprise/numina-production',sourceCommit:source,files:[input,output],fetchFn,runId:'123',runAttempt:'2'});
   assert.equal(receipt.sha256ReadBackVerified,true);
   assert.equal(receipt.assets.length,2);
   assert.ok(receipt.assets.every(asset=>asset.readBackVerified&&asset.assetId));
@@ -90,7 +90,7 @@ test('failed Release upload or mismatched independent readback produces no succe
       if(options.method==='POST')return mode==='upload-failure'?new Response('unavailable',{status:503}):Response.json({id:1,name:'observation.json',url:'https://api.github.test/assets/1'});
       return new Response('corrupt bytes');
     };
-    await assert.rejects(publishEvidence({token:'test',repository:'skott34-dot/numina-production',sourceCommit:source,files:[input],fetchFn}),/upload failed 503|read-back (size|SHA-256) mismatch/);
+    await assert.rejects(publishEvidence({token:'test',repository:'Numina-Enterprise/numina-production',sourceCommit:source,files:[input],fetchFn}),/upload failed 503|read-back (size|SHA-256) mismatch/);
   }
 });
 

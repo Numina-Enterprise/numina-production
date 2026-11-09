@@ -12,7 +12,7 @@ export const RunnerErrorCodes = {
   ERR_RUNNER_FLOATING_LABEL_DISALLOWED: 'ERR_RUNNER_FLOATING_LABEL_DISALLOWED'
 };
 
-export const AUTHORIZED_REPO = 'skott34-dot/numina-production';
+export const AUTHORIZED_REPO = 'Numina-Enterprise/numina-production';
 export const PRESERVED_HOSTED_TARGETS = new Set(['NUMINA', 'ubuntu-24.04', 'macos-latest']);
 export const DENIED_FLOATING_LABELS = new Set(['ubuntu-latest']);
 

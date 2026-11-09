@@ -158,7 +158,7 @@ function normalizeAllActiveJsonMetadata(){
 function preserveRoutingSemantics(){
   const path=join(ROOT,'config/numina-routing.json'),routing=JSON.parse(readFileSync(path,'utf8'));
   routing.canonicalSource={identity:'NUMINA',root:'NUMINA',squareRoot:'NUMINA',repository:'NUMINA',branch:'main',role:'ROOT_SOURCE_OF_TRUTH',authoritative:true,updateDirection:'ROOT_TO_LEAVES'};
-  routing.tree={...routing.tree,root:'NUMINA',squareRoot:'NUMINA',sourceOfTruth:'NUMINA',updateDirection:'ROOT_TO_LEAVES',leaves:{github:{role:'ARCHIVE_LEAF',transport:'github',repository:'skott34-dot/numina-production',branch:'main',authoritative:false,evidenceTransport:true,ciTransport:false,ref:'refs/heads/main',headResolution:'FROZEN_AT_ARCHIVE',ingestIntoTree:false,ingestRole:'ARCHIVE_STATE_REFERENCE',authorityTransferred:false}}};
+  routing.tree={...routing.tree,root:'NUMINA',squareRoot:'NUMINA',sourceOfTruth:'NUMINA',updateDirection:'ROOT_TO_LEAVES',leaves:{github:{role:'ARCHIVE_LEAF',transport:'github',repository:'Numina-Enterprise/numina-production',branch:'main',authoritative:false,evidenceTransport:true,ciTransport:false,ref:'refs/heads/main',headResolution:'FROZEN_AT_ARCHIVE',ingestIntoTree:false,ingestRole:'ARCHIVE_STATE_REFERENCE',authorityTransferred:false}}};
   writeFileSync(path,JSON.stringify(routing,null,2)+'\n');
 }
 function stampJson(path,current=false){

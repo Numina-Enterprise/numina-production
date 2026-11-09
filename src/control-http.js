@@ -22,14 +22,17 @@ export const DELIVERY_SURFACE_MODEL=NUMINA;
 export const GITHUB_OIDC_ISSUER='https://token.actions.githubusercontent.com';
 export const GITHUB_OIDC_JWKS='https://token.actions.githubusercontent.com/.well-known/jwks';
 export const GITHUB_OIDC_AUDIENCE='numina-control';
-export const GITHUB_OIDC_REPOSITORY='skott34-dot/numina-production';
+export const GITHUB_OIDC_REPOSITORY='Numina-Enterprise/numina-production';
+export const GITHUB_OIDC_REPOSITORIES=Object.freeze(['Numina-Enterprise/numina-production','skott34-dot/numina-production']);
 export const GITHUB_OIDC_REPOSITORY_ID='1367647143';
 export const GITHUB_OIDC_OWNER_ID='269050000';
 export const GITHUB_OIDC_REF='refs/heads/main';
 export const GITHUB_OIDC_ENVIRONMENT='production';
-export const GITHUB_OIDC_WORKFLOW_REF='skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main';
+export const GITHUB_OIDC_WORKFLOW_REF='Numina-Enterprise/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main';
 export const GITHUB_OIDC_WORKFLOW_REFS=Object.freeze([
   GITHUB_OIDC_WORKFLOW_REF,
+  'Numina-Enterprise/numina-production/.github/workflows/deploy-nusd-contracts.yml@refs/heads/main',
+  'skott34-dot/numina-production/.github/workflows/settle-numina-aggregate-model.yml@refs/heads/main',
   'skott34-dot/numina-production/.github/workflows/deploy-nusd-contracts.yml@refs/heads/main'
 ]);
 let githubOidcCache={at:0,keys:null};
@@ -51,7 +54,7 @@ export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.fl
     if(header.alg!=='RS256'||typeof header.kid!=='string'||!header.kid)return false;
     const audience=Array.isArray(claims.aud)?claims.aud:[claims.aud];
     if(claims.iss!==GITHUB_OIDC_ISSUER||!audience.includes(GITHUB_OIDC_AUDIENCE))return false;
-    if(String(claims.repository_id)!==GITHUB_OIDC_REPOSITORY_ID||claims.repository!==GITHUB_OIDC_REPOSITORY||String(claims.repository_owner_id)!==GITHUB_OIDC_OWNER_ID)return false;
+    if(String(claims.repository_id)!==GITHUB_OIDC_REPOSITORY_ID||!GITHUB_OIDC_REPOSITORIES.includes(claims.repository)||String(claims.repository_owner_id)!==GITHUB_OIDC_OWNER_ID)return false;
     if(claims.ref!==GITHUB_OIDC_REF||claims.environment!==GITHUB_OIDC_ENVIRONMENT||!GITHUB_OIDC_WORKFLOW_REFS.includes(claims.workflow_ref))return false;
     if(!['workflow_dispatch','push'].includes(claims.event_name)||claims.runner_environment!=='github-hosted')return false;
     if(typeof claims.exp!=='number'||typeof claims.iat!=='number'||claims.exp<now-30||claims.iat>now+30||claims.iat<now-900)return false;

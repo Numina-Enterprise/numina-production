@@ -4,7 +4,7 @@ import {basename,resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 
 const API_VERSION='2022-11-28';
-const EXPECTED_REPOSITORY='skott34-dot/numina-production';
+const EXPECTED_REPOSITORY='Numina-Enterprise/numina-production';
 
 export const sha256Hex=value=>createHash('sha256').update(value).digest('hex');
 

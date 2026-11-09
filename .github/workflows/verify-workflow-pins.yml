@@ -115,7 +115,7 @@ jobs:
           MARKER: release-evidence/nusd-runtime-provenance-dispatch.json
         run: |
           set -euo pipefail
-          [[ "$REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$REPOSITORY" == 'Numina-Enterprise/numina-production' || "$REPOSITORY" == 'skott34-dot/numina-production' ]]
           [[ "$REPOSITORY_ID" == '1367647143' ]]
           [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
 
@@ -163,7 +163,7 @@ jobs:
           MARKER: release-evidence/treasury-write-dispatch.json
         run: |
           set -euo pipefail
-          [[ "$REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$REPOSITORY" == 'Numina-Enterprise/numina-production' || "$REPOSITORY" == 'skott34-dot/numina-production' ]]
           [[ "$REPOSITORY_ID" == '1367647143' ]]
           [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
 

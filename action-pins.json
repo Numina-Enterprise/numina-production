@@ -48,7 +48,7 @@
   "builder_workflow_commit": null,
   "hosted_run": null,
   "provenance_identity": "NUMINA",
-  "canonical_repository": "skott34-dot/numina-production",
+  "canonical_repository": "Numina-Enterprise/numina-production",
   "reference_policy": {
     "external_actions": "full_40_character_commit_sha_required",
     "external_reusable_workflows": "full_40_character_commit_sha_required",

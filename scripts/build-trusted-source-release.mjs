@@ -10,7 +10,7 @@ const digest=value=>createHash('sha256').update(canonical(value)).digest('hex');
 
 assert(PROVIDER_RECORD_PATH,'NUMINA_PROVIDER_RECORD_PATH required');assert(OUTPUT_PATH,'NUMINA_TRUSTED_RELEASE_PATH required');assert(/^[0-9a-f]{40}$/i.test(EXPECTED_GIT_SHA),'current GitHub source commit is required');
 assert(process.env.NUMINA_ROOT_VERIFIED==='true','Numina build and exact artifact checks must pass before trusted source release creation');
-if(process.env.GITHUB_REPOSITORY)assert(process.env.GITHUB_REPOSITORY==='skott34-dot/numina-production','unexpected GitHub repository');
+if(process.env.GITHUB_REPOSITORY)assert((process.env.GITHUB_REPOSITORY==='Numina-Enterprise/numina-production'||process.env.GITHUB_REPOSITORY==='skott34-dot/numina-production'),'unexpected GitHub repository');
 if(process.env.GITHUB_REF_NAME)assert(process.env.GITHUB_REF_NAME==='main','trusted source release must be bound to main');
 
 const providerRecord=JSON.parse(fs.readFileSync(PROVIDER_RECORD_PATH,'utf8'));
@@ -32,7 +32,7 @@ assert(finalBuild.identity==='NUMINA'&&finalBuild.status==='FINAL'&&finalBuild.m
 assert(pkg.numina?.finalBuildManifest?.blob&&pkg.numina.finalBuildManifest.identity==='NUMINA','final build pin missing');
 const repository=manifest.mechanics?.repository,githubLeaf=routing.tree?.leaves?.github;
 assert(manifest.schema==='numina.manifest.v2'&&manifest.identity==='NUMINA'&&repository?.identity==='NUMINA'&&repository?.branch==='main'&&repository?.role==='CANONICAL_ROOT_REPOSITORY'&&repository?.authoritative===true,'canonical manifest mismatch');
-assert(routing.canonicalSource?.root==='NUMINA'&&routing.canonicalSource?.role==='ROOT_SOURCE_OF_TRUTH'&&routing.canonicalSource?.updateDirection==='ROOT_TO_LEAVES'&&githubLeaf?.repository==='skott34-dot/numina-production'&&githubLeaf?.branch==='main'&&githubLeaf?.role==='ARCHIVE_LEAF'&&githubLeaf?.authoritative===false,'canonical GitHub routing mismatch');
+assert(routing.canonicalSource?.root==='NUMINA'&&routing.canonicalSource?.role==='ROOT_SOURCE_OF_TRUTH'&&routing.canonicalSource?.updateDirection==='ROOT_TO_LEAVES'&&githubLeaf?.repository==='Numina-Enterprise/numina-production'&&githubLeaf?.branch==='main'&&githubLeaf?.role==='ARCHIVE_LEAF'&&githubLeaf?.authoritative===false,'canonical GitHub routing mismatch');
 assert(!(manifest.mechanics?.delivery?.surfaces||[]).some(value=>String(value).includes('vercel.app')),'retired Vercel surface returned');
 
 const observedAt=providerArtifact.provider_observation?.observation_set?.observed_at;
@@ -40,7 +40,7 @@ assert(Number.isFinite(Date.parse(observedAt)),'provider observation timestamp i
 const observedTag=new Date(observedAt).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
 const artifactJson={
   schema:'numina.trusted-source-release.v1',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',
-  scope:'numina_github_source_release_gate',source_commit:EXPECTED_GIT_SHA,canonical_repository:'skott34-dot/numina-production',canonical_branch:'main',
+  scope:'numina_github_source_release_gate',source_commit:EXPECTED_GIT_SHA,canonical_repository:'Numina-Enterprise/numina-production',canonical_branch:'main',
   provider_evidence:{record_id:providerRecord.record_id,artifact_root:providerRecord.artifact_root,archive_digest:providerArtifact.archive.digest},
   root_verification:{build_and_artifact_checks:true,full_test_suite_executed:false,workflow_run_id:process.env.GITHUB_RUN_ID||null,workflow_run_attempt:process.env.GITHUB_RUN_ATTEMPT||null,final_build_blob:pkg.numina.finalBuildManifest.blob,application_version:pkg.version},
   publication:{public_deployment_verified:false,classification:'source_release_not_live_deployment'},

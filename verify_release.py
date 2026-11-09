@@ -15,7 +15,7 @@ import sys
 import tarfile
 from datetime import datetime, timezone
 
-CANONICAL_REPOSITORY = "skott34-dot/numina-production"
+CANONICAL_REPOSITORY = "Numina-Enterprise/numina-production"
 PROVENANCE_IDENTITY = "NUMINA"
 
 

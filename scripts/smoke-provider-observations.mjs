@@ -7,7 +7,7 @@ import {EXPECTED_RELEASE,RUNTIME_VERSION} from '../public/runtime-contract.js';
 const require=createRequire(import.meta.url);
 const {observeProvider,SUPPORTED_READ_ONLY_PROVIDERS}=require('../runtime/vercel-production/lib/provider-observations.js');
 
-const EXPECTED_REPOSITORY='skott34-dot/numina-production';
+const EXPECTED_REPOSITORY='Numina-Enterprise/numina-production';
 const EXPECTED_GIT_SHA=(process.env.NUMINA_EXPECTED_GIT_SHA||process.env.GITHUB_SHA||'').trim();
 const EVIDENCE_PATH=(process.env.NUMINA_PROVIDER_EVIDENCE_PATH||'').trim();
 const MAX_AGE_MS=5*60*1000,MAX_FUTURE_SKEW_MS=60*1000;
