@@ -38,7 +38,7 @@ test('every website page shares the Numina design and complete primary navigatio
   assert.match(read('index.html'),/Accountable intelligence/);
   for(const name of readdirSync(new URL('../public/',import.meta.url)).filter(n=>n.endsWith('.html'))){
     const html=read(name);
-    assert.doesNotMatch(html,/1,500T|\b500T|NUSD|Numina USD|Bank of America|Stripe Treasury|treasury|designated account|block height|root fingerprint|production head|chatgpt\.site|Iowa, USA|S K Consulting|S\. ?K\. Consulting/i,name);
+    assert.doesNotMatch(html,/1,500T|\b500T|NUSD|Numina USD|Bank of America|Stripe Treasury|treasury|designated account|block height|root fingerprint|production head|chatgpt\.site|Iowa, USA|S K Consulting|S\. ?K\. Consulting|United Nations|\bSDG\b|Sustainable Development Goals|humanitarian/i,name);
     // KYC/AML gate: no KYC, custody, deposit, yield or investment offers on public pages.
     assert.doesNotMatch(html,/\bKYC\b|\b(?:we|numina(?: labs)?)\s+(?:offer|offers|provide|provides)\s+[^.<]{0,40}\b(?:custody|custodial|deposits?|yields?|investments?)\b|\b(?:earn|guaranteed)\s+[^.<]{0,30}\b(?:yield|returns?|interest)\b|\d+(?:\.\d+)?\s?%\s?(?:APY|APR|yield|returns?)\b|\b(?:deposit|send|transfer)\s+(?:your\s+)?(?:funds|money|crypto|USD|USDC)\s+(?:to|with)\s+(?:us|numina)\b|\binvest\s+(?:with|in)\s+(?:us|numina)\b|\btoken\s+(?:sale|offering|presale)\b/i,name);
     assert.doesNotMatch(html,/href="\/(?:app|control|economy|blockchain|redemption|wallet-signing|financial-services|treasury|treasury-simulation|deployment-readiness|transfer-receipts|status)(?:[#?"])/,name);
