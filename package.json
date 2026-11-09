@@ -36,7 +36,7 @@
     "release:pq-keygen": "node scripts/release-pq-keygen.mjs"
   },
   "license": "BSD-3-Clause",
-  "author": "Numina \u00b7 SK Consulting LLC",
+  "author": "Numina · SK Consulting LLC",
   "numina": {
     "identity": "NUMINA",
     "self": "NUMINA",
