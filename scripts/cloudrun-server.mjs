@@ -3,20 +3,10 @@
 // New file only: does not change src/worker.js, wrangler.jsonc,
 // scripts/serve-numina-cloud.mjs, or config/numina-node26.v1.json.
 //
-// Differences from the local preview server, deliberately:
-// - Listens on 0.0.0.0, not 127.0.0.1, so Cloud Run can reach it.
-// - Port comes from process.env.PORT (Cloud Run sets it, default 8080),
-//   not from --port args and not from a fixed 8788.
-// - No PINNED_NODE_VERSION_REQUIRED check. The Dockerfile pins
-//   Node 26.13.0, matching .nvmrc 26.13.0 (Nov 1 alignment).
-//   The preview server is frozen to 26.11.1 by its own config
-//   (config.version must equal '26.11.1'), so it cannot run on
-//   a 26.13.0 machine. This adapter does not re-impose that pin.
-// - Private services, financial execution and signing are
-//   deliberately unavailable, same as the preview: D1 and R2
-//   bindings throw, NUMINA_LIVEMODE is 'false'.
-// - No secrets are read from code. Control secrets, if ever used,
-//   belong in Cloud Run / Worker configuration, never in this file.
+// Shares the canonical Worker and generated assets with Cloudflare.
+// The adapter listens on 0.0.0.0:$PORT for container platforms.
+// Private storage, signing and financial execution require separate adapters;
+// this public web container exposes their unavailable state explicitly.
 import { createServer } from 'node:http';
 import { constants } from 'node:fs';
 import { lstat, open } from 'node:fs/promises';

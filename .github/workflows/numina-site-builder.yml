@@ -39,7 +39,7 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$SOURCE_HOST" == 'https://github.com' ]]
-          [[ "$SOURCE_REPOSITORY" == 'skott34-dot/numina-production' ]]
+          [[ "$SOURCE_REPOSITORY" == 'Numina-Enterprise/numina-production' ]]
           [[ "$SOURCE_REPOSITORY_ID" == '1367647143' ]]
           [[ "$SOURCE_REF" == 'refs/heads/main' ]]
           [[ "$SOURCE_PROTECTED" == 'true' ]]
@@ -69,16 +69,16 @@ jobs:
           [[ "$(git rev-parse HEAD)" == "$SOURCE_SHA" ]]
           # Current Site has no npm dependencies. Dependency additions require a
           # reviewed workflow/lockfile change; no implicit install or lifecycle hooks.
-          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("package.json")); if(p.version!=="4.0.0" || ["dependencies","devDependencies","optionalDependencies"].some(k=>Object.keys(p[k]||{}).length)) throw Error("Build policy needs review"); fs.rmSync("dist",{recursive:true,force:true});'
+          node --input-type=module -e 'import fs from "node:fs"; const p=JSON.parse(fs.readFileSync("package.json")); if(p.version!=="5.0.0" || ["dependencies","devDependencies","optionalDependencies"].some(k=>Object.keys(p[k]||{}).length)) throw Error("Build policy needs review"); fs.rmSync("dist",{recursive:true,force:true});'
           node scripts/build.mjs
-          node scripts/package.mjs "$RUNNER_TEMP/numina-site-v4.0.0.tar.gz"
+          node scripts/package.mjs "$RUNNER_TEMP/numina-site-v5.0.0.tar.gz"
           # No tests are run by this workflow. A copied conformance fixture is
           # historical input, never evidence that this hosted build ran tests.
       - name: Store the exact deployment archive as one immutable artifact
         id: upload
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.1
         with:
-          path: ${{ runner.temp }}/numina-site-v4.0.0.tar.gz
+          path: ${{ runner.temp }}/numina-site-v5.0.0.tar.gz
           archive: false
           if-no-files-found: error
           overwrite: false
@@ -87,7 +87,7 @@ jobs:
         id: upload_inventory
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.1
         with:
-          path: dist/client/downloads/application-release-v4.json
+          path: dist/client/downloads/application-release-v5.json
           archive: false
           if-no-files-found: error
           overwrite: false
@@ -128,7 +128,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          artifact="$RUNNER_TEMP/incoming/numina-site-v4.0.0.tar.gz"
+          artifact="$RUNNER_TEMP/incoming/numina-site-v5.0.0.tar.gz"
           [[ -f "$artifact" && ! -L "$artifact" ]]
           digest="$(sha256sum -- "$artifact" | cut -d ' ' -f 1)"
           [[ "$digest" =~ ^[0-9a-f]{64}$ ]]
@@ -138,8 +138,8 @@ jobs:
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: |
-            ${{ runner.temp }}/incoming/numina-site-v4.0.0.tar.gz
-            ${{ runner.temp }}/inventory/application-release-v4.json
+            ${{ runner.temp }}/incoming/numina-site-v5.0.0.tar.gz
+            ${{ runner.temp }}/inventory/application-release-v5.json
           # Use the action's generated SLSA predicate. Do not accept a predicate
           # supplied by source code or turn a runtime receipt into provenance.
       - name: Retain the actual Sigstore bundle

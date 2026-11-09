@@ -118,10 +118,10 @@ jobs:
               'integrations/numina/distribution.json',
               'integrations/numina/verification.json',
               'integrations/numina/file-manifest.json',
-              'docs/native-package-record-v4.json',
-              'docs/numina-os-4.0.0-ios-source.zip',
-              'runtime/vercel-production/public/downloads/native-package-record-v4.json',
-              'runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip',
+              'docs/native-package-record-v5.json',
+              'docs/numina-os-5.0.0-ios-source.zip',
+              'runtime/vercel-production/public/downloads/native-package-record-v5.json',
+              'runtime/vercel-production/public/downloads/numina-os-5.0.0-ios-source.zip',
           ]
           record.update(
               schema='numina.rc27.repair-evidence.v1',
@@ -150,10 +150,10 @@ jobs:
             integrations/numina/distribution.json \
             integrations/numina/verification.json \
             integrations/numina/file-manifest.json \
-            docs/native-package-record-v4.json \
-            docs/numina-os-4.0.0-ios-source.zip \
-            runtime/vercel-production/public/downloads/native-package-record-v4.json \
-            runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip
+            docs/native-package-record-v5.json \
+            docs/numina-os-5.0.0-ios-source.zip \
+            runtime/vercel-production/public/downloads/native-package-record-v5.json \
+            runtime/vercel-production/public/downloads/numina-os-5.0.0-ios-source.zip
           git add "$EVIDENCE_RECORD"
           git diff --cached --check
           if git diff --cached --quiet; then
@@ -198,10 +198,10 @@ jobs:
             integrations/numina/distribution.json \
             integrations/numina/verification.json \
             integrations/numina/file-manifest.json \
-            docs/native-package-record-v4.json \
-            docs/numina-os-4.0.0-ios-source.zip \
-            runtime/vercel-production/public/downloads/native-package-record-v4.json \
-            runtime/vercel-production/public/downloads/numina-os-4.0.0-ios-source.zip \
+            docs/native-package-record-v5.json \
+            docs/numina-os-5.0.0-ios-source.zip \
+            runtime/vercel-production/public/downloads/native-package-record-v5.json \
+            runtime/vercel-production/public/downloads/numina-os-5.0.0-ios-source.zip \
             > "$EVIDENCE_DIR/inventory-sha256.txt"
       - name: Preserve optional Actions evidence archive
         id: archive

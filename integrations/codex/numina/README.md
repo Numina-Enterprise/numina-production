@@ -1,4 +1,4 @@
-# Numina plugin 4.0.0
+# Numina plugin 5.0.0
 
 Business, partnership and support contact: [skott34@numinalabs.xyz](mailto:skott34@numinalabs.xyz). [Explore services](https://numinalabs.xyz/services) or [track an existing request](https://numinalabs.xyz/app#service-work).
 
@@ -14,15 +14,15 @@ The public source package can be installed through a Codex marketplace. This arc
 
 No native-store or third-party marketplace publication is implied by this package. Numina's architecture layers share one canonical control journal. Production account connections and approvals retain their own actual status.
 
-Release alignment: Numina 4.0.0 / rc27 singularity. The signed core-to-root binding is at https://numinalabs.xyz/v1/release/core-binding. The preserved 1.8.0 frozen core retains its original identity. The public MCP tools remain read-only. Evidence revocation uses the separate owner-authenticated POST /v1/evidence/revoke and retains stored artifacts.
+Release alignment: Numina 5.0.0 / rc27 singularity. The signed core-to-root binding is at https://numinalabs.xyz/v1/release/core-binding. The preserved 1.8.0 frozen core retains its original identity. The public MCP tools remain read-only. Evidence revocation uses the separate owner-authenticated POST /v1/evidence/revoke and retains stored artifacts.
 
-Website and OS: Intelligence in motion. One core, one root, seven final frontier layers. The current application release is available at https://numinalabs.xyz/v4/release/manifest.
+Website and OS: Intelligence in motion. One core, one root, seven final frontier layers. The current application release is available at https://numinalabs.xyz/v5/release/manifest.
 
 Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks claimed by SK Consulting LLC. See [OWNERSHIP.md](OWNERSHIP.md); third-party licenses remain applicable.
 
 ## Procurement usage
 
-The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v5/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.
 
 ## Shared denomination policy
 

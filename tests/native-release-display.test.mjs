@@ -10,8 +10,8 @@ const records = [
   'release-evidence/numina-final-build-2026-09-18.json',
   'docs/delivery-observation-2026-09-18.json',
   'release-evidence/delivery-observation-2026-09-18.json',
-  'docs/native-package-record-v4.json',
-  'runtime/vercel-production/public/downloads/native-package-record-v4.json',
+  'docs/native-package-record-v5.json',
+  'runtime/vercel-production/public/downloads/native-package-record-v5.json',
   'release-evidence/native-signing-attempt-2026-09-18T2110.json'
 ];
 
@@ -40,8 +40,8 @@ test('signing attempts retain their actual job outcomes and absent artifacts', (
 });
 
 test('native binary and source archive hashes still match their recorded bytes', () => {
-  const record = json('docs/native-package-record-v4.json');
-  assert.equal(record.finalBuild.status, 'SIGNING_PENDING');
+  const record = json('docs/native-package-record-v5.json');
+  assert.equal(record.finalBuild.status, 'SOURCE_PREPARED_SIGNING_PENDING');
   assert.equal(record.finalBuild.androidSignedArtifactReceipt, null);
   assert.equal(record.finalBuild.iosSignedArtifactReceipt, null);
   for (const item of [...record.android.binaries, ...record.ios.binaries, ...record.sourceArchives]) {
@@ -49,7 +49,7 @@ test('native binary and source archive hashes still match their recorded bytes',
     assert.equal(data.length, item.bytes, item.file);
     assert.equal(createHash('sha256').update(data).digest('hex'), item.sha256, item.file);
   }
-  assert.deepEqual(record, json('runtime/vercel-production/public/downloads/native-package-record-v4.json'));
+  assert.deepEqual(record, json('runtime/vercel-production/public/downloads/native-package-record-v5.json'));
   assert.deepEqual(json('public/final-build.json'), json('docs/NUMINA-FINAL-BUILD.json'));
   // Dated release evidence is historical; only the current documentation projection follows FINAL.
   assert.equal(json('release-evidence/numina-final-build-2026-09-18.json').applicationVersion, '4.0.0');

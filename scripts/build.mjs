@@ -31,6 +31,8 @@ for(const p of ['dist/client','dist/server','dist/.openai','dist/client/download
 function copy(from,to){mkdirSync(to,{recursive:true});for(const n of readdirSync(from)){const a=from+'/'+n,b=to+'/'+n;statSync(a).isDirectory()?copy(a,b):copyFileSync(a,b);}}
 copy('public','dist/client');copy('docs','dist/client/downloads');
 copyFileSync('config/numina-workspaces.v1.json','dist/client/workspaces.json');
+copyFileSync('config/numina-topology.v1.json','dist/client/topology.json');
+copyFileSync('config/numina-release.v1.json','dist/client/release-version.json');
 copyFileSync('config/numina-agentforce-tasks.v1.json','dist/client/tasks.json');
 copyFileSync('config/numina-treasury-team.v1.json','dist/client/treasury-team.json');
 // Publish the reviewed proof packet after metadata normalization so detached

@@ -4,7 +4,13 @@
   "private": true,
   "license": "BSD-3-Clause",
   "type": "module",
-  "engines": { "node": "24.x" },
-  "dependencies": { "ethers": "6.17.0" },
-  "overrides": { "ws": "8.21.3" }
+  "engines": {
+    "node": "26.13.0"
+  },
+  "dependencies": {
+    "ethers": "6.17.0"
+  },
+  "overrides": {
+    "ws": "8.21.3"
+  }
 }

@@ -23,7 +23,7 @@ class SigningInputs(unittest.TestCase):
         fixture={'ios':{'currentSourceCompiled':True,'sourceBuildNumber':5,'binaryVersionCode':5,'signingInputMatchesCurrentSource':True}}
         self.assertEqual(signer.current_source_build('CURRENT_PROJECT_VERSION = 5',fixture),5)
     def test_published_compilation_matches_build5(self):
-        record=json.loads((ROOT/'docs/native-package-record-v4.json').read_text(encoding='utf-8'))
+        record=json.loads((ROOT/'docs/native-package-record-v5.json').read_text(encoding='utf-8'))
         settings=(ROOT/'mobile/ios/Configuration/Numina.xcconfig').read_text()
         self.assertEqual(signer.current_source_build(settings,record),5)
         self.assertFalse(record['ios']['signed'])

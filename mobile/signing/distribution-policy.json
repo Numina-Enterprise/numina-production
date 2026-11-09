@@ -43,9 +43,9 @@
     "sharedAcrossLayers": true
   },
   "finalBuild": {
-    "applicationVersion": "4.0.0",
-    "androidVersionCode": 4,
-    "iosBuildNumber": 6,
+    "applicationVersion": "5.0.0",
+    "androidVersionCode": 5,
+    "iosBuildNumber": 7,
     "canonicalReceipt": "/downloads/nusd/deployment-receipt.json",
     "token": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
     "settlement": "0x7F9793d519464103e0c51EDcc5Ca6317c89af3A0"

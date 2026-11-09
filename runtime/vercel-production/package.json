@@ -1,7 +1,10 @@
 {
   "name": "numina-production",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "license": "BSD-3-Clause",
-  "author": "Numina \u00b7 SK Consulting LLC"
+  "author": "Numina \u00b7 SK Consulting LLC",
+  "engines": {
+    "node": "26.13.0"
+  }
 }

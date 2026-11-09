@@ -62,8 +62,8 @@
     "feature": "Deterministic SVG extension of existing Numina visual identity; rendered to opaque RGB PNG."
   },
   "candidate": {
-    "repositoryPath": "docs/numina-4.0.0-upload-signed.aab",
-    "versionName": "4.0.0",
+    "repositoryPath": "docs/numina-5.0.0-upload-signed.aab",
+    "versionName": "5.0.0",
     "versionCode": 3,
     "sha256": "d4adc52ebe16117dd21706d9df60592ff9d97d35555ed95665e220709623a896",
     "bytes": 3617288,

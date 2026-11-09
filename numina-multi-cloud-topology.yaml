@@ -4,7 +4,10 @@
 # Guardian Keypin:    465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c
 
 schema: "numina.multi-cloud-topology.v1"
-version: "4.0.0-m2"
+version: "5.0.0"
+nodeVersion: "26.13.0"
+canonicalTopology: "config/numina-topology.v1.json"
+liveVerification: "PENDING_PROVIDER_EVIDENCE"
 clusterStateRoot: "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd"
 
 clouds:
@@ -59,8 +62,9 @@ clouds:
         cliConfigUrl: "https://cloud.ibm.com/containers/serverless/cli"
         project: "numina-serverless-project"
         application: "numinalabs-web"
-        sourcePath: "numinalabs-web"
-        containerPort: 80
+        sourcePath: "."
+        dockerfile: "Dockerfile"
+        containerPort: 8080
         deploymentScript: "deploy_ibm_code_engine.ps1"
 
   # 3. GitHub Central Coordination
@@ -73,3 +77,22 @@ clouds:
       cicdPipeline: ".github/workflows/ (Release, Android, iOS, Quantum validation)"
       immutableReceipts: "release-evidence/ (Cryptographic proofs, audit traces, receipts)"
       archivePins: "archive/full-evidence-20261028-m2"
+
+# These targets share one release contract; live readiness requires provider receipts.
+additionalClouds:
+  cloudflare:
+    accountId: "3c1fd59ef2ef67f750b4bc23e656d722"
+    worker: "numina-production"
+    configuration: "wrangler.jsonc"
+    origin: "https://numinalabs.xyz"
+  aws:
+    role: "SECONDARY_TARGET_PENDING_INVENTORY"
+    workload: null
+    runtimeContract: "Dockerfile"
+  azure:
+    role: "SECONDARY_TARGET_PENDING_INVENTORY"
+    workload: null
+    runtimeContract: "Dockerfile"
+replication:
+  enabled: false
+  verification: "PENDING_INVENTORY_AND_RESTORE_EVIDENCE"

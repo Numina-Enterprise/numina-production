@@ -254,3 +254,28 @@ ul { padding-left: 22px; color: var(--muted); }
   html { scroll-behavior: auto; }
   * { transition-duration: .01ms !important; }
 }
+
+
+/* Shared ecosystem directory and homepage entry point. */
+.release-pill{display:inline-flex;align-items:center;align-self:flex-start;gap:12px;margin-bottom:24px;padding:9px 13px;border:1px solid #34505b;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.12em;text-decoration:none}
+.release-pill:hover{border-color:var(--accent)}
+.ecosystem-callout{display:flex;justify-content:space-between;align-items:end;gap:30px;padding:clamp(64px,6vw,120px) 0;border-bottom:1px solid var(--line)}
+.ecosystem-callout h2{margin-top:20px}
+.ecosystem-callout p{margin-bottom:0}
+.ecosystem-callout .button{flex:none}
+.hub-hero{padding-bottom:clamp(65px,6vw,120px)}
+.hub-hero h1{max-width:16ch}
+.hub-section{padding:clamp(65px,6vw,120px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.hub-heading{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:38px}
+.hub-heading h2{margin:18px 0 0}
+.hub-heading p{max-width:37ch;margin:0}
+.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.hub-grid article{display:flex;flex-direction:column;min-width:0;min-height:285px;padding:clamp(25px,2vw,40px);background:var(--surface)}
+.hub-grid article:hover{background:var(--surface-strong)}
+.hub-grid h3{margin:32px 0 8px;font-size:1.4rem}
+.hub-grid p{margin:0 0 22px;font-size:.95rem}
+.hub-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:auto}
+.hub-links a{font-size:.88rem}
+@media(max-width:900px){.hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.ecosystem-callout,.hub-heading{align-items:flex-start;flex-direction:column}.hub-grid{grid-template-columns:1fr}.hub-grid article{min-height:0}.hub-grid h3{margin-top:24px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.01ms!important}}

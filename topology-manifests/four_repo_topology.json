@@ -23,7 +23,9 @@
         ".github/workflows/numina-mobile-release-build.yml",
         ".github/workflows/numina-mobile-store-distribution.yml",
         "archive/numina-builder/**"
-      ]
+      ],
+      "release_authority": false,
+      "source_role": "historical_or_supporting_repository"
     },
     "numina-production": {
       "purpose": "Serves real live production files, canonical state, Cloud HSM signing, multi-cloud runtimes, and live releases",
@@ -40,7 +42,9 @@
         "VICTORY_CERTIFICATE.md",
         "NUMINA_ORGANIZATION_AND_AUDIT_REPORT.md",
         "numina-multi-cloud-topology.yaml"
-      ]
+      ],
+      "release_authority": true,
+      "source_role": "canonical_release_root"
     },
     "sitesk": {
       "purpose": "Stores website history, web evolution revisions, and Cloudflare Worker / edge source history",
@@ -52,7 +56,9 @@
         ".github/workflows/publish-sites-control-source.yml",
         "release-evidence/sites-source-projection-2026-10-11.json",
         "release-evidence/vercel-custom-domain-delivery-*.json"
-      ]
+      ],
+      "release_authority": false,
+      "source_role": "historical_or_supporting_repository"
     },
     "diagram-design": {
       "purpose": "Stores agentic singular design, Mermaid architectural models, swarm topologies, and governance specifications",
@@ -65,7 +71,9 @@
         "rules/**",
         "AGENTS.md",
         "GEMINI.md"
-      ]
+      ],
+      "release_authority": false,
+      "source_role": "historical_or_supporting_repository"
     }
   },
   "external_infrastructure_review": {
@@ -82,5 +90,8 @@
       "role": "Pre-cutover edge delivery & deployment receipts",
       "status": "Sunset in favor of Cloudflare edge (fred/lola.ns.cloudflare.com) + GCP Cloud Run / IBM Code Engine serverless origins"
     }
-  }
+  },
+  "canonical_source": "https://github.com/Numina-Enterprise/numina-production",
+  "topology_contract": "config/numina-topology.v1.json",
+  "mapping_scope": "Historical repository responsibilities; maintained release source is numina-production."
 }

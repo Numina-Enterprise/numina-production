@@ -1,7 +1,7 @@
 // Copyright © 2026 SK Consulting LLC. Numina™. See OWNERSHIP.md.
 // Bounded, process-local measurements. No request bodies, headers or identities.
-export const TELEMETRY_VERSION = '4.0.0';
-export const TELEMETRY_RUNTIME = '1.9.0-rc27';
+export const TELEMETRY_VERSION = '5.0.0';
+export const TELEMETRY_RUNTIME = '2.0.0-rc27';
 export const TELEMETRY_BOUNDS_MS = Object.freeze([10, 50, 100, 250, 500, 1000, 2500, 5000, 15000, 60000]);
 const TELEMETRY_METHODS = new Set(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']);
 export function telemetryRoute(path) {
@@ -9,7 +9,7 @@ export function telemetryRoute(path) {
   if (path === '/api/ops/v1/telemetry') return '/api/ops/v1/telemetry';
   if (path.startsWith('/api/ops/v1/quantum/')) return '/api/ops/v1/quantum/*';
   if (path === '/v2/network/status' || path === '/api/node-connection') return '/v2/network/status';
-  if (/^\/v[234]\/release\/manifest$/.test(path)) return '/v4/release/manifest';
+  if (/^\/v[234]\/release\/manifest$/.test(path)) return '/v5/release/manifest';
   for (const prefix of ['/api/control/v1/', '/api/control/v2/', '/api/app/v1/', '/api/nusd/v1/', '/v1/']) {
     if (path.startsWith(prefix)) return prefix + '*';
   }

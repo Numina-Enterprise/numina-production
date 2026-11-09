@@ -5,7 +5,7 @@
   "frontier": "NEXT_FRONTIER",
   "frontierId": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
   "canonicalSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
-  "applicationVersion": "4.0.0",
+  "applicationVersion": "5.0.0",
   "repository": {
     "schema": "numina.repository.v1",
     "identity": "NUMINA",
@@ -47,12 +47,12 @@
     "canonicalSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
     "identity": "NUMINA",
     "status": "FINAL",
-    "applicationVersion": "4.0.0",
+    "applicationVersion": "5.0.0",
     "appliesTo": "NUMINA",
     "scope": "NUMINA",
     "universal": true,
     "sha256Semantics": "IMMUTABLE_RELEASE_REFERENCE",
-    "currentContentSha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1",
+    "currentContentSha256": "854aebbb419aef8b52aa09467b91ad3f4ac2932ccaccb1649f87878363f9aa8c",
     "structure": "NUMINA",
     "contract": "NUMINA",
     "singular": true
@@ -732,5 +732,15 @@
   "environment": "FRONTIER",
   "deploymentEnvironment": "FRONTIER",
   "frontierOnly": true,
-  "frontierLayerCount": 7
+  "frontierLayerCount": 7,
+  "releaseVersioning": {
+    "application": "5.0.0",
+    "core": "NUMINA",
+    "runtime": "2.0.0-rc27",
+    "node": "26.13.0",
+    "iosBuild": 7,
+    "androidVersionCode": 5,
+    "scope": "current_source_release",
+    "retainedRuntimeInventories": "historical_records_not_current_deployment_attestations"
+  }
 }

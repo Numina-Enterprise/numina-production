@@ -5,10 +5,10 @@ import handler from '../api/application-release.mjs';
 import {syncApplicationReleasePin} from '../scripts/sync-application-release-pin.mjs';
 
 test('root application release reports the exact current distribution inventory',async()=>{
-  const release=JSON.parse(readFileSync(new URL('../dist/client/downloads/application-release-v4.json',import.meta.url)));
+  const release=JSON.parse(readFileSync(new URL('../dist/client/downloads/application-release-v5.json',import.meta.url)));
   const verified=syncApplicationReleasePin();
   const response={setHeader(){},end(body){this.body=JSON.parse(body);}};
-  await handler({method:'GET',url:'/v4/release/manifest'},response);
+  await handler({method:'GET',url:'/v5/release/manifest'},response);
   assert.equal(response.statusCode,200);
   assert.equal(response.body.build_id,verified.buildId);
   assert.equal(response.body.build_id,release.build_id);

@@ -12,7 +12,7 @@ test('baseline: current checker contract strictly asserted', () => {
   assert.equal(r.status, 0, `Expected exit code 0, got ${r.status}`);
   assert.match(
     r.stdout,
-    /NUMINA runner policy verified: 36 preserved hosted declarations; self-hosted execution denied; future runners denied\./,
+    /NUMINA runner policy verified: 44 preserved hosted declarations; self-hosted execution denied; future runners denied\./,
     'stdout did not match expected policy verification string'
   );
   assert.equal(r.stderr, '', `Expected empty stderr, got: ${r.stderr}`);

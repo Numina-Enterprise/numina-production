@@ -2,7 +2,7 @@
 
 ## Current signing input
 
-The current-source unsigned application **4.0.0, build 5**, bundle `xyz.numinalabs.app`, is compiled and integrated into the signing path. `docs/native-package-record-v4.json` selects `numina-4.0.0-ios-build5-c6ffbb5-unsigned-app.zip`, produced by [build run 35158998398](https://github.com/skott34-dot/numina-production/actions/runs/35158998398) from source commit `c6ffbb50d77ff53323b71b7048872637677e6b42`. Its SHA-256 is `23e953860f7ec71937666a0fe543613bc4762fab4abd9da0fc59def92334425e`.
+The current-source unsigned application **5.0.0, build 5**, bundle `xyz.numinalabs.app`, is compiled and integrated into the signing path. `docs/native-package-record-v5.json` selects `numina-5.0.0-ios-build5-c6ffbb5-unsigned-app.zip`, produced by [build run 35158998398](https://github.com/skott34-dot/numina-production/actions/runs/35158998398) from source commit `c6ffbb50d77ff53323b71b7048872637677e6b42`. Its SHA-256 is `23e953860f7ec71937666a0fe543613bc4762fab4abd9da0fc59def92334425e`.
 
 The current native source fingerprint matches the compiled input: `85775b4254ba63eee0709738a842dcffb95746caaf671472d75fb3dbf00e1da0`. The manual `numina-ios-signing.yml` workflow remains scoped to `main`; its script checks current-source build identity before accessing signing assets. Historical build 3 is retained as historical evidence and is not the selected signing input.
 

@@ -13,7 +13,7 @@ test('public frontier head is a deterministic finalized-build projection',async(
   assert.equal(Object.hasOwn(body,'stateModel'),false);
   assert.equal(Object.hasOwn(body,'stateful'),false);
   assert.equal(body.finalized,true);
-  assert.equal(body.applicationVersion,'4.0.0');
+  assert.equal(body.applicationVersion,'5.0.0');
   assert.equal(body.revision,null);
   assert.equal(body.eventCount,null);
   assert.equal(body.journalContinuity,null);
@@ -32,7 +32,7 @@ test('public MCP discovery initializes without a database binding',async()=>{
   const body=await res.json();
   assert.equal(body.result.protocolVersion,'2025-11-25');
   assert.equal(body.result.serverInfo.name,'numina-discovery');
-  assert.equal(body.result.serverInfo.version,'4.0.0');
+  assert.equal(body.result.serverInfo.version,'5.0.0');
 });
 
 test('public MCP numina_head returns the finalized build head',async()=>{

@@ -154,10 +154,10 @@
     "pausedScope": "historical_deployment_receipt"
   },
   "pendingRuntimeMigration": null,
-  "frontierVersion": "4.0.0",
+  "frontierVersion": "5.0.0",
   "architectureManifest": "/api/control/v2/architecture",
-  "applicationVersion": "4.0.0",
-  "applicationManifest": "/v4/release/manifest",
+  "applicationVersion": "5.0.0",
+  "applicationManifest": "/v5/release/manifest",
   "reconstructedSources": "preserved_unchanged",
   "root": "NUMINA",
   "manifest": "NUMINA",
@@ -1213,7 +1213,7 @@
         "NUMINA"
       ],
       "routes": [
-        "/v4/release/manifest",
+        "/v5/release/manifest",
         "/final-build.json",
         "/final-manifest.json"
       ]

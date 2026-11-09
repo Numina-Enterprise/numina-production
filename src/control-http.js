@@ -93,7 +93,7 @@ async function readApplicationRelease(req,env){
   let value;
   try{
     if(!env.ASSETS?.fetch)controlError('APPLICATION_RELEASE_UNAVAILABLE',503);
-    const response=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v4.json',req.url),{method:'GET'}));
+    const response=await env.ASSETS.fetch(new Request(new URL('/downloads/application-release-v5.json',req.url),{method:'GET'}));
     if(!response.ok)controlError('APPLICATION_RELEASE_UNAVAILABLE',503);
     value=await response.json();
   }catch(error){

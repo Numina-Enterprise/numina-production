@@ -2,7 +2,7 @@
 import {prepareQuantumJob} from './quantum.js';
 export const NUMINA_QUANTUM_LIMITS = Object.freeze({qubits: 8, gates: 256, shots: 4096, concurrentPerProcess: 2, requestsPerMinutePerProcess: 30});
 export function numinaQuantumCapabilities(env = {}) {
-  return {schema: 'numina.quantum-backend.v1', backend: 'numina-statevector', version: '4.0.0',
+  return {schema: 'numina.quantum-backend.v1', backend: 'numina-statevector', version: '5.0.0',
     connected: env.NUMINA_QUANTUM_SIMULATOR_ENABLED !== 'false', kind: 'classical_simulator',
     hardwareConnected: false, quantumAdvantageMeasured: false, execution: 'synchronous',
     endpoint: '/api/ops/v1/quantum/measure', measurement: 'computational_basis_sample_counts',
@@ -61,7 +61,7 @@ export async function measureNuminaCircuit(input) {
     const label = lo.toString(2).padStart(measure.length,'0'); counts[label] = (counts[label] ?? 0) + 1;
   }
   return {schema:'numina.quantum-measurement.v1', measurementId:crypto.randomUUID(), requestSha256:prepared.sha256,
-    observedAt:new Date().toISOString(), backend:'numina-statevector', backendVersion:'4.0.0', kind:'classical_simulator',
+    observedAt:new Date().toISOString(), backend:'numina-statevector', backendVersion:'5.0.0', kind:'classical_simulator',
     qubits, gates:gates.length, shots, measuredQubits:measure, bitOrder:'measuredQubits_left_to_right',
     counts, idealProbabilities, durationMs:performance.now()-start, randomness:'Web_Crypto_uniform_uint32',
     hardwareExecution:false, quantumAdvantageMeasured:false, canonicalFinalCommitted:false, treasuryWrites:false};

@@ -1,7 +1,7 @@
 {
   "schema": "numina.mobile-post-release-policy.v1",
   "identity": "NUMINA",
-  "applicationVersion": "4.0.0",
+  "applicationVersion": "5.0.0",
   "hostedOrigin": "https://numinalabs.xyz",
   "hostedEntryPoint": "/app",
   "deliveryModel": {

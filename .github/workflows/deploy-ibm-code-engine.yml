@@ -75,6 +75,21 @@ jobs:
             ibmcloud ce project select --name "$PROJECT_NAME"
           fi
 
+      - name: Build the canonical web release
+        if: ${{ inputs.deploy_web }}
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '26.13.0'
+          package-manager-cache: false
+
+      - name: Prepare canonical web assets
+        if: ${{ inputs.deploy_web }}
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+          npm run build
+
       - name: Deploy Numina Web to Code Engine
         if: ${{ inputs.deploy_web }}
         shell: bash
@@ -84,11 +99,11 @@ jobs:
           if ibmcloud ce app get --name "$APP_NAME" >/dev/null 2>&1; then
             ibmcloud ce app update \
               --name "$APP_NAME" \
-              --build-source ./numinalabs-web
+              --build-source . --build-dockerfile Dockerfile
           else
             ibmcloud ce app create \
               --name "$APP_NAME" \
-              --build-source ./numinalabs-web \
+              --build-source . --build-dockerfile Dockerfile \
               --port 8080 \
               --min-scale 1 \
               --max-scale 10 \

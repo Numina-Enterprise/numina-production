@@ -11,14 +11,24 @@ struct ContentView: View {
             ZStack {
                 HostedWebView(model: model)
                 if let failure = model.failure {
-                    VStack(spacing: 18) {
-                        Image(systemName: "wifi.exclamationmark").font(.largeTitle).accessibilityHidden(true)
-                        Text("Unable to load Numina").font(.title2).bold()
-                        Text(failure).multilineTextAlignment(.center)
+                    VStack(spacing: 16) {
+                        Image(systemName: "wifi.exclamationmark")
+                            .font(.largeTitle)
+                            .accessibilityHidden(true)
+                        Text("NUMINA / WORKSPACE")
+                            .font(.caption.weight(.semibold))
+                            .tracking(1.2)
+                            .foregroundStyle(.secondary)
+                        Text("Workspace unavailable").font(.title2.weight(.semibold))
+                        Text(failure)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
                         Button("Try Again", action: model.retry).buttonStyle(.borderedProminent)
                         Button("Open in Browser", action: model.openBrowserWorkspace)
                     }
                     .padding(28)
+                    .frame(maxWidth: 440)
+                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.systemBackground))
                 }
@@ -33,6 +43,7 @@ struct ContentView: View {
             }
             .navigationTitle("Numina")
             .navigationBarTitleDisplayMode(.inline)
+            .tint(Color(red: 0.24, green: 0.65, blue: 0.70))
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: model.back) {
