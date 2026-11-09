@@ -12,3 +12,14 @@
 
 /* Shared minimum-age requirement for all hosted website and app screens. */
 .site-footer .age-requirement{grid-column:1/-1;margin:0;padding:22px 0;border-top:1px solid var(--line);font-size:15px;line-height:1.7;color:var(--text)}.site-footer .age-requirement strong{display:block;font-size:16px;color:var(--cyan);margin-bottom:4px}
+
+
+/* Shared Numina palette, wayfinding and responsive finishing. */
+:root{--bg:#070a0f;--panel:#0b1018;--panel2:#101722;--text:#f1f5fb;--muted:#aeb9c7;--line:#263142;--cyan:#b9edf2}
+.site-header{border-bottom:1px solid var(--line)}
+.site-header .desktop-nav a[aria-current]{text-decoration:underline;text-decoration-color:var(--cyan);text-underline-offset:7px}
+.site-footer{border-top:1px solid var(--line)}
+.cards article{background:linear-gradient(145deg,var(--panel2),var(--panel))}
+.site-footer a:hover{color:var(--cyan)}
+@media(max-width:760px){.mobile-menu nav a{min-height:44px;display:flex;align-items:center}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
