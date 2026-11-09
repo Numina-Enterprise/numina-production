@@ -33,23 +33,24 @@ export const SAMPLE_ARGS={
 };
 const sha=s=>createHash('sha256').update(s).digest('base64url');
 
-export async function startMockServer({apiKey,omitTools=[],extraTools=[],schemaOverrides={},liveApproval=true,oauth=false}={}){
-  const requests=[];const sessions=new Set();const codes=new Map();const tokens=new Set();const refreshTokens=new Set();let origin;
+export async function startMockServer({apiKey,omitTools=[],extraTools=[],schemaOverrides={},liveApproval=true,oauth=false,omitIss=false}={}){
+  const requests=[];const sessions=new Set();const codes=new Map();const tokens=new Set();const refreshTokens=new Set();let origin;const state={requests,tokens,omitIss,expireAll(){tokens.clear();},calls:()=>requests.filter(r=>r.body?.method==='tools/call')};
   const tools=()=>[...registry.tools.filter(t=>!omitTools.includes(t.name)).map(t=>({name:t.name,description:t.description,inputSchema:schemaOverrides[t.name]||MOCK_SCHEMAS[t.name]||{type:'object',properties:{}}})),...extraTools];
-  const state={requests,tokens,expireAll(){tokens.clear();},calls:()=>requests.filter(r=>r.body?.method==='tools/call')};
   const srv=createServer(async(req,res)=>{
     const chunks=[];for await(const c of req)chunks.push(c);const raw=Buffer.concat(chunks).toString('utf8');
     const url=new URL(req.url,origin);
     const send=(s,b,h={})=>{res.writeHead(s,{'Content-Type':'application/json',...h});res.end(b===undefined?'':JSON.stringify(b));};
     // ---- OAuth (RFC 9728 / 8414 / 7591 / PKCE) ----
     if(url.pathname==='/.well-known/oauth-protected-resource')return send(200,{resource:origin,authorization_servers:[origin+'/as'],scopes_supported:['mcp']});
-    if(url.pathname==='/.well-known/oauth-authorization-server/as')return send(200,{issuer:origin+'/as',authorization_endpoint:origin+'/as/authorize',token_endpoint:origin+'/as/token',registration_endpoint:origin+'/as/register',code_challenge_methods_supported:['S256'],response_types_supported:['code']});
+    if(url.pathname==='/.well-known/oauth-authorization-server/as')return send(200,{issuer:origin+'/as',authorization_endpoint:origin+'/as/authorize',token_endpoint:origin+'/as/token',registration_endpoint:origin+'/as/register',code_challenge_methods_supported:['S256'],response_types_supported:['code'],grant_types_supported:['authorization_code','refresh_token'],authorization_response_iss_parameter_supported:true,token_endpoint_auth_methods_supported:['none']});
     if(url.pathname==='/as/register'){const b=JSON.parse(raw);state.registered=b;return send(201,{client_id:'mock-client-'+randomBytes(4).toString('hex'),redirect_uris:b.redirect_uris,token_endpoint_auth_method:'none'});}
     if(url.pathname==='/as/authorize'){
       const q=Object.fromEntries(url.searchParams);state.authorizeQuery=q;
+      if(q.response_type&&q.response_type!=='code')return send(400,{error:'unsupported_response_type'});
       if(q.code_challenge_method!=='S256'||!q.code_challenge)return send(400,{error:'invalid_request'});
       const code=randomBytes(8).toString('hex');codes.set(code,q);
       const to=new URL(q.redirect_uri);to.searchParams.set('code',code);to.searchParams.set('state',q.state);
+      if(state.omitIss!==true)to.searchParams.set('iss',origin+'/as');
       res.writeHead(302,{Location:to.toString()});return res.end();
     }
     if(url.pathname==='/as/token'){
@@ -58,6 +59,7 @@ export async function startMockServer({apiKey,omitTools=[],extraTools=[],schemaO
       if(f.grant_type==='authorization_code'){const q=codes.get(f.code);codes.delete(f.code);
         if(!q||sha(f.code_verifier||'')!==q.code_challenge||f.redirect_uri!==q.redirect_uri)return send(400,{error:'invalid_grant'});return issue();}
       if(f.grant_type==='refresh_token'){if(!refreshTokens.has(f.refresh_token))return send(400,{error:'invalid_grant'});refreshTokens.delete(f.refresh_token);return issue();}
+      if(f.grant_type==='password'||f.grant_type==='implicit'||f.grant_type==='urn:ietf:params:oauth:grant-type:device_code')return send(400,{error:'unsupported_grant_type'});
       return send(400,{error:'unsupported_grant_type'});
     }
     // ---- MCP ----

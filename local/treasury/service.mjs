@@ -1,7 +1,7 @@
 // Treasury MCP service: per-profile clients (sandbox and live configured separately), tools/list
 // discovery that pins each call to the server's real inputSchema, input validation, the Stripe
 // approval guard, informational compliance screening, and an audit entry for every attempt.
-import {createMcpClient,apiKeyAuth,oauthAuth,McpError} from './mcp-client.mjs';
+import {createMcpClient,oauthAuth,McpError} from './mcp-client.mjs';
 import {createTokenStore} from './token-store.mjs';
 import {refresh as oauthRefresh} from './oauth.mjs';
 import {guardedFetch} from './net-guard.mjs';
@@ -27,7 +27,7 @@ export function createTreasuryService({config,repo,env=process.env,fetchImpl=glo
   const stores=Object.fromEntries(PROFILES.map(p=>[p,createTokenStore({file:config.profiles[p].auth.tokenFile,keyEnv:config.profiles[p].auth.tokenKeyEnv,env,profile:p})]));
   const secrets=()=>{
     const out=[];
-    for(const p of PROFILES){const a=config.profiles[p].auth;if(env[a.apiKeyEnv])out.push(env[a.apiKeyEnv]);if(env[a.tokenKeyEnv])out.push(env[a.tokenKeyEnv]);
+    for(const p of PROFILES){const a=config.profiles[p].auth;if(env[a.tokenKeyEnv])out.push(env[a.tokenKeyEnv]);
       try{const s=stores[p].exists()&&env[a.tokenKeyEnv]?stores[p].load():null;if(s){out.push(s.accessToken,s.refreshToken);}}catch{}}
     if(env[config.audit.signingKeyEnv])out.push(env[config.audit.signingKeyEnv]);
     return out.filter(Boolean);
@@ -39,7 +39,8 @@ export function createTreasuryService({config,repo,env=process.env,fetchImpl=glo
   function client(profile){
     if(clients[profile])return clients[profile];
     const p=config.profiles[profile];
-    const auth=p.auth.method==='agent_api_key'?apiKeyAuth({env,envName:p.auth.apiKeyEnv}):oauthAuth({store:stores[profile],refresh:()=>oauthRefresh({store:stores[profile],fetchImpl:fetchSafe})});
+    if(p.auth.method!=='oauth')throw Object.assign(new Error('Stripe MCP requires OAuth 2.1'),{code:'INVALID_CONFIG'});
+    const auth=oauthAuth({store:stores[profile],refresh:()=>oauthRefresh({store:stores[profile],fetchImpl:fetchSafe})});
     return clients[profile]=createMcpClient({serverUrl:p.serverUrl,auth,fetchImpl:fetchSafe,extraHeaders:p.stripeAccountHeader?{'Stripe-Account':p.stripeAccountHeader}:{}});
   }
   const resolveProfile=p=>{const name=p||config.defaultProfile;if(!PROFILES.includes(name))throw Object.assign(new Error('profile must be sandbox or live'),{code:'INVALID_PROFILE'});return name;};

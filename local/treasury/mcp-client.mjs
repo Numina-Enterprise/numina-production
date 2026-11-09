@@ -72,17 +72,10 @@ export function createMcpClient({serverUrl,auth,fetchImpl,extraHeaders={},timeou
   };
 }
 
-// Auth providers. Agent API key: read from the named env var at request time, never stored.
-export function apiKeyAuth({env=process.env,envName}){
-  return {method:'agent_api_key',async headers(){
-    const k=env[envName];
-    if(!k)throw new McpError(`environment variable ${envName} is not set`,{code:'MCP_NO_CREDENTIAL'});
-    return {Authorization:`Bearer ${k}`};
-  }};
-}
+// Auth provider: OAuth 2.1 access token from the encrypted local session (Stripe MCP is OAuth 2.1 only).
 export function oauthAuth({store,refresh}){
   return {method:'oauth',
-    async headers(){const s=store.load();if(!s?.accessToken)throw new McpError(`no OAuth session for ${store.profile}; run: npm run treasury -- login --profile ${store.profile}`,{code:'MCP_NO_CREDENTIAL'});return {Authorization:`Bearer ${s.accessToken}`};},
+    async headers(){const s=store.load();if(!s?.accessToken)throw new McpError(`no OAuth 2.1 session for ${store.profile}; run: npm run treasury -- login --profile ${store.profile}`,{code:'MCP_NO_CREDENTIAL'});return {Authorization:`Bearer ${s.accessToken}`};},
     async onUnauthorized(){try{await refresh();return true;}catch{return false;}}
   };
 }

@@ -17,7 +17,6 @@ const profileDefaults=(mode,stateDir)=>({
   serverUrl:REGISTRY.server,
   auth:{
     method:'oauth',
-    apiKeyEnv:`NUMINA_STRIPE_MCP_${mode.toUpperCase()}_AGENT_KEY`,
     tokenFile:path.join(stateDir,`${mode}.oauth-session.enc`),
     tokenKeyEnv:`NUMINA_TREASURY_${mode.toUpperCase()}_TOKEN_KEY`,
     oauthClientName:`Numina local admin (${mode})`
@@ -54,12 +53,11 @@ export function validateConfig(cfg,{repo}={}){
     let u;try{u=new URL(p.serverUrl);}catch{throw new ConfigError(`profiles.${name}.serverUrl is not a URL`);}
     if(u.protocol!=='https:'&&!(u.protocol==='http:'&&isLoopbackUrl(u)))throw new ConfigError(`profiles.${name}.serverUrl must be https (plain http only for a loopback mock)`);
     const a=p.auth||{};
-    if(!['oauth','agent_api_key'].includes(a.method))throw new ConfigError(`profiles.${name}.auth.method must be oauth or agent_api_key`);
-    for(const k of ['apiKeyEnv','tokenKeyEnv']){
-      if(!ENV_NAME.test(a[k]||''))throw new ConfigError(`profiles.${name}.auth.${k} must be an environment variable NAME`);
-      if(seen.env.has(a[k]))throw new ConfigError(`profiles.${name}.auth.${k}: sandbox and live must use different environment variables`);
-      seen.env.add(a[k]);
-    }
+    if(a.method!=='oauth')throw new ConfigError(`profiles.${name}.auth.method must be "oauth" (OAuth 2.1 is required for Stripe MCP; agent API keys are not supported)`);
+    if('apiKeyEnv' in a)throw new ConfigError(`profiles.${name}.auth.apiKeyEnv is not supported; Stripe MCP uses OAuth 2.1 only`);
+    if(!ENV_NAME.test(a.tokenKeyEnv||''))throw new ConfigError(`profiles.${name}.auth.tokenKeyEnv must be an environment variable NAME`);
+    if(seen.env.has(a.tokenKeyEnv))throw new ConfigError(`profiles.${name}.auth.tokenKeyEnv: sandbox and live must use different environment variables`);
+    seen.env.add(a.tokenKeyEnv);
     if(!a.tokenFile||!path.isAbsolute(a.tokenFile))throw new ConfigError(`profiles.${name}.auth.tokenFile must be an absolute path`);
     if(repo&&!path.relative(path.resolve(repo),path.resolve(a.tokenFile)).startsWith('..'))throw new ConfigError(`profiles.${name}.auth.tokenFile must be outside the repository`);
     if(seen.file.has(a.tokenFile))throw new ConfigError('sandbox and live must use different token files');

@@ -25,16 +25,15 @@ Default environment variable names (values are never written anywhere):
 
 | Purpose | sandbox | live |
 | --- | --- | --- |
-| Agent API key (if `auth.method` = `agent_api_key`) | `NUMINA_STRIPE_MCP_SANDBOX_AGENT_KEY` | `NUMINA_STRIPE_MCP_LIVE_AGENT_KEY` |
-| OAuth session file key (base64, 32 bytes) | `NUMINA_TREASURY_SANDBOX_TOKEN_KEY` | `NUMINA_TREASURY_LIVE_TOKEN_KEY` |
+| OAuth 2.1 session file key (base64, 32 bytes) | `NUMINA_TREASURY_SANDBOX_TOKEN_KEY` | `NUMINA_TREASURY_LIVE_TOKEN_KEY` |
 | Session file | `~/.numina/treasury-mcp/sandbox.oauth-session.enc` | `~/.numina/treasury-mcp/live.oauth-session.enc` |
 | Audit log / signing key env | `~/.numina/treasury-mcp/audit.jsonl` / `NUMINA_TREASURY_AUDIT_SIGNING_KEY` | same log, `profile` field per entry |
 
 Config file: `local-data/treasury-mcp-config.json` (git-ignored), edited via `PUT /admin/treasury/config` with the admin token.
+`auth.method` must be `oauth`. Agent API keys are not configured and are rejected by validation.
 
-> **Agent API key deadline:** Stripe MCP stops accepting full-access secret keys and restricted keys without the
-> Agent tag in December 2026. Use agent API keys or OAuth; migrate by **2026-11-30**. Unsupported keys get a 401 with
-> an OAuth discovery challenge.
+> **Auth:** Stripe MCP for this module is **OAuth 2.1 only** (authorization code + PKCE S256, public client,
+> resource indicator, RFC 9207 iss when advertised). There is no agent API key path.
 
 ## How a call runs
 
@@ -55,12 +54,14 @@ Writes (need `Authorization: Bearer $NUMINA_LOCAL_ADMIN_TOKEN`): `PUT /config`, 
 CLI: `npm run treasury -- status | tools | sessions | runbook | revoke --profile P | audit [--verify] | login --profile P | discover [--profile P] | call <tool> --profile P --args '{...}'`.
 `login`, `discover` and `call` contact the configured server; the rest are local.
 
-## OAuth
+## OAuth 2.1
 
-OAuth 2.1 authorization code + PKCE (S256) per the MCP authorization spec: protected-resource metadata (RFC 9728),
-authorization-server metadata (RFC 8414), dynamic client registration (RFC 7591) when offered, browser consent,
-loopback redirect on `127.0.0.1:<ephemeral>/callback`, code exchange with the `resource` indicator (RFC 8707),
-refresh on 401. Tokens are saved only encrypted, per profile.
+OAuth 2.1 authorization code + PKCE (S256) per the MCP authorization spec: OAuth 2.0 Protected Resource Metadata
+(RFC9728), authorization-server metadata (RFC 8414), dynamic client registration (RFC 7591) when offered, browser
+consent, loopback redirect on `127.0.0.1:<ephemeral>/callback`, code exchange with the `resource` indicator
+(RFC 8707), RFC 9207 `iss` validation when the AS advertises it, refresh on 401. Tokens are saved only encrypted,
+per profile. The shared client in `local/treasury/oauth.mjs` can also serve OAuth 2.0-style providers via
+`{oauth21:false}`; Stripe always uses `{oauth21:true}`.
 
 ## Revoking sessions
 
@@ -69,8 +70,6 @@ encrypted token file. Stripe side (from docs.stripe.com/treasury/agents):
 - Your sessions: user settings > OAuth sessions > find the client > overflow menu (⋯) > Revoke access.
 - As an administrator: Team and security > select the member > OAuth sessions > overflow menu > Revoke access, or Revoke all.
 - Revocation is scoped to the account/organization and environment you are viewing: do it in both sandbox and live.
-- Agent API keys: expire the key in the Dashboard and unset the env var.
-
 ## Tests (mock only)
 
 `npm run test:treasury` runs `tests/treasury/*.test.mjs` against a local mock MCP + OAuth server on 127.0.0.1.
@@ -80,5 +79,5 @@ The mock's tool input schemas are guesses; real schemas come from `tools/list` a
 ## Not verified against the live server
 
 Exact tool input schemas, the exact shape of Stripe's "requires approval" response and the retry/approval-token
-field, OAuth scopes and whether mcp.stripe.com supports dynamic client registration, agent API key prefixes, and
-`stripe_reports` (seen only in a search-index snapshot of the docs). None of this module has contacted Stripe.
+field, whether mcp.stripe.com supports dynamic client registration in every environment, and `stripe_reports`
+(seen only in a search-index snapshot of the docs). None of this module has contacted Stripe.

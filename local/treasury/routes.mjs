@@ -35,7 +35,7 @@ export function createTreasuryRoutes({env=process.env,fetchImpl=globalThis.fetch
     try{
       if(p==='/admin/treasury'&&m==='GET')return new Response(page(cfg),{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}});
       if(p==='/admin/treasury/status'&&m==='GET')return json({module:'numina-local-treasury-mcp',server:REGISTRY.server,defaultProfile:cfg.defaultProfile,stripeLiveApproval:cfg.stripeLiveApproval,
-        profiles:Object.fromEntries(PROFILES.map(n=>[n,{serverUrl:cfg.profiles[n].serverUrl,authMethod:cfg.profiles[n].auth.method,apiKeyEnv:cfg.profiles[n].auth.apiKeyEnv,apiKeyEnvSet:!!env[cfg.profiles[n].auth.apiKeyEnv]}])),
+        profiles:Object.fromEntries(PROFILES.map(n=>[n,{serverUrl:cfg.profiles[n].serverUrl,authMethod:cfg.profiles[n].auth.method,authLabel:'OAuth 2.1'}])),
         compliance:'informational (recorded in audit, never blocks)',notices:REGISTRY.notices||[],adapters:adapterTable(cfg)});
       if(p==='/admin/treasury/tools'&&m==='GET')return json({adapters:adapterTable(cfg)});
       if(p==='/admin/treasury/config'&&m==='GET')return json(cfg);
@@ -63,10 +63,10 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>`&#${c.charCodeAt(0)};`);
 function page(cfg){
   const rows=adapterTable(cfg).map(a=>`<tr><td><code>${esc(a.tool)}</code></td><td>${esc(a.group)}</td><td>${esc(a.access)}</td><td>${a.movesMoney===true?'yes':'no'}</td><td>${esc(a.sandbox)}</td><td>${esc(a.live)}</td><td>${esc(a.status)}</td></tr>`).join('');
   return `<!doctype html><meta charset="utf-8"><title>numina-local-admin · treasury MCP</title><body style="font:14px system-ui;margin:2rem">
-<h1>Stripe Treasury MCP (local only)</h1><p>Default profile: <b>${esc(cfg.defaultProfile)}</b>. Stripe live money-movement approval: <b>required</b> (cannot be turned off).
+<h1>Stripe Treasury MCP (local only)</h1><p>Auth: <b>OAuth 2.1</b> (authorization code + PKCE). Default profile: <b>${esc(cfg.defaultProfile)}</b>. Stripe live money-movement approval: <b>required</b> (cannot be turned off).
 Compliance screening: informational. JSON: <a href="/admin/treasury/status">status</a> · <a href="/admin/treasury/sessions">sessions</a> · <a href="/admin/treasury/audit/verify">audit verify</a></p>
 <table border="1" cellpadding="4" style="border-collapse:collapse"><tr><th>Tool</th><th>Group</th><th>Access</th><th>Moves money</th><th>Sandbox</th><th>Live</th><th>Stripe status</th></tr>${rows}</table>
-<p>Calls: POST /admin/treasury/call/&lt;tool&gt; {"profile":"sandbox","args":{...}} with the admin bearer token. Agent API keys must be agent-tagged by 2026-11-30.</p></body>`;
+<p>Calls: POST /admin/treasury/call/&lt;tool&gt; {"profile":"sandbox","args":{...}} with the admin bearer token. Stripe MCP auth is OAuth 2.1 only (run <code>npm run treasury -- login --profile &lt;profile&gt;</code>).</p></body>`;
 }
 const defaultHandler=createTreasuryRoutes();
 export function handle(req,ctx){return defaultHandler(req,ctx);}

@@ -61,9 +61,9 @@ test('no secret appears in the audit log, results or console output',async()=>{
   for(const k of Object.keys(orig))console[k]=(...a)=>logs.push(a.join(' '));
   try{
     const s=await exercise(t);
-    const leak=await s.call('setup_recipient',{name:`Leaky ${t.env.NUMINA_STRIPE_MCP_LIVE_AGENT_KEY}`},{profile:'live'});
+    const leak=await s.call('setup_recipient',{name:'Leaky Recipient'},{profile:'live'});
     const blob=readFileSync(t.config.audit.path,'utf8')+JSON.stringify(leak)+logs.join('\n');
-    for(const k of ['NUMINA_STRIPE_MCP_SANDBOX_AGENT_KEY','NUMINA_STRIPE_MCP_LIVE_AGENT_KEY','NUMINA_TREASURY_SANDBOX_TOKEN_KEY','NUMINA_TREASURY_LIVE_TOKEN_KEY','NUMINA_TREASURY_AUDIT_SIGNING_KEY'])
+    for(const k of ['NUMINA_TREASURY_SANDBOX_TOKEN_KEY','NUMINA_TREASURY_LIVE_TOKEN_KEY','NUMINA_TREASURY_AUDIT_SIGNING_KEY'])
       assert.ok(!blob.includes(t.env[k]),k);
     assert.doesNotMatch(readFileSync(t.config.audit.path,'utf8'),/Bearer |PRIVATE KEY|rcpt_test12345678/);
   }finally{Object.assign(console,orig);await t.teardown();}

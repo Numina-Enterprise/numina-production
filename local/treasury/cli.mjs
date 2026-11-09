@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Local CLI for the treasury MCP module. Network commands (login, discover, call) contact the
-// configured MCP server; everything else is local. Secrets are read from env vars only.
+// configured MCP server over OAuth 2.1; everything else is local. Session keys are env var names only.
 //   node local/treasury/cli.mjs status|tools|sessions|runbook|audit [--verify]
 //   node local/treasury/cli.mjs revoke --profile sandbox|live
 //   node local/treasury/cli.mjs login --profile sandbox|live
@@ -35,7 +35,7 @@ try{
       const profile=opt('profile')||cfg.defaultProfile;const p=cfg.profiles[profile];
       if(!p)throw new Error('profile must be sandbox or live');
       const store=createTokenStore({file:p.auth.tokenFile,keyEnv:p.auth.tokenKeyEnv,profile});
-      const r=await login({serverUrl:p.serverUrl,store,fetchImpl:guardedFetch(),clientName:p.auth.oauthClientName,openUrl:u=>console.log(`Open this URL in your browser to approve ${profile} access:\n${u}`)});
+      const r=await login({serverUrl:p.serverUrl,store,fetchImpl:guardedFetch(),clientName:p.auth.oauthClientName,oauth21:true,openUrl:u=>console.log(`Open this URL in your browser for OAuth 2.1 approval (${profile}):\n${u}`)});
       out({loggedIn:true,...r});break;}
     case 'discover':{const s=createTreasuryService({config:cfg,repo});out(await s.discover(opt('profile')));await s.close();break;}
     case 'call':{const s=createTreasuryService({config:cfg,repo});const r=await s.call(argv[1],JSON.parse(opt('args')||'{}'),{profile:opt('profile'),actor:'cli'});out(r);await s.close();process.exitCode=r.status==='ok'||r.status==='pending_stripe_approval'?0:2;break;}

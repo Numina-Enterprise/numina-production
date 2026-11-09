@@ -21,15 +21,17 @@ test('nothing under local/ is imported by the public Worker, the src tree or the
   if(existsSync(bundle)){const b=readFileSync(bundle,'utf8');for(const m of ['numina-local-treasury-mcp','treasury-mcp-config','NUMINA_TREASURY_AUDIT_SIGNING_KEY','stripeLiveApproval'])assert.ok(!b.includes(m),m);}
 });
 
-test('the default config targets mcp.stripe.com, but the guard refuses it and the suite never reached it',async()=>{
+test('the default config targets mcp.stripe.com over OAuth 2.1; without a session nothing is fetched, and the guard refuses the host',async()=>{
   const dir=mkdtempSync(path.join(tmpdir(),'numina-treasury-guard-'));
   try{
-    const env={NUMINA_TREASURY_NETWORK_GUARD:'loopback-only',NUMINA_STRIPE_MCP_SANDBOX_AGENT_KEY:'ek_test_guardguardguard'};
-    const config=defaultConfig(path.join(dir,'state'));config.profiles.sandbox.auth.method='agent_api_key';
+    const env={NUMINA_TREASURY_NETWORK_GUARD:'loopback-only',NUMINA_TREASURY_SANDBOX_TOKEN_KEY:Buffer.alloc(32,9).toString('base64')};
+    const config=defaultConfig(path.join(dir,'state'));
+    assert.equal(config.profiles.sandbox.serverUrl,'https://mcp.stripe.com');
+    assert.equal(config.profiles.sandbox.auth.method,'oauth');
     let realCalls=0;const counting=async()=>{realCalls++;throw new Error('should not be called');};
     const s=createTreasuryService({config,env,fetchImpl:counting});
     const r=await s.call('get_balance_summary',{},{profile:'sandbox'});
-    assert.equal(r.status,'blocked');assert.equal(r.reason,'NETWORK_GUARD');assert.equal(realCalls,0);
+    assert.equal(r.status,'blocked');assert.equal(r.reason,'MCP_NO_CREDENTIAL');assert.equal(realCalls,0);
     await assert.rejects(guardedFetch(env,counting)('https://mcp.stripe.com'),/loopback-only/);
     await assert.rejects(guardedFetch({},counting)('http://example.com'),/non-https/);
     assert.equal(realCalls,0);
@@ -47,7 +49,7 @@ test('admin routes: loopback Host only, reads open, writes need the admin token'
     const req=(p,init={},host='127.0.0.1:8790')=>new Request(`http://${host}${p}`,{...init,headers:{Host:host,...init.headers}});
     assert.equal((await handle(req('/admin/treasury/status',{},'192.168.1.20:8790'),ctx(true))).status,403);
     const st=await (await handle(req('/admin/treasury/status'),ctx(false))).json();
-    assert.equal(st.defaultProfile,'sandbox');assert.equal(st.stripeLiveApproval,'required');assert.ok(st.notices.some(n=>/2026-11-30/.test(n)));
+    assert.equal(st.defaultProfile,'sandbox');assert.equal(st.stripeLiveApproval,'required');assert.ok(st.notices.some(n=>/OAuth 2\.1/.test(n)));
     assert.equal(st.adapters.length,16);assert.ok(st.adapters.every(a=>a.sandbox==='enabled'&&a.live==='enabled'&&a.implemented));
     const body=JSON.stringify(t.config);
     assert.equal((await handle(req('/admin/treasury/config',{method:'PUT',body}),ctx(false))).status,401);
