@@ -382,7 +382,7 @@
     {
       "name": "dist/server/index.js",
       "digest": {
-        "sha256": "3726e745e641afdc1a322d659cde20be83902f2add0e00036eacfec3a34d64a9"
+        "sha256": "7b161dfee61c05280fba7199273c388cd0c2adbc4a8e57016b04b117fd6961b1"
       }
     }
   ],
@@ -394,12 +394,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-09T16:05:33.069Z",
+    "timestamp": "2026-11-09T16:13:06.364Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "68478683ada9851e1077032ae50853cd9a799a62934a45e219490735bfe38a5b",
-      "gitCommit": "937e6ea0ac9381716903d0710f92bae30983f769",
-      "gitTree": "1e98917d2ed5d7dc38253857311b30a1f8855115"
+      "sha256": "e0518391df746ad23d672064124a6d5fec16245e5c1c57ec5f643eb652857878",
+      "gitCommit": "31dfc6a2c1802ec7ac37a759205290667e67bde3",
+      "gitTree": "f0ab21fa9840f61388d38bae351cc13772487466"
     },
     "subjectRoots": [
       "dist/client",
