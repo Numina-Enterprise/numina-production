@@ -853,8 +853,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 31833,
-      "sha256": "f666fe9102c84a0618f8859307a8d684055e1a1a9930457ab4edfdd6cf456bb3"
+      "bytes": 31887,
+      "sha256": "34a1ab036e749a2545ff5d8fcb98b7a1a54fc047762152460614f68ae434b840"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -918,8 +918,8 @@
     },
     {
       "path": "scripts/package-distribution.js",
-      "bytes": 11287,
-      "sha256": "1f5b1480e5b3afa326c4d5a6a6515eed859f7d8a3eb43bbc243cd536b6d6b5fe"
+      "bytes": 11292,
+      "sha256": "c3e8f63f18b42592531a1cdd22d948cfc682ae383c367fb27027e9cc3a6e8b56"
     },
     {
       "path": "src/client.js",
@@ -979,7 +979,7 @@
     {
       "path": "verification.json",
       "bytes": 29151,
-      "sha256": "3f3315ddc2ed0e8b6f0950fe76839d9eb7517aeb6cb1832067a1d8dcb7c46fa0"
+      "sha256": "ba238fe9a8a859d0069b705835422e28dd83792ee30cfe4562e93b5a41b52ac7"
     }
   ],
   "numinaMetadata": {
