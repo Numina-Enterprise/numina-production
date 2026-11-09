@@ -1,0 +1,15 @@
+{
+  "schema": "numina.release-versioning.v1",
+  "name": "Numina 5",
+  "applicationVersion": "5.0.0",
+  "previousApplicationVersion": "4.0.0",
+  "coreVersion": "2.0.0",
+  "runtimeVersion": "2.0.0-rc27",
+  "nodeVersion": "26.13.0",
+  "iosBuildNumber": 7,
+  "androidVersionCode": 5,
+  "applicationManifest": "/v5/release/manifest",
+  "canonicalOrigin": "https://numinalabs.xyz",
+  "canonicalRepository": "https://github.com/Numina-Enterprise/numina-production",
+  "scope": "Source release versioning; distribution and deployment require their own receipts."
+}

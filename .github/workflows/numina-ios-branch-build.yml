@@ -1,25 +1,123 @@
-name: Numina iOS branch build
+name: Numina 4.0 native branch build
 on:
   push:
     branches:
       - numina-site-treasury-alignment
+      - codex/numina-4-alignment-20261108
 permissions:
   contents: read
 concurrency:
-  group: numina-ios-branch-build
+  group: numina-native-branch-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  ios:
-    runs-on: NUMINA
-    timeout-minutes: 20
+  node_compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - name: Compile unsigned iOS release
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '26.13.0'
+          package-manager-cache: false
+      - name: Test NUSD dependencies with the target Node version
+        shell: bash
         run: |
+          set -euo pipefail
+          test "$(node -p 'process.versions.node')" = '26.13.0'
+          npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+          npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+          npm test --prefix runtime/nusd/development
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '26.13.0'
+          package-manager-cache: false
+      - name: Verify iOS source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p packages/ios
+          node scripts/ios-release.mjs identity > packages/ios/source-identity.json
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          const identity=JSON.parse(readFileSync('packages/ios/source-identity.json','utf8'));
+          const record=JSON.parse(readFileSync('docs/native-package-record-v5.json','utf8'));
+          if(identity.applicationVersion!=='5.0.0'||identity.buildNumber!==7||identity.bundleIdentifier!=='xyz.numinalabs.app') throw Error('Unexpected iOS release identity');
+          if(identity.sourceInputs.sha256!==record.ios.sourceInputsSha256) throw Error('iOS source package identity is stale');
+          NODE
+      - name: Reproduce iOS source package under Node 26.13.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/package-ios-source.py
+          git diff --exit-code -- docs/numina-os-5.0.0-ios-source.zip
+      - name: Compile unsigned iOS build 6
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
           xcodebuild -project mobile/ios/Numina.xcodeproj -scheme Numina -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/NuminaDerived" CODE_SIGNING_ALLOWED=NO build
-      - name: Verify built bundle metadata
+          app="$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Info.plist")" = '5.0.0'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$app/Info.plist")" = '7'
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist")" = 'xyz.numinalabs.app'
+          ditto -c -k --sequesterRsrc --keepParent "$app" packages/ios/numina-5.0.0-ios-build7-unsigned-app.zip
+          printf '%s\n' "$GITHUB_SHA" > packages/ios/SOURCE-COMMIT
+          shasum -a 256 packages/ios/numina-5.0.0-ios-build7-unsigned-app.zip > packages/ios/SHA256SUMS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: numina-ios-5.0.0-build7-unsigned
+          path: packages/ios/
+          if-no-files-found: error
+          retention-days: 30
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '26.13.0'
+          package-manager-cache: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Prepare pinned Gradle
+        shell: bash
         run: |
-          /usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app/Info.plist"
-          /usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$RUNNER_TEMP/NuminaDerived/Build/Products/Release-iphoneos/Numina.app/Info.plist"
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          curl --fail --location --retry 2 https://services.gradle.org/distributions/gradle-8.13-bin.zip -o "$RUNNER_TEMP/gradle.zip"
+          printf '%s  %s\n' '20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78' "$RUNNER_TEMP/gradle.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
+      - name: Compile unsigned Android code 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-36' 'build-tools;35.0.0'
+          "$RUNNER_TEMP/gradle-8.13/bin/gradle" --no-daemon --console=plain -p mobile/android :app:bundleRelease :app:assembleRelease
+          mkdir -p packages/android
+          cp mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk packages/android/numina-5.0.0-android-code5-unsigned.apk
+          cp mobile/android/app/build/outputs/bundle/release/app-release.aab packages/android/numina-5.0.0-android-code5-unsigned.aab
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging packages/android/numina-5.0.0-android-code5-unsigned.apk > packages/android/APK-BADGING
+          grep -F "package: name='xyz.numinalabs.app' versionCode='5' versionName='5.0.0'" packages/android/APK-BADGING
+          printf '%s\n' "$GITHUB_SHA" > packages/android/SOURCE-COMMIT
+          sha256sum packages/android/*.apk packages/android/*.aab > packages/android/SHA256SUMS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: numina-android-5.0.0-code5-unsigned
+          path: packages/android/
+          if-no-files-found: error
+          retention-days: 30

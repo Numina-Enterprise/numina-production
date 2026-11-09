@@ -66,6 +66,6 @@ jobs:
         with:
           name: NUMINA
           path: |
-            numina-release-v4.0.0.tar.gz
-            numina-release-v4.0.0.tar.gz.sha256
+            numina-release-v5.0.0.tar.gz
+            numina-release-v5.0.0.tar.gz.sha256
           if-no-files-found: error

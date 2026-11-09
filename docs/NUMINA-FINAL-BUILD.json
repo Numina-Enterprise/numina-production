@@ -3,7 +3,7 @@
   "identity": "NUMINA",
   "status": "FINAL",
   "finalizedAt": "2026-09-19",
-  "applicationVersion": "4.0.0",
+  "applicationVersion": "5.0.0",
   "website": {
     "origin": "https://numinalabs.xyz",
     "workspace": "https://numinalabs.xyz/app",
@@ -1195,14 +1195,14 @@
   "mobile": {
     "packageIdentity": "xyz.numinalabs.app",
     "android": {
-      "versionCode": 4,
+      "versionCode": 5,
       "versionName": "4.0.0",
       "signingWorkflow": "NUMINA_SIGNING_PIPELINE",
       "signedArtifactReceipt": null,
       "googlePlaySubmissionReceipt": null
     },
     "ios": {
-      "buildNumber": 6,
+      "buildNumber": 7,
       "marketingVersion": "4.0.0",
       "signingWorkflow": "NUMINA_SIGNING_PIPELINE",
       "signedArtifactReceipt": null,
@@ -4130,5 +4130,15 @@
   "environment": "FRONTIER",
   "deploymentEnvironment": "FRONTIER",
   "frontierOnly": true,
-  "frontierLayerCount": 7
+  "frontierLayerCount": 7,
+  "releaseVersioning": {
+    "application": "5.0.0",
+    "core": "NUMINA",
+    "runtime": "2.0.0-rc27",
+    "node": "26.13.0",
+    "iosBuild": 7,
+    "androidVersionCode": 5,
+    "scope": "current_source_release",
+    "retainedRuntimeInventories": "historical_records_not_current_deployment_attestations"
+  }
 }

@@ -1,8 +1,8 @@
-# Numina integration kit 4.0.0
+# Numina integration kit 5.0.0
 
 Business, integration and support inquiries: [skott34@numinalabs.xyz](mailto:skott34@numinalabs.xyz). Scope work through [Numina services](https://numinalabs.xyz/services) and track accepted requests in [Numina OS](https://numinalabs.xyz/app#service-work).
 
-JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 4.0** through [its application manifest](https://numinalabs.xyz/v4/release/manifest). The application and kit have separate artifact identities. The application's **rc27 runtime dependency** and historical rc20 evidence retain their original versions.
+JavaScript client, TypeScript declarations, five provider tool formats, generated JSON descriptors and a local MCP stdio server. No third-party runtime dependencies. This kit targets **Numina application 4.0** through [its application manifest](https://numinalabs.xyz/v5/release/manifest). The application and kit have separate artifact identities. The application's **rc27 runtime dependency** and historical rc20 evidence retain their original versions.
 
 This archive is an integration deliverable. It does not install itself into provider accounts, create a hosted MCP endpoint or establish compatibility with every LLM.
 
@@ -76,4 +76,4 @@ Copyright © 2026 SK Consulting LLC. Numina™ and Numina OS™ are trademarks c
 
 ## Procurement usage
 
-The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v5/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

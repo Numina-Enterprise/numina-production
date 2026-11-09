@@ -1,13 +1,13 @@
 # iOS release inputs still required
 
-Current source is 4.0.0 with build number 6 and has not been compiled after the latest native changes. The recorded unsigned build 5 is historical, not release evidence for build 6. Apple signing remains pending; the main-branch signing workflow compiles current source before signing with the shared Numina distribution policy.
+Current source is 5.0.0 with build number 6 and has not been compiled after the latest native changes. The recorded unsigned build 5 is historical, not release evidence for build 6. Apple signing remains pending; the main-branch signing workflow compiles current source before signing with the shared Numina distribution policy.
 
 Historical status updated September 13, 2026: the unsigned 3.0.0 device package compiled in hosted run 34785069076. The user reports Apple Developer organization registration is complete. Distribution signing assets, provisioning, archive validation and store publication remain unverified.
 
 | Input | Current state / action needed |
 | --- | --- |
 | macOS + Xcode | Historical v4 build 5 compilation is recorded; current build 6 is not verified compiled. Use the configured macOS runner, then validate the actual bundle and toolchain. |
-| Store identity | Proposed `xyz.numinalabs.app`; confirm the actual App Store Connect identifier. Current source is 4.0.0 build 6. Historical binaries retain their original build evidence and must not be relabeled. |
+| Store identity | Proposed `xyz.numinalabs.app`; confirm the actual App Store Connect identifier. Current source is 5.0.0 build 6. Historical binaries retain their original build evidence and must not be relabeled. |
 | Signing and distribution | Apple Developer organization registration is user-confirmed. The owner-approved CSR and owner-reported issuance are recorded in `../signing/release-identities.json`; a usable distribution certificate/profile and signed archive are not yet verified. |
 | Native sign-in | Browser continuation is implemented, including the canonical runtime metrics panel. Returning a signed-in browser session to the native app is not implemented or verified. |
 | Native utility | The app now includes native navigation/failure controls and a native System Status surface that shows app/device diagnostics from the existing web view and routes runtime/quantum metrics to the shared owner-only Frontier panel without independent network probes. Apple guideline 4.2 still requires sufficient app functionality; these additions do not guarantee review eligibility. |
@@ -16,7 +16,7 @@ Historical status updated September 13, 2026: the unsigned 3.0.0 device package 
 | Privacy policy | `/privacy` is linked in the native menu. Confirm that the published notice covers the distributed iOS experience and all actual data flows. |
 | Account deletion | Saved web privacy source says automated account deletion is unavailable. Determine and implement the required in-app deletion route where account creation is offered. |
 | Payments and services | Review the actual service types, geographic availability and payment flows against current platform requirements before distribution. This wrapper does not add purchases or activate payments. |
-| Shared software alignment | Root application 4.0.0 and rc27/core 1.8.0 are checked by scripts/ios-release.mjs and the normal software build. The iOS source archive must match current input hashes. This is source evidence only. |
+| Shared software alignment | Root application 5.0.0 and rc27/core 1.8.0 are checked by scripts/ios-release.mjs and the normal software build. The iOS source archive must match current input hashes. This is source evidence only. |
 | Fresh signing input | `.github/workflows/numina-ios-signing.yml` compiles current source, then `scripts/sign-ios-release.py` checks its bundle identity/build and the real Apple distribution identity/profile before signing. It does not select the historical unsigned bundle. |
 | Release evidence | No simulator/device run, sign-in validation, screenshots, accessibility review, purchase review, archive validation or store review exists. |
 | Listing | Confirm product name, support/privacy URLs, rights, category, age rating, review access and all final listing content. |

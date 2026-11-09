@@ -157,10 +157,10 @@ test('integration reads legacy proofs only through the existing authenticated re
   const client = new NuminaClient({baseUrl:'https://numina.test', token, fetch:async (url, options) => {
     requests.push(url);
     assert.equal(options.method, 'GET');
-    if (url.endsWith('/v4/release/manifest')) {
+    if (url.endsWith('/v5/release/manifest')) {
       assert.equal(options.headers.Authorization, undefined);
-      return Response.json({schema:'numina.application-release.v2', schema_version:2, product:'Numina', version:'4.0.0',
-        release:'numina-v4.0.0', artifact_digest_algorithm:'sha256', build_id:record.head,
+      return Response.json({schema:'numina.application-release.v2', schema_version:2, product:'Numina', version:'5.0.0',
+        release:'numina-v5.0.0', artifact_digest_algorithm:'sha256', build_id:record.head,
         artifacts:[{path:'offline-fixture', sha256:record.head}], runtime_dependency:{version:EXPECTED_RELEASE.production_version, release:EXPECTED_RELEASE.release}});
     }
     assert.equal(url, 'https://numina.test/api/control/v1/treasury');

@@ -14,7 +14,7 @@ const HOST = '127.0.0.1';
 const PUBLIC_MCP = new Set(['/mcp', '/api/control/v2/discovery-mcp']);
 const MCP_METHODS = new Set(['initialize', 'ping', 'tools/list', 'notifications/initialized']);
 const PUBLIC_TOOLS = new Set(['numina_connections', 'numina_architecture', 'numina_capabilities', 'numina_head']);
-const PUBLIC_API = new Set(['/api/control/v2/architecture', '/api/control/v2/manifest', '/api/control/v2/head', '/api/core/v1.8/manifest', '/api/core/v1.8/context', '/.well-known/agent-card.json', '/v2/release/manifest', '/v3/release/manifest', '/v4/release/manifest']);
+const PUBLIC_API = new Set(['/api/control/v2/architecture', '/api/control/v2/manifest', '/api/control/v2/head', '/api/core/v1.8/manifest', '/api/core/v1.8/context', '/.well-known/agent-card.json', '/v2/release/manifest', '/v3/release/manifest', '/v4/release/manifest', '/v5/release/manifest']);
 const MIME = {'.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8', '.json':'application/json; charset=utf-8', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.ico':'image/x-icon', '.txt':'text/plain; charset=utf-8', '.md':'text/plain; charset=utf-8', '.xml':'application/xml; charset=utf-8', '.pdf':'application/pdf', '.zip':'application/zip', '.gz':'application/gzip', '.apk':'application/vnd.android.package-archive', '.woff2':'font/woff2', '.webmanifest':'application/manifest+json', '.pem':'text/plain; charset=utf-8', '.sig64':'application/octet-stream'};
 
 function json(body, status = 200) {
@@ -89,7 +89,7 @@ function portFromArgs() {
 
 async function main() {
   const config = JSON.parse(await readFile(new URL('../config/numina-node26.v1.json', import.meta.url), 'utf8'));
-  if (process.versions.node !== config.version || config.version !== '26.11.1') throw new Error('PINNED_NODE_VERSION_REQUIRED');
+  if (process.versions.node !== config.version || config.version !== '26.13.0') throw new Error('PINNED_NODE_VERSION_REQUIRED');
   const port = portFromArgs();
   for (const path of [resolve(ROOT, 'dist'), ASSET_ROOT]) {
     const metadata = await lstat(path);

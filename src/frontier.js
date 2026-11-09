@@ -1,7 +1,7 @@
 import {stable,controlHash,controlError,authorizeControl,normalizeRecord} from './control.js';
 import {NUMINA_TREASURY_POLICIES} from './treasury-policy.js';
 
-export const FRONTIER_VERSION='4.0.0';
+export const FRONTIER_VERSION='5.0.0';
 export const NUMINA_OWNER_DECLARED_STATE=Object.freeze({source:'owner_declaration',externalExecution:true,stripeSubmission:true,executableConversionVerified:true,providerBalancesChanged:true,providerReceiptRequiredForExternalCompletion:true,submissionAdapterConnected:false});
 export const FRONTIER_PROVIDERS=[
   {id:'internal.record.v1',kind:'internal',submission:true},

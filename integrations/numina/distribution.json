@@ -776,7 +776,7 @@
   "procurementPolicy": "/business-core.json",
   "livemode": true,
   "frontier": {
-    "version": "4.0.0",
+    "version": "5.0.0",
     "transport": "stdio-to-streamable-http",
     "script": "bin/control-mcp-stdio.js",
     "endpoint": "https://numinalabs.xyz/api/control/v2/mcp",
@@ -785,9 +785,9 @@
     "a2a": "https://numinalabs.xyz/.well-known/agent-card.json"
   },
   "schema": "numina.integration.distribution.v2",
-  "version": "4.0.0",
-  "revision": "numina-root-v4.0.0",
-  "applicationManifest": "/v4/release/manifest",
+  "version": "5.0.0",
+  "revision": "numina-root-v5.0.0",
+  "applicationManifest": "/v5/release/manifest",
   "applicationSchema": "numina.application-release.v2",
   "runtimeBuild": {
     "tool": "numina_runtime_build",

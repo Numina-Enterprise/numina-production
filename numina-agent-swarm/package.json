@@ -14,5 +14,8 @@
     "numina"
   ],
   "author": "SK Consulting LLC",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "26.13.0"
+  }
 }

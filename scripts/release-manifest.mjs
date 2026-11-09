@@ -26,7 +26,7 @@ if(integrationManifest.schema!=='numina.integration.manifest.v2'||integrationMan
 const integrationManifestSha256=digest(integrationManifestBytes);
 const integrationRecord=JSON.parse(readFileSync('docs/integration-kit-v'+version+'-record.json'));
 const nativeRecordFile='native-package-record-v'+major+'.json';
-const manifestAliases=['release.json',...new Set(['2','3',major])].map(name=>name==='release.json'?name:'application-release-v'+name+'.json');
+const manifestAliases=['release.json',...new Set(['2','3','4',major])].map(name=>name==='release.json'?name:'application-release-v'+name+'.json');
 const nativePackage=JSON.parse(readFileSync('docs/'+nativeRecordFile));
 const iosIdentity=checkIOSRelease(),iosInputs=iosInputSnapshot();
 const iosSourceArchive=nativePackage.sourceArchives.find(item=>item.platform==='ios');

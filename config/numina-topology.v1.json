@@ -1,0 +1,113 @@
+{
+  "schema": "numina.topology.v1",
+  "applicationVersion": "5.0.0",
+  "nodeVersion": "26.13.0",
+  "canonicalRepository": "https://github.com/Numina-Enterprise/numina-production",
+  "branch": "main",
+  "publicOrigin": "https://numinalabs.xyz",
+  "applicationManifest": "/v5/release/manifest",
+  "sourceAlignment": "configurations_aligned",
+  "liveAlignment": "pending_provider_verification",
+  "providers": [
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare",
+      "role": "Public edge and canonical web delivery",
+      "runtime": "Cloudflare Workers",
+      "target": "numina-production",
+      "configuration": "wrangler.jsonc",
+      "accountId": "3c1fd59ef2ef67f750b4bc23e656d722",
+      "liveVerification": "unverified"
+    },
+    {
+      "id": "gcp",
+      "name": "Google Cloud",
+      "role": "Primary cloud origin",
+      "runtime": "Node 26.13.0 container",
+      "target": "numina-production",
+      "projectId": "project-0317d6c9-e943-409e-83f",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "configuration": "Dockerfile",
+      "liveVerification": "unverified"
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "role": "Secondary cloud target pending inventory",
+      "runtime": "Node 26.13.0 container contract",
+      "target": null,
+      "region": null,
+      "configuration": "Dockerfile",
+      "liveVerification": "unverified"
+    },
+    {
+      "id": "azure",
+      "name": "Azure",
+      "role": "Secondary cloud target pending inventory",
+      "runtime": "Node 26.13.0 container contract",
+      "target": null,
+      "region": null,
+      "configuration": "Dockerfile",
+      "liveVerification": "unverified"
+    },
+    {
+      "id": "ibm_cloud",
+      "name": "IBM Cloud",
+      "role": "Auxiliary web and research services",
+      "runtime": "Node 26.13.0 web container; separate Python quantum service",
+      "target": "numinalabs-web",
+      "project": "numina-serverless-project",
+      "region": "us-south",
+      "configuration": "Dockerfile",
+      "liveVerification": "unverified"
+    },
+    {
+      "id": "ibm_quantum",
+      "name": "IBM Quantum",
+      "role": "Research compute with individual job receipts",
+      "runtime": "Qiskit Runtime",
+      "target": null,
+      "configuration": "numina-ibm-quantum/Dockerfile",
+      "liveVerification": "unverified"
+    },
+    {
+      "id": "tailscale",
+      "name": "Tailscale",
+      "role": "Private host transport",
+      "runtime": "Existing authorized private hosts",
+      "target": null,
+      "configuration": "tools/topology/inventory.py",
+      "liveVerification": "unverified"
+    }
+  ],
+  "replication": {
+    "enabled": false,
+    "state": "pending_inventory_and_restore_evidence",
+    "sourceOfTruth": "existing Numina canonical journal",
+    "directions": [],
+    "rpo": null,
+    "rto": null,
+    "conflictPolicy": "no_multi_writer_without_verified_policy",
+    "requiredEvidence": [
+      "provider workload identity",
+      "source commit and artifact SHA-256",
+      "deployment revision",
+      "authenticated health observation",
+      "isolated restore and failover results"
+    ]
+  },
+  "nativeClients": {
+    "ios": {
+      "bundleId": "xyz.numinalabs.app",
+      "applicationVersion": "5.0.0",
+      "sourceBuildNumber": 7
+    },
+    "android": {
+      "applicationId": "xyz.numinalabs.app",
+      "applicationVersion": "5.0.0",
+      "sourceVersionCode": 5
+    }
+  },
+  "historicalEvidencePolicy": "Retain original bytes and dated observations; source alignment does not verify a deployed workload."
+}

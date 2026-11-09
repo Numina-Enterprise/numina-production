@@ -5,7 +5,7 @@ import worker from '../src/worker.js';
 const read=path=>readFileSync(new URL('../public/'+path,import.meta.url),'utf8');
 const routes=['/app','/frontier','/economy','/services','/integrations','/build','/control','/labs'];
 const institutionalPages=new Set(['index.html','government.html','financial-institutions.html','partners.html','developers.html','trust.html','uk-eu.html','mena.html','apac.html','contact.html']);
-const institutionalRoutes=['/government','/financial-institutions','/partners','/developers','/trust','/contact'];
+const institutionalRoutes=['/government','/financial-institutions','/partners','/ecosystem','/developers','/trust','/contact'];
 
 test('every website page shares the Numina design and complete primary navigation',()=>{
   for(const file of readdirSync(new URL('../public/',import.meta.url)).filter(name=>name.endsWith('.html'))){
@@ -35,7 +35,7 @@ test('every website page shares the Numina design and complete primary navigatio
   }
   assert.notEqual(read('index.html'),read('frontier.html'));
   assert.match(read('index.html'),/class="service-pane"/);
-  assert.match(read('index.html'),/Institutional digital-asset infrastructure/);
+  assert.match(read('index.html'),/Accountable intelligence/);
 });
 
 test('services and pricing combine scope, terms and the existing enterprise request routes once',()=>{

@@ -47,7 +47,7 @@ export class NuminaClient {
   #requireAuth(){if(!this.#token)fail('SERVER_AUTH_REQUIRED');}
   async #send(path,body){
     const privateOperation=!['/status','/catalog','/application-release'].includes(path);if(privateOperation)this.#requireAuth();
-    const endpoint=path==='/treasury'?'/api/control/v1/treasury':path==='/provider-routes'?'/api/control/v2/treasury/provider-routes':path==='/application-release'?'/v4/release/manifest':path==='/catalog'?'/api/app/v1/catalog':'/api/nusd/v1'+path;
+    const endpoint=path==='/treasury'?'/api/control/v1/treasury':path==='/provider-routes'?'/api/control/v2/treasury/provider-routes':path==='/application-release'?'/v5/release/manifest':path==='/catalog'?'/api/app/v1/catalog':'/api/nusd/v1'+path;
     const controller=new AbortController();let timer,reader;
     const timeout=new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(new NuminaError('REQUEST_TIMEOUT'));},this.#timeout);});
     try{
@@ -101,14 +101,14 @@ export class NuminaClient {
     validateArguments('numina_application_release',input);
     const data=await this.#send('/application-release');
     if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.product!=='Numina'||
-      typeof data.version!=='string'||!/^[234]\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/.test(data.version)||
+      typeof data.version!=='string'||!/^[2345]\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/.test(data.version)||
       data.release!=='numina-v'+data.version||data.artifact_digest_algorithm!=='sha256'||
       typeof data.build_id!=='string'||!/^[a-f0-9]{64}$/.test(data.build_id)||
       !Array.isArray(data.artifacts)||data.artifacts.length<1||data.artifacts.length>10000||
       data.artifacts.some(artifact=>!object(artifact)||!text(artifact.path,1,2048)||typeof artifact.sha256!=='string'||!/^[a-f0-9]{64}$/.test(artifact.sha256))||
       !object(data.runtime_dependency)||!text(data.runtime_dependency.version,1,128))fail('INVALID_SERVER_RESPONSE');
     if(data.runtime_dependency.version!==EXPECTED_RELEASE.production_version || data.runtime_dependency.release!==EXPECTED_RELEASE.release)fail('RUNTIME_RELEASE_MISMATCH');
-    if(data.version!=='4.0.0'||data.release!=='numina-v4.0.0')fail('APPLICATION_RELEASE_MISMATCH');
+    if(data.version!=='5.0.0'||data.release!=='numina-v5.0.0')fail('APPLICATION_RELEASE_MISMATCH');
     // Preserve application identity and require the shared rc27 runtime target.
     // Schema recognition is not signature, artifact, deployment or reserve verification.
     return this.#wrap(data);

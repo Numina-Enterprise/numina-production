@@ -1,12 +1,12 @@
-# Numina 4.0.0 — iOS source candidate
+# Numina 5.0.0 — iOS source candidate
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
-The current source targets bundle version 4.0.0 and build number 5. It now includes native code changes, not only version metadata. These latest changes have not been compiled or signed; earlier unsigned artifacts must not be presented as builds of this source. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v4.json`.
+The current source targets bundle version 5.0.0 and build number 5. It now includes native code changes, not only version metadata. These latest changes have not been compiled or signed; earlier unsigned artifacts must not be presented as builds of this source. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v5.json`.
 
 ## Shared software release binding
 
-The application remains **4.0.0**, with iOS source build **5** and runtime **1.9.0-rc27** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
+The application remains **5.0.0**, with iOS source build **5** and runtime **1.9.0-rc27** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
 
 `node scripts/ios-release.mjs check` verifies the iOS identity against the root application package, required architecture, runtime contract and shared distribution policy. `node scripts/ios-release.mjs sync` regenerates only `Configuration/NuminaRelease.xcconfig`; it does not change the source build counter or create a binary. The generated dependency values are embedded into Info.plist and shown in native diagnostics.
 
@@ -20,7 +20,7 @@ The existing recorded unsigned iOS binary remains build 3 and predates these sou
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 4.0.0 / 5 |
+| Version / build | 5.0.0 / 5 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
@@ -81,4 +81,4 @@ See `Signing/README.md`. The package preserves the existing CSR and provides tem
 
 ## Procurement usage
 
-The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v4/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.
+The current shared application release publishes `procurement_usage: true` at https://numinalabs.xyz/v5/release/manifest. This permits use of existing Numina procurement workflows under the current owner and delegated permissions. Read https://numinalabs.xyz/business-core.json for the owner authorization and https://numinalabs.xyz/api/control/v2/manifest for current capabilities. Provider payment evidence and treasury rules remain applicable. The hosted workspace reads this shared release; packaged native binaries retain their separately recorded build identities.

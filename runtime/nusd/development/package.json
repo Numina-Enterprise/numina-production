@@ -4,7 +4,9 @@
   "private": true,
   "license": "BSD-3-Clause",
   "type": "module",
-  "engines": { "node": "24.x" },
+  "engines": {
+    "node": "26.13.0"
+  },
   "scripts": {
     "compile": "node compile.mjs",
     "test": "node --test ../../../tests/nusd-contract*.mjs ../../../tests/nusd-conversion.test.mjs"

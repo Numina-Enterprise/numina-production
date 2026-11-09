@@ -1,28 +1,20 @@
+# Submit from the canonical repository root. This prepares an existing service revision with no traffic cutover.
 steps:
-  # Build container image targeting modern Artifact Registry
+  - name: 'node:26.13.0'
+    entrypoint: bash
+    args:
+      - '-ceu'
+      - |
+        npm ci --ignore-scripts --no-audit --no-fund
+        npm ci --prefix runtime/nusd --ignore-scripts --no-audit --no-fund
+        npm ci --prefix runtime/nusd/development --ignore-scripts --no-audit --no-fund
+        npm run build
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest', '.']
-
-  # Push container image to existing numina-production repository
+    args: ['build', '-f', 'Dockerfile', '-t', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numina-production:$BUILD_ID', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest']
-
-  # Deploy to Cloud Run in us-central1
+    args: ['push', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numina-production:$BUILD_ID']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'numinalabs-web'
-      - '--image'
-      - 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest'
-      - '--region'
-      - 'us-central1'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--project'
-      - 'project-0317d6c9-e943-409e-83f'
-
+    args: ['run', 'deploy', 'numina-production', '--image', 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numina-production:$BUILD_ID', '--region', 'us-central1', '--project', 'project-0317d6c9-e943-409e-83f', '--no-traffic', '--quiet']
 images:
-  - 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numinalabs-web:latest'
+  - 'us-central1-docker.pkg.dev/project-0317d6c9-e943-409e-83f/numina-production/numina-production:$BUILD_ID'

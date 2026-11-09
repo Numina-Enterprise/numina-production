@@ -1,4 +1,4 @@
-# Supply the independently selected official Node 24 image with its actual digest.
+# Supply the independently selected official Node 26.13.0 image with its actual digest.
 # No mutable image tag or invented digest is selected by this candidate.
 ARG NODE_IMAGE
 FROM ${NODE_IMAGE} AS dependencies

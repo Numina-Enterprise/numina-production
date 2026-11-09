@@ -8,7 +8,7 @@ const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 
 export function syncApplicationReleasePin({write=false}={}){
   const version=JSON.parse(readFileSync(path.join(root,'package.json'))).version,major=version.split('.')[0];
-  const aliases=['release.json',...new Set(['2','3',major])].map(name=>name==='release.json'?name:'application-release-v'+name+'.json');
+  const aliases=['release.json',...new Set(['2','3','4',major])].map(name=>name==='release.json'?name:'application-release-v'+name+'.json');
   const excluded=new Set(aliases.map(name=>'client/downloads/'+name));
   const release=JSON.parse(readFileSync(path.join(root,'dist/client/downloads/application-release-v'+major+'.json')));
   const collect=(relative='')=>readdirSync(path.join(root,'dist',relative)).flatMap(name=>{

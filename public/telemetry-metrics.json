@@ -1,6 +1,6 @@
 {
   "schema": "numina.metric-map.v1",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "ownerEndpoint": "/api/ops/v1/telemetry",
   "scope": "current_process_only",
   "guide": "/downloads/Telemetry-and-Quantum.md",

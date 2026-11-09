@@ -1,4 +1,4 @@
-# Install Numina integration kit 4.0.0
+# Install Numina integration kit 5.0.0
 
 Extract the ZIP to a trusted directory. Use Node.js 22 or later. The package requires no npm dependency install and is not an npm registry release.
 
@@ -25,7 +25,7 @@ Use the generated provider descriptor from `schemas/` or `providerTools(provider
 
 ## First release read
 
-Call `numina_application_release` with `{}`. It targets `GET /v4/release/manifest`. The application version comes from that response; do not infer deployment success from the kit's own 4.0.0 version. A missing or incompatible server response is an error, not a fabricated fallback.
+Call `numina_application_release` with `{}`. It targets `GET /v5/release/manifest`. The application version comes from that response; do not infer deployment success from the kit's own 5.0.0 version. A missing or incompatible server response is an error, not a fabricated fallback.
 
 ## Credentials and unavailable workflows
 

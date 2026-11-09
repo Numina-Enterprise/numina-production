@@ -1,35 +1,25 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "numina-production",
+  "account_id": "3c1fd59ef2ef67f750b4bc23e656d722",
+  "keep_vars": true,
+  "unsafe": {
+    "metadata": {
+      "keep_bindings": [
+        "plain_text",
+        "json",
+        "secret_text",
+        "secret_key",
+        "d1",
+        "r2_bucket"
+      ]
+    }
+  },
   "main": "./dist/server/index.js",
   "compatibility_date": "2026-09-18",
   "workers_dev": true,
   "preview_urls": true,
   "routes": [
-    {
-      "pattern": "numinalabs.xyz/v2/*",
-      "zone_name": "numinalabs.xyz"
-    },
-    {
-      "pattern": "www.numinalabs.xyz/v2/*",
-      "zone_name": "numinalabs.xyz"
-    },
-    {
-      "pattern": "numinalabs.xyz/v3/*",
-      "zone_name": "numinalabs.xyz"
-    },
-    {
-      "pattern": "www.numinalabs.xyz/v3/*",
-      "zone_name": "numinalabs.xyz"
-    },
-    {
-      "pattern": "numinalabs.xyz/v4/*",
-      "zone_name": "numinalabs.xyz"
-    },
-    {
-      "pattern": "www.numinalabs.xyz/v4/*",
-      "zone_name": "numinalabs.xyz"
-    },
     {
       "pattern": "numinalabs.xyz/*",
       "zone_name": "numinalabs.xyz"
@@ -49,6 +39,7 @@
       "/v2/*",
       "/v3/*",
       "/v4/*",
+      "/v5/*",
       "/readyz",
       "/control-room*",
       "/pricing*",
