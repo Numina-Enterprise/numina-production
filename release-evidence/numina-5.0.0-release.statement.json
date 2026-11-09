@@ -40,7 +40,7 @@
     {
       "name": "dist/client/about.html",
       "digest": {
-        "sha256": "1a61c73f9997ee2ecfd4d6e2657588d5563dc3e65b2fab0b29ba5c40095246df"
+        "sha256": "a2b217740848a2fb181bd8103a289a1fe82ab50248c7ee741b47725ebdeeed86"
       }
     },
     {
@@ -394,12 +394,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-09T15:50:29.291Z",
+    "timestamp": "2026-11-09T16:05:33.069Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "0c21ef82c00d2d188879758b2fe3c2ea5e344fbce11251453be4e12123aaa3f8",
-      "gitCommit": "53e052e1aa777af1fc0edc86a0461369997ed187",
-      "gitTree": "24f1f7f9d92911df0b6d645c6bfdf7294cfc5a27"
+      "sha256": "68478683ada9851e1077032ae50853cd9a799a62934a45e219490735bfe38a5b",
+      "gitCommit": "937e6ea0ac9381716903d0710f92bae30983f769",
+      "gitTree": "1e98917d2ed5d7dc38253857311b30a1f8855115"
     },
     "subjectRoots": [
       "dist/client",
