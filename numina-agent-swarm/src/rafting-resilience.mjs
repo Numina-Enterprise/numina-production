@@ -3,15 +3,30 @@ import { createPublicKey, verify, createHash } from 'node:crypto';
 const DOMAIN = Buffer.from('numina-rafting-binding-v1\\0'.replace('\\0','\0'),'utf8');
 const MAX_SAFE = Number.MAX_SAFE_INTEGER;
 function fail(message) { throw new Error(message); }
-function canonical(value) {
-  if (value === null || typeof value === 'boolean' || typeof value === 'string') return JSON.stringify(value);
+function validateUnicode(s) {
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c >= 0xd800 && c <= 0xdbff) {
+      const next = s.charCodeAt(++i);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) fail('unpaired Unicode surrogate');
+    } else if (c >= 0xdc00 && c <= 0xdfff) fail('unpaired Unicode surrogate');
+  }
+}
+export function canonicalize(value) {
+  if (value === null || typeof value === 'boolean') return JSON.stringify(value);
+  if (typeof value === 'string') { validateUnicode(value); return JSON.stringify(value); }
   if (typeof value === 'number') {
-    if (!Number.isFinite(value) || !Number.isSafeInteger(value)) fail('unsafe number');
+    if (!Number.isFinite(value)) fail('non-finite number');
     return JSON.stringify(value);
   }
-  if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
-  if (value && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
-    return '{' + Object.keys(value).sort().map(k => JSON.stringify(k)+':'+canonical(value[k])).join(',') + '}';
+  if (Array.isArray(value)) {
+    if (Object.keys(value).some(k => !/^(0|[1-9]\\d*)$/.test(k) || Number(k) >= value.length) || Array.from({length:value.length},(_,i)=>i).some(i=>!Object.hasOwn(value,i))) fail('sparse or extended array');
+    return '[' + value.map(canonicalize).join(',') + ']';
+  }
+  if (value && typeof value === 'object' && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)) {
+    const keys=Object.keys(value);
+    for (const key of keys) validateUnicode(key);
+    return '{' + keys.sort().map(k => JSON.stringify(k)+':'+canonicalize(value[k])).join(',') + '}';
   }
   fail('invalid canonical value');
 }
@@ -36,7 +51,7 @@ function validate(m) {
 }
 export function signingBytes(manifest) {
   const {signatures, ...unsigned} = manifest;
-  return Buffer.concat([DOMAIN, Buffer.from(canonical(unsigned),'utf8')]);
+  return Buffer.concat([DOMAIN, Buffer.from(canonicalize(unsigned),'utf8')]);
 }
 function ed25519PublicKey(hexKey) {
   return createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),Buffer.from(hexKey,'hex')]),format:'der',type:'spki'});
