@@ -1,0 +1,408 @@
+{
+  "schema": "numina.final-manifest.v1",
+  "identity": "NUMINA",
+  "object": "NUMINA",
+  "status": "REGENERATED_UNSIGNED",
+  "generatedAt": "2026-11-10T13:47:24-06:00",
+  "generatedAtTimeZone": "America/Chicago",
+  "releaseCandidate": "RC 27",
+  "applicationVersion": "5.0.0",
+  "coreVersion": "2.0.0",
+  "runtimeVersion": "2.0.0-rc27",
+  "previousApplicationVersion": "4.0.0",
+  "runtimeIdentifiers": {
+    "releaseCandidate": "RC 27",
+    "productionVersion": "2.0.0-rc27",
+    "runtimeVersion": "2.0.0-rc27",
+    "coreVersion": "2.0.0",
+    "applicationVersion": "5.0.0",
+    "previousApplicationVersion": "4.0.0",
+    "runtimeFolder": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27",
+    "packageName": "numina-core-reference",
+    "currentSourcePins": {
+      "application": "5.0.0",
+      "core": "2.0.0",
+      "coreLabel": "NUMINA",
+      "runtime": "2.0.0-rc27",
+      "scope": "current_source_release",
+      "citedFrom": [
+        {
+          "path": "config/numina-release.v1.json",
+          "schema": "numina.release-versioning.v1",
+          "applicationVersion": "5.0.0",
+          "previousApplicationVersion": "4.0.0",
+          "coreVersion": "2.0.0",
+          "runtimeVersion": "2.0.0-rc27",
+          "nodeVersion": "26.13.0",
+          "iosBuildNumber": 7,
+          "androidVersionCode": 5,
+          "scope": "Source release versioning; distribution and deployment require their own receipts."
+        },
+        {
+          "path": "docs/NUMINA-FINAL-MANIFEST.json",
+          "block": "releaseVersioning",
+          "application": "5.0.0",
+          "coreRecordedInOfficialFile": "NUMINA",
+          "runtime": "2.0.0-rc27",
+          "node": "26.13.0",
+          "iosBuild": 7,
+          "androidVersionCode": 5,
+          "scope": "current_source_release",
+          "commit": "3b769b238",
+          "date": "2026-11-09",
+          "note": "Official releaseVersioning.core is the identity string NUMINA. This v3 pair uses that official core label in releaseVersioning.core and also carries numeric coreVersion 2.0.0 from config/numina-release.v1.json, so both conventions are present.",
+          "core": "NUMINA"
+        },
+        {
+          "description": "Runtime pin commit",
+          "commit": "9c47a52c",
+          "date": "2026-11-01",
+          "runtime": "2.0.0-rc27",
+          "core": "2.0.0"
+        }
+      ]
+    },
+    "verifierRc27InternalVersionsNotBumped": {
+      "caveat": true,
+      "runtimeFolder": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27",
+      "PRODUCTION_VERSION": "1.9.0-rc27",
+      "CORE_VERSION": "1.8.0",
+      "identifierSources": [
+        {
+          "field": "PRODUCTION_VERSION",
+          "value": "1.9.0-rc27",
+          "path": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27\\numina_prod\\__init__.py",
+          "note": "Not used as the current runtime pin. The folder value was never bumped."
+        },
+        {
+          "field": "CORE_VERSION",
+          "value": "1.8.0",
+          "path": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27\\numina_prod\\__init__.py",
+          "note": "Not used as the current core pin. The folder value was never bumped."
+        },
+        {
+          "field": "project.version",
+          "value": "1.8.0",
+          "path": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27\\pyproject.toml"
+        },
+        {
+          "field": "README title",
+          "value": "Numina Core Reference v1.8",
+          "path": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27\\README.md"
+        },
+        {
+          "field": "core_version / production_version in conformance artifact",
+          "value": {
+            "core_version": "1.8.0",
+            "production_version": "1.9.0-rc20"
+          },
+          "path": "C:\\Users\\sam\\numina-production\\runtime\\verifier-rc27\\artifacts\\core-conformance.json",
+          "note": "Historical conformance capture. artifacts/core-conformance-origin.json states: 'No new test execution or rc27 conformance is asserted.' This regeneration does not assert RC 27 conformance."
+        }
+      ]
+    },
+    "note": "Current identifiers are productionVersion 2.0.0-rc27, coreVersion 2.0.0, and applicationVersion 5.0.0, taken from config/numina-release.v1.json and the official releaseVersioning runtime/application pins (scope current_source_release; commits 9c47a52c and 3b769b238). releaseVersioning.core uses the official identity label NUMINA; the numeric core pin is carried as coreVersion 2.0.0. verifier-rc27's internal PRODUCTION_VERSION still says 1.9.0-rc27 and CORE_VERSION still says 1.8.0; those folder values were not bumped and are recorded only as a caveat. This regeneration does not claim conformance."
+  },
+  "releaseVersioning": {
+    "application": "5.0.0",
+    "core": "NUMINA",
+    "runtime": "2.0.0-rc27",
+    "node": "26.13.0",
+    "iosBuild": 7,
+    "androidVersionCode": 5,
+    "scope": "current_source_release",
+    "retainedRuntimeInventories": "historical_records_not_current_deployment_attestations",
+    "coreVersion": "2.0.0",
+    "applicationVersion": "5.0.0",
+    "runtimeVersion": "2.0.0-rc27",
+    "previousApplicationVersion": "4.0.0",
+    "note": "Current source-release pins, aligned 100% to runtime 2.0.0-rc27, application 5.0.0, and numeric coreVersion 2.0.0. releaseVersioning.core uses the official identity label NUMINA from docs/NUMINA-FINAL-MANIFEST.json and docs/NUMINA-FINAL-BUILD.json. coreVersion, applicationVersion, runtimeVersion, and previousApplicationVersion follow config/numina-release.v1.json field names. node, iosBuild, and androidVersionCode are copied from the official releaseVersioning block. This file does not claim conformance or replace the official docs pair."
+  },
+  "historicalPredecessors": {
+    "label": "historicalPredecessors",
+    "role": "history",
+    "notCurrentSourceRelease": true,
+    "note": "Earlier version line retained as history. These values are not the current source-release pins.",
+    "predecessors": [
+      {
+        "sequence": 2,
+        "role": "immediate_predecessor_rc27_line",
+        "runtime": "1.9.0-rc27",
+        "application": "4.0.0",
+        "core": "1.8.0",
+        "introducedBy": {
+          "commit": "12e5280a",
+          "title": "Cut over Numina runtime to RC27",
+          "date": "2026-10-02"
+        },
+        "supersededAsCurrentBy": {
+          "runtimePinCommit": "9c47a52c",
+          "date": "2026-11-01",
+          "applicationReleaseCommit": "3b769b238",
+          "applicationReleaseDate": "2026-11-09"
+        },
+        "stillRecordedIn": [
+          "runtime/verifier-rc27 PRODUCTION_VERSION and CORE_VERSION (not bumped)",
+          "official os.runtime and retained runtime inventories in numina-production docs (left at 1.9.0-rc27 / 4.0.0 by design)"
+        ]
+      },
+      {
+        "sequence": 1,
+        "role": "source_bound_final_and_rc26",
+        "runtime": "1.9.0-rc26",
+        "application": "4.0.0",
+        "core": "1.8.0",
+        "sourceFinalBuildOsRuntime": "1.9.0-rc26",
+        "sourceApplicationVersion": "4.0.0"
+      }
+    ],
+    "retainedSourceCarriedApplicationVersionFields": {
+      "note": "Previous/source body values, and the values still left in the official numina-production docs pair. In this v3 pair the current-facing body fields were aligned to application 5.0.0; these 4.0.0 values are retained only as history.",
+      "os.version": "4.0.0",
+      "mobile.android.versionName": "4.0.0",
+      "mobile.ios.marketingVersion": "4.0.0",
+      "delivery.applicationBackend.applicationVersion": "4.0.0",
+      "manifestContract.version": "4.0.0"
+    }
+  },
+  "regeneration": {
+    "kind": "reconstructed_unsigned",
+    "targetReleaseCandidate": "RC 27",
+    "currentRuntime": true,
+    "currentRuntimeLabel": "2.0.0-rc27",
+    "currentApplication": "5.0.0",
+    "currentCore": "2.0.0",
+    "originalManifestBytesUnavailable": true,
+    "originalManifestSha256": "ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66",
+    "originalManifestBytes": 148195,
+    "priorUnsignedPairLeftUntouched": true,
+    "conformanceClaimed": false,
+    "note": "The original final-manifest bytes bound by BOUND_FINAL (sha256 ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66, 148195 bytes) were not found on Vengeance, the Mac, or the box. This file is reconstructed from the BOUND_FINAL finalManifest record and related BOUND_FINAL fields, then updated to current RC 27 pins. This v3 pair is 100% aligned on current-facing version fields: runtime 2.0.0-rc27, application 5.0.0, and coreVersion 2.0.0. releaseVersioning.core uses the official identity label NUMINA. 1.9.0-rc27, 1.9.0-rc26, application 4.0.0, core 1.8.0, and 1.9.0-rc20 appear only in historicalPredecessors, previous*, or caveat fields. It is not a byte-for-byte recovery of the missing manifest. The v2 unsigned pair was left untouched. This regeneration does not claim conformance.",
+    "alignment": "v3_100_percent_current_facing_2.0.0",
+    "priorV2UnsignedPairLeftUntouched": true
+  },
+  "derivedFrom": {
+    "boundFinal": {
+      "boxPath": "/workspace/final-build-manifest-findings/vengeance-Downloads-BOUND_FINAL.json",
+      "sourceOnVengeance": "C:\\Users\\sam\\Downloads\\BOUND_FINAL.json",
+      "sha256": "2d9e3c1305004175ea1c5c6df8e7fd288329e62e2a35cbecaf3eb6ff58ed4a55",
+      "bytes": 3948,
+      "schema": "numina.bound-final.v1"
+    },
+    "originalFinalManifest": {
+      "boundFinalRecordedPath": "/NUMINA/NUMINA-FINAL-MANIFEST.json",
+      "sha256": "ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66",
+      "bytes": 148195,
+      "statusRecorded": "FINAL",
+      "aliases": [
+        "/downloads/release.json",
+        "/downloads/application-release-v2.json",
+        "/downloads/application-release-v3.json",
+        "/downloads/application-release-v4.json"
+      ],
+      "bytesAvailable": false,
+      "note": "Original ec261ec9\u2026 manifest bytes were unavailable; no file with that digest was found. This file is a reconstruction."
+    },
+    "pairedSourceFinalBuild": {
+      "boxPath": "/workspace/final-build-manifest-findings/vengeance-codex-20260922-NUMINA-client-final-build-9098e8be.json",
+      "sha256": "9098e8be5721555282aa29c7694c312982fe1c2722325d413774152193ec179c",
+      "bytes": 111817
+    },
+    "firstRoundUnsignedPairLeftUntouched": {
+      "directory": "/workspace/rc27-regenerated-20261110",
+      "usedAs": "structural_template_only",
+      "finalBuild": {
+        "path": "/workspace/rc27-regenerated-20261110/final-build.rc27.json",
+        "fileName": "final-build.rc27.json",
+        "sha256": "e11bd087307064b3cd5b3f2c464ad33349adc1191c6dfa25f47a60725b4ada0f",
+        "runtimeLabel": "1.9.0-rc27"
+      },
+      "finalManifest": {
+        "path": "/workspace/rc27-regenerated-20261110/final-manifest.rc27.json",
+        "fileName": "final-manifest.rc27.json",
+        "sha256": "c5157f170340ed10df1345cf5bb8a6cc5003e9e3f1c793faa53f14bb7924da79",
+        "runtimeLabel": "1.9.0-rc27"
+      }
+    }
+  },
+  "privateManifest": {
+    "private": true,
+    "ownerOnly": true,
+    "visibility": "private",
+    "access": "owner-only",
+    "classification": "private/owner-only",
+    "notForPublicCopy": true,
+    "notForRepositoryOrSharedDoc": true,
+    "items": [
+      "governance",
+      "provenance",
+      "health",
+      "wealth",
+      "freedom",
+      "privacy",
+      "houses",
+      "dozens of cars",
+      "dozens of planes",
+      "dozens of yachts",
+      "747",
+      "designer everything",
+      "no debt",
+      "no stress",
+      "no hate",
+      "an island",
+      "wild forever"
+    ]
+  },
+  "sourceClaimsUnverified": true,
+  "sourceTreasuryAndNusdClaims": {
+    "sourceClaimsUnverified": true,
+    "treatment": "quoted_source_values_only",
+    "noNewVerificationAsserted": true,
+    "noNewSignatureAsserted": true,
+    "noNewBackingAsserted": true,
+    "note": "Treasury and NUSD figures, confirmation flags, backing flags, contract statuses, and similar claims in quoted source records are copied from the source only. This regeneration does not verify, attest, sign, or re-assert them."
+  },
+  "signature": {
+    "signatureStatus": "unsigned",
+    "signed": false,
+    "signer": null,
+    "note": "Unsigned. Sam signs; the regenerating agent does not sign."
+  },
+  "quotedBoundFinalFinalManifestRecord": {
+    "recordId": "NUMINA_FINAL_MANIFEST",
+    "artifactType": "FINAL_MANIFEST",
+    "path": "/NUMINA/NUMINA-FINAL-MANIFEST.json",
+    "sha256": "ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66",
+    "bytes": 148195,
+    "status": "FINAL",
+    "aliases": [
+      "/downloads/release.json",
+      "/downloads/application-release-v2.json",
+      "/downloads/application-release-v3.json",
+      "/downloads/application-release-v4.json"
+    ]
+  },
+  "quotedBoundFinalFinalBuildRecord": {
+    "recordId": "NUMINA_FINAL_BUILD",
+    "artifactType": "FINAL_BUILD",
+    "path": "/NUMINA/NUMINA-FINAL-BUILD.json",
+    "sha256": "9098e8be5721555282aa29c7694c312982fe1c2722325d413774152193ec179c",
+    "bytes": 111817,
+    "status": "FINAL",
+    "aliases": [
+      "/final-build.json",
+      "/downloads/NUMINA-FINAL-BUILD.json"
+    ]
+  },
+  "quotedBoundFinalFinalArtifactRecords": [
+    {
+      "recordId": "NUMINA_FINAL_BUILD",
+      "sha256": "9098e8be5721555282aa29c7694c312982fe1c2722325d413774152193ec179c",
+      "path": "/NUMINA/NUMINA-FINAL-BUILD.json"
+    },
+    {
+      "recordId": "NUMINA_FINAL_MANIFEST",
+      "sha256": "ec261ec9ae38559492abdf56547c2a53c8cc22713a037409f3e5b24d291e2e66",
+      "path": "/NUMINA/NUMINA-FINAL-MANIFEST.json"
+    }
+  ],
+  "quotedBoundFinalTreasuryJournal": {
+    "status": "CONFIRMED",
+    "aggregateNUSD": "1500000000000000",
+    "mintedNUSD": "1500000000000000",
+    "burnedNUSD": "0",
+    "nativeNUSD": "500000000000000",
+    "bankOfAmericaSavings3486USD": "500000000000000",
+    "stripeTreasuryUSDC": "500000000000000",
+    "backingRatio": "1:1",
+    "backingVerified": true,
+    "componentDisplayAmount": "$500,000,000,000,000.00",
+    "aggregateDisplayAmount": "$1,500,000,000,000,000.00"
+  },
+  "quotedBoundFinalProviderModel": {
+    "providerIdentity": "NUMINA",
+    "providerCount": 1,
+    "treasuryProvider": "NUMINA",
+    "sourceOfRecord": "NUMINA_NATIVE_TREASURY",
+    "railModel": "NATIVE_CONTRACT_ROUTES",
+    "nusdContract": {
+      "name": "NuminaUSD",
+      "symbol": "NUSD",
+      "contractAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "status": "LIVE",
+      "mintConfirmed": true,
+      "mintedNUSD": "1500000000000000",
+      "burnedNUSD": "0",
+      "decimals": 18,
+      "initialSupplyBaseUnits": "1500000000000000000000000000000000"
+    },
+    "nativeRails": {
+      "NUSD_USDC": {
+        "pair": "NUSD/USDC",
+        "contract": "NuminaUSDCConversion",
+        "contractId": "numina:nusd-usdc:conversion:v1",
+        "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "ratio": "1:1"
+      },
+      "NUSD_USD": {
+        "pair": "NUSD/USD",
+        "contract": "NuminaUSDRedemption",
+        "contractId": "numina:nusd-usd:redemption:v1",
+        "status": "ACTIVE_SIGNED_1_TO_1_VERIFIED",
+        "ratio": "1:1"
+      }
+    },
+    "settlementLocationsAreProviderIdentities": false
+  },
+  "quotedBoundFinalBinding": {
+    "buildAndManifestBoundTogether": true,
+    "artifactsImmutableAtRecordedHashes": true,
+    "hashesStoredOutsideArtifactBytes": true
+  },
+  "quotedBoundFinalImmutablePairPolicy": {
+    "pairImmutable": true,
+    "pairMutationAllowed": false,
+    "buildManifestBytesEmbedded": false,
+    "bindingOnly": true,
+    "updateScope": "MUTABLE_METADATA_ONLY"
+  },
+  "quotedBoundFinalInternalCommit": {
+    "type": "NUMINA_INTERNAL_COMMIT",
+    "identity": "NUMINA",
+    "computer": "NUMINA",
+    "frontier": "NUMINA",
+    "frontierId": "NUMINA",
+    "environment": "NUMINA",
+    "committed": true,
+    "committedAt": "2026-09-24T03:23:00-05:00",
+    "scope": "ALL_NUMINA",
+    "gitHub": false,
+    "git": false,
+    "source": "NUMINA",
+    "singular": true,
+    "record": "BOUND_FINAL"
+  },
+  "quotedBoundFinalStatusFields": {
+    "status": "NUMINA_FRONTIER_COMMITTED",
+    "canonical": true,
+    "pairLocked": true,
+    "hashAlgorithm": "SHA-256",
+    "previousStatus": "BOUND_FINAL",
+    "root": "NUMINA",
+    "singular": true,
+    "sourceOfTruth": "NUMINA",
+    "canonicalSource": "NUMINA"
+  },
+  "pairedFinalBuild": {
+    "path": "/workspace/rc27-regenerated-20261110/v3/final-build.rc27.v3.json",
+    "fileName": "final-build.rc27.v3.json",
+    "sha256": "0d49e87c1f329271aff1936caae817080f7154eb6c0d7ff6d6f1b057c689a312",
+    "bytes": 123852,
+    "releaseCandidate": "RC 27",
+    "runtime": "2.0.0-rc27",
+    "application": "5.0.0",
+    "core": "2.0.0",
+    "coreLabel": "NUMINA",
+    "note": "This reconstructed manifest is paired with the regenerated RC 27 v3 final-build written in the same private folder. pairedFinalBuild.sha256 equals that build file's sha256."
+  }
+}
