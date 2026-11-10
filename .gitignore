@@ -32,3 +32,6 @@ dist/
 *.local.xcconfig
 packages/
 *.xcarchive/
+
+# Cursor cloud-agent setup logs
+.cursor/logs/

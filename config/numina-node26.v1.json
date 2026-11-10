@@ -1,6 +1,6 @@
 {
   "schema": "numina.node-toolchain.v1",
-  "version": "26.11.1",
+  "version": "27.0.0-alpha.0.0.0",
   "downloadOrigin": "https://nodejs.org/dist",
   "checksumFile": "SHASUMS256.txt",
   "role": "Numina build and local Node toolchain",
@@ -8,20 +8,16 @@
   "signingKeyChanged": false,
   "artifacts": {
     "linux-x64": {
-      "filename": "node-v26.11.1-linux-x64.tar.xz",
-      "sha256": "3883bfc73f9a680ca4eab04b196068aaaab1373ffa77d8fc1a4408222495b651"
+      "filename": "node-v27.0.0-alpha.0.0.0-linux-x64.tar.xz",
+      "sha256": "f1e9f7f2deef9797f9106781d097649b99df2a473e1fd3f97b6991fa6a271f4f"
     },
     "linux-arm64": {
-      "filename": "node-v26.11.1-linux-arm64.tar.xz",
-      "sha256": "0945e2cde6aa0f54d980f03874dfe5cf3a549ce714c7fb9019e591ce0accf282"
+      "filename": "node-v27.0.0-alpha.0.0.0-linux-arm64.tar.xz",
+      "sha256": "348be53d6a3d6d41ba147d88743cc842777ac1a1efec56a8dc56128b27e69b9f"
     },
     "darwin-arm64": {
-      "filename": "node-v26.11.1-darwin-arm64.tar.xz",
-      "sha256": "0ef9b443000681bffc062ec126d53f97933ea9b086ea73dcba0480d87e639b39"
-    },
-    "darwin-x64": {
-      "filename": "node-v26.11.1-darwin-x64.tar.xz",
-      "sha256": "68a8a4de0c46e693a261d13efb43d041fcd7386187816ef9a4b14bf60003adb2"
+      "filename": "node-v27.0.0-alpha.0.0.0-darwin-arm64.tar.xz",
+      "sha256": "8061d34354a9d847d9f12658e02796fdf8f20ed17375474c299eeca5d900d30d"
     }
   }
 }

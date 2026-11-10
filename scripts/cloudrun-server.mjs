@@ -8,10 +8,9 @@
 // - Port comes from process.env.PORT (Cloud Run sets it, default 8080),
 //   not from --port args and not from a fixed 8788.
 // - No PINNED_NODE_VERSION_REQUIRED check. The Dockerfile pins
-//   Node 26.13.0, matching .nvmrc 26.13.0 (Nov 1 alignment).
-//   The preview server is frozen to 26.11.1 by its own config
-//   (config.version must equal '26.11.1'), so it cannot run on
-//   a 26.13.0 machine. This adapter does not re-impose that pin.
+//   Node 27.0.0-alpha.0.0.0, matching .nvmrc. The preview guard
+//   requires the same version (config.version must equal
+//   '27.0.0-alpha.0.0.0'). This adapter does not re-impose that pin.
 // - Private services, financial execution and signing are
 //   deliberately unavailable, same as the preview: D1 and R2
 //   bindings throw, NUMINA_LIVEMODE is 'false'.
