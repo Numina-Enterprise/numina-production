@@ -1,0 +1,22 @@
+name: NSPR-001 resilience conformance
+on:
+  pull_request:
+    paths:
+      - 'numina-agent-swarm/src/rafting-resilience.mjs'
+      - 'numina-agent-swarm/tests/rafting-*.test.mjs'
+      - 'schemas/numina.rafting-binding.v1.json'
+      - '.github/workflows/nspr-001.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.13.0'
+      - name: Run isolated NSPR tests
+        run: node --test numina-agent-swarm/tests/rafting-canonical.test.mjs numina-agent-swarm/tests/rafting-resilience.test.mjs
