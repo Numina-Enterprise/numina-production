@@ -44,18 +44,18 @@ function Write-Evidence([string]$Result, $Head, $Checks, [string]$Reason) {
 $head = $null
 $lastChecks = @()
 try {
-    $pr = Invoke-GhJson @('pr','view',"$PrNumber",'--repo',$Repository,'--json','headRefOid')
+    $pr = Invoke-GhJson -Arguments @('pr','view',"$PrNumber",'--repo',$Repository,'--json','headRefOid')
     $head = [string]$pr.headRefOid
     if ($head -notmatch '^[a-fA-F0-9]{40}$') { throw 'Invalid PR head SHA.' }
     Write-Host "Watching $Repository PR #$PrNumber at $head" -ForegroundColor Cyan
     for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
-        $current = Invoke-GhJson @('pr','view',"$PrNumber",'--repo',$Repository,'--json','headRefOid')
+        $current = Invoke-GhJson -Arguments @('pr','view',"$PrNumber",'--repo',$Repository,'--json','headRefOid')
         if ($current.headRefOid -ne $head) {
             Write-Evidence 'inconclusive' $head $lastChecks 'PR head SHA changed during monitoring'
             exit 2
         }
         # gh pr checks exposes state and bucket, not status/conclusion.
-        $checks = @(Invoke-GhJson @('pr','checks',"$PrNumber",'--repo',$Repository,'--json','name,state,bucket'))
+        $checks = @(Invoke-GhJson -Arguments @('pr','checks',"$PrNumber",'--repo',$Repository,'--json','name,state,bucket'))
         $lastChecks = $checks
         $pending = @($checks | Where-Object { $_.bucket -eq 'pending' })
         $failed = @($checks | Where-Object { $_.bucket -eq 'fail' })
@@ -73,7 +73,7 @@ try {
             exit 1
         }
         if ($checks.Count -gt 0 -and $pending.Count -eq 0 -and $other.Count -eq 0 -and $missing.Count -eq 0 -and $passed.Count -eq $checks.Count) {
-            $confirm = Invoke-GhJson @('pr','view',"$PrNumber",'--repo',$Repository,'--json','headRefOid')
+            $confirm = Invoke-GhJson -Arguments @('pr','view',"$PrNumber",'--repo',$Repository,'--json','headRefOid')
             if ($confirm.headRefOid -ne $head) {
                 Write-Evidence 'inconclusive' $head $checks 'PR head SHA changed before success'
                 exit 2
