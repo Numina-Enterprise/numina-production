@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, codex/node27-alpha-compat-20261110]
   workflow_dispatch:
 
 permissions:
@@ -69,3 +69,26 @@ jobs:
             numina-release-v5.0.0.tar.gz
             numina-release-v5.0.0.tar.gz.sha256
           if-no-files-found: error
+
+      - name: Evaluate Node 27 alpha compatibility (isolated branch only)
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/codex/node27-alpha-compat-20261110' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/node-v27.0.0-alpha.0.0.0-linux-x64.tar.xz"
+          curl --fail --location --retry 2 --output "$archive" https://nodejs.org/dist/v27.0.0-alpha.0.0.0/node-v27.0.0-alpha.0.0.0-linux-x64.tar.xz
+          printf '%s  %s\n' 'f1e9f7f2deef9797f9106781d097649b99df2a473e1fd3f97b6991fa6a271f4f' "$archive" | sha256sum --check
+          tar -xJf "$archive" -C "$RUNNER_TEMP"
+          export PATH="$RUNNER_TEMP/node-v27.0.0-alpha.0.0.0-linux-x64/bin:$PATH"
+          node -e "if (process.version !== 'v27.0.0-alpha.0.0.0' || process.versions.openssl !== '4.1.0') process.exit(1); console.log(JSON.stringify({node:process.version, openssl:process.versions.openssl}))"
+          npm ci --ignore-scripts --no-audit --no-fund
+          set +e
+          npm run build
+          build_status=$?
+          node --test tests/release-signing.test.mjs
+          signing_status=$?
+          node --test --test-name-pattern='pinned cloud preview serves' tests/cloud-preview.test.mjs
+          preview_status=$?
+          set -e
+          printf 'alpha compatibility: build=%s signing=%s preview=%s\n' "$build_status" "$signing_status" "$preview_status"
+          if (( build_status || signing_status || preview_status )); then exit 1; fi
