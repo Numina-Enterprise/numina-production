@@ -20,7 +20,7 @@ export function canonicalize(value) {
     return JSON.stringify(value);
   }
   if (Array.isArray(value)) {
-    if (Object.keys(value).some(k => !/^(0|[1-9]\\d*)$/.test(k) || Number(k) >= value.length) || Array.from({length:value.length},(_,i)=>i).some(i=>!Object.hasOwn(value,i))) fail('sparse or extended array');
+    if (Object.keys(value).some(k => !/^(0|[1-9]\d*)$/.test(k) || Number(k) >= value.length) || Array.from({length:value.length},(_,i)=>i).some(i=>!Object.hasOwn(value,i))) fail('sparse or extended array');
     return '[' + value.map(canonicalize).join(',') + ']';
   }
   if (value && typeof value === 'object' && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)) {
