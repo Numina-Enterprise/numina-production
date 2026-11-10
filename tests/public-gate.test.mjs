@@ -10,7 +10,8 @@ test('every blocked prefix is covered by a sample path',()=>{
   for(const prefix of PUBLIC_BLOCKED_PREFIXES)assert.ok(BLOCKED_SAMPLES.some(p=>p===prefix||p.startsWith(prefix)),prefix);
   for(const p of BLOCKED_SAMPLES)assert.equal(publicGateBlocks('numinalabs.xyz',p),true,p);
   for(const p of PUBLIC_ALLOWED_PATHS)assert.equal(publicGateBlocks('numinalabs.xyz',p),false,p);
-  for(const p of ['/','/services','/contact','/privacy','/mcpx','/downloadsx','/frontier'])assert.equal(publicGateBlocks('numinalabs.xyz',p),false,p);
+  for(const p of ['/','/services','/contact','/privacy','/mcpx','/downloadsx','/frontier','/api/payments/v1/checkout','/api/payments/v1/webhook'])assert.equal(publicGateBlocks('numinalabs.xyz',p),false,p);
+  assert.equal(publicGateBlocks('numinalabs.xyz','/api/payments/v1/other'),true);
   assert.equal(publicGateBlocks('127.0.0.1','/mcp'),false);
 });
 
