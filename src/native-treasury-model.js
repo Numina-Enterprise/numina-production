@@ -111,3 +111,47 @@ export function reduceTreasuryProjection(current,data,actor,eventId,recordedInit
 }
 
 export function treasuryProjectionEquals(left,right){return stable(left)===stable(right);}
+
+// Amount descriptors. Journal and projection amounts are recorded as whole-unit decimal strings
+// (for example '500000000000000' NUSD) and bank requests as USD minor units (cents). Frozen journals
+// are replayed byte-for-byte, so the stored projection shape is not changed here. Instead every
+// amount can be expanded into a self-describing record carrying exact base units (decimal string),
+// decimals, token address and chain ID. NUSD is the deployed 18-decimal token on chain 962421430.
+// See src/schemas/numina-treasury-ledger-amount.v1.schema.json.
+export const NUMINA_TREASURY_AMOUNT_SCHEMA='numina.treasury.ledger-amount.v1';
+export const NUMINA_TREASURY_ASSETS=Object.freeze({
+  NUSD:Object.freeze({unit:'NUSD',decimals:18,tokenAddress:'0x491c1DF1b5CA77AF797f052c2310ca17039C931b',chainId:'962421430'}),
+  // The USDC rail's chain and token contract are not recorded in this repository; they stay null until evidenced.
+  USDC:Object.freeze({unit:'USDC',decimals:6,tokenAddress:null,chainId:null}),
+  // Fiat USD has no token contract or chain; minor units are cents.
+  USD:Object.freeze({unit:'USD',decimals:2,tokenAddress:null,chainId:null})
+});
+const treasuryMaxUint256=2n**256n-1n;
+/** Expand one recorded amount. scale is 'whole' (decimal whole-unit text) or 'minor' (base-unit text). */
+export function treasuryAmount(value,unit,scale='whole'){
+  const asset=Object.hasOwn(NUMINA_TREASURY_ASSETS,unit)?NUMINA_TREASURY_ASSETS[unit]:null;
+  if(!asset)controlError('UNSUPPORTED_TREASURY_UNIT',400);
+  if(typeof value!=='string'||!treasuryUnsigned.test(value)||(scale!=='whole'&&scale!=='minor'))controlError('INVALID_TRANSACTION_AMOUNT',400);
+  const baseUnits=scale==='whole'?BigInt(value)*10n**BigInt(asset.decimals):BigInt(value);
+  if(baseUnits>treasuryMaxUint256)controlError('TREASURY_AMOUNT_OUT_OF_RANGE',400);
+  return Object.freeze({schema:NUMINA_TREASURY_AMOUNT_SCHEMA,unit:asset.unit,recorded:value,recordedScale:scale,
+    baseUnits:baseUnits.toString(),decimals:asset.decimals,tokenAddress:asset.tokenAddress,chainId:asset.chainId});
+}
+/** Derived, read-only view of a projection in which every amount carries base units, decimals, token and chain. */
+export function describeTreasuryProjectionAmounts(value){
+  const projection=validateTreasuryProjection(value);
+  const requests=projection.transaction_requests.map(request=>{
+    const amounts={};
+    if(request.kind==='mint_request')amounts.amount=treasuryAmount(request.amount,'NUSD');
+    else if(request.kind==='usdc_deposit_request')amounts.amount=treasuryAmount(request.amount,'USDC');
+    else if(request.kind==='bank_transaction_request')amounts.amount_minor=treasuryAmount(request.amount_minor,request.currency,'minor');
+    else if(request.kind==='aggregate_settlement'){
+      amounts.aggregate_amount=treasuryAmount(request.aggregate_amount,request.unit);
+      amounts.components=request.components.map(component=>({id:component.id,
+        amount_nusd:treasuryAmount(component.amount_nusd,'NUSD'),
+        settled_amount:treasuryAmount(component.settled_amount,component.settled_unit)}));
+    }else controlError('UNSUPPORTED_TREASURY_REQUEST_KIND',400);
+    return {id:request.id,kind:request.kind,amounts};
+  });
+  return {schema:'numina.treasury.projection-amounts.v1',balance:treasuryAmount(projection.balance,projection.unit),transaction_requests:requests};
+}

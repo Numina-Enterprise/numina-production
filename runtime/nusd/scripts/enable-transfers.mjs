@@ -20,7 +20,7 @@ const artifact=JSON.parse(fs.readFileSync(path.join(root,'artifacts/NuminaUSD.js
 const tokenAddress=getAddress(receipt?.token?.address||'');
 const admin=getAddress(deployment?.roles?.admin||'');
 const recipient=getAddress(deployment?.initialRecipient||'');
-if(receipt?.issuance?.decimals!==6||receipt?.issuance?.amountNusd!=='1500000000000000')throw Error('NUMINA_DEPLOYMENT_RECEIPT_MISMATCH');
+if(receipt?.issuance?.decimals!==18||receipt?.issuance?.baseUnits!=='1500000000000000000000000000000000'||receipt?.issuance?.amountNusd!=='1500000000000000')throw Error('NUMINA_DEPLOYMENT_RECEIPT_MISMATCH');
 if(receipt?.verification?.tokenState!==true||receipt?.verification?.roles!==true)throw Error('NUMINA_DEPLOYMENT_NOT_VERIFIED');
 
 function authCandidates(value){

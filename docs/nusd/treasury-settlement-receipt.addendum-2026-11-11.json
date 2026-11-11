@@ -1,0 +1,188 @@
+{
+  "schema": "numina.nusd.receipt-addendum.v1",
+  "addendumId": "numina:nusd:decimals-reconciliation:2026-11-11",
+  "date": "2026-11-11",
+  "status": "UNSIGNED_ADDENDUM",
+  "signed": false,
+  "original": {
+    "path": "docs/nusd/treasury-settlement-receipt.json",
+    "sha256": "7334d78dee023b9cd9a291ebb66a9dd0e3dbc735ed9180712eeed9fabbcbd5c0",
+    "repositoryCommit": "827cb5a335f4afc0a060ebc09cd5c33d003f543a",
+    "edited": false
+  },
+  "counterpart": {
+    "path": "runtime/nusd/treasury-settlement-receipt.json",
+    "sha256": "36b9b9667b572d6edc759ed1237f62166e45b6193f5c53ddfcacd18048e24014"
+  },
+  "purpose": "Record the corrected NUSD unit basis for every amount in the original receipt without editing the signed original.",
+  "correction": {
+    "token": {
+      "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+      "chainId": "962421430",
+      "decimals": 18,
+      "totalSupplyBaseUnits": "1500000000000000000000000000000000",
+      "capBaseUnits": "1500000000000000000000000000000000",
+      "totalSupplyNusd": "1500000000000000",
+      "burnedNusd": "0",
+      "mintEvidence": {
+        "receipt": "runtime/nusd/mint-receipt.json",
+        "receiptSha256": "3dab1a847ba8b0b4a14a92a0b881e5e888af7ffbbab74a9af0e1fe9935bc63ee",
+        "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+        "blockNumber": "51725",
+        "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+        "deploymentReceiptSha256": "6d7d2a3c3f4ee9fe2b95f02a5abf000626bd2e66735bedb0ab78f81883b86e53"
+      }
+    },
+    "statement": "All NUSD amounts in the original are whole-NUSD decimal text. The deployed token uses 18 decimals, so base units = amountNusd x 10^18. The superseded 6-decimal contract candidate (runtime/nusd/history/6d) was never deployed and does not apply to these amounts.",
+    "amounts": {
+      "aggregate.amountNusd": {
+        "amountNusd": "1500000000000000",
+        "baseUnits": "1500000000000000000000000000000000",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      },
+      "mintEvidence.mintedNusd": {
+        "amountNusd": "1500000000000000",
+        "baseUnits": "1500000000000000000000000000000000",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      },
+      "mintEvidence.burnedNusd": {
+        "amountNusd": "0",
+        "baseUnits": "0",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      },
+      "components[bank-usd].amountNusd": {
+        "amountNusd": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      },
+      "components[stripe-usdc].amountNusd": {
+        "amountNusd": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      },
+      "components[native-retained].amountNusd": {
+        "amountNusd": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      }
+    },
+    "settledAmounts": {
+      "components[bank-usd].settledAmount": {
+        "unit": "USD",
+        "amount": "500000000000000",
+        "minorUnits": "50000000000000000",
+        "decimals": 2,
+        "tokenAddress": null,
+        "chainId": null,
+        "externalSettlementVerified": false
+      },
+      "components[stripe-usdc].settledAmount": {
+        "unit": "USDC",
+        "amount": "500000000000000",
+        "baseUnits": "500000000000000000000",
+        "decimals": 6,
+        "tokenAddress": null,
+        "chainId": null,
+        "note": "USDC token contract and chain for this rail are not evidenced in the repository.",
+        "externalSettlementVerified": false
+      },
+      "components[native-retained].settledAmount": {
+        "amountNusd": "500000000000000",
+        "baseUnits": "500000000000000000000000000000000",
+        "decimals": 18,
+        "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+        "chainId": "962421430"
+      }
+    },
+    "usdcConversionRule": "NUSD base units convert to USDC base units by exact division by 1e12; amounts not divisible by 1e12 are rejected, never rounded."
+  },
+  "docsVsRuntimeDiscrepancy": {
+    "summary": "The docs and runtime copies of the treasury settlement receipt (same id numina:treasury:settlement:2026-09-19:v1) are not byte- or field-identical.",
+    "documentsCompared": [
+      {
+        "path": "docs/nusd/treasury-settlement-receipt.json",
+        "sha256": "7334d78dee023b9cd9a291ebb66a9dd0e3dbc735ed9180712eeed9fabbcbd5c0"
+      },
+      {
+        "path": "runtime/nusd/treasury-settlement-receipt.json",
+        "sha256": "36b9b9667b572d6edc759ed1237f62166e45b6193f5c53ddfcacd18048e24014"
+      }
+    ],
+    "fieldDifferences": [
+      {
+        "field": "status",
+        "docs": "FINAL",
+        "runtime": "SETTLED"
+      },
+      {
+        "field": "submissionPerformed",
+        "docs": false,
+        "runtime": true
+      },
+      {
+        "field": "settlementScope / canonicalValuesSource / externalSettlementVerified",
+        "docs": "present (NUMINA_NATIVE_TREASURY_VALUES / NUMINA_NATIVE_TREASURY / false)",
+        "runtime": "absent"
+      },
+      {
+        "field": "components[bank-usd].status",
+        "docs": "NATIVE_ALLOCATED_EXTERNAL_UNVERIFIED",
+        "runtime": "SETTLED"
+      },
+      {
+        "field": "components[bank-usd].submissionPerformed",
+        "docs": false,
+        "runtime": true
+      },
+      {
+        "field": "components[bank-usd].linkedOfficialName",
+        "docs": "NUMINA",
+        "runtime": "Business Advantage Sav"
+      },
+      {
+        "field": "components[stripe-usdc].status",
+        "docs": "NATIVE_ALLOCATED_EXTERNAL_UNVERIFIED",
+        "runtime": "SETTLED"
+      },
+      {
+        "field": "components[stripe-usdc].submissionPerformed",
+        "docs": false,
+        "runtime": true
+      },
+      {
+        "field": "components[native-retained].status",
+        "docs": "SETTLED_NATIVE",
+        "runtime": "SETTLED"
+      },
+      {
+        "field": "components[bank-usd|stripe-usdc].settlementScope/externalSettlementVerified",
+        "docs": "present",
+        "runtime": "absent"
+      },
+      {
+        "field": "note",
+        "docs": "external Bank of America and Stripe settlement remain separately unverified",
+        "runtime": "all three settled 500T locations"
+      }
+    ],
+    "resolution": "Not resolved by this addendum. Neither original is edited. The docs copy is the more conservative statement (external settlement unverified); no provider-issued bank or Stripe evidence exists in this repository, so external settlement must continue to be treated as unverified until such evidence is recorded."
+  },
+  "boundaries": {
+    "onChainActionPerformed": false,
+    "signaturePerformed": false,
+    "fundsMoved": false,
+    "externalSettlementVerified": false
+  }
+}

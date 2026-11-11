@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "numina.treasury.ledger-amount.v1",
+  "title": "Numina treasury ledger amount",
+  "description": "A self-describing ledger amount. baseUnits is an exact unsigned decimal string in the asset's smallest unit. NUSD is the deployed 18-decimal token 0x491c1DF1b5CA77AF797f052c2310ca17039C931b on chain 962421430. USDC uses 6 decimals; USD minor units are cents. tokenAddress and chainId are null when the asset has no token contract (USD) or the rail is not yet evidenced (USDC).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "unit", "recorded", "recordedScale", "baseUnits", "decimals", "tokenAddress", "chainId"],
+  "properties": {
+    "schema": { "const": "numina.treasury.ledger-amount.v1" },
+    "unit": { "enum": ["NUSD", "USDC", "USD"] },
+    "recorded": { "type": "string", "pattern": "^(0|[1-9][0-9]{0,77})$" },
+    "recordedScale": { "enum": ["whole", "minor"] },
+    "baseUnits": { "type": "string", "pattern": "^(0|[1-9][0-9]{0,77})$" },
+    "decimals": { "type": "integer", "minimum": 0, "maximum": 18 },
+    "tokenAddress": { "type": ["string", "null"], "pattern": "^0x[0-9a-fA-F]{40}$" },
+    "chainId": { "type": ["string", "null"], "pattern": "^[1-9][0-9]*$" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "unit": { "const": "NUSD" } } },
+      "then": {
+        "properties": {
+          "decimals": { "const": 18 },
+          "tokenAddress": { "const": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b" },
+          "chainId": { "const": "962421430" }
+        }
+      }
+    },
+    { "if": { "properties": { "unit": { "const": "USDC" } } }, "then": { "properties": { "decimals": { "const": 6 } } } },
+    { "if": { "properties": { "unit": { "const": "USD" } } }, "then": { "properties": { "decimals": { "const": 2 }, "tokenAddress": { "const": null }, "chainId": { "const": null } } } }
+  ]
+}
