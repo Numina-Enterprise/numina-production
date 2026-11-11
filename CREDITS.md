@@ -20,5 +20,6 @@ The text of this CREDITS file is dedicated to the public domain under [CC0 1.0 U
 
 When using or citing this work, you should not imply endorsement by the author or the affirmer.
 
+- CC0 deed (English): https://creativecommons.org/publicdomain/zero/1.0/deed.en
 - CC0 legal code: https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
 - Publicity and privacy rights (not affected by CC0): https://creativecommons.org/publicdomain/zero/1.0/#ref-publicity-rights
