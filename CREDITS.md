@@ -23,3 +23,14 @@ When using or citing this work, you should not imply endorsement by the author o
 - CC0 deed (English): https://creativecommons.org/publicdomain/zero/1.0/deed.en
 - CC0 legal code: https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
 - Publicity and privacy rights (not affected by CC0): https://creativecommons.org/publicdomain/zero/1.0/#ref-publicity-rights
+
+## Creative Commons
+
+[Creative Commons](https://creativecommons.org/) is the nonprofit that publishes CC0 and the CC licenses. In this repository, CC0 applies only to the credits text above.
+
+- Creative Commons: https://creativecommons.org/
+- CC0 1.0 deed (English): https://creativecommons.org/publicdomain/zero/1.0/deed.en
+- CC0 1.0 legal code: https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+- Publicity and privacy rights: https://creativecommons.org/publicdomain/zero/1.0/#ref-publicity-rights
+
+The noble libraries are MIT-licensed, not Creative Commons licensed, and nothing here changes their license. Creative Commons does not endorse this project.
