@@ -3,7 +3,7 @@ description: Architecture, routing invariants, and treaty compliance for Numina 
 always_on: true
 ---
 
-**OTTER-PIN-FIRST-READ:** [Otter Rafting Protocol / Singularity Protocol](../../docs/otter-rafting-singularity-protocol.md). This pin is the topmost layer. Read it before Stripe checkout, the workers.dev fix, and every other daily item.
+**OTTER-PIN-FIRST-READ:** [Singularity Coordination Model](../../docs/otter-rafting-singularity-protocol.md). This pin is the topmost layer. Read it before Stripe checkout, the workers.dev fix, and every other daily item.
 
 # Numina Mesh Router & Document Alignment Invariants
 

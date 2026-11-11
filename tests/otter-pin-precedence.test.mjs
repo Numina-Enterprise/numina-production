@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const pinRel = 'docs/otter-rafting-singularity-protocol.md';
 const read = rel => readFileSync(path.join(root, rel), 'utf8');
-const motto = 'Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned.';
+const protocolBodySha256 = '5146df237edaa9507612ad4ce001391bc91072ebecb3b7eefd304173cb1090f0';
 
 function body(text) {
   const source = text.replace(/^\uFEFF/, '');
@@ -28,19 +29,47 @@ const entryPoints = [
   '.agents/rules/mesh-router-architecture.md'
 ];
 
-test('the pin quotes existing protocol text and leaves missing names as placeholders', () => {
-  const pin = read(pinRel);
-  assert.match(pin, /^# Otter Rafting Protocol \/ Singularity Protocol\r?\n/);
-  assert.match(pin, /This file is the topmost layer\. It is the first thing read each day\./);
-  assert.match(pin, /PLACEHOLDER: repository text that uses the name "Otter Rafting Protocol"/);
-  assert.match(pin, /PLACEHOLDER: repository text that uses "Singularity Protocol" as its own name/);
-  assert.match(pin, /PLACEHOLDER: the source document outside this repository/);
-  assert.match(pin, /PLACEHOLDER: source text that places the Otter Rafting Protocol and the Singularity Protocol above Stripe checkout/);
-  assert.ok(pin.includes(motto));
-  assert.ok(pin.includes('ALL agent definition files across all workspaces must embody the Otter-Raft Singularity Protocol.'));
-  assert.ok(pin.includes('Anti-Drift Handshake: Inter-agent communications maintain continuous cryptographic consensus; any state divergence triggers fail-closed quarantine.'));
-  assert.equal(read('AGENTS.md').includes(motto), true);
-  assert.equal(read('numina-agent-swarm/src/swarm-dispatcher.mjs').includes(motto), true);
+function protocolBody(text) {
+  const source = text.replace(/\r\n/g, '\n');
+  const marker = '<!-- protocol-body -->\n';
+  const at = source.indexOf(marker);
+  assert.notEqual(at, -1, 'protocol body marker');
+  return source.slice(at + marker.length);
+}
+
+const protocolBodyText = `Like otters holding hands, every agent stays connected without losing its independence.
+
+That\u2019s the idea behind Singularity, the coordination model I\u2019m developing at Numina Labs.
+
+As AI agents work together, each needs to retain its own identity, authority, and accountability. Shared work should leave evidence that others can independently check.
+
+Our design brings these principles together:
+
+- Independent identity: each agent remains identifiable, with defined permissions.
+- Ed25519 verification: digital signatures help verify who signed specific data and whether it changed. Authorization still requires separate checks.
+- Evidence and provenance: claims stay connected to their supporting records.
+- Zero Trust: participation alone never grants authority.
+- Multi-signature governance: decisions require the independent approvals defined by policy.
+
+The proposed Singularity Task Envelope organizes coordination around six components: identity, topology, task, evidence, signatures, and protocol versioning. In everyday terms: who is involved, how they connect, what they are doing, and what can be verified.
+
+This application-level design is separate from our published pair-binding Internet-Draft, which proposes associating two fixed software-artifact commitments with attribution and revisioned claims.
+
+Both are work in progress. The task-envelope design and operational multi-signature enforcement still require implementation and verification. The Internet-Draft is a proposal, without IETF endorsement.
+
+The goal is simple: agents that can cooperate while preserving independent identity and verifiable accountability.
+`;
+
+test('the pin body matches the authoritative Singularity Coordination Model text and its SHA-256', () => {
+  const pin = read(pinRel).replace(/\r\n/g, '\n');
+  assert.match(pin, /^# Singularity Coordination Model\n/);
+  assert.match(pin, /\*\*First read\.\*\* This pin is the topmost layer\. It is the first thing read each day\./);
+  assert.match(pin, /\*\*Purpose\.\*\* Authoritative statement of the Singularity Coordination Model, also called the Otter Rafting Protocol \/ Singularity Protocol\./);
+  const recorded = pin.match(/\*\*Protocol body SHA-256:\*\* `([a-f0-9]{64})`/)?.[1];
+  const digest = createHash('sha256').update(protocolBody(pin)).digest('hex');
+  assert.equal(protocolBody(pin), protocolBodyText);
+  assert.equal(digest, protocolBodySha256);
+  assert.equal(recorded, protocolBodySha256);
 });
 
 test('first-read entry points keep the pin pointer at the top', () => {

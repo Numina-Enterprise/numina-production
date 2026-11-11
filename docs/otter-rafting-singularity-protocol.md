@@ -1,66 +1,30 @@
-# Otter Rafting Protocol / Singularity Protocol
+# Singularity Coordination Model
 
-## Reading order
+**First read.** This pin is the topmost layer. It is the first thing read each day. Everything else builds underneath it, including the Stripe checkout work, the workers.dev fix, and the other daily items.
 
-This file is the topmost layer. It is the first thing read each day. Everything else builds underneath it, including the Stripe checkout work, the workers.dev fix, and the other daily items.
+**Purpose.** Authoritative statement of the Singularity Coordination Model, also called the Otter Rafting Protocol / Singularity Protocol.
 
-The sections below copy protocol text that is already in this repository. They do not add rules. Wording that is not in the repository is marked PLACEHOLDER.
+**Protocol body SHA-256:** `5146df237edaa9507612ad4ce001391bc91072ebecb3b7eefd304173cb1090f0`
 
-## Names
+<!-- protocol-body -->
+Like otters holding hands, every agent stays connected without losing its independence.
 
-The owner uses two names for this protocol: "Otter Rafting Protocol" and "Singularity Protocol".
+That’s the idea behind Singularity, the coordination model I’m developing at Numina Labs.
 
-PLACEHOLDER: repository text that uses the name "Otter Rafting Protocol". A search of this repository found no occurrence of "Otter Rafting Protocol", "otter raft", or "rafting".
+As AI agents work together, each needs to retain its own identity, authority, and accountability. Shared work should leave evidence that others can independently check.
 
-PLACEHOLDER: repository text that uses "Singularity Protocol" as its own name. In this repository the words "Singularity Protocol" occur only inside the longer name "Otter-Raft Singularity Protocol".
+Our design brings these principles together:
 
-PLACEHOLDER: the source document outside this repository that carries these two names. It is not in the tree. Leave this placeholder until that document is attached.
+- Independent identity: each agent remains identifiable, with defined permissions.
+- Ed25519 verification: digital signatures help verify who signed specific data and whether it changed. Authorization still requires separate checks.
+- Evidence and provenance: claims stay connected to their supporting records.
+- Zero Trust: participation alone never grants authority.
+- Multi-signature governance: decisions require the independent approvals defined by policy.
 
-Names that do appear, as written in their files:
+The proposed Singularity Task Envelope organizes coordination around six components: identity, topology, task, evidence, signatures, and protocol versioning. In everyday terms: who is involved, how they connect, what they are doing, and what can be verified.
 
-- `AGENTS.md`, section 38 heading: "Mandatory Otter-Raft Singularity Protocol Alignment"
-- `AGENTS.md`, section 38: "Otter-Raft Singularity Protocol"
-- `numina-doc-alignment/docs/Numina-Security.md`: "Otter-Raft Hand-Link Protocol"
-- `numina-doc-alignment/docs/Numina-Security.md`, section heading: "Cryptographic Identity & The Otter-Raft Protocol"
-- `numina-doc-alignment/docs/Numina-Security.md`: "Singularity Raft Topology"
-- `AGENTS.md`: "Singularity Motto" and "Pinned Singularity Motto"
-- `numina-agent-swarm/src/deploy-divisions.mjs`, field name: `singularityProtocol`
-- `VICTORY_CERTIFICATE.md`: "Otter-Raft Singularity Protocol Verbatim Locked"
+This application-level design is separate from our published pair-binding Internet-Draft, which proposes associating two fixed software-artifact commitments with attribution and revisioned claims.
 
-PLACEHOLDER: a statement, already written in a source document, that "Otter Rafting Protocol" and "Singularity Protocol" are the same protocol. This file does not make that equivalence.
+Both are work in progress. The task-envelope design and operational multi-signature enforcement still require implementation and verification. The Internet-Draft is a proposal, without IETF endorsement.
 
-## Protocol text already in the repository
-
-### From `AGENTS.md`
-
-> Singularity Motto: "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."
-
-> ## 38. Mandatory Otter-Raft Singularity Protocol Alignment
-> - Universal Invariant: ALL agent definition files across all workspaces must embody the Otter-Raft Singularity Protocol.
-> - Pinned Singularity Motto: "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."
-> - Anti-Drift Handshake: Inter-agent communications maintain continuous cryptographic consensus; any state divergence triggers fail-closed quarantine.
-> - Sovereign Identity: Unconditional allegiance to Authority Lead Samuel J. Kott (skott34-ed25519) and Guardian numina-guardian-ed25519.
-
-### From `numina-agent-swarm/src/swarm-dispatcher.mjs`
-
-`OTTER_RAFT_SINGULARITY_MOTTO` is the same string as the Pinned Singularity Motto in `AGENTS.md`:
-
-> Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned.
-
-### From `numina-doc-alignment/docs/Numina-Security.md`
-
-These strings differ from the motto above. Both are present in the repository. This file does not choose between them.
-
-> **Motto**: "Like otters holding hands, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."
-
-> **Otter-Raft Hand-Link Protocol**: "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence"
-
-> ## 3. Cryptographic Identity & The Otter-Raft Protocol
-> - **Singularity Raft Topology**: Every agent maintains a continuous cryptographic hand-link to its neighbors (ring topology + shared state root `clusterStateRootSha256`) while preserving independent memory and execution keys.
-> - **Motto Invariant**: "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence"
-
-PLACEHOLDER: source text that says which of these motto strings is authoritative.
-
-## Precedence over daily work
-
-PLACEHOLDER: source text that places the Otter Rafting Protocol and the Singularity Protocol above Stripe checkout, the workers.dev fix, and other daily items. The reading-order note at the top of this file is the owner's instruction for where this pin sits. It is not a protocol rule copied from the repository.
+The goal is simple: agents that can cooperate while preserving independent identity and verifiable accountability.
