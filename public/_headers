@@ -2,6 +2,41 @@
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: no-referrer
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Cross-Origin-Resource-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
+  X-DNS-Prefetch-Control: off
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), display-capture=(), browsing-topics=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000
   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-2tAXL0MXpCFnUKMHj8NnmeDpoQYsECCkLLQ/5ws1dSQ=' 'sha256-B614+Jd2Qyoz2jrBrfvjNUorkR18LMC2w45LXD2waAE=' 'sha256-FYSuNbIYOxc2S1vlP/19PJWXJntuyIBQ9PzxUtGyTEU=' 'sha256-I/H2ZPFKVhmDF+CM87wHkphMgVT/M6hwxRlelT7Alhw=' 'sha256-RcOFH39j5uVKsEQAvdZI1zGIvAa25fcpsgllenb3lb4=' 'sha256-V8yJ6CdISENxNroOdy82yZEriLWfeMZ1hXWGtJo8XQc=' 'sha256-Z5BSm8bAtD76g/G6U2qqxQ6s7i+0+sjk8pXpl58dM3M=' 'sha256-eW+UgFbXXgT02Iws6T53oI2TrZpLDzfKKbIfvAf7eIk=' 'sha256-rTsFNRymltQmGrw583C05AZm9oKE0XJcfoKWCjGAQQU=' 'sha256-uFq9Xo1APyhQai8mlGYU8F+SEV0VxD8ecq23vhtgdt0='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests
+
+/final-build.json
+  Cache-Control: no-store
+/final-manifest.json
+  Cache-Control: no-store
+/business-core.json
+  Cache-Control: no-store
+/security-surfaces.json
+  Cache-Control: no-store
+/ownership.json
+  Cache-Control: no-store
+/wallet-signing-review.json
+  Cache-Control: no-store
+/telemetry-metrics.json
+  Cache-Control: no-store
+/deployment-readiness-inputs.json
+  Cache-Control: no-store
+/current-environments.json
+  Cache-Control: no-store
+/publication-policy.json
+  Cache-Control: no-store
+/downstream-publication.json
+  Cache-Control: no-store
+/mobile-update-policy.json
+  Cache-Control: no-store
+/readyz
+  Cache-Control: no-store
+/downloads/*
+  Cache-Control: private, no-store
+/.well-known/*
+  Cache-Control: no-store
