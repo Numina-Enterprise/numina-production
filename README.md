@@ -1,3 +1,5 @@
+**OTTER-PIN-FIRST-READ:** [Singularity Coordination Model](docs/otter-rafting-singularity-protocol.md). This pin is the topmost layer. Read it before Stripe checkout, the workers.dev fix, and every other daily item.
+
 # NUMINA
 
 ## Singular identity

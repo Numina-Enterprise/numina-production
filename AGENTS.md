@@ -1,3 +1,5 @@
+**OTTER-PIN-FIRST-READ:** [Singularity Coordination Model](docs/otter-rafting-singularity-protocol.md). This pin is the topmost layer. Read it before Stripe checkout, the workers.dev fix, and every other daily item.
+
 # Universal Agent Operational Contract & Governance Specification
 Document Identifier: PROOF-NUMINA-SEC-V1
 Security Classification: Strict Zero-Trust / Production Locked
