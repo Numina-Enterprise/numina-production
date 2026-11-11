@@ -8,6 +8,18 @@
       }
     },
     {
+      "name": "dist/client/.well-known/skott34-ed25519.pub.pem",
+      "digest": {
+        "sha256": "277f6b8a7545435bc4e26ea7ac92686e0378587e25a128fdd9a2dd631bae2462"
+      }
+    },
+    {
+      "name": "dist/client/.well-known/skott34-fn-dsa-1024.pub.json",
+      "digest": {
+        "sha256": "5ebca9a6e876145718d3a5b8978117d3d09661a46546cf4b6a21125cc06d5353"
+      }
+    },
+    {
       "name": "dist/client/1317faaa99cf1272fa36ee6ba288abf2.txt",
       "digest": {
         "sha256": "1f5efa914ce92a9b85cf83ea00ea8ddf564b1fe3c1bd88f69fd49ee67a5b2c15"
@@ -166,7 +178,7 @@
     {
       "name": "dist/client/index.html",
       "digest": {
-        "sha256": "9dbd7a5a62ee85d331290e4bdbaee1ace190b939a68041ee3a05b1507fb1ffb6"
+        "sha256": "56d00cae9aed2b7823fc2fb9e106ffff80914acc1c268bdb41f2b112dfce415b"
       }
     },
     {
@@ -196,7 +208,7 @@
     {
       "name": "dist/client/numina-5.css",
       "digest": {
-        "sha256": "2a82b45dace8e06b5ee3b0d955f2b8860198892d1005a6bdb8b171e94f51153e"
+        "sha256": "b1f88aef6d222e8bfc0f07f8dfc4b9dea06ee0da63e4e35b95a1559cdd8d65bb"
       }
     },
     {
@@ -382,7 +394,7 @@
     {
       "name": "dist/server/index.js",
       "digest": {
-        "sha256": "2f28dca9560f9133756746da5cea46c849e535ab1d91d70875d4d6ce842786ae"
+        "sha256": "0ce76fc399605ab4b8e7dea7e46d16a34398ca06e18c2c520a52608f63b80c22"
       }
     }
   ],
@@ -394,12 +406,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-09T19:42:58.033Z",
+    "timestamp": "2026-11-11T02:39:39.523Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "2357d595eb475526cf6d9b126ff59bf2073b19fa736d89620c4d14445e818bb6",
-      "gitCommit": "a17fcbac35f5c3e44d37b51ed258f512c2288716",
-      "gitTree": "a4031fab75c2d488f113a1e1cfbfac3aa1a57bf9"
+      "sha256": "00a7358781ea3a0322e6541c6afcd288f8de58398289c3fbfa902453bd9ecfb9",
+      "gitCommit": "6f196054e855a1b067d930378c28ca2213265e9b",
+      "gitTree": "61bec3e62a70194dfb0e55a48771258bc07759ef"
     },
     "subjectRoots": [
       "dist/client",
