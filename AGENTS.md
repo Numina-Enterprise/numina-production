@@ -1,3 +1,5 @@
+**First read:** [Singularity Coordination Model](docs/protocols/singularity-coordination-model.md) is the topmost layer. Read it first each day.
+
 # Universal Agent Operational Contract & Governance Specification
 Document Identifier: PROOF-NUMINA-SEC-V1
 Security Classification: Strict Zero-Trust / Production Locked
