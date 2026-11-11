@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import worker,{canonicalSitePath,PRIVATE_NOTICE_JSON} from '../src/worker.js';
+import worker,{canonicalSitePath,FORM_POST_PATHS,PRIVATE_NOTICE_JSON} from '../src/worker.js';
+import {CHECKOUT_PATH} from '../src/checkout-redirect.js';
 
 const env={NUMINA_TELEMETRY_LOGS:'false'};
 function assetsSpy(){const calls=[];return {calls,fetch(req){calls.push(new URL(req.url).pathname);return new Response('asset:'+new URL(req.url).pathname,{status:200,headers:{'Content-Type':'text/plain'}});}};}
@@ -20,7 +21,7 @@ test('canonical paths collapse empty segments and reject encoded traversal',()=>
   assert.equal(canonicalSitePath('robots.txt'),null);
 });
 
-test('worker responses carry the site security headers and do not loosen form posts',async()=>{
+test('worker responses carry the site security headers and allow same-origin form posts',async()=>{
   const assets=assetsSpy();
   const response=await worker.fetch(new Request('https://numinalabs.xyz/robots.txt'),{...env,ASSETS:assets});
   assert.equal(response.status,200);
@@ -32,12 +33,12 @@ test('worker responses carry the site security headers and do not loosen form po
   assert.equal(response.headers.get('X-Permitted-Cross-Domain-Policies'),'none');
   assert.match(response.headers.get('Strict-Transport-Security'),/max-age=31536000/);
   assert.match(response.headers.get('Content-Security-Policy'),/frame-ancestors 'none'/);
-  assert.match(response.headers.get('Content-Security-Policy'),/form-action 'none'/);
+  assert.match(response.headers.get('Content-Security-Policy'),/form-action 'self' https:\/\/checkout\.stripe\.com;/);
   assert.match(response.headers.get('Permissions-Policy'),/payment=\(\)/);
   assert.deepEqual(assets.calls,['/robots.txt']);
   const headers=read('public/_headers');
   for(const name of ['X-Content-Type-Options','X-Frame-Options','Referrer-Policy','Cross-Origin-Opener-Policy','Cross-Origin-Resource-Policy','Permissions-Policy','Strict-Transport-Security'])assert.match(headers,new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
-  assert.match(headers,/form-action 'none'/);
+  assert.match(headers,/form-action 'self' https:\/\/checkout\.stripe\.com;/);
   assert.match(headers,/\/final-build\.json[\s\S]*Cache-Control: no-store/);
 });
 
@@ -58,11 +59,29 @@ test('encoded traversal, empty segments and unexpected methods never reach asset
   assert.equal(robots.status,200);
   assert.deepEqual(collapsed.calls,['/robots.txt']);
 
+  assert.deepEqual([...FORM_POST_PATHS],[CHECKOUT_PATH]);
+  for(const path of FORM_POST_PATHS){
+    if(path===CHECKOUT_PATH)continue;
+    const allowed=assetsSpy();
+    const same=await worker.fetch(new Request('https://numinalabs.xyz'+path,{method:'POST',headers:{Origin:'https://numinalabs.xyz'},body:'a=1'}),{...env,ASSETS:allowed});
+    assert.equal(same.status,200,path);
+    assert.deepEqual(allowed.calls,[path]);
+  }
   const posted=assetsSpy();
-  const post=await worker.fetch(new Request('https://numinalabs.xyz/services',{method:'POST',body:'offering=diagnostic'}),{...env,ASSETS:posted});
+  const post=await worker.fetch(new Request('https://numinalabs.xyz/services',{method:'POST',headers:{Origin:'https://numinalabs.xyz'},body:'offering=diagnostic'}),{...env,ASSETS:posted});
   assert.equal(post.status,405);
   assert.equal(post.headers.get('Allow'),'GET, HEAD');
   assert.equal(posted.calls.length,0);
+  const foreign=await worker.fetch(new Request('https://numinalabs.xyz/services',{method:'POST',headers:{Origin:'https://evil.example'},body:'a=1'}),{...env,ASSETS:assetsSpy()});
+  assert.equal(foreign.status,405);
+  assert.equal(foreign.headers.get('Allow'),'GET, HEAD');
+  const missing=await worker.fetch(new Request('https://numinalabs.xyz/contact',{method:'POST',body:'a=1'}),{...env,ASSETS:assetsSpy()});
+  assert.equal(missing.status,405);
+  const traversal=assetsSpy();
+  const encodedPost=await worker.fetch(new Request('https://numinalabs.xyz/%2e%2e%2fetc/passwd',{method:'POST',headers:{Origin:'https://numinalabs.xyz'},body:'a=1'}),{...env,ASSETS:traversal});
+  assert.equal(encodedPost.status,404);
+  assert.equal(traversal.calls.length,0);
+  assert.equal((await encodedPost.json()).error,'NOT_FOUND');
 
   const trace=await worker.fetch({url:'https://numinalabs.xyz/robots.txt',method:'TRACE',headers:new Headers()},{...env,ASSETS:assetsSpy()});
   assert.equal(trace.status,405);

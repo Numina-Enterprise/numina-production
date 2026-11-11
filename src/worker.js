@@ -14,7 +14,8 @@ import {sitesMcpHttp} from './sites-mcp-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
 import {quantumHttp} from './quantum-http.js';
-const security={"X-Numina-Version":"5.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"scoped-source-projection","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Cross-Origin-Opener-Policy":"same-origin-allow-popups","Cross-Origin-Resource-Policy":"same-origin","X-Permitted-Cross-Domain-Policies":"none","X-DNS-Prefetch-Control":"off","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), display-capture=(), browsing-topics=(), interest-cohort=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-2tAXL0MXpCFnUKMHj8NnmeDpoQYsECCkLLQ/5ws1dSQ=' 'sha256-B614+Jd2Qyoz2jrBrfvjNUorkR18LMC2w45LXD2waAE=' 'sha256-FYSuNbIYOxc2S1vlP/19PJWXJntuyIBQ9PzxUtGyTEU=' 'sha256-I/H2ZPFKVhmDF+CM87wHkphMgVT/M6hwxRlelT7Alhw=' 'sha256-RcOFH39j5uVKsEQAvdZI1zGIvAa25fcpsgllenb3lb4=' 'sha256-V8yJ6CdISENxNroOdy82yZEriLWfeMZ1hXWGtJo8XQc=' 'sha256-Z5BSm8bAtD76g/G6U2qqxQ6s7i+0+sjk8pXpl58dM3M=' 'sha256-eW+UgFbXXgT02Iws6T53oI2TrZpLDzfKKbIfvAf7eIk=' 'sha256-rTsFNRymltQmGrw583C05AZm9oKE0XJcfoKWCjGAQQU=' 'sha256-uFq9Xo1APyhQai8mlGYU8F+SEV0VxD8ecq23vhtgdt0='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests"};
+import {CHECKOUT_PATH,checkoutRedirect} from './checkout-redirect.js';
+const security={"X-Numina-Version":"5.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"scoped-source-projection","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Cross-Origin-Opener-Policy":"same-origin-allow-popups","Cross-Origin-Resource-Policy":"same-origin","X-Permitted-Cross-Domain-Policies":"none","X-DNS-Prefetch-Control":"off","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), display-capture=(), browsing-topics=(), interest-cohort=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-2tAXL0MXpCFnUKMHj8NnmeDpoQYsECCkLLQ/5ws1dSQ=' 'sha256-B614+Jd2Qyoz2jrBrfvjNUorkR18LMC2w45LXD2waAE=' 'sha256-FYSuNbIYOxc2S1vlP/19PJWXJntuyIBQ9PzxUtGyTEU=' 'sha256-I/H2ZPFKVhmDF+CM87wHkphMgVT/M6hwxRlelT7Alhw=' 'sha256-RcOFH39j5uVKsEQAvdZI1zGIvAa25fcpsgllenb3lb4=' 'sha256-V8yJ6CdISENxNroOdy82yZEriLWfeMZ1hXWGtJo8XQc=' 'sha256-Z5BSm8bAtD76g/G6U2qqxQ6s7i+0+sjk8pXpl58dM3M=' 'sha256-eW+UgFbXXgT02Iws6T53oI2TrZpLDzfKKbIfvAf7eIk=' 'sha256-rTsFNRymltQmGrw583C05AZm9oKE0XJcfoKWCjGAQQU=' 'sha256-uFq9Xo1APyhQai8mlGYU8F+SEV0VxD8ecq23vhtgdt0='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' https://checkout.stripe.com; upgrade-insecure-requests"};
 
 // Public-host gate (Nov 2026): numinalabs.xyz and www.numinalabs.xyz serve only public-safe
 // pages. MCP, MCP discovery, control, treasury, NUSD, financial, ops, app, reviewer,
@@ -37,6 +38,8 @@ export function privateSectionNotice(req){
 }
 
 const ALLOWED_METHODS=new Set(['GET','HEAD','POST','PUT','PATCH','DELETE','OPTIONS']);
+// The public checkout form posts here. Page paths are not form actions.
+export const FORM_POST_PATHS=Object.freeze(new Set([CHECKOUT_PATH]));
 const SENSITIVE_FILES=new Set(['/final-build.json','/final-manifest.json','/business-core.json','/security-surfaces.json','/ownership.json','/wallet-signing-review.json','/telemetry-metrics.json','/deployment-readiness-inputs.json','/current-environments.json','/publication-policy.json','/downstream-publication.json','/mobile-update-policy.json','/readyz']);
 // The URL parser has already decoded ordinary escapes and removed dot segments.
 // A leftover "%" is a second encoding (%2e, %2f, %00) that a later decoder could turn back into a traversal.
@@ -75,6 +78,11 @@ export default {
    if(canonical!==url.pathname){const rewritten=requestForPath(req,canonical);if(!rewritten)return finish(response({error:'NOT_FOUND'},404));req=rewritten;url=new URL(req.url);}
    path=canonical;
    if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;if(target.origin!=='https://'+url.hostname)return finish(response({error:'NOT_FOUND'},404));return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   if(req.method==='POST'&&FORM_POST_PATHS.has(path)){
+    if(req.headers.get('Origin')!==url.origin)return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
+    if(path===CHECKOUT_PATH)return finish(await checkoutRedirect(req,env));
+    return finish(await env.ASSETS.fetch(req));
+   }
    if(publicGateBlocks(url.hostname,path))return finish(privateSectionNotice(req));
    if(path==='/favicon.ico'){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
@@ -118,6 +126,7 @@ export default {
    if(path==='/api/core/v1.8/context'&&req.method==='GET')return finish(response(CORE_CONTEXT));
    if(path.startsWith('/api/'))return finish(response({error:'NOT_FOUND'},404));
    if(path.startsWith('/v4/')||path.startsWith('/v5/'))return finish(response({error:'NOT_FOUND'},404));
+   if(req.method==='POST'&&FORM_POST_PATHS.has(path)&&req.headers.get('Origin')===url.origin)return finish(await env.ASSETS.fetch(req));
    if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
    return finish(await env.ASSETS.fetch(req));
   }catch(error){
