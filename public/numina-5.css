@@ -154,6 +154,12 @@ body.n5-page{
 .n5-page .home-services .service-list a{color:var(--n5-ink);font-size:.98rem;font-weight:500;border-radius:8px}
 .n5-page .home-services .service-list a:hover{color:var(--n5-accent);padding-left:8px}
 
+/* Pay buttons sit under the existing contact rows without inheriting the row-link grid. */
+.n5-page .home-services .service-list li{display:flex;flex-direction:column;align-items:stretch}
+.n5-page .home-services .service-list a.service-pay{display:inline-flex;align-self:flex-start;min-height:40px;margin:0 0 14px 30px;padding:8px 16px;grid-template-columns:none;gap:0;font-size:.85rem;font-weight:600;border-radius:999px;color:#061016}
+.n5-page .home-services .service-list a.service-pay:hover{color:#061016;padding-left:16px}
+.n5-page .grid article a.service-pay{margin-top:18px}
+
 /* Sections, callouts, notes. */
 .n5-page .section{padding-block:var(--n5-space);border-bottom-color:var(--n5-line)}
 .n5-page .ecosystem-callout{margin-top:var(--n5-space);padding:clamp(30px,4vw,64px);border:1px solid var(--n5-line);border-radius:calc(var(--n5-radius) + 6px);background:linear-gradient(120deg,#13232d,#0d121d 55%,#17142a);box-shadow:var(--n5-shadow)}
