@@ -55,3 +55,13 @@ release-evidence/** -text
 scripts/build-numina-correctness-reports.py -text
 
 .github/workflows/*.lock.yml linguist-generated=true
+
+# Inputs copied into dist/ feed the application build ID pin
+# (src/application-release-contract.js). Check them out byte-for-byte on every
+# platform so a Windows core.autocrlf=true checkout cannot produce a different pin
+# than the Linux deploy runner.
+public/** -text
+docs/** -text
+config/** -text
+src/** -text
+fixtures/** -text
