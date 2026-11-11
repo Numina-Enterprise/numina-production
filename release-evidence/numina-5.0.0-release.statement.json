@@ -8,6 +8,12 @@
       }
     },
     {
+      "name": "dist/client/.well-known/cc0-deed.en.html",
+      "digest": {
+        "sha256": "2e17b831c6fdcdff4e166ee02a543b413644b336915fcb89b38f06a586353e87"
+      }
+    },
+    {
       "name": "dist/client/.well-known/skott34-ed25519.pub.pem",
       "digest": {
         "sha256": "277f6b8a7545435bc4e26ea7ac92686e0378587e25a128fdd9a2dd631bae2462"
@@ -394,7 +400,7 @@
     {
       "name": "dist/server/index.js",
       "digest": {
-        "sha256": "0ce76fc399605ab4b8e7dea7e46d16a34398ca06e18c2c520a52608f63b80c22"
+        "sha256": "330e0d28e093e7ae60e16c72d23e7be803bfbe5a4a835a8d9a7600aaad9a9523"
       }
     }
   ],
@@ -406,12 +412,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-11T02:39:39.523Z",
+    "timestamp": "2026-11-11T02:48:32.724Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "00a7358781ea3a0322e6541c6afcd288f8de58398289c3fbfa902453bd9ecfb9",
-      "gitCommit": "6f196054e855a1b067d930378c28ca2213265e9b",
-      "gitTree": "61bec3e62a70194dfb0e55a48771258bc07759ef"
+      "sha256": "90a557eed740f75d9f04092ed14f853c124b63757dd91219fa21af396954efe8",
+      "gitCommit": "ac508417a1033511152803e9a16566adc766501c",
+      "gitTree": "967b49fcde8a1ed11e902104adf77ec508588023"
     },
     "subjectRoots": [
       "dist/client",
