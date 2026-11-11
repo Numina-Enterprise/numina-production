@@ -77,7 +77,7 @@ execFileSync(process.execPath,['scripts/source-alignment.mjs'],{stdio:'inherit'}
 // Downloads, data records, vendor bundles and schemas move to dist/private-downloads (same
 // relative paths, never uploaded as assets) so local tools and tests can still read them.
 {
-  const PUBLISHED_FILES=new Set(['robots.txt','sitemap.xml','_headers','_redirects','LICENSE.md','NOTICE.md','1317faaa99cf1272fa36ee6ba288abf2.txt','.well-known/assetlinks.json']);
+  const PUBLISHED_FILES=new Set(['robots.txt','sitemap.xml','_headers','_redirects','LICENSE.md','NOTICE.md','1317faaa99cf1272fa36ee6ba288abf2.txt','.well-known/assetlinks.json','.well-known/skott34-ed25519.pub.pem','.well-known/skott34-fn-dsa-1024.pub.json','.well-known/cc0-deed.en.html']);
   const PUBLISHED_EXTENSIONS=/\.(html|css|png|jpe?g|svg|ico|webp)$/;
   const published=rel=>PUBLISHED_FILES.has(rel)||(!rel.includes('/')&&PUBLISHED_EXTENSIONS.test(rel));
   const walk=(rel='')=>readdirSync('dist/client'+(rel?'/'+rel:'')).flatMap(n=>{const r=rel?rel+'/'+n:n;return statSync('dist/client/'+r).isDirectory()?walk(r):[r];});

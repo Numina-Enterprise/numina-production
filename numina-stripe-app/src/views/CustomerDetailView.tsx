@@ -1,28 +1,27 @@
 import React from "react";
 import {
+  Badge,
   Box,
   ContextView,
   Inline,
-  Text,
-  Badge,
 } from "@stripe/ui-extension-sdk/ui";
 import type { ExtensionContextValue } from "@stripe/ui-extension-sdk/context";
 
-export const CustomerDetailView = ({ userContext }: ExtensionContextValue) => {
+export const CustomerDetailView = (_context: ExtensionContextValue) => {
   return (
     <ContextView title="Numina Customer Allocation">
-      <Box css={{ stack: "y", gap: "medium" }}>
-        <Inline css={{ distribution: "space-between", alignY: "center" }}>
-          <Text weight="bold">Settlement Status</Text>
+      <Box css={{ layout: "column", gap: "medium" }}>
+        <Inline css={{ layout: "row", gap: "medium", alignY: "center" }}>
+          <Box css={{ font: "bodyEmphasized" }}>Settlement Status</Box>
           <Badge type="positive">COMMITTED_SETTLED</Badge>
         </Inline>
-        <Inline css={{ distribution: "space-between" }}>
-          <Text color="secondary">Ledger Format</Text>
-          <Text weight="medium">Integer BigInt (10⁻⁶)</Text>
+        <Inline css={{ layout: "row", gap: "medium", alignY: "center" }}>
+          <Box css={{ color: "secondary" }}>Ledger Format</Box>
+          <Box css={{ font: "bodyEmphasized" }}>Integer BigInt (10⁻⁶)</Box>
         </Inline>
-        <Inline css={{ distribution: "space-between" }}>
-          <Text color="secondary">Disbursement Auth</Text>
-          <Text weight="medium">Dual-Key Ed25519</Text>
+        <Inline css={{ layout: "row", gap: "medium", alignY: "center" }}>
+          <Box css={{ color: "secondary" }}>Disbursement Auth</Box>
+          <Box css={{ font: "bodyEmphasized" }}>Dual-Key Ed25519</Box>
         </Inline>
       </Box>
     </ContextView>

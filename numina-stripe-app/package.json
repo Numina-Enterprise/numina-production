@@ -4,10 +4,12 @@
   "description": "Numina Native Treasury Stripe App for Enterprise Payment & Custody Reconciliation",
   "private": true,
   "scripts": {
-    "start": "stripe-apps start",
-    "build": "stripe-apps build",
+    "start": "stripe apps start",
+    "dev": "stripe apps start",
+    "build": "stripe apps start",
     "upload": "stripe apps upload",
-    "test": "node test.js"
+    "test": "node test.js",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@stripe/ui-extension-sdk": "^2.1.0",
