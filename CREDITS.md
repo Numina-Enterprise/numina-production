@@ -17,3 +17,5 @@ The noble libraries are distributed by their author under the MIT License; see e
 ## Dedication of this file
 
 The text of this CREDITS file is dedicated to the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). This dedication covers only this credits text. It does not change the license of the noble libraries or of any other part of this repository.
+
+When using or citing this work, you should not imply endorsement by the author or the affirmer.
