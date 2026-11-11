@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import worker from '../src/worker.js';
 import {CHECKOUT_PATH} from '../src/checkout-redirect.js';
 
@@ -22,6 +23,23 @@ function stripeFetch(sessionUrl){
   return {calls,fetchImpl};
 }
 
+test('the services page posts diagnostic and audit to the same-origin checkout endpoint',()=>{
+  const html=readFileSync(new URL('../public/services.html',import.meta.url),'utf8');
+  const forms=[...html.matchAll(/<form\b[^>]*>/gi)].map(form=>form[0]);
+  assert.deepEqual(forms,[
+    '<form class="pay-form" method="post" action="/api/payments/v1/checkout">',
+    '<form class="pay-form" method="post" action="/api/payments/v1/checkout">'
+  ]);
+  assert.match(html,/name="offering" value="diagnostic"/);
+  assert.match(html,/name="offering" value="audit"/);
+  assert.equal(forms.some(form=>/https?:\/\//.test(form)),false);
+  for(const page of ['checkout-success.html','checkout-cancel.html']){
+    const body=readFileSync(new URL('../public/'+page,import.meta.url),'utf8');
+    assert.match(body,/href="\/services"/);
+    assert.doesNotMatch(body,/checkout\.stripe\.com|book\.stripe\.com/);
+  }
+});
+
 test('a same-origin checkout post redirects only to hosted Checkout',async()=>{
   const previous=globalThis.fetch;
   const stripe=stripeFetch(hosted);
@@ -41,7 +59,8 @@ test('a same-origin checkout post redirects only to hosted Checkout',async()=>{
     assert.equal(body.get('mode'),'payment');
     assert.equal(body.get('line_items[0][price]'),env.STRIPE_PRICE_DIAGNOSTIC);
     assert.equal(body.get('line_items[0][quantity]'),'1');
-    assert.match(body.get('success_url'),/^https:\/\/numinalabs\.xyz\/services\?session_id=\{CHECKOUT_SESSION_ID\}$/);
+    assert.match(body.get('success_url'),/^https:\/\/numinalabs\.xyz\/checkout-success\?session_id=\{CHECKOUT_SESSION_ID\}$/);
+    assert.equal(body.get('cancel_url'),'https://numinalabs.xyz/checkout-cancel');
   }finally{globalThis.fetch=previous;}
 });
 

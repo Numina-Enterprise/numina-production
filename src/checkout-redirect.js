@@ -71,8 +71,8 @@ export async function checkoutRedirect(req,env,{fetchImpl=globalThis.fetch}={}){
         mode:'payment',
         'line_items[0][price]':price,
         'line_items[0][quantity]':'1',
-        success_url:origin+'/services?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url:origin+'/services'
+        success_url:origin+'/checkout-success?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url:origin+'/checkout-cancel'
       })
     });
   }catch{return json('CHECKOUT_UNAVAILABLE',502);}
