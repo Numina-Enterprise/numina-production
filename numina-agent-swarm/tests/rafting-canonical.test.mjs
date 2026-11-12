@@ -27,16 +27,25 @@ test('RFC 8785 §3.1 I-JSON and §3.2.2.2 reject malformed Unicode and non-JSON 
  assert.throws(()=>canonicalize({'\uDC00':1}),/surrogate/);
  assert.throws(()=>canonicalize({x:undefined}),/invalid/);
  assert.throws(()=>canonicalize({x:1n}),/invalid/);
- assert.throws(()=>canonicalize([,1]),/non-JSON array hole/);
+ assert.throws(()=>canonicalize([,1]),/sparse or extended array/);
 });
 test('tampering changes canonical bytes',()=>{
  assert.notEqual(canonicalize({binding_id:'test-uuid',sequence:10}),canonicalize({binding_id:'test-uuid',sequence:11}));
 });
-test('general canonicalizer omits extra array properties and rejects holes',()=>{
+test('RFC 8785 array order is kept and sparse, hole, and extra non-index arrays are rejected',()=>{
+ assert.equal(canonicalize([10,5,20,15]),'[10,5,20,15]');
+ assert.equal(canonicalize([0,1]),'[0,1]');
+ const sparse=[1,2];
+ sparse.length=4;
+ assert.throws(()=>canonicalize(sparse),/sparse or extended array/);
+ assert.throws(()=>canonicalize([,1]),/sparse or extended array/);
+ assert.throws(()=>canonicalize([1,,3]),/sparse or extended array/);
  const extra=[10,5,20,15];
- extra.note='not-json';
- assert.equal(canonicalize(extra),'[10,5,20,15]');
- assert.throws(()=>canonicalize([,1]),/non-JSON array hole/);
+ extra.note='not-an-index';
+ assert.throws(()=>canonicalize(extra),/sparse or extended array/);
+ const padded=[1,2];
+ padded['01']=9;
+ assert.throws(()=>canonicalize(padded),/sparse or extended array/);
 });
 test('tokenize rejects duplicate names and does not apply sequence or ttl bounds',()=>{
  assert.throws(()=>tokenize('{"a":1,"a":2}'),/duplicate property name/);

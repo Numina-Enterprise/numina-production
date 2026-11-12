@@ -1,6 +1,6 @@
 # NSPR-001: Raft resilience-layer integration contract
 
-Status: experimental, not connected to production consensus.
+Status: experimental binding verifier. The Otter-Raft mesh serializer delegates to `canonicalize()`. No Raft log RPC implementation is in this tree.
 
 ## Non-interference invariant
 The resilience layer MUST NOT call or modify Raft `appendEntries`, `requestVote`, `installSnapshot`, quorum, term, commit-index, log-compaction, or membership mutation paths. It may observe committed index/term and emit advisory health events only. A SLACKENED edge is not a Raft membership removal or leadership transfer.
@@ -22,9 +22,13 @@ The resilience layer MUST NOT call or modify Raft `appendEntries`, `requestVote`
 - During partitions, all globally exclusive operations remain subject to the existing Raft quorum.
 - No unverified shard may overwrite a committed Raft log or snapshot.
 
-## Production module search
+## Production serializer
 
-A search of this branch found no production Raft or consensus implementation. Nothing defines `appendEntries`, `requestVote`, or `installSnapshot`, and `numina-agent-swarm/src/swarm-dispatcher.mjs` is not a Raft log, vote, or snapshot module. Its pinned cluster-state root is unchanged. `canonicalize()` and `signingBytes()` are therefore not wired into production Raft code. `RaftingLink` stays an experimental observer-side helper: a caller supplies `verifyManifest`, and the tests pass `verifyBinding`, which signs with `signingBytes()`. No incompatibility with an on-tree Raft API arises, because that API is not in this tree. A later observer must stay off quorum, term, commit-index, and log mutation, as the non-interference invariant requires.
+Nothing in this tree defines Raft `appendEntries`, `requestVote`, or `installSnapshot`. `numina-agent-swarm/src/swarm-dispatcher.mjs` is not a Raft log. Its pinned cluster-state root is unchanged.
+
+The production Otter-Raft serializer is `canonicalizeJson()` in `numina-doc-alignment/src/numina-mesh-router.mjs`. It now calls `canonicalize()` after the existing soft-hyphen and prototype-pollution checks. Plain JSON objects keep the same canonical bytes. Holes, extra non-index array properties, lone surrogates, and `undefined` values now throw instead of being emitted.
+
+`signingBytes()` is the domain-separated byte string for `numina.rafting-binding.v1` only. The mesh router signs E2EE envelopes and grant transcripts under different domains, so those transcripts still do not call `signingBytes()`. Swapping them would invalidate existing signatures. `RaftingLink` remains an observer: it does not call quorum, term, commit-index, or log mutation paths.
 
 ## Pre-merge gates
 - Pass the isolated Node 26.13.0 test workflow.

@@ -2,6 +2,9 @@ import { createPublicKey, verify, createHash } from 'node:crypto';
 
 const DOMAIN = Buffer.from('numina-rafting-binding-v1\\0'.replace('\\0','\0'),'utf8');
 const MAX_SAFE = Number.MAX_SAFE_INTEGER;
+// One backslash: \d is the digit class. A source spelling of \\d matches a
+// literal backslash and rejects every dense index, including length >= 2.
+const DECIMAL_INDEX = /^(0|[1-9]\d*)$/;
 function fail(message) { throw new Error(message); }
 function validateUnicode(s) {
   for (let i = 0; i < s.length; i++) {
@@ -132,22 +135,16 @@ export function canonicalize(value) {
     return JSON.stringify(value);
   }
   if (Array.isArray(value)) {
-    // RFC 8785 §3.2.3: array element order is kept and elements are never sorted.
-    // RFC 8785 works on JSON data adapted for I-JSON (§3.1). JSON text has no
-    // holes and no extra array properties (RFC 8259), so neither is an RFC
-    // sorting rule. A hole is rejected here as non-JSON input: skipping it or
-    // emitting null would change the array. Extra own properties are not
-    // elements; this general canonicalizer omits them, matching the JSON array
-    // model. The stricter sparse/extended rejection stays on the binding path
-    // in signingBytes(), which verifyBinding() calls. A digit-class index test
-    // belongs there. Writing the class as \\d in a regex literal matches the
-    // two characters "\d" and rejects every dense index, including 0.
-    const parts = new Array(value.length);
+    // RFC 8785 §3.2.3 keeps array element order and does not sort arrays.
+    // Sparse arrays, holes, and extra non-index own properties are not JSON
+    // array elements. They are rejected here, not omitted or turned into null.
+    assertDenseArray(value);
+    let out = '[';
     for (let i = 0; i < value.length; i++) {
-      if (!Object.hasOwn(value, i)) fail('non-JSON array hole');
-      parts[i] = canonicalize(value[i]);
+      if (i) out += ',';
+      out += canonicalize(value[i]);
     }
-    return '[' + parts.join(',') + ']';
+    return out + ']';
   }
   if (value && typeof value === 'object' && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)) {
     // Duplicate names are rejected by tokenize() on raw JSON text. A value
@@ -177,19 +174,19 @@ function validate(m) {
   assertKeys(m.signatures,['node_a_sig','node_b_sig']);
   if (!hex(m.signatures.node_a_sig,128) || !hex(m.signatures.node_b_sig,128)) fail('invalid signatures');
 }
-// Stricter than canonicalize(): bindings must not silently drop holes or
-// extra own properties. The index pattern is a real digit class, not \\d.
-const DECIMAL_INDEX = /^(0|[1-9]\d*)$/;
+function assertDenseArray(value) {
+  for (const key of Object.keys(value)) {
+    if (!DECIMAL_INDEX.test(key) || Number(key) >= value.length) fail('sparse or extended array');
+  }
+  for (let i = 0; i < value.length; i++) {
+    if (!Object.hasOwn(value, i)) fail('sparse or extended array');
+  }
+}
 function assertStrictJsonArrays(value) {
   if (!value || typeof value !== 'object') return;
   if (Array.isArray(value)) {
-    for (const key of Object.keys(value)) {
-      if (!DECIMAL_INDEX.test(key) || Number(key) >= value.length) fail('sparse or extended array');
-    }
-    for (let i = 0; i < value.length; i++) {
-      if (!Object.hasOwn(value, i)) fail('sparse or extended array');
-      assertStrictJsonArrays(value[i]);
-    }
+    assertDenseArray(value);
+    for (let i = 0; i < value.length; i++) assertStrictJsonArrays(value[i]);
     return;
   }
   const proto = Object.getPrototypeOf(value);

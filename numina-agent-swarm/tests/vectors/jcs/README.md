@@ -95,7 +95,8 @@ not as its own subsection.
 | Whitespace removed from parsed JSON | §3.2.1 |
 | `values.json` literals, strings, and numbers | §3.2.2, §3.2.2.1, §3.2.2.2, §3.2.2.3 |
 | `es6-numbers-static.txt` and the published sample lines | §3.2.2.3 |
-| `arrays.json`, `structures.json` element order | §3.2.3 (array order must not change) |
+| `arrays.json`, `structures.json`, and the dense length-2 array test | §3.2.3 array order must not change |
+| Sparse length extension, holes (`[,1]`, `[1,,3]`), and extra non-index properties (`note`, `"01"`) | Rejected. Not JSON array elements. Not an RFC sort. |
 | `french.json`, `weird.json`, `structures.json` member order | §3.2.3 UTF-16 code-unit sort, not locale order |
 | `unicode.json` | §3.1, no Unicode normalization |
 | Output byte compare | §3.2.4 UTF-8, for these vectors |

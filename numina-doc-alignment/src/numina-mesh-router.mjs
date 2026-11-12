@@ -15,6 +15,7 @@
 
 import crypto from 'node:crypto';
 import assert from 'node:assert/strict';
+import { canonicalize } from '../../numina-agent-swarm/src/rafting-resilience.mjs';
 
 // --- SYSTEM CONSTANTS & INVARIANTS ---
 
@@ -125,30 +126,40 @@ export const PINNED_GUARDIAN_PUBLIC_KEY_PEM =
 
 // --- CRYPTOGRAPHIC & UTILITY FUNCTIONS ---
 
-/**
- * Deterministic JSON Canonicalization.
- * Recursively sorts keys, strips whitespace, and rejects prototype pollution and non-finite numbers.
- */
-export function canonicalizeJson(value) {
-  if (value === null || typeof value !== 'object') {
-    if (typeof value === 'number' && !Number.isFinite(value)) {
-      throw new Error('NON_FINITE_NUMBER_FORBIDDEN');
-    }
-    if (typeof value === 'string' && value.includes('\u00ad')) {
-      throw new Error('SOFT_HYPHEN_0XAD_FORBIDDEN');
-    }
-    return JSON.stringify(value);
+function rejectMeshJsonHazards(value) {
+  if (typeof value === 'string') {
+    if (value.includes('\u00ad')) throw new Error('SOFT_HYPHEN_0XAD_FORBIDDEN');
+    return;
   }
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new Error('NON_FINITE_NUMBER_FORBIDDEN');
+    return;
+  }
+  if (!value || typeof value !== 'object') return;
   if (Array.isArray(value)) {
-    return '[' + value.map(canonicalizeJson).join(',') + ']';
+    for (let i = 0; i < value.length; i++) {
+      if (Object.hasOwn(value, i)) rejectMeshJsonHazards(value[i]);
+    }
+    return;
   }
-  const keys = Object.keys(value).sort();
-  for (const k of keys) {
-    if (k === '__proto__' || k === 'constructor' || k === 'prototype') {
+  for (const key of Object.keys(value)) {
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
       throw new Error('PROTOTYPE_POLLUTION_KEY_REJECTED');
     }
+    rejectMeshJsonHazards(value[key]);
   }
-  return '{' + keys.map(k => JSON.stringify(k) + ':' + canonicalizeJson(value[k])).join(',') + '}';
+}
+
+/**
+ * Production Otter-Raft JSON serializer.
+ * Keeps the mesh router's soft-hyphen and prototype-pollution errors, then
+ * emits bytes from rafting-resilience canonicalize(). signingBytes() is not
+ * used here: E2EE and grant transcripts are a different domain from
+ * numina-rafting-binding-v1, and replacing them would invalidate signatures.
+ */
+export function canonicalizeJson(value) {
+  rejectMeshJsonHazards(value);
+  return canonicalize(value);
 }
 
 /**
