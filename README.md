@@ -1,3 +1,5 @@
+**First read:** [Singularity Coordination Model](docs/protocols/singularity-coordination-model.md) is the topmost layer. Read it first each day.
+
 # NUMINA
 
 ## Singular identity

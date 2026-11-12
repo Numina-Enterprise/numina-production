@@ -10,6 +10,7 @@ export const PUBLISH_TARGETS = Object.freeze({
   github: 'https://github.com/skott34-dot/numina-production.git',
   sites: 'https://git.chatgpt-team.site/26e6048d-1773-4301-af72-0b7aeedabce7/'+SITE_PROJECT+'.git'
 });
+const SITES_HOST = 'git.chatgpt-team.site';
 const SHA = /^[a-f0-9]{40}$/;
 const TRANSIENT = new Set(['timeout','connection_reset','temporary_http_failure']);
 const remedies = {
@@ -28,7 +29,8 @@ const remedies = {
   source_identity_mismatch: 'Select the configured Numina repository root and source identity.',
   remote_revision_mismatch: 'Inspect the current remote revision; the requested release is not verified there.',
   output_limit: 'Inspect Git locally; output exceeded the bounded capture limit.',
-  unknown: 'Inspect the publishing host locally; this report intentionally excludes raw command output.'
+  unknown: 'Inspect the publishing host locally; this report intentionally excludes raw command output.',
+  missing_sites_token: 'Set the production environment secret SITES_GIT_TOKEN to authenticate the git push to git.chatgpt-team.site.'
 };
 
 function classify(result) {
@@ -49,9 +51,35 @@ function classify(result) {
   return 'unknown';
 }
 
+function readSitesToken(env) {
+  const raw=typeof env?.SITES_GIT_TOKEN==='string'?env.SITES_GIT_TOKEN:'';
+  const token=raw.trim();
+  if(!token)throw Error('SITES_GIT_TOKEN is missing. Set the production environment secret SITES_GIT_TOKEN to authenticate the git push to git.chatgpt-team.site.');
+  if(/[\r\n\0]/.test(token))throw Error('SITES_GIT_TOKEN is invalid. The production environment secret SITES_GIT_TOKEN must be a single-line value.');
+  return token;
+}
+
+function redactSecrets(text,token) {
+  const source=String(text ?? '');
+  if(!token)return source;
+  const needles=[token,Buffer.from('x-access-token:'+token,'utf8').toString('base64')].filter(Boolean);
+  let out=source;
+  for(const needle of needles)out=out.split(needle).join('***');
+  return out;
+}
+
+function sitesAuthConfig(token) {
+  return 'http.https://'+SITES_HOST+'/.extraheader=Authorization: Basic '+Buffer.from('x-access-token:'+token,'utf8').toString('base64');
+}
+
+function commandTalksToSites(args) {
+  return args.some(value=>typeof value==='string' && (value===PUBLISH_TARGETS.sites || value.includes('://'+SITES_HOST+'/')));
+}
+
 /** Publish a pinned commit with existing host credentials. Never deploys or transfers funds. */
 export async function publishGit({cwd=process.cwd(),target,env=process.env,reportDirectory}={}) {
   if(!Object.hasOwn(PUBLISH_TARGETS,target))throw Error('Select github or sites.');
+  let sitesToken='';
   cwd = realpathSync(resolve(cwd));
   const id = randomUUID();
   const directory = resolve(reportDirectory || resolve(cwd,'.openai/publishing'));
@@ -77,7 +105,10 @@ export async function publishGit({cwd=process.cwd(),target,env=process.env,repor
   };
   const command = (stage,args,attempt=0) => {
     const time = performance.now();
-    const result = spawnSync('git',['-c','safe.directory='+cwd.replaceAll('\\','/'),...args],{
+    const gitArgs=['-c','safe.directory='+cwd.replaceAll('\\','/')];
+    if(sitesToken && commandTalksToSites(args))gitArgs.push('-c',sitesAuthConfig(sitesToken));
+    gitArgs.push(...args);
+    const result = spawnSync('git',gitArgs,{
       cwd,env:{...env,GIT_TERMINAL_PROMPT:'0',GH_PROMPT_DISABLED:'1'},encoding:'utf8',
       windowsHide:true,timeout:30000,maxBuffer:256*1024
     });
@@ -112,6 +143,13 @@ export async function publishGit({cwd=process.cwd(),target,env=process.env,repor
   };
   try {
     persist();
+    if(target==='sites') {
+      try {sitesToken=readSitesToken(env);}
+      catch(error) {
+        console.error(redactSecrets(error instanceof Error && error.message?error.message:'SITES_GIT_TOKEN is missing. Set the production environment secret SITES_GIT_TOKEN to authenticate the git push to git.chatgpt-team.site.',typeof env?.SITES_GIT_TOKEN==='string'?env.SITES_GIT_TOKEN:''));
+        return finish('blocked_before_push','missing_sites_token');
+      }
+    }
     const root = command('repository_root',['rev-parse','--show-toplevel']);
     if(!root.ok)return finish('blocked_before_push',root.failure);
     if(realpathSync(root.output) !== cwd)return finish('blocked_before_push','source_identity_mismatch');
@@ -157,10 +195,12 @@ if(process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url
   try {
     if(process.argv.length !== 3)throw Error('Usage: node scripts/publish-with-telemetry.mjs github|sites');
     const result = await publishGit({target:process.argv[2]});
-    console.log(JSON.stringify(result));
+    console.log(redactSecrets(JSON.stringify(result),process.env.SITES_GIT_TOKEN));
     process.exitCode = result.exitCode;
-  } catch {
-    console.error('Publishing setup failed. Select a configured target and a writable private report directory.');
+  } catch (error) {
+    const message=error instanceof Error?String(error.message):'';
+    if(message.includes('SITES_GIT_TOKEN') || message.startsWith('Usage:'))console.error(redactSecrets(message,process.env.SITES_GIT_TOKEN));
+    else console.error('Publishing setup failed. Select a configured target and a writable private report directory.');
     process.exitCode = 1;
   }
 }

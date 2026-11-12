@@ -1,6 +1,6 @@
 {
   "id": "com.numinalabs.treasury",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "name": "Numina Native Treasury",
   "icon": "assets/icon.png",
   "permissions": [
@@ -9,11 +9,11 @@
       "purpose": "Read Stripe balance to reconcile with Numina Native Treasury BigInt triple-entry ledger"
     },
     {
-      "permission": "charges_read",
+      "permission": "charge_read",
       "purpose": "Ingest payment records for 3-stage atomic settlement"
     },
     {
-      "permission": "customers_read",
+      "permission": "customer_read",
       "purpose": "Link customer profiles to Numina cryptographic IDs"
     }
   ],

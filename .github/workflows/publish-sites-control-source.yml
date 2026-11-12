@@ -91,6 +91,8 @@ jobs:
       - name: Publish Numina Sites mirror
         id: sites_source
         shell: bash
+        env:
+          SITES_GIT_TOKEN: ${{ secrets.SITES_GIT_TOKEN }}
         run: npm run publish:source -- sites
 
       - name: Verify Sites source publication result

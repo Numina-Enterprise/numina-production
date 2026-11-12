@@ -47,7 +47,7 @@ test('Cloudflare uploads retain existing storage and secrets and use a dedicated
   assert.equal(config.account_id,'3c1fd59ef2ef67f750b4bc23e656d722');
   assert.deepEqual(config.routes.map(route=>route.pattern),['numinalabs.xyz/*','www.numinalabs.xyz/*']);
   for(const type of ['plain_text','json','secret_text','secret_key','d1','r2_bucket'])assert.ok(config.unsafe.metadata.keep_bindings.includes(type));
-  assert.ok(config.assets.run_worker_first.includes('/v5/*'));
+  assert.equal(config.assets.run_worker_first,true);
   const workflow=read('.github/workflows/deploy-cloudflare.yml');
   assert.match(workflow,/secrets\.CLOUDFLARE_API_TOKEN/);
   assert.doesNotMatch(workflow,/secrets\.NUMINA_CONTROL_API_KEY/);
