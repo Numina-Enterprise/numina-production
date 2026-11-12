@@ -69,7 +69,7 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "scripts/build.mjs",
       "role": "runs-alignment-check",
-      "sha256": "a3822885c112903e75f18c07ead12d02ff31691f0476a592cdf37133cc3fc420"
+      "sha256": "f35c83f369b4db44298e08d2786607ec2d10366b86abb6068a53eaf9a74dc77b"
     },
     {
       "path": "config/numina-release.v1.json",
