@@ -30,7 +30,7 @@
       "storeReleaseSubmitted": false
     },
     "finalBuild": {
-      "versionCode": 4,
+      "versionCode": 5,
       "versionName": "5.0.0",
       "signedArtifactRequired": true,
       "googlePlaySubmissionReceipt": null
@@ -80,7 +80,7 @@
   "finalBuild": {
     "status": "FINAL_SOURCE_ALIGNED",
     "applicationVersion": "5.0.0",
-    "androidVersionCode": 4,
+    "androidVersionCode": 5,
     "iosBuildNumber": 7,
     "nusd": {
       "chainId": "962421430",
