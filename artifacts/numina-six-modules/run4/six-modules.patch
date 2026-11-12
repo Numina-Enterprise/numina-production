@@ -1,0 +1,563 @@
+diff --git a/artifacts/numina-six-modules/run4/status.md b/artifacts/numina-six-modules/run4/status.md
+new file mode 100644
+index 00000000..234a29f0
+--- /dev/null
++++ b/artifacts/numina-six-modules/run4/status.md
+@@ -0,0 +1 @@
++repo=https://github.com/Numina-Enterprise/numina-production.git branch=cursor/six-treasury-modules-eff3 base=96dbf1b4690f401856cc26e5877b2547b42d23bd
+diff --git a/src/treasury-modules/amounts.js b/src/treasury-modules/amounts.js
+new file mode 100644
+index 00000000..ec884819
+--- /dev/null
++++ b/src/treasury-modules/amounts.js
+@@ -0,0 +1,27 @@
++import {controlError} from '../control.js';
++
++// Same unsigned decimal-string bound as the native treasury journal. No provider I/O.
++export const UNSIGNED_AMOUNT=/^(0|[1-9][0-9]{0,77})$/;
++const ADDRESS=/^0x[0-9a-fA-F]{40}$/;
++export const ZERO_ADDRESS='0x0000000000000000000000000000000000000000';
++
++export function requirePositiveAmount(value,code='INVALID_AMOUNT'){
++  if(typeof value!=='string'||!UNSIGNED_AMOUNT.test(value)||value==='0')controlError(code,400);
++  return BigInt(value);
++}
++export function amountText(value){
++  const text=value.toString();
++  if(!UNSIGNED_AMOUNT.test(text))controlError('AMOUNT_OUT_OF_RANGE',409);
++  return text;
++}
++export function requireDecimals(value,code='INVALID_DECIMALS'){
++  if(!Number.isInteger(value)||value<0||value>36)controlError(code,400);
++  return value;
++}
++export function requireAddress(value,code='INVALID_ADDRESS'){
++  if(typeof value!=='string'||!ADDRESS.test(value))controlError(code,400);
++  return value;
++}
++export function isZeroAddress(value){
++  return typeof value==='string'&&value.toLowerCase()===ZERO_ADDRESS;
++}
+diff --git a/src/treasury-modules/buidl-adapter.js b/src/treasury-modules/buidl-adapter.js
+new file mode 100644
+index 00000000..2db1976d
+--- /dev/null
++++ b/src/treasury-modules/buidl-adapter.js
+@@ -0,0 +1,15 @@
++import {prepareFundObservation} from './fund-adapter.js';
++
++// NUSD-facing adapter for a tokenized money market fund (BUIDL). Decimals are an input.
++// This file does not assume BUIDL decimals equal either NUSD variant, and it does not credit NUSD.
++export const BUIDL_ADAPTER=Object.freeze({
++  schema:'numina.treasury.buidl-adapter.v1',
++  module:'buidl-adapter',
++  symbol:'BUIDL',
++  instrumentClass:'TOKENIZED_MONEY_MARKET_FUND',
++  issuerLabel:'BlackRock'
++});
++
++export function prepareBuidlObservation(input){
++  return prepareFundObservation(BUIDL_ADAPTER,input);
++}
+diff --git a/src/treasury-modules/fund-adapter.js b/src/treasury-modules/fund-adapter.js
+new file mode 100644
+index 00000000..6792de47
+--- /dev/null
++++ b/src/treasury-modules/fund-adapter.js
+@@ -0,0 +1,31 @@
++import {controlError} from '../control.js';
++import {requireAddress,requireDecimals,requirePositiveAmount} from './amounts.js';
++
++// Shared preparation for tokenized-fund observations. An observation does not mint or credit NUSD.
++export function prepareFundObservation(spec,input){
++  if(!input||input.symbol!==spec.symbol)controlError('FUND_SYMBOL_MISMATCH',400);
++  if(input.convert===true||input.mintNusd===true)controlError('FUND_CONVERSION_EXECUTION_REFUSED',409);
++  const decimals=requireDecimals(input.decimals);
++  if(input.nusdDecimals!==6&&input.nusdDecimals!==18)controlError('NUSD_DECIMAL_VARIANT_REQUIRED',400);
++  requirePositiveAmount(input.baseUnits,'INVALID_AMOUNT');
++  requireAddress(input.tokenAddress,'INVALID_TOKEN_ADDRESS');
++  return Object.freeze({
++    schema:spec.schema,
++    module:spec.module,
++    instrument:spec.symbol,
++    instrumentClass:spec.instrumentClass,
++    issuerLabel:spec.issuerLabel,
++    status:'PREPARED',
++    tokenAddress:input.tokenAddress,
++    instrumentDecimals:decimals,
++    instrumentBaseUnits:input.baseUnits,
++    nusdDecimalsNoted:input.nusdDecimals,
++    selectedNusdVariant:null,
++    sameDecimalCount:decimals===input.nusdDecimals,
++    decimalVariantsUnresolved:true,
++    nusdCredited:'0',
++    conversionPerformed:false,
++    executionPerformed:false,
++    chainObservationPerformed:false
++  });
++}
+diff --git a/src/treasury-modules/index.js b/src/treasury-modules/index.js
+new file mode 100644
+index 00000000..2cf8c28e
+--- /dev/null
++++ b/src/treasury-modules/index.js
+@@ -0,0 +1,23 @@
++import {prepareBuidlObservation} from './buidl-adapter.js';
++import {prepareQualifiedBankEscrow} from './qualified-bank-escrow.js';
++import {prepareRevenueDistribution} from './revenue-splitter.js';
++import {createSolvencyLedger} from './solvency-ledger.js';
++import {prepareReserveSettlement,SELECTED_RUNTIME_VARIANT} from './treasury-reserve.js';
++import {prepareUsdyObservation} from './usdy-adapter.js';
++
++// Source catalog only. Not imported by src/native-treasury.js or src/treasury-submission.js.
++export const SIX_TREASURY_MODULES=Object.freeze([
++  Object.freeze({id:'revenue-splitter',prepare:prepareRevenueDistribution,executionWired:false}),
++  Object.freeze({id:'treasury-reserve',prepare:prepareReserveSettlement,executionWired:false,selectedRuntimeVariant:SELECTED_RUNTIME_VARIANT}),
++  Object.freeze({id:'qualified-bank-escrow',prepare:prepareQualifiedBankEscrow,executionWired:false}),
++  Object.freeze({id:'solvency-ledger',prepare:createSolvencyLedger,executionWired:false}),
++  Object.freeze({id:'usdy-adapter',prepare:prepareUsdyObservation,executionWired:false}),
++  Object.freeze({id:'buidl-adapter',prepare:prepareBuidlObservation,executionWired:false})
++]);
++
++export {prepareRevenueDistribution,executeRevenueDistribution,splitRevenueAmount,REVENUE_SPLITTER_REFERENCE} from './revenue-splitter.js';
++export {prepareReserveSettlement,prepareReserveTransferFrom,authorizeReserveSettlement,rescaleReserveBaseUnits,TREASURY_RESERVE_REFERENCE,NUSD_DECIMAL_VARIANTS,SELECTED_RUNTIME_VARIANT} from './treasury-reserve.js';
++export {prepareQualifiedBankEscrow,releaseQualifiedBankEscrow,assertEscrowConserved} from './qualified-bank-escrow.js';
++export {createSolvencyLedger,postSolvencyEntry,solvencyResidual,combinedSolvency} from './solvency-ledger.js';
++export {prepareUsdyObservation,USDY_ADAPTER} from './usdy-adapter.js';
++export {prepareBuidlObservation,BUIDL_ADAPTER} from './buidl-adapter.js';
+diff --git a/src/treasury-modules/qualified-bank-escrow.js b/src/treasury-modules/qualified-bank-escrow.js
+new file mode 100644
+index 00000000..840aebc1
+--- /dev/null
++++ b/src/treasury-modules/qualified-bank-escrow.js
+@@ -0,0 +1,47 @@
++import {controlError} from '../control.js';
++import {amountText,requirePositiveAmount} from './amounts.js';
++
++// Mirrors PREPARE_BANK_TRANSACTION fields from src/native-treasury-model.js:
++// amountMinor, currency USD, destination reference, submission_performed false.
++// This module does not append a journal event or contact a bank.
++const REFERENCE=/^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$/;
++const DIGEST=/^sha256:[a-f0-9]{64}$/;
++
++export function prepareQualifiedBankEscrow({amountMinor,currency,destinationReference,institutionReference,qualificationEvidenceDigest=null}){
++  const amount=requirePositiveAmount(amountMinor,'INVALID_TRANSACTION_AMOUNT');
++  if(currency!=='USD')controlError('INVALID_TRANSACTION_REFERENCE',400);
++  if(typeof destinationReference!=='string'||!REFERENCE.test(destinationReference))controlError('INVALID_TRANSACTION_REFERENCE',400);
++  if(typeof institutionReference!=='string'||!REFERENCE.test(institutionReference))controlError('INVALID_INSTITUTION_REFERENCE',400);
++  if(qualificationEvidenceDigest!==null&&(typeof qualificationEvidenceDigest!=='string'||!DIGEST.test(qualificationEvidenceDigest)))controlError('INVALID_QUALIFICATION_DIGEST',400);
++  const prepared=Object.freeze({
++    schema:'numina.treasury.qualified-bank-escrow.preparation.v1',
++    module:'qualified-bank-escrow',
++    kind:'bank_transaction_request',
++    status:'PREPARED',
++    currency:'USD',
++    amountMinor:amountText(amount),
++    escrowedAmountMinor:amountText(amount),
++    releasedAmountMinor:'0',
++    destinationReference,
++    institutionReference,
++    qualificationEvidenceDigest,
++    qualificationVerified:false,
++    fundsMoved:false,
++    submissionPerformed:false,
++    executionPerformed:false,
++    receipt:null
++  });
++  assertEscrowConserved(prepared);
++  return prepared;
++}
++
++export function assertEscrowConserved(prepared){
++  const escrowed=BigInt(prepared.escrowedAmountMinor);
++  const released=BigInt(prepared.releasedAmountMinor);
++  if(escrowed<0n||released<0n||escrowed+released!==BigInt(prepared.amountMinor))controlError('ESCROW_NOT_CONSERVED',409);
++  return true;
++}
++
++export function releaseQualifiedBankEscrow(){
++  controlError('BANK_RELEASE_NOT_WIRED',409);
++}
+diff --git a/src/treasury-modules/revenue-splitter.js b/src/treasury-modules/revenue-splitter.js
+new file mode 100644
+index 00000000..a8671b5a
+--- /dev/null
++++ b/src/treasury-modules/revenue-splitter.js
+@@ -0,0 +1,55 @@
++import {controlError} from '../control.js';
++import {amountText,requirePositiveAmount} from './amounts.js';
++
++// Reference copy: numina-smart-contracts/contracts/NuminaRevenueSplitter.sol
++// SHA-256 685d081ff1b4485a112eeb926f4e0edff71b419879b655d8b7ceb31a8d22f000 (2122 bytes).
++// The reference receive() calls distributeRevenue(), which forwards with transfer.
++// Weights are 70/20/10. Integer-division remainder is assigned to protocol.
++export const REVENUE_SPLITTER_REFERENCE=Object.freeze({
++  label:'reference-original',
++  path:'numina-smart-contracts/contracts/NuminaRevenueSplitter.sol',
++  sha256:'685d081ff1b4485a112eeb926f4e0edff71b419879b655d8b7ceb31a8d22f000',
++  bytes:2122,
++  reserveBps:7000,stakingBps:2000,protocolBps:1000,totalBps:10000,
++  knownIssues:Object.freeze([
++    'receive() immediately calls distributeRevenue()',
++    'distributeRevenue() forwards native value with transfer',
++    '70/20/10 integer division; remainder is assigned to protocol'
++  ])
++});
++
++const RESERVE_BPS=7000n,STAKING_BPS=2000n,PROTOCOL_BPS=1000n,TOTAL_BPS=10000n;
++
++export function splitRevenueAmount(amount){
++  const total=requirePositiveAmount(amount,'ZERO_REVENUE');
++  const reserve=(total*RESERVE_BPS)/TOTAL_BPS;
++  const staking=(total*STAKING_BPS)/TOTAL_BPS;
++  const protocol=total-reserve-staking;
++  if(reserve+staking+protocol!==total)controlError('SPLIT_NOT_CONSERVED',409);
++  if(RESERVE_BPS+STAKING_BPS+PROTOCOL_BPS!==TOTAL_BPS)controlError('BPS_NOT_CONSERVED',409);
++  return Object.freeze({
++    amount:amountText(total),
++    reserve:amountText(reserve),
++    staking:amountText(staking),
++    protocol:amountText(protocol)
++  });
++}
++
++// Preparation only. Inbound value is accounted and is not forwarded.
++export function prepareRevenueDistribution(amount){
++  const shares=splitRevenueAmount(amount);
++  return Object.freeze({
++    schema:'numina.treasury.revenue-splitter.preparation.v1',
++    module:'revenue-splitter',
++    status:'PREPARED',
++    reference:REVENUE_SPLITTER_REFERENCE.path,
++    executionPerformed:false,
++    valueForwarded:false,
++    submissionPerformed:false,
++    shares
++  });
++}
++
++export function executeRevenueDistribution(){
++  controlError('REVENUE_DISTRIBUTION_EXECUTION_NOT_WIRED',409);
++}
+diff --git a/src/treasury-modules/solvency-ledger.js b/src/treasury-modules/solvency-ledger.js
+new file mode 100644
+index 00000000..58af7e06
+--- /dev/null
++++ b/src/treasury-modules/solvency-ledger.js
+@@ -0,0 +1,58 @@
++import {controlError} from '../control.js';
++import {amountText,requireDecimals,requirePositiveAmount} from './amounts.js';
++
++// Integer ledger of recorded base units. It does not claim external solvency or add across decimal variants.
++const COMPONENT=/^[a-z0-9][a-z0-9-]{0,63}$/;
++
++export function createSolvencyLedger(){
++  return Object.freeze({
++    schema:'numina.treasury.solvency-ledger.v1',
++    module:'solvency-ledger',
++    entries:Object.freeze([]),
++    externallySolvent:false,
++    executionPerformed:false
++  });
++}
++
++export function postSolvencyEntry(ledger,entry){
++  if(!ledger||ledger.schema!=='numina.treasury.solvency-ledger.v1'||ledger.executionPerformed!==false)controlError('SOLVENCY_LEDGER_INVALID',409);
++  if(!entry||typeof entry.id!=='string'||!COMPONENT.test(entry.id)||typeof entry.component!=='string'||!COMPONENT.test(entry.component))controlError('INVALID_SOLVENCY_ENTRY',400);
++  if(entry.direction!=='asset'&&entry.direction!=='liability')controlError('INVALID_SOLVENCY_ENTRY',400);
++  if(ledger.entries.some(item=>item.id===entry.id))controlError('DUPLICATE_SOLVENCY_ENTRY',409);
++  const decimals=requireDecimals(entry.decimals);
++  const baseUnits=requirePositiveAmount(entry.baseUnits,'INVALID_AMOUNT');
++  const posted=Object.freeze({id:entry.id,component:entry.component,decimals,direction:entry.direction,baseUnits:amountText(baseUnits)});
++  return Object.freeze({
++    ...ledger,
++    entries:Object.freeze([...ledger.entries,posted]),
++    externallySolvent:false,
++    executionPerformed:false
++  });
++}
++
++export function solvencyResidual(ledger,decimals){
++  requireDecimals(decimals);
++  let assets=0n,liabilities=0n;
++  for(const entry of ledger.entries){
++    if(entry.decimals!==decimals)continue;
++    const amount=BigInt(entry.baseUnits);
++    if(entry.direction==='asset')assets+=amount;
++    else liabilities+=amount;
++  }
++  return Object.freeze({
++    decimals,
++    assets:amountText(assets),
++    liabilities:amountText(liabilities),
++    residual:amountText(assets>=liabilities?assets-liabilities:liabilities-assets),
++    residualSign:assets>=liabilities?'non-negative':'deficit',
++    externallySolvent:false,
++    executionPerformed:false
++  });
++}
++
++export function combinedSolvency(ledger){
++  const decimals=new Set(ledger.entries.map(entry=>entry.decimals));
++  if(decimals.size>1)controlError('DECIMAL_VARIANTS_NOT_ADDITIVE',409);
++  const only=[...decimals][0]??0;
++  return solvencyResidual(ledger,only);
++}
+diff --git a/src/treasury-modules/treasury-reserve.js b/src/treasury-modules/treasury-reserve.js
+new file mode 100644
+index 00000000..8a5b6f58
+--- /dev/null
++++ b/src/treasury-modules/treasury-reserve.js
+@@ -0,0 +1,86 @@
++import {controlError} from '../control.js';
++import {isZeroAddress,requireAddress,requirePositiveAmount} from './amounts.js';
++
++const HEX32=/^0x[0-9a-fA-F]{64}$/;
++
++// Reference copy: numina-smart-contracts/contracts/NuminaTreasuryReserve.sol
++// SHA-256 2f1c5551b51042882bf445d96a61e5a4d38fbe491fc358b1c676a488871192ff (4138 bytes).
++// This module does not replace that file and does not rescale any token.
++export const TREASURY_RESERVE_REFERENCE=Object.freeze({
++  label:'reference-original',
++  path:'numina-smart-contracts/contracts/NuminaTreasuryReserve.sol',
++  sha256:'2f1c5551b51042882bf445d96a61e5a4d38fbe491fc358b1c676a488871192ff',
++  bytes:4138,
++  decimals:6,
++  capExpression:'1_500_000_000_000_000 * 10**6',
++  baseUnitCap:'1500000000000000000000',
++  knownIssues:Object.freeze([
++    'Reference treasury uses 6 decimals and a 1.5-quadrillion cap; the receipt-bound on-chain NUSD source uses 18 decimals',
++    'guardian is stored and unused',
++    'executeSettlement accepts any nonzero proofHash and does not check a signature',
++    'transferFrom does not reject a zero address'
++  ])
++});
++
++// Unselected. The receipt-bound source and the runtime candidate stay separate files.
++export const NUSD_DECIMAL_VARIANTS=Object.freeze([
++  Object.freeze({id:'vengeance-treasury-reserve-6d',decimals:6,baseUnits:'1500000000000000000000',sha256:TREASURY_RESERVE_REFERENCE.sha256,role:'reference-original'}),
++  Object.freeze({id:'receipt-bound-numina-usd-18d',decimals:18,baseUnits:'1500000000000000000000000000000000',sha256:'08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238',role:'receipt-bound-source',receipt:'docs/nusd/deployment-receipt.json'}),
++  Object.freeze({id:'runtime-candidate-numina-usd-6d',decimals:6,sha256:'c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510',role:'runtime-candidate',path:'runtime/nusd/contracts/NuminaUSD.sol'})
++]);
++export const SELECTED_RUNTIME_VARIANT=null;
++
++export function prepareReserveSettlement({owner,guardian,recipient,amount,proofHash,debitFrom,reserveAddress}){
++  requireAddress(owner,'INVALID_OWNER');
++  requireAddress(guardian,'INVALID_GUARDIAN');
++  requireAddress(recipient,'INVALID_RECIPIENT');
++  requireAddress(debitFrom,'INVALID_DEBIT_ACCOUNT');
++  requireAddress(reserveAddress,'INVALID_RESERVE_ADDRESS');
++  if(isZeroAddress(guardian)||isZeroAddress(owner)||guardian.toLowerCase()===owner.toLowerCase())controlError('GUARDIAN_MUST_BE_DISTINCT',400);
++  if(isZeroAddress(recipient))controlError('INVALID_RECIPIENT',400);
++  if(isZeroAddress(reserveAddress))controlError('INVALID_RESERVE_ADDRESS',400);
++  const debit=debitFrom.toLowerCase();
++  if(debit!==owner.toLowerCase()&&debit!==reserveAddress.toLowerCase())controlError('INVALID_DEBIT_ACCOUNT',400);
++  requirePositiveAmount(amount,'ZERO_SETTLEMENT_AMOUNT');
++  if(typeof proofHash!=='string'||!HEX32.test(proofHash)||/^0x0{64}$/i.test(proofHash))controlError('INVALID_PROOF_HASH',400);
++  return Object.freeze({
++    schema:'numina.treasury.reserve.preparation.v1',
++    module:'treasury-reserve',
++    status:'PREPARED',
++    reference:TREASURY_RESERVE_REFERENCE.path,
++    decimals:TREASURY_RESERVE_REFERENCE.decimals,
++    selectedRuntimeVariant:SELECTED_RUNTIME_VARIANT,
++    executionPerformed:false,
++    balancesMoved:false,
++    proofHashAuthorizesExecution:false,
++    guardianUsed:true,
++    signatureVerificationPerformed:false,
++    owner,guardian,recipient,amount,proofHash,debitFrom,reserveAddress
++  });
++}
++
++export function prepareReserveTransferFrom({from,to,amount}){
++  requireAddress(from,'INVALID_ADDRESS');
++  requireAddress(to,'INVALID_ADDRESS');
++  if(isZeroAddress(from)||isZeroAddress(to))controlError('TRANSFER_TO_ZERO_ADDRESS',400);
++  requirePositiveAmount(amount);
++  return Object.freeze({status:'PREPARED',executionPerformed:false,balancesMoved:false,from,to,amount});
++}
++
++// A nonzero proofHash is not authorization. Present signatures are not checked here.
++export function authorizeReserveSettlement(preparation,signatures={}){
++  if(!preparation||preparation.status!=='PREPARED'||preparation.proofHashAuthorizesExecution!==false)controlError('SETTLEMENT_NOT_PREPARED',409);
++  const guardianSignature=signatures.guardianSignature??null;
++  const authoritySignature=signatures.authoritySignature??null;
++  if(!guardianSignature||!authoritySignature)controlError('PROOF_HASH_IS_NOT_A_SIGNATURE',409);
++  return Object.freeze({
++    status:'BLOCKED',
++    executionPerformed:false,
++    signatureVerificationPerformed:false,
++    reason:'SIGNATURE_VERIFICATION_NOT_PERFORMED'
++  });
++}
++
++export function rescaleReserveBaseUnits(){
++  controlError('DECIMAL_RESCALE_REFUSED',409);
++}
+diff --git a/src/treasury-modules/usdy-adapter.js b/src/treasury-modules/usdy-adapter.js
+new file mode 100644
+index 00000000..fe6b749c
+--- /dev/null
++++ b/src/treasury-modules/usdy-adapter.js
+@@ -0,0 +1,15 @@
++import {prepareFundObservation} from './fund-adapter.js';
++
++// NUSD-facing adapter for tokenized Treasury notes (USDY). Decimals are an input.
++// This file does not assume USDY decimals equal the 6-decimal reference reserve or the 18-decimal receipt-bound NUSD.
++export const USDY_ADAPTER=Object.freeze({
++  schema:'numina.treasury.usdy-adapter.v1',
++  module:'usdy-adapter',
++  symbol:'USDY',
++  instrumentClass:'TOKENIZED_TREASURY_NOTES',
++  issuerLabel:'Ondo'
++});
++
++export function prepareUsdyObservation(input){
++  return prepareFundObservation(USDY_ADAPTER,input);
++}
+diff --git a/tests/numina-six-modules.test.mjs b/tests/numina-six-modules.test.mjs
+new file mode 100644
+index 00000000..7fe6e886
+--- /dev/null
++++ b/tests/numina-six-modules.test.mjs
+@@ -0,0 +1,139 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import {createHash} from 'node:crypto';
++import {
++  SIX_TREASURY_MODULES,
++  BUIDL_ADAPTER,
++  NUSD_DECIMAL_VARIANTS,
++  REVENUE_SPLITTER_REFERENCE,
++  SELECTED_RUNTIME_VARIANT,
++  TREASURY_RESERVE_REFERENCE,
++  USDY_ADAPTER,
++  authorizeReserveSettlement,
++  combinedSolvency,
++  createSolvencyLedger,
++  executeRevenueDistribution,
++  postSolvencyEntry,
++  prepareBuidlObservation,
++  prepareQualifiedBankEscrow,
++  prepareReserveSettlement,
++  prepareReserveTransferFrom,
++  prepareRevenueDistribution,
++  prepareUsdyObservation,
++  releaseQualifiedBankEscrow,
++  rescaleReserveBaseUnits,
++  solvencyResidual,
++  splitRevenueAmount
++} from '../src/treasury-modules/index.js';
++
++const read=path=>fs.readFileSync(path);
++const sha256=path=>createHash('sha256').update(read(path)).digest('hex');
++const throws=(fn,code)=>assert.throws(fn,error=>error.code===code);
++const owner='0x1111111111111111111111111111111111111111';
++const guardian='0x2222222222222222222222222222222222222222';
++const recipient='0x3333333333333333333333333333333333333333';
++const reserve='0x4444444444444444444444444444444444444444';
++const proof='0x'+'ab'.repeat(32);
++
++test('six modules stay unwired and the reference contracts keep their hashes',()=>{
++  assert.equal(SIX_TREASURY_MODULES.length,6);
++  assert.deepEqual(SIX_TREASURY_MODULES.map(module=>module.id),['revenue-splitter','treasury-reserve','qualified-bank-escrow','solvency-ledger','usdy-adapter','buidl-adapter']);
++  for(const module of SIX_TREASURY_MODULES)assert.equal(module.executionWired,false);
++  assert.equal(SELECTED_RUNTIME_VARIANT,null);
++  assert.equal(read(REVENUE_SPLITTER_REFERENCE.path).length,REVENUE_SPLITTER_REFERENCE.bytes);
++  assert.equal(sha256(REVENUE_SPLITTER_REFERENCE.path),REVENUE_SPLITTER_REFERENCE.sha256);
++  assert.equal(read(TREASURY_RESERVE_REFERENCE.path).length,TREASURY_RESERVE_REFERENCE.bytes);
++  assert.equal(sha256(TREASURY_RESERVE_REFERENCE.path),TREASURY_RESERVE_REFERENCE.sha256);
++  const receipt=JSON.parse(read('docs/nusd/deployment-receipt.json'));
++  assert.equal(receipt.issuance.decimals,18);
++  assert.equal(receipt.issuance.externallyBackedClaim,false);
++  const bound=NUSD_DECIMAL_VARIANTS.find(variant=>variant.id==='receipt-bound-numina-usd-18d');
++  assert.equal(bound.sha256,receipt.sourceSha256);
++  assert.equal(bound.baseUnits,receipt.issuance.baseUnits);
++  const runtime=NUSD_DECIMAL_VARIANTS.find(variant=>variant.id==='runtime-candidate-numina-usd-6d');
++  assert.equal(sha256(runtime.path),runtime.sha256);
++  assert.match(TREASURY_RESERVE_REFERENCE.knownIssues.join('\n'),/guardian is stored and unused/);
++  assert.match(TREASURY_RESERVE_REFERENCE.knownIssues.join('\n'),/nonzero proofHash/);
++  assert.match(TREASURY_RESERVE_REFERENCE.knownIssues.join('\n'),/transferFrom/);
++  const referenceCap=BigInt(TREASURY_RESERVE_REFERENCE.baseUnitCap);
++  assert.notEqual(referenceCap,BigInt(bound.baseUnits));
++  assert.equal(referenceCap*(10n**12n),BigInt(bound.baseUnits));
++  throws(()=>rescaleReserveBaseUnits(),'DECIMAL_RESCALE_REFUSED');
++  for(const file of ['src/native-treasury.js','src/native-treasury-model.js','src/treasury-submission.js','src/treasury-policy.js']){
++    assert.equal(read(file).toString('utf8').includes('treasury-modules'),false,file);
++  }
++});
++
++test('revenue splitter conserves 70/20/10 and does not forward value',()=>{
++  assert.deepEqual(splitRevenueAmount('1'),{amount:'1',reserve:'0',staking:'0',protocol:'1'});
++  assert.deepEqual(splitRevenueAmount('10000'),{amount:'10000',reserve:'7000',staking:'2000',protocol:'1000'});
++  const prepared=prepareRevenueDistribution('123456789');
++  const shares=prepared.shares;
++  assert.equal(BigInt(shares.reserve)+BigInt(shares.staking)+BigInt(shares.protocol),123456789n);
++  assert.equal(prepared.executionPerformed,false);
++  assert.equal(prepared.valueForwarded,false);
++  throws(()=>executeRevenueDistribution(),'REVENUE_DISTRIBUTION_EXECUTION_NOT_WIRED');
++  throws(()=>splitRevenueAmount('0'),'ZERO_REVENUE');
++});
++
++test('reserve preparation uses the guardian and does not treat proofHash as a signature',()=>{
++  const prepared=prepareReserveSettlement({owner,guardian,recipient,amount:'10',proofHash:proof,debitFrom:reserve,reserveAddress:reserve});
++  assert.equal(prepared.guardianUsed,true);
++  assert.equal(prepared.proofHashAuthorizesExecution,false);
++  assert.equal(prepared.balancesMoved,false);
++  assert.equal(prepared.decimals,6);
++  throws(()=>authorizeReserveSettlement(prepared,{}),'PROOF_HASH_IS_NOT_A_SIGNATURE');
++  const blocked=authorizeReserveSettlement(prepared,{guardianSignature:'present',authoritySignature:'present'});
++  assert.equal(blocked.status,'BLOCKED');
++  assert.equal(blocked.signatureVerificationPerformed,false);
++  throws(()=>prepareReserveSettlement({owner,guardian:owner,recipient,amount:'10',proofHash:proof,debitFrom:owner,reserveAddress:reserve}),'GUARDIAN_MUST_BE_DISTINCT');
++  throws(()=>prepareReserveTransferFrom({from:owner,to:'0x0000000000000000000000000000000000000000',amount:'1'}),'TRANSFER_TO_ZERO_ADDRESS');
++  const transfer=prepareReserveTransferFrom({from:owner,to:recipient,amount:'1'});
++  assert.equal(transfer.executionPerformed,false);
++});
++
++test('qualified bank escrow reserves minor units without moving funds',()=>{
++  const prepared=prepareQualifiedBankEscrow({amountMinor:'2500',currency:'USD',destinationReference:'bank-3486',institutionReference:'qualified-custodian',qualificationEvidenceDigest:'sha256:'+'ab'.repeat(32)});
++  assert.equal(prepared.fundsMoved,false);
++  assert.equal(prepared.submissionPerformed,false);
++  assert.equal(prepared.qualificationVerified,false);
++  assert.equal(BigInt(prepared.escrowedAmountMinor)+BigInt(prepared.releasedAmountMinor),BigInt(prepared.amountMinor));
++  throws(()=>releaseQualifiedBankEscrow(),'BANK_RELEASE_NOT_WIRED');
++  throws(()=>prepareQualifiedBankEscrow({amountMinor:'1',currency:'EUR',destinationReference:'bank-3486',institutionReference:'qualified-custodian'}),'INVALID_TRANSACTION_REFERENCE');
++});
++
++test('solvency ledger conserves one decimal group and refuses to add variants',()=>{
++  let ledger=createSolvencyLedger();
++  ledger=postSolvencyEntry(ledger,{id:'cash',component:'bank-usd',decimals:6,direction:'asset',baseUnits:'5000'});
++  ledger=postSolvencyEntry(ledger,{id:'note',component:'usdy',decimals:6,direction:'liability',baseUnits:'1250'});
++  const residual=solvencyResidual(ledger,6);
++  assert.equal(residual.assets,'5000');
++  assert.equal(residual.liabilities,'1250');
++  assert.equal(residual.residual,'3750');
++  assert.equal(residual.externallySolvent,false);
++  assert.equal(combinedSolvency(ledger).residual,'3750');
++  ledger=postSolvencyEntry(ledger,{id:'receipt-nusd',component:'nusd-18',decimals:18,direction:'asset',baseUnits:'1000'});
++  throws(()=>combinedSolvency(ledger),'DECIMAL_VARIANTS_NOT_ADDITIVE');
++  assert.equal(solvencyResidual(ledger,18).assets,'1000');
++  assert.equal(ledger.executionPerformed,false);
++});
++
++test('USDY and BUIDL observations credit no NUSD',()=>{
++  const token='0x5555555555555555555555555555555555555555';
++  const usdy=prepareUsdyObservation({symbol:USDY_ADAPTER.symbol,decimals:18,nusdDecimals:6,baseUnits:'1000',tokenAddress:token});
++  const buidl=prepareBuidlObservation({symbol:BUIDL_ADAPTER.symbol,decimals:6,nusdDecimals:18,baseUnits:'1000',tokenAddress:token});
++  for(const observation of [usdy,buidl]){
++    assert.equal(observation.status,'PREPARED');
++    assert.equal(observation.nusdCredited,'0');
++    assert.equal(observation.conversionPerformed,false);
++    assert.equal(observation.executionPerformed,false);
++    assert.equal(observation.chainObservationPerformed,false);
++    assert.equal(observation.decimalVariantsUnresolved,true);
++    assert.equal(observation.selectedNusdVariant,null);
++  }
++  assert.equal(usdy.instrumentClass,'TOKENIZED_TREASURY_NOTES');
++  assert.equal(buidl.instrumentClass,'TOKENIZED_MONEY_MARKET_FUND');
++  throws(()=>prepareUsdyObservation({symbol:'USDY',decimals:18,nusdDecimals:18,baseUnits:'1',tokenAddress:token,mintNusd:true}),'FUND_CONVERSION_EXECUTION_REFUSED');
++  throws(()=>prepareBuidlObservation({symbol:'OTHER',decimals:6,nusdDecimals:6,baseUnits:'1',tokenAddress:token}),'FUND_SYMBOL_MISMATCH');
++});

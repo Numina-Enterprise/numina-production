@@ -5,6 +5,7 @@ import {createNuminaTreasury} from './native-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {readStripeTreasury} from './stripe-treasury.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
+import {clientSuppliedIdentityAccepted} from './client-identity.js';
 import {readControl,bootstrapControl,controlManifestView,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
@@ -47,13 +48,19 @@ async function githubOidcKeys(fetchImpl,nowMs){
   githubOidcCache={at:nowMs,keys:body.keys};
   return body.keys;
 }
-export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.floor(Date.now()/1000),keys=null}={}){
+export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.floor(Date.now()/1000),keys=null,audience=GITHUB_OIDC_AUDIENCE,scope=undefined}={}){
   try{
     const parts=token.split('.');if(parts.length!==3)return false;
     const header=decodeJwtJson(parts[0]),claims=decodeJwtJson(parts[1]);
     if(header.alg!=='RS256'||typeof header.kid!=='string'||!header.kid)return false;
-    const audience=Array.isArray(claims.aud)?claims.aud:[claims.aud];
-    if(claims.iss!==GITHUB_OIDC_ISSUER||!audience.includes(GITHUB_OIDC_AUDIENCE))return false;
+    const audienceClaim=Array.isArray(claims.aud)?claims.aud:[claims.aud];
+    const expectedAudience=Array.isArray(audience)?audience:[audience];
+    if(claims.iss!==GITHUB_OIDC_ISSUER||expectedAudience.some(item=>typeof item!=='string'||!audienceClaim.includes(item)))return false;
+    if(scope!==undefined){
+      const presented=typeof claims.scope==='string'?claims.scope.split(' ').filter(Boolean):[];
+      const required=Array.isArray(scope)?scope:[scope];
+      if(!required.length||required.some(item=>typeof item!=='string'||!item)||presented.length!==required.length||required.some(item=>!presented.includes(item)))return false;
+    }
     if(String(claims.repository_id)!==GITHUB_OIDC_REPOSITORY_ID||!GITHUB_OIDC_REPOSITORIES.includes(claims.repository)||String(claims.repository_owner_id)!==GITHUB_OIDC_OWNER_ID)return false;
     if(claims.ref!==GITHUB_OIDC_REF||claims.environment!==GITHUB_OIDC_ENVIRONMENT||!GITHUB_OIDC_WORKFLOW_REFS.includes(claims.workflow_ref))return false;
     if(!['workflow_dispatch','push'].includes(claims.event_name)||claims.runner_environment!=='github-hosted')return false;
@@ -67,7 +74,7 @@ export async function verifyGithubActionsOidc(token,{fetchImpl=fetch,now=Math.fl
     return await crypto.subtle.verify('RSASSA-PKCS1-v1_5',publicKey,decodeB64Url(parts[2]),new TextEncoder().encode(parts[0]+'.'+parts[1]));
   }catch{return false;}
 }
-function controlApiKeyPins(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured&&configured!==CONTROL_API_KEY_SHA256_PIN?[CONTROL_API_KEY_SHA256_PIN,configured]:[CONTROL_API_KEY_SHA256_PIN];}
+export function controlApiKeyPins(env){const configured=typeof env.NUMINA_CONTROL_API_KEY_SHA256==='string'?env.NUMINA_CONTROL_API_KEY_SHA256.trim():'';if(configured&&!/^[a-f0-9]{64}$/.test(configured))controlError('AUTHORITY_CONFIGURATION_INVALID',503);return configured&&configured!==CONTROL_API_KEY_SHA256_PIN?[CONTROL_API_KEY_SHA256_PIN,configured]:[CONTROL_API_KEY_SHA256_PIN];}
 function controlResponse(body,status=200,extraHeaders={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie, Authorization','X-Numina-Control-Version':CONTROL_VERSION,...extraHeaders}});}
 export async function controlActor(req,env){
   if(!env.NUMINA_CONTROL_OWNER)controlError('AUTHORITY_CONFIGURATION_MISSING',503);
@@ -79,10 +86,11 @@ export async function controlActor(req,env){
     if(!controlApiKeyPins(env).includes(await controlHash(token)))controlError('UNAUTHENTICATED',401);
     return env.NUMINA_CONTROL_OWNER;
   }
-  // Identity is supplied by Sites or the verified reviewer middleware. Reviewers
-  // retain their distinct principal and do not inherit the production root.
+  // Header identity is the local/test and verified-reviewer boundary. A client
+  // can set the same headers on workers.dev and Cloud Run, so those hosts
+  // require a bearer credential or GitHub OIDC token.
   const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
-  if(!id||!email)controlError('UNAUTHENTICATED',401);
+  if(!clientSuppliedIdentityAccepted(req,env)||!id||!email)controlError('UNAUTHENTICATED',401);
   return 'email:'+email.trim().toLowerCase();
 }
 export async function controlBody(req){

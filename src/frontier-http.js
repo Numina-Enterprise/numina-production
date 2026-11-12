@@ -10,6 +10,7 @@ import {NUMINA_TREASURY_CURRENT_POLICY} from './treasury-policy.js';
 import {alignTreasuryAccounts} from './treasury-alignment.js';
 import {readTreasuryEvidence,TREASURY_EVIDENCE_ROUTE} from './treasury-evidence.js';
 import {readStripeProviderRoutes,TREASURY_PROVIDER_ROUTES,NUSD_PROVIDER_ROUTING} from './stripe-treasury.js';
+import {MCP_PROTECTED_RESOURCE_PATHS,MCP_RESOURCE_PATH,mcpMetadataResponse,resolveMcpActor} from './mcp-resource-auth.js';
 
 const frontierRoutes={principals:'principal',policies:'policy',requests:'request',approvals:'approval',prepare:'prepare',execute:'execute',revoke:'revoke','treasury/accounts':'account','treasury/consolidate':'consolidate','treasury/policy':'treasury_policy','treasury/funding':'funding_plan','treasury/funding-declaration':'funding_declaration'};
 const frontierToolNames={numina_request:'requests',numina_prepare:'prepare',numina_execute:'execute'};
@@ -108,6 +109,22 @@ async function frontierDiscovery(req,env){
 export async function frontierHttp(req,env){
   const path=new URL(req.url).pathname;
   try{
+    if(MCP_PROTECTED_RESOURCE_PATHS.includes(path)){
+      if(!['GET','HEAD'].includes(req.method))return frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
+      return mcpMetadataResponse(req.method);
+    }
+    if(path===MCP_RESOURCE_PATH){
+      const resolved=await resolveMcpActor(req,env);
+      if(resolved.response)return resolved.response;
+      if(req.method!=='POST')return frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
+      if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
+      const now=Math.floor(Date.now()/1000),bucket=await controlHash('frontier:'+Math.floor(now/86400)+':'+(req.headers.get('cf-connecting-ip')||'unknown'));
+      if(!await rateLimit(env.DB,bucket,now))return frontierResponse({error:'RATE_LIMITED'},429);
+      const row=await readControl(env.DB);
+      frontierAssert(row.manifest.root===env.NUMINA_CONTROL_OWNER,'ROOT_CONFIGURATION_MISMATCH',503);
+      frontierAssert(resolved.actor===row.manifest.root,'AUTHORITY_DENIED',403);
+      return frontierRpc(req,env,resolved.actor);
+    }
     if(path==='/api/control/v2/architecture'&&req.method==='GET')return frontierResponse(NUMINA_LAYERS);
     if(path==='/.well-known/agent-card.json')return frontierResponse({protocolVersion:'0.3.0',name:'Numina',description:'Delegated requests, policy decisions and internal records.',url:new URL('/api/control/v2/a2a',req.url).href,version:FRONTIER_VERSION,preferredTransport:'JSONRPC',capabilities:{streaming:false,pushNotifications:false},defaultInputModes:['application/json'],defaultOutputModes:['application/json'],skills:[{id:'governed-actions',name:'Governed actions',description:'Send one data part containing tool and arguments. Human approvals are recorded separately by the owner.',tags:['policy','provenance']}],securitySchemes:{bearer:{type:'http',scheme:'bearer'}},security:[{bearer:[]}]});
     if(path==='/api/control/v2/manifest'&&req.method==='GET')return frontierResponse({schema:'numina.frontier.v2',root:'NUMINA',manifest:'NUMINA',identity:'NUMINA',authority:'NUMINA',source:'NUMINA',evidence:'NUMINA',provider:'NUMINA',provider_verification:true,core:'NUMINA',worker:'NUMINA',journal:'NUMINA',runtime:'NUMINA',artifact:'NUMINA',authentication:'NUMINA',delivery:'NUMINA',readiness:'NUMINA',authoritativeHead:'/api/control/v2/head',security:{connections:'/connections',connectionManifest:'/api/connections/v1/manifest',documentation:'/security',surfaces:'/security-surfaces.json',controlModel:'/downloads/Numina-Security.md'},denomination_policy:NUMINA_LAYERS.denomination_policy,procurement_usage:NUMINA_LAYERS.procurement_usage,procurement:NUMINA_LAYERS.procurement,version:FRONTIER_VERSION,livemode:env.NUMINA_LIVEMODE==='true',environment:'production',architecture:'/api/control/v2/architecture',businessCore:'/business-core.json',fundingPlan:'/api/control/v2/treasury/funding',discoveryMcp:'/api/control/v2/discovery-mcp',decisions:['ALLOW','DENY','ESCALATE'],providers:FRONTIER_PROVIDERS,treasury:'/api/control/v1/treasury',treasuryPolicy:'/api/control/v2/treasury/policy',providerRouting:NUSD_PROVIDER_ROUTING,mcp:{url:'/api/control/v2/mcp',protocolVersion:'2025-11-25'},a2a:{url:'/api/control/v2/a2a',protocolVersion:'0.3.0'},...NUMINA_OWNER_DECLARED_STATE});
@@ -130,7 +147,7 @@ export async function frontierHttp(req,env){
     frontierAssert(actor===row.manifest.root||frontierManifestView(row.manifest).principals.some(p=>p.id===actor&&!p.revoked),'AUTHORITY_DENIED',403);
     if(req.headers.has('origin')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_DENIED',403);
     if(req.method==='POST'&&!req.headers.has('authorization')&&req.headers.get('origin')!==new URL(req.url).origin)controlError('ORIGIN_REQUIRED',403);
-    if(['/api/control/v2/mcp','/api/control/v2/a2a'].includes(path))return req.method==='POST'?frontierRpc(req,env,actor):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
+    if(path==='/api/control/v2/a2a')return req.method==='POST'?frontierRpc(req,env,actor):frontierResponse({error:'METHOD_NOT_ALLOWED'},405);
     const route=path.slice('/api/control/v2/'.length);
     if(route==='runtime-access'&&req.method==='GET'){
       frontierAssert(actor===row.manifest.root,'OWNER_REQUIRED',403);

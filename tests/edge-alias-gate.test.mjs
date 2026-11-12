@@ -1,17 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import worker,{PUBLIC_ALLOWED_PATHS,PRIVATE_NOTICE_JSON,CONTROL_BACKEND_HOST,publicGateBlocks,controlBackendAllows,isEdgeAliasHost} from '../src/worker.js';
+import worker,{PUBLIC_ALLOWED_PATHS,PRIVATE_NOTICE_JSON,CONTROL_BACKEND_HOST,publicGateBlocks,controlBackendAllows,isEdgeAliasHost,isCloudRunHost} from '../src/worker.js';
 
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const PREVIEW_HOSTS=['a1b2c3d4-numina-production.skott34.workers.dev','staging-numina-production.skott34.workers.dev','other-worker.skott34.workers.dev'];
+const CLOUD_RUN_HOSTS=['numina-production-wfz53i3z3a-uc.a.run.app','numina-production-00007-gq8.us-central1.run.app'];
 const PRIVATE_SAMPLES=['/mcp','/mcp/tools','/api/control/v1/state','/api/control/v1/commands','/api/control/v1/treasury-attestation','/.well-known/mcp.json','/.well-known/mcp/server.json','/api/treasury/v1/model','/api/financial/v1/manifest','/api/nusd/v1/status','/api/ops/v1/telemetry','/api/app/v1/requests','/api/reviewer/v1/session','/api/connections/v1/manifest','/api/v0.1/anything','/downloads','/downloads/nusd/mint-receipt.json','/v1/status','/v2/network/status','/v5/release/manifest'];
 const DECLARED=['/api/control/v2/head','/api/control/v2/a2a','/api/control/v2/mcp','/.well-known/agent-card.json','/api/control/v1/treasury'];
 function assetsSpy(){const calls=[];return {calls,fetch(req){calls.push(new URL(req.url).pathname);return new Response('asset',{status:200});}};}
 
 test('workers.dev and preview hosts are edge aliases; public and local hosts are classified as before',()=>{
   for(const host of [CONTROL_BACKEND_HOST,...PREVIEW_HOSTS,'NUMINA-PRODUCTION.SKOTT34.WORKERS.DEV'])assert.equal(isEdgeAliasHost(host),true,host);
-  for(const host of ['numinalabs.xyz','www.numinalabs.xyz','127.0.0.1','numina.test','workers.dev.example.com'])assert.equal(isEdgeAliasHost(host),false,host);
+  for(const host of ['numinalabs.xyz','www.numinalabs.xyz','127.0.0.1','numina.test','workers.dev.example.com',...CLOUD_RUN_HOSTS])assert.equal(isEdgeAliasHost(host),false,host);
+  for(const host of CLOUD_RUN_HOSTS)assert.equal(isCloudRunHost(host),true,host);
+  for(const host of ['run.app','not.run.app.example.com','numinalabs.xyz','127.0.0.1'])assert.equal(isCloudRunHost(host),false,host);
 });
 
 test('the control backend alias keeps only its declared paths; previews keep none',()=>{
@@ -21,7 +24,12 @@ test('the control backend alias keeps only its declared paths; previews keep non
     for(const path of [...PRIVATE_SAMPLES,...DECLARED])assert.equal(publicGateBlocks(host,path),true,host+path);
     for(const path of PUBLIC_ALLOWED_PATHS)assert.equal(publicGateBlocks(host,path),false,host+path);
   }
-  for(const path of DECLARED)assert.equal(publicGateBlocks('numinalabs.xyz',path),true,'public host still blocks '+path);
+  for(const path of DECLARED)assert.equal(publicGateBlocks('numinalabs.xyz',path),path!=='/api/control/v2/mcp','public host still blocks '+path);
+  for(const host of CLOUD_RUN_HOSTS){
+    for(const path of [...PRIVATE_SAMPLES,...DECLARED])assert.equal(publicGateBlocks(host,path),true,host+path);
+    for(const path of PUBLIC_ALLOWED_PATHS)assert.equal(publicGateBlocks(host,path),false,host+path);
+    assert.equal(controlBackendAllows(host,'/api/control/v1/treasury'),false,host);
+  }
   assert.equal(controlBackendAllows(CONTROL_BACKEND_HOST,'/api/control/v2'),false);
   assert.equal(controlBackendAllows(CONTROL_BACKEND_HOST,'/api/control/v1/treasury/extra'),false);
   assert.equal(publicGateBlocks('127.0.0.1','/mcp'),false);

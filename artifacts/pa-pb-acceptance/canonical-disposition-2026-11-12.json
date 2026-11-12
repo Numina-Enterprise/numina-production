@@ -1,0 +1,63 @@
+{
+  "schema": "numina.pa-pb-canonical-disposition.v1",
+  "recordedAt": "2026-11-12T21:40:00Z",
+  "repository": "https://github.com/Numina-Enterprise/numina-production.git",
+  "branch": "cursor/cloudrun-source-audit-1303",
+  "startup": {
+    "gitInsideWorkTree": true,
+    "head": "598e676c9bd9d5fc9b7d8f51faa97729eef6e988",
+    "origin": "https://github.com/Numina-Enterprise/numina-production.git",
+    "accessBlocker": null
+  },
+  "sourcesRead": [
+    "PA-01-PA-14 gate PA-1350, Slack file F0C7M8TJNLF",
+    "PB01-PB12 product acceptance delta, message_ts 1791431910.053509"
+  ],
+  "admission": "NOT_ADMITTED",
+  "acceptance": "OPEN_HOLD",
+  "runsPerformed": 0,
+  "reason": "PA-1350 requires named H1 and H2 provider environments, an approved nonfinancial operation, both ordered artifact_id and hash_profile_id pins, issuer and relying-party identities, an authenticated trust record, and accepted executor and independent reviewer identities before any case may run. Those inputs are not in this tree. Missing admission input is NOT ADMITTED. No run ID, provider identity, or signature was filled in.",
+  "pa1350": [
+    {"id": "PA-01", "name": "H1 authorized path", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-02", "name": "H2 authorized path", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-03", "name": "Wrong tenant/audience/resource", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-04", "name": "Expired or revoked authority", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-05", "name": "Tampered bytes or profile mismatch", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-06", "name": "Bad or untrusted signature", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-07", "name": "Delegation or scope expansion", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-08", "name": "Duplicate/replayed request", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-09", "name": "Stale/out-of-order predecessor", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-10", "name": "Restart", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-11", "name": "Timeout or partial completion", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-12", "name": "Manual escalation", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-13", "name": "Recipient and independent readback", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"},
+    {"id": "PA-14", "name": "Evidence replay by reviewer", "disposition": "NOT_RUN", "admission": "NOT_ADMITTED"}
+  ],
+  "pb01pb12": [
+    {"id": "PB01", "disposition": "NOT_RUN"},
+    {"id": "PB02", "disposition": "NOT_RUN"},
+    {"id": "PB03", "disposition": "NOT_RUN"},
+    {"id": "PB04", "disposition": "NOT_RUN"},
+    {"id": "PB05", "disposition": "NOT_RUN"},
+    {"id": "PB06", "disposition": "NOT_RUN"},
+    {"id": "PB07", "disposition": "NOT_RUN"},
+    {"id": "PB08", "disposition": "NOT_RUN"},
+    {"id": "PB09", "disposition": "NOT_RUN"},
+    {"id": "PB10", "disposition": "NOT_RUN"},
+    {"id": "PB11", "disposition": "NOT_RUN"},
+    {"id": "PB12", "disposition": "NOT_RUN"}
+  ],
+  "pbNotRunBecause": "Each PB case needs the source record fields, including an actual worker or job run ID, provider invocation count, and an independent verifier result. The nonfinancial fixture's authorized tenant and mock providers A and B are not named. A local reducer exercise would not be independent readback and cannot be counted as PASS or SKIP.",
+  "priorLocalScript": {
+    "file": "artifacts/pa-pb-acceptance/baseline-2026-11-12.json",
+    "status": "NOT_AN_ADMITTED_RUN",
+    "note": "That file was produced before the canonical PA-1350 and PB01-PB12 texts were attached. Its PA labels do not match this table. None of its local observations are provider receipts, PASS, or SKIP."
+  },
+  "notPromoted": [
+    "No production deployment",
+    "No live financial action",
+    "No new trust authority",
+    "No guessed issuer or ChatGPT redirect",
+    "No synthetic fixture promoted to provider-confirmed"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "numina.nusd-source-variant-record.v1",
+  "status": "UNRESOLVED",
+  "selectedRuntimeVariant": null,
+  "executionWired": false,
+  "rescaleApplied": false,
+  "historicalVariantsErased": false,
+  "bytecodeEquivalenceClaimed": false,
+  "wholeUnitFigureSharedByCapStatements": "1500000000000000",
+  "note": "The shared whole-unit figure is not source equivalence. Six-decimal and eighteen-decimal base units differ by 10^12. This record does not multiply one into the other or select either for execution.",
+  "variants": [
+    {
+      "id": "vengeance-treasury-reserve-6d",
+      "role": "reference-original",
+      "contract": "NuminaTreasuryReserve",
+      "path": "numina-smart-contracts/contracts/NuminaTreasuryReserve.sol",
+      "sha256": "2f1c5551b51042882bf445d96a61e5a4d38fbe491fc358b1c676a488871192ff",
+      "bytes": 4138,
+      "decimals": 6,
+      "capExpression": "1_500_000_000_000_000 * 10**6",
+      "baseUnitCap": "1500000000000000000000",
+      "pragma": "^0.8.24",
+      "receiptBound": false
+    },
+    {
+      "id": "receipt-bound-numina-usd-18d",
+      "role": "historical-and-receipt-bound-source",
+      "contract": "NuminaUSD",
+      "path": "docs/contracts/NuminaUSD.sol",
+      "sameBytesAs": "runtime/nusd/history/18d/contracts/NuminaUSD.sol",
+      "sha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238",
+      "bytes": 8562,
+      "decimals": 18,
+      "receiptPath": "runtime/nusd/deployment-receipt.json",
+      "receiptField": "sourceSha256",
+      "receiptBaseUnits": "1500000000000000000000000000000000",
+      "externallyBackedClaim": false
+    },
+    {
+      "id": "runtime-candidate-numina-usd-6d",
+      "role": "current-runtime-candidate",
+      "contract": "NuminaUSD",
+      "path": "runtime/nusd/contracts/NuminaUSD.sol",
+      "sha256": "c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510",
+      "bytes": 8549,
+      "decimals": 6,
+      "receiptBound": false,
+      "sameSourceAsVengeanceTreasury": false
+    }
+  ],
+  "sixModuleSnapshot": [
+    {"path": "runtime/nusd/contracts/NuminaUSD.sol", "sha256": "c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510", "bytes": 8549},
+    {"path": "runtime/nusd/contracts/NuminaSettlement.sol", "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb", "bytes": 3003},
+    {"path": "runtime/nusd/contracts/NuminaUSDCConversion.sol", "sha256": "14bd8f0bdc76f8cff9b26a4d0972d45becb55f47c027db9fb5e4e9d7707fdc5c", "bytes": 8333},
+    {"path": "runtime/nusd/contracts/NuminaUSDRedemption.sol", "sha256": "b26d5b0a69ca06d83ec3541e50a673e6a7f7f550a1fa0f0054aea890f6e3559f", "bytes": 12981},
+    {"path": "runtime/nusd/contracts/NuminaBaseBridgeEscrow.sol", "sha256": "2245053c5ba9e642cb5507df26f0af311bcf4a96f10fddb10d6ea2c91ef461d1", "bytes": 5776},
+    {"path": "runtime/nusd/contracts/NuminaBaseUSDCVault.sol", "sha256": "eb4e4bcbd5fb5e89ee4e16ae75038c7e0c60cfcb7517c74e0854ad58ab7cfd88", "bytes": 3755}
+  ],
+  "preservedEighteenDecimalCopies": [
+    {"path": "runtime/nusd/history/18d/contracts/NuminaUSD.sol", "sha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238", "bytes": 8562},
+    {"path": "docs/contracts/NuminaUSDCConversion.sol", "sha256": "327d2f17de8b2894272189eb27e288589ae8cf231ce6d1b28d3bfeb9e8920104", "bytes": 8337},
+    {"path": "runtime/nusd/history/18d/contracts/NuminaUSDCConversion.sol", "sha256": "327d2f17de8b2894272189eb27e288589ae8cf231ce6d1b28d3bfeb9e8920104", "bytes": 8337},
+    {"path": "docs/contracts/NuminaUSDRedemption.sol", "sha256": "17a5a1dce327b6239851902382f356c3bb5770843498c41a8213d62b07ef6c1a", "bytes": 11527},
+    {"path": "runtime/nusd/history/18d/contracts/NuminaUSDRedemption.sol", "sha256": "17a5a1dce327b6239851902382f356c3bb5770843498c41a8213d62b07ef6c1a", "bytes": 11527},
+    {"path": "runtime/nusd/contracts/NuminaSettlement.sol", "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb", "bytes": 3003}
+  ],
+  "proposedChoice": {
+    "id": "no-automatic-selection",
+    "selectedRuntimeVariant": null,
+    "doNotRescaleExistingToken": true,
+    "doNotReplaceReceiptBoundSource": true,
+    "doNotEraseHistory18d": true,
+    "vengeanceSourcesRemainReference": true,
+    "proposedHardeningIsNotTheDeployedSource": true,
+    "reason": "Three source identities use the NUSD name. The vengeance treasury is 6 decimals with a fixed 1.5-quadrillion cap. The deployment receipt binds an 18-decimal NuminaUSD source. The current runtime NuminaUSD candidate is a third, 6-decimal file and is not the vengeance treasury. No config file, policy, or contract record is switched by this reconciliation."
+  }
+}

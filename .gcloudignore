@@ -6,3 +6,13 @@
 .git
 .gitignore
 manifest-verifier/.venv312/
+**/.pytest_cache/
+**/.cloudflared/
+**/.cloudflared_isolated/
+.env
+**/.env
+*.key
+*.p12
+*.p8
+**/role-wallets.private.json
+**/*.keystore.json

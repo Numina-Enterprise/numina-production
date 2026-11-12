@@ -11,12 +11,35 @@ import { createServer } from 'node:http';
 import { constants } from 'node:fs';
 import { lstat, open } from 'node:fs/promises';
 import { extname, join, relative, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Readable } from 'node:stream';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const ASSET_ROOT = resolve(ROOT, 'dist/client');
 const HOST = '0.0.0.0';
+export const CLOUD_RUN_REPOSITORY = 'Numina-Enterprise/numina-production';
+const UNTRUSTED_REQUEST_HEADERS = new Set([
+  'host',
+  'oai-authenticated-user-id',
+  'oai-authenticated-user-email',
+  'connection',
+  'keep-alive',
+  'proxy-authenticate',
+  'proxy-authorization',
+  'te',
+  'trailer',
+  'transfer-encoding',
+  'upgrade',
+]);
+
+export function forwardedHeaders(incoming) {
+  const headers = new Headers();
+  for (const [name, value] of Object.entries(incoming.headers || {})) {
+    if (value === undefined || UNTRUSTED_REQUEST_HEADERS.has(name.toLowerCase())) continue;
+    headers.set(name, Array.isArray(value) ? value.join(', ') : value);
+  }
+  return headers;
+}
 
 function portFromEnv() {
   const raw = process.env.PORT;
@@ -205,7 +228,7 @@ async function main() {
   });
   const identity = {
     schema: 'numina.cloudrun-runtime.v1',
-    canonicalRepository: ROOT.replace(/\/$/, ''),
+    canonicalRepository: CLOUD_RUN_REPOSITORY,
     runtime: 'Node.js',
     nodeVersion: process.versions.node,
     bindAddress: HOST,
@@ -227,10 +250,7 @@ async function main() {
         result = ['GET', 'HEAD'].includes(method) ? json(identity) : json({ error: 'METHOD_NOT_ALLOWED' }, 405);
       } else {
         const body = ['GET', 'HEAD'].includes(method) ? undefined : await requestBody(incoming);
-        const headers = new Headers();
-        for (const [name, value] of Object.entries(incoming.headers)) {
-          if (value !== undefined) headers.set(name, Array.isArray(value) ? value.join(', ') : value);
-        }
+        const headers = forwardedHeaders(incoming);
         // Present the canonical origin to the worker so routeRuntime
         // treats same-origin reads as local (File 3) instead of
         // upstream-fetching https://numinalabs.xyz and returning 502
@@ -282,7 +302,8 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+const invokedDirectly = process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href;
+if (invokedDirectly) main().catch((error) => {
   const known = new Set(['CANONICAL_ASSET_DIRECTORY_REQUIRED', 'CANONICAL_WORKER_FETCH_REQUIRED', 'INVALID_PORT']);
   console.error(JSON.stringify({
     event: 'numina_cloudrun_start_failed',

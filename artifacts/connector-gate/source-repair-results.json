@@ -1,0 +1,31 @@
+{
+  "gate_id": "NCC-20261011T085412Z-CONNECTOR-GATE",
+  "acceptance": "OPEN",
+  "sourceCommitBeforeRepair": "0f46723e7ca7aaa705faadc4194196149ffa4b55",
+  "paPbBaseline": "artifacts/pa-pb-acceptance/baseline-2026-11-12.json",
+  "paPbMatrixAfterRepair": "unchanged: OPEN_HOLD, 0 closed, 13 local observations, 13 not run",
+  "isolatedTests": {
+    "command": "node --test tests/mcp-resource-auth.test.mjs tests/github-actions-oidc.test.mjs tests/public-gate.test.mjs tests/edge-alias-gate.test.mjs tests/mcp-auth-inventory.test.mjs tests/sites-mcp.test.mjs tests/treasury-evidence.test.mjs tests/treasury-provider-routes.test.mjs tests/cloud-run-source-boundary.test.mjs",
+    "result": "pass",
+    "node": "v27.0.0-alpha.0.0.0",
+    "pinnedNode": "26.13.0",
+    "pinnedRuntime": false
+  },
+  "whatUnitTestsShow": [
+    "Protected-resource metadata returns the canonical resource https://numinalabs.xyz/api/control/v2/mcp and authorization server https://token.actions.githubusercontent.com",
+    "Unauthenticated MCP POST returns 401 with WWW-Authenticate Bearer resource_metadata",
+    "Wrong issuer, audience, expiry, and scope are denied before JWKS fetch",
+    "A fixture RS256 token with the configured issuer, canonical audience, scope numina.mcp, and the existing repository binding can initialize and list tools in-process",
+    "Authorization-code and PKCE acceptance is fail-closed because the issuer role is external and no redirect is registered",
+    "Local oauth-authorization-server and openid-configuration responses are not an issuer"
+  ],
+  "whatRemainsUnverified": [
+    "No live request to numinalabs.xyz was made; this environment receives a Cloudflare challenge and was not bypassed",
+    "No sole-publisher deploy receipt",
+    "No independent public readback of metadata 200 or MCP 401",
+    "No registered ChatGPT redirect URI in repository configuration",
+    "No valid owner initialize or tools/list through ChatGPT or a production GitHub OIDC token",
+    "Opaque owner bearer remains a pre-existing fallback and is not connector acceptance",
+    "A Grok Bot connection was not added and would not close this gate"
+  ]
+}
