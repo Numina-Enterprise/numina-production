@@ -40,7 +40,7 @@
       "id": "runtime-candidate-numina-usd-6d",
       "role": "current-runtime-candidate",
       "contract": "NuminaUSD",
-      "path": "runtime/nusd/contracts/NuminaUSD.sol",
+      "path": "runtime/nusd/history/6d/contracts/NuminaUSD.sol",
       "sha256": "c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510",
       "bytes": 8549,
       "decimals": 6,
@@ -49,10 +49,10 @@
     }
   ],
   "sixModuleSnapshot": [
-    {"path": "runtime/nusd/contracts/NuminaUSD.sol", "sha256": "c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510", "bytes": 8549},
+    {"path": "runtime/nusd/history/6d/contracts/NuminaUSD.sol", "sha256": "c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510", "bytes": 8549},
     {"path": "runtime/nusd/contracts/NuminaSettlement.sol", "sha256": "dddf53004f2eb8b427ba29452eb741c473f8f072ff5b7a095302b6d5df4231fb", "bytes": 3003},
-    {"path": "runtime/nusd/contracts/NuminaUSDCConversion.sol", "sha256": "14bd8f0bdc76f8cff9b26a4d0972d45becb55f47c027db9fb5e4e9d7707fdc5c", "bytes": 8333},
-    {"path": "runtime/nusd/contracts/NuminaUSDRedemption.sol", "sha256": "b26d5b0a69ca06d83ec3541e50a673e6a7f7f550a1fa0f0054aea890f6e3559f", "bytes": 12981},
+    {"path": "runtime/nusd/history/6d/contracts/NuminaUSDCConversion.sol", "sha256": "14bd8f0bdc76f8cff9b26a4d0972d45becb55f47c027db9fb5e4e9d7707fdc5c", "bytes": 8333},
+    {"path": "runtime/nusd/history/6d/contracts/NuminaUSDRedemption.sol", "sha256": "b26d5b0a69ca06d83ec3541e50a673e6a7f7f550a1fa0f0054aea890f6e3559f", "bytes": 12981},
     {"path": "runtime/nusd/contracts/NuminaBaseBridgeEscrow.sol", "sha256": "2245053c5ba9e642cb5507df26f0af311bcf4a96f10fddb10d6ea2c91ef461d1", "bytes": 5776},
     {"path": "runtime/nusd/contracts/NuminaBaseUSDCVault.sol", "sha256": "eb4e4bcbd5fb5e89ee4e16ae75038c7e0c60cfcb7517c74e0854ad58ab7cfd88", "bytes": 3755}
   ],

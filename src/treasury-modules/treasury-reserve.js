@@ -26,7 +26,7 @@ export const TREASURY_RESERVE_REFERENCE=Object.freeze({
 export const NUSD_DECIMAL_VARIANTS=Object.freeze([
   Object.freeze({id:'vengeance-treasury-reserve-6d',decimals:6,baseUnits:'1500000000000000000000',sha256:TREASURY_RESERVE_REFERENCE.sha256,role:'reference-original'}),
   Object.freeze({id:'receipt-bound-numina-usd-18d',decimals:18,baseUnits:'1500000000000000000000000000000000',sha256:'08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238',role:'receipt-bound-source',receipt:'docs/nusd/deployment-receipt.json'}),
-  Object.freeze({id:'runtime-candidate-numina-usd-6d',decimals:6,sha256:'c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510',role:'runtime-candidate',path:'runtime/nusd/contracts/NuminaUSD.sol'})
+  Object.freeze({id:'runtime-candidate-numina-usd-6d',decimals:6,sha256:'c2aa2975d3a5c6fb1fe75ee86e3851e7a13ef1c21bfe06f8fa2a5a1558e52510',role:'runtime-candidate',path:'runtime/nusd/history/6d/contracts/NuminaUSD.sol'})
 ]);
 export const SELECTED_RUNTIME_VARIANT=null;
 
