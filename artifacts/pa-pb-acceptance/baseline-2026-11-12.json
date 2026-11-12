@@ -1,0 +1,362 @@
+{
+  "schema": "numina.pa-pb-safe-run.v1",
+  "acceptance": "OPEN_HOLD",
+  "executedAt": "2026-11-12T21:32:22.753Z",
+  "source": {
+    "root": "/Users/samuelkott/bump-501-20261110",
+    "branch": "cursor/cloudrun-source-audit-1303",
+    "commit": "0f46723e7ca7aaa705faadc4194196149ffa4b55",
+    "canonicalProofFile": "F0C7M8TJNLF numina-product-proof-gate-PA1350.md",
+    "canonicalProofFilePresent": false
+  },
+  "runtime": {
+    "node": "v27.0.0-alpha.0.0.0",
+    "pinnedNode": "26.13.0",
+    "pinnedRuntime": false,
+    "networkCalls": 0,
+    "treasuryCommands": 0,
+    "signingKeysCreated": 0,
+    "broadcasts": 0
+  },
+  "sourcesHashed": {
+    "src/frontier.js": "70e1a575f907d708c55c2d2b9c5a4215372a7793fb298d6a2ab7d7cb87bc4c33",
+    "src/control.js": "3851422e6d23b052cdb475814b7c1e8bae2cf8e695248cfe8a3e9a9a31d48a13",
+    "src/control-store.js": "68271ed230d0f1c71411a80efce8e3b34ed5efd614b00f5808d161e6c27f24e6"
+  },
+  "scope": "In-memory or temp sqlite only. Amount 0. No treasury, custody, payout, settlement, provider HTTP, or production release operation.",
+  "counts": {
+    "cases": 26,
+    "acceptanceClosed": 0,
+    "localObservation": 13,
+    "notRun": 13
+  },
+  "cases": [
+    {
+      "id": "PB01",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "localEffect": true,
+        "records": 1,
+        "replayed": true,
+        "independentVerifier": null,
+        "limit": "Same-process journal readback only. No provider operation, signed outcome, or outside verifier."
+      }
+    },
+    {
+      "id": "PB02",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "changedCommand": "IDEMPOTENCY_CONFLICT",
+        "wrongResource": "POLICY_SCOPE_DENIED",
+        "wrongProviderStoredAsEscalation": false,
+        "records": 1,
+        "externalExecution": true,
+        "limit": "Rejects a changed command id binding and an out-of-policy resource before a second record. Stripe is not dispatched; it is stored only as an unexecuted escalation."
+      }
+    },
+    {
+      "id": "PB03",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "revokedGrantDeniesControl": true,
+        "policyHash": "DENY:POLICY_UNAVAILABLE",
+        "expiredPolicy": "DENY:POLICY_UNAVAILABLE",
+        "limit": "Decision-function observations. No approval object was executed and no provider was called."
+      }
+    },
+    {
+      "id": "PB04",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "first": "HUMAN_DENIED",
+        "replay": "HUMAN_DENIED",
+        "records": 0,
+        "providerCalls": 0,
+        "limit": "Human DENY blocks internal execution. This is not a provider deny/replay receipt."
+      }
+    },
+    {
+      "id": "PB05",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "pending": "ESCALATE:HUMAN_APPROVAL_REQUIRED",
+        "unauthorized": "OWNER_REQUIRED",
+        "approvalsBeforeUnauthorized": 0,
+        "approvalRequestHash": "3150d3ddeecbdec5339530c5058a664452deabaea6ca63fb01bb86fb1ecbc475",
+        "changedPayload": "ESCALATE:HUMAN_APPROVAL_REQUIRED",
+        "records": 0,
+        "limit": "Escalation is internal. No human identity provider or external release was used."
+      }
+    },
+    {
+      "id": "PB06",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "firstReplay": false,
+        "secondReplay": true,
+        "sameEvent": true,
+        "records": 1,
+        "limit": "Internal command idempotency only. No provider idempotency key was presented."
+      }
+    },
+    {
+      "id": "PB07",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "fulfilled": 1,
+        "rejected": [
+          "STALE_REVISION"
+        ],
+        "revision": 1,
+        "records": 0,
+        "limit": "One local revision wins. This does not prove a provider serialization policy."
+      }
+    },
+    {
+      "id": "PB08",
+      "group": "PB",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "localRetryReplayed": true,
+        "records": 1,
+        "limit": "No provider commit/timeout exists to drop. Local retry did not create a second record, and that does not close the provider reconciliation case."
+      }
+    },
+    {
+      "id": "PB09",
+      "group": "PB",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "h2Decision": "ESCALATE:PROVIDER_NOT_CONNECTED",
+        "h2Execute": "EXECUTION_NOT_ALLOWED",
+        "stripeSubmission": false,
+        "limit": "H1 does not authorize H2. No second provider tenant, operation id, or normalized A/B fixture was available."
+      }
+    },
+    {
+      "id": "PB10",
+      "group": "PB",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "limit": "No separate verifier process, exported receipt, or outside replay was run. Same-process hash checks do not meet this case."
+      }
+    },
+    {
+      "id": "PB11",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "tamper": "JOURNAL_CORRUPT",
+        "externalReceipt": null,
+        "externalExecution": false,
+        "claimedStatus": "FINAL",
+        "limit": "Tamper fails closed locally. Missing provider result is null/false, not an explicit UNKNOWN provider state, and is not a portable verifier failure."
+      }
+    },
+    {
+      "id": "PB12",
+      "group": "PB",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "visibleIds": [
+          "visible"
+        ],
+        "leaksPrivatePayload": false,
+        "anonymous": "AUTHORITY_DENIED",
+        "limit": "Local manifest scoping only. No sanitized provider receipt was exported."
+      }
+    },
+    {
+      "id": "PA-01",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "authorized H1 provider handoff",
+        "limit": "No named H1 provider tenant, permitted operation, signed outcome, or relying-party readback."
+      }
+    },
+    {
+      "id": "PA-02",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "authorized H2 after independent H1 readback",
+        "limit": "H1 success is not H2 authority. No second provider environment was admitted."
+      }
+    },
+    {
+      "id": "PA-03",
+      "group": "PA",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "wrong resource / audience",
+        "observed": "PRINCIPAL_UNAVAILABLE",
+        "acceptanceMeaning": "Local authority denial only. Tenant and token audience are not represented."
+      }
+    },
+    {
+      "id": "PA-04",
+      "group": "PA",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "revoked authority",
+        "observed": "DENY:PRINCIPAL_UNAVAILABLE",
+        "limit": "No certificate revocation list or provider signer freshness was checked."
+      }
+    },
+    {
+      "id": "PA-05",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "altered bytes / profile",
+        "limit": "The four artifact_id and hash_profile_id pins are not in this tree. No approved profile bytes were available to alter."
+      }
+    },
+    {
+      "id": "PA-06",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "invalid or untrusted signer",
+        "limit": "This reducer binds an actor string. It does not verify an Ed25519 signature or a separate trust decision. No signing key was created."
+      }
+    },
+    {
+      "id": "PA-07",
+      "group": "PA",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "delegation expansion",
+        "observed": "AUTHORITY_BROADENING",
+        "limit": "Local grant attenuation only. No provider delegation credential was expanded."
+      }
+    },
+    {
+      "id": "PA-08",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "duplicate / replay across providers",
+        "limit": "Internal idempotency was observed under PB06. Provider replay receipts were not available."
+      }
+    },
+    {
+      "id": "PA-09",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "stale predecessor",
+        "limit": "No H1 outcome is bound as a predecessor of H2. A stale local revision is a different control."
+      }
+    },
+    {
+      "id": "PA-10",
+      "group": "PA",
+      "disposition": "LOCAL_OBSERVATION",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "local restart",
+        "revisionBefore": 1,
+        "revisionAfter": 1,
+        "limit": "Process restart of the local database only. Not a provider workflow restart."
+      }
+    },
+    {
+      "id": "PA-11",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "timeout / partial completion",
+        "localRollback": "ERR_SQLITE_ERROR",
+        "revision": 0,
+        "limit": "A simulated local insert abort rolled back. No provider timeout, partial commit, or reconciliation receipt exists."
+      }
+    },
+    {
+      "id": "PA-12",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "scoped escalation across two handoffs",
+        "limit": "Internal ESCALATE was observed under PB05. Two-provider escalation evidence was not available."
+      }
+    },
+    {
+      "id": "PA-13",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "recipient / independent readback",
+        "limit": "No relying party outside this process read a provider receipt."
+      }
+    },
+    {
+      "id": "PA-14",
+      "group": "PA",
+      "disposition": "NOT_RUN",
+      "acceptanceClosed": false,
+      "providerInvocationCount": 0,
+      "detail": {
+        "name": "reviewer reproduction",
+        "limit": "No separate reviewer or second implementation was admitted. Canonical file F0C7M8TJNLF was not in the workspace, so this numbering follows the public 14-case summary and may not match that file verbatim."
+      }
+    }
+  ]
+}

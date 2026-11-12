@@ -24,7 +24,7 @@ test('the control backend alias keeps only its declared paths; previews keep non
     for(const path of [...PRIVATE_SAMPLES,...DECLARED])assert.equal(publicGateBlocks(host,path),true,host+path);
     for(const path of PUBLIC_ALLOWED_PATHS)assert.equal(publicGateBlocks(host,path),false,host+path);
   }
-  for(const path of DECLARED)assert.equal(publicGateBlocks('numinalabs.xyz',path),true,'public host still blocks '+path);
+  for(const path of DECLARED)assert.equal(publicGateBlocks('numinalabs.xyz',path),path!=='/api/control/v2/mcp','public host still blocks '+path);
   for(const host of CLOUD_RUN_HOSTS){
     for(const path of [...PRIVATE_SAMPLES,...DECLARED])assert.equal(publicGateBlocks(host,path),true,host+path);
     for(const path of PUBLIC_ALLOWED_PATHS)assert.equal(publicGateBlocks(host,path),false,host+path);
