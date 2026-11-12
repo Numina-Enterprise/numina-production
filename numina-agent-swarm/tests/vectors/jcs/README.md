@@ -103,9 +103,9 @@ not as its own subsection.
 
 ## Known gaps
 
-- Duplicate JSON object names are an I-JSON prohibition (§3.1). `canonicalize()`
-  sees an already parsed object, so it cannot reject duplicates. There is no
-  raw JSON ingestion parser in this module.
+- Duplicate JSON object names are rejected by `tokenize()` on raw text
+  (I-JSON §3.1). `canonicalize()` still cannot see a duplicate once a value
+  has already been parsed.
 - The 100,000,000-line ES6 file and the other published prefix lengths above
   are not vendored and are not run here.
 - `testdata/outhex/` is not vendored.

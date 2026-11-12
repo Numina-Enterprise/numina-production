@@ -16,3 +16,22 @@ test('bilateral verification, replay rejection, tamper rejection, and slackening
  link.receive(m);assert.equal(link.tick(),'BOUND');t=2001;assert.equal(link.tick(),'SLACKENED');
  assert.equal(link.sequence,1);
 });
+test('verifier keeps sequence and ttl bounds that tokenize does not apply',()=>{
+ const a=keys(),b=keys(),hash='sha256:'+'a'.repeat(64);
+ const sig='ab'.repeat(64);
+ const m={schema_id:'numina.rafting-binding.v1',binding_id:'123e4567-e89b-42d3-a456-426614174000',node_a:{node_id:'A',public_key:a.hex,state_commitment:hash},node_b:{node_id:'B',public_key:b.hex,state_commitment:hash},sequence:1,timestamp:'2026-11-09T00:00:00Z',ttl_seconds:2,canonical_spec:'RFC-8785',signatures:{node_a_sig:sig,node_b_sig:sig}};
+ const trustedKeys={A:a.hex,B:b.hex};
+ for (const sequence of [0,-1,1.5,1e21,9007199254740992]) assert.throws(()=>verifyBinding({...m,sequence},{trustedKeys}),/invalid sequence/);
+ for (const ttl_seconds of [0,86401,1.5,9007199254740991]) assert.throws(()=>verifyBinding({...m,ttl_seconds},{trustedKeys}),/invalid ttl/);
+ assert.throws(()=>verifyBinding({...m,sequence:Number.MAX_SAFE_INTEGER},{trustedKeys}),/signature/);
+ assert.throws(()=>verifyBinding({...m,ttl_seconds:86400},{trustedKeys}),/signature/);
+});
+test('signing bytes exclude signatures and reject sparse or extended arrays',()=>{
+ const a={sequence:10,signatures:{node_a_sig:'a',node_b_sig:'b'}};
+ const b={signatures:{node_b_sig:'changed',node_a_sig:'changed'},sequence:10};
+ assert.deepEqual(signingBytes(a),signingBytes(b));
+ const extra=[10,5,20,15];
+ extra.note='not-json';
+ assert.throws(()=>signingBytes({metrics:extra}),/sparse or extended array/);
+ assert.throws(()=>signingBytes({metrics:[,1]}),/sparse or extended array/);
+});

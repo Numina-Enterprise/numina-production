@@ -5,6 +5,9 @@ Status: experimental, not connected to production consensus.
 ## Non-interference invariant
 The resilience layer MUST NOT call or modify Raft `appendEntries`, `requestVote`, `installSnapshot`, quorum, term, commit-index, log-compaction, or membership mutation paths. It may observe committed index/term and emit advisory health events only. A SLACKENED edge is not a Raft membership removal or leadership transfer.
 
+## Canonicalizer and binding bounds
+`tokenize()` reads JSON text for the general canonicalizer. It rejects duplicate property names and does not apply the binding limits on `sequence` or `ttl_seconds`. `canonicalize()` likewise accepts any finite IEEE number. `verifyBinding()` keeps the stricter safe-integer bound on `sequence` and the 1..86400 integer bound on `ttl_seconds`.
+
 ## Binding exchange
 1. Both peers agree on the *entire* unsigned manifest, including both state commitments.
 2. Each signs the same domain-separated RFC 8785 bytes.

@@ -12,6 +12,118 @@ function validateUnicode(s) {
     } else if (c >= 0xdc00 && c <= 0xdfff) fail('unpaired Unicode surrogate');
   }
 }
+function isWs(c) { return c === ' ' || c === '\t' || c === '\n' || c === '\r'; }
+function isDigit(c) { return c >= '0' && c <= '9'; }
+// JSON text ingestion for the general canonicalizer. Duplicate names are an
+// I-JSON violation (RFC 8785 §3.1) and are rejected here. Sequence and
+// ttl_seconds safe-integer bounds belong to verifyBinding(), not this parser.
+export function tokenize(text) {
+  if (typeof text !== 'string') fail('invalid JSON text');
+  let i = 0;
+  const n = text.length;
+  function ws() { while (i < n && isWs(text[i])) i++; }
+  function parseString() {
+    if (text[i] !== '"') fail('invalid JSON text');
+    const start = i;
+    i++;
+    while (i < n) {
+      const c = text[i];
+      if (c === '"') {
+        i++;
+        try { return JSON.parse(text.slice(start, i)); }
+        catch { fail('invalid JSON text'); }
+      }
+      if (c === '\\') {
+        i++;
+        if (i >= n) fail('invalid JSON text');
+        const e = text[i];
+        if (e === 'u') {
+          if (i + 4 >= n || !/^[\da-fA-F]{4}$/.test(text.slice(i + 1, i + 5))) fail('invalid JSON text');
+          i += 5;
+        } else if ('"\\/bfnrt'.includes(e)) i++;
+        else fail('invalid JSON text');
+        continue;
+      }
+      if (text.charCodeAt(i) < 0x20) fail('invalid JSON text');
+      i++;
+    }
+    fail('invalid JSON text');
+  }
+  function parseNumber() {
+    const start = i;
+    if (text[i] === '-') i++;
+    if (i >= n || !isDigit(text[i])) fail('invalid JSON text');
+    if (text[i] === '0') i++;
+    else while (i < n && isDigit(text[i])) i++;
+    if (i < n && isDigit(text[i])) fail('invalid JSON text');
+    if (text[i] === '.') {
+      i++;
+      if (i >= n || !isDigit(text[i])) fail('invalid JSON text');
+      while (i < n && isDigit(text[i])) i++;
+    }
+    if (text[i] === 'e' || text[i] === 'E') {
+      i++;
+      if (text[i] === '+' || text[i] === '-') i++;
+      if (i >= n || !isDigit(text[i])) fail('invalid JSON text');
+      while (i < n && isDigit(text[i])) i++;
+    }
+    return JSON.parse(text.slice(start, i));
+  }
+  function parseLiteral(word, value) {
+    if (text.slice(i, i + word.length) !== word) fail('invalid JSON text');
+    i += word.length;
+    return value;
+  }
+  function parseValue() {
+    ws();
+    if (i >= n) fail('invalid JSON text');
+    const c = text[i];
+    if (c === '{') return parseObject();
+    if (c === '[') return parseArray();
+    if (c === '"') return parseString();
+    if (c === 't') return parseLiteral('true', true);
+    if (c === 'f') return parseLiteral('false', false);
+    if (c === 'n') return parseLiteral('null', null);
+    if (c === '-' || isDigit(c)) return parseNumber();
+    fail('invalid JSON text');
+  }
+  function parseObject() {
+    i++;
+    const obj = {};
+    ws();
+    if (text[i] === '}') { i++; return obj; }
+    while (true) {
+      ws();
+      const key = parseString();
+      if (Object.hasOwn(obj, key)) fail('duplicate property name');
+      ws();
+      if (text[i] !== ':') fail('invalid JSON text');
+      i++;
+      Object.defineProperty(obj, key, { value: parseValue(), enumerable: true, writable: true, configurable: true });
+      ws();
+      if (text[i] === '}') { i++; return obj; }
+      if (text[i] !== ',') fail('invalid JSON text');
+      i++;
+    }
+  }
+  function parseArray() {
+    i++;
+    const arr = [];
+    ws();
+    if (text[i] === ']') { i++; return arr; }
+    while (true) {
+      arr.push(parseValue());
+      ws();
+      if (text[i] === ']') { i++; return arr; }
+      if (text[i] !== ',') fail('invalid JSON text');
+      i++;
+    }
+  }
+  const value = parseValue();
+  ws();
+  if (i !== n) fail('invalid JSON text');
+  return value;
+}
 export function canonicalize(value) {
   if (value === null || typeof value === 'boolean') return JSON.stringify(value);
   if (typeof value === 'string') { validateUnicode(value); return JSON.stringify(value); }
@@ -38,8 +150,8 @@ export function canonicalize(value) {
     return '[' + parts.join(',') + ']';
   }
   if (value && typeof value === 'object' && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)) {
-    // I-JSON (§3.1) forbids duplicate names, but a parsed object cannot show
-    // them. Raw JSON ingestion has to reject duplicates before this point.
+    // Duplicate names are rejected by tokenize() on raw JSON text. A value
+    // that has already been parsed cannot show the overwritten name.
     const keys=Object.keys(value);
     for (const key of keys) validateUnicode(key);
     return '{' + keys.sort().map(k => JSON.stringify(k)+':'+canonicalize(value[k])).join(',') + '}';

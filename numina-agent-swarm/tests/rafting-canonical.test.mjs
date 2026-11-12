@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { canonicalize, signingBytes } from '../src/rafting-resilience.mjs';
+import { canonicalize, tokenize } from '../src/rafting-resilience.mjs';
 
 const vectorDir = join(dirname(fileURLToPath(import.meta.url)), 'vectors', 'jcs');
 
@@ -29,24 +29,34 @@ test('RFC 8785 §3.1 I-JSON and §3.2.2.2 reject malformed Unicode and non-JSON 
  assert.throws(()=>canonicalize({x:1n}),/invalid/);
  assert.throws(()=>canonicalize([,1]),/non-JSON array hole/);
 });
-test('tampering changes canonical bytes and signing bytes exclude signatures',()=>{
+test('tampering changes canonical bytes',()=>{
  assert.notEqual(canonicalize({binding_id:'test-uuid',sequence:10}),canonicalize({binding_id:'test-uuid',sequence:11}));
- const a={sequence:10,signatures:{node_a_sig:'a',node_b_sig:'b'}};
- const b={signatures:{node_b_sig:'changed',node_a_sig:'changed'},sequence:10};
- assert.deepEqual(signingBytes(a),signingBytes(b));
 });
-test('binding path keeps sparse and extended array rejection',()=>{
+test('general canonicalizer omits extra array properties and rejects holes',()=>{
  const extra=[10,5,20,15];
  extra.note='not-json';
  assert.equal(canonicalize(extra),'[10,5,20,15]');
- assert.throws(()=>signingBytes({metrics:extra}),/sparse or extended array/);
- assert.throws(()=>signingBytes({metrics:[,1]}),/sparse or extended array/);
+ assert.throws(()=>canonicalize([,1]),/non-JSON array hole/);
+});
+test('tokenize rejects duplicate names and does not apply sequence or ttl bounds',()=>{
+ assert.throws(()=>tokenize('{"a":1,"a":2}'),/duplicate property name/);
+ assert.throws(()=>tokenize('{"a":1,"\\u0061":2}'),/duplicate property name/);
+ assert.throws(()=>tokenize('{"outer":{"b":1,"b":2}}'),/duplicate property name/);
+ assert.throws(()=>tokenize('01'),/invalid JSON text/);
+ assert.throws(()=>tokenize('{"a":1,}'),/invalid JSON text/);
+ const parsed=tokenize('{"ttl_seconds":0,"sequence":1e+21}');
+ assert.equal(parsed.sequence,1e21);
+ assert.equal(parsed.ttl_seconds,0);
+ assert.equal(canonicalize(parsed),'{"sequence":1e+21,"ttl_seconds":0}');
+ assert.equal(canonicalize(tokenize('{"ttl_seconds":86401,"sequence":9007199254740992}')),'{"sequence":9007199254740992,"ttl_seconds":86401}');
 });
 test('RFC 8785 §3.2.1 §3.2.2 §3.2.2.3 §3.2.3 official input/output bytes',()=>{
  const names=readdirSync(join(vectorDir,'input')).filter(name=>name.endsWith('.json')).sort();
  assert.deepEqual(names,['arrays.json','french.json','structures.json','unicode.json','values.json','weird.json']);
  for (const name of names) {
-  const value=JSON.parse(readFileSync(join(vectorDir,'input',name),'utf8'));
+  const text=readFileSync(join(vectorDir,'input',name),'utf8');
+  const value=tokenize(text);
+  assert.deepEqual(value, JSON.parse(text), name);
   const expected=readFileSync(join(vectorDir,'output',name));
   assert.deepEqual(Buffer.from(canonicalize(value),'utf8'), expected, name);
  }
