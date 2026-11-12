@@ -64,7 +64,7 @@
       "verifiedAtUtc": "2026-09-14T23:06:03Z"
     },
     "finalBuild": {
-      "buildNumber": 6,
+      "buildNumber": 7,
       "marketingVersion": "5.0.0",
       "signedArtifactRequired": true,
       "appStoreSubmissionReceipt": null
@@ -81,7 +81,7 @@
     "status": "FINAL_SOURCE_ALIGNED",
     "applicationVersion": "5.0.0",
     "androidVersionCode": 4,
-    "iosBuildNumber": 6,
+    "iosBuildNumber": 7,
     "nusd": {
       "chainId": "962421430",
       "decimals": 18,

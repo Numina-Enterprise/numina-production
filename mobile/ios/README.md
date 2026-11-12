@@ -2,17 +2,17 @@
 
 This folder contains a native SwiftUI/WKWebView Xcode project that opens `https://numinalabs.xyz/app`. It preserves the hosted application; it does not copy, replace, publish, or modify its web code. This is source, not an IPA, an installable build, or an App Store submission.
 
-The current source targets bundle version 5.0.0 and build number 5. It now includes native code changes, not only version metadata. These latest changes have not been compiled or signed; earlier unsigned artifacts must not be presented as builds of this source. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v5.json`.
+The current source targets bundle version 5.0.0 and build number 7. It now includes native code changes, not only version metadata. These latest changes have not been compiled or signed; earlier unsigned artifacts must not be presented as builds of this source. The macOS workflow in `../../.github/workflows/numina-ios-signing.yml` requires Apple's actual distribution credentials; see `../signing/APPLE-SIGNING.md`. See `../../docs/native-package-record-v5.json`.
 
 ## Shared software release binding
 
-The application remains **5.0.0**, with iOS source build **5** and runtime **1.9.0-rc27** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
+The application remains **5.0.0**, with iOS source build **7** and runtime **1.9.0-rc27** / core **1.8.0**. Android's source build counter remains 3. Platform build counters are not software versions and must not be overwritten to match the number in an older binary record.
 
 `node scripts/ios-release.mjs check` verifies the iOS identity against the root application package, required architecture, runtime contract and shared distribution policy. `node scripts/ios-release.mjs sync` regenerates only `Configuration/NuminaRelease.xcconfig`; it does not change the source build counter or create a binary. The generated dependency values are embedded into Info.plist and shown in native diagnostics.
 
 The normal web build checks these bindings before building and records the current iOS input fingerprint in source-alignment.json. Release metadata treats stored iOS source ZIPs as historical snapshots: a stale snapshot is marked non-authoritative instead of replacing or blocking the checked-in current source identity. The source snapshot and existing unsigned binary remain separate artifacts.
 
-The existing recorded unsigned iOS binary remains build 3 and predates these source changes. **Do not sign or submit that older bundle as build 5.** A fresh macOS compile, matching artifact evidence and an updated signing path are still required. No source alignment check establishes native compilation, Apple signing or store acceptance.
+The existing recorded unsigned iOS binary remains build 3 and predates these source changes. **Do not sign or submit that older bundle as build 7.** A fresh macOS compile, matching artifact evidence and an updated signing path are still required. No source alignment check establishes native compilation, Apple signing or store acceptance.
 
 ## Candidate settings
 
@@ -20,12 +20,12 @@ The existing recorded unsigned iOS binary remains build 3 and predates these sou
 | --- | --- |
 | Display name | Numina |
 | Proposed bundle identifier | `xyz.numinalabs.app` — unregistered/unverified |
-| Version / build | 5.0.0 / 5 |
+| Version / build | 5.0.0 / 7 |
 | Deployment target | iOS / iPadOS 15.0+ |
 | Implementation | SwiftUI, WebKit; Apple system frameworks only |
 | Signing | Disabled; no team, certificate, profile, or key supplied |
 
-For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 5 must also be checked against any existing release history.
+For an update to an existing store app, its existing bundle identifier must be used. This proposed value is not evidence that an app record exists or that the identifier is available. Build 7 must also be checked against any existing release history.
 
 ## Included behavior
 

@@ -60,7 +60,7 @@ jobs:
           set -euo pipefail
           python3 scripts/package-ios-source.py
           git diff --exit-code -- docs/numina-os-5.0.0-ios-source.zip
-      - name: Compile unsigned iOS build 6
+      - name: Compile unsigned iOS build 7
         shell: bash
         run: |
           set -euo pipefail
