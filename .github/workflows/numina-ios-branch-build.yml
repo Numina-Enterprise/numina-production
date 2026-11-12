@@ -60,7 +60,7 @@ jobs:
           set -euo pipefail
           python3 scripts/package-ios-source.py
           git diff --exit-code -- docs/numina-os-5.0.0-ios-source.zip
-      - name: Compile unsigned iOS build 6
+      - name: Compile unsigned iOS build 7
         shell: bash
         run: |
           set -euo pipefail
@@ -102,7 +102,7 @@ jobs:
           curl --fail --location --retry 2 https://services.gradle.org/distributions/gradle-8.13-bin.zip -o "$RUNNER_TEMP/gradle.zip"
           printf '%s  %s\n' '20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78' "$RUNNER_TEMP/gradle.zip" | sha256sum --check
           unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
-      - name: Compile unsigned Android code 4
+      - name: Compile unsigned Android code 5
         shell: bash
         run: |
           set -euo pipefail

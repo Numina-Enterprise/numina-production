@@ -370,3 +370,250 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Ephemeral Cloud-Native Execution: All automated builds, CI test matrix jobs, Docker container compilations, and deployments must execute exclusively on managed, ephemeral, cloud-hosted runners (e.g. GitHub-hosted runners `ubuntu-latest`, `macos-latest`, `windows-latest`, Google Cloud Build in project `project-0317d6c9-e943-409e-83f`, or Apple Xcode Cloud).
 - Workstation Perimeter Integrity: Workstations and development machines must NEVER run runner daemons or expose local sockets to external CI/CD dispatchers. Any workflow configuration containing `runs-on: self-hosted` or binding local compute nodes is rejected fail-closed to prevent lateral persistence, memory tampering, and credential exfiltration.
 
+
+## 46. Agent operating index
+
+Sections 1–45 above are unchanged. This index tells an agent where configuration and instructions live, and which files to leave alone. Summaries here are pointers. When a source and this index disagree, the source file wins. When two sources disagree with each other, both pins are listed under [Conflicts](#conflicts-between-sources). Do not pick one silently, and do not edit a sealed file to make them match.
+
+Checked at `ea07008d46cff0944e64ed2e667d173886fb3212`: the root `AGENTS.md` filename and its SHA-256 were absent from `HARDENED_SECURITY_MANIFEST.json` (`file_checksums_sha256`), `ALIGNMENT_STATE_RATIFIED.json`, `release-evidence/` checksum lists, and `release-evidence/numina-5.0.0-release.statement.json` subjects. Those files stay link-only. If a later seal records this file, stop editing it.
+
+### Overview
+
+Numina production is the canonical repository for the hosted site, Worker, local admin console, mobile wrappers, and release evidence. The public origin named in workflow checks is `https://numinalabs.xyz`. Package identity in root `package.json` is `numina-singular-control`, `version` `5.0.0`, `"type": "module"`, license BSD-3-Clause.
+
+The README opens with a **Singular identity** section that defines the NUMINA model identity. Read that section in [README.md](README.md). This index does not restate it.
+
+Treasury, NUSD, bank, and Stripe Treasury claims stay in their source documents. Read them there. This index does not copy those claims. Start at [NATIVE-TREASURY.md](NATIVE-TREASURY.md) and the treasury sections already in this file (sections 2, 25–29, 32–33).
+
+### Repository map
+
+| Area | Path | What it is |
+|---|---|---|
+| Governance (this file) | [AGENTS.md](AGENTS.md) | Sections 1–45 plus this index |
+| Short governance mirror | [GEMINI.md](GEMINI.md) | Ten runtime invariants; defers to AGENTS.md |
+| Frontier model notes | [FRONTIER.md](FRONTIER.md) | Singular runtime and build law |
+| Product readme | [README.md](README.md) | Identity, architecture, build, license |
+| Security contact | [SECURITY.md](SECURITY.md) | Reporting path; points at `docs/Numina-Security.md` |
+| Historical rc26 record | [RC26-ALIGNMENT.md](RC26-ALIGNMENT.md) | Migration notes from 2026-09-13 |
+| Provenance reading list | [sources.md](sources.md) | External SLSA and Actions references |
+| Changelog | [CHANGELOG.md](CHANGELOG.md) | Release history |
+| Worker and site source | `src/`, `public/` | Application code and website |
+| Tests and scripts | `tests/`, `scripts/` | `node --test` suite and build/release scripts |
+| Local-only console | `src/local/`, [LOCAL-ADMIN.md](LOCAL-ADMIN.md) | Loopback admin; excluded from the production build |
+| Runtimes | `runtime/` | Including `runtime/nusd` and verifier trees |
+| Mobile | `mobile/` | iOS and Android wrappers |
+| Agent rules and skills | `.agents/` | Rules, skills, and historical teamwork notes |
+| CI | `.github/workflows/` | GitHub Actions. Read only unless Sam asks for a workflow edit |
+| Docs | `docs/` | Specifications and runbooks |
+| Evidence and releases | `release-evidence/`, `releases/` | Signed bytes. Link only |
+
+`test.txt` is a root placeholder (`// test`). It has no operating instructions.
+
+### Related agent guidance and overlaps
+
+- [GEMINI.md](GEMINI.md) repeats the authority, state-root, ingress, cloud-scope, audit, and self-hosted-runner invariants from sections 1–45, then points agents at AGENTS.md. Its link target is a local scratch path (`file:///C:/Users/sam/.gemini/antigravity/scratch/AGENTS.md`), which is a different file from this repository root. Use this root file when working in the repo. GEMINI.md also restates treasury status; follow the treasury documents instead of copying that paragraph.
+- [FRONTIER.md](FRONTIER.md) overlaps the README singular-identity section and the treasury documents. Read it for the runtime and build law. Treasury figures in that file stay in that file.
+- [LOCAL-ADMIN.md](LOCAL-ADMIN.md) is the runbook for `npm run local-admin` (`src/local/server.mjs`). The production build (`scripts/build.mjs`) omits that server. Default listen address in the runbook is `http://127.0.0.1:8790/admin`. Writes need `NUMINA_LOCAL_ADMIN_TOKEN` (16+ characters) from the environment. `local-data/` is gitignored.
+- [README.md](README.md) **Singular identity** is the model-identity definition. Later README sections cover production architecture, build commands, and distribution. Architecture prose that states treasury or chain deployment facts stays in the README and in [NATIVE-TREASURY.md](NATIVE-TREASURY.md).
+- [SECURITY.md](SECURITY.md) sends vulnerability reports to the published security contact and tells reporters to keep credentials and financial records out of public issues. The long control write-up is [docs/Numina-Security.md](docs/Numina-Security.md).
+- [RC26-ALIGNMENT.md](RC26-ALIGNMENT.md) is a historical engineering record. It says the rc26 migration was still pending as of that note, and it points local checks at `node scripts/build.mjs`, `node --test tests/*.test.mjs`, and `node scripts/check-runtime.mjs`.
+- [sources.md](sources.md) is a bibliography for provenance verification. Exact action SHAs live in [action-pins.json](action-pins.json). See the attest-version conflict below.
+- `.agents/teamwork/` holds past dispatch, briefing, and handoff notes. Those notes are history. They are not a second copy of sections 1–45, and old hashes written inside them are not seals of the current tree.
+
+### Setup and runtime pins
+
+Install and run Node from [.nvmrc](.nvmrc).
+
+| Pin | Value | Source |
+|---|---|---|
+| Node | `26.13.0` | [.nvmrc](.nvmrc), `package.json` `engines.node`, [Dockerfile](Dockerfile) `FROM node:26.13.0`, [numina-multi-cloud-topology.yaml](numina-multi-cloud-topology.yaml) `nodeVersion`, and the workflows listed below that pass `node-version: '26.13.0'` |
+| Python (root verify job) | `3.12` | [.github/workflows/verify-root-numina.yml](.github/workflows/verify-root-numina.yml) |
+| `verify_release.py` | Python 3.12+ and a current GitHub CLI | [verify_release.py](verify_release.py) module docstring |
+| Package manager | npm, `"type": "module"` | [package.json](package.json) |
+| Hosted Linux runner named by pin policy | `ubuntu-24.04` | [action-pins.json](action-pins.json) `reference_policy.hosted_linux_runner` |
+| Public site deploy | Cloudflare Worker | [wrangler.jsonc](wrangler.jsonc), [.github/workflows/deploy-cloudflare.yml](.github/workflows/deploy-cloudflare.yml) |
+| Vercel Git deploys | disabled | [vercel.json](vercel.json) `git.deploymentEnabled: false` |
+
+Root [Dockerfile](Dockerfile) is a Cloud Run image. It copies a prebuilt `dist/` and `scripts/cloudrun-server.mjs`, sets `NODE_ENV=production`, exposes `8080`, and runs `node scripts/cloudrun-server.mjs` so the process binds `0.0.0.0:$PORT`. It does not run `npm install`. The comment in that file says the local preview server binds `127.0.0.1`, defaults to port `8788`, ignores `$PORT`, and is separate from this image. [.gcloudignore](.gcloudignore) exists so a Cloud Run upload still includes `dist/` (`.gitignore` excludes `dist/`; this ignore file must keep `dist/` included).
+
+[numina-multi-cloud-topology.yaml](numina-multi-cloud-topology.yaml) is schema `numina.multi-cloud-topology.v1`, `version` `5.0.0`, with `canonicalTopology` `config/numina-topology.v1.json` and `liveVerification` `PENDING_PROVIDER_EVIDENCE`. The Google Cloud block names project `project-0317d6c9-e943-409e-83f`, region `us-central1`, zone `us-central1-a`. Read the file for other clouds. Secret names and treasury details stay in the file.
+
+Environment names from [.env.example](.env.example), names only: `PORKBUN_SMTP_HOST`, `PORKBUN_SMTP_PORT`, `PORKBUN_EMAIL`, `PORKBUN_PASSWORD`, `RECIPIENT_EMAIL`, `EMAIL_SUBJECT`, `NUMINA_STRIPE_TREASURY_READ_KEY`, `NUMINA_STRIPE_TREASURY_FINANCIAL_ACCOUNT`, `DATABASE_URL`, `NEON_DATABASE_URL`, `VERCEL_ENV`, `VERCEL_PROJECT_ID`, `VERCEL_ORG_ID`. Copy none of the values. Real secrets stay in the host secret store. `.gitignore` ignores `.env` and `.env.local`.
+
+### Build and test commands
+
+Root scripts in [package.json](package.json). Prefer `npm run <name>` so the script body stays in that file.
+
+| Script | Command |
+|---|---|
+| `build` | `node scripts/build.mjs` |
+| `test` | `node --test tests/*.test.mjs` |
+| `start` | `bash scripts/numina-cloud-preview.sh` |
+| `conformance` | `node scripts/conformance-current.mjs` |
+| `check:runtime` | `node scripts/check-runtime.mjs` |
+| `publish:source` | `node scripts/publish-with-telemetry.mjs` |
+| `release:numina` | `node scripts/package-numina-release.mjs` |
+| `release:statement` | `node scripts/release-statement.mjs` |
+| `release:sign` | `node scripts/release-sign.mjs` |
+| `release:verify` | `node scripts/release-verify.mjs` |
+| `release:pq-keygen` | `node scripts/release-pq-keygen.mjs` |
+| `local-admin` | `node src/local/server.mjs` |
+| `compliance` and `compliance:*` | `node local/compliance/bin/compliance.mjs` (and `gate.mjs` for `compliance:gate`) |
+| `treasury`, `treasury:generate`, `treasury:check`, `test:treasury` | Local treasury CLI and `node --test tests/treasury/*.test.mjs` |
+| `runner:activate`, `runner:status` | `scripts/activate-numina-runner.ps1` |
+
+[README.md](README.md) build section: install pinned test dependencies with `npm ci --prefix runtime/nusd --ignore-scripts` and `npm ci --prefix runtime/nusd/development --ignore-scripts`, then `npm run build`, `npm test`, and `npm run release:numina`. The same prefix installs appear in [.github/workflows/numina.yml](.github/workflows/numina.yml) and [.github/workflows/deploy-cloudflare.yml](.github/workflows/deploy-cloudflare.yml).
+
+Release, treasury, compliance, publish, and runner scripts change signed output, financial state, or a local runner. Run them only when Sam explicitly asks. Section 45 forbids self-hosted runners; leave `runner:activate` unused unless Sam overrides that in writing.
+
+`verify_release.py` is a read-only provenance gate. It does not deploy, sign, or publish. From a trusted Python 3.12+ environment with GitHub CLI available:
+
+```text
+python verify_release.py policy.json artifact.tar.gz provenance.jsonl result.json
+```
+
+The policy file must already be configured. The script checks repository identity `Numina-Enterprise/numina-production`, provenance identity `NUMINA`, immutable source and signer SHAs, artifact and inventory digests, SLSA v1 predicate type, GitHub OIDC issuer, `deny_self_hosted_runners`, a successful `workflow_dispatch` run via `gh`, and `gh attestation verify` against the supplied bundle. It deletes any previous result file first and writes a result only after every gate succeeds. A nonzero exit means there is no current decision. The gate inside the script is scoped to application version `4.0.0` and artifact name `numina-site-v4.0.0.tar.gz`. The policy template is release configuration: [verification-policy.template.json](verification-policy.template.json). Link only. Do not copy it into chat or into a new policy file from memory.
+
+### Deployment
+
+Production site deployment is Cloudflare. [wrangler.jsonc](wrangler.jsonc) names the Worker `numina-production`, sets `main` to `./dist/server/index.js`, assets directory `./dist/client`, and routes `numinalabs.xyz/*` and `www.numinalabs.xyz/*`. [.github/workflows/deploy-cloudflare.yml](.github/workflows/deploy-cloudflare.yml) (`Deploy Numina to Cloudflare Edge`, job `deploy-edge`, environment `Production`) checks out, uses Node `26.13.0`, installs the pinned prefixes, and deploys on pushes to `main` or `workflow_dispatch`.
+
+[vercel.json](vercel.json) sets `git.deploymentEnabled` to `false`. Vercel Git deployments stay disabled. `vercel.json` is off-limits: do not edit it, and do not turn Git deployments back on.
+
+[deploy_ibm_code_engine.ps1](deploy_ibm_code_engine.ps1) deploys the web origin to IBM Cloud Code Engine. Defaults in the script: region `us-south`, resource group `default`, project `numina-serverless-project`, app `numinalabs-web`, registry namespace `numina-cr`. It requires the `ibmcloud` CLI and the `code-engine` plugin. The matching workflow is [.github/workflows/deploy-ibm-code-engine.yml](.github/workflows/deploy-ibm-code-engine.yml) (`Deploy Numina to IBM Cloud Code Engine`, job `deploy-code-engine`, `workflow_dispatch`, Node `26.13.0` on `ubuntu-24.04`). Do not run the script or dispatch the workflow without Sam's explicit approval.
+
+The Cloud Run image is [Dockerfile](Dockerfile), described above. Do not deploy it without an explicit request.
+
+### CI summary
+
+Workflows live in [.github/workflows/](.github/workflows/). Dependabot watches the `github-actions` ecosystem weekly and opens at most five PRs ([.github/dependabot.yml](.github/dependabot.yml)); its comment says not to auto-merge or silently expand the builder-SHA policy. [.github/agents/agentic-workflows.md](.github/agents/agentic-workflows.md) is GitHub Agentic Workflows (gh-aw) dispatcher guidance. [.github/mcp.json](.github/mcp.json) is MCP config. [.github/workflows/daily-repo-status.md](.github/workflows/daily-repo-status.md) is the source for the compiled lock workflow. Do not edit workflow files unless Sam asks.
+
+Most jobs use `runs-on: ubuntu-24.04`. iOS signing and parts of the mobile workflows use `macos-latest`. Node `26.13.0` is the pin in every setup-node step found except the gh-aw lock file, which uses Node `24` (see conflicts). [.github/workflows/verify-root-numina.yml](.github/workflows/verify-root-numina.yml) reads Node from `.nvmrc` and fails unless `package.json` engines, `.nvmrc`, and the running Node are all `26.13.0`. It also installs Python `3.12`.
+
+`npm test` runs in [.github/workflows/deploy-cloudflare.yml](.github/workflows/deploy-cloudflare.yml) and [.github/workflows/verify-provider-observations.yml](.github/workflows/verify-provider-observations.yml). [.github/workflows/numina-ios-branch-build.yml](.github/workflows/numina-ios-branch-build.yml) runs `npm test --prefix runtime/nusd/development`. The main [.github/workflows/numina.yml](.github/workflows/numina.yml) job builds and packages a release; it does not run `npm test`.
+
+| Workflow file | Name | Jobs | Runner | Node |
+|---|---|---|---|---|
+| `numina.yml` | NUMINA | `numina` | ubuntu-24.04 | 26.13.0. On pull_request and push to `main`: checkout, prefix `npm ci`, `npm run build`, syntax checks, `npm run release:numina`, upload `numina-release-v5.0.0.tar.gz` |
+| `verify-root-numina.yml` | Verify root Numina | `verify` | ubuntu-24.04 | `.nvmrc` (enforced `26.13.0`) plus Python 3.12 |
+| `verify-workflow-pins.yml` | Verify immutable workflow dependencies | `verify` | ubuntu-24.04 | — |
+| `verify-provider-observations.yml` | Verify provider observations | `verify` | ubuntu-24.04 | `.nvmrc`, then `npm test` |
+| `publish-sites-control-source.yml` | Build and verify Numina Sites source | `numina` | ubuntu-24.04 | `.nvmrc` |
+| `numina-ci-start.yml` | NUMINA CI start | `release-artifacts` | ubuntu-24.04 | 26.13.0 |
+| `numina-release.yml` | Numina GitHub Release | `publish` | ubuntu-24.04 | 26.13.0 |
+| `numina-site-builder.yml` | Numina Site 4.0 trusted build and provenance | `build`, `attest` | ubuntu-24.04 | 26.13.0 (`workflow_call`) |
+| `deploy-cloudflare.yml` | Deploy Numina to Cloudflare Edge | `deploy-edge` | ubuntu-24.04 | 26.13.0, then `npm test` |
+| `check-sites-control-origin.yml` | Check canonical Sites control origin | (see file) | ubuntu-24.04 | — |
+| `diagnose-control-auth.yml` | Diagnose production control auth | (see file) | ubuntu-24.04 | — |
+| `sync-control-key-pin.yml` | Sync production control credential pin | (see file) | ubuntu-24.04 | — |
+| `copilot-setup-steps.yml` | Copilot Setup Steps | `copilot-setup-steps` | ubuntu-24.04 | — |
+| `daily-repo-status.lock.yml` | Repo Status | several gh-aw jobs | ubuntu-24.04 | **24** |
+| `numina-ios-branch-build.yml` | Numina 4.0 native branch build | `node_compatibility`, `ios`, `android` | ubuntu-24.04 and macos-latest | 26.13.0 |
+| `numina-ios-signing.yml` | Numina iOS distribution signing | `sign` | macos-latest | 26.13.0 |
+| `numina-android-release.yml` | Numina signed Android production release | `release` | ubuntu-24.04 | 26.13.0 |
+| `numina-mobile-release-build.yml` | NUMINA native mobile release build | `android`, `ios` | ubuntu-24.04 and macos-latest | — |
+| `numina-mobile-store-distribution.yml` | NUMINA native mobile store distribution | `android`, `ios` | ubuntu-24.04 and macos-latest | — |
+| `deploy-ibm-code-engine.yml` | Deploy Numina to IBM Cloud Code Engine | `deploy-code-engine` | ubuntu-24.04 | 26.13.0 |
+| `ibm-quantum-smoke.yml` | IBM Quantum smoke | `local-simulation` | ubuntu-24.04 | — |
+| `ibm-quantum-hardware.yml` | IBM Quantum hardware validation | `hardware-validation` | ubuntu-24.04 | — |
+| `repair-rc27-integration-manifest.yml` | Repair rc27 integration manifest | `repair-and-validate` | ubuntu-24.04 | 26.13.0 |
+| `historical-numina-rc26-verifier.yml` | Historical Numina RC26 verifier provenance | `build-and-attest` | reusable workflow at the SHA in `action-pins.json` | caller has no Node step |
+| `numina-nusd-runtime.yml` | Numina NUSD runtime image and provenance | `build-and-attest` | calls `numina-nusd-runtime-builder.yml` | builder jobs on ubuntu-24.04 |
+| `numina-nusd-runtime-builder.yml` | Numina NUSD Linux runtime build and provenance | `build`, `attest` | ubuntu-24.04 | — |
+
+These workflows use `runs-on: NUMINA`, which conflicts with section 45 and with the `ubuntu-24.04` pin policy. Leave them unchanged:
+
+| Workflow file | Name | Jobs |
+|---|---|---|
+| `settle-numina-aggregate-model.yml` | Settle singular Numina aggregate model | `settle` |
+| `rebuild-nusd-artifacts.yml` | Rebuild NUSD Artifacts | `rebuild` |
+| `numina-native-packages.yml` | Numina native production packages | `android`, `ios` |
+| `probe-numina-runtime-auth.yml` | Probe NUMINA runtime deployment authentication | `probe` |
+
+Treasury and contract workflows, also left unchanged and not for an agent to dispatch: `verify-nusd-production.yml` (Verify NUSD Production, job `verify`, Node 26.13.0), `activate-minted-nusd.yml` (Activate minted NUSD transfers, job on ubuntu-24.04, Node 26.13.0), `deploy-nusd-contracts.yml` (Deploy NUSD contracts to NUMINA chain, job `deploy`, Node 26.13.0), `align-native-treasury-500t.yml` (Align native treasury 500T), `initiate-treasury-aggregate-model.yml` (Prepare 1500T treasury aggregate model). Their subjects are treasury documents, not this index.
+
+### Action pins
+
+[action-pins.json](action-pins.json) records an observation dated `2026-09-12`. It pins these Actions to full 40-character SHAs (versions named in the file): `actions/checkout` v7.0.1, `actions/setup-node` v7.0.0, `actions/upload-artifact` v7.0.1, `actions/download-artifact` v8.0.1, `actions/attest` v4.2.2, `cloudflare/wrangler-action` v4.1.3. Policy in the same file: external actions and reusable workflows need a full SHA, local reusable workflows stay on the same commit path, hosted Linux is `ubuntu-24.04`, and floating `ubuntu-latest` is denied. The `node` object is a checksum observation of Node `24.21.0`, with an explicit note that the binary was not executed there. One reusable workflow pointer records `skott34-dot/numina-builder` `.github/workflows/numina-rc26-verifier-builder.yml` at `f85e9428fa8bf0371931429479f31b0348ead454`. Read the SHAs from the file. Do not retype them into a workflow from memory.
+
+### Host audit and maintenance scripts
+
+Section 44 names the orchestrator. How to run the pieces:
+
+| Script | Role | How to run |
+|---|---|---|
+| [audit_acls.ps1](audit_acls.ps1) | Read Windows ACL owner and inheritance on a fixed set of `C:\Windows` paths | `powershell -NoProfile -File audit_acls.ps1` |
+| [audit_services.ps1](audit_services.ps1) | Query `AppReadiness` and `BcastDVR*` service state; falls back to `sc.exe` | `powershell -NoProfile -File audit_services.ps1` |
+| [audit_sizes.ps1](audit_sizes.ps1) | File counts and sizes under `C:\Windows\CbsTemp`, `Logs`, and `Debug` | `powershell -NoProfile -File audit_sizes.ps1` |
+| [audit_mac_acls.sh](audit_mac_acls.sh) | macOS owner, mode, and ACL presence on Library and log paths | `bash audit_mac_acls.sh` |
+| [audit_mac_services.sh](audit_mac_services.sh) | `launchctl list` sample and LaunchDaemons directory listing | `bash audit_mac_services.sh` |
+| [audit_mac_sizes.sh](audit_mac_sizes.sh) | `du` and file counts for macOS log, tmp, and cache dirs | `bash audit_mac_sizes.sh` |
+| [audit_gcp_resources.sh](audit_gcp_resources.sh) | Lists Compute instances in `us-central1-a`, Cloud Run services, buckets, and service accounts for project `project-0317d6c9-e943-409e-83f`. Without `gcloud` it prints the intended commands and exits 0. With `gcloud` it sets the active project | `bash audit_gcp_resources.sh` |
+| [unified_audit_orchestrator.ps1](unified_audit_orchestrator.ps1) | Runs the Windows scripts, checks the macOS scripts, and runs the GCP script. Supports `-DryRun` and `-IncludeWindows` / `-IncludeMac` / `-IncludeGcp` | `powershell -NoProfile -File unified_audit_orchestrator.ps1` |
+| [register_audit_schedule.ps1](register_audit_schedule.ps1) | `-Action RunOnce` (default) runs the orchestrator. `Register` creates scheduled task `NuminaVictoryAuditMonitor` (default every 60 minutes). `Unregister` and `Status` manage that task. `Register` needs an elevated host | `powershell -NoProfile -File register_audit_schedule.ps1 -Action RunOnce` |
+
+Do not `Register` a scheduled audit, and do not run [audit_gcp_resources.sh](audit_gcp_resources.sh) against a live project, unless Sam explicitly asks. Those calls change Task Scheduler or the active gcloud project.
+
+[windows-maintenance-suite.ps1](windows-maintenance-suite.ps1) is an elevated host-maintenance script (it exits unless the session is Administrator). Phase 1 cleans caches, phase 2 tunes services, phase 3 runs system integrity checks (SFC and DISM, skippable with `-SkipSFC` and `-SkipDISM`), phase 4 audits ACLs. `-WhatIf` is supported. It changes the workstation. Do not run it unless Sam explicitly asks.
+
+### Agent rules and skills (`.agents/`)
+
+Active rules:
+
+| File | Constraint to follow |
+|---|---|
+| [.agents/rules/numina-zero-trust-contract.md](.agents/rules/numina-zero-trust-contract.md) | Fail closed on signature or digest drift. RFC 8785 canonical JSON. No private keys in logs or transcripts. No BOM and no Windows-1252 mojibake. Ingress stays off public SSH. |
+| [.agents/rules/numina-provenance.md](.agents/rules/numina-provenance.md) | Manifest state root is the SHA-256 of the canonical body with signature fields removed. Dual signers sign the `NUMINA-PROVENANCE-MANIFEST-V1` transcript. Pure Ed25519. |
+| [.agents/rules/mesh-router-architecture.md](.agents/rules/mesh-router-architecture.md) | In `numina-doc-alignment`, use Node built-ins only (`node:crypto`, `node:test`, `node:assert/strict`, `node:fs`, `node:path`). Messages need the E2EE envelope, an exact state-root match, and a dual-signed room grant. |
+| [.agents/rules/genai-engineering-standards.md](.agents/rules/genai-engineering-standards.md) | Small inspectable diffs, tests before calling work done, preserve unrelated public signatures, re-run the failing test after a fix. |
+| [.agents/rules/security-coexistence.md](.agents/rules/security-coexistence.md) | On Windows, check Security Center for a third-party antivirus product before treating Defender real-time protection being off as a compromise. |
+
+Skills, read the `SKILL.md` before using the procedure:
+
+- [.agents/skills/numina-verification-suite/SKILL.md](.agents/skills/numina-verification-suite/SKILL.md) — manifest verification and the Node test suite.
+- [.agents/skills/provenance-signer-pipeline/SKILL.md](.agents/skills/provenance-signer-pipeline/SKILL.md) — verify and re-sign manifests. Do not print private keys.
+- [.agents/skills/genai-software-engineering/SKILL.md](.agents/skills/genai-software-engineering/SKILL.md) — engineering workflow notes paired with the standards rule.
+- [.agents/skills/tailscale-zero-trust/SKILL.md](.agents/skills/tailscale-zero-trust/SKILL.md) — ACL and SSH check-mode runbook. Ports 22 and 2389 stay closed (section 39).
+
+Mirrors of some of these files also exist under `numina-doc-alignment/.agents/`, `manifest-verifier/.agents/`, and `tailscale-ssh-policy/.agents/`. Edit a mirror only when the task is that subtree.
+
+### Coding conventions
+
+- JavaScript in this repo is ESM (`"type": "module"`). Mesh-router and doc-alignment code stays on Node built-ins.
+- Tests are `node --test` (`npm test`, and `tests/treasury/*.test.mjs` for `test:treasury`). Python verifiers use `py_compile` in CI and `verify_release.py` for the provenance gate.
+- [.gitattributes](.gitattributes) forces `-text` on signed evidence, runtime trees, `src/`, `public/`, release manifests, and `release-evidence/**`, and marks `*.ed25519.sig64` and `*.raw32` binary. Keep those bytes identical across Windows and Linux. The gh-aw lock file is marked `linguist-generated`.
+- [.gitignore](.gitignore) drops `node_modules/`, `.env`, `dist/`, `.vercel/`, `.wrangler/`, keystores, `*.p12`, `*.p8`, `*.key`, `local-data/`, and Cloudflare tunnel credential JSON. Do not commit those.
+- Keep diffs limited to the task. Do not reformat unrelated files. Sections 1–45 already require UTF-8 without BOM.
+
+### Conflicts between sources
+
+Recorded so the next agent does not “fix” one side by guessing:
+
+1. **Node.** Runtime pin is `26.13.0` (`.nvmrc`, `package.json` engines, Dockerfile, topology YAML, and the workflows in the table above). [action-pins.json](action-pins.json) observes Node `24.21.0` checksums and says that observation was not executed. [sources.md](sources.md) points at the Node 24 checksum list for that same observation. [.github/workflows/daily-repo-status.lock.yml](.github/workflows/daily-repo-status.lock.yml) sets `node-version: '24'`. [.agents/rules/mesh-router-architecture.md](.agents/rules/mesh-router-architecture.md) says “Node 26” without the `26.13.0` patch.
+2. **Application version.** Section 9 says hosted application `4.0.0`. Root `package.json` `version` is `5.0.0`. [README.md](README.md) describes a 5.0.0 control extension. [numina.yml](.github/workflows/numina.yml) uploads `numina-release-v5.0.0.tar.gz`. [verify_release.py](verify_release.py) requires policy `application_version` `4.0.0` and hosted artifact name `numina-site-v4.0.0.tar.gz`. Workflow titles `numina-site-builder.yml` and `numina-ios-branch-build.yml` say 4.0. The v4 tarball at the repo root is a release artifact (link only): [numina-release-v4.0.0.tar.gz](numina-release-v4.0.0.tar.gz), [numina-release-v4.0.0.tar.gz.sha256](numina-release-v4.0.0.tar.gz.sha256).
+3. **Runners.** Section 45 and [GEMINI.md](GEMINI.md) forbid self-hosted runners and name GitHub-hosted `ubuntu-latest` / `macos-latest` / `windows-latest`. [action-pins.json](action-pins.json) denies floating `ubuntu-latest` and requires `ubuntu-24.04`. Current workflows mostly use `ubuntu-24.04` (and `macos-latest` for Apple jobs). Four workflows set `runs-on: NUMINA` (table above). `package.json` also defines `runner:activate`. Do not start a runner to paper over the label.
+4. **`actions/attest` version.** [sources.md](sources.md) lists v4.2.1. [action-pins.json](action-pins.json) records v4.2.2. The pin file holds the SHA the workflows should match; confirm before changing either file. The compiled [.github/workflows/daily-repo-status.lock.yml](.github/workflows/daily-repo-status.lock.yml) also carries different Action SHAs than `action-pins.json` (including `actions/setup-node`, `actions/upload-artifact`, and `actions/download-artifact` in its gh-aw manifest) and a comment that labels SHA `820762786026740c76f36085b0efc47a31fe5020` as v7.1.0, while `action-pins.json` labels that same SHA as `actions/setup-node` v7.0.0.
+5. **GEMINI link target.** [GEMINI.md](GEMINI.md) links to a scratch-path `AGENTS.md`, not to `./AGENTS.md`.
+6. **Local ports.** Dockerfile comments describe a preview server on `127.0.0.1:8788`. [LOCAL-ADMIN.md](LOCAL-ADMIN.md) serves admin on `127.0.0.1:8790`. They are different processes (`scripts/numina-cloud-preview.sh` via `npm start`, and `src/local/server.mjs` via `npm run local-admin`).
+
+### Off-limits
+
+- **Do not edit** [.github/workflows/](.github/workflows/), other files under `.github/`, or anything under `.agents/` as part of ordinary doc or feature work. This index was added by reading them.
+- **Do not edit** [vercel.json](vercel.json). Vercel Git deployments stay disabled.
+- **Do not edit** signed or release artifacts. Link only: [HARDENED_SECURITY_MANIFEST.json](HARDENED_SECURITY_MANIFEST.json), [ALIGNMENT_STATE_RATIFIED.json](ALIGNMENT_STATE_RATIFIED.json), [VICTORY_CERTIFICATE.md](VICTORY_CERTIFICATE.md), [deployment-binding.template.json](deployment-binding.template.json), [verification-policy.template.json](verification-policy.template.json), [numina-release-v4.0.0.tar.gz](numina-release-v4.0.0.tar.gz), [numina-release-v4.0.0.tar.gz.sha256](numina-release-v4.0.0.tar.gz.sha256), `release-evidence/`, `releases/`, `*.dsse.json`, in-toto statements, `*.ed25519.sig64`, and checksum files.
+- **Treasury:** [NATIVE-TREASURY.md](NATIVE-TREASURY.md) is link only. Do not copy treasury, bank, or Stripe Treasury claims into new docs or commits. Do not change treasury or NUSD implementation files unless Sam explicitly asks.
+- **Email:** [send_porkbun_email.mjs](send_porkbun_email.mjs) sends mail (it loads `.env` and uses the Porkbun SMTP variable names above). Do not run it unless Sam explicitly approves that send.
+- **Host mutation:** do not run [windows-maintenance-suite.ps1](windows-maintenance-suite.ps1) or `register_audit_schedule.ps1 -Action Register` without an explicit request.
+- **Secrets:** never print values from `.env`, `.env.example`, keystores, `*.pem`, `*.key`, or Cloudflare tunnel credentials. `.gitignore` already excludes those tunnel files.
+
+### Source index
+
+Governance and identity: [AGENTS.md](AGENTS.md), [GEMINI.md](GEMINI.md), [FRONTIER.md](FRONTIER.md), [README.md](README.md), [SECURITY.md](SECURITY.md), [RC26-ALIGNMENT.md](RC26-ALIGNMENT.md), [sources.md](sources.md), [CHANGELOG.md](CHANGELOG.md), [LOCAL-ADMIN.md](LOCAL-ADMIN.md).
+
+Pins and build: [.nvmrc](.nvmrc), [package.json](package.json), [Dockerfile](Dockerfile), [.gitattributes](.gitattributes), [.gitignore](.gitignore), [.gcloudignore](.gcloudignore), [.env.example](.env.example), [action-pins.json](action-pins.json), [numina-multi-cloud-topology.yaml](numina-multi-cloud-topology.yaml), [wrangler.jsonc](wrangler.jsonc), [vercel.json](vercel.json), [verify_release.py](verify_release.py).
+
+Audits: [unified_audit_orchestrator.ps1](unified_audit_orchestrator.ps1), [register_audit_schedule.ps1](register_audit_schedule.ps1), [audit_acls.ps1](audit_acls.ps1), [audit_services.ps1](audit_services.ps1), [audit_sizes.ps1](audit_sizes.ps1), [audit_mac_acls.sh](audit_mac_acls.sh), [audit_mac_services.sh](audit_mac_services.sh), [audit_mac_sizes.sh](audit_mac_sizes.sh), [audit_gcp_resources.sh](audit_gcp_resources.sh), [windows-maintenance-suite.ps1](windows-maintenance-suite.ps1), [deploy_ibm_code_engine.ps1](deploy_ibm_code_engine.ps1).
+
+Agent configuration: [.agents/rules/](.agents/rules/), [.agents/skills/](.agents/skills/), [.github/workflows/](.github/workflows/), [.github/dependabot.yml](.github/dependabot.yml), [.github/agents/agentic-workflows.md](.github/agents/agentic-workflows.md).
+
+Link only: [NATIVE-TREASURY.md](NATIVE-TREASURY.md), [VICTORY_CERTIFICATE.md](VICTORY_CERTIFICATE.md), [HARDENED_SECURITY_MANIFEST.json](HARDENED_SECURITY_MANIFEST.json), [ALIGNMENT_STATE_RATIFIED.json](ALIGNMENT_STATE_RATIFIED.json), [deployment-binding.template.json](deployment-binding.template.json), [verification-policy.template.json](verification-policy.template.json), [numina-release-v4.0.0.tar.gz](numina-release-v4.0.0.tar.gz), [numina-release-v4.0.0.tar.gz.sha256](numina-release-v4.0.0.tar.gz.sha256), [send_porkbun_email.mjs](send_porkbun_email.mjs).

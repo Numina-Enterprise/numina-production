@@ -55,3 +55,8 @@ release-evidence/** -text
 scripts/build-numina-correctness-reports.py -text
 
 .github/workflows/*.lock.yml linguist-generated=true
+
+# Directories copied into dist/ must check out as the committed bytes on every platform.
+docs/** -text
+config/** -text
+fixtures/** -text
