@@ -123,3 +123,23 @@ HTTP responses at 10:37 AM CST:
 | `https://numina-production.skott34.workers.dev/api/control/v1/treasury` | 503 `{"status":"unavailable","error":"DEPENDENCY_UNAVAILABLE"}` |
 
 The apex and workers.dev homepages carry the same page copy. The apex response is larger because Cloudflare injects its challenge script into the cached HTML. The workers.dev agent-card response matches the control-backend exception in `src/worker.js`. The treasury request above sent no credential. `controlHttp` calls `rateLimit(env.DB, ...)` before authentication, and this script has no `DB` binding, so that route cannot return `READY` until a database is bound and initialized. That binding was not added. CI still cannot publish a Worker version until the release statement is re-signed.
+
+## 7. Edge-alias gate is not the deployed Worker (2026-11-12, 10:52 AM CST)
+
+Read-only GETs, no credentials. The active production script is still the wrangler version from section 6 (`91a0db93`, created `2026-11-12T04:06:23Z`, 10:06 PM CST on Nov 11). Commit `350d9a14` ("Apply the private-route lockdown to workers.dev and preview hosts") is `2026-11-11 23:54 CST`, after that deploy. Deploy run 43257992268 on `1a39da47` never published a newer version.
+
+A 200 on `/.well-known/agent-card.json` at the control host does not show that the new exception is live. The pre-lockdown script served that path on workers.dev with no host gate. Paths `publicGateBlocks` would reject on `*.workers.dev` still reach handlers:
+
+| URL | Live status | Current `src/worker.js` |
+|---|---|---|
+| `https://numinalabs.xyz/mcp` | 403 private notice | 403 |
+| `https://www.numinalabs.xyz/mcp` | 403 private notice | 403 |
+| `https://numina-production.skott34.workers.dev/mcp` | 405 from the MCP handler (POST required) | 403 private notice |
+| `https://numinalabs.xyz/v5/release/manifest` | 403 private notice | 403 |
+| `https://numina-production.skott34.workers.dev/v5/release/manifest` | 404 | 403 private notice |
+| `https://numinalabs.xyz/downloads/application-release-v5.json` | 403 private notice | 403 |
+| `https://numina-production.skott34.workers.dev/downloads/application-release-v5.json` | 404 | 403 private notice |
+| `https://numinalabs.xyz/api/financial/v1/` | 403 private notice | 403 |
+| `https://numina-production.skott34.workers.dev/api/financial/v1/` | 503 from that route | 403 private notice |
+
+Public hosts match the lockdown. The workers.dev host does not. Section 5 describes the repository, not the Worker Cloudflare is serving. Shipping `isEdgeAliasHost` still depends on Sam re-signing the release statement so Deploy Numina to Cloudflare Edge can pass attestation and publish the current script.
