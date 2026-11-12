@@ -1,5 +1,6 @@
 import {NUMINA_LAYERS} from '../public/architecture-layers.js';
 import {APP_VERSION,APP_OFFERS,appFail,appDigest,appText,appIntake,appPaymentSummary,appTransition,appVerifyStripe} from './app-core.js';
+import {clientSuppliedIdentityAccepted} from './client-identity.js';
 function appResponse(value,status=200,headers={}){return new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Vary':'Cookie','X-Numina-App-Version':APP_VERSION,...headers}});}
 async function appReadRaw(req,max=16384){
  if(req.headers.get('content-type')?.split(';')[0].trim()!=='application/json'||req.headers.has('content-encoding'))appFail('JSON_REQUIRED',415);
@@ -10,7 +11,7 @@ async function appReadRaw(req,max=16384){
 async function appBody(req){try{return JSON.parse(await appReadRaw(req));}catch(e){if(e.code)throw e;appFail('INVALID_JSON');}}
 async function appActor(req,env){
  const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
- if(!id||!email||id.length>250||email.length>320)appFail('SIGN_IN_REQUIRED',401);
+ if(!clientSuppliedIdentityAccepted(req,env)||!id||!email||id.length>250||email.length>320)appFail('SIGN_IN_REQUIRED',401);
  return {id,email:email.trim().toLowerCase(),operator:env.NUMINA_REVIEW_SESSION!==true&&env.NUMINA_CONTROL_OWNER==='email:'+email.trim().toLowerCase(),reviewer:env.NUMINA_REVIEW_SESSION===true};
 }
 async function appRate(db,key,max,now){await db.prepare('DELETE FROM numina_app_rate WHERE window<?').bind(Math.floor(now/60)-2).run();const row=await db.prepare('INSERT INTO numina_app_rate (bucket,window,count) VALUES (?,?,1) ON CONFLICT(bucket,window) DO UPDATE SET count=count+1 WHERE count<? RETURNING count').bind(key,Math.floor(now/60),max).first();if(!row)appFail('RATE_LIMITED',429);}
