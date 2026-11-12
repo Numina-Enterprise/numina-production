@@ -89,4 +89,5 @@ Either changes live Worker behaviour and needs an explicit go-ahead.
   - `scripts/publish-with-telemetry.mjs` pushes with whatever git credential already exists on the host (`GIT_TERMINAL_PROMPT=0`). A hosted runner has none.
   - No repo or environment secret for `git.chatgpt-team.site` exists or is referenced.
   - Every run, including the last one marked successful on 2026-10-03 (run 37163299661), shows `push_failed` with `failure: authentication`.
-* Still open: the otter latch entry for `tests/release-topology.test.mjs` (pinned `b7b6724e…`, current `01eac257…`).
+* Resolved on PR #173 follow-up: otter latch entries for `scripts/build.mjs`, `tests/release-topology.test.mjs`, and `AGENTS.md` (operating index) now match `docs/protocols/singularity-coordination-model.md`; `verify-provider-observations` installs root `npm ci` before runtime packages.
+* Still open after merge: Sam must re-sign `release-evidence/numina-5.0.0-release.statement.json` on the merged commit (`npm run release:statement && npm run release:sign`) before deploy attestation passes; configure `SITES_GIT_TOKEN` (or equivalent) if Sites publish should succeed on hosted runners.
