@@ -432,7 +432,7 @@ Install and run Node from [.nvmrc](.nvmrc).
 | Package manager | npm, `"type": "module"` | [package.json](package.json) |
 | Hosted Linux runner named by pin policy | `ubuntu-24.04` | [action-pins.json](action-pins.json) `reference_policy.hosted_linux_runner` |
 | Public site deploy | Cloudflare Worker | [wrangler.jsonc](wrangler.jsonc), [.github/workflows/deploy-cloudflare.yml](.github/workflows/deploy-cloudflare.yml) |
-| Vercel Git deploys | disabled | [vercel.json](vercel.json) `git.deploymentEnabled: false` |
+| Vercel Git deploys | no repo config | Root `vercel.json` must stay absent. [verify-root-numina.yml](.github/workflows/verify-root-numina.yml) fails if it returns. |
 
 Root [Dockerfile](Dockerfile) is a Cloud Run image. It copies a prebuilt `dist/` and `scripts/cloudrun-server.mjs`, sets `NODE_ENV=production`, exposes `8080`, and runs `node scripts/cloudrun-server.mjs` so the process binds `0.0.0.0:$PORT`. It does not run `npm install`. The comment in that file says the local preview server binds `127.0.0.1`, defaults to port `8788`, ignores `$PORT`, and is separate from this image. [.gcloudignore](.gcloudignore) exists so a Cloud Run upload still includes `dist/` (`.gitignore` excludes `dist/`; this ignore file must keep `dist/` included).
 
@@ -478,7 +478,7 @@ The policy file must already be configured. The script checks repository identit
 
 Production site deployment is Cloudflare. [wrangler.jsonc](wrangler.jsonc) names the Worker `numina-production`, sets `main` to `./dist/server/index.js`, assets directory `./dist/client`, and routes `numinalabs.xyz/*` and `www.numinalabs.xyz/*`. [.github/workflows/deploy-cloudflare.yml](.github/workflows/deploy-cloudflare.yml) (`Deploy Numina to Cloudflare Edge`, job `deploy-edge`, environment `Production`) checks out, uses Node `26.13.0`, installs the pinned prefixes, and deploys on pushes to `main` or `workflow_dispatch`.
 
-[vercel.json](vercel.json) sets `git.deploymentEnabled` to `false`. Vercel Git deployments stay disabled. `vercel.json` is off-limits: do not edit it, and do not turn Git deployments back on.
+Root `vercel.json` is retired and must stay absent. [.github/workflows/verify-root-numina.yml](.github/workflows/verify-root-numina.yml) fails the verify job when `vercel.json`, `runtime/vercel-production/vercel.json`, or `runtime/verifier-rc26/deploy/vercel/vercel.json` exists. Do not add those files back.
 
 [deploy_ibm_code_engine.ps1](deploy_ibm_code_engine.ps1) deploys the web origin to IBM Cloud Code Engine. Defaults in the script: region `us-south`, resource group `default`, project `numina-serverless-project`, app `numinalabs-web`, registry namespace `numina-cr`. It requires the `ibmcloud` CLI and the `code-engine` plugin. The matching workflow is [.github/workflows/deploy-ibm-code-engine.yml](.github/workflows/deploy-ibm-code-engine.yml) (`Deploy Numina to IBM Cloud Code Engine`, job `deploy-code-engine`, `workflow_dispatch`, Node `26.13.0` on `ubuntu-24.04`). Do not run the script or dispatch the workflow without Sam's explicit approval.
 
@@ -599,7 +599,7 @@ Recorded so the next agent does not “fix” one side by guessing:
 ### Off-limits
 
 - **Do not edit** [.github/workflows/](.github/workflows/), other files under `.github/`, or anything under `.agents/` as part of ordinary doc or feature work. This index was added by reading them.
-- **Do not edit** [vercel.json](vercel.json). Vercel Git deployments stay disabled.
+- **Do not add** a root `vercel.json`. Verify root Numina treats it as a retired provider deployment config.
 - **Do not edit** signed or release artifacts. Link only: [HARDENED_SECURITY_MANIFEST.json](HARDENED_SECURITY_MANIFEST.json), [ALIGNMENT_STATE_RATIFIED.json](ALIGNMENT_STATE_RATIFIED.json), [VICTORY_CERTIFICATE.md](VICTORY_CERTIFICATE.md), [deployment-binding.template.json](deployment-binding.template.json), [verification-policy.template.json](verification-policy.template.json), [numina-release-v4.0.0.tar.gz](numina-release-v4.0.0.tar.gz), [numina-release-v4.0.0.tar.gz.sha256](numina-release-v4.0.0.tar.gz.sha256), `release-evidence/`, `releases/`, `*.dsse.json`, in-toto statements, `*.ed25519.sig64`, and checksum files.
 - **Treasury:** [NATIVE-TREASURY.md](NATIVE-TREASURY.md) is link only. Do not copy treasury, bank, or Stripe Treasury claims into new docs or commits. Do not change treasury or NUSD implementation files unless Sam explicitly asks.
 - **Email:** [send_porkbun_email.mjs](send_porkbun_email.mjs) sends mail (it loads `.env` and uses the Porkbun SMTP variable names above). Do not run it unless Sam explicitly approves that send.
@@ -610,7 +610,7 @@ Recorded so the next agent does not “fix” one side by guessing:
 
 Governance and identity: [AGENTS.md](AGENTS.md), [GEMINI.md](GEMINI.md), [FRONTIER.md](FRONTIER.md), [README.md](README.md), [SECURITY.md](SECURITY.md), [RC26-ALIGNMENT.md](RC26-ALIGNMENT.md), [sources.md](sources.md), [CHANGELOG.md](CHANGELOG.md), [LOCAL-ADMIN.md](LOCAL-ADMIN.md).
 
-Pins and build: [.nvmrc](.nvmrc), [package.json](package.json), [Dockerfile](Dockerfile), [.gitattributes](.gitattributes), [.gitignore](.gitignore), [.gcloudignore](.gcloudignore), [.env.example](.env.example), [action-pins.json](action-pins.json), [numina-multi-cloud-topology.yaml](numina-multi-cloud-topology.yaml), [wrangler.jsonc](wrangler.jsonc), [vercel.json](vercel.json), [verify_release.py](verify_release.py).
+Pins and build: [.nvmrc](.nvmrc), [package.json](package.json), [Dockerfile](Dockerfile), [.gitattributes](.gitattributes), [.gitignore](.gitignore), [.gcloudignore](.gcloudignore), [.env.example](.env.example), [action-pins.json](action-pins.json), [numina-multi-cloud-topology.yaml](numina-multi-cloud-topology.yaml), [wrangler.jsonc](wrangler.jsonc), [verify_release.py](verify_release.py).
 
 Audits: [unified_audit_orchestrator.ps1](unified_audit_orchestrator.ps1), [register_audit_schedule.ps1](register_audit_schedule.ps1), [audit_acls.ps1](audit_acls.ps1), [audit_services.ps1](audit_services.ps1), [audit_sizes.ps1](audit_sizes.ps1), [audit_mac_acls.sh](audit_mac_acls.sh), [audit_mac_services.sh](audit_mac_services.sh), [audit_mac_sizes.sh](audit_mac_sizes.sh), [audit_gcp_resources.sh](audit_gcp_resources.sh), [windows-maintenance-suite.ps1](windows-maintenance-suite.ps1), [deploy_ibm_code_engine.ps1](deploy_ibm_code_engine.ps1).
 
