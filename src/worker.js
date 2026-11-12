@@ -14,7 +14,8 @@ import {sitesMcpHttp} from './sites-mcp-http.js';
 import {numinaWebTelemetry} from './telemetry.js';
 import {telemetryHttp} from './telemetry-http.js';
 import {quantumHttp} from './quantum-http.js';
-const security={"X-Numina-Version":"5.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"scoped-source-projection","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-2tAXL0MXpCFnUKMHj8NnmeDpoQYsECCkLLQ/5ws1dSQ=' 'sha256-B614+Jd2Qyoz2jrBrfvjNUorkR18LMC2w45LXD2waAE=' 'sha256-FYSuNbIYOxc2S1vlP/19PJWXJntuyIBQ9PzxUtGyTEU=' 'sha256-I/H2ZPFKVhmDF+CM87wHkphMgVT/M6hwxRlelT7Alhw=' 'sha256-RcOFH39j5uVKsEQAvdZI1zGIvAa25fcpsgllenb3lb4=' 'sha256-V8yJ6CdISENxNroOdy82yZEriLWfeMZ1hXWGtJo8XQc=' 'sha256-Z5BSm8bAtD76g/G6U2qqxQ6s7i+0+sjk8pXpl58dM3M=' 'sha256-eW+UgFbXXgT02Iws6T53oI2TrZpLDzfKKbIfvAf7eIk=' 'sha256-rTsFNRymltQmGrw583C05AZm9oKE0XJcfoKWCjGAQQU=' 'sha256-uFq9Xo1APyhQai8mlGYU8F+SEV0VxD8ecq23vhtgdt0='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"};
+import {CHECKOUT_PATH,checkoutRedirect} from './checkout-redirect.js';
+const security={"X-Numina-Version":"5.0.0","X-Numina-Profile":"numina-production","X-Numina-Root":"NUMINA","X-Numina-Manifest":"NUMINA","X-Numina-Identity":"NUMINA","X-Numina-Source":"NUMINA","X-Numina-Evidence":"NUMINA","X-Numina-Provider":"NUMINA","X-Numina-Provider-Verification":"scoped-source-projection","X-Numina-Source-Of-Truth":SOURCE_OF_TRUTH_MODEL,"X-Numina-Worker-Identity":CONTROL_WORKER_IDENTITY,"X-Numina-Authority":AUTHORITY_IDENTITY,"X-Numina-Environment-Model":ENVIRONMENT_MODEL,"X-Numina-Delivery-Surface-Model":DELIVERY_SURFACE_MODEL,"X-Content-Type-Options":"nosniff","X-Frame-Options":"DENY","Referrer-Policy":"no-referrer","Cross-Origin-Opener-Policy":"same-origin-allow-popups","Cross-Origin-Resource-Policy":"same-origin","X-Permitted-Cross-Domain-Policies":"none","X-DNS-Prefetch-Control":"off","Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), display-capture=(), browsing-topics=(), interest-cohort=()","Strict-Transport-Security":"max-age=31536000","Content-Security-Policy":"default-src 'self'; script-src 'self' 'sha256-2tAXL0MXpCFnUKMHj8NnmeDpoQYsECCkLLQ/5ws1dSQ=' 'sha256-B614+Jd2Qyoz2jrBrfvjNUorkR18LMC2w45LXD2waAE=' 'sha256-FYSuNbIYOxc2S1vlP/19PJWXJntuyIBQ9PzxUtGyTEU=' 'sha256-I/H2ZPFKVhmDF+CM87wHkphMgVT/M6hwxRlelT7Alhw=' 'sha256-RcOFH39j5uVKsEQAvdZI1zGIvAa25fcpsgllenb3lb4=' 'sha256-V8yJ6CdISENxNroOdy82yZEriLWfeMZ1hXWGtJo8XQc=' 'sha256-Z5BSm8bAtD76g/G6U2qqxQ6s7i+0+sjk8pXpl58dM3M=' 'sha256-eW+UgFbXXgT02Iws6T53oI2TrZpLDzfKKbIfvAf7eIk=' 'sha256-rTsFNRymltQmGrw583C05AZm9oKE0XJcfoKWCjGAQQU=' 'sha256-uFq9Xo1APyhQai8mlGYU8F+SEV0VxD8ecq23vhtgdt0='; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' https://checkout.stripe.com; upgrade-insecure-requests"};
 
 // Public-host gate (Nov 2026): numinalabs.xyz and www.numinalabs.xyz serve only public-safe
 // pages. MCP, MCP discovery, control, treasury, NUSD, financial, ops, app, reviewer,
@@ -36,6 +37,27 @@ export function privateSectionNotice(req){
  return new Response(req.method==='HEAD'?null:html?PRIVATE_NOTICE_HTML:JSON.stringify(PRIVATE_NOTICE_JSON),{status:403,headers});
 }
 
+const ALLOWED_METHODS=new Set(['GET','HEAD','POST','PUT','PATCH','DELETE','OPTIONS']);
+// The public checkout form posts here. Page paths are not form actions.
+export const FORM_POST_PATHS=Object.freeze(new Set([CHECKOUT_PATH]));
+const SENSITIVE_FILES=new Set(['/final-build.json','/final-manifest.json','/business-core.json','/security-surfaces.json','/ownership.json','/wallet-signing-review.json','/telemetry-metrics.json','/deployment-readiness-inputs.json','/current-environments.json','/publication-policy.json','/downstream-publication.json','/mobile-update-policy.json','/readyz']);
+// The URL parser has already decoded ordinary escapes and removed dot segments.
+// A leftover "%" is a second encoding (%2e, %2f, %00) that a later decoder could turn back into a traversal.
+export function canonicalSitePath(pathname){
+ if(typeof pathname!=='string'||pathname.length===0||pathname.length>2048||!pathname.startsWith('/')||/[\u0000-\u001f\u007f\\%]/.test(pathname))return null;
+ const collapsed=pathname.replace(/\/{2,}/g,'/');
+ if(collapsed.split('/').some((part,index)=>index>0&&(part==='.'||part==='..')))return null;
+ return collapsed;
+}
+function sensitiveCachePath(path){
+ return SENSITIVE_FILES.has(path)||path.startsWith('/api/')||path==='/mcp'||path.startsWith('/mcp/')||path==='/downloads'||path.startsWith('/downloads/')||path.startsWith('/.well-known/')||/^\/v[1-5](?:\/|$)/.test(path);
+}
+function requestForPath(req,pathname){
+ const next=new URL(req.url);
+ if(next.pathname===pathname)return req;
+ next.pathname=pathname;
+ try{return new Request(next,req);}catch{return null;}
+}
 function response(body,status=200,extra={}){return new Response(JSON.stringify(body),{status,headers:{...security,'Content-Type':'application/json','Cache-Control':'no-store',...extra}});}
 export default {
  async fetch(req,env){
@@ -44,12 +66,23 @@ export default {
   const inheritedEnv=Object.create(env);
   Object.defineProperty(inheritedEnv,'NUMINA_CONTROL_API_KEY_SHA256',{value:controlPin,enumerable:true,configurable:true});
   env=inheritedEnv;
-  const url=new URL(req.url),path=url.pathname;
+  const canonical=canonicalSitePath(new URL(req.url).pathname);
+  let path=canonical||'/rejected';
+  let url=new URL(req.url);
   const span=path==='/api/ops/v1/telemetry'?{requestId:crypto.randomUUID(),finish(){}}:numinaWebTelemetry.begin({path,method:req.method,log:env.NUMINA_TELEMETRY_LOGS!=='false'});
   const requestId=span.requestId;let status=200;
-  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(!headers.get('Cache-Control')?.includes('no-store')&&!path.startsWith('/api/')&&!path.startsWith('/v1/')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
+  const finish=r=>{status=r.status;const headers=new Headers(r.headers);for(const [k,v]of Object.entries(security))headers.set(k,k==='Content-Security-Policy'&&path.startsWith('/api/control/v1/treasury-documents/')?"sandbox; default-src 'none'":v);if(sensitiveCachePath(path)){const cache=headers.get('Cache-Control')||'';if(!/\bno-store\b/.test(cache))headers.set('Cache-Control','private, no-store');}else if(!headers.get('Cache-Control')?.includes('no-store')&&(path==='/app'||path==='/app.html'||path.endsWith('.js')))headers.set('Cache-Control','no-cache');if(path===TRANSFER_RECEIPTS_ROUTE||path.startsWith(TRANSFER_RECEIPTS_ROUTE+'/'))headers.set('X-Numina-Provider-Verification','scoped-observation-only');headers.set('X-Request-Id',requestId);return new Response(r.body,{status:r.status,headers});};
   try{
-   if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   if(!ALLOWED_METHODS.has(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS'}));
+   if(!canonical)return finish(response({error:'NOT_FOUND'},404));
+   if(canonical!==url.pathname){const rewritten=requestForPath(req,canonical);if(!rewritten)return finish(response({error:'NOT_FOUND'},404));req=rewritten;url=new URL(req.url);}
+   path=canonical;
+   if(['numinalabs.xyz','www.numinalabs.xyz'].includes(url.hostname)&&url.protocol==='http:'){const target=new URL('https://'+url.hostname);target.pathname=path;target.search=url.search;if(target.origin!=='https://'+url.hostname)return finish(response({error:'NOT_FOUND'},404));return finish(new Response(null,{status:['GET','HEAD'].includes(req.method)?301:308,headers:{Location:target.href}}));}
+   if(req.method==='POST'&&FORM_POST_PATHS.has(path)){
+    if(req.headers.get('Origin')!==url.origin)return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
+    if(path===CHECKOUT_PATH)return finish(await checkoutRedirect(req,env));
+    return finish(await env.ASSETS.fetch(req));
+   }
    if(publicGateBlocks(url.hostname,path))return finish(privateSectionNotice(req));
    if(path==='/favicon.ico'){
     if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
@@ -73,7 +106,7 @@ export default {
    // Retired public test surfaces stay closed even if an environment is misconfigured.
    if(path.startsWith('/api/v0.1/')||['/api/core/v1.8/eac/verify','/api/core/v1.8/stability/assess'].includes(path))return finish(response({error:'REFERENCE_RUNTIME_RETIRED',message:'Use the production workspace, internal controls or release documentation.',workspace:'/app',documentation:'/core'},410));
    if(path.startsWith('/api/control/v2/')||path==='/.well-known/agent-card.json')return finish(await frontierHttp(req,env));
-   if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path))return finish(await env.ASSETS.fetch(new Request(new URL('/frontier.html',req.url),req)));
+   if(['/frontier','/frontier/','/control-room','/control-room/'].includes(path)){if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));return finish(await env.ASSETS.fetch(new Request(new URL('/frontier.html',req.url),req)));}
    if(path.startsWith('/api/app/v1/'))return finish(await appHttp(req,env));
    if(['/platform','/platform/','/platform.html'].includes(path))return finish(new Response(null,{status:308,headers:{Location:'/app'}}));
    if(['/pricing','/pricing/','/pricing.html'].includes(path)){
@@ -92,7 +125,9 @@ export default {
    if(path==='/api/core/v1.8/manifest'&&req.method==='GET')return finish(response(CORE_MANIFEST));
    if(path==='/api/core/v1.8/context'&&req.method==='GET')return finish(response(CORE_CONTEXT));
    if(path.startsWith('/api/'))return finish(response({error:'NOT_FOUND'},404));
-   if(path.startsWith('/v4/')||path.startsWith('/v5/'))return finish(response({error:'NOT_FOUND',path},404));
+   if(path.startsWith('/v4/')||path.startsWith('/v5/'))return finish(response({error:'NOT_FOUND'},404));
+   if(req.method==='POST'&&FORM_POST_PATHS.has(path)&&req.headers.get('Origin')===url.origin)return finish(await env.ASSETS.fetch(req));
+   if(!['GET','HEAD'].includes(req.method))return finish(response({error:'METHOD_NOT_ALLOWED'},405,{Allow:'GET, HEAD'}));
    return finish(await env.ASSETS.fetch(req));
   }catch(error){
    const exceptionTypes=new Set(['Error','TypeError','ReferenceError','RangeError','URIError','SyntaxError','AggregateError']);
