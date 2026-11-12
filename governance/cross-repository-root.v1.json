@@ -1,0 +1,42 @@
+{
+  "schema": "numina.cross-repository-root.v1",
+  "identity": "NUMINA",
+  "canonical_source": {
+    "repository": "Numina-Enterprise/numina-production",
+    "branch": "main",
+    "status": "requires_verified_commit_binding"
+  },
+  "builder": {
+    "repository": "Numina-Enterprise/numina-builder",
+    "policy": "pin source by immutable commit SHA; never infer signing or testing from workflow presence"
+  },
+  "research": {
+    "status": "simulation_only",
+    "domains": [
+      "quantum-genesis",
+      "fusion-plasma",
+      "haleu-smr",
+      "natrium-terrapower",
+      "gas-extraction-generation",
+      "battery-grid"
+    ]
+  },
+  "trust": {
+    "manifest_canonicalization": "RFC8785",
+    "signature_algorithm": "Ed25519",
+    "domain_separator": "numina-manifest-v1\\u0000",
+    "required_roles": [
+      "Authority",
+      "Guardian"
+    ],
+    "threshold": 2,
+    "public_keys": "independent_pinned_registry_required"
+  },
+  "release": {
+    "merge": "manual_approval",
+    "production_activation": false,
+    "unverified_evidence": "fail_closed",
+    "nuclear_operational_controls": false
+  },
+  "note": "This is a shared policy declaration, not an attestation or computed Merkle/cluster state root."
+}
