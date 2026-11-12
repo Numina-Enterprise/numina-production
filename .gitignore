@@ -41,3 +41,6 @@ local-data/
 **/.cloudflared/cert.pem
 **/.cloudflared_isolated/*.json
 **/.cloudflared_isolated/cert.pem
+
+# Cursor cloud-agent setup logs
+.cursor/logs/

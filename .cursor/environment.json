@@ -1,0 +1,8 @@
+{
+  "name": "numina-production",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "bash .cursor/setup.sh"
+}
