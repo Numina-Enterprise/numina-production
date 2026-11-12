@@ -253,6 +253,7 @@ def check_roots(m, doc_hashes, policy=None, confirm_canonical_root=False):
 
 # -------------------------------------------------------------- openssl
 OPENSSL_CANDIDATES = (
+    r"C:\Program Files\Git\ucrt64\bin\openssl.exe",
     r"C:\Program Files\Git\mingw64\bin\openssl.exe",
     r"C:\Program Files\Git\usr\bin\openssl.exe",
     r"C:\Program Files\OpenSSL-Win64\bin\openssl.exe",
