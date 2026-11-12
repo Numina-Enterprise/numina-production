@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install Numina's official checksum-pinned Node 26 toolchain in isolation.
+"""Install Numina's official checksum-pinned Node 27 toolchain in isolation.
 
 Uses only the Python standard library on Linux and macOS. Existing Node
 installations, system paths, signing custody and Worker runtime stay intact.
@@ -21,7 +21,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / 'config/numina-node26.v1.json'
-VERSION = '26.13.0'
+VERSION = '27.0.0-alpha.0.0.0'
 ORIGIN = 'https://nodejs.org/dist'
 
 

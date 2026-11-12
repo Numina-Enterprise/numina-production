@@ -192,8 +192,8 @@ def main():
     try:
         receipt['preservedDeliveryBefore'] = preserved_delivery()
         runtime = document(ROOT / 'config/numina-node26.v1.json')
-        if runtime.get('schema') != 'numina.node-toolchain.v1' or runtime.get('version') != '26.13.0':
-            raise ValueError('The exact observed Node 26.13.0 toolchain configuration is required.')
+        if runtime.get('schema') != 'numina.node-toolchain.v1' or runtime.get('version') != '27.0.0-alpha.0.0.0':
+            raise ValueError('The exact observed Node 27.0.0-alpha.0.0.0 toolchain configuration is required.')
         if not args.node:
             raise ValueError('The selected Node executable is unavailable.')
         version = subprocess.check_output([args.node, '--version'], text=True).strip()
