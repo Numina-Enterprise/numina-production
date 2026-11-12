@@ -75,3 +75,18 @@ Either changes live Worker behaviour and needs an explicit go-ahead.
 1. Merge this PR (or equivalent).
 2. Decide the `services.html` USDC card, update the otter latch pin, add root `npm ci` to the provider-observations workflow.
 3. On the final `main` commit: `npm ci && npm run build && npm run release:statement && npm run release:sign` (Sam's keys), commit the statement and envelope, and push.
+
+## 5. Follow-up on PR #168 (Sam's decisions, 2026-11-11 23:49 CST)
+
+* The `usdc-deposit` card is removed from `public/services.html`. The section nav and heading no longer mention deposits.
+* `src/worker.js` now applies the private-route lockdown to every `*.workers.dev` host (`isEdgeAliasHost`).
+  - Only `numina-production.skott34.workers.dev` (`CONTROL_BACKEND_HOST`) still serves `/api/control/v2/*`, `/.well-known/agent-card.json` and `/api/control/v1/treasury`.
+  - Those three paths keep their existing handler authentication.
+  - Preview URLs get no exceptions.
+  - Covered by `tests/edge-alias-gate.test.mjs`.
+  - `workers_dev` and `preview_urls` are unchanged.
+* Sites credential: the publish step passes no secret, and checkout uses `persist-credentials: false`.
+  - `scripts/publish-with-telemetry.mjs` pushes with whatever git credential already exists on the host (`GIT_TERMINAL_PROMPT=0`). A hosted runner has none.
+  - No repo or environment secret for `git.chatgpt-team.site` exists or is referenced.
+  - Every run, including the last one marked successful on 2026-10-03 (run 37163299661), shows `push_failed` with `failure: authentication`.
+* Still open: the otter latch entry for `tests/release-topology.test.mjs` (pinned `b7b6724e…`, current `01eac257…`).
