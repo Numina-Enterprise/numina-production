@@ -1,0 +1,71 @@
+{
+  "schema": "numina.nusd.deployment-request-addendum.v1",
+  "addendumId": "numina:nusd:decimals-reconciliation:2026-11-11",
+  "date": "2026-11-11",
+  "status": "UNSIGNED_ADDENDUM",
+  "signed": false,
+  "original": {
+    "path": "runtime/nusd/deployment.production.json",
+    "sha256": "dc4c73074a291707e7fed845e87a5516fa66553d2ec89590d85f6ab05d043ed5",
+    "repositoryCommit": "827cb5a335f4afc0a060ebc09cd5c33d003f543a",
+    "edited": false
+  },
+  "purpose": "Record that the current deployment request points at the 6-decimal issuer policy and a policy hash that matches neither the current policy files nor the deployed token, without editing the original.",
+  "deployedToken": {
+    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "chainId": "962421430",
+    "decimals": 18,
+    "totalSupplyBaseUnits": "1500000000000000000000000000000000",
+    "capBaseUnits": "1500000000000000000000000000000000",
+    "totalSupplyNusd": "1500000000000000",
+    "burnedNusd": "0",
+    "mintEvidence": {
+      "receipt": "runtime/nusd/mint-receipt.json",
+      "receiptSha256": "3dab1a847ba8b0b4a14a92a0b881e5e888af7ffbbab74a9af0e1fe9935bc63ee",
+      "transactionHash": "0x86578ab250a1b0d23bc801338bf1530d07a93dc5e09965da5088ff57baac0a1b",
+      "blockNumber": "51725",
+      "deploymentReceipt": "runtime/nusd/deployment-receipt.json",
+      "deploymentReceiptSha256": "6d7d2a3c3f4ee9fe2b95f02a5abf000626bd2e66735bedb0ab78f81883b86e53"
+    },
+    "issuerPolicyHashOnChain": "0x2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5",
+    "issuerPolicyHashSource": "runtime/nusd/deployment-receipt.json token.state.issuerPolicyHash",
+    "artifactSha256": "3e9d8f22014cb1a2496cba9bef334b0146a073c07d84382752a31d586d7658c2",
+    "sourceSha256": "08fdd4e87e7ca336edc3cf7958a035feca73e4275968bee04d30d5d217e18238"
+  },
+  "findings": [
+    {
+      "field": "issuer.approvedPolicyFile",
+      "recorded": "policies/issuer-policy-1500t-6d.json",
+      "corrected": "policies/issuer-policy-1500t-18d.json (18-decimal basis of the deployed token)"
+    },
+    {
+      "field": "issuer.policySha256",
+      "recorded": "fae9787b5a9890b7c7aa668ab0c989a1224d1d37692cd1aecf4de98841c2d6d2",
+      "matches": "issuer-policy-1500t-6d.json as of commit 92800a52 only",
+      "currentFileHashes": {
+        "policies/issuer-policy-1500t-6d.json": "f063139dd8c2fad54d500832e2d9903eb751297503c0204e7ddd66813e5af32d",
+        "policies/issuer-policy-1500t-18d.json": "1d9a544410baa6f0b35263435db49ac3528ba0420ecb99bb324755530d05e33b"
+      },
+      "deployedHash": "2134617c4fb7a538271dcf6b3b4bfa10fc71c23631a9cf63c7d0a05ee05294f5",
+      "deployedHashMatches": "issuer-policy-1500t-18d.json as of commit d2ffef53 (2026-09-18); that file has since been edited (commits f2b50a25, ba7966d6), so no current file reproduces the on-chain hash",
+      "consequence": "validate-deployment.mjs rejects this request (policy hash mismatch). This is expected and safe: the token is already deployed and the request must not be re-broadcast."
+    },
+    {
+      "field": "supplyCapNusd / initialSupplyNusd",
+      "recorded": "1500000000000000",
+      "baseUnitsAt18Decimals": "1500000000000000000000000000000000",
+      "baseUnitsAt6DecimalsSuperseded": "1500000000000000000000",
+      "corrected": "18-decimal base units apply"
+    },
+    {
+      "field": "roles / adminDelaySeconds",
+      "recorded": "admin 0xa7e9FB02495700ccE0d209392C0A30FbE077498e, issuer 0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0, minter 0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6, pauser 0x434AB24E613055Fd2598Fd9f0558A06a94D39c81, 86400",
+      "corrected": "unchanged; live role state is not verified by this addendum"
+    }
+  ],
+  "boundaries": {
+    "onChainActionPerformed": false,
+    "signaturePerformed": false,
+    "redeploymentRequested": false
+  }
+}

@@ -28,8 +28,9 @@ const plan=JSON.parse(fs.readFileSync(planFile,'utf8'));
 const receiptBytes=fs.readFileSync(receiptFile);
 const receipt=JSON.parse(receiptBytes.toString('utf8'));
 const txHash=receipt?.token?.transactionHash;
-if(!/^0x[0-9a-fA-F]{64}$/.test(txHash||''))throw Error('NUMINA_6D_MINT_RECEIPT_REQUIRED');
-if(receipt?.issuance?.decimals!==6||receipt?.issuance?.amountNusd!=='1500000000000000')throw Error('NUMINA_6D_MINT_RECEIPT_MISMATCH');
+if(!/^0x[0-9a-fA-F]{64}$/.test(txHash||''))throw Error('NUMINA_18D_MINT_RECEIPT_REQUIRED');
+if(receipt?.issuance?.decimals!==18||receipt?.issuance?.amountNusd!=='1500000000000000'||
+   receipt?.issuance?.baseUnits!=='1500000000000000000000000000000000')throw Error('NUMINA_18D_MINT_RECEIPT_MISMATCH');
 const digest='sha256:'+createHash('sha256').update(receiptBytes).digest('hex');
 
 const token=await numinaControlToken();
@@ -61,14 +62,14 @@ if(!mint)throw Error('NUMINA_MINT_REQUEST_NOT_FOUND');
 if(mint.status==='PREPARED'){
   current=await write(current,'treasury.external.receipt.bind',{
     operation:'BIND_EXTERNAL_RECEIPT',requestId:mint.id,provider:'NUMINA_CHAIN',providerReference:txHash,evidenceDigest:digest,
-    reason:'Bind the verified 6-decimal NuminaUSD deployment receipt to the canonical post-freeze mint request'
+    reason:'Bind the verified 18-decimal NuminaUSD deployment receipt to the canonical post-freeze mint request'
   },'bind_'+mint.id);
   mint=find(current);
 }
 if(mint.status==='EVIDENCE_BOUND'){
   current=await write(current,'treasury.receipt.confirm',{
     operation:'CONFIRM_NUMINA_RECEIPT',requestId:mint.id,
-    reason:'Confirm the canonical NUMINA chain receipt for the post-freeze 6-decimal mint request'
+    reason:'Confirm the canonical NUMINA chain receipt for the post-freeze 18-decimal mint request'
   },'confirm_'+mint.id);
   mint=find(current);
 }
