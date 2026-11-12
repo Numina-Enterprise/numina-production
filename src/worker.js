@@ -25,8 +25,20 @@ export const PUBLIC_SITE_HOSTS=Object.freeze(['numinalabs.xyz','www.numinalabs.x
 export const PUBLIC_BLOCKED_PREFIXES=Object.freeze(['/mcp','/api/','/.well-known/','/downloads/','/v1/','/v2/','/v3/','/v4/','/v5/']);
 export const PUBLIC_ALLOWED_PATHS=Object.freeze(['/readyz','/robots.txt','/favicon.ico','/favicon.svg','/.well-known/assetlinks.json','/.well-known/skott34-ed25519.pub.pem','/.well-known/skott34-fn-dsa-1024.pub.json','/.well-known/cc0-deed.en.html']);
 export function isPublicSiteHost(hostname){return PUBLIC_SITE_HOSTS.includes(String(hostname||'').toLowerCase());}
+// Edge-alias gate (Nov 2026): the workers.dev host and every preview URL (*.workers.dev) get the same
+// private-route lockdown as the public hosts. Only the declared control backend host keeps the paths its
+// declared callers use, with their existing handler authentication: config/numina-routing.json rewrites
+// /api/control/v2/* and /.well-known/agent-card.json to it, and check-sites-control-origin.yml reads
+// /api/control/v1/treasury from it with the owner bearer credential. Preview URLs get no exceptions.
+export const CONTROL_BACKEND_HOST='numina-production.skott34.workers.dev';
+export const CONTROL_BACKEND_ALLOWED_PREFIXES=Object.freeze(['/api/control/v2/']);
+export const CONTROL_BACKEND_ALLOWED_PATHS=Object.freeze(['/.well-known/agent-card.json','/api/control/v1/treasury']);
+export function isEdgeAliasHost(hostname){return String(hostname||'').toLowerCase().endsWith('.workers.dev');}
+export function controlBackendAllows(hostname,path){
+ return String(hostname||'').toLowerCase()===CONTROL_BACKEND_HOST&&(CONTROL_BACKEND_ALLOWED_PATHS.includes(path)||CONTROL_BACKEND_ALLOWED_PREFIXES.some(prefix=>path.startsWith(prefix)));
+}
 export function publicGateBlocks(hostname,path){
- if(!isPublicSiteHost(hostname)||PUBLIC_ALLOWED_PATHS.includes(path))return false;
+ if(!(isPublicSiteHost(hostname)||isEdgeAliasHost(hostname))||PUBLIC_ALLOWED_PATHS.includes(path)||controlBackendAllows(hostname,path))return false;
  return path==='/mcp'||path.startsWith('/mcp/')||path==='/downloads'||PUBLIC_BLOCKED_PREFIXES.some(prefix=>prefix!=='/mcp'&&path.startsWith(prefix));
 }
 export const PRIVATE_NOTICE_JSON=Object.freeze({error:'private',message:'This endpoint is private and available on request or on the local network only.',contact:'https://www.numinalabs.xyz/contact'});
