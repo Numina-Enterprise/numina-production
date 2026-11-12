@@ -10,7 +10,7 @@ The owner-supplied `NuminaTreasuryReserve.sol` and `NuminaRevenueSplitter.sol` b
 | --- | --- | --- | --- |
 | Vengeance `NuminaTreasuryReserve` | 6 | `1500000000000000000000` | `2f1c5551…` |
 | Receipt-bound `NuminaUSD` (`docs/contracts/NuminaUSD.sol`, also `runtime/nusd/history/18d/contracts/NuminaUSD.sol`) | 18 | `1500000000000000000000000000000000` | `08fdd4e8…`, equal to `deployment-receipt.json` `sourceSha256` |
-| Current runtime candidate `runtime/nusd/contracts/NuminaUSD.sol` | 6 | Cap is a constructor argument, not the vengeance constant | `c2aa2975…` |
+| Current runtime candidate `runtime/nusd/history/6d/contracts/NuminaUSD.sol` | 6 | Cap is a constructor argument, not the vengeance constant | `c2aa2975…` |
 
 The 6-decimal cap times `10^12` is numerically the 18-decimal receipt base-unit figure. That arithmetic is not applied, and it is not source or bytecode equivalence. The receipt's `externallyBackedClaim` is false. The runtime candidate is a different file from both the receipt-bound source and the vengeance treasury.
 

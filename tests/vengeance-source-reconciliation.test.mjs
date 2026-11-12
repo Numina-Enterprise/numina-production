@@ -85,7 +85,7 @@ test('decimal variants stay distinct and unselected', () => {
     assert.equal(read(file.path).length, file.bytes, file.path);
     assert.equal(sha256(file.path), file.sha256, file.path);
   }
-  assert.match(text('runtime/nusd/contracts/NuminaUSD.sol'), /return 6;/);
+  assert.match(text('runtime/nusd/history/6d/contracts/NuminaUSD.sol'), /return 6;/);
   assert.match(text('docs/contracts/NuminaUSD.sol'), /return 18;/);
   assert.match(text('runtime/nusd/history/18d/contracts/NuminaUSD.sol'), /return 18;/);
   assert.match(text(`${reference}/NuminaTreasuryReserve.sol`), /decimals = 6;/);
