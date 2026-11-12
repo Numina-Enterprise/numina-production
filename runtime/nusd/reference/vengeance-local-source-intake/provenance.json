@@ -1,0 +1,50 @@
+{
+  "schema": "numina.vengeance-local-source-intake.v1",
+  "status": "REFERENCE_EVIDENCE",
+  "executionWired": false,
+  "deploymentIdentityProven": false,
+  "externalBackingProven": false,
+  "bytecodeEquivalenceClaimed": false,
+  "compilersInvoked": false,
+  "testsExecuted": false,
+  "intakeProvenanceFileReobservedInWorkspace": false,
+  "fieldsNotReobserved": ["originalMachine", "originalPath", "originalMtime"],
+  "intakeStatement": "The owner-authorized intake reported a provenance.json that maps original machine, path, mtime, and hash. That file was not present in this workspace, so those three fields are left unreobserved rather than reconstructed.",
+  "workspaceCheckoutTimestamp": {
+    "value": "2026-11-10T20:52:07-0600",
+    "meaning": "Timestamp of the tracked repository files in this checkout. Not an original-machine mtime."
+  },
+  "sources": [
+    {
+      "label": "reference-original",
+      "filename": "NuminaTreasuryReserve.sol",
+      "repositoryPath": "numina-smart-contracts/contracts/NuminaTreasuryReserve.sol",
+      "gitBlob": "728cee9b25d28057f6800a3531ea9c90bdb93495",
+      "bytes": 4138,
+      "sha256": "2f1c5551b51042882bf445d96a61e5a4d38fbe491fc358b1c676a488871192ff",
+      "matchesOwnerSuppliedHash": true,
+      "duplicateBytesAdded": false
+    },
+    {
+      "label": "reference-original",
+      "filename": "NuminaRevenueSplitter.sol",
+      "repositoryPath": "numina-smart-contracts/contracts/NuminaRevenueSplitter.sol",
+      "gitBlob": "e955c8198a04495b2d58ea29c271c194e0c76018",
+      "bytes": 2122,
+      "sha256": "685d081ff1b4485a112eeb926f4e0edff71b419879b655d8b7ceb31a8d22f000",
+      "matchesOwnerSuppliedHash": true,
+      "duplicateBytesAdded": false
+    }
+  ],
+  "narrowMacDirectoryObservation": {
+    "statement": "No relevant public source, ABI, or bytecode filename was found in the narrowly inspected Mac directory.",
+    "scope": "Scoped observation supplied with the intake. Not re-executed as a host search in this change, and not proof of absence."
+  },
+  "notProofOf": [
+    "deployment identity",
+    "on-chain bytecode",
+    "source/bytecode equivalence with NuminaUSD",
+    "external reserve backing",
+    "a 1:1 cash or USDC rail"
+  ]
+}
