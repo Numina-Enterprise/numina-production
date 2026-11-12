@@ -136,7 +136,7 @@
     {
       "name": "dist/client/developers.html",
       "digest": {
-        "sha256": "3eecca8b49e292d731b5e53e3b570f68b9503683b97a7d33c20daf814835d743"
+        "sha256": "0142b7515f322f09ef39cbbfd0cf5e3a3eedc5a076bce992b3c29d05a7990800"
       }
     },
     {
@@ -154,7 +154,7 @@
     {
       "name": "dist/client/ecosystem.html",
       "digest": {
-        "sha256": "2b03ebe68a54e28c16e169ee1010dcf45283134c5bddfbc3dd43cf879208270c"
+        "sha256": "e5ab126f9a5281b8a4eb27170ad07d869a464e22c8a0f5f70a8c3cddef1bb64f"
       }
     },
     {
@@ -310,7 +310,7 @@
     {
       "name": "dist/client/services.html",
       "digest": {
-        "sha256": "25d44b43631f522baedda1ea2b9dcbe9f32d024f462c7deda32e4483a1301c5a"
+        "sha256": "b1000ed02a84938ba75ec2f3a423ddf1c8d5adb4bdc8e5fc303ce49759370201"
       }
     },
     {
@@ -322,7 +322,7 @@
     {
       "name": "dist/client/sitemap.xml",
       "digest": {
-        "sha256": "e73abd2fad9bc760ace7c28f5482f8a32d3e551f672ea4a00190efde27bb7aec"
+        "sha256": "fe19022e951111d44cf575605db2a9ac910b0780ea95314278004c615e2f660c"
       }
     },
     {
@@ -424,12 +424,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-12T23:01:56.246Z",
+    "timestamp": "2026-11-12T23:10:37.516Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "1b784449e4d30897298298d2084fb6e7e9470548ce4bf4851162015c25622150",
-      "gitCommit": "4af8c0c83c205d8ab8c4150f1b69f40818d72b0e",
-      "gitTree": "b159f71a76bb8dc64f7b2a6714a6b03f20035379"
+      "sha256": "f644053064f4ba6253f1aa2135f8599c0c1fc1ce31b8beb92457317ab7c964ee",
+      "gitCommit": "51a0ff8674a1ab1f04501f7bc6b062ff523b5889",
+      "gitTree": "d3d962eafa555b40e8a05de4bd900778101ddc02"
     },
     "subjectRoots": [
       "dist/client",
