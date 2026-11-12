@@ -34,11 +34,14 @@ export const CONTROL_BACKEND_HOST='numina-production.skott34.workers.dev';
 export const CONTROL_BACKEND_ALLOWED_PREFIXES=Object.freeze(['/api/control/v2/']);
 export const CONTROL_BACKEND_ALLOWED_PATHS=Object.freeze(['/.well-known/agent-card.json','/api/control/v1/treasury']);
 export function isEdgeAliasHost(hostname){return String(hostname||'').toLowerCase().endsWith('.workers.dev');}
+// Cloud Run service hosts are public edges. They do not inherit the workers.dev
+// control-backend exceptions. The suffix covers *.a.run.app as well.
+export function isCloudRunHost(hostname){return String(hostname||'').toLowerCase().endsWith('.run.app');}
 export function controlBackendAllows(hostname,path){
  return String(hostname||'').toLowerCase()===CONTROL_BACKEND_HOST&&(CONTROL_BACKEND_ALLOWED_PATHS.includes(path)||CONTROL_BACKEND_ALLOWED_PREFIXES.some(prefix=>path.startsWith(prefix)));
 }
 export function publicGateBlocks(hostname,path){
- if(!(isPublicSiteHost(hostname)||isEdgeAliasHost(hostname))||PUBLIC_ALLOWED_PATHS.includes(path)||controlBackendAllows(hostname,path))return false;
+ if(!(isPublicSiteHost(hostname)||isEdgeAliasHost(hostname)||isCloudRunHost(hostname))||PUBLIC_ALLOWED_PATHS.includes(path)||controlBackendAllows(hostname,path))return false;
  return path==='/mcp'||path.startsWith('/mcp/')||path==='/downloads'||PUBLIC_BLOCKED_PREFIXES.some(prefix=>prefix!=='/mcp'&&path.startsWith(prefix));
 }
 export const PRIVATE_NOTICE_JSON=Object.freeze({error:'private',message:'This endpoint is private and available on request or on the local network only.',contact:'https://www.numinalabs.xyz/contact'});
