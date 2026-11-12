@@ -20,10 +20,26 @@ export function canonicalize(value) {
     return JSON.stringify(value);
   }
   if (Array.isArray(value)) {
-    if (Object.keys(value).some(k => !/^(0|[1-9]\d*)$/.test(k) || Number(k) >= value.length) || Array.from({length:value.length},(_,i)=>i).some(i=>!Object.hasOwn(value,i))) fail('sparse or extended array');
-    return '[' + value.map(canonicalize).join(',') + ']';
+    // RFC 8785 §3.2.3: array element order is kept and elements are never sorted.
+    // RFC 8785 works on JSON data adapted for I-JSON (§3.1). JSON text has no
+    // holes and no extra array properties (RFC 8259), so neither is an RFC
+    // sorting rule. A hole is rejected here as non-JSON input: skipping it or
+    // emitting null would change the array. Extra own properties are not
+    // elements; this general canonicalizer omits them, matching the JSON array
+    // model. The stricter sparse/extended rejection stays on the binding path
+    // in signingBytes(), which verifyBinding() calls. A digit-class index test
+    // belongs there. Writing the class as \\d in a regex literal matches the
+    // two characters "\d" and rejects every dense index, including 0.
+    const parts = new Array(value.length);
+    for (let i = 0; i < value.length; i++) {
+      if (!Object.hasOwn(value, i)) fail('non-JSON array hole');
+      parts[i] = canonicalize(value[i]);
+    }
+    return '[' + parts.join(',') + ']';
   }
   if (value && typeof value === 'object' && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)) {
+    // I-JSON (§3.1) forbids duplicate names, but a parsed object cannot show
+    // them. Raw JSON ingestion has to reject duplicates before this point.
     const keys=Object.keys(value);
     for (const key of keys) validateUnicode(key);
     return '{' + keys.sort().map(k => JSON.stringify(k)+':'+canonicalize(value[k])).join(',') + '}';
@@ -49,8 +65,29 @@ function validate(m) {
   assertKeys(m.signatures,['node_a_sig','node_b_sig']);
   if (!hex(m.signatures.node_a_sig,128) || !hex(m.signatures.node_b_sig,128)) fail('invalid signatures');
 }
+// Stricter than canonicalize(): bindings must not silently drop holes or
+// extra own properties. The index pattern is a real digit class, not \\d.
+const DECIMAL_INDEX = /^(0|[1-9]\d*)$/;
+function assertStrictJsonArrays(value) {
+  if (!value || typeof value !== 'object') return;
+  if (Array.isArray(value)) {
+    for (const key of Object.keys(value)) {
+      if (!DECIMAL_INDEX.test(key) || Number(key) >= value.length) fail('sparse or extended array');
+    }
+    for (let i = 0; i < value.length; i++) {
+      if (!Object.hasOwn(value, i)) fail('sparse or extended array');
+      assertStrictJsonArrays(value[i]);
+    }
+    return;
+  }
+  const proto = Object.getPrototypeOf(value);
+  if (proto === Object.prototype || proto === null) {
+    for (const key of Object.keys(value)) assertStrictJsonArrays(value[key]);
+  }
+}
 export function signingBytes(manifest) {
   const {signatures, ...unsigned} = manifest;
+  assertStrictJsonArrays(unsigned);
   return Buffer.concat([DOMAIN, Buffer.from(canonicalize(unsigned),'utf8')]);
 }
 function ed25519PublicKey(hexKey) {

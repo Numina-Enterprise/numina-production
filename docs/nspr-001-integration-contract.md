@@ -19,6 +19,10 @@ The resilience layer MUST NOT call or modify Raft `appendEntries`, `requestVote`
 - During partitions, all globally exclusive operations remain subject to the existing Raft quorum.
 - No unverified shard may overwrite a committed Raft log or snapshot.
 
+## Production module search
+
+A search of this branch found no production Raft or consensus implementation. Nothing defines `appendEntries`, `requestVote`, or `installSnapshot`, and `numina-agent-swarm/src/swarm-dispatcher.mjs` is not a Raft log, vote, or snapshot module. Its pinned cluster-state root is unchanged. `canonicalize()` and `signingBytes()` are therefore not wired into production Raft code. `RaftingLink` stays an experimental observer-side helper: a caller supplies `verifyManifest`, and the tests pass `verifyBinding`, which signs with `signingBytes()`. No incompatibility with an on-tree Raft API arises, because that API is not in this tree. A later observer must stay off quorum, term, commit-index, and log mutation, as the non-interference invariant requires.
+
 ## Pre-merge gates
 - Pass the isolated Node 26.13.0 test workflow.
 - Validate official RFC 8785 vectors and independent runtime parity.
