@@ -97,3 +97,29 @@ Status after `1a39da47` (PR #173, 2026-11-12 10:22 CST):
 * Sites publish now reads `SITES_GIT_TOKEN` from the production environment (`.github/workflows/publish-sites-control-source.yml`) and refuses to push when that value is empty. Run 43257992178 on `1a39da47` reported `failure: missing_sites_token` and `status: blocked_before_push`. Checkout still uses `persist-credentials: false`. Earlier runs, including 37163299661 on 2026-10-03, reached `git push` and failed with `failure: authentication` because the step had no credential.
 * Resolved on PR #173: otter latch entries for `scripts/build.mjs`, `tests/release-topology.test.mjs`, and `AGENTS.md` match `docs/protocols/singularity-coordination-model.md`. Verify provider observations run 43257992409 passed, including root `npm ci` and `npm test`.
 * Still open: Sam re-signs `release-evidence/numina-5.0.0-release.statement.json` and the DSSE envelope on current `main` (`npm ci && npm run build && npm run release:statement && npm run release:sign`). Deploy run 43257992268 failed attestation after every signature passed. Sam also sets production secret `SITES_GIT_TOKEN` when the Sites mirror should publish.
+
+
+## 6. Live Cloudflare read (2026-11-12, 10:37 AM CST)
+
+Read-only. No deploy, DNS edit, binding change, secret read, or schema write.
+
+Account `3c1fd59ef2ef67f750b4bc23e656d722`. Zone `numinalabs.xyz` (`2f33643b75a07b13dd160957630ee615`) is active. SSL mode is strict, the certificate is active, Always Use HTTPS is on, and the minimum TLS version is 1.2. Apex and `www` are proxied AAAA records at `100::`. Worker routes `numinalabs.xyz/*` and `www.numinalabs.xyz/*` both use script `numina-production`. A proxied wildcard CNAME `*.numinalabs.xyz` points at the apex and has no Worker route; `https://not-a-real-host.numinalabs.xyz/` returned HTTP 523.
+
+The production script was last modified `2026-11-12T04:06:24Z` (10:06 PM CST, Nov 11). The deployment at 100% is version `91a0db93-c985-439b-a575-3be81f621026`, source `wrangler`, created `2026-11-12T04:06:23Z`. The account workers.dev subdomain is `skott34`. This script has workers.dev and preview URLs enabled. Its bindings are the `ASSETS` binding and secret text bindings `NUMINA_CONTROL_API_KEY`, `NUMINA_CONTROL_API_KEY_SHA256`, `STRIPE_PRICE_AUDIT`, `STRIPE_PRICE_DIAGNOSTIC`, and `STRIPE_SECRET_KEY`. There is no D1 binding.
+
+D1 database `numina-production` (`c203bfa3-8854-4705-8227-742cae3c11b5`) was created `2026-11-11T15:56:08Z` (9:56 AM CST) and reports 0 tables. `wrangler.jsonc` lists `d1` in `keep_bindings` and does not declare `d1_databases`, so a deploy does not attach this database.
+
+HTTP responses at 10:37 AM CST:
+
+| URL | Status |
+|---|---|
+| `https://numinalabs.xyz/` | 200 |
+| `https://www.numinalabs.xyz/` | 200 |
+| `https://numinalabs.xyz/services` | 200 |
+| `https://numinalabs.xyz/.well-known/agent-card.json` | 403 `{"error":"private"}` |
+| `https://numinalabs.xyz/api/control/v1/treasury` | 403 `{"error":"private"}` |
+| `https://numina-production.skott34.workers.dev/` | 200 |
+| `https://numina-production.skott34.workers.dev/.well-known/agent-card.json` | 200 |
+| `https://numina-production.skott34.workers.dev/api/control/v1/treasury` | 503 `{"status":"unavailable","error":"DEPENDENCY_UNAVAILABLE"}` |
+
+The apex and workers.dev homepages carry the same page copy. The apex response is larger because Cloudflare injects its challenge script into the cached HTML. The workers.dev agent-card response matches the control-backend exception in `src/worker.js`. The treasury request above sent no credential. `controlHttp` calls `rateLimit(env.DB, ...)` before authentication, and this script has no `DB` binding, so that route cannot return `READY` until a database is bound and initialized. That binding was not added. CI still cannot publish a Worker version until the release statement is re-signed.
