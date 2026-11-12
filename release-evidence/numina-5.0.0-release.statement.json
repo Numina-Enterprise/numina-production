@@ -424,12 +424,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-12T22:49:38.411Z",
+    "timestamp": "2026-11-12T23:01:56.246Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "3b7432b31ef7a97393ef6ebf885b42872633447c0c7706b4d7e02c2e3f12e806",
-      "gitCommit": "7a7d69bd4f6d1b46fab8f310ed813e0123551f06",
-      "gitTree": "7e78bed0e922d825fd2155ae206b875e1eaea14d"
+      "sha256": "1b784449e4d30897298298d2084fb6e7e9470548ce4bf4851162015c25622150",
+      "gitCommit": "4af8c0c83c205d8ab8c4150f1b69f40818d72b0e",
+      "gitTree": "b159f71a76bb8dc64f7b2a6714a6b03f20035379"
     },
     "subjectRoots": [
       "dist/client",
