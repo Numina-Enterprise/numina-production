@@ -7,3 +7,151 @@ updates:
     open-pull-requests-limit: 5
     # Review release notes and exact upstream commits. Do not auto-merge or
     # silently expand the accepted builder-SHA policy after an update.
+
+  # npm: one entry per directory that contains a live package.json.
+  # release-evidence/ is omitted; those copies are sealed historical snapshots.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    exclude-paths:
+      - "integrations/numina"
+      - "integrations/numina/**"
+      - "numina-agent-swarm"
+      - "numina-agent-swarm/**"
+      - "numina-financial-core"
+      - "numina-financial-core/**"
+      - "numina-smart-contracts"
+      - "numina-smart-contracts/**"
+      - "numina-stripe-app"
+      - "numina-stripe-app/**"
+      - "runtime/nusd"
+      - "runtime/nusd/**"
+      - "runtime/vercel-production"
+      - "runtime/vercel-production/**"
+      - "runtime/verifier-v2.0"
+      - "runtime/verifier-v2.0/**"
+      - "release-evidence"
+      - "release-evidence/**"
+  - package-ecosystem: npm
+    directory: /integrations/numina
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /numina-agent-swarm
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /numina-financial-core
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /numina-smart-contracts
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /numina-stripe-app
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /runtime/nusd
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /runtime/nusd/development
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /runtime/nusd/reviews/uncapped-500t/tool
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /runtime/vercel-production
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /runtime/verifier-v2.0
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm
+    directory: /runtime/verifier-v2.0/core/financial
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  # pip: one entry per directory with a pyproject.toml or a requirements file.
+  # Parent entries exclude nested manifest directories so each file is updated once.
+  # Dependabot treats a *.txt or *.in file whose name contains "requirements" as a manifest.
+  - package-ecosystem: pip
+    directory: /manifest-verifier
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /numina-ibm-quantum
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /runtime/verifier-rc26
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    exclude-paths:
+      - "deploy/vercel"
+      - "deploy/vercel/**"
+  - package-ecosystem: pip
+    directory: /runtime/verifier-rc26/deploy/vercel
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /runtime/verifier-rc27
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    exclude-paths:
+      - "deploy/vercel"
+      - "deploy/vercel/**"
+  - package-ecosystem: pip
+    directory: /runtime/verifier-rc27/deploy/vercel
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /runtime/verifier-v2.0
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    exclude-paths:
+      - "core"
+      - "core/**"
+  - package-ecosystem: pip
+    directory: /runtime/verifier-v2.0/core
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    exclude-paths:
+      - "deploy/vercel"
+      - "deploy/vercel/**"
+  - package-ecosystem: pip
+    directory: /runtime/verifier-v2.0/core/deploy/vercel
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /vendor/numina-core-v1.8
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

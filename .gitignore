@@ -2,6 +2,11 @@
 node_modules/
 .npm-cache/
 
+# Python virtual environments. Never commit these.
+.venv/
+.venv*/
+venv/
+
 # OS / Editor noise
 .DS_Store
 Thumbs.db
