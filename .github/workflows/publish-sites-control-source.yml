@@ -88,7 +88,9 @@ jobs:
           path: ${{ runner.temp }}/numina.tgz
           if-no-files-found: error
 
+      # Sites mirror is disabled until a lasting Sites credential exists.
       - name: Publish Numina Sites mirror
+        if: ${{ vars.SITES_MIRROR_ENABLED == 'true' }}
         id: sites_source
         shell: bash
         env:
@@ -96,7 +98,7 @@ jobs:
         run: npm run publish:source -- sites
 
       - name: Verify Sites source publication result
-        if: always()
+        if: ${{ always() && vars.SITES_MIRROR_ENABLED == 'true' }}
         shell: bash
         run: |
           node --input-type=module <<'NODE'
