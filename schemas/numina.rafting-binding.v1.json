@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://numinalabs.xyz/schemas/numina.rafting-binding.v1.json",
+  "title": "NuminaRaftingBindingV1",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "binding_id",
+    "node_a",
+    "node_b",
+    "sequence",
+    "timestamp",
+    "ttl_seconds",
+    "canonical_spec",
+    "signatures"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "numina.rafting-binding.v1"
+    },
+    "binding_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "node_a": {
+      "$ref": "#/$defs/node"
+    },
+    "node_b": {
+      "$ref": "#/$defs/node"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ttl_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    },
+    "canonical_spec": {
+      "const": "RFC-8785"
+    },
+    "signatures": {
+      "type": "object",
+      "required": [
+        "node_a_sig",
+        "node_b_sig"
+      ],
+      "properties": {
+        "node_a_sig": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{128}$"
+        },
+        "node_b_sig": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{128}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "public_key",
+        "state_commitment"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "public_key": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "state_commitment": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
