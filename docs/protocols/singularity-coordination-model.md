@@ -84,7 +84,7 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "tests/release-topology.test.mjs",
       "role": "version-check",
-      "sha256": "b7b6724e1d6290dc6215fd8b497c3225ba4ee3cf7ac4d2386990db1e5973a2d3"
+      "sha256": "01eac257ddfb7388f1d9afeffab74f237f0cd2fa07c2c60d977efd747c37fc13"
     },
     {
       "path": ".github/workflows/numina.yml",
