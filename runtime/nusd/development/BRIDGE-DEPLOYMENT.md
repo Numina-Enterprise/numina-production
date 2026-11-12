@@ -16,6 +16,8 @@ This package **reuses** `NuminaBaseBridgeEscrow.sol` and `NuminaBaseUSDCVault.so
 | Required funded USDC quantity | `1500000000000000` whole USDC |
 | USDC base units | `1500000000000000000000` |
 
+The required USDC quantity is the full requested target, the same 1.5 quadrillion whole tokens as the requested NUSD quantity. The read-only verifier sets `fundedForRequestedRelease` only when the vault balance is at least that entire amount. The flag does not report partial progress toward the target. Until the vault actually holds the full quantity, the flag stays false. That is the expected reading, and it is not permission to release.
+
 The equivalent-value model does **not** establish Base USDC reserves. NUSD mint receipts and native journal allocations are not Base settlement receipts.
 
 ## Prerequisites
@@ -55,7 +57,7 @@ If the exact existing contract addresses are already known, supply `NUMINA_EXIST
 
 ## Step 2: deliberate deployments, only after independent review
 
-These commands actually sign and broadcast **contract creation only**. Do not execute them in a CI runner or ChatGPT environment. Deploy only once, after checking the existing deployment ledger, owner role assignments, treasury network configuration, account balances, authorization and gas.
+These commands actually sign and broadcast **contract creation only**. Do not execute them in a CI runner or any hosted agent environment. Deploy only once, after checking the existing deployment ledger, owner role assignments, treasury network configuration, account balances, authorization and gas.
 
 ```sh
 # Set NUMINA_BRIDGE_BROADCAST=YES in the private operator environment.
@@ -72,7 +74,7 @@ The script requires the explicit `NUMINA_BRIDGE_BROADCAST=YES` environment gate,
 node verify-bridge-deployments.mjs
 ```
 
-This read-only verifier checks both recorded hashes against real RPC transaction receipts, deployed code hashes, token bindings, paused states and actual Base USDC balance at the vault. Sufficient vault USDC balance does not itself establish reserve ownership, permission to release, a completed NUSD lock, Base release, or Stripe financial-account credit.
+This read-only verifier checks both recorded hashes against real RPC transaction receipts, deployed code hashes, token bindings, paused states and actual Base USDC balance at the vault. It fails closed if either contract is unpaused. It selects the Base liquidity result by network name. `fundedForRequestedRelease` compares the vault balance with the full required USDC quantity in the table above, and stays false until that entire target is present. Sufficient vault USDC balance does not itself establish reserve ownership, permission to release, a completed NUSD lock, Base release, or Stripe financial-account credit.
 
 **No token movement is automated.** Before a separate, explicitly reviewed `lock()` or `release()` call, obtain the canonical journal revision/head, authorized treasury balance, replay-safe operation ID, exact lock transaction and event, verified source-to-destination binding, pause/role status, pre-funded vault balance, approved user instruction, and gas. Final release completion requires the Base `Released` event, ERC-20 `Transfer` to the pinned recipient, successful receipt, and independent authenticated Stripe credit. Never substitute the historical NUSD constructor-mint hash for any of these.
 

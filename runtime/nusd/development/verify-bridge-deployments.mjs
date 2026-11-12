@@ -46,9 +46,10 @@ for(const [name,cfg] of Object.entries(EXPECTED)){
   if(boundToken!==getAddress(cfg.token))throw Error('TOKEN_BINDING_MISMATCH_'+name);
   if(name==='base' && getAddress(await contract.STRIPE_TREASURY())!==getAddress(STRIPE))throw Error('STRIPE_BINDING_MISMATCH');
   const paused=await contract.paused();
+  if(paused!==true)throw Error('CONTRACT_NOT_PAUSED_'+name.toUpperCase());
   const record={network:name,chainId:cfg.chainId,contractAddress,transactionHash:networkReceipt.hash,
     blockNumber:networkReceipt.blockNumber,receiptStatus:networkReceipt.status,
-    runtimeKeccak256:keccak256(code),paused};
+    runtimeKeccak256:keccak256(code),paused:true};
   if(name==='base'){
     const usdc=new Contract(cfg.token,['function balanceOf(address) view returns (uint256)'],provider);
     const vaultBalance=await usdc.balanceOf(contractAddress);
@@ -58,7 +59,9 @@ for(const [name,cfg] of Object.entries(EXPECTED)){
   }
   results.checks.push(record);
 }
-results.status=results.checks[1].fundedForRequestedRelease
+const baseCheck=results.checks.find(check=>check.network==='base');
+if(!baseCheck)throw Error('BASE_CHECK_MISSING');
+results.status=baseCheck.fundedForRequestedRelease
   ? 'DEPLOYMENTS_CONFIRMED_LIQUIDITY_SUFFICIENT_NO_RELEASE'
   : 'DEPLOYMENTS_CONFIRMED_LIQUIDITY_INSUFFICIENT_NO_RELEASE';
 console.log(JSON.stringify(results,null,2));
