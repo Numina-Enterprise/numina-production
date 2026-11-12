@@ -51,4 +51,21 @@ test('public hosts keep readyz, robots, favicon and Android asset links, and hav
 test('the private handlers still answer on a non-public host',async()=>{
   const res=await worker.fetch(new Request('http://127.0.0.1/api/control/v2/head'),{ASSETS:assetsSpy()});
   assert.notEqual(res.status,403);
+  assert.equal(publicGateBlocks('numina.test','/api/control/v1/treasury'),false);
+  assert.equal(publicGateBlocks('notworkers.dev','/mcp'),false);
+});
+
+test('workers.dev uses the same private-section gate as the public site',async()=>{
+  const hosts=['numina-production.skott34.workers.dev','preview-abc.numina-production.skott34.workers.dev'];
+  for(const host of hosts){
+    for(const path of ['/mcp','/api/control/v2/head','/api/control/v1/treasury','/.well-known/agent-card.json'])assert.equal(publicGateBlocks(host,path),true,host+path);
+    for(const path of ['/','/services',...PUBLIC_ALLOWED_PATHS])assert.equal(publicGateBlocks(host,path),false,host+path);
+    const assets=assetsSpy();
+    const blocked=await worker.fetch(new Request('https://'+host+'/api/control/v2/head',{headers:{Authorization:'Bearer not-a-gate'}}),{ASSETS:assets,NUMINA_TELEMETRY_LOGS:'false'});
+    assert.equal(blocked.status,403,host);
+    assert.equal(assets.calls.length,0,host);
+    assert.deepEqual(await blocked.json(),PRIVATE_NOTICE_JSON);
+    const page=await worker.fetch(new Request('https://'+host+'/services'),{ASSETS:assetsSpy(),NUMINA_TELEMETRY_LOGS:'false'});
+    assert.equal(page.status,200,host);
+  }
 });
