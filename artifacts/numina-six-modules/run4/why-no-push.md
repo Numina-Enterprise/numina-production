@@ -1,0 +1,3 @@
+Push of `cursor/six-treasury-modules-eff3` was not performed. The commit is `796449d1418117d822e977fea00440b0b175b308`. `six-modules.patch` is the diff from base `96dbf1b4690f401856cc26e5877b2547b42d23bd`.
+
+`.github/workflows/verify-root-numina.yml` runs on every push that changes `src/**` or `tests/**`, with no branch filter, and that job runs `npm run build`. Deploy workflows `deploy-cloudflare.yml`, `deploy-nusd-contracts.yml`, and `activate-minted-nusd.yml` run on pushes to `main`. This change stays local so neither that build nor a main deploy is started. Tests in `tests/numina-six-modules.test.mjs` were not run.
