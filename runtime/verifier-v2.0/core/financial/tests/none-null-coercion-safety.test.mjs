@@ -10,7 +10,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseMonetaryToUnits, parseMinorUnits } from '../src/money.mjs';
 import { RWATokenizationEngine, QUALIFIED_RWA_ASSET_TYPES } from '../src/rwa-tokenization-engine.mjs';
-import { AutonomousSwarmDispatcher } from '../../../../../numina-agent-swarm/src/swarm-dispatcher.mjs';
+import { AutonomousSwarmDispatcher } from '../../numina-agent-swarm/src/swarm-dispatcher.mjs';
 
 test('▶ ▶ "None" & Null Safety / Type Coercion Invariant Suite', async (t) => {
   await t.test('1. Money Module: Strict String/BigInt Types & "None"/Null Rejection', () => {
