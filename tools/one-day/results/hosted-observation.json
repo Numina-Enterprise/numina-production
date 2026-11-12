@@ -1,0 +1,35 @@
+{
+  "schema": "numina.one-day-sprint.hosted-observation.v1",
+  "sourceCommit": "c1100df61ac389ba03313883e695f5b712f07ea2",
+  "runId": 41438838027,
+  "jobId": 125255321398,
+  "runUrl": "https://github.com/Numina-Enterprise/numina-production/actions/runs/41438838027",
+  "runtimeObserved": "v26.13.0",
+  "checkout": "success",
+  "parallelTests": {
+    "tests": 65,
+    "passed": 65,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sourceEvidenceStep": "success",
+  "artifactUpload": "success",
+  "artifact": {
+    "id": 13136579694,
+    "name": "numina-one-day-41438838027-1",
+    "digest": "sha256:72863f7d26b8e76f95f3511003eacedf6686b425226bdfd72d789e1a60d433de"
+  },
+  "overallRun": "failure",
+  "buildBlocker": "ENOENT runtime/verifier-v2.0/core/.pytest_cache/.gitignore in scripts/source-alignment.mjs",
+  "workflowPolicy": {
+    "runId": 41438838114,
+    "runnerPolicy": "success",
+    "immutablePins": "failure",
+    "violations": 32,
+    "note": "Existing NUMINA pins were preserved initially. Follow-up aligns all touched NUMINA references with action-pins.json; violations in unrelated existing workflows remain unresolved."
+  },
+  "productionDeploymentVerified": false,
+  "liveSignerVerified": false,
+  "providerSessionVerified": false,
+  "hilVerified": false
+}
