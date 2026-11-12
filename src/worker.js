@@ -26,7 +26,7 @@ const security={"X-Numina-Version":"5.0.0","X-Numina-Profile":"numina-production
 // The handlers below stay in place for the local-only server (src/local/).
 export const PUBLIC_SITE_HOSTS=Object.freeze(['numinalabs.xyz','www.numinalabs.xyz']);
 export const PUBLIC_BLOCKED_PREFIXES=Object.freeze(['/mcp','/api/','/.well-known/','/downloads/','/v1/','/v2/','/v3/','/v4/','/v5/']);
-export const PUBLIC_ALLOWED_PATHS=Object.freeze(['/readyz','/robots.txt','/favicon.ico','/favicon.svg','/.well-known/assetlinks.json','/.well-known/skott34-ed25519.pub.pem','/.well-known/skott34-fn-dsa-1024.pub.json','/.well-known/cc0-deed.en.html']);
+export const PUBLIC_ALLOWED_PATHS=Object.freeze(['/readyz','/robots.txt','/favicon.ico','/favicon.svg','/.well-known/assetlinks.json','/.well-known/skott34-ed25519.pub.pem','/.well-known/skott34-fn-dsa-1024.pub.json','/.well-known/cc0-deed.en.html','/.well-known/vercel.json']);
 export function isPublicSiteHost(hostname){return PUBLIC_SITE_HOSTS.includes(String(hostname||'').toLowerCase());}
 // Edge-alias gate (Nov 2026): the workers.dev host and every preview URL (*.workers.dev) get the same
 // private-route lockdown as the public hosts. Only the declared control backend host keeps the paths its
