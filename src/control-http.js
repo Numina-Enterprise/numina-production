@@ -5,6 +5,7 @@ import {createNuminaTreasury} from './native-treasury.js';
 import {treasuryDocumentHttp} from './treasury-documents.js';
 import {readStripeTreasury} from './stripe-treasury.js';
 import {CONTROL_VERSION,CONTROL_ADAPTER,stable,controlHash,controlError} from './control.js';
+import {clientSuppliedIdentityAccepted} from './client-identity.js';
 import {readControl,bootstrapControl,controlManifestView,commitControl} from './control-store.js';
 import {rateLimit} from './store.js';
 import {WALLET_EXECUTION_POLICY,walletExecutionAuthorized} from '../public/wallet-execution-policy.js';
@@ -79,10 +80,11 @@ export async function controlActor(req,env){
     if(!controlApiKeyPins(env).includes(await controlHash(token)))controlError('UNAUTHENTICATED',401);
     return env.NUMINA_CONTROL_OWNER;
   }
-  // Identity is supplied by Sites or the verified reviewer middleware. Reviewers
-  // retain their distinct principal and do not inherit the production root.
+  // Header identity is the local/test and verified-reviewer boundary. A client
+  // can set the same headers on workers.dev and Cloud Run, so those hosts
+  // require a bearer credential or GitHub OIDC token.
   const id=req.headers.get('oai-authenticated-user-id'),email=req.headers.get('oai-authenticated-user-email');
-  if(!id||!email)controlError('UNAUTHENTICATED',401);
+  if(!clientSuppliedIdentityAccepted(req,env)||!id||!email)controlError('UNAUTHENTICATED',401);
   return 'email:'+email.trim().toLowerCase();
 }
 export async function controlBody(req){
