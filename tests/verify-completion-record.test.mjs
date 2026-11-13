@@ -8,7 +8,7 @@ import {verifyCompletionRecord,validateVerificationOutput,NUSD_VERIFICATION_POLI
 
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 function fixture(t){
-  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'numina-completion-test-'));
+  const dir=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'numina-completion-test-'));
   t.after(()=>{assert.ok(path.isAbsolute(dir)&&path.dirname(dir)===fs.realpathSync(os.tmpdir())&&path.basename(dir).startsWith('numina-completion-test-'));fs.rmSync(dir,{recursive:true,force:true});});
   const inputs=path.join(dir,'historical');fs.mkdirSync(inputs);
   const record={schema:'numina.hosted-runtime-completion.v1',recordedAt:'2026-09-12T23:40:28.662Z',

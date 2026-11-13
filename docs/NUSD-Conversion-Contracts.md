@@ -1,5 +1,7 @@
 # NUSD 1:1 conversion contracts
 
+Contributors: Sam Kott <skott34@numinalabs.xyz>, Annie
+
 ## Release scope
 
 This document describes the `NuminaUSDCConversion` and `NuminaUSDRedemption` contract candidates. They implement fixed 1:1 whole-unit arithmetic for existing NUSD tokens. The current contract sources require 18-decimal NUSD (the deployed token `0x491c1DF1b5CA77AF797f052c2310ca17039C931b` on chain 962421430) and 6-decimal USDC. The superseded 6-decimal candidates are kept for history only in `runtime/nusd/history/6d/`; they were never deployed and do not apply to current amounts. This documentation update changes neither token supply nor issuer/minter separation. Publishing these sources or this document does not establish contract deployment, token issuance, a bridge, provider payment, reserve funding or financial approval. An independent security audit is not established by this source review.
