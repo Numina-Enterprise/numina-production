@@ -61,7 +61,6 @@ export class NuminaTreasuryEngine {
     this.clusterRoot = clusterState.root;
     this.trustedProviderKeys = { ...trustedProviderKeys };
     this.now = now;
-    this.state = 'UNPAUSED_AND_ACTIVE';
     this.totalMinted = BigInt(clusterState.payload.authorizedSupplyUnits);
     this.totalBurned = 0n;
     this.circulatingSupply = 0n;
@@ -81,11 +80,7 @@ export class NuminaTreasuryEngine {
   }
 
   getOperationalStatus() {
-    if (this.state !== 'UNPAUSED_AND_ACTIVE') {
-      throw new Error(`TREASURY_CRITICAL_INVARIANT_VIOLATION: State is ${this.state}`);
-    }
     return {
-      state: this.state,
       totalMinted: this.totalMinted,
       totalBurned: this.totalBurned,
       circulatingSupply: this.circulatingSupply,
@@ -125,10 +120,6 @@ export class NuminaTreasuryEngine {
    * Stage 1: Ingest Transaction with Idempotency Key
    */
   initiateSettlement({ idempotencyKey, fromAccount, toAccount, amountUnits, proofHash }) {
-    if (this.state !== 'UNPAUSED_AND_ACTIVE') {
-      throw new Error('TREASURY_OPERATION_REJECTED: Treasury is not in UNPAUSED_AND_ACTIVE status.');
-    }
-
     if (typeof idempotencyKey !== 'string' || !/^nusd:[A-Za-z0-9:_-]{8,}$/.test(idempotencyKey)) throw new Error('INVALID_IDEMPOTENCY_KEY');
     const now = this.now();
     this._expireIdempotencyKey(idempotencyKey, now);

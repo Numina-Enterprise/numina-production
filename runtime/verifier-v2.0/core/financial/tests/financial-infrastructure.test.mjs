@@ -70,7 +70,6 @@ test('▶ Numina Financial Infrastructure Suite', async (t) => {
     const treasury = new NuminaTreasuryEngine({ clusterState, trustedProviderKeys });
     const status = treasury.getOperationalStatus();
 
-    assert.equal(status.state, 'UNPAUSED_AND_ACTIVE');
     assert.equal(status.totalMinted, AUTHORIZED_SUPPLY);
     assert.equal(status.totalBurned, 0n);
     assert.equal(status.vaultReserve, AUTHORIZED_SUPPLY);

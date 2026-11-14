@@ -12,14 +12,12 @@ class RightsError(ValueError):
 
 
 class RightLifecycle(str, Enum):
-    PROPOSED = "PROPOSED"
     ACTIVE = "ACTIVE"
     SUSPENDED = "SUSPENDED"
     EXTINGUISHED = "EXTINGUISHED"
 
 
 class RightRecognitionState(str, Enum):
-    LOCAL = "LOCAL"
     RECOGNIZED = "RECOGNIZED"
     DISPUTED = "DISPUTED"
     REJECTED = "REJECTED"
@@ -29,17 +27,12 @@ class RightKind(str, Enum):
     CLAIM = "CLAIM"
     CONTROL = "CONTROL"
     USE = "USE"
-    GOVERNANCE = "GOVERNANCE"
-    CREATION = "CREATION"
-    RECOGNITION = "RECOGNITION"
 
 
 class BackingKind(str, Enum):
     RESOURCE_BACKED = "RESOURCE_BACKED"
     CONTRACTUAL = "CONTRACTUAL"
     PROTOCOL_NATIVE = "PROTOCOL_NATIVE"
-    STATUTORY = "STATUTORY"
-    UNBACKED_INSTITUTIONAL = "UNBACKED_INSTITUTIONAL"
 
 
 class RightsVMOp(str, Enum):
@@ -395,6 +388,8 @@ class RightsRuntime:
         right = self.rights.get(right_id)
         if rec is None or right is None:
             raise RightsError("recognition missing")
+        if rec.state == RightRecognitionState.REJECTED:
+            raise RightsError("rejected recognition is terminal")
         pre = self.state_root
         self.recognitions[key] = replace(rec, state=state, sequence=self.sequence + 1)
         mapping = dict(right.recognition)
