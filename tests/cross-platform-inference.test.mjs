@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {CONTRACT_VERSION,validateInferenceRequest,dispatchInference} from "../../ml/inference/cross_platform_contract.mjs";
+import {CONTRACT_VERSION,validateInferenceRequest,dispatchInference} from "../ml/inference/cross_platform_contract.mjs";
 const base={contract_version:CONTRACT_VERSION,surface:"web",modality:"text",request_id:"request_123",prompt:"Hello"};
 test("all supported client surfaces share one contract",()=>{
  for(const surface of ["web","ios","android","desktop","api","agent","multimodal"]) assert.equal(validateInferenceRequest({...base,surface}).surface,surface);
