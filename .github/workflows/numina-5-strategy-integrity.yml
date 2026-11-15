@@ -4,6 +4,7 @@ on:
     paths:
       - 'docs/strategy/numina-5-multidimensional-roadmap.md'
       - 'ml/model-registry/numina-5-candidates.json'
+      - 'ml/evaluations/**'
       - '.github/workflows/numina-5-strategy-integrity.yml'
   workflow_dispatch:
 permissions:
@@ -16,6 +17,8 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+      - name: Run model registry negative tests
+        run: python3 -m unittest discover -s ml/evaluations -p 'test_numina5_registry.py' -v
       - name: Validate model registry and boundaries
         shell: bash
         run: |
