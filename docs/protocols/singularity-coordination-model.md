@@ -6,7 +6,8 @@
 
 **Protocol body SHA-256:** `949d22cb92f40c2c16b6a72850fe0a75bb36434059ac898d42a38b3078c0fc04`
 
-**Creator and author:** Samuel J. Kott.  
+**Creator, author, founder, and producer:** Samuel J. Kott.  
+**Principal investigator:** Samuel J. Kott.  
 **Project organization:** SK Consulting LLC, doing business as Numina Labs.  
 **Rights:** Subject to verified ownership, applicable licenses, and separate contributor attribution.
 
