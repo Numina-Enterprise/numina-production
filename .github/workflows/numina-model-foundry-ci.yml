@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'ml/**'
+      - 'tests/cross-platform-inference.test.mjs'
       - '.github/workflows/numina-model-foundry-ci.yml'
       - 'config/numina-runners.json'
       - 'scripts/check-runner-policy.mjs'
@@ -24,3 +25,5 @@ jobs:
         run: |
           if [ -d ml/evaluations ]; then python3 -m unittest discover -s ml/evaluations -p 'test_*.py' -v; fi
           if [ -d ml/inference ]; then python3 -m unittest discover -s ml/inference -p 'test_*.py' -v; fi
+      - name: Validate cross-platform contract tests
+        run: node --test tests/cross-platform-inference.test.mjs
