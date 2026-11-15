@@ -1,0 +1,39 @@
+{
+  "schema_id": "numina.model-candidates.v1",
+  "status": "proposed_nonproduction",
+  "canonical_identity": "NUMINA",
+  "product_family": "Numina 5.0",
+  "candidates": [
+    {
+      "id": "N5-CAND-A",
+      "category": "Other",
+      "checkpoint_label": "Numina 5",
+      "submitted_score": 100,
+      "submitted_score_type": "provisional_self_assessment",
+      "verified_score": null,
+      "admission": "HOLD",
+      "weights_digest": null,
+      "license": null
+    },
+    {
+      "id": "N5-CAND-B",
+      "checkpoint_label": null,
+      "role": "open_weight_baseline_1",
+      "admission": "NOT_RUN"
+    },
+    {
+      "id": "N5-CAND-C",
+      "checkpoint_label": null,
+      "role": "open_weight_baseline_2",
+      "admission": "NOT_RUN"
+    },
+    {
+      "id": "N5-CAND-D",
+      "checkpoint_label": null,
+      "role": "numina_adaptation_research",
+      "admission": "NOT_RUN"
+    }
+  ],
+  "production_change_authorized": false,
+  "treasury_change_authorized": false
+}
