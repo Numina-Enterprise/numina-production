@@ -65,9 +65,9 @@ for (const name of Object.keys(targetSets)) if (!readdirSync(workflowsDir).inclu
 if (declarations < policy.preservedRunnerCount) {
   failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);
 }
-if (declarations > policy.preservedRunnerCount) {
-  failures.push('Future runner declaration denied: preserved ' + policy.preservedRunnerCount + ' got ' + declarations);
-}
+for (const name of approvedNames) if (!seenApproved.has(name)) failures.push('Authorized workflow absent: ' + name);
+const authorizedCount = Object.values(authorized).reduce((n, a) => n + (Array.isArray(a.targets) ? a.targets.length : 0), 0);
+if (declarations !== policy.preservedRunnerCount + authorizedCount) failures.push('Runner count does not match baseline plus authorized additions: expected ' + (policy.preservedRunnerCount + authorizedCount) + ' got ' + declarations);
 
 if (failures.length) {
   for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
