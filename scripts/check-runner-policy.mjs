@@ -14,7 +14,7 @@ if (policy.rules?.preserveCurrentRunners !== true) failures.push('Current runner
 if (policy.rules?.preserveExistingSelfHostedRunners !== false) failures.push('Self-hosted runner execution must not be preserved');
 if (policy.rules?.preserveExistingSelfHostedRunnerRegistrations !== true) failures.push('Existing self-hosted registration records must be preserved as non-executing state');
 if (policy.rules?.denySelfHostedRunnerExecution !== true || policy.rules?.denySelfHostedRunnerScheduling !== true) failures.push('Self-hosted runner execution and scheduling must remain denied');
-if (policy.rules?.denyFutureRunners !== true || policy.futureRunnerPolicy !== 'deny') failures.push('Future runners must remain denied');
+if (policy.schema !== 'numina.runner-policy.v15' || policy.rules?.denyFutureRunners !== false || policy.futureRunnerPolicy !== 'explicit_allowlist_only') failures.push('New runner declarations require v15 explicit allowlist');
 if (policy.rules?.allRunnersAreNumina !== true) failures.push('All runners must resolve to NUMINA');
 if (policy.rules?.hostIsNumina !== true) failures.push('Host identity must remain NUMINA');
 if (policy.rules?.runnerPlacementFrozen !== false) failures.push('Runner placement must not be frozen');
@@ -30,6 +30,9 @@ if (!deniedFloatingLabels.has('ubuntu-latest')) failures.push('ubuntu-latest mus
 if (executionTargets?.default !== policy.runnerTarget) failures.push('Default execution target must remain NUMINA');
 const usedOverrides = new Set();
 
+const authorized = policy.authorizedNewWorkflows || {};
+const approvedNames = new Set(Object.keys(authorized));
+const seenApproved = new Set();
 let declarations = 0;
 for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(name)).sort()) {
   const text = readFileSync(resolve(workflowsDir, name), 'utf8');
@@ -37,6 +40,12 @@ for (const name of readdirSync(workflowsDir).filter(name => /\.ya?ml$/i.test(nam
   const targets = [...text.matchAll(/^\s*runs-on:\s*(.+?)\s*(?:#.*)?$/gm)]
     .map(match => match[1].trim().replace(/^['"]|['"]$/g, ''));
   declarations += targets.length;
+  if (approvedNames.has(name)) {
+    seenApproved.add(name);
+    const approved = authorized[name];
+    if (!approved || !Array.isArray(approved.targets) || !approved.purpose || JSON.stringify(targets) !== JSON.stringify(approved.targets)) failures.push(name + ' does not match explicitly authorized runner targets');
+    if (targets.some(t => t !== 'ubuntu-24.04' && t !== 'macos-latest')) failures.push(name + ' has unauthorized substrate');
+  }
   for (const target of targets) if (deniedFloatingLabels.has(target)) failures.push(name + ' uses denied floating runner label ' + target);
   const expectedSet = Object.hasOwn(targetSets,name) ? targetSets[name] : null;
   const expectedTarget = Object.hasOwn(overrides, name) ? overrides[name] : executionTargets?.default;
@@ -56,12 +65,12 @@ for (const name of Object.keys(targetSets)) if (!readdirSync(workflowsDir).inclu
 if (declarations < policy.preservedRunnerCount) {
   failures.push('Current runners were removed: expected ' + policy.preservedRunnerCount + ' got ' + declarations);
 }
-if (declarations > policy.preservedRunnerCount) {
-  failures.push('Future runner declaration denied: preserved ' + policy.preservedRunnerCount + ' got ' + declarations);
-}
+for (const name of approvedNames) if (!seenApproved.has(name)) failures.push('Authorized workflow absent: ' + name);
+const authorizedCount = Object.values(authorized).reduce((n, a) => n + (Array.isArray(a.targets) ? a.targets.length : 0), 0);
+if (declarations !== policy.preservedRunnerCount + authorizedCount) failures.push('Runner count does not match baseline plus authorized additions: expected ' + (policy.preservedRunnerCount + authorizedCount) + ' got ' + declarations);
 
 if (failures.length) {
   for (const failure of failures) console.error('RUNNER_POLICY_VIOLATION ' + failure);
   process.exit(1);
 }
-console.log('NUMINA runner policy verified: ' + declarations + ' preserved hosted declarations; self-hosted execution denied; future runners denied.');
+console.log('NUMINA runner policy verified: ' + declarations + ' preserved hosted declarations; self-hosted execution denied; new runner declarations explicitly allowlisted.');
