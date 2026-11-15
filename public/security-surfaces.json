@@ -144,7 +144,7 @@
     },
     {
       "id": "release-evidence",
-      "entry": "/v4/release/manifest",
+      "entry": "/v5/release/manifest",
       "access": "public release inventory",
       "security": "/security",
       "connectionVerification": "not_established_by_this_record"

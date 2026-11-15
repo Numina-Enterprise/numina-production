@@ -108,9 +108,9 @@ $('#refresh').onclick=refresh;refresh();
 async function refreshApplicationIdentity(signal,isCurrent){
   $('#core-release-status').textContent='Checking the current Numina build…';
   try{
-    const r=await requestJson('/v4/release/manifest',{cache:'no-store',credentials:'omit',redirect:'error',signal});
+    const r=await requestJson('/v5/release/manifest',{cache:'no-store',credentials:'omit',redirect:'error',signal});
     if(!isCurrent())return;
-    if(r.schema!=='numina.application-release.v2'||r.schema_version!==2||r.product!=='Numina'||r.version!=='4.0.0'||r.release!=='numina-v4.0.0'||!/^[a-f0-9]{64}$/.test(r.build_id)||r.frontier?.version!=='4.0.0'||r.distribution?.codex_plugin?.version!=='4.0.0')throw Error('Current application release required');
-    $('#core-release-status').textContent='Numina OS 4.0.0 · Control room 4.0.0 · Plugin 4.0.0 · Build '+r.build_id;
+    if(r.schema!=='numina.application-release.v2'||r.schema_version!==2||r.product!=='Numina'||r.version!=='5.0.0'||r.release!=='numina-v5.0.0'||!/^[a-f0-9]{64}$/.test(r.build_id)||r.frontier?.version!=='5.0.0'||r.distribution?.codex_plugin?.version!=='5.0.0')throw Error('Current application release required');
+    $('#core-release-status').textContent='Numina OS 5.0.0 · Control room 5.0.0 · Plugin 5.0.0 · Build '+r.build_id;
   }catch{if(isCurrent())$('#core-release-status').textContent='Current release information is unavailable. Refresh to load the current build.';}
 }

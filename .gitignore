@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 .npm-cache/
+.venv312/
 
 # OS / Editor noise
 .DS_Store

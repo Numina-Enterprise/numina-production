@@ -20,7 +20,7 @@ export const CONNECTION_TARGETS = Object.freeze({
   'financial-status':{name:'Financial capabilities',entry:'/api/nusd/v1/status',path:'/api/nusd/v1/status',kind:'financial'},
   'financial-evidence':{name:'Financial evidence',entry:'/financial-services',path:'/api/financial/v1/manifest',kind:'evidence'},
   telemetry:{name:'Telemetry',entry:'/telemetry-metrics.json',path:'/telemetry-metrics.json',kind:'telemetry'},
-  'release-evidence':{name:'Release evidence',entry:'/v4/release/manifest',path:'/v4/release/manifest',kind:'release'}
+  'release-evidence':{name:'Release evidence',entry:'/v5/release/manifest',path:'/v5/release/manifest',kind:'release'}
 });
 for(const target of Object.values(CONNECTION_TARGETS))Object.freeze(target);
 
@@ -38,13 +38,13 @@ export function validateConnectionManifest(value){
 function connectionClassification(target,value){
   const schema=value?.schema;
   switch(target.kind){
-    case 'health':if(value?.version==='4.0.0')return value.status==='ready'?['available','Service responding','Account-service health check passed.']:['attention','Needs attention','The account service reports it is unavailable.'];break;
+    case 'health':if(value?.version==='5.0.0')return value.status==='ready'?['available','Service responding','Account-service health check passed.']:['attention','Needs attention','The account service reports it is unavailable.'];break;
     case 'control':if(schema==='numina.frontier.v2'&&value.treasury==='/api/control/v1/treasury')return ['available','Interface available','The shared control manifest responds. Each operation still requires its existing authority.'];break;
     case 'mcp':if(value?.jsonrpc==='2.0'&&value.id==='numina-connection-check'&&value.result?.serverInfo?.name===target.server&&value.result.protocolVersion==='2025-11-25')return ['available','Protocol connected','The agent interface accepted a read-only initialization check. No tool was executed.'];break;
     case 'a2a':if(value?.protocolVersion==='0.3.0'&&value.name==='Numina Control')return ['available','Discovery available','The agent card responds. No agent message or operation was sent.'];break;
-    case 'integration':if(schema==='numina.integration.archive.v2'&&value.version==='4.0.0'&&/^[a-f0-9]{64}$/.test(value.sha256))return ['available','Package record available','Distribution metadata responds. Installation in another product is not checked.'];break;
+    case 'integration':if(schema==='numina.integration.archive.v2'&&value.version==='5.0.0'&&/^[a-f0-9]{64}$/.test(value.sha256))return ['available','Package record available','Distribution metadata responds. Installation in another product is not checked.'];break;
     case 'native':if(schema==='numina.native-package.v1'&&value.proposedPackageIdentity==='xyz.numinalabs.app')return ['available','Package record available','The existing package record responds. Device installation and store approval are separate.'];break;
-    case 'runtime':if([value?.production_version,value?.release,value?.state?.release].some(version=>['1.9.0-rc27','core-v1.8+prod-v1.9.0-rc27'].includes(version)))return ['available','Runtime responding','The pinned runtime status responds. Review its signed evidence in Build & trust.'];break;
+    case 'runtime':if([value?.production_version,value?.release,value?.state?.release].some(version=>['2.0.0-rc27','core-v2.0+prod-v2.0.0-rc27'].includes(version)))return ['available','Runtime responding','The pinned runtime status responds. Review its signed evidence in Build & trust.'];break;
     case 'treasury':if(schema==='numina.treasury.v1')return value.status==='READY'?['available','Read connection working','The authorized canonical treasury read succeeded. No financial movement was requested.']:['attention','Not initialized','The canonical treasury reports that initialization is incomplete.'];break;
     case 'provider':if(schema==='numina.stripe.treasury.v1'&&value.connection==='read_only')return ['available','Provider read working','The authorized provider observation succeeded. No balances are included in this report.'];break;
     case 'provider-routes':if(schema==='numina.treasury.provider-routes.v1'&&value.connection==='read_only')return ['available','Route observation available','The authorized route observation responds. This check does not verify funding, provider acceptance or settlement.'];break;
@@ -69,7 +69,7 @@ export async function checkConnection(id,{origin,fetchImpl=fetch,signal,timeoutM
     const deadline=new Promise((_,reject)=>{abortHandler=()=>reject(Error(signal?.aborted?'CANCELLED':'TIMEOUT'));controller.signal.addEventListener('abort',abortHandler,{once:true});timer=setTimeout(stop,timeoutMs);});
     signal?.addEventListener('abort',stop,{once:true});if(signal?.aborted)stop();
     const request={method:target.kind==='mcp'?'POST':'GET',credentials:'same-origin',cache:'no-store',redirect:'manual',signal:controller.signal,headers:{Accept:target.kind==='page'?'text/html':'application/json'}};
-    if(target.kind==='mcp'){request.headers['Content-Type']='application/json';request.body=JSON.stringify({jsonrpc:'2.0',id:'numina-connection-check',method:'initialize',params:{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'numina-connections',version:'4.0.0'}}});}
+    if(target.kind==='mcp'){request.headers['Content-Type']='application/json';request.body=JSON.stringify({jsonrpc:'2.0',id:'numina-connection-check',method:'initialize',params:{protocolVersion:'2025-11-25',capabilities:{},clientInfo:{name:'numina-connections',version:'5.0.0'}}});}
     response=await Promise.race([fetchImpl(new URL(target.path,base.origin).href,request),deadline]);
     if(response.type==='opaqueredirect'||response.redirected||response.status===401||response.status===403||response.status>=300&&response.status<400)return result('access','Sign-in or access needed','Open the interface with an authorized account. No credentials are collected here.');
     if(!response.ok)return result('error',response.status===429?'Try again later':'Unavailable',response.status===429?'The service requested a slower request rate.':'The service did not accept this connection check.');

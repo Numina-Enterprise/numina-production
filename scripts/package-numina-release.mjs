@@ -22,7 +22,7 @@ if(finalBuild.schema!=='numina.final-build.v1'||finalBuild.identity!=='NUMINA'||
 if(finalBuild.applicationVersion!==pkg.version)throw Error('FINAL build manifest version differs from package version');
 if(finalBuild.buildModel?.finalCount!==1||finalBuild.buildModel?.finalIdentity!=='NUMINA'||finalBuild.buildModel?.canonicalHeadIdentity!=='NUMINA'||finalBuild.manifestContract?.schema!=='numina.final-build.contract.v2'||finalBuild.manifestContract?.finalAll!=='NUMINA'||finalBuild.manifestContract?.singular!==true)throw Error('Preserved FINAL NUMINA build manifest identity model mismatch');
 const archive=resolve(process.argv[2]||`numina-release-v${pkg.version}.tar.gz`);
-const required=['dist/client','dist/server/index.js','dist/client/downloads/application-release-v4.json'];
+const required=['dist/client','dist/server/index.js','dist/client/downloads/application-release-v5.json'];
 for(const path of required)if(!existsSync(path))throw Error('Missing NUMINA build output: '+path);
 
 const release={

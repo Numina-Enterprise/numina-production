@@ -27,7 +27,6 @@ class Exclusivity(str, Enum):
 class NovelTypeState(str, Enum):
     PROPOSED = "PROPOSED"
     APPROVED = "APPROVED"
-    REJECTED = "REJECTED"
 
 
 @dataclass(frozen=True)

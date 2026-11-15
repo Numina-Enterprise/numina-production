@@ -19,9 +19,6 @@ class ClearingState(str, Enum):
     OPEN = "OPEN"
     MARGIN_DEFICIENT = "MARGIN_DEFICIENT"
     DEFAULT_PENDING = "DEFAULT_PENDING"
-    DEFAULT_DECLARED = "DEFAULT_DECLARED"
-    RECOVERY = "RECOVERY"
-    CLOSED = "CLOSED"
 
 
 @dataclass(frozen=True)

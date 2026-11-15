@@ -14,9 +14,9 @@ function input() {
 test('iOS release binds the shared application, core and rc27 runtime',()=>{
   const identity=checkIOSRelease();
   assert.equal(identity.applicationVersion,json('package.json').version);
-  assert.equal(identity.runtimeVersion,'1.9.0-rc27');
-  assert.equal(identity.coreVersion,'1.8.0');
-  assert.equal(identity.applicationManifest,'/v4/release/manifest');
+  assert.equal(identity.runtimeVersion,'2.0.0-rc27');
+  assert.equal(identity.coreVersion,'2.0.0');
+  assert.equal(identity.applicationManifest,'/v5/release/manifest');
   assert.equal(identity.nativeCompilationEstablished,false);
   assert.equal(identity.signed,false);
 });
@@ -28,7 +28,7 @@ test('current platform source counters remain distinct from historical binaries'
   assert.equal(input().native.android.binaryVersionCode,3);
 });
 test('application version drift fails rather than relabeling an artifact',()=>{
-  const value=input(); value.pkg.version='5.0.0';
+  const value=input(); value.pkg.version='6.0.0';
   assert.throws(()=>deriveIOSIdentity(value),/APPLICATION_VERSION_MISMATCH/);
 });
 test('unapproved runtime migrations fail',()=>{
@@ -72,7 +72,7 @@ test('iOS source archive retains its packaged identity while current source may 
   assert.equal(evidence.compiledInfoPlist.CFBundleVersion,String(record.ios.binaryVersionCode));
   assert.equal(evidence.compiledInfoPlist.NuminaRuntimeVersion,'1.9.0-rc26');
   assert.notEqual(evidence.compiledInfoPlist.NuminaRuntimeVersion,checkIOSRelease().runtimeVersion);
-  assert.equal(evidence.compiledInfoPlist.NuminaFrozenCoreRoot,checkIOSRelease().frozenCoreRoot);
+  assert.equal(evidence.compiledInfoPlist.NuminaFrozenCoreRoot,json('docs/rc26-core-binding.json').frozen_core_manifest_root);
   assert.ok(Object.values(evidence.checks).every(value=>value===true));
   assert.ok(record.ios.binaries.length>0);
   for(const file of record.ios.binaries)assert.equal(createHash('sha256').update(readFileSync(new URL('../docs/'+file.file,import.meta.url))).digest('hex'),file.sha256);
@@ -92,6 +92,6 @@ test('iOS source archive retains its packaged identity while current source may 
 
 test("core version capture cannot consume following runtime manifest fields",()=>{
   const identity=deriveIOSIdentity(input());
-  assert.equal(identity.coreVersion,"1.8.0");
+  assert.equal(identity.coreVersion,"2.0.0");
   assert.doesNotMatch(renderIOSRelease(identity),/production_files_root|spdx_sbom_sha256/);
 });

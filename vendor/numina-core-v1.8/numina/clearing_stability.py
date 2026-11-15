@@ -18,10 +18,7 @@ class StabilityError(Exception):
 class MarginState(str, Enum):
     HEALTHY = "HEALTHY"
     CALL_REQUIRED = "CALL_REQUIRED"
-    CALL_OUTSTANDING = "CALL_OUTSTANDING"
     DEFAULT_PENDING = "DEFAULT_PENDING"
-    DEFAULT_DECLARED = "DEFAULT_DECLARED"
-    RECOVERY = "RECOVERY"
 
 
 @dataclass(frozen=True)

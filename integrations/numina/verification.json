@@ -318,14 +318,14 @@
     "identity": "NUMINA",
     "canonical": true
   },
-  "packagedAtUtc": "2026-11-14T05:49:48.741Z",
+  "packagedAtUtc": "2026-11-15T01:09:19.617Z",
   "package": {
     "name": "@numina/nusd-integration",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "private": true
   },
-  "revision": "numina-root-v4.0.0",
-  "applicationManifest": "https://numinalabs.xyz/v4/release/manifest",
+  "revision": "numina-root-v5.0.0",
+  "applicationManifest": "https://numinalabs.xyz/v5/release/manifest",
   "applicationSchema": "numina.application-release.v2",
   "runtimeBuild": {
     "tool": "numina_runtime_build",

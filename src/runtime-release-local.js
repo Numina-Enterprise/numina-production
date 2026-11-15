@@ -128,7 +128,7 @@ export async function routeLocalRuntime(request,env={},pins={}){
     softwareIdentity:'1bf43817cf470abb868074a76598cb5f360517d7255b92ab3b409c6b545ec66b',
     signed:false,
     signer:null,
-    source:'dist/client/downloads/application-release-v4.json'
+    source:'dist/client/downloads/application-release-v5.json'
   });
   if(!SELF_HOSTED_SIGNER_PATHS.has(path))return selfHostedRuntimeResponse(request,{error:'RUNTIME_LOCAL_ROUTE_UNAVAILABLE',release:RUNTIME_VERSION},503);
   try{

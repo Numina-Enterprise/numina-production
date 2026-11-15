@@ -209,7 +209,7 @@ test('runtime gateway rejects artifact identity drift even when the rc27 version
 });
 
 function appManifest(version=RUNTIME_VERSION){
-  return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',artifact_digest_algorithm:'sha256',build_id:hash('application'),artifacts:[{path:'server/index.js',sha256:hash('worker')}],runtime_dependency:{version,release:EXPECTED_RELEASE.release}};
+  return {schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'5.0.0',release:'numina-v5.0.0',artifact_digest_algorithm:'sha256',build_id:hash('application'),artifacts:[{path:'server/index.js',sha256:hash('worker')}],runtime_dependency:{version,release:EXPECTED_RELEASE.release}};
 }
 test('packaged integration requires rc27 while retaining server-reported evidence classification',async()=>{
   const client=payload=>new NuminaClient({baseUrl:'https://numina.test',token:'private-test-token',fetch:async(url,options)=>{
@@ -219,7 +219,7 @@ test('packaged integration requires rc27 while retaining server-reported evidenc
   assert.equal(result.verification,'server_reported_not_independently_verified');
   assert.equal(result.data.runtime_dependency.version,RUNTIME_VERSION);
   await assert.rejects(client(appManifest('1.9.0-rc22')).release(),{code:'RUNTIME_RELEASE_MISMATCH'});
-  for(const version of ['2.0.0','3.0.0','4.0.0-rc1'])await assert.rejects(client({...appManifest(),version,release:'numina-v'+version}).release(),{code:'APPLICATION_RELEASE_MISMATCH'});
+  for(const version of ['2.0.0','3.0.0','4.0.0','4.0.0-rc1'])await assert.rejects(client({...appManifest(),version,release:'numina-v'+version}).release(),{code:'APPLICATION_RELEASE_MISMATCH'});
 });
 
 test('integration distribution contains the same release contract as the browser and gateway',()=>{

@@ -66,13 +66,13 @@ assert.deepEqual(build.runtimeInventory.liveRuntimes.map(x=>x.runtimeId),[
   '424f660e35e6f48f72cb53d6c0241702c35358dac48322477343b9103178113e'
 ]);
 assert.deepEqual(build.runtimeInventory.liveRuntimes.map(x=>x.role),['LIVE_APPLICATION_RUNTIME','LIVE_RC27_RUNTIME']);
-assert.deepEqual(build.runtimeInventory.liveRuntimes.map(x=>x.version),['4.0.0','1.9.0-rc27']);
+assert.deepEqual(build.runtimeInventory.liveRuntimes.map(x=>x.version),['5.0.0','1.9.0-rc27']);
 assert.deepEqual(build.environmentBindings.map(x=>x.runtimeTargetId),build.runtimeInventory.frontierRuntimes.map(x=>x.runtimeId));
 assert.deepEqual(build.runtimeInventory.frontierRuntimes.map(x=>x.mergedRuntimeId),[
   '35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064',
   '424f660e35e6f48f72cb53d6c0241702c35358dac48322477343b9103178113e'
 ]);
-assert.deepEqual(build.runtimeInventory.frontierRuntimes.map(x=>x.mergedVersion),['4.0.0','1.9.0-rc27']);
+assert.deepEqual(build.runtimeInventory.frontierRuntimes.map(x=>x.mergedVersion),['5.0.0','1.9.0-rc27']);
 
 const recordPath='release-evidence/numina-bofa-ach-instruction-2026-09-19.json';
 const instruction=json(recordPath),projection=build.treasury.achTransferInstruction;

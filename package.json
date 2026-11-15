@@ -1,6 +1,6 @@
 {
   "name": "numina-singular-control",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -39,7 +39,7 @@
       "allRuntimeSurfaces": true,
       "blob": "9830f25cfa48c4bb28ac49313cf8695a3667be45",
       "sha256Semantics": "IMMUTABLE_RELEASE_REFERENCE",
-      "currentContentSha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1",
+      "currentContentSha256": "c3857e0c1e114ad38dd78c379c5d6abe89d5a1c59baf3b657b3cc9e5a16d099e",
       "structure": "NUMINA",
       "contract": "NUMINA",
       "singular": true
@@ -785,8 +785,8 @@
       "sha256": "c9300f87f0ccfe1f2e2e132ecfa9e5de9a23f144dcdfa682849fe6f7bcc09b63",
       "canonicalBuildSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",
       "sha256Semantics": "IMMUTABLE_RELEASE_REFERENCE",
-      "currentContentSha256": "8f68c2b90623f44e9e5afe002349962fb24cf60850dde5386e18cfd9cbbad3e0",
-      "currentCanonicalBuildSha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1",
+      "currentContentSha256": "541295b3ffd4a71c6bdbb78df7f0c8e2be1ac434ab4dc028e5c183de2d52a011",
+      "currentCanonicalBuildSha256": "c3857e0c1e114ad38dd78c379c5d6abe89d5a1c59baf3b657b3cc9e5a16d099e",
       "structure": "NUMINA",
       "contract": "NUMINA",
       "singular": true
@@ -841,7 +841,7 @@
           "deploymentEnvironment": "FRONTIER",
           "carriedForward": true,
           "mergedRuntimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
-          "mergedVersion": "4.0.0",
+          "mergedVersion": "5.0.0",
           "structure": "NUMINA",
           "contract": "NUMINA",
           "hashIdentity": "NUMINA",
@@ -878,7 +878,7 @@
           "identity": "NUMINA",
           "role": "LIVE_APPLICATION_RUNTIME",
           "status": "LIVE",
-          "version": "4.0.0",
+          "version": "5.0.0",
           "deploymentEnvironment": "FRONTIER",
           "carriedForward": true,
           "structure": "NUMINA",
@@ -920,7 +920,7 @@
           "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
           "role": "LIVE_APPLICATION_RUNTIME",
           "status": "LIVE",
-          "version": "4.0.0",
+          "version": "5.0.0",
           "appliesTo": "NUMINA",
           "scope": "NUMINA",
           "deploymentEnvironment": "FRONTIER",
@@ -967,7 +967,7 @@
           "deploymentEnvironment": "FRONTIER",
           "carriedForward": true,
           "mergedRuntimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
-          "mergedVersion": "4.0.0",
+          "mergedVersion": "5.0.0",
           "mergedRecordSha256": "84e8152cb70138f6fe5c4f4b9138b32af7be8387ec0b09ed62e6f00cf78830fa",
           "structure": "NUMINA",
           "contract": "NUMINA",
@@ -1458,7 +1458,7 @@
       ],
       "finalBuild": "/final-build.json",
       "finalManifest": "/final-manifest.json",
-      "applicationVersion": "4.0.0",
+      "applicationVersion": "5.0.0",
       "currentPushEnvironment": "FRONTIER",
       "futureAdvancementAllowed": true
     },
@@ -1476,7 +1476,7 @@
         "runtimeId": "35c9ac86fb9bef46579bf2201cc48094d663d925d9af8bf6aa304a797be0c064",
         "role": "LIVE_APPLICATION_RUNTIME",
         "status": "LIVE",
-        "version": "4.0.0",
+        "version": "5.0.0",
         "appliesTo": "NUMINA",
         "scope": "NUMINA",
         "deploymentEnvironment": "FRONTIER",
@@ -2464,5 +2464,10 @@
       "externalReceiptRecorded": false,
       "onChainObserved": false
     }
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0",
+    "canonicalize": "5.1.0"
   }
 }

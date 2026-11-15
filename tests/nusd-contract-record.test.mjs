@@ -55,7 +55,7 @@ test('conversion workflow binds both compiled contracts and preserves disabled l
  assert.equal(NUSD_CONVERSION_WORKFLOW.treasury.balanceCount,1);
  assert.equal(NUSD_CONVERSION_WORKFLOW.activation.financialExecutionEnabled,false);
  assert.deepEqual(NUSD_POLICY.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
- const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+ const release=JSON.parse(read('dist/client/downloads/application-release-v5.json'));
  assert.deepEqual(release.conversion_workflow,NUSD_CONVERSION_WORKFLOW);
 });
 test('contract records hash exact downloadable artifacts and never supply invented deployment identities',()=>{
@@ -100,7 +100,7 @@ test('contract API and UI separate compiled functions from activated financial o
   const forged=structuredClone(record);forged.contracts[0].deployment.contract_address='0x123';assert.throws(()=>contractSourcePresentation(forged));
 });
 test('integration retains the contract source record without interpreting it as live execution',async()=>{
-  const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));let include=true;
+  const release=JSON.parse(read('dist/client/downloads/application-release-v5.json'));let include=true;
   release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   const client=new NuminaClient({baseUrl:'https://numina.test',fetch:async url=>Response.json(url.endsWith('/status')?{schema:'numina.nusd.status.v1',...(include?{contract_record:record}:{})}:{...release,contract_record:include?record:undefined})});
   assert.deepEqual((await client.network()).data.contract_record,record);
@@ -121,13 +121,13 @@ test('mint workflow reports implemented preparation while receipt and provider c
   assert.throws(()=>assessFinancialStatus(unsafe),/Mint workflow unavailable/);
   const mismatched=structuredClone(NUSD_POLICY);mismatched.mint_workflow.contract.artifactSha256='0'.repeat(64);
   assert.throws(()=>assessFinancialStatus(mismatched),/Mint workflow unavailable/);
-  const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+  const release=JSON.parse(read('dist/client/downloads/application-release-v5.json'));
   assert.deepEqual(release.nusd_software_capabilities,{mint:true,transfer:true,settlement:true,redemption:true,exchange:true});
   assert.deepEqual(release.mint_workflow,NUSD_MINT_WORKFLOW);
 });
 
 test('integration retains optional mint workflow metadata without activating execution',async()=>{
-  const release=JSON.parse(read('dist/client/downloads/application-release-v4.json'));
+  const release=JSON.parse(read('dist/client/downloads/application-release-v5.json'));
   release.runtime_dependency={...release.runtime_dependency,version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release};
   let workflow=NUSD_MINT_WORKFLOW;
   const calls=[];

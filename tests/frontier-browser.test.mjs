@@ -11,7 +11,7 @@ import {createTreasuryAdjustment} from '../public/treasury-adjustment.js';
 
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
-const applicationManifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',build_id:'a'.repeat(64),frontier:{version:'4.0.0'},distribution:{codex_plugin:{version:'4.0.0'}}});
+const applicationManifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'5.0.0',release:'numina-v5.0.0',build_id:'a'.repeat(64),frontier:{version:'5.0.0'},distribution:{codex_plugin:{version:'5.0.0'}}});
 async function settled(){for(let i=0;i<8;i++)await new Promise(r=>setTimeout(r,0));}
 class Element{
   constructor(){this.children=[];this._text='';}
@@ -40,8 +40,8 @@ function harness(view,override=()=>null,adjustmentClient=null){
     else if(path.endsWith('/treasury/policy'))body={activation:{policyHash:'policy'},policyHash:'policy',policy:{id:'policy'}};
     else if(path.endsWith('/stripe-treasury'))return Response.json({error:'Unavailable'},{status:503});
     else if(path.endsWith('/state'))body={revision:1,requests:[]};
-    else if(path==='/v4/release/manifest')body=applicationManifest();
-    else body={livemode:true,version:'4.0.0',providers:[]};
+    else if(path==='/v5/release/manifest')body=applicationManifest();
+    else body={livemode:true,version:'5.0.0',providers:[]};
     return Response.json(body);
   };
   const context=vm.createContext({document,window:{addEventListener:(name,fn)=>events[name]=fn},fetch,Response,AbortController,TextEncoder,crypto,Intl,CustomEvent,setTimeout,clearTimeout,verifyTreasuryAccountView,async refreshControlRoom(){},mountTreasuryPreparation(target,options){assert.equal(options.root,view.treasury.principal);assert.deepEqual(options.accounts,view.accounts);assert.equal(typeof options.onAccessLost,'function');assert.equal(typeof options.onCommitted,'function');assert.equal(typeof options.isCurrent,'function');},...(!adjustmentClient?{mountTreasuryAdjustment(){}}:{createTreasuryAdjustment:()=>adjustmentClient}),NUMINA_LAYERS:{layers:[]}});
@@ -53,7 +53,7 @@ function harness(view,override=()=>null,adjustmentClient=null){
 test('frontier displays only current application identities and refreshes without stale responses',async()=>{
   const view=await accountView(),old=deferred();let calls=0;
   const h=harness(view,(path,options)=>{
-    if(path!=='/v4/release/manifest')return null;
+    if(path!=='/v5/release/manifest')return null;
     assert.equal(options.cache,'no-store');assert.equal(options.credentials,'omit');assert.equal(options.redirect,'error');
     return ++calls===1?old.promise:Response.json({...applicationManifest(),build_id:'b'.repeat(64)});
   });
@@ -87,8 +87,8 @@ for(const phase of ['prepare','submit'])for(const status of [401,403])test(`adju
 
 test('frontier rejects older, missing and mixed application release metadata',async()=>{
   const view=await accountView();
-  for(const change of [{version:'3.0.0',release:'numina-v3.0.0'},{schema:'unknown'},{build_id:null},{frontier:{version:'3.0.0'}},{distribution:{codex_plugin:{version:'3.0.0'}}}]){
-    const h=harness(view,path=>path==='/v4/release/manifest'?Response.json({...applicationManifest(),...change}):null);
+  for(const change of [{version:'3.0.0',release:'numina-v3.0.0'},{version:'4.0.0',release:'numina-v4.0.0'},{schema:'unknown'},{build_id:null},{frontier:{version:'3.0.0'}},{frontier:{version:'4.0.0'}},{distribution:{codex_plugin:{version:'3.0.0'}}},{distribution:{codex_plugin:{version:'4.0.0'}}}]){
+    const h=harness(view,path=>path==='/v5/release/manifest'?Response.json({...applicationManifest(),...change}):null);
     try{await settled();assert.match(h.get('#core-release-status').textContent,/Current release information is unavailable/);assert.doesNotMatch(h.get('#core-release-status').textContent,/Production|Build [a-f0-9]{64}/);}finally{h.close();}
   }
 });

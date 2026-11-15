@@ -315,8 +315,8 @@
   "singular": true,
   "canonical": true,
   "role": "canonical_integration_manifest",
-  "version": "4.0.0",
-  "revision": "numina-root-v4.0.0",
+  "version": "5.0.0",
+  "revision": "numina-root-v5.0.0",
   "scope": "NUMINA",
   "nusdContracts": {
     "schema": "numina.nusd.contract-lifecycle.v1",
@@ -774,7 +774,7 @@
     {
       "path": "distribution.json",
       "bytes": 32291,
-      "sha256": "6e6620d30bf73337a5e63fa9951ac942f1963b58531ba736a2e5794cbc38f90b"
+      "sha256": "209294a9573e0b87b96ddecf4b67e033636b5831205d51c8e1c14ae112cf3fcd"
     },
     {
       "path": "examples/NVIDIA.md",
@@ -854,7 +854,7 @@
     {
       "path": "package.json",
       "bytes": 31830,
-      "sha256": "03b801c8096cdeed1639be14fe07b1b88dc4e641b8ffc7134f7c489be35a81dc"
+      "sha256": "de613b3dd9ed1592afdd3e170de0ab206ec525a653643cd62ba7bf8d3f07d9e9"
     },
     {
       "path": "schemas/anthropic-messages-workflow.json",
@@ -919,12 +919,12 @@
     {
       "path": "scripts/package-distribution.js",
       "bytes": 11287,
-      "sha256": "e0e6b4b9bce2a7c66f7faaef6a49d929a926a37ca3068ca93cb43292371f3be2"
+      "sha256": "9bfe02c5d6b0d2e08219c13943b6b19413c65fc8898d7931332ca2c86b194769"
     },
     {
       "path": "src/client.js",
-      "bytes": 17406,
-      "sha256": "bd61e5054bddded3cfdc6eb0a7a7a2323de90c03adb5ca4eebe5c6b274658f74"
+      "bytes": 17407,
+      "sha256": "df41f837c2cf6a7a0970bc2bbcb0b9a41e337cb584f9a62de15501c8d2998c22"
     },
     {
       "path": "src/index.d.ts",
@@ -939,7 +939,7 @@
     {
       "path": "src/mcp.js",
       "bytes": 4878,
-      "sha256": "fcaf04ebe31063af7ee1f549642d54d048bfd358c90ae9c11a9dc8264bcd30d3"
+      "sha256": "27c416f40db8c0be2442f025d8d06c06bdae6196b87d1cc183d00de8eddcd181"
     },
     {
       "path": "src/provider-adapters.js",
@@ -949,7 +949,7 @@
     {
       "path": "src/quantum-backend.js",
       "bytes": 4278,
-      "sha256": "bb4088d8fe3e3729c673e0f2b70eff31443ce1fac4626c3ff35e61c822a269c4"
+      "sha256": "d82568860204c6a7cf38ba84a8deec81d01b8c51affb68a2d6fcddedf34c1509"
     },
     {
       "path": "src/quantum.js",
@@ -979,7 +979,7 @@
     {
       "path": "verification.json",
       "bytes": 29151,
-      "sha256": "28e232a5557eccaaa02872d725b4a150fde29b181284172191d8a3019ac83e66"
+      "sha256": "28331a672adb226d18a840f1c499a42954be69505ea39866cfe66e839f311d02"
     }
   ],
   "numinaMetadata": {

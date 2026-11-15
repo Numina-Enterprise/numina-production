@@ -21,7 +21,7 @@ test('routes, methods and logs exclude caller-controlled identity and URL conten
   }
   assert.equal(events.length,3);assert.doesNotMatch(JSON.stringify(events),/private-name|token=|person@|SECRET|unknown\/secret/);
   assert.equal(events[0].route,'/api/control/v1/*');assert.equal(events[0].method,'OTHER');
-  assert.equal(telemetryRoute('/v3/release/manifest'),'/v4/release/manifest');
+  assert.equal(telemetryRoute('/v3/release/manifest'),'/v5/release/manifest');
 });
 test('overlapping requests, exactly-once completion, errors and histogram estimates',()=>{
   let time=0;const m=createTelemetry({clock:()=>time,now:()=>time,emit:()=>{}});

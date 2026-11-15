@@ -25,7 +25,6 @@ class Lifecycle(str, Enum):
 class Legitimacy(str, Enum):
     VALID = "VALID"
     VIOLATION = "VIOLATION"
-    DISPUTED = "DISPUTED"
 
 
 class Certainty(str, Enum):
@@ -266,6 +265,11 @@ class NuminaRuntime:
         op = self.operations[operation_id]
         if fill_id in op.fill_ids:
             return self._append("DUPLICATE_FILL_IGNORED", operation_id, {"fill_id": fill_id}, lambda: None)
+        # Narrow guard (owner decision, Nov 6, 2026): fills are cumulative, so a second
+        # fill legitimately arrives from OBSERVED — allow COMMITTING, ECONOMICALLY_POSSIBLE,
+        # and OBSERVED; block AUTHORIZED (not yet committed), FINAL, and CLOSED.
+        if op.lifecycle not in (Lifecycle.COMMITTING, Lifecycle.ECONOMICALLY_POSSIBLE, Lifecycle.OBSERVED):
+            raise ConstitutionalError("fill requires COMMITTING, ECONOMICALLY_POSSIBLE, or OBSERVED")
         notional = (quantity_wei * price_usd_minor_per_eth) // 10**18
         def mutate():
             op.fill_ids.add(fill_id)
@@ -285,6 +289,8 @@ class NuminaRuntime:
         op = self.operations[operation_id]
         if op.certainty == Certainty.BOUNDED_UNCERTAIN:
             raise ConstitutionalError("cannot release uncertain remainder without reconciliation")
+        if op.lifecycle in (Lifecycle.FINAL, Lifecycle.CLOSED):
+            raise ConstitutionalError("cannot cancel a final or closed operation")
         def mutate():
             if op.intent.side == "BUY":
                 filled = op.cumulative_fill_notional_usd_minor

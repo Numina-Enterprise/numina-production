@@ -43,7 +43,7 @@ test('source safeguards and historical AAB binding do not claim Play readiness',
   assert.equal(result.sourceChecksPassed,true,JSON.stringify(result.checks));
   assert.equal(result.readyForSubmission,false);
   assert.equal(result.rolloutComplete,false);
-  assert.equal(result.sourceVersion,'4.0.0');
+  assert.equal(result.sourceVersion,'5.0.0');
   assert.equal(result.candidateVersion,'4.0.0');
   assert.deepEqual(result.submissionBlockers.map(item=>item.id),['upload','playValidation','storeListing','reviewerAccess','financialScope','dataSafety','billingClassification']);
   assert.equal(record.gates.appContent.status,'confirmed');

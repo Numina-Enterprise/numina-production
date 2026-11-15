@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {nvidiaNimRoundTrip,nimEndpoint} from '../integrations/numina/examples/nvidia-nim.mjs';
 import {EXPECTED_RELEASE} from '../integrations/numina/src/runtime-contract.js';
-const manifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'4.0.0',release:'numina-v4.0.0',artifact_digest_algorithm:'sha256',build_id:'0'.repeat(64),artifacts:[{path:'test-fixture',sha256:'1'.repeat(64)}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
+const manifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'5.0.0',release:'numina-v5.0.0',artifact_digest_algorithm:'sha256',build_id:'0'.repeat(64),artifacts:[{path:'test-fixture',sha256:'1'.repeat(64)}],runtime_dependency:{version:EXPECTED_RELEASE.production_version,release:EXPECTED_RELEASE.release}});
 const call=(id='call1',name='numina_application_release')=>({id,type:'function',function:{name,arguments:'{}'}});
 function harness(calls=[call()],release=manifest()){
  const requests=[],reads=[],configs=[];

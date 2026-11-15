@@ -11,7 +11,7 @@ import {EXPECTED_RELEASE} from '../public/runtime-contract.js';
 const bytes=path=>readFileSync(new URL('../'+path,import.meta.url));
 const json=path=>JSON.parse(bytes(path));
 const digest=value=>createHash('sha256').update(value).digest('hex');
-const releasePath='dist/client/downloads/application-release-v4.json';
+const releasePath='dist/client/downloads/application-release-v5.json';
 
 test('one owner approval binds both runtime manifests without manufacturing financial evidence',()=>{
  const release=json(releasePath),approval=release.owner_approval;
@@ -52,10 +52,10 @@ test('application manifest aliases contain the same current release bytes',()=>{
   for(const name of ['release.json','application-release-v2.json','application-release-v3.json']){
     assert.deepEqual(bytes('dist/client/downloads/'+name),current,name);
   }
-  assert.equal(release.version,'4.0.0');
-  assert.equal(release.release,'numina-v4.0.0');
+  assert.equal(release.version,'5.0.0');
+  assert.equal(release.release,'numina-v5.0.0');
   assert.equal(release.schema,'numina.application-release.v2');
-  assert.equal(release.runtime_dependency.version,'1.9.0-rc27');
+  assert.equal(release.runtime_dependency.version,'2.0.0-rc27');
   assert.equal(release.identity,'NUMINA');
   for(const field of ['root','manifest','authority','source','evidence','provider','core','worker','journal','runtime','artifact','authentication','delivery','readiness','treasury'])assert.equal(release.compatibility.identity_aliases[field],'NUMINA',field);
   assert.equal(release.provider_verification,true);
@@ -72,9 +72,9 @@ test('application manifest aliases contain the same current release bytes',()=>{
 });
 
 test('current native distribution retains its actual Android and iOS build identities',()=>{
-  const native=json('docs/native-package-record-v4.json');
+  const native=json('docs/native-package-record-v5.json');
   const distribution=json(releasePath).distribution.native_candidates;
-  assert.equal(native.applicationVersion,'4.0.0');
+  assert.equal(native.applicationVersion,'5.0.0');
   assert.equal(native.android.binaryApplicationVersion,'4.0.0');
   assert.equal(native.android.binaryVersionCode,3);
   assert.equal(native.ios.binaryApplicationVersion,'4.0.0');
@@ -98,8 +98,8 @@ test('current release preserves historical publication evidence and labels its s
   const context=release.recorded_release_evidence_context;
   assert.equal(context.classification,'historical');
   assert.equal(context.source,'/downloads/release-evidence-2026-09-13.json');
-  assert.equal(context.latestReleaseManifest,'/v4/release/manifest');
-  assert.equal(context.currentNativeDistribution,'/downloads/native-package-record-v4.json');
+  assert.equal(context.latestReleaseManifest,'/v5/release/manifest');
+  assert.equal(context.currentNativeDistribution,'/downloads/native-package-record-v5.json');
   assert.equal(context.deploymentOfCurrentBuildVerified,false);
 });
 

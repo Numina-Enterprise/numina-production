@@ -11,7 +11,7 @@ export const APPLICATION_PROVENANCE_POLICY = Object.freeze({
  oidcIssuer:'https://token.actions.githubusercontent.com'
 });
 
-const MANIFEST_PATH='/v4/release/manifest';
+const MANIFEST_PATH='/v5/release/manifest';
 const MAX_MANIFEST_BYTES=1024*1024;
 const all=selector=>document.querySelectorAll(selector);
 const set=(selector,value)=>all(selector).forEach(element=>{element.textContent=value;});
@@ -67,7 +67,7 @@ async function readManifestBytes(response){
 function commandForPolicy(){
  const policy=APPLICATION_PROVENANCE_POLICY;
  if(!/^[0-9a-f]{40}$/.test(policy.signerSha||''))return '';
- const args=['gh attestation verify application-release-v4.json',
+ const args=['gh attestation verify application-release-v5.json',
   '--hostname github.com','--repo '+policy.sourceRepository,
   '--signer-workflow '+policy.signerRepository+'/'+policy.signerWorkflow,
   '--signer-digest '+policy.signerSha,
@@ -122,14 +122,14 @@ async function refreshApplicationRelease(){
     if(!response.ok||response.redirected)throw Error('Release response unavailable');
     const bytes=await readManifestBytes(response);
     const data=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
-    if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='4.0.0'||data.product!=='Numina'||data.release!=='numina-v4.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
+    if(data.schema!=='numina.application-release.v2'||data.schema_version!==2||data.version!=='5.0.0'||data.product!=='Numina'||data.release!=='numina-v5.0.0'||!/^[a-f0-9]{64}$/.test(data.build_id))throw Error('Release identity mismatch');
     // Hash the response body itself. JSON.stringify(data) would change the signed bytes.
     const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),byte=>byte.toString(16).padStart(2,'0')).join('');
     return {data,bytes,digest};
    })()
   ]);
   if(generation!==requestGeneration||controller.signal.aborted)return;
-  set('[data-application-version]','4.0.0');
+  set('[data-application-version]','5.0.0');
   renderReleaseRequirements(data);
   set('[data-application-build]',data.build_id);
   set('[data-application-manifest-sha]',digest);
@@ -157,7 +157,7 @@ async function refreshApplicationRelease(){
 
 all('[data-application-download]').forEach(button=>button.addEventListener('click',()=>{
  if(!downloadUrl||button.disabled)return;
- const link=document.createElement('a');link.href=downloadUrl;link.download='application-release-v4.json';
+ const link=document.createElement('a');link.href=downloadUrl;link.download='application-release-v5.json';
  document.body.append(link);link.click();link.remove();
 }));
 all('[data-application-copy-command]').forEach(button=>button.addEventListener('click',async()=>{

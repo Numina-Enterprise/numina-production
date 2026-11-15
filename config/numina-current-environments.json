@@ -47,8 +47,8 @@
   },
   "contentHashSemantics": "IMMUTABLE_RELEASE_REFERENCE",
   "currentContentHashes": {
-    "finalBuildSha256": "94b32d11d4b5b758d64011ed44075565718b7a7650b7fbb83c18abacac0046e1",
-    "finalManifestSha256": "8f68c2b90623f44e9e5afe002349962fb24cf60850dde5386e18cfd9cbbad3e0"
+    "finalBuildSha256": "c3857e0c1e114ad38dd78c379c5d6abe89d5a1c59baf3b657b3cc9e5a16d099e",
+    "finalManifestSha256": "541295b3ffd4a71c6bdbb78df7f0c8e2be1ac434ab4dc028e5c183de2d52a011"
   },
   "immutableReleaseHashes": {
     "finalBuildSha256": "996f0ce7cc8cc5809969c6aaf5188d5c3a9a6332dbe5fd231cca974152a115fa",

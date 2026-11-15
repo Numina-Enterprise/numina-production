@@ -9,17 +9,17 @@ const read=p=>readFileSync(new URL(p,root));
 const json=p=>JSON.parse(readFileSync(new URL(p,root),'utf8'));
 
 test('canonical repository release is bound to the tagged source and exact bytes',()=>{
-  const release=json('releases/v4.0.0/release.json');
-  const archive=read('releases/v4.0.0/numina-release-v4.0.0.tar.gz');
+  const release=json('releases/v5.0.0/release.json');
+  const archive=read('releases/v5.0.0/numina-release-v5.0.0.tar.gz');
   assert.equal(release.schema,'numina.repository-release.v1');
   assert.equal(release.identity,'NUMINA');
-  assert.equal(release.version,'4.0.0');
-  assert.equal(release.tag,'v4.0.0');
-  assert.equal(release.sourceCommit,'c57106e8bafd8078873b777587f748da6be86a32');
+  assert.equal(release.version,'5.0.0');
+  assert.equal(release.tag,'v5.0.0');
+  assert.match(release.sourceCommit,/^[a-f0-9]{40}$/);
   assert.equal(release.githubReleaseObjectRequired,false);
   assert.equal(archive.length,release.bytes);
   assert.equal(createHash('sha256').update(archive).digest('hex'),release.sha256);
-  const tagged=execFileSync('git',['rev-list','-n','1','v4.0.0'],{cwd:new URL('..',import.meta.url),encoding:'utf8'}).trim();
+  const tagged=execFileSync('git',['rev-list','-n','1','v5.0.0'],{cwd:new URL('..',import.meta.url),encoding:'utf8'}).trim();
   assert.equal(tagged,release.sourceCommit);
 });
 
