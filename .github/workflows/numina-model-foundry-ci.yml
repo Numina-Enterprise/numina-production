@@ -1,0 +1,26 @@
+name: Numina Model Foundry CI
+on:
+  pull_request:
+    paths:
+      - 'ml/**'
+      - '.github/workflows/numina-model-foundry-ci.yml'
+      - 'config/numina-runners.json'
+      - 'scripts/check-runner-policy.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  model-foundry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Validate runner policy
+        run: node scripts/check-runner-policy.mjs
+      - name: Validate model foundry Python tests if present
+        shell: bash
+        run: |
+          if [ -d ml/evaluations ]; then python3 -m unittest discover -s ml/evaluations -p 'test_*.py' -v; fi
+          if [ -d ml/inference ]; then python3 -m unittest discover -s ml/inference -p 'test_*.py' -v; fi
