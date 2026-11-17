@@ -1,0 +1,22 @@
+name: Ed25519 Vitest review
+on:
+  push:
+    branches: [test/vitest-ed25519-decompression]
+  pull_request:
+    paths:
+      - 'src/crypto/ed25519-point.js'
+      - 'tests/ed25519-decode.test.js'
+      - 'package.json'
+      - '.github/workflows/ed25519-vitest.yml'
+jobs:
+  ed25519:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26'
+      - run: npm install --no-package-lock --ignore-scripts
+      - run: npm run test:ed25519
