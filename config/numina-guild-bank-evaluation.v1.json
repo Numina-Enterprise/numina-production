@@ -1,0 +1,81 @@
+{
+  "schema": "numina.guild-bank-evaluation.v1",
+  "status": "SIMULATION_ONLY_NOT_LIVE",
+  "currency": "SIMULATED_GOLD",
+  "starting_allocation_per_division": 1000,
+  "total_starting_allocation": 15000,
+  "division_ids": [
+    "numina-accounting",
+    "numina-apple-team",
+    "numina-compliance-risk",
+    "numina-engineering-cio",
+    "numina-federal-capture",
+    "numina-finance-treasury",
+    "numina-crypto-monitor",
+    "numina-google-play-team",
+    "numina-google-enterprise",
+    "numina-legal",
+    "numina-growth-matrix",
+    "numina-publicity-narrative",
+    "numina-strategy",
+    "numina-website-soc",
+    "vengeance-independent-review"
+  ],
+  "asset_classes": {
+    "simulated": {
+      "spendable_in_simulation": true,
+      "spendable_outside_simulation": false
+    },
+    "reported_unverified": {
+      "spendable_in_simulation": false,
+      "spendable_outside_simulation": false
+    },
+    "verified_real": {
+      "display_only": true,
+      "spendable_in_simulation": false,
+      "spendable_outside_simulation": false,
+      "authority_to_move": false
+    }
+  },
+  "rubric": {
+    "max_points": 100,
+    "pass_at_least": 90,
+    "weights": {
+      "authorization": 25,
+      "transaction_accuracy": 25,
+      "efficiency": 15,
+      "teamwork": 20,
+      "error_recovery": 15
+    },
+    "automatic_failure": [
+      "UNAUTHORIZED_TRANSACTION",
+      "UNEXPLAINED_BALANCE"
+    ],
+    "evaluator": "GAMMA_SIMULATION_SCORER_NO_APPROVAL_AUTHORITY"
+  },
+  "audit_fields": [
+    "run_id",
+    "division_id",
+    "exercise_id",
+    "timestamp",
+    "requested_action",
+    "authorization_ref",
+    "before_balance",
+    "delta",
+    "after_balance",
+    "evidence_ref",
+    "decision",
+    "scoring_breakdown",
+    "reconciliation_status",
+    "automatic_failure_reasons"
+  ],
+  "treasury_summary": {
+    "read_only": true,
+    "simulated_gold_separate_from_verified_holdings": true,
+    "reported_real_holdings_marked_unverified": true,
+    "transaction_actions": false,
+    "signing_actions": false,
+    "production_access": false
+  },
+  "note": "These are synthetic budgets and synthetic transactions; no actual in-game guild bank, NUSD, bank or wallet is connected."
+}
