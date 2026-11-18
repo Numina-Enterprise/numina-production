@@ -130,5 +130,52 @@
     "production_controls": false,
     "transfer_controls": false
   },
-  "disclaimers": "The 15 Numina divisions are training lanes, not 15 in-game automated players. None of the roster slots or holdings are confirmed by this config."
+  "disclaimers": "The 15 Numina divisions are training lanes, not 15 in-game automated players. None of the roster slots or holdings are confirmed by this config.",
+  "governance": {
+    "financial_authority": "HUMAN_OWNER_ONLY",
+    "authority_scope": "All real funds, NUSD, wallets, bank accounts, real in-game guild-bank spending or transfers",
+    "delegation": "NONE_CONFIGURED",
+    "owner_identity": "NUMINA_OWNER",
+    "agents": "READ_ONLY_OBSERVE_SIMULATE_PROPOSE",
+    "officers": "NO_FINANCIAL_AUTHORITY",
+    "gamma": "EVALUATION_ONLY_NO_FINANCIAL_AUTHORITY",
+    "co_gm": "COORDINATION_ONLY_NO_FINANCIAL_AUTHORITY",
+    "approval": "Explicit owner authorization plus applicable independent verification and custody/signing policy",
+    "state": "POLICY_CONFIG_ONLY_NOT_ENFORCED_IN_EXTERNAL_SERVICES"
+  },
+  "milestones": [
+    {
+      "id": "M1_DUNGEON",
+      "name": "Five-player dungeon readiness",
+      "criteria": [
+        "Human-reviewed five-player party composition",
+        "Consent and coordination procedure",
+        "Recorded rehearsal",
+        "Gamma evaluation and exception review"
+      ],
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "M2_ECONOMY",
+      "name": "Sustainable farming and crafting",
+      "criteria": [
+        "Per-run gathering and crafting ledger",
+        "Verified supply inflow and consumption",
+        "Reconciled shared guild-bank ledger",
+        "No unauthorized real or in-game transactions"
+      ],
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "M3_RAID",
+      "name": "Forty-player raid readiness",
+      "criteria": [
+        "40 unique confirmed player participants",
+        "Proposed roster of 4 tanks, 10 healers and 26 DPS adjusted to actual raid",
+        "Verified consumables, gear and repair reserve",
+        "Documented rehearsals and owner acceptance"
+      ],
+      "status": "NOT_VERIFIED"
+    }
+  ]
 }
