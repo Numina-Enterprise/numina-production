@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numina checkout | Request a USD invoice</title><meta name="robots" content="noindex,follow"><link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/site-shell.css"><link rel="stylesheet" href="/numina-5.css">
+<style>main{max-width:720px;margin:5rem auto;padding:0 1.3rem} .checkout-panel{padding:1.5rem;border:1px solid #65718a;border-radius:1rem} .badge{display:inline-block;padding:.2rem .7rem;border:1px solid #8d96a9;border-radius:99px} .actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}</style></head>
+<body class="n5-page"><main><a href="/services">← Services</a><h1>Numina checkout</h1>
+<p class="lead">Request a USD invoice for an engagement. Payment processing is not active on this page, and no payment is taken.</p>
+<div class="checkout-panel"><span class="badge">LIVE USD PAYMENT: UNAVAILABLE</span><h2 id="offering">Select an engagement</h2><p id="price"></p>
+<p>Numina will confirm scope and provide verified payment instructions only after acceptance. Do not send card details, banking passwords, or account numbers by email.</p>
+<div class="actions"><a class="button" id="invoice" href="/contact">Request invoice</a><a class="button secondary" href="/contact">Contact Numina</a></div></div>
+<details><summary>Sandbox and integration readiness</summary><p>Sandbox checkout can verify catalog selection, order reference creation, webhooks and error handling only after a test processor is configured. No sandbox payment is represented as settled USD. A verified live merchant payment provider and bank settlement account are required before live charges can be enabled.</p></details>
+<p>Operated by SK Consulting LLC doing business as Numina Labs.</p></main>
+<script>
+const offers=Object.freeze({
+  diagnostic:["Operational Agent Diagnostic","$1,500 USD"],
+  audit:["Agentic Systems & Operations Audit","$7,500 USD"],
+  "enterprise-audit":["Enterprise Agentic Systems & Operations Audit","$25,000 USD"],
+  "credits-10k":["10K Compute Credits","$10 USD"],
+  "credits-100k":["100K Compute Credits","$100 USD"],
+  "credits-1m":["1M Compute Credits","$1,000 USD"]
+});
+const key=new URLSearchParams(location.search).get("offering");
+const selected=Object.hasOwn(offers,key)?offers[key]:null;
+if(selected){
+ document.querySelector("#offering").textContent=selected[0];
+ document.querySelector("#price").textContent=selected[1];
+ const subject="Numina invoice request: "+selected[0];
+ const body="Please confirm scope, availability, and approved USD payment instructions for: "+selected[0]+" ("+selected[1]+"). No payment has been made.";
+ document.querySelector("#invoice").href="mailto:skott34@numinalabs.xyz?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+}else{document.querySelector("#invoice").href="/contact";}
+</script></body></html>
