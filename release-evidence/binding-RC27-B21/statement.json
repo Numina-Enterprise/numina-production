@@ -1,0 +1,25 @@
+{
+    "_type":  "https://in-toto.io/Statement/v1",
+    "subject":  [
+                    {
+                        "digest":  {
+                                       "sha256":  "89fc81e3284b59afa0cd862a8bd771015d43265ed738ac569eace181c6406610"
+                                   },
+                        "name":  "public/final-manifest.json"
+                    },
+                    {
+                        "digest":  {
+                                       "sha256":  "854aebbb419aef8b52aa09467b91ad3f4ac2932ccaccb1649f87878363f9aa8c"
+                                   },
+                        "name":  "public/final-build.json"
+                    }
+                ],
+    "predicateType":  "https://numinalabs.xyz/release-binding/v1",
+    "predicate":  {
+                      "product":  "numina-production",
+                      "releaseCandidate":  "RC27",
+                      "build":  "B21",
+                      "version":  "5.0.0",
+                      "timestamp":  "2026-11-12T04:55:14.7028860Z"
+                  }
+}
