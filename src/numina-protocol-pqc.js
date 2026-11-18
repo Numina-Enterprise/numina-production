@@ -49,6 +49,7 @@ import {
   checkGenesis,
 } from './numina-protocol-verify.js';
 import { signPayload } from './numina-protocol-sign.js';
+import { defaultMetrology } from './numina-metrology.js';
 
 export const ML_DSA_65 = 'ml-dsa-65';
 export const ML_KEM_768 = 'ml-kem-768';
@@ -155,19 +156,23 @@ export function toMlDsa65PrivateKey(privateKey) {
  * Sign the RFC 8785 canonical bytes of a payload with ML-DSA-65.
  * When expectedPublicKeySpkiDer is given, the fresh signature is
  * re-verified against it (proving the private key matches) before it is
- * returned. Returns the signature hex (3,309 bytes).
+ * returned. Returns the signature hex (3,309 bytes). Telemetry only:
+ * the canonical byte count is recorded and the sign (and the
+ * re-verification, via verifyMlDsa65) is counted on `meter`.
  */
-export function signMlDsa65({ privateKey, payload, expectedPublicKeySpkiDer }) {
+export function signMlDsa65({ privateKey, payload, expectedPublicKeySpkiDer, meter = defaultMetrology }) {
   const key = toMlDsa65PrivateKey(privateKey);
   const bytes = canonicalBytes(payload);
+  meter.recordCanonical(bytes.length);
   const signature = cryptoSign(null, bytes, key);
+  meter.record('mlDsa65Sign');
   if (signature.length !== ML_DSA_65_SIGNATURE_BYTES) {
     throw new Error(`ML-DSA-65 signature must be ${ML_DSA_65_SIGNATURE_BYTES} bytes`);
   }
   const signatureHex = hex(signature);
   if (typeof expectedPublicKeySpkiDer === 'string') {
     if (
-      !verifyMlDsa65({ publicKey: expectedPublicKeySpkiDer, signature: signatureHex, payload })
+      !verifyMlDsa65({ publicKey: expectedPublicKeySpkiDer, signature: signatureHex, payload, meter })
     ) {
       throw new Error('supplied key does not match the expected ML-DSA-65 public key — refusing to sign');
     }
@@ -179,9 +184,10 @@ export function signMlDsa65({ privateKey, payload, expectedPublicKeySpkiDer }) {
  * Verify one ML-DSA-65 signature over the RFC 8785 canonical bytes of a
  * payload. The public key is a KeyObject or SPKI DER hex. Returns
  * true/false; malformed keys or signatures verify as false, they do
- * not throw.
+ * not throw. Telemetry only: the canonical byte count is recorded
+ * and the verify is counted on `meter`.
  */
-export function verifyMlDsa65({ publicKey, signature, payload }) {
+export function verifyMlDsa65({ publicKey, signature, payload, meter = defaultMetrology }) {
   let pub;
   let sig;
   try {
@@ -194,11 +200,16 @@ export function verifyMlDsa65({ publicKey, signature, payload }) {
   } catch {
     return false;
   }
+  const bytes = canonicalBytes(payload);
+  meter.recordCanonical(bytes.length);
+  let ok = false;
   try {
-    return cryptoVerify(null, canonicalBytes(payload), pub, sig);
+    ok = cryptoVerify(null, bytes, pub, sig);
   } catch {
-    return false;
+    ok = false;
   }
+  meter.record('mlDsa65Verify');
+  return ok;
 }
 
 /**
@@ -318,16 +329,19 @@ export function signHybridPayload({
   payload,
   expectedEd25519PublicKey,
   expectedMlDsa65PublicKeySpkiDer,
+  meter = defaultMetrology,
 }) {
   const ed = signPayload({
     privateKey: ed25519PrivateKey,
     payload,
     expectedPublicKey: expectedEd25519PublicKey,
+    meter,
   });
   const mlDsa65Signature = signMlDsa65({
     privateKey: mlDsa65PrivateKey,
     payload,
     expectedPublicKeySpkiDer: expectedMlDsa65PublicKeySpkiDer,
+    meter,
   });
   const bundleHex = hex(encodeHybridSignatureBundle(ed.signatureHex, mlDsa65Signature));
   return {
@@ -345,7 +359,7 @@ export function signHybridPayload({
  * ML-DSA-65 public key, a malformed bundle or record, or either part
  * failing returns false. Never throws for bad input.
  */
-export function verifyHybridSignature({ ed25519PublicKey, mlDsa65PublicKey, hybridSignature, payload }) {
+export function verifyHybridSignature({ ed25519PublicKey, mlDsa65PublicKey, hybridSignature, payload, meter = defaultMetrology }) {
   if (mlDsa65PublicKey === null || mlDsa65PublicKey === undefined) return false;
   let parts;
   try {
@@ -357,12 +371,14 @@ export function verifyHybridSignature({ ed25519PublicKey, mlDsa65PublicKey, hybr
     publicKey: ed25519PublicKey,
     signature: parts.ed25519Signature,
     payload,
+    meter,
   });
   if (!edOk) return false;
   return verifyMlDsa65({
     publicKey: mlDsa65PublicKey,
     signature: parts.mlDsa65Signature,
     payload,
+    meter,
   });
 }
 
@@ -379,22 +395,24 @@ export function pqcProvisioningStatus(protocol = loadProtocol()) {
 }
 
 /** Verify a hybrid signature as the Authority (Ed25519 + ML-DSA-65). */
-export function verifyHybridAuthoritySignature(hybridSignature, payload, protocol = loadProtocol()) {
+export function verifyHybridAuthoritySignature(hybridSignature, payload, protocol = loadProtocol(), meter = defaultMetrology) {
   return verifyHybridSignature({
     ed25519PublicKey: protocol.authority.rawPublicKey,
     mlDsa65PublicKey: pqcPublicKeyForRole('authority', protocol),
     hybridSignature,
     payload,
+    meter,
   });
 }
 
 /** Verify a hybrid signature as the Guardian (Ed25519 + ML-DSA-65). */
-export function verifyHybridGuardianSignature(hybridSignature, payload, protocol = loadProtocol()) {
+export function verifyHybridGuardianSignature(hybridSignature, payload, protocol = loadProtocol(), meter = defaultMetrology) {
   return verifyHybridSignature({
     ed25519PublicKey: protocol.guardian.rawPublicKey,
     mlDsa65PublicKey: pqcPublicKeyForRole('guardian', protocol),
     hybridSignature,
     payload,
+    meter,
   });
 }
 
@@ -406,7 +424,7 @@ export function verifyHybridGuardianSignature(hybridSignature, payload, protocol
  * plus its bundle and canonical bytes, re-verified before return.
  */
 export function signHybridAsRole(
-  { role, ed25519PrivateKey, mlDsa65PrivateKey, payload },
+  { role, ed25519PrivateKey, mlDsa65PrivateKey, payload, meter = defaultMetrology },
   protocol = loadProtocol(),
 ) {
   if (role !== 'authority' && role !== 'guardian') {
@@ -422,11 +440,12 @@ export function signHybridAsRole(
     payload,
     expectedEd25519PublicKey: protocol[role].rawPublicKey,
     expectedMlDsa65PublicKeySpkiDer: pinnedPqc,
+    meter,
   });
   const verified =
     role === 'authority'
-      ? verifyHybridAuthoritySignature(signed, payload, protocol)
-      : verifyHybridGuardianSignature(signed, payload, protocol);
+      ? verifyHybridAuthoritySignature(signed, payload, protocol, meter)
+      : verifyHybridGuardianSignature(signed, payload, protocol, meter);
   if (!verified) {
     throw new Error('fresh hybrid signature failed re-verification — refusing to return it');
   }
@@ -441,18 +460,22 @@ export function signHybridAsRole(
  * `complete` adds the Genesis guardrail, mirroring verifyMurphRecord.
  */
 export function verifyHybridMurphRecord(
-  { payload, authorityHybridSignature, guardianHybridSignature },
+  { payload, authorityHybridSignature, guardianHybridSignature, meter = defaultMetrology },
   protocol = loadProtocol(),
 ) {
-  const authority = verifyHybridAuthoritySignature(authorityHybridSignature, payload, protocol);
-  const guardian = verifyHybridGuardianSignature(guardianHybridSignature, payload, protocol);
+  const authority = verifyHybridAuthoritySignature(authorityHybridSignature, payload, protocol, meter);
+  const guardian = verifyHybridGuardianSignature(guardianHybridSignature, payload, protocol, meter);
   const genesis = checkGenesis(payload, protocol);
+  // Telemetry only: the canonical bytes behind the reported hex are
+  // measured like every other canonicalization this module performs.
+  const canonicalBytesForHex = canonicalBytes(payload);
+  meter.recordCanonical(canonicalBytesForHex.length);
   return {
     authority,
     guardian,
     both: authority && guardian,
     genesis,
     complete: authority && guardian && genesis.ok,
-    canonicalBytesHex: hex(canonicalBytes(payload)),
+    canonicalBytesHex: hex(canonicalBytesForHex),
   };
 }

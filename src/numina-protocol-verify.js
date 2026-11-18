@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 import { ed25519 } from '@noble/curves/ed25519.js';
 import { sha256 } from '@noble/hashes/sha2.js';
 import canonicalize from 'canonicalize';
+import { defaultMetrology } from './numina-metrology.js';
 
 const PROTOCOL_PATH = join(dirname(fileURLToPath(import.meta.url)), '..', 'numina-protocol.json');
 
@@ -118,8 +119,11 @@ function toSignatureBytes(signature) {
  * Verify one Ed25519 signature over the RFC 8785 canonical bytes of a
  * payload, against a raw public key (hex or bytes). Returns true/false;
  * malformed keys or signatures verify as false, they do not throw.
+ * Telemetry only: the canonical byte count is recorded and the verify
+ * is counted on `meter` (default: the module default meter). Counting
+ * never changes the result.
  */
-export function verifySignature({ publicKey, signature, payload }) {
+export function verifySignature({ publicKey, signature, payload, meter = defaultMetrology }) {
   let pub;
   let sig;
   try {
@@ -129,28 +133,35 @@ export function verifySignature({ publicKey, signature, payload }) {
   } catch {
     return false;
   }
+  const bytes = canonicalBytes(payload);
+  meter.recordCanonical(bytes.length);
+  let ok = false;
   try {
-    return ed25519.verify(sig, canonicalBytes(payload), pub);
+    ok = ed25519.verify(sig, bytes, pub);
   } catch {
-    return false;
+    ok = false;
   }
+  meter.record('ed25519Verify');
+  return ok;
 }
 
 /** Verify a signature as the Authority (Samuel J. Kott, SKOTT34-Ed25519). */
-export function verifyAuthoritySignature(signature, payload, protocol = loadProtocol()) {
+export function verifyAuthoritySignature(signature, payload, protocol = loadProtocol(), meter = defaultMetrology) {
   return verifySignature({
     publicKey: protocol.authority.rawPublicKey,
     signature,
     payload,
+    meter,
   });
 }
 
 /** Verify a signature as the Guardian (Numina, numina-guardian-ed25519). */
-export function verifyGuardianSignature(signature, payload, protocol = loadProtocol()) {
+export function verifyGuardianSignature(signature, payload, protocol = loadProtocol(), meter = defaultMetrology) {
   return verifySignature({
     publicKey: protocol.guardian.rawPublicKey,
     signature,
     payload,
+    meter,
   });
 }
 
@@ -197,16 +208,20 @@ export function checkGenesis(record, protocol = loadProtocol()) {
  * payload names the pinned chain id and genesis. A record that is signed
  * but not chain-bound is not complete.
  */
-export function verifyMurphRecord({ payload, authoritySignature, guardianSignature }, protocol = loadProtocol()) {
-  const authority = verifyAuthoritySignature(authoritySignature, payload, protocol);
-  const guardian = verifyGuardianSignature(guardianSignature, payload, protocol);
+export function verifyMurphRecord({ payload, authoritySignature, guardianSignature, meter = defaultMetrology }, protocol = loadProtocol()) {
+  const authority = verifyAuthoritySignature(authoritySignature, payload, protocol, meter);
+  const guardian = verifyGuardianSignature(guardianSignature, payload, protocol, meter);
   const genesis = checkGenesis(payload, protocol);
+  // Telemetry only: the canonical bytes behind the reported hex are
+  // measured like every other canonicalization this module performs.
+  const canonicalBytesForHex = canonicalBytes(payload);
+  meter.recordCanonical(canonicalBytesForHex.length);
   return {
     authority,
     guardian,
     both: authority && guardian,
     genesis,
     complete: authority && guardian && genesis.ok,
-    canonicalBytesHex: hex(canonicalBytes(payload)),
+    canonicalBytesHex: hex(canonicalBytesForHex),
   };
 }

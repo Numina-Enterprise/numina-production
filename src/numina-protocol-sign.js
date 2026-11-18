@@ -25,6 +25,7 @@ import {
   verifySignature,
   verifyMurphRecord,
 } from './numina-protocol-verify.js';
+import { defaultMetrology } from './numina-metrology.js';
 
 /**
  * Parse a private key supplied at runtime into 32 seed bytes.
@@ -63,8 +64,11 @@ export function derivePublicKey(privateKey) {
  * private key. When expectedPublicKey is given, the derived public key must
  * equal it or signing is refused. Returns { signatureHex, publicKeyHex,
  * canonicalBytesHex }. The signature is re-verified before it is returned.
+ * Telemetry only: the canonical byte count is recorded and the sign (and
+ * the re-verification, via verifySignature) is counted on `meter`.
+ * Counting never changes the result.
  */
-export function signPayload({ privateKey, payload, expectedPublicKey }) {
+export function signPayload({ privateKey, payload, expectedPublicKey, meter = defaultMetrology }) {
   const secret = parsePrivateKey(privateKey);
   const publicKeyHex = hex(ed25519.getPublicKey(secret));
   if (
@@ -74,9 +78,11 @@ export function signPayload({ privateKey, payload, expectedPublicKey }) {
     throw new Error('supplied key does not match the expected public key — refusing to sign');
   }
   const bytes = canonicalBytes(payload);
+  meter.recordCanonical(bytes.length);
   const signature = ed25519.sign(bytes, secret);
+  meter.record('ed25519Sign');
   const signatureHex = hex(signature);
-  if (!verifySignature({ publicKey: publicKeyHex, signature: signatureHex, payload })) {
+  if (!verifySignature({ publicKey: publicKeyHex, signature: signatureHex, payload, meter })) {
     throw new Error('fresh signature failed re-verification — refusing to return it');
   }
   return { signatureHex, publicKeyHex, canonicalBytesHex: hex(bytes) };
@@ -87,12 +93,12 @@ export function signPayload({ privateKey, payload, expectedPublicKey }) {
  * derive to the pinned public key for that role, or signing is refused.
  * Returns { role, publicKeyHex, signatureHex, canonicalBytesHex, verified }.
  */
-export function signAsRole({ role, privateKey, payload }, protocol = loadProtocol()) {
+export function signAsRole({ role, privateKey, payload, meter = defaultMetrology }, protocol = loadProtocol()) {
   if (role !== 'authority' && role !== 'guardian') {
     throw new Error("role must be 'authority' or 'guardian'");
   }
   const pinned = protocol[role].rawPublicKey;
-  const signed = signPayload({ privateKey, payload, expectedPublicKey: pinned });
+  const signed = signPayload({ privateKey, payload, expectedPublicKey: pinned, meter });
   return { role, ...signed, verified: true };
 }
 
@@ -104,16 +110,17 @@ export function signAsRole({ role, privateKey, payload }, protocol = loadProtoco
  * record is returned.
  */
 export function createSignedMurphRecord(
-  { payload, authorityPrivateKey, guardianPrivateKey },
+  { payload, authorityPrivateKey, guardianPrivateKey, meter = defaultMetrology },
   protocol = loadProtocol(),
 ) {
-  const authority = signAsRole({ role: 'authority', privateKey: authorityPrivateKey, payload }, protocol);
-  const guardian = signAsRole({ role: 'guardian', privateKey: guardianPrivateKey, payload }, protocol);
+  const authority = signAsRole({ role: 'authority', privateKey: authorityPrivateKey, payload, meter }, protocol);
+  const guardian = signAsRole({ role: 'guardian', privateKey: guardianPrivateKey, payload, meter }, protocol);
   const verified = verifyMurphRecord(
     {
       payload,
       authoritySignature: authority.signatureHex,
       guardianSignature: guardian.signatureHex,
+      meter,
     },
     protocol,
   );

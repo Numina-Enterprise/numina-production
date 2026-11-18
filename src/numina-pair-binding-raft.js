@@ -43,6 +43,24 @@
 //     boundary that exists in code; there is no separate transport
 //     layer to enforce it in.
 //
+// v1.2.0 (Nov 18, 2026, owner-directed NOPair binding work):
+//   - Strict predecessor hash-chaining: raftContext.prevEntryHash is
+//     the SHA-256 digest (64 lowercase hex) of the immediately
+//     preceding committed log entry's unsigned envelope. The genesis
+//     (first) entry's predecessor is the all-zero 64-hex-character
+//     hash ('00' repeated 32 times, PAIR_BINDING_GENESIS_PREV_ENTRY_HASH).
+//     processEntry enforces it AFTER index monotonicity and BEFORE
+//     hybrid signature verification (a wrong predecessor is a
+//     chain-integrity failure, cheap to check before crypto): mismatch
+//     returns PREV_ENTRY_HASH_MISMATCH with expected and received
+//     hashes and commits nothing. The expected hash is always the
+//     stored digest of the last committed entry in this.stateLog (or
+//     the all-zero hash when the log is empty) — never a
+//     caller-supplied "previous digest". prevEntryHash sits inside
+//     the signed bytes (raftContext), so the digest of an entry
+//     automatically covers its predecessor link, and the committed
+//     log entry stores prevEntryHash alongside its digest.
+//
 // What this engine IS: single-node validation of a pair-binding envelope
 // plus an append-only in-memory log. What it is NOT: full Raft (no leader
 // election, no log replication, no persistence), NOT Byzantine-fault
@@ -95,10 +113,16 @@ import {
   verifyHybridGuardianSignature,
   verifyMlDsa65,
 } from './numina-protocol-pqc.js';
+import { defaultMetrology } from './numina-metrology.js';
 
 const SCHEMA_PATH = join(dirname(fileURLToPath(import.meta.url)), 'pair-binding.schema.json');
 
-export const PAIR_BINDING_SCHEMA_VERSION = '1.1.0';
+export const PAIR_BINDING_SCHEMA_VERSION = '1.2.0';
+// Genesis predecessor: the all-zero 64-hex-character SHA-256 hash
+// ('00' repeated 32 times). The first entry in an empty log must name
+// this as its prevEntryHash; any other value on an empty log fails
+// with PREV_ENTRY_HASH_MISMATCH.
+export const PAIR_BINDING_GENESIS_PREV_ENTRY_HASH = '00'.repeat(32);
 export const PAIR_BINDING_SOLE_OWNER = 'Samuel J. Kott';
 export const PAIR_BINDING_ENTITY = 'Numina Labs';
 export const PAIR_BINDING_CONTROL_PERCENTAGE = 100;
@@ -118,6 +142,7 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 const TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
 const ED25519_PUBLIC_KEY_PATTERN = /^[a-f0-9]{64}$/;
 const ED25519_SIGNATURE_PATTERN = /^[a-f0-9]{128}$/;
+const SHA256_HEX_PATTERN = /^[a-f0-9]{64}$/;
 const ML_DSA_65_SIGNATURE_PATTERN = new RegExp(`^[a-f0-9]{${ML_DSA_65_SIGNATURE_BYTES * 2}}$`);
 const HYBRID_BUNDLE_HEX_PATTERN = new RegExp(`^[a-f0-9]{${HYBRID_BUNDLE_BYTES * 2}}$`);
 
@@ -305,9 +330,19 @@ export function validatePairBindingEnvelope(document) {
     }
   }
   const ctx = document.raftContext;
-  if (!hasExactKeys(ctx, ['term', 'index', 'leaderId', 'clusterId', 'originNodeId', 'counterpartyNodeId'])) {
+  if (
+    !hasExactKeys(ctx, [
+      'term',
+      'index',
+      'leaderId',
+      'clusterId',
+      'originNodeId',
+      'counterpartyNodeId',
+      'prevEntryHash',
+    ])
+  ) {
     issues.push(
-      'raftContext must have exactly term, index, leaderId, clusterId, originNodeId, counterpartyNodeId',
+      'raftContext must have exactly term, index, leaderId, clusterId, originNodeId, counterpartyNodeId, prevEntryHash',
     );
   } else {
     if (!Number.isInteger(ctx.term) || ctx.term < 0) {
@@ -327,6 +362,9 @@ export function validatePairBindingEnvelope(document) {
     }
     if (typeof ctx.counterpartyNodeId !== 'string' || ctx.counterpartyNodeId.length === 0) {
       issues.push('raftContext.counterpartyNodeId must be a non-empty string');
+    }
+    if (typeof ctx.prevEntryHash !== 'string' || !SHA256_HEX_PATTERN.test(ctx.prevEntryHash)) {
+      issues.push('raftContext.prevEntryHash must be 64 lowercase hex characters');
     }
     if (
       typeof ctx.originNodeId === 'string' &&
@@ -368,8 +406,9 @@ export function validatePairBindingEnvelope(document) {
  * bytes, against the PINNED keys for the role — never against the
  * document-supplied entry keys (those were checked against the pinned
  * keys in the pinned-key gate). Returns true/false; never throws.
+ * Telemetry only: the verifies are counted on `meter`.
  */
-function verifySignatureArrayForRole(array, role, unsigned, protocol) {
+function verifySignatureArrayForRole(array, role, unsigned, protocol, meter = defaultMetrology) {
   const pinnedEd = protocol?.[role]?.rawPublicKey;
   const pinnedPqc = pqcPublicKeyForRole(role, protocol);
   if (typeof pinnedEd !== 'string' || typeof pinnedPqc !== 'string') return false;
@@ -377,17 +416,19 @@ function verifySignatureArrayForRole(array, role, unsigned, protocol) {
     publicKey: pinnedEd,
     signature: array.ed25519.signature,
     payload: unsigned,
+    meter,
   });
   if (!edOk) return false;
   return verifyMlDsa65({
     publicKey: pinnedPqc,
     signature: array.mlDsa65.signature,
     payload: unsigned,
+    meter,
   });
 }
 
 export class NuminaPairBindingRaftEngine {
-  constructor(nodeId, { currentTerm = 1, commitIndex = 0, protocol = loadProtocol() } = {}) {
+  constructor(nodeId, { currentTerm = 1, commitIndex = 0, protocol = loadProtocol(), meter = defaultMetrology } = {}) {
     if (typeof nodeId !== 'string' || nodeId.length === 0) {
       throw new Error('nodeId must be a non-empty string');
     }
@@ -396,6 +437,10 @@ export class NuminaPairBindingRaftEngine {
     this.commitIndex = commitIndex;
     this.protocol = protocol;
     this.stateLog = [];
+    // Telemetry only: this engine records its measurements on this
+    // meter (default: the module default meter). Counting never
+    // changes whether an entry is accepted or rejected.
+    this.meter = meter;
   }
 
   /** The envelope without attestations — the bytes both roles hybrid-sign. */
@@ -404,9 +449,15 @@ export class NuminaPairBindingRaftEngine {
     return unsigned;
   }
 
-  /** Canonical bytes + SHA-256 digest of the unsigned envelope. */
+  /**
+   * Canonical bytes + SHA-256 digest of the unsigned envelope.
+   * Telemetry only: the canonical byte count is recorded and the
+   * digest computation is counted on this engine's meter.
+   */
   envelopeDigest(document) {
     const bytes = canonicalBytes(NuminaPairBindingRaftEngine.unsignedEnvelope(document));
+    this.meter.recordCanonical(bytes.length);
+    this.meter.record('sha256');
     return { canonicalBytesHex: hex(bytes), sha256Hex: hex(sha256(bytes)) };
   }
 
@@ -426,9 +477,9 @@ export class NuminaPairBindingRaftEngine {
    * in-memory log. Gates, in order: structural validation, transport
    * frame bound, authorship assertion, node-identity binding, pinned-key
    * match, distinct signers, PQC provisioning, Raft term, index
-   * monotonicity, hybrid verification of BOTH parts against the PINNED
-   * keys. Any failure returns { success: false, error } and commits
-   * nothing.
+   * monotonicity, predecessor hash-chaining, hybrid verification of
+   * BOTH parts against the PINNED keys. Any failure returns
+   * { success: false, error } and commits nothing.
    */
   processEntry(document) {
     // 1. Structural validation (plain code; the schema file is the contract).
@@ -440,8 +491,10 @@ export class NuminaPairBindingRaftEngine {
     // 2. Transport frame bound. The canonical serialized envelope is the
     // frame; it must fit in a 16,384-byte MTU. Oversized envelopes are
     // rejected, never truncated — post-quantum signatures and keys are
-    // too large to risk a silent cut.
+    // too large to risk a silent cut. Telemetry only: the frame's
+    // canonical byte count is recorded on this engine's meter.
     const frameBytes = canonicalBytes(document).length;
+    this.meter.recordCanonical(frameBytes);
     if (frameBytes > PAIR_BINDING_MAX_FRAME_BYTES) {
       return {
         success: false,
@@ -489,7 +542,7 @@ export class NuminaPairBindingRaftEngine {
     // Authority / Guardian Ed25519 keys. A document naming its own keys
     // is rejected here, before any signature is checked. In array form
     // the ML-DSA-65 entry carries no public key — its key is the pinned
-    // ML-DSA-65 key for the role, checked at verification (gate 10);
+    // ML-DSA-65 key for the role, checked at verification (gate 11);
     // an unprovisioned pinned key is reported by gate 7.
     const originKey = document.attestations.origin.publicKey.toLowerCase();
     const counterpartyKey = document.attestations.counterparty.publicKey.toLowerCase();
@@ -537,7 +590,31 @@ export class NuminaPairBindingRaftEngine {
       };
     }
 
-    // 10. Hybrid verification against the PINNED keys: BOTH the Ed25519
+    // 10. Predecessor hash-chaining. The entry's prevEntryHash must
+    // equal the digest of the last committed entry — the SHA-256 of
+    // that entry's canonical unsigned envelope, as STORED in
+    // this.stateLog — or the all-zero genesis hash when the log is
+    // empty. A caller-supplied "previous digest" is never trusted:
+    // the expected value comes only from committed state. This gate
+    // sits after index monotonicity and before hybrid verification
+    // because a wrong predecessor is a chain-integrity failure, cheap
+    // to check before any crypto runs. prevEntryHash is inside the
+    // signed bytes, so a tampered link also breaks the signatures —
+    // but this gate is what names the failure as a chain failure.
+    const expectedPrevEntryHash =
+      this.stateLog.length === 0
+        ? PAIR_BINDING_GENESIS_PREV_ENTRY_HASH
+        : this.stateLog[this.stateLog.length - 1].digest;
+    if (document.raftContext.prevEntryHash !== expectedPrevEntryHash) {
+      return {
+        success: false,
+        error: 'PREV_ENTRY_HASH_MISMATCH',
+        expected: expectedPrevEntryHash,
+        received: document.raftContext.prevEntryHash,
+      };
+    }
+
+    // 11. Hybrid verification against the PINNED keys: BOTH the Ed25519
     // part and the ML-DSA-65 part must verify over the same canonical
     // bytes of the unsigned envelope. The document's key fields are not
     // trusted here — verification uses the pinned keys. In array form
@@ -549,11 +626,11 @@ export class NuminaPairBindingRaftEngine {
       if (Object.prototype.hasOwnProperty.call(attestation, 'signatures')) {
         const array = parseSignatureArray(attestation.signatures);
         if (array === null) return false;
-        return verifySignatureArrayForRole(array, protocolRole, unsigned, this.protocol);
+        return verifySignatureArrayForRole(array, protocolRole, unsigned, this.protocol, this.meter);
       }
       const verifier =
         protocolRole === 'authority' ? verifyHybridAuthoritySignature : verifyHybridGuardianSignature;
-      return verifier(attestation.hybridSignature, unsigned, this.protocol);
+      return verifier(attestation.hybridSignature, unsigned, this.protocol, this.meter);
     };
     const originValid = verifyRole('origin', 'authority');
     const counterpartyValid = verifyRole('counterparty', 'guardian');
@@ -565,13 +642,14 @@ export class NuminaPairBindingRaftEngine {
       };
     }
 
-    // 11. Commit the state transition to the append-only log.
+    // 12. Commit the state transition to the append-only log.
     const { sha256Hex } = this.envelopeDigest(document);
     this.commitIndex = index;
     this.stateLog.push({
       index,
       term,
       digest: sha256Hex,
+      prevEntryHash: document.raftContext.prevEntryHash,
       owner: PAIR_BINDING_SOLE_OWNER,
       payload: document.payload,
     });
@@ -584,6 +662,7 @@ export class NuminaPairBindingRaftEngine {
       term,
       index,
       digest: sha256Hex,
+      prevEntryHash: document.raftContext.prevEntryHash,
     };
   }
 }
