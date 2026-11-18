@@ -21,7 +21,7 @@ Configure the Data Agent Kit plugin for production use, ensuring all required se
 ### R2. Governance Parity and Regression Invariant Guarding
 Ensure complete alignment, regression invariant guarding, and governance parity across all 15 Numina enterprise agent divisions. Maintain zero-drift, type safety, coercion immunity, and CI runner security across all rooms.
 Constraints:
-- Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`
+- Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Authority Keypin: `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce` (skott34-ed25519)
 - Guardian Keypin: `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c` (numina-guardian-ed25519)
 - Active Sprint Boundary GID: `1219183110870936` (Forbidden GID: `1219187222788173`)
@@ -39,7 +39,7 @@ Constraints:
 - [ ] `npm test` passes in `numina-financial-core`, `numina-agent-swarm`, `numina-doc-alignment`, and `numina-smart-contracts`.
 
 ### Invariant & Integrity Enforcement
-- [ ] Cluster State Root matches `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+- [ ] Cluster State Root matches `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - [ ] Authority and Guardian Keypins are verified against their pinned ed25519 keys.
 - [ ] Sprint boundary GID is confirmed as `1219183110870936` with no references to forbidden GID `1219187222788173`.
 - [ ] Zero IEEE-754 floats and zero self-hosted CI runners present across division configurations.

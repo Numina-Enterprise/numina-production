@@ -17,7 +17,7 @@ The workspace houses a dual-engine verification pipeline validating document pro
   - Verifies document hashes using SHA-256 and exact byte lengths.
   - Enforces canonical RFC 8785 JSON formatting and dual Ed25519 signature checks (`skott34-ed25519` + `numina-guardian-ed25519`).
 - **`verify_pasted_payload.py`**:
-  - Directly recomputes the SHA-256 hash over canonical JSON payload buffers and verifies equality against expected Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+  - Directly recomputes the SHA-256 hash over canonical JSON payload buffers and verifies equality against expected Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - **Status**: Verified passing (`Matches: True`, 1592 bytes).
 - **`sign_root.py`**:
   - Signs 32-byte canonical roots using Ed25519 private keys without leaking sensitive key material.
@@ -25,7 +25,7 @@ The workspace houses a dual-engine verification pipeline validating document pro
 ### B. JavaScript/Node.js Provenance & Router Engine (`scratch/numina-doc-alignment/`)
 - **`src/provenance-verifier.mjs`**:
   - Implements lightweight, dependency-free cryptographic verification using Node.js built-in `crypto`.
-  - Computes `PROVENANCE_MANIFEST_VERIFIED` and binds to cluster root `726e35da14...`.
+  - Computes `PROVENANCE_MANIFEST_VERIFIED` and binds to cluster root `726e35da14...`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - **`src/numina-mesh-router.mjs`**:
   - 16-channel zero-trust mesh routing engine enforcing default-deny quarantine (`SEC-2`).
   - Enforces 3-Pillar Message Gate (E2EE Envelope, State Root match, Multi-Sig grant).
@@ -40,7 +40,7 @@ All manifests, policies, and audit scripts bind to these non-negotiable invarian
 
 | Security Invariant | Exact Parameter Value | Verification Engine | Status |
 |---|---|---|---|
-| **Cluster State Root** | `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` | `verify_pasted_payload.py` | **VERIFIED** |
+| **Cluster State Root** | `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` | `verify_pasted_payload.py` | **QUARANTINED** **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root. |
 | **Authority Lead Keypin** | `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce` | Ed25519 SPKI Digest | **VERIFIED** |
 | **Guardian Keypin** | `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c` | Ed25519 SPKI Digest | **VERIFIED** |
 | **Verified Sprint GID** | `1219183110870936` (Forbidden: `1219187222788173`) | Fast-path router regex | **VERIFIED** |

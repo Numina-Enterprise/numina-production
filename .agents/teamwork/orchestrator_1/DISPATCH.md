@@ -44,7 +44,7 @@ Sentinel conversation ID: 138902d5-e47c-4e1e-8d31-48fd053994db
 
 New user directive received:
 "deploy all subagents and ensure all rooms are working in parallel".
-Align across all 15 Numina Enterprise Agent Divisions per AGENTS.md (numina-accounting, numina-apple-team, numina-compliance-risk, numina-engineering-cio, numina-federal-capture, numina-finance-treasury, numina-crypto-monitor, numina-google-play-team, numina-google-enterprise, numina-legal, numina-growth-matrix, numina-publicity-narrative, numina-strategy, numina-website-soc, vengeance-independent-review) bound to Sprint GID 1219183110870936 and Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd. Ensure all division rooms and parallel execution threads are active.
+Align across all 15 Numina Enterprise Agent Divisions per AGENTS.md (numina-accounting, numina-apple-team, numina-compliance-risk, numina-engineering-cio, numina-federal-capture, numina-finance-treasury, numina-crypto-monitor, numina-google-play-team, numina-google-enterprise, numina-legal, numina-growth-matrix, numina-publicity-narrative, numina-strategy, numina-website-soc, vengeance-independent-review) bound to Sprint GID 1219183110870936 and Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd. Ensure all division rooms and parallel execution threads are active. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 Please incorporate into the orchestration plan and execution swarm immediately.
 

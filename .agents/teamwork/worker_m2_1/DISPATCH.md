@@ -34,7 +34,7 @@ DO NOT CHEAT. All implementations must be genuine. DO NOT hardcode test results,
    - In `none-null-coercion-safety.test.mjs`: Add tests for 1.5Q scale float elimination, zero type coercion, and null boundaries.
 2. **15-Division Swarm Execution & Protocol Invariants (R1 & R2)**:
    - In `numina-agent-swarm/src/deploy-divisions.mjs` and `swarm-dispatcher.mjs`: Execute the Milestone 2 swarm cycle across all 15 divisions and generate a new deployment record in `deployments/swarm-deployment-dep-<timestamp>.json`.
-   - In `numina-agent-swarm/tests/m2-division-execution.test.mjs`: Add a comprehensive test suite asserting all 15 division operations, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and Otter-Raft Singularity Protocol.
+   - In `numina-agent-swarm/tests/m2-division-execution.test.mjs`: Add a comprehensive test suite asserting all 15 division operations, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and Otter-Raft Singularity Protocol. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. **Governance Rule Parity**:
    - Align `numina-doc-alignment/AGENTS.md` and `GEMINI.md` to reflect all 45 sections and 10 runtime invariants matching root files.
    - Ensure section counter citations in root `AGENTS.md` (lines 10, 337) reference 45 sections.
@@ -64,7 +64,7 @@ Also read C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\worker_m2_1\
 
 Implement:
 1. Type safety, coercion prevention, null boundaries in numina-financial-core (float elimination at 1.5Q scale in rwa-tokenization-engine.mjs, zero coercion in money.mjs, BigInt and null safety in treasury-engine.mjs and stripe-treasury-bridge.mjs, and unit tests).
-2. 15-division swarm execution and invariant enforcement in numina-agent-swarm (deploy-divisions.mjs execution generating new deployment record, tests in m2-division-execution.test.mjs asserting Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Sprint GID 1219183110870936, Otter-Raft Singularity Protocol).
+2. 15-division swarm execution and invariant enforcement in numina-agent-swarm (deploy-divisions.mjs execution generating new deployment record, tests in m2-division-execution.test.mjs asserting Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Sprint GID 1219183110870936, Otter-Raft Singularity Protocol). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. Governance rule parity across AGENTS.md (45 sections) and GEMINI.md.
 4. Run all test suites across the workspace and verify 100% pass with zero regressions.
 

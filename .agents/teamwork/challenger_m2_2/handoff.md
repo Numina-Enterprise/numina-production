@@ -5,7 +5,7 @@
 **Working Directory**: `C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\challenger_m2_2\`  
 **Timestamp**: 2026-10-29T01:05:00Z  
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936` (Forbidden: `1219187222788173`)  
 **Singularity Motto**: *"Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."*  
 **Overall Verdict**: **CONFIRMED** (Risk Assessment: **LOW**)
@@ -23,7 +23,7 @@ Direct empirical evidence obtained by designing, executing, and validating dedic
      new AutonomousSwarmDispatcher({ clusterStateRoot: '82' + CLUSTER_STATE_ROOT.slice(2) });
      ```
    - Verbatim observation: Throws fail-closed error immediately:
-     `STATE_ROOT_MISMATCH: Expected 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, got 826e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`
+     `STATE_ROOT_MISMATCH: Expected 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, got 826e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Tested 5 distinct byte mutations (first byte `82...`, last byte `...ce`, interior byte substitution `00000000`, all zeros `0`.repeat(64), all f's `f`.repeat(64)). All 5 triggered 100% fail-closed rejection.
 
 2. **Numina Mesh Router (`numina-doc-alignment/src/numina-mesh-router.mjs`, lines 558–563, 636–640)**:
@@ -40,7 +40,7 @@ Direct empirical evidence obtained by designing, executing, and validating dedic
 
 4. **Solidity Smart Contract (`numina-smart-contracts/contracts/NuminaTreasuryReserve.sol`, line 18)**:
    - Verbatim check on contract bytecode/source:
-     `bytes32 public constant CLUSTER_STATE_ROOT = 0x726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd;`
+     `bytes32 public constant CLUSTER_STATE_ROOT = 0x726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd;` **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Mutation test: Verified that any contract deployment or test targeting a drifted root fails cryptographic provenance binding.
 
 ---
@@ -131,7 +131,7 @@ Direct empirical evidence obtained by designing, executing, and validating dedic
 
 1. **State Root Invariance Proof**:
    - Observation 1.1 shows that altering even a single byte in `CLUSTER_STATE_ROOT` (e.g., `826e...` instead of `726e...`) causes immediate instantiation failure in `AutonomousSwarmDispatcher` (`STATE_ROOT_MISMATCH`), immediate attestation rejection in `activateAllDefinedRooms` (`ATTESTATION_STATE_ROOT_MISMATCH`), and immediate channel quarantine in `routeChannelMessage` (`STATE_ROOT_DRIFT_DETECTED` setting status to `CHANNEL_QUARANTINED_BY_DEFAULT`).
-   - Therefore, the system is cryptographically anchored to `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` and fails closed on drift.
+   - Therefore, the system is cryptographically anchored to `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` and fails closed on drift. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 2. **Sprint Boundary Protection Proof**:
    - Observation 1.2 demonstrates that supplying forbidden sprint GID `1219187222788173` halts dispatcher construction (`FORBIDDEN_SPRINT_GID`) and flags a CRITICAL/HIGH severity anomaly in the mesh router (`FORBIDDEN_ASANA_GID`), blocking channel routing.

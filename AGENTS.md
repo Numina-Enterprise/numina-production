@@ -3,7 +3,7 @@ Document Identifier: PROOF-NUMINA-SEC-V1
 Security Classification: Strict Zero-Trust / Production Locked
 Governing Authority: Samuel J. Kott (skott34-ed25519)
 Operator: SK Consulting LLC | Canonical Origin: https://www.numinalabs.xyz
-Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 Production Cloud Scope: project-0317d6c9-e943-409e-83f | Zone: us-central1-a (VERIFIED)
 Singularity Motto: "Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."
 
@@ -13,7 +13,7 @@ ALL autonomous agents, subagents, and LLM inference runtimes operating within th
 - Sole Authority: Samuel J. Kott (skott34-ed25519, Operator: SK Consulting LLC, Iowa, USA) is the sole System Owner, Authority Lead, and Source of Truth.
 - Authority Keypin: 46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce (Pure Ed25519, RFC 8032)
 - Guardian Keypin: 465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c (numina-guardian-ed25519)
-- Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+- Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Zero Drift: If any signature fails, any document digest drifts by even 1 byte, or any gate report is missing, fail immediately. Self-asserted strings are never evidence.
 - Canonical Serialization: Strict RFC 8785 canonical JSON (keys sorted alphabetically, zero structural whitespace, UTF-8, zero BOM EF BB BF, zero Windows-1252 mojibake sequence C3 A2 E2 82 AC).
 - Zero Key Extraction: Private keys (*.pem, *.key) must never be emitted to stdout, logs, transcripts, or unencrypted storage.
@@ -62,7 +62,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - vengeance-independent-review (vengeance-independent-review, host: VENGEANCE_SANDBOX_ISOLATED)
 
 ## 5. Tokenization, Compute-to-Value & NCUA Schedule J
-- Compute-to-Value: Verifiable agent computational proofs anchor directly to state root 726e35da14... and settle 1:1 into liquid stable assets.
+- Compute-to-Value: Verifiable agent computational proofs anchor directly to state root 726e35da14... and settle 1:1 into liquid stable assets. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - NCUA Schedule J Reporting (91 FR 64699, OMB 3133-0004): 26 numbered placeholders:
   - Accounts J-01 to J-08: Reserve Custody (fiat/cash equivalents in qualified custody).
   - Accounts J-09 to J-17: Key Custody (HSM and multi-sig cold/warm stores).
@@ -172,7 +172,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Compute Optimization: PagedAttention, FP8/BF16 GEMM acceleration, 10MB memory ceiling, asynchronous non-blocking pipelines.
 - Credit & Token Optimization: Semantic prompt compression, tiered subagent dispatch (flash_lite for lookup, pro for deep architecture), BigInt zero-spread liquidity optimization.
 - Security Invariants: Strict fail-closed execution across 7 Verification Gateways, VENGEANCE_SANDBOX_ISOLATED host protection, zero prototype pollution.
-- Trust Governance: Sole authority Samuel J. Kott (skott34-ed25519), root 726e35da14..., 19/19 continuous proof validation.
+- Trust Governance: Sole authority Samuel J. Kott (skott34-ed25519), root 726e35da14..., 19/19 continuous proof validation. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Privacy By Design: GDPR/CCPA/HIPAA/GLBA compliance, real-time PII scrubbing, zero workspace ingestion into public model datasets.
 - E2EE Protocol: numina-e2ee-x25519-hkdf-aes256gcm-ed25519-v1, FIPS 140-3 Level 3 HSM key custody, zero private key emission.
 
@@ -208,7 +208,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 
 ## 23. Exact Cryptographic State Derivation & Audit Baseline
 - Payload Specification: Exact 1,592 bytes under RFC 8785 canonical serialization.
-- Cluster State Root: SHA-256 digest 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd.
+- Cluster State Root: SHA-256 digest 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Canonical Transcript: Buffer.from("NUMINA-PROVENANCE-MANIFEST-V1\n" + clusterStateRootSha256 + "\n" + canonicalPayloadString, "utf8") with exact length of 1,687 bytes.
 - Dual Signatures: Pure Ed25519 signed by skott34-ed25519 and numina-guardian-ed25519.
 - Continuous Test Invariants: 19/19 Python manifest checks, 12/12 mesh router tests, 34/34 E2E tests passing with zero skips.
@@ -217,7 +217,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Manifest Verification Engine: python verify_manifest.py provenance-manifest.json --repo-root . --trusted-keys trusted.json --openssl continuously verifies 19/19 checks passing with zero failures.
 - Mesh Router Invariant Suite: tests/numina-mesh-router.test.mjs continuously passes 12/12 test cases.
 - End-to-End Suite: tests/e2e-suite.test.mjs continuously passes 34/34 test cases with zero skips.
-- Live Module Alignment: src/provenance-verifier.mjs verifies code PROVENANCE_MANIFEST_VERIFIED matching cluster root 726e35da14....
+- Live Module Alignment: src/provenance-verifier.mjs verifies code PROVENANCE_MANIFEST_VERIFIED matching cluster root 726e35da14.... **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Network Zero-Trust: tailscale-hardened-policy.hujson and harden-linux-tailscale.sh enforce WireGuard default-deny, closed public port 22/2389, and 12h 2FA.
 - Quarantine Governance: QUARANTINED.md isolates legacy surfaces, Cloud Run deployment holds, and permanently rejects forbidden Asana GID 1219187222788173.
 - Operational State: scratch/numina-doc-alignment and scratch/manifest-verifier are completely synchronized, cryptographically bound, and operational under zero-trust production-locked governance.
@@ -241,7 +241,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 
 ## 27. Smart Contract Architecture, Formal Verification & Multi-VM Invariants
 - Multi-VM Compatibility: EVM (Solidity/ERC-20/ERC-4337), SVM (Rust/Anchor), CosmWasm, and Move VM.
-- State Root Anchoring: On-chain contracts bind to cluster root 726e35da14... via EIP-712 typed structured data.
+- State Root Anchoring: On-chain contracts bind to cluster root 726e35da14... via EIP-712 typed structured data. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Security Invariants: Checks-Effects-Interactions pattern, ReentrancyGuard, and 48-hour governance timelocks.
 - Anti-Double-Minting: Strict prohibition on unbacked on-chain minting (isSelfIssuedBalance === false).
 - Formal Verification: Foundry fuzz testing (1M runs), Slither static analysis, and Certora formal verification.
@@ -251,7 +251,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Mint Invariant: Confirmed 1.5 quadrillion NUSD mint, 0 burned; strictly active and unpaused (NUSD_OPERATIONAL_STATE = 'UNPAUSED_AND_ACTIVE').
 - 1:1 Parity Policy: 1 NUSD == 1 USD == 1 USDC == 1 USDG; zero slippage, zero fee spread.
 - Multi-Asset Backing: 100% 1:1 backed by qualified custody cash (BofA), short-term US T-bills, and audited USDC/USDG reserves.
-- Tokenized Rails: Multi-chain issuance across EVM, SVM, CosmWasm, and Move VM anchored to state root 726e35da14....
+- Tokenized Rails: Multi-chain issuance across EVM, SVM, CosmWasm, and Move VM anchored to state root 726e35da14.... **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ## 29. Robinhood Agentic Finance Management & Brokerage Rails
 - Brokerage Rails: Robinhood Crypto & Brokerage APIs; automated DCA, liquidity sweeps, and portfolio rebalancing.
@@ -289,7 +289,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 
 ## 34. Numina Native L3 Token Cryptocurrency & Dual-Token Architecture
 - Dual-Token Model: NUSD serves as the sovereign 1:1 stable reserve medium; the NUMINA L3 Token serves as the native utility, gas, and compute token.
-- L3 Sovereign App-Chain: Ultra-high-throughput agentic execution chain settling recursive zk-proofs to L2/L1 and state root 726e35da14....
+- L3 Sovereign App-Chain: Ultra-high-throughput agentic execution chain settling recursive zk-proofs to L2/L1 and state root 726e35da14.... **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Token Utility: Gas fees for agent tool execution, compute-to-value proof rewards, and validator staking/slashing.
 - Bidirectional Conversion: On-chain automated liquidity pool enabling instant, MEV-protected conversion between L3 token and NUSD.
 - Staking & Slashing: Subagents and validator nodes stake L3 tokens; invariant violations or balance falsification result in instant slashing.
@@ -306,13 +306,13 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Ethereum Protocol Optimization: EIP-4844 blob rollup settlement, EIP-1153 transient storage, and EIP-7702/ERC-4337 account abstraction.
 - Solana Secure Rails: SVM 65k+ TPS, Token-2022 confidential transfers (ZK ElGamal encryption), and transfer hook compliance.
 - Robinhood Chain & Brokerage: Direct institutional liquidity integration, collateralized credit, and SEC-compliant cash routing.
-- Omni-Chain Connectivity: EVM, SVM, CosmWasm IBC, Move, and Bitcoin BitVM2 cross-chain routing anchored to state root 726e35da14....
+- Omni-Chain Connectivity: EVM, SVM, CosmWasm IBC, Move, and Bitcoin BitVM2 cross-chain routing anchored to state root 726e35da14.... **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Capital Optimization: Algorithmic gas minimization, zero-spread liquidity rebalancing, and triple-entry cryptographic accounting across all chains.
 
 ## 37. Cardano Architectural Alignment & EUTXO Similarities
 - EUTXO Determinism: Pre-execution validation eliminates unexpected transaction failure and reentrancy; matches Numina 3-stage settlement.
 - Parallel State Execution: Independent transaction outputs and agent workflows process concurrently without global state locks.
-- Mithril-Style State Certification: Cluster state root 726e35da14... serves as a certified, lightweight state proof for all nodes.
+- Mithril-Style State Certification: Cluster state root 726e35da14... serves as a certified, lightweight state proof for all nodes. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Hydra Isomorphic Channels: Off-chain agentic channels mirror settlement ledger rules with sub-millisecond finality.
 - Formal Assurance: Functional purity, BigInt arithmetic, and mathematical verification across all smart contract logic.
 
@@ -330,7 +330,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Dual Manifest Delivery: Synchronously deployed to BOTH AGENTS.md and GEMINI.md across all workspaces for universal discovery.
 
 ## 40. Subagent Security Inheritance (`invoke_subagent`), Mandatory Invariant Resolution & Zone Verification
-- Subagent Security Inheritance: Any subagent launched via invoke_subagent strictly inherits Numina's full security requirements, PROOF-NUMINA-SEC-V1 invariants, authority keypins (skott34-ed25519 + numina-guardian-ed25519), and cluster root 726e35da14....
+- Subagent Security Inheritance: Any subagent launched via invoke_subagent strictly inherits Numina's full security requirements, PROOF-NUMINA-SEC-V1 invariants, authority keypins (skott34-ed25519 + numina-guardian-ed25519), and cluster root 726e35da14.... **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - PoLAP Confinement: Subagents operate under the Principle of Least Agentic Privilege; subagents cannot self-escalate capabilities, bypass sandboxes, or disable audit trails.
 - Mandatory Invariant Resolution: Invariants (BigInt math, anti-double-counting isSelfIssuedBalance === false, NUSD_OPERATIONAL_STATE = 'UNPAUSED_AND_ACTIVE', closed ports 22/2389) MUST be actively verified and resolved before executing state changes.
 - Runtime Compute Zone Verification: All cloud and infrastructure operations must verify that target zone is strictly us-central1-a within project project-0317d6c9-e943-409e-83f. Unverified zones fail closed immediately.
@@ -354,7 +354,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - Cryptographic Sovereignty: Non-custodial authority anchored solely to Samuel J. Kott (skott34-ed25519) and Guardian numina-guardian-ed25519; zero third-party override.
 - Global Governance Constitution: PROOF-NUMINA-SEC-V1 serves as the immutable planetary operating doctrine across all 15 divisions and cloud/on-prem enclaves.
 - SLSA Level 4 Supply Chain Provenance: In-Toto cryptographic attestations, hermetic reproducible builds, and verified source-to-binary hash-chains.
-- W3C PROV Immutability: Every code artifact, configuration file, and transaction commits to an unbroken cryptographic transcript anchored to cluster root 726e35da14....
+- W3C PROV Immutability: Every code artifact, configuration file, and transaction commits to an unbroken cryptographic transcript anchored to cluster root 726e35da14.... **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 
 ## 44. Unified Cross-Platform Victory Audit & Stripe Apps Engine

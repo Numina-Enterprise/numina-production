@@ -4,6 +4,7 @@
   "organization": "Numina-Enterprise",
   "invariants": {
     "cluster_state_root": "726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd",
+    "cluster_state_root_status": "QUARANTINED 2026-10-23 \u2014 unverified; see state-root-726e-quarantine-2026-10-23.md; do not use as a verified root",
     "authority_keypin": "46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce",
     "guardian_keypin": "465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c",
     "domain": "numinalabs.xyz",

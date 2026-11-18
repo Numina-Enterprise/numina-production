@@ -11,7 +11,7 @@ ALL autonomous agents and subagents operating via Antigravity within this verifi
 - Sole Authority: Samuel J. Kott (skott34-ed25519, Operator: SK Consulting LLC, Iowa, USA) is the sole System Owner, Authority Lead, and Source of Truth.
 - Authority Keypin: 46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce (Pure Ed25519, RFC 8032)
 - Guardian Keypin: 465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c (numina-guardian-ed25519)
-- Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+- Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Zero Drift: If any signature fails, any document digest drifts by even 1 byte, or any gate report is missing, fail immediately. Self-asserted strings are never evidence.
 - Canonical Serialization: Strict RFC 8785 canonical JSON (keys sorted alphabetically, zero structural whitespace, UTF-8, zero BOM EF BB BF, zero Windows-1252 mojibake sequence C3 A2 E2 82 AC).
 - Zero Key Extraction: Private keys (*.pem, *.key) must never be emitted to stdout, logs, transcripts, or unencrypted storage.
@@ -57,7 +57,7 @@ All 15 divisions enforce asanaTracked: true bound exclusively to Verified Sprint
 - vengeance-independent-review (vengeance-independent-review, host: VENGEANCE_SANDBOX_ISOLATED)
 
 ## 5. Tokenization, Compute-to-Value & NCUA Schedule J
-- Compute-to-Value: Verifiable agent computational proofs anchor directly to state root 726e35da14... and settle 1:1 into liquid stable assets.
+- Compute-to-Value: Verifiable agent computational proofs anchor directly to state root 726e35da14... and settle 1:1 into liquid stable assets. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - NCUA Schedule J Reporting (91 FR 64699, OMB 3133-0004): 26 numbered placeholders:
   - Accounts J-01 to J-08: Reserve Custody (fiat/cash equivalents in qualified custody).
   - Accounts J-09 to J-17: Key Custody (HSM and multi-sig cold/warm stores).

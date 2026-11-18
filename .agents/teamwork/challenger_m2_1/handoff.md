@@ -5,7 +5,7 @@
 **Working Directory**: `C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\challenger_m2_1\`  
 **Timestamp**: 2026-10-29T01:05:30Z  
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936`  
 **Verdict**: **`CONFIRMED`**
 
@@ -55,7 +55,7 @@ All findings are based on direct empirical execution of test harnesses, generato
 - **Location**: `numina-agent-swarm/src/swarm-dispatcher.mjs`, `numina-agent-swarm/src/deploy-divisions.mjs`, and `numina-agent-swarm/tests/m2-empirical-challenger.test.mjs`.
 - **Harness & Stress Execution**:
   - Verified all 15 divisions defined in `DIVISIONS` execute concurrently in `runParallelSwarmCycle()`.
-  - Each division yields `TASK_COMPLETED_SUCCESSFULLY`, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and a valid 64-char hex SHA-256 proof digest (`/^[a-f0-9]{64}$/`).
+  - Each division yields `TASK_COMPLETED_SUCCESSFULLY`, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and a valid 64-char hex SHA-256 proof digest (`/^[a-f0-9]{64}$/`). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - Executed `deploySwarm()`: verified creation of physical immutable JSON deployment ledger in `numina-agent-swarm/deployments/swarm-deployment-dep-<timestamp>.json`. Verified file contents, 15 division entries, and verbatim Otter-Raft Singularity motto.
   - Executed 10 consecutive parallel swarm cycles under load: executed 150 tasks, confirming 150/150 success rate and 150 globally unique cryptographic proof digests (zero collisions).
 

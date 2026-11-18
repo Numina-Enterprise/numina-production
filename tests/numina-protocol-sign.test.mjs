@@ -1,4 +1,5 @@
-// numina-protocol-sign.test.mjs — signing functionality for the Numina Protocol.
+// numina-protocol-sign.test.mjs — signing functionality for the Singularity Protocol.
+// Samuel J. Kott, SK Consulting LLC, operating under Numina Labs.
 //
 // What this proves:
 //  - a runtime-supplied private key signs RFC 8785 canonical bytes, and the

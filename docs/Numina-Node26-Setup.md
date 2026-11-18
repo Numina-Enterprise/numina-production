@@ -1,6 +1,6 @@
 # Numina Node 26 cloud toolchain
 
-The current Numina build and local cloud preview select **Node 26.11.1**. The isolated Linux installation includes **npm 11.20.0**. The official archive's SHA-256 matches both the pinned configuration and its entry in Node's `SHASUMS256.txt`.
+The current Numina build and local cloud preview select **Node 26.13.1**. The isolated Linux installation includes **npm 11.20.0**. The official archive's SHA-256 matches both the pinned configuration and its entry in Node's `SHASUMS256.txt`.
 
 The canonical source is `/workspace/numina-production`. Install or locate the toolchain, then select it for the current shell:
 

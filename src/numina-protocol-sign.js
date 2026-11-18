@@ -1,4 +1,5 @@
-// numina-protocol-sign.js — signing for the Numina Protocol.
+// numina-protocol-sign.js — signing for the Singularity Protocol.
+// Samuel J. Kott, SK Consulting LLC, operating under Numina Labs.
 //
 // The counterpart to numina-protocol-verify.js. This module SIGNS Ed25519
 // signatures over RFC 8785 canonical bytes. It completes the signing

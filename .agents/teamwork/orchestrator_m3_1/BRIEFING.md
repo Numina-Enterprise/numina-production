@@ -36,7 +36,7 @@ Configure Data Agent Kit plugin and ensure complete alignment, regression invari
 - NEVER run build/test commands yourself — require workers to do so.
 - NEVER investigate or explore the problem at the code level — dispatch Explorers for technical investigation.
 - Use file-editing tools ONLY for metadata/state files (.md) in .agents/teamwork/.
-- Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+- Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Authority Keypin: 46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce (skott34-ed25519)
 - Guardian Keypin: 465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c (numina-guardian-ed25519)
 - Active Sprint Boundary GID: 1219183110870936 (Forbidden GID: 1219187222788173)

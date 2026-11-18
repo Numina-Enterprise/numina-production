@@ -8,7 +8,7 @@
 ## 2. Institutional RWA & Digital Asset Invariants
 - All tokenized asset ledgers (BUIDL, BENJI/FOBXX, USDY, cash deposits) must use strict 6-decimal micro-unit `BigInt` arithmetic.
 - Solvency validation must prove 1:1 asset backing against circulating NUSD without floating-point approximations.
-- Anchor all asset registrations with SHA-256 attestation hashes bound to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+- Anchor all asset registrations with SHA-256 attestation hashes bound to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ## 3. PowerShell CLI Execution Standards
 - When invoking PowerShell scripts that define `[switch]` parameters, pass them as flags (e.g. `-SingleCycle`), never as string literals or boolean conversions (`-SingleCycle:$true` can trigger `ParameterArgumentTransformationError`).

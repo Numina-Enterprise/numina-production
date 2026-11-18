@@ -89,7 +89,7 @@ function portFromArgs() {
 
 async function main() {
   const config = JSON.parse(await readFile(new URL('../config/numina-node26.v1.json', import.meta.url), 'utf8'));
-  if (process.versions.node !== config.version || config.version !== '26.11.1') throw new Error('PINNED_NODE_VERSION_REQUIRED');
+  if (process.versions.node !== config.version || config.version !== '26.13.1') throw new Error('PINNED_NODE_VERSION_REQUIRED');
   const port = portFromArgs();
   for (const path of [resolve(ROOT, 'dist'), ASSET_ROOT]) {
     const metadata = await lstat(path);

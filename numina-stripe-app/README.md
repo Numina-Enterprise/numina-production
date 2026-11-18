@@ -8,7 +8,7 @@ Based on official Stripe Apps documentation: [Upload and Install a Stripe App](h
 
 ## Architecture & Features
 
-- **Dashboard Context View**: Visualizes NUSD operational status (`UNPAUSED_AND_ACTIVE`), 1:1 USD parity, and cluster state root (`726e35da14...`).
+- **Dashboard Context View**: Visualizes NUSD operational status (`UNPAUSED_AND_ACTIVE`), 1:1 USD parity, and cluster state root (`726e35da14...`). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - **Customer View**: Embedded view under customer detail pages displaying BigInt settlement states and dual-key signatures.
 - **Security & Idempotency**: Cryptographically bound to HMAC-SHA256 webhook signatures with `PERSISTENT_ATOMIC` idempotency keys.
 

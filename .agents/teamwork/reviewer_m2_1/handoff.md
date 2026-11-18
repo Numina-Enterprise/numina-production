@@ -5,7 +5,7 @@
 **Working Directory**: `C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\reviewer_m2_1\`  
 **Timestamp**: 2026-10-29T01:01:00Z  
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936` (Forbidden: `1219187222788173`)  
 **Singularity Motto**: *"Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."*
 
@@ -96,7 +96,7 @@ Direct empirical observations from independent file inspections, cryptographic h
 ### 1.2 15-Division Swarm Execution & Protocol Invariants (R1 & R2)
 1. **Roster Completeness & Invariants in `swarm-dispatcher.mjs`**:
    - Lines 8–24: Exactly 15 enterprise agent divisions registered with distinct rooms and tasks.
-   - Lines 28–42: Asserts `clusterStateRoot === '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd'` and rejects forbidden sprint GID `1219187222788173`.
+   - Lines 28–42: Asserts `clusterStateRoot === '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd'` and rejects forbidden sprint GID `1219187222788173`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Line 6: Verbatim Otter-Raft Singularity Protocol motto registered.
 2. **Parallel Swarm Execution & Ledger Archival in `deploy-divisions.mjs`**:
    - Lines 21–54: Concurrently runs `runParallelSwarmCycle()`, collects SHA-256 proofs for all 15 divisions, and archives deployment ledger to `numina-agent-swarm/deployments/swarm-deployment-dep-<timestamp>.json`.
@@ -142,7 +142,7 @@ All commands executed directly in powershell and verified with exit code 0:
    Observation 1.1 shows `parseMinorUnits` rejects non-safe integers, floats, negative BigInts, and non-canonical string numbers. `getBalance` and `getNonce` enforce string checks and reject empty strings via `TypeError`. `initiateSettlement` rejects booleans and malformed strings before `BigInt()` conversion. Therefore, silent JavaScript type coercion vulnerabilities are eliminated across institutional rails.
 
 3. **Premise 3 (State Root, Sprint, and Protocol Invariance)**:
-   Observation 1.2 shows that `AutonomousSwarmDispatcher` enforces the immutable Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, verifies Sprint GID `1219183110870936`, rejects forbidden GID `1219187222788173`, embeds the verbatim Otter-Raft Singularity Protocol motto, and writes SHA-256 proof records for all 15 divisions to `deployments/`.
+   Observation 1.2 shows that `AutonomousSwarmDispatcher` enforces the immutable Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, verifies Sprint GID `1219183110870936`, rejects forbidden GID `1219187222788173`, embeds the verbatim Otter-Raft Singularity Protocol motto, and writes SHA-256 proof records for all 15 divisions to `deployments/`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 4. **Premise 4 (Governance Parity Guarantee)**:
    Observation 1.3 shows identical SHA-256 hashes between root and enclave documentation files for `AGENTS.md` and `GEMINI.md`. Therefore, governance rule parity is absolute with zero formatting or encoding drift.
@@ -241,4 +241,4 @@ powershell -ExecutionPolicy Bypass -File C:\Users\sam\.gemini\antigravity\scratc
 - Any test failure among the 155 enumerated checks.
 - Any float arithmetic detected at 1.5 Quadrillion scale.
 - Any byte drift between root and enclave `AGENTS.md` or `GEMINI.md`.
-- Any alteration to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+- Any alteration to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.

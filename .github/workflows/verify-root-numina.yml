@@ -39,8 +39,8 @@ jobs:
           const pkg=JSON.parse(readFileSync('package.json','utf8'));
           const nvmrc=readFileSync('.nvmrc','utf8').trim();
           if(pkg.engines?.node!=='26.x') throw new Error('package runtime must stay pinned to Node 26.x');
-          if(nvmrc!=='26.11.1') throw new Error('.nvmrc must stay pinned to Node 26.11.1');
-          if(process.versions.node!=='26.11.1') throw new Error('CI is not running Node 26.11.1');
+          if(nvmrc!=='26.13.1') throw new Error('.nvmrc must stay pinned to Node 26.13.1');
+          if(process.versions.node!=='26.13.1') throw new Error('CI is not running Node 26.13.1');
           NODE
       - name: Install pinned dependencies
         run: |

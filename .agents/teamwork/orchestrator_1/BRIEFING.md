@@ -1,7 +1,7 @@
 # BRIEFING — 2026-10-28T22:17:00Z
 
 ## Mission
-Build a production-grade cross-platform audit and maintenance automation suite that utilizes existing Windows audit scripts and aligns macOS and Google Cloud environments, Zero-Trust verification, and governance documentation. Incorporate alignment across all 15 Numina Enterprise Agent Divisions bound to Sprint GID 1219183110870936 and Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd.
+Build a production-grade cross-platform audit and maintenance automation suite that utilizes existing Windows audit scripts and aligns macOS and Google Cloud environments, Zero-Trust verification, and governance documentation. Incorporate alignment across all 15 Numina Enterprise Agent Divisions bound to Sprint GID 1219183110870936 and Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ## 🔒 My Identity
 - Archetype: teamwork_orchestrator
@@ -50,7 +50,7 @@ Build a production-grade cross-platform audit and maintenance automation suite t
 
 ## Key Decisions Made
 - Adopted Project Pattern with Survey phase (3 Explorers in parallel) per Orchestrator Procedure step 0.
-- Incorporated User Directive: 15 Numina Enterprise Agent Divisions, Sprint GID 1219183110870936, Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd into survey scope.
+- Incorporated User Directive: 15 Numina Enterprise Agent Divisions, Sprint GID 1219183110870936, Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd into survey scope. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |

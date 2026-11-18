@@ -21,24 +21,24 @@ Ensure complete alignment, regression invariant guarding, and governance parity 
   - Run external scripts or delegate execution to other tools
   - Read test source code to understand expected behaviour before implementing
 - Milestone 2 Constraints:
-  - Maintain Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+  - Maintain Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - Otter-Raft Singularity Protocol
   - Sprint GID: 1219183110870936
   - Zero type coercion across BigInt, string, numeric types; avoid float arithmetic
   - Strict null, undefined, optional boundary checking
   - Zero regressions across existing 90+ tests, manifest verifiers, multi-platform audit suite
 - Continuous Alignment Directive (2026-10-29T01:04:51Z):
-  - Maintain continuous alignment and monitoring across all 15 enterprise divisions, keeping Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd and Sprint GID 1219183110870936 locked.
+  - Maintain continuous alignment and monitoring across all 15 enterprise divisions, keeping Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd and Sprint GID 1219183110870936 locked. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Alignment & Invariant Enforcement Directive (2026-10-29T01:09:58Z):
   - Ensure alignment and regression invariant guarding; governance parity resolved.
   - R3: Type safety, coercion prevention, null boundaries addressed.
-  - R2: Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd and Sprint GID 1219183110870936 pinned and verified.
+  - R2: Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd and Sprint GID 1219183110870936 pinned and verified. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - R1: 15-division multi-agent swarm concurrency aligned.
   - Zero regressions across all automated checks (100% PASS).
 - Milestone 3 Constraints (2026-10-29T01:25:46Z):
   - Configure Data Agent Kit plugin for production use
   - Ensure governance parity and regression invariant guarding across all 15 Numina enterprise agent divisions
-  - Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+  - Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - Authority Keypin: 46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce (skott34-ed25519)
   - Guardian Keypin: 465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c (numina-guardian-ed25519)
   - Active Sprint Boundary GID: 1219183110870936 (Forbidden GID: 1219187222788173)

@@ -1,7 +1,7 @@
 # Progress Log: Spec Miner 3 (Cross-Platform Governance Alignment)
 
 - **2026-10-28T22:16:07Z**: Task initialized. Read `DISPATCH.md` and `ORIGINAL_REQUEST.md`.
-- **2026-10-28T22:16:53Z**: Incorporated User Directive: "deploy all subagents and ensure all rooms are working in parallel" across all 15 divisions bound to Sprint GID `1219183110870936` and State Root `726e35da14...`.
+- **2026-10-28T22:16:53Z**: Incorporated User Directive: "deploy all subagents and ensure all rooms are working in parallel" across all 15 divisions bound to Sprint GID `1219183110870936` and State Root `726e35da14...`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - **2026-10-28T22:19:09Z**: Incorporated Division Room Directives:
   - `numina-apple-team` & `numina-google-play-team`: Optimization for Apple & Google Play apps.
   - `numina-finance-treasury`: Stripe App creation (`numina-stripe-app`) for upload & install per official Stripe documentation.

@@ -17,7 +17,7 @@
 | 5 | Null/Undefined Account Boundary Guard | Non-empty string account validation throwing `TypeError` in `treasury-engine.mjs` | M2.1 | Survey |
 | 6 | 15-Division Milestone 2 Swarm Execution | Synchronized multi-agent execution across all 15 divisions with deployment ledger archival | M2.2 | Survey |
 | 7 | Rule Parity Alignment | Byte-exact parity across `AGENTS.md` (45 sections) and `GEMINI.md` (10 runtime invariants) | M2.2 | Survey |
-| 8 | Cluster State Root & Protocol Invariant Verification | Cryptographically asserted Cluster State Root `726e35da...`, Otter-Raft Singularity Protocol, Sprint GID `1219183110870936` | M2.2 | Survey |
+| 8 | Cluster State Root & Protocol Invariant Verification | Cryptographically asserted Cluster State Root `726e35da...`, Otter-Raft Singularity Protocol, Sprint GID `1219183110870936` | M2.2 | Survey **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root. |
 | 9 | Full Workspace Regression Testing | 169 automated checks executed across Node.js, Python 3.12, OpenSSL, and PowerShell with 100% pass | M2.3 | Survey |
 | 10 | Milestone 2 Adversarial & Integrity Audit | Dual Reviewer APPROVE, Dual Challenger CONFIRMED, Forensic Auditor CLEAN | M2.3 | Survey |
 
@@ -30,7 +30,7 @@
 
 ## Interface Contracts
 ### numina-financial-core ↔ numina-agent-swarm
-- Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`
+- Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Sprint GID: `1219183110870936`
 - Units: BigInt micro-units (6 decimal places), zero float arithmetic, zero type coercion
 - Error Handling: Fail-closed `TypeError` on null, undefined, "None", boolean, or float parameters

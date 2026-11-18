@@ -9,7 +9,7 @@ Perform an objective, rigorous review of Milestone 2 implementation against all 
    - Inspect `stripe-treasury-bridge.mjs`: Verify strict timestamp parsing.
 2. Verify 15-Division Swarm Execution & Protocol Invariants (R1 & R2) in `numina-agent-swarm`:
    - Verify deployment record in `numina-agent-swarm/deployments/`.
-   - Verify Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Verify Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Verify Sprint GID `1219183110870936` and Otter-Raft Singularity Protocol.
    - Inspect `tests/m2-division-execution.test.mjs`.
 3. Verify Governance Rule Parity:

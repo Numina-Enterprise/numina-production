@@ -22,7 +22,7 @@
 - [Check 4: Self-certifying tests]: **PASS** — Tests rigorously validate dynamic behavior, boundary conditions, and cryptographic proofs without tautologies.
 - [Check 5: Pure BigInt formatUsdFromMicro vs float]: **PASS** — Evaluated across 11 edge cases (including 1.5 Quadrillion scale and micro-cents); zero floating-point arithmetic verified.
 - [Check 6: 15-Division execution & SHA-256 proofs]: **PASS** — All 15 divisions execute concurrently; each generates unique, authentic 64-char hex SHA-256 proof digests.
-- [Check 7: Invariants (State Root, Sprint GID, Otter-Raft)]: **PASS** — Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and Otter-Raft Singularity Protocol verbatim motto verified across code, manifests, and tests.
+- [Check 7: Invariants (State Root, Sprint GID, Otter-Raft)]: **QUARANTINED** — Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and Otter-Raft Singularity Protocol verbatim motto QUARANTINED — not verified across code, manifests, and tests. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - [Check 8: Full Workspace Test Suite Execution]: **PASS** — 100% pass rate across 154+ automated checks spanning Node.js, Python 3.12, OpenSSL 3.5.7, and PowerShell.
 
 ---
@@ -82,7 +82,7 @@ Direct empirical observations obtained via code inspection, independent test exe
      ```
    - Independently tested via `AutonomousSwarmDispatcher`: verified 15 distinct, valid 64-character hex digests per cycle.
 2. **Cluster State Root & Sprint GID Invariants**:
-   - `CLUSTER_STATE_ROOT = '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd'`
+   - `CLUSTER_STATE_ROOT = '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd'` **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - `SPRINT_GID = '1219183110870936'`
    - `FORBIDDEN_SPRINT_GIDS = Object.freeze(['1219187222788173'])`
    - Constructor fails closed on state root mismatch (`STATE_ROOT_MISMATCH`) and forbidden GID injection (`FORBIDDEN_SPRINT_GID`).
@@ -141,7 +141,7 @@ All test suites were independently executed from clean sessions:
    Observation 1.2 proves that `AutonomousSwarmDispatcher` and `deploySwarm` execute real cycles producing distinct SHA-256 proof digests generated from `division.id`, `timestamp`, a random 8-byte hex nonce, the state root, and the sprint GID. The deployment files in `numina-agent-swarm/deployments/` are dynamically created and verified on disk.
 
 5. **Verification of Cryptographic & Protocol Invariants**:
-   Observation 1.2 and 1.3 prove that Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and the Otter-Raft Singularity Protocol motto are cryptographically asserted and strictly matched across all modules, manifests, and documentation enclaves with zero byte drift.
+   Observation 1.2 and 1.3 prove that Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Sprint GID `1219183110870936`, and the Otter-Raft Singularity Protocol motto are cryptographically asserted and strictly matched across all modules, manifests, and documentation enclaves with zero byte drift. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 6. **Verification of Test Suite Authenticity & Regression Guard**:
    Observation 1.4 confirms that running the workspace test suites across Node.js, Python, OpenSSL, and PowerShell yields an authentic 100% pass rate across 154+ automated checks with zero regressions.
@@ -200,5 +200,5 @@ To independently reproduce the forensic verification findings from `C:\Users\sam
 5. **Invalidation Conditions**:
    - Floating-point arithmetic detected at 1.5 Quadrillion scale.
    - Any failure among the 154+ automated test checks.
-   - Any SHA-256 discrepancy in Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Any SHA-256 discrepancy in Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Acceptance of forbidden Sprint GID `1219187222788173`.

@@ -7,7 +7,7 @@
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
 **Parent Agent**: `parent` (`6fa40ce0-dc24-4a9c-909e-15f39813b342`)  
 **Target**: Milestone 2 Across All 15 Numina Enterprise Agent Divisions  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936` (Forbidden: `1219187222788173`)  
 **Singularity Motto**: *"Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."*  
 **Final Verdict**: **VICTORY CONFIRMED**
@@ -94,7 +94,7 @@ All 11 test suites and validation scripts were independently executed:
 ## 2. Logic Chain
 
 1. **Integrity Mode & Verification Scope**:
-   Per `ORIGINAL_REQUEST.md`, Milestone 2 mandates 15 active divisions, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Otter-Raft Singularity Protocol, Sprint GID `1219183110870936`, pure BigInt arithmetic avoiding float precision loss, strict null boundaries, and 100% pass rate across test suites.
+   Per `ORIGINAL_REQUEST.md`, Milestone 2 mandates 15 active divisions, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, Otter-Raft Singularity Protocol, Sprint GID `1219183110870936`, pure BigInt arithmetic avoiding float precision loss, strict null boundaries, and 100% pass rate across test suites. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 2. **Timeline Provenance (Observation 1.1)**:
    The filesystem timeline confirms clean chronological agent progression without anomalous file clustering or pre-populated verification artifacts.
 3. **Forensic Integrity (Observation 1.2)**:

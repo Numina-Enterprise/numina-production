@@ -16,7 +16,7 @@ Survey and mine specifications for Milestone 2 focusing on Rule Parity, Financia
 - Enforce strict integer/BigInt financial arithmetic; identify and eliminate float arithmetic.
 - Zero type coercion across BigInt, string, numeric types; prevent silent conversions.
 - Enforce strict null/undefined/optional boundaries across data models and dispatch payloads.
-- Preserve Cluster State Root (726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd), Otter-Raft Singularity Protocol, and Sprint GID (1219183110870936).
+- Preserve Cluster State Root (726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd), Otter-Raft Singularity Protocol, and Sprint GID (1219183110870936). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ## Current Parent
 - Conversation ID: 1c476180-f7cd-4653-867d-465b8c57f969

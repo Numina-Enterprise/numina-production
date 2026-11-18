@@ -12,7 +12,8 @@ import {createTreasuryAdjustment} from '../public/treasury-adjustment.js';
 const source=name=>readFileSync(new URL('../public/'+name,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'');
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
 const applicationManifest=()=>({schema:'numina.application-release.v2',schema_version:2,product:'Numina',version:'5.0.0',release:'numina-v5.0.0',build_id:'a'.repeat(64),frontier:{version:'5.0.0'},distribution:{codex_plugin:{version:'5.0.0'}}});
-async function settled(){for(let i=0;i<8;i++)await new Promise(r=>setTimeout(r,0));}
+async function settled(){for(let i=0;i<50;i++)await new Promise(r=>setTimeout(r,0));}
+async function waitForChildren(getter,attempts=200){for(let i=0;i<attempts;i++){if(getter().children.length)return;await new Promise(r=>setTimeout(r,0));}assert.ok(getter().children.length,'#accounts never rendered children');}
 class Element{
   constructor(){this.children=[];this._text='';}
   append(...nodes){this.children.push(...nodes);}
@@ -72,7 +73,7 @@ for(const phase of ['prepare','submit'])for(const status of [401,403])test(`adju
  const h=harness(view,()=>null,client);
  const find=(target,predicate)=>{if(predicate(target))return target;for(const child of target.children){const match=find(child,predicate);if(match)return match;}};
  try{
-  await settled();assert.ok(h.get('#accounts').children.length);
+  await waitForChildren(()=>h.get('#accounts'));
   const actions=h.get('#treasury-actions'),section=actions.children[0],form=section.children[2];
   const delta=find(section,node=>node.id==='native-adjustment-delta'),reason=find(section,node=>node.id==='native-adjustment-reason'),commit=find(section,node=>node.id==='native-adjustment-commit');
   delta.value='1000000000000000';reason.value='Authorized native model adjustment';

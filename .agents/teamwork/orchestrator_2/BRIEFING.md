@@ -13,7 +13,7 @@ Build and verify a production-grade cross-platform audit and maintenance automat
 ## 🔒 Status & Execution Summary
 All 3 Explorer/Spec Miner tracks have completed and delivered their handoffs:
 1. **`explorer_survey_1`**: Surveyed Windows victory scripts; specified and validated macOS (`audit_mac_*.sh`) and Google Cloud (`audit_gcp_resources.sh`) equivalents; developed `unified_audit_orchestrator.ps1` and `register_audit_schedule.ps1`.
-2. **`explorer_survey_2`**: Surveyed manifest verifier & Zero-Trust gateway; verified Cluster State Root `726e35da14...`, Sprint GID `1219183110870936`, and mesh router 12/12 security suites.
+2. **`explorer_survey_2`**: Surveyed manifest verifier & Zero-Trust gateway; verified Cluster State Root `726e35da14...`, Sprint GID `1219183110870936`, and mesh router 12/12 security suites. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. **`spec_miner_survey_3`**: Surveyed governance alignment (`AGENTS.md`, `GEMINI.md`); verified 100% UTF-8 LF-only formatting across all 8 files; codified Section 44.
 
 Follow-up Directives Executed:

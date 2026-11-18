@@ -2,7 +2,7 @@
 
 ## 1. Observation
 - **Operational Alignment**: All 15 Numina enterprise agent divisions (numina-accounting, numina-apple-team, numina-compliance-risk, numina-engineering-cio, numina-federal-capture, numina-finance-treasury, numina-crypto-monitor, numina-google-play-team, numina-google-enterprise, numina-legal, numina-growth-matrix, numina-publicity-narrative, numina-strategy, numina-website-soc, vengeance-independent-review) are fully aligned under verified governance and operational manifests.
-- **Cluster State Invariants**: Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, active Sprint Boundary GID `1219183110870936` (Forbidden GID `1219187222788173`), Authority Keypin `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce` (skott34-ed25519), and Guardian Keypin `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c` (numina-guardian-ed25519) are verified with absolute zero drift.
+- **Cluster State Invariants**: Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, active Sprint Boundary GID `1219183110870936` (Forbidden GID `1219187222788173`), Authority Keypin `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce` (skott34-ed25519), and Guardian Keypin `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c` (numina-guardian-ed25519) are verified with absolute zero drift. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - **Arithmetic & System Guarding**: Pure BigInt arithmetic at 1.5 Quadrillion scale, zero IEEE-754 floats, zero type coercion (`/^(?:0|[1-9]\d*)$/`), fail-closed string boundaries on account IDs, and zero self-hosted CI runners are strictly maintained across all rooms.
 - **Task & Swarm Management**:
   - Background cron tasks (progress reporting and liveness monitoring) cleanly cancelled and terminated per user command (`manage_task`).
@@ -25,7 +25,7 @@ Governance parity, regression invariant guarding, and zero-drift operational ali
 
 ## 5. Verification Method
 - Invariant verification against pinned digests:
-  - Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`
+  - Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - Authority Keypin: `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce`
   - Guardian Keypin: `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c`
   - Active Sprint GID: `1219183110870936`

@@ -94,7 +94,7 @@ and developer workflows from the DeepLearning.AI specialization by Andrew Ng and
 Before completing any engineering task, writing code, or committing diffs:
 1. **Provenance Invariant Preservation**:
    - Ensure modifications do not compromise or drift the canonical state root:
-     `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+     `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Adhere strictly to RFC 8785 canonical JSON formatting (sorted keys, no extraneous whitespace, UTF-8 without BOM).
 2. **Dual-Engine Test Verification**:
    - Execute the 19-point verification suite:

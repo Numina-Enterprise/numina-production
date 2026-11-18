@@ -7,7 +7,7 @@
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
 **Parent Agent**: `parent` (`6fa40ce0-dc24-4a9c-909e-15f39813b342`)  
 **Timestamp**: 2026-10-29T01:07:00Z  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936` (Forbidden: `1219187222788173`)  
 **Otter-Raft Singularity Protocol Motto**: *"Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."*
 
@@ -29,7 +29,7 @@ All four requirements defined in `ORIGINAL_REQUEST.md` for Milestone 2 have been
    - All 15 Numina enterprise agent divisions are aligned and operational across governance contracts (`AGENTS.md`), mesh router (`numina-mesh-router.mjs`), autonomous swarm runner (`swarm-dispatcher.mjs`), and parallel deployer (`deploy-divisions.mjs`).
    - Dynamic parallel swarm deployment was executed, archiving physical immutable deployment records to `numina-agent-swarm/deployments/swarm-deployment-dep-<timestamp>.json` with 15/15 active divisions and 64-char SHA-256 proof digests.
 2. **R2: Cluster State Root & Protocol Invariants**:
-   - Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` is cryptographically asserted across smart contracts (`NuminaTreasuryReserve.sol`), financial engines, swarm dispatchers, web origins, and provenance manifests with zero drift.
+   - Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` is cryptographically asserted across smart contracts (`NuminaTreasuryReserve.sol`), financial engines, swarm dispatchers, web origins, and provenance manifests with zero drift. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Otter-Raft Singularity Protocol verbatim motto is embedded and verified across codebase files, deployment ledgers, and test suites.
    - Verified Asana Sprint GID `1219183110870936` is pinned, with fail-closed rejection of forbidden GID `1219187222788173`.
 3. **R3: Type Safety, Coercion Prevention & Null Boundaries**:
@@ -77,7 +77,7 @@ All four requirements defined in `ORIGINAL_REQUEST.md` for Milestone 2 have been
 
 Milestone 2 is formally completed, fully aligned, certified clean, and passed by the multi-agent verification gate:
 - [x] All 15 division operations execute and complete successfully without runtime failures.
-- [x] Cluster State Root verified as `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+- [ ] Cluster State Root QUARANTINED — not verified: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - [x] Verified Sprint GID matches `1219183110870936` across all manifests and logs.
 - [x] Zero type coercion verified across all integer/BigInt financial arithmetic and string parsing.
 - [x] Null, undefined, and optional boundary checks pass cleanly across all data models and dispatch payloads.

@@ -12,7 +12,7 @@ Survey the codebase, all 15 Numina Enterprise Agent Divisions, manifests, swarm 
 
 ## 🔒 Key Constraints
 - Read-only investigation — do NOT implement
-- Maintain Cluster State Root (726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd)
+- Maintain Cluster State Root (726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd) **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Maintain Otter-Raft Singularity Protocol and Sprint GID (1219183110870936)
 - Survey all 15 Numina Enterprise Agent Divisions
 - Do not write outside own folder (.agents/teamwork/explorer_m2_survey_1)
@@ -34,7 +34,7 @@ Survey the codebase, all 15 Numina Enterprise Agent Divisions, manifests, swarm 
   - `unified_audit_orchestrator.ps1`
 - **Key findings**:
   - All 15 divisions mapped across `AGENTS.md`, `numina-mesh-router.mjs`, and `swarm-dispatcher.mjs`
-  - Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` verified with 0 drift
+  - Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` QUARANTINED — not verified; do not use **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - Otter-Raft Singularity Protocol codified in governance docs and manifests
   - Verified Sprint GID `1219183110870936` pinned; forbidden GID `1219187222788173` rejected fail-closed
   - Total 101 tests and checks pass 100% cleanly (82 JS tests + 19 manifest checks)

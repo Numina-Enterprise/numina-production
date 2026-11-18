@@ -34,7 +34,7 @@ node --test tests/e2e-suite.test.mjs
 When updating bound documents in `docs/`:
 1. **Strip Volatile Fields:** Remove `multiSignature`, `clusterStateRootSha256`, and `manifestSha256`.
 2. **Canonicalize:** Apply RFC 8785 canonical serialization (sorted keys, zero whitespace, UTF-8).
-3. **Derive State Root:** `clusterStateRootSha256 = sha256(canonicalPayload)` (baseline: `726e35da14...`).
+3. **Derive State Root:** `clusterStateRootSha256 = sha256(canonicalPayload)` (baseline: `726e35da14...`). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 4. **Construct Binary Signing Transcript:**
    ```
    Buffer.from("NUMINA-PROVENANCE-MANIFEST-V1\n" + clusterStateRootSha256 + "\n" + canonicalPayloadString, 'utf8')

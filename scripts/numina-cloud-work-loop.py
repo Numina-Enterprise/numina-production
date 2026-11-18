@@ -31,7 +31,7 @@ CONFIG = ROOT / 'config/numina-cloud-work.v1.json'
 MANIFEST = ROOT / 'config/numina-workspaces.v1.json'
 LEDGER = ROOT / 'config/numina-agentforce-tasks.v1.json'
 NODE_CONFIG = ROOT / 'config/numina-node26.v1.json'
-NODE = Path('/workspace/.numina-tools/node-v26.11.1-linux-x64/bin/node')
+NODE = Path('/workspace/.numina-tools/node-v26.13.1-linux-x64/bin/node')
 INSTALL = NODE.parent.parent / 'numina-installation.json'
 TEAMS = {'engineering', 'deployment', 'proofs', 'signatures', 'review'}
 TASK_IDS = {'agentforce-' + str(i).zfill(3) for i in range(1, 101)}
@@ -277,7 +277,7 @@ def task_records(ledger):
 def node_toolchain():
     pin, installation = doc(NODE_CONFIG), doc(INSTALL)
     archive = pin.get('artifacts', {}).get('linux-x64', {})
-    if (pin.get('version') != '26.11.1' or installation.get('version') != 'v26.11.1'
+    if (pin.get('version') != '26.13.1' or installation.get('version') != 'v26.13.1'
             or installation.get('archiveSha256') != archive.get('sha256')
             or installation.get('archive') != archive.get('filename')
             or doc(ROOT / 'package.json').get('engines', {}).get('node') != '26.x'):
@@ -290,7 +290,7 @@ def node_toolchain():
     version = subprocess.check_output([str(NODE), '--version'], text=True, timeout=10, env=node_env).strip()
     if stamp(NODE) != before:
         raise ValueError('NODE_EXECUTABLE_CHANGED_DURING_OBSERVATION')
-    if version != 'v26.11.1':
+    if version != 'v26.13.1':
         raise ValueError('NODE_EXECUTABLE_VERSION_MISMATCH')
     return {'version': version, 'executable': str(NODE), 'executableSha256': sha(binary),
             'installationRecordSha256': sha(raw(INSTALL)), 'officialArchiveSha256': archive['sha256'],
@@ -319,7 +319,7 @@ def local_json(path, payload=None):
 def cloud_preview():
     runtime, runtime_sha = local_json('/__numina/cloud-runtime')
     if (runtime.get('schema') != 'numina.cloud-preview-runtime.v1'
-            or runtime.get('canonicalRepository') != str(ROOT) or runtime.get('nodeVersion') != '26.11.1'
+            or runtime.get('canonicalRepository') != str(ROOT) or runtime.get('nodeVersion') != '26.13.1'
             or runtime.get('financialExecutionEnabled') is not False or runtime.get('productionWorkerActivated') is not False):
         raise ValueError('CLOUD_PREVIEW_RUNTIME_IDENTITY_MISMATCH')
     init, init_sha = local_json('/mcp', {'jsonrpc': '2.0', 'id': 'numina-cloud-initialize', 'method': 'initialize',

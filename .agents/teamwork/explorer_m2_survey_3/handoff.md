@@ -259,7 +259,7 @@ Google Cloud audit_gcp_resources.sh VALIDATED Target project-0317d6c9 bound & ve
 1. **Test Suite Baseline (Observation 1.1 & 1.2)**:
    The workspace contains 130 distinct automated verification checks distributed across Node.js (`node --test`), Python (`verify_manifest.py` in `.venv312`), OpenSSL 3.5.7, and PowerShell. All 130 checks execute with 0 failures, establishing a verified regression guard baseline.
 2. **Protocol & State Invariance (Observation 1.2.F & 1.3)**:
-   The Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` and Sprint GID `1219183110870936` are cryptographically pinned and validated across `provenance-manifest.json`, `numina-mesh-router.mjs`, `swarm-dispatcher.mjs`, `rwa-tokenization-engine.mjs`, `treasury-engine.mjs`, `unified_audit_orchestrator.ps1`, and `verify_site.mjs`.
+   The Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` and Sprint GID `1219183110870936` are cryptographically pinned and validated across `provenance-manifest.json`, `numina-mesh-router.mjs`, `swarm-dispatcher.mjs`, `rwa-tokenization-engine.mjs`, `treasury-engine.mjs`, `unified_audit_orchestrator.ps1`, and `verify_site.mjs`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. **M2 Coverage Gap Identification (Observations 1.1, 1.2, 1.3)**:
    By analyzing the current test suites against the Milestone 2 requirements (R1, R2, R3, R4) from `ORIGINAL_REQUEST.md`:
    - **R1 (Division Execution Gap)**: While `swarm-dispatcher.mjs` executes and generates SHA-256 proof digests for 15 divisions (`runParallelSwarmCycle`), each division task is currently a structured simulation. No end-to-end integration test exists that triggers the real operational scripts (e.g. running `windows-maintenance-suite.ps1 -WhatIf` for `numina-engineering-cio`, executing `validate-staging-env.mjs` for `numina-finance-treasury`, or executing `verify_site.mjs` for `numina-website-soc`).
@@ -285,7 +285,7 @@ Google Cloud audit_gcp_resources.sh VALIDATED Target project-0317d6c9 bound & ve
 1. **Baseline Invariant Integrity**: All existing test suites (130 checks across 6 projects and audit orchestrators) pass cleanly with 100% pass rates. Zero regressions exist in the current baseline.
 2. **Milestone 2 Priority Gaps**:
    - **Gap 1 (R1 Integration)**: Connect `swarm-dispatcher.mjs` to invoke concrete division actions rather than relying solely on cryptographic proof digest generation.
-   - **Gap 2 (R2 Workspace-Wide Invariant Suite)**: Create an end-to-end invariant test verifying that all generated artifacts (such as `deployments/swarm-deployment-*.json`) strictly adhere to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` and Sprint GID `1219183110870936`.
+   - **Gap 2 (R2 Workspace-Wide Invariant Suite)**: Create an end-to-end invariant test verifying that all generated artifacts (such as `deployments/swarm-deployment-*.json`) strictly adhere to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` and Sprint GID `1219183110870936`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - **Gap 3 (R3 Strict Zero Coercion)**: Refactor `numina-financial-core/src/money.mjs:parseMinorUnits` to reject JavaScript `number` primitives, requiring explicit `BigInt` or canonical string representations to satisfy zero coercion. Expand null/undefined boundary fuzzing across `camt-parser.mjs` and `stripe-treasury-bridge.mjs`.
 
 ---
@@ -335,5 +335,5 @@ To independently reproduce and verify every finding in this report, execute the 
 
 7. **Invalidation Conditions**:
    - Any test failure among the 130 enumerated checks.
-   - Alteration of the Cluster State Root from `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Alteration of the Cluster State Root from `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Alteration of Sprint GID from `1219183110870936` or injection of forbidden GID `1219187222788173`.

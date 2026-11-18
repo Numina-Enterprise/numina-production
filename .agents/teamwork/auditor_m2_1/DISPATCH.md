@@ -7,7 +7,7 @@ Perform independent forensic integrity verification of all Milestone 2 changes:
    - Verify that `formatUsdFromMicro` genuinely implements pure BigInt arithmetic without hidden `Number()` or float conversions.
    - Verify that all 15 divisions in `deploy-divisions.mjs` and `swarm-dispatcher.mjs` genuinely execute tasks and produce legitimate SHA-256 digests.
 2. Invariant & Cryptographic Integrity:
-   - Verify Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Verify Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Verify Sprint GID `1219183110870936` and Otter-Raft Singularity Protocol.
    - Run `manifest-verifier` Python and OpenSSL verification.
 3. Test Authenticity & Regression Guard:
@@ -30,6 +30,6 @@ Perform an independent forensic audit of all Milestone 2 changes:
 1. Verify that all implementations in numina-financial-core and numina-agent-swarm are genuine (no hardcoded outputs, dummy facades, test circumvention).
 2. Check pure BigInt formatUsdFromMicro vs float arithmetic.
 3. Check 15-division execution authenticity, deployment records, and SHA-256 proof digests.
-4. Verify Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Sprint GID 1219183110870936, and Otter-Raft Singularity Protocol.
+4. Verify Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Sprint GID 1219183110870936, and Otter-Raft Singularity Protocol. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 5. Run manifest verifier and test suites.
 Deliver your verdict: CLEAN or INTEGRITY VIOLATION with full forensic evidence in C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\auditor_m2_1\handoff.md and notify me when complete.

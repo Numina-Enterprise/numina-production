@@ -1,7 +1,7 @@
 # BRIEFING — 2026-10-29T01:06:30Z
 
 ## Mission
-Advance to Milestone 2 across all 15 Numina Enterprise Agent Divisions, maintaining Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Otter-Raft Singularity Protocol, sprint GID 1219183110870936, type safety & zero-coercion BigInt arithmetic, and 100% pass on 90+ regression tests.
+Advance to Milestone 2 across all 15 Numina Enterprise Agent Divisions, maintaining Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Otter-Raft Singularity Protocol, sprint GID 1219183110870936, type safety & zero-coercion BigInt arithmetic, and 100% pass on 90+ regression tests. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ## 🔒 My Identity
 - Archetype: teamwork_orchestrator
@@ -36,7 +36,7 @@ Advance to Milestone 2 across all 15 Numina Enterprise Agent Divisions, maintain
 - NEVER write, modify, or create source code files directly.
 - NEVER run build/test commands yourself — require workers to do so.
 - NEVER investigate or explore the problem at the code level — dispatch Explorers for technical investigation.
-- Always enforce Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Otter-Raft Singularity Protocol, sprint GID 1219183110870936.
+- Always enforce Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd, Otter-Raft Singularity Protocol, sprint GID 1219183110870936. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Zero type coercion across BigInt, string, numeric types; no float arithmetic.
 - Comprehensive null/undefined boundaries.
 - Never reuse a subagent after it has delivered its handoff — always spawn fresh.
@@ -56,7 +56,7 @@ Advance to Milestone 2 across all 15 Numina Enterprise Agent Divisions, maintain
 - challenger_m2_1 delivered CONFIRMED verdict (mathematical oracle agreement at 1.5Q scale, 57-case type fuzzing, 169 tests passing).
 - challenger_m2_2 delivered CONFIRMED verdict (fail-closed root drift, sprint poisoning, type/null fault injection).
 - auditor_m2_1 delivered CLEAN verdict (zero integrity violations, genuine implementations, zero facades).
-- All 15 divisions confirmed active and verified with Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd and Sprint GID 1219183110870936.
+- All 15 divisions confirmed active and verified with Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd and Sprint GID 1219183110870936. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Gate Result: PASS.
 
 ## Team Roster

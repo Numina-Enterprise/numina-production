@@ -3,7 +3,7 @@
 ## Objective
 Survey the codebase for Milestone 2:
 1. Identify all 15 Numina Enterprise Agent Divisions (AGENTS.md, GEMINI.md, manifests, swarm runners `run_swarm.ps1`, `manifest-verifier/`, `unified_audit_orchestrator.ps1`).
-2. Identify all references, usages, and validation of Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`), Otter-Raft Singularity Protocol, and Sprint GID (`1219183110870936`).
+2. Identify all references, usages, and validation of Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`), Otter-Raft Singularity Protocol, and Sprint GID (`1219183110870936`). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. Determine what division operations and manifests need to be updated, executed, or verified for Milestone 2.
 4. Output a comprehensive report to `C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\explorer_m2_survey_1\handoff.md`.
 
@@ -20,7 +20,7 @@ Your identity and assignment:
 MANDATORY: Read C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\ORIGINAL_REQUEST.md before starting work.
 Investigate:
 1. All 15 Numina Enterprise Agent Divisions (AGENTS.md, GEMINI.md, manifests, swarm runners run_swarm.ps1, manifest-verifier/, unified_audit_orchestrator.ps1).
-2. All references, usages, and validation of Cluster State Root (726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd), Otter-Raft Singularity Protocol, and Sprint GID (1219183110870936).
+2. All references, usages, and validation of Cluster State Root (726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd), Otter-Raft Singularity Protocol, and Sprint GID (1219183110870936). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. Current state of division manifests and what operations must be executed/aligned for Milestone 2.
 
 Write your findings to C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\explorer_m2_survey_1\handoff.md and notify me when complete.

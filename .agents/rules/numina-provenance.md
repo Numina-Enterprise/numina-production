@@ -10,7 +10,7 @@ When inspecting, generating, or verifying Numina provenance manifests:
 1. **State Root Derivation**:
    - The cluster state root (`clusterStateRootSha256` and `manifestSha256`) MUST equal the SHA-256 digest of the canonical JSON body stripped of `multiSignature`, `manifestSha256`, and `clusterStateRootSha256`.
    - Always apply RFC 8785 canonical JSON formatting (sorted keys, no extraneous whitespace, UTF-8 encoding without BOM).
-   - Expected State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Expected State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 2. **Deterministic Signing Transcript**:
    - Signatures MUST NOT be computed over raw hashes or unformatted JSON alone.

@@ -25,14 +25,14 @@ Direct inspection of authoritative governance specifications (`ORIGINAL_REQUEST.
 - **Subdirectory `numina-doc-alignment/GEMINI.md`**: Contains 32 lines structured into 4 sections, but completely lacks Invariants 3, 4, 9, and 10.
 - **Rules Directory `rules/numina-operational-invariants.md`**: Codifies 4 core rules:
   1. Provenance Manifest & Policy Decoupling (`--policy <path>` preserves canonical body).
-  2. Institutional RWA & Digital Asset Invariants (strict 6-decimal micro-unit `BigInt` arithmetic, 1:1 solvency validation without floating-point approximations, anchoring to root `726e35da14...`).
+  2. Institutional RWA & Digital Asset Invariants (strict 6-decimal micro-unit `BigInt` arithmetic, 1:1 solvency validation without floating-point approximations, anchoring to root `726e35da14...`). **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   3. PowerShell CLI Execution Standards (pass `[switch]` parameters as flags, not boolean literals).
   4. CI/CD & Build Invariant: Deny Self-Hosted Runners.
 
 ### 1.2 Pinned Invariants and Identity Constants
 - **Authority Lead & Source of Truth**: Samuel J. Kott (`skott34-ed25519`, Operator: SK Consulting LLC, Iowa, USA). Keypin SPKI SHA-256: `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce`.
 - **Guardian Keypin**: `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c` (`numina-guardian-ed25519`).
-- **Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+- **Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - **Asana Sprint GID**: Strictly verified `1219183110870936`; forbidden/quarantined GID `1219187222788173`.
 - **Production Cloud Scope**: Project `project-0317d6c9-e943-409e-83f`, Primary Zone `us-central1-a`.
 - **Canonical Origin**: `https://www.numinalabs.xyz`.
@@ -72,7 +72,7 @@ Direct inspection of authoritative governance specifications (`ORIGINAL_REQUEST.
 - **Institutional RWA Rails (`rwa-tokenization-engine.mjs`)**:
   - Asset types: `TOKENIZED_US_TREASURY_MMF` (BlackRock BUIDL, Franklin FOBXX/BENJI), `TOKENIZED_TREASURY_NOTE` (Ondo USDY), `QUALIFIED_BANK_DEPOSIT` (BofA CashPro), `TOKENIZED_PUBLIC_EQUITY`.
   - Precision: 6 decimals micro-units (`unitsMicro`, `navUsdMicro`, `totalValueMicroUsd = (unitsMicro * navUsdMicro) / 1_000_000n`).
-  - Anchored via SHA-256 attestation hash to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+  - Anchored via SHA-256 attestation hash to Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 ### 1.4 Deep Dive into Requirement R3: Type Safety, Coercion Prevention & Null Boundaries
 Direct empirical testing and code audit revealed critical findings:
@@ -206,7 +206,7 @@ Direct empirical testing and code audit revealed critical findings:
 1. **Premise 1 (Authority and State Invariants)**:
    Per `ORIGINAL_REQUEST.md` and `GEMINI.md`, Milestone 2 must preserve:
    - Authority Lead: Samuel J. Kott (`skott34-ed25519`).
-   - Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Cluster State Root: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Verified Sprint GID: `1219183110870936`.
    - All 15 Enterprise Agent Divisions operating concurrently without drift.
 

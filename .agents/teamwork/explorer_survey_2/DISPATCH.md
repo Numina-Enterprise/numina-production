@@ -31,5 +31,5 @@ When complete, send a message to caller Recipient: 6efa3343-a50c-40c2-829a-8740a
 
 ## 2026-10-28T22:16:57Z
 [Message] timestamp=2026-10-28T22:16:57Z sender=6efa3343-a50c-40c2-829a-8740af882873 priority=MESSAGE_PRIORITY_HIGH content=**Context**: New User Directive regarding Cluster State Root and Sprint GID
-**Content**: Note new user directive specifying Sprint GID 1219183110870936 and Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd across all 15 Numina divisions.
+**Content**: Note new user directive specifying Sprint GID 1219183110870936 and Cluster State Root 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd across all 15 Numina divisions. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Action**: Check if the repository's manifest verifier, Zero-Trust gateway pipeline, or provenance manifests reference or validate this Cluster State Root or Sprint GID.

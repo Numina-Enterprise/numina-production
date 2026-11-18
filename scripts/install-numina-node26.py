@@ -21,7 +21,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / 'config/numina-node26.v1.json'
-VERSION = '26.11.1'
+VERSION = '26.13.1'
 ORIGIN = 'https://nodejs.org/dist'
 
 

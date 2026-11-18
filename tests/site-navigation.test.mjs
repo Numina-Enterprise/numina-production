@@ -35,7 +35,7 @@ test('every website page shares the Numina design and complete primary navigatio
   }
   assert.notEqual(read('index.html'),read('frontier.html'));
   assert.match(read('index.html'),/class="service-pane"/);
-  assert.match(read('index.html'),/Institutional digital-asset infrastructure/);
+  assert.match(read('index.html'),/Engineering the Next Generation of Independent Intelligence/);
 });
 
 test('services and pricing combine scope, terms and the existing enterprise request routes once',()=>{

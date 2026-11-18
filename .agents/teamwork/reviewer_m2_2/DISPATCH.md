@@ -8,7 +8,7 @@ Perform an adversarial review of Milestone 2 implementation, attempting to break
    - Attempt null, undefined, whitespace, and injection attacks on `treasury-engine.mjs` (`getBalance`, `getNonce`, `initiateSettlement`, `attestSettlement`).
    - Attempt timestamp manipulation attacks on `stripe-treasury-bridge.mjs`.
 2. Adversarially stress test Requirements R1 & R2:
-   - Check for drift in Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Check for drift in Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Inject forbidden Sprint GID `1219187222788173` to confirm fail-closed defense.
    - Check if any of the 15 divisions fail or are skipped during parallel swarm cycle.
 3. Verify test suites and governance parity.

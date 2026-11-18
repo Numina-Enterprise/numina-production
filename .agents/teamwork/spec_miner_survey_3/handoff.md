@@ -28,7 +28,7 @@ All governance files were read as raw binary buffers and evaluated for BOM (`0xE
 ---
 
 ## 2. 15 Enterprise Agent Divisions & Room Mapping
-Governed under Section 4 of `AGENTS.md`, bound exclusively to **Verified Sprint GID `1219183110870936`** (strictly rejecting forbidden GID `1219187222788173`) and **Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`**:
+Governed under Section 4 of `AGENTS.md`, bound exclusively to **Verified Sprint GID `1219183110870936`** (strictly rejecting forbidden GID `1219187222788173`) and **Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`**: **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 1. **`numina-accounting`** (Room: `numina-accounting`): ISO 20022 camt.053 / BAI2 statement reconciliation, triple-entry BigInt ledger balancing.
 2. **`numina-apple-team`** (Room: `numina-apple-deployment`): macOS audit suite (`audit_mac_acls.sh`, `audit_mac_services.sh`, `audit_mac_sizes.sh`), Swift 6 strict concurrency, Metal shaders, FileVault 2, and Xcode Cloud.
@@ -69,7 +69,7 @@ Governed under Section 4 of `AGENTS.md`, bound exclusively to **Verified Sprint 
 ### D. Stripe Dashboard App (`numina-finance-treasury`)
 - Location: `scratch/numina-stripe-app/`
 - Manifest: `stripe-app.json` (ID: `com.numinalabs.treasury` v0.1.0)
-- Views: Context Drawer (`App.tsx`) displaying NUSD `UNPAUSED_AND_ACTIVE` and State Root `726e35da14...`; Customer Detail View (`CustomerDetailView.tsx`) displaying atomic BigInt settlements.
+- Views: Context Drawer (`App.tsx`) displaying NUSD `UNPAUSED_AND_ACTIVE` and State Root `726e35da14...`; Customer Detail View (`CustomerDetailView.tsx`) displaying atomic BigInt settlements. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Unit Test: `test.js` verified passing.
 - Deployment Runbook: `README.md` following [Stripe Apps Upload & Install Guide](https://docs.stripe.com/stripe-apps/upload-install-app).
 
@@ -84,4 +84,4 @@ Governed under Section 4 of `AGENTS.md`, bound exclusively to **Verified Sprint 
 - **`GEMINI.md`**: Fast-path document aligned to 44 sections, linking directly to `AGENTS.md` with zero drift.
 - **Root Authority Keypin**: `46b301f039fcf3fdfa7eeda9cacd9a8614c3c9e9e4e88a47f53c12fc859be8ce`.
 - **Guardian Keypin**: `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c`.
-- **Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+- **Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.

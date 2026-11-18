@@ -60,7 +60,7 @@ Every verification run within this suite strictly enforces the workspace rules:
    - Guardian (`numina-guardian-ed25519`) fingerprint must match `465d10c9e7e1ff1ba2e740773c8de67b349ec6b8ffbb9fe2e584d902c6c19b6c`.
    - Documents must be clean UTF-8 with zero BOM (`EF BB BF`) and zero mojibake (`C3 A2 E2 82 AC`).
 2. **Rule Binding: `numina-provenance.md`**:
-   - Cluster state root must equal `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Cluster state root must NOT equal (QUARANTINED 2026-10-23 — do not enforce) `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Fail-closed execution: any single failure halts downstream operations immediately.
 3. **Rule Binding: `security-coexistence.md`**:
    - Treat `RealTimeProtectionEnabled: False` in Defender as normal when McAfee is active. Check `root/SecurityCenter2` first.

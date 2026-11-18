@@ -12,7 +12,7 @@ Implement Milestone 2 across financial core, agent swarm, and governance documen
 
 ## 🔒 Key Constraints
 - DO NOT CHEAT: Genuine logic only, no hardcoded test expectations or facades.
-- Preserve Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd.
+- Preserve Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 - Preserve Verified Sprint GID: 1219183110870936 (forbidden: 1219187222788173).
 - Preserve Otter-Raft Singularity Protocol.
 - Float elimination at 1.5Q scale in rwa-tokenization-engine.mjs (pure BigInt math).

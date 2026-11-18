@@ -154,7 +154,7 @@ All test suites across the workspace were executed independently via command-lin
    Observation 1.2 confirms that `stripe-treasury-bridge.mjs` enforces `/^\d+$/` on timestamp components before parsing, strictly blocking decimal, suffix, and negative timestamps, while enforcing constant-time HMAC comparison and ±300s replay tolerance windows.
 
 4. **Premise 4 (15-Division Concurrency & Cryptographic Invariants)**:
-   Observations 1.1 and 1.2 prove that the Autonomous Swarm Dispatcher runs all 15 divisions concurrently in a single parallel cycle without failures, writes immutable deployment records to disk, asserts Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, blocks forbidden sprint GID `1219187222788173`, and binds each division task to a SHA-256 proof digest, satisfying Requirements R1 and R2.
+   Observations 1.1 and 1.2 prove that the Autonomous Swarm Dispatcher runs all 15 divisions concurrently in a single parallel cycle without failures, writes immutable deployment records to disk, asserts Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, blocks forbidden sprint GID `1219187222788173`, and binds each division task to a SHA-256 proof digest, satisfying Requirements R1 and R2. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 5. **Premise 5 (Regression Immunity & Zero Integrity Violations)**:
    Observation 1.1 confirms that all 155 automated checks pass across all 9 workspaces and lanes. Code review verified that no tests rely on hardcoded shortcuts, facades, or fabricated logs; all logic is genuine and verifiable.
@@ -218,4 +218,4 @@ To independently verify the adversarial findings and test suites from `C:\Users\
    - Any float precision loss detected at 1.5 Quadrillion scale.
    - Any type coercion permitted by `parseMinorUnits` or `treasury-engine.mjs`.
    - Any failure among the 155 workspace checks.
-   - Any drift in Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Any drift in Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.

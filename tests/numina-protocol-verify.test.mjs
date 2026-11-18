@@ -1,4 +1,5 @@
-// numina-protocol-verify.test.mjs — verify-only round-trip for the Numina Protocol.
+// numina-protocol-verify.test.mjs — verify-only round-trip for the Singularity Protocol.
+// Samuel J. Kott, SK Consulting LLC, operating under Numina Labs.
 //
 // What this proves, without ever signing as the Authority:
 //  - the pinned Authority + Guardian public keys in numina-protocol.json are
@@ -45,7 +46,7 @@ const PAYLOAD = {
 
 test('protocol file loads with the approved version and constant', () => {
   const protocol = loadProtocol();
-  assert.equal(protocol.name, 'The Numina Protocol');
+  assert.equal(protocol.name, 'The Singularity Protocol');
   assert.equal(protocol.productionVersion, '5.0.0');
   assert.equal(protocol.constants.gamma.value, 0.2375);
 });

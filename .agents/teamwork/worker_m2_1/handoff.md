@@ -5,7 +5,7 @@
 **Working Directory**: `C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\worker_m2_1\`  
 **Timestamp**: 2026-10-29T00:54:30Z  
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936` (Forbidden: `1219187222788173`)  
 **Singularity Motto**: *"Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."*
 
@@ -77,7 +77,7 @@ Direct empirical evidence obtained through code inspection, implementation, test
 3. **Comprehensive Invariant Test Suite in `m2-division-execution.test.mjs`**:
    - Created `numina-agent-swarm/tests/m2-division-execution.test.mjs` asserting:
      - All 15 division operations and room mappings.
-     - Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+     - Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
      - Verified Sprint GID `1219183110870936` and rejection of forbidden GID `1219187222788173`.
      - Otter-Raft Singularity Protocol verbatim motto alignment.
      - Deployment ledger disk verification.
@@ -120,7 +120,7 @@ Every suite across the workspace was executed and passed with 100% success rate:
    JavaScript's native `BigInt()` silently coerces booleans (`false` -> `0n`) and empty strings (`""` -> `0n`). In financial settlement engines, silent coercion can mask corrupted data payloads. Validating all string amount units against `/^(?:0|[1-9]\d*)$/` before BigInt conversion and requiring explicit non-empty strings on account lookups guarantees that malformed, null, undefined, or boolean inputs trigger immediate fail-closed exceptions (`TypeError` or `INVALID_AMOUNT`).
 
 3. **Premise 3 (15-Division Multi-Agent Swarm Concurrency)**:
-   All 15 divisions cataloged in `AGENTS.md` and mapped in `DIVISIONS` execute concurrently within `runParallelSwarmCycle()`. Binding each task execution to a timestamp, nonce, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, and Sprint GID `1219183110870936` generates an immutable cryptographic SHA-256 proof chain preserved in `deployments/swarm-deployment-dep-<timestamp>.json`.
+   All 15 divisions cataloged in `AGENTS.md` and mapped in `DIVISIONS` execute concurrently within `runParallelSwarmCycle()`. Binding each task execution to a timestamp, nonce, Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`, and Sprint GID `1219183110870936` generates an immutable cryptographic SHA-256 proof chain preserved in `deployments/swarm-deployment-dep-<timestamp>.json`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 
 4. **Premise 4 (Governance Rule Parity Across Enclaves)**:
    The workspace governance constitution advanced to 45 sections (Section 44: Unified Cross-Platform Audits & Section 45: Self-Hosted Runner Denial). Replicating these sections and the 10 Critical Runtime Invariants across root and `numina-doc-alignment/` with exact byte matching ensures zero documentation rot, zero encoding drift, and 100% adherence to the Zero-Trust mandate.
@@ -189,4 +189,4 @@ To independently verify all changes, execute the following commands from `C:\Use
    - Float arithmetic detected at 1.5 Quadrillion scale.
    - Any test failure among the 155 enumerated checks.
    - Any byte drift between root and `numina-doc-alignment` governance files.
-   - Any alteration of Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` or Sprint GID `1219183110870936`.
+   - Any alteration of Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd` or Sprint GID `1219183110870936`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.

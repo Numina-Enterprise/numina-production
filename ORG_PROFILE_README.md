@@ -1,6 +1,6 @@
 # Numina Enterprise Organization Architecture Ledger
 ================================================================================
-Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd
+Cluster State Root: 726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 Authority: Samuel J. Kott (skott34-ed25519)
 Guardian: numina-guardian-ed25519
 Invariant: 100% Data Preservation | Zero Branch Deletion | Pure Merging & Archival

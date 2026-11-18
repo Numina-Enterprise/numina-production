@@ -4,7 +4,7 @@
 **Working Directory**: `C:\Users\sam\.gemini\antigravity\scratch\.agents\teamwork\explorer_m2_survey_1`  
 **Target Workspace**: `C:\Users\sam\.gemini\antigravity\scratch`  
 **Governing Authority**: Samuel J. Kott (`skott34-ed25519`)  
-**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`  
+**Cluster State Root**: `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`   **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 **Verified Sprint GID**: `1219183110870936` (Forbidden: `1219187222788173`)  
 **Otter-Raft Singularity Protocol Motto**: *"Like otters holding hands so they dont drift apart while resting, every agent stays connected without losing its independence. One identity. One purpose. Many coordinated agents. Singularity confirmed. NUMINA aligned."*
 
@@ -62,13 +62,13 @@ The workspace registers exactly 15 Numina Enterprise Agent Divisions across gove
   - Google Cloud (`audit_gcp_resources.sh` bound to `project-0317d6c9-e943-409e-83f`)
 
 ### 1.2 Cluster State Root, Otter-Raft Singularity Protocol, & Sprint GID
-1. **Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`)**:
+1. **Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`)**: **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Exact derivation: SHA-256 digest of canonical RFC 8785 serialized JSON body of `numina-doc-alignment/provenance-manifest.json` (excluding root fields and multi-signature). Length of canonical body: exactly 1,592 bytes; signing transcript length: 1,687 bytes.
    - Pinned references:
      - `AGENTS.md`: Lines 6, 16, 211
      - `GEMINI.md`: Lines 6, 14
-     - `numina-smart-contracts/contracts/NuminaTreasuryReserve.sol`: Line 18 (`bytes32 public constant CLUSTER_STATE_ROOT = 0x726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd;`)
-     - `numina-financial-core/src/rwa-tokenization-engine.mjs`: Line 11 (`export const CANONICAL_CLUSTER_STATE_ROOT = '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd';`)
+     - `numina-smart-contracts/contracts/NuminaTreasuryReserve.sol`: Line 18 (`bytes32 public constant CLUSTER_STATE_ROOT = 0x726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd;`) **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
+     - `numina-financial-core/src/rwa-tokenization-engine.mjs`: Line 11 (`export const CANONICAL_CLUSTER_STATE_ROOT = '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd';`) **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
      - `numina-agent-swarm/src/swarm-dispatcher.mjs`: Line 3 (`export const CLUSTER_STATE_ROOT = '...';`)
      - `numina-stripe-app/src/views/App.tsx`: Line 15 (`const STATE_ROOT = "...";`)
      - `numinalabs-web/index.html`: Line 116 (`STATE_ROOT = "..."`)
@@ -117,12 +117,12 @@ Every existing test and audit suite was executed directly and passed with zero f
 ## 2. Logic Chain
 
 1. **Premise 1 (Authority and State Invariants)**:
-   The workspace is governed by Samuel J. Kott (`skott34-ed25519`) under Zero-Trust fail-closed security. The Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`) is derived deterministically from the canonical RFC 8785 JSON body of `provenance-manifest.json` and must remain invariant across all downstream artifacts.
+   The workspace is governed by Samuel J. Kott (`skott34-ed25519`) under Zero-Trust fail-closed security. The Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`) is derived deterministically from the canonical RFC 8785 JSON body of `provenance-manifest.json` and must remain invariant across all downstream artifacts. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 2. **Premise 2 (15 Division Synchronization)**:
    All 15 divisions are cataloged in `AGENTS.md` and mapped in both `numina-mesh-router.mjs` and `swarm-dispatcher.mjs`. In Milestone 1, an initial swarm deployment ledger (`swarm-deployment-dep-1793233186001.json`) confirmed the baseline deployment of all 15 divisions.
 3. **Premise 3 (Milestone 2 Advancement Requirements)**:
    Per `ORIGINAL_REQUEST.md` (lines 72–111), advancing to Milestone 2 requires:
-   - Synchronized execution of all 15 division operations bound to Sprint GID `1219183110870936` and Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`.
+   - Synchronized execution of all 15 division operations bound to Sprint GID `1219183110870936` and Cluster State Root `726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
    - Continuous verification of zero type coercion (BigInt vs float/number/string) and null/undefined/"None" boundary safety across financial rails and dispatch payloads.
    - Guarding against regressions across all 101 existing tests and manifest verifications.
 4. **Premise 4 (Read-Only Survey Verification)**:
@@ -142,7 +142,7 @@ Every existing test and audit suite was executed directly and passed with zero f
 
 The repository is in a pristine, fully verified state with zero regressions:
 1. **15 Divisions**: Fully defined, mapped, and verified in `AGENTS.md`, `GEMINI.md`, `swarm-dispatcher.mjs`, and `numina-mesh-router.mjs`.
-2. **Protocol Invariants**: The Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`), Otter-Raft Singularity Protocol (`Singularity confirmed. NUMINA aligned.`), and Sprint GID (`1219183110870936`) are intact and verified across 100% of references.
+2. **Protocol Invariants**: The Cluster State Root (`726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd`), Otter-Raft Singularity Protocol (`Singularity confirmed. NUMINA aligned.`), and Sprint GID (`1219183110870936`) are QUARANTINED — not verified. **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
 3. **Milestone 2 Alignment Plan**:
    - Execute Milestone 2 parallel swarm dispatch cycle using `deploy-divisions.mjs` / `run_swarm.ps1` to produce the Milestone 2 deployment ledger.
    - Maintain institutional RWA tokenization, BigInt financial precision, and null safety invariants.

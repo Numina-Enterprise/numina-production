@@ -31,7 +31,7 @@ Perform independent forensic integrity audit of all Milestone 2 changes across n
   - Source code analysis (hardcoded outputs, facade implementations, fabricated artifacts) -> CLEAN
   - Pure BigInt arithmetic vs float in formatUsdFromMicro -> VERIFIED (11 edge cases tested)
   - 15-division execution authenticity, deployment records, SHA-256 proof digests -> VERIFIED
-  - Invariant checks (Cluster State Root 726e35da..., Sprint GID 1219183110870936, Otter-Raft Singularity Protocol) -> VERIFIED
+  - Invariant checks (Cluster State Root 726e35da..., Sprint GID 1219183110870936, Otter-Raft Singularity Protocol) -> QUARANTINED **QUARANTINED 2026-10-23** — see `state-root-726e-quarantine-2026-10-23.md`; do not use as a verified root.
   - Independent build & test execution across all test suites and manifest verifier (154+ checks) -> ALL PASS (0 failures)
   - Stress testing & adversarial failure mode analysis -> PASSED
 - Checks remaining: none
