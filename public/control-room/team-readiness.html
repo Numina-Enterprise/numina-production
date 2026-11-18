@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NUMINA 5 | Control Room — Teams & Cloudflare</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#0c1220;color:#e9efff}
+body{max-width:1100px;margin:0 auto;padding:clamp(16px,3vw,44px);line-height:1.55}
+h1,h2{line-height:1.2}h1{font-size:clamp(28px,4vw,45px);margin-bottom:8px}h2{margin-top:36px}
+small,.muted{color:#a5b4cd}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px}
+.card{padding:18px;background:#172238;border:1px solid #35465d;border-radius:14px}
+.card h3{margin:0 0 7px}.tag{font-size:.77rem;padding:4px 9px;border-radius:100px;background:#344259;color:#eff4fe;white-space:nowrap}
+header{border-bottom:1px solid #35465d;padding-bottom:20px}
+a{color:#95c4ff}table{width:100%;border-collapse:collapse;font-size:.94rem}th,td{padding:11px;text-align:left;border-bottom:1px solid #35465d}th{color:#bdd0ee}
+.warning{border-left:4px solid #f2c36b;padding:14px 18px;background:#222637;border-radius:6px}
+</style></head><body><header><small>NUMINA / NEURAL NETWORK / CONTROL ROOM</small><h1>Teams and Cloudflare readiness</h1>
+<p class="muted">Source proposal only. This page does not report live team execution, Cloudflare account state, WARP connectivity, deployment or production approval.</p>
+<div class="warning"><strong>Release disposition: HOLD.</strong> Real GGUF generation, signed release evidence, runner acceptance and independent verification are unresolved.</div></header>
+<section><h2>Response teams</h2><div class="grid">
+<article class="card"><h3>White Team</h3><p>Configuration, connectivity, troubleshooting, recovery and CI diagnostics.</p><span class="tag">Activation unverified</span></article>
+<article class="card"><h3>Blue Team</h3><p>Defensive security, evidence review, defect retest and access-policy verification.</p><span class="tag">Activation unverified</span></article>
+<article class="card"><h3>Green Team</h3><p>Infrastructure health, backup testing, availability and rollback evidence.</p><span class="tag">Activation unverified</span></article>
+<article class="card"><h3>Red Team</h3><p>Independent adversarial review with read-only production posture.</p><span class="tag">Activation unverified</span></article>
+<article class="card"><h3>Gold Team</h3><p>Release-readiness coordination, evidence completeness and escalation. No signing or deployment authority.</p><span class="tag">New role / not activated</span></article>
+<article class="card"><h3>Agent Gamma</h3><p>Implementation and tests on review branches; independent verification required.</p><span class="tag">Activation unverified</span></article>
+</div></section>
+<section><h2>Cloudflare for numinalabs.xyz</h2><div class="grid">
+<article class="card"><h3>Public website / Cloudflare Worker</h3><p>Review source revision, DNS, edge routing, TLS, signed deployment artifacts, production health and rollback.</p><span class="tag">Live validation: NOT RUN</span></article>
+<article class="card"><h3>Private operator connectivity / WARP</h3><p>Review enrolled-device identity, posture, Zero Trust application policies, tunnel scope and denied-access tests. WARP is not public-site hosting.</p><span class="tag">Live validation: NOT RUN</span></article>
+</div></section>
+<section><h2>Release checkpoints</h2><table><thead><tr><th>Check</th><th>Status</th><th>Verification required</th></tr></thead><tbody>
+<tr><td>Cloudflare zone / DNS</td><td>NOT RUN</td><td>Provider readback</td></tr>
+<tr><td>Worker revision / routes</td><td>NOT RUN</td><td>Commit + digest + observed deployment</td></tr>
+<tr><td>TLS / redirects / headers</td><td>NOT RUN</td><td>Independent live edge checks</td></tr>
+<tr><td>WARP enrollment and access</td><td>NOT RUN</td><td>Authorized device and policy readback</td></tr>
+<tr><td>WARP unauthorized client</td><td>NOT RUN</td><td>Documented rejection test</td></tr>
+<tr><td>Numina 5 model and signed release</td><td>RELEASE HOLD</td><td>Real GGUF receipt + independent attestation</td></tr>
+</tbody></table></section>
+<footer><p class="muted">Source registers: <code>config/numina-control-room-teams.v1.json</code> and <code>config/numina-cloudflare-control-room.v1.json</code>. Historical signed release records remain unchanged.</p>
+<a href="https://github.com/Numina-Enterprise/numina-production/pull/200">Review the proposed changes on GitHub</a></footer>
+</body></html>
