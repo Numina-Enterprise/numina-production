@@ -13,7 +13,10 @@
           "role": "TANK",
           "participant_id": null,
           "source": "UNASSIGNED",
-          "connection": "NOT_CONNECTED"
+          "connection": "NOT_CONNECTED",
+          "proposed_character_class": "DRUID",
+          "proposed_actor": "HUMAN_GUILD_LEADER",
+          "identity_status": "USER_REPORTED_NOT_CONNECTED"
         },
         {
           "slot_id": "G1-2",
@@ -24,7 +27,7 @@
         },
         {
           "slot_id": "G1-3",
-          "role": "DPS",
+          "role": "HEALER",
           "participant_id": null,
           "source": "UNASSIGNED",
           "connection": "NOT_CONNECTED"
@@ -64,7 +67,7 @@
         },
         {
           "slot_id": "G2-3",
-          "role": "DPS",
+          "role": "HEALER",
           "participant_id": null,
           "source": "UNASSIGNED",
           "connection": "NOT_CONNECTED"
@@ -90,14 +93,14 @@
       "slots": [
         {
           "slot_id": "G3-1",
-          "role": "HEALER",
+          "role": "TANK",
           "participant_id": null,
           "source": "UNASSIGNED",
           "connection": "NOT_CONNECTED"
         },
         {
           "slot_id": "G3-2",
-          "role": "DPS",
+          "role": "HEALER",
           "participant_id": null,
           "source": "UNASSIGNED",
           "connection": "NOT_CONNECTED"
@@ -130,14 +133,14 @@
       "slots": [
         {
           "slot_id": "G4-1",
-          "role": "HEALER",
+          "role": "TANK",
           "participant_id": null,
           "source": "UNASSIGNED",
           "connection": "NOT_CONNECTED"
         },
         {
           "slot_id": "G4-2",
-          "role": "DPS",
+          "role": "HEALER",
           "participant_id": null,
           "source": "UNASSIGNED",
           "connection": "NOT_CONNECTED"
@@ -328,7 +331,10 @@
   ],
   "raid_lead": {
     "actor": "HUMAN_GUILD_LEADER",
-    "authority": "OWNER_ONLY"
+    "authority": "OWNER_ONLY",
+    "proposed_character_class": "DRUID",
+    "faction": "ALLIANCE",
+    "attendance": "NOT_VERIFIED"
   },
   "co_gm": {
     "actor": "NUMINA_COORDINATOR",
@@ -372,9 +378,9 @@
     "unique_slots": 40,
     "group_count": 8,
     "group_size": 5,
-    "tanks": 2,
-    "healers": 8,
-    "dps": 30,
+    "tanks": 4,
+    "healers": 10,
+    "dps": 26,
     "command_acknowledgment_pct_at_least": 99,
     "critical_policy_violations": 0,
     "unreconciled_simulated_balances": 0,
@@ -386,5 +392,6 @@
   "live_wow_bot_accounts": "NOT_CREATED",
   "discord_voice_integration": "NOT_CONNECTED",
   "production_promotion": "RELEASE_HOLD",
-  "note": "Forty planned simulation roles are not forty active agents, paid WoW accounts, or live players; capacity and latency are not yet benchmarked."
+  "note": "Forty planned simulation roles are not forty active agents, paid WoW accounts, or live players; capacity and latency are not yet benchmarked.",
+  "notes": "Eight five-player planning groups, with 40 roster slots and 4/10/26 proposed roles. Actual raid/version and date are not confirmed. Forty slots are not forty active participants or agents; live WoW/Discord access remains disabled."
 }
