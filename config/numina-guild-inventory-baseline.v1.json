@@ -50,5 +50,21 @@
     "real_currency": "NO_ACCESS",
     "approval_authority": "HUMAN_GUILD_LEADER_ONLY"
   },
-  "note": "53 silver is a user-reported character opening balance, not confirmed guild-bank holdings or real funds."
+  "note": "53 silver is a user-reported character opening balance, not confirmed guild-bank holdings or real funds.",
+  "first_milestone": {
+    "id": "M0_ONE_GOLD",
+    "target_copper": 10000,
+    "target_display": "1 gold",
+    "baseline_copper": 5300,
+    "required_net_gain_copper": 4700,
+    "required_net_gain_display": "47 silver",
+    "status": "PENDING_VERIFIED_CHARACTER_SNAPSHOT",
+    "tracked_inflows": [],
+    "tracked_outflows": [],
+    "observed_balance_copper": null,
+    "reconciliation": "NOT_RUN",
+    "owner_financial_authority": true,
+    "gamma_authority": "OBSERVE_AND_RECONCILE_ONLY",
+    "promotion_condition": "timestamped character balance verification and balanced transaction journal"
+  }
 }
