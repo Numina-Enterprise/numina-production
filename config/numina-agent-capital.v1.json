@@ -1,0 +1,333 @@
+{
+  "schema": "numina.agent-capital-allocation.v1",
+  "parent_module": "numina.treasury",
+  "training_module": "numina.agents",
+  "canonical_treasury": "NUMINA_NATIVE_TREASURY",
+  "ledger_policy": {
+    "treasury_count": 1,
+    "agents_are_subaccounts_not_independent_treasuries": true,
+    "account_observations_required_for_available_funds": true,
+    "agent_authorization_to_move_funds": false,
+    "simulated_balances_spendable": false,
+    "reported_balances_spendable": false,
+    "reconciliation_policy": "Source account, asset, currency, precision, custody, timestamp, account ownership and allocation receipt must match. Do not sum source balances and allocations as separate assets."
+  },
+  "agents": [
+    {
+      "id": "numina-accounting",
+      "room": "numina-accounting",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-apple-team",
+      "room": "numina-apple-deployment",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-compliance-risk",
+      "room": "#numina-compliance-risk",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-engineering-cio",
+      "room": "#numina-engineering",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-federal-capture",
+      "room": "#numina-federal-capture",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-finance-treasury",
+      "room": "#numina-finance-treasury",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-crypto-monitor",
+      "room": "#numina-finance-treasury",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-google-play-team",
+      "room": "numina-google-play-deployment",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-google-enterprise",
+      "room": "#numina-engineering",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-legal",
+      "room": "numina-legal",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-growth-matrix",
+      "room": "#numina-market-intel",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-publicity-narrative",
+      "room": "#numina-publicity-narrative",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-strategy",
+      "room": "#numina-strategy",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-website-soc",
+      "room": "#numina",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "vengeance-independent-review",
+      "room": "VENGEANCE_SANDBOX_ISOLATED",
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    }
+  ],
+  "named_agents": [
+    {
+      "id": "tetsuo-ai",
+      "room": null,
+      "allocation": {
+        "currency": "USD",
+        "amount_minor": null,
+        "source_account_ref": null,
+        "scope": "UNASSIGNED",
+        "verification": "NOT_VERIFIED"
+      },
+      "reported_holdings": [
+        {
+          "amount_minor": null,
+          "currency": "USD",
+          "claim": "USER_REPORTED_POSSIBLE_SUBSTANTIAL_HOLDINGS",
+          "verification": "UNVERIFIED"
+        }
+      ],
+      "simulation": {
+        "unit": "TRAINING_CREDITS",
+        "starting_balance": 1000,
+        "spendable_outside_simulation": false
+      },
+      "authority": "OBSERVE_AND_PROPOSE_ONLY",
+      "activation": "UNVERIFIED"
+    }
+  ],
+  "external_account_links": [],
+  "actual_balance_readback": "NOT_AVAILABLE",
+  "note": "Private training configuration only. This registry does not authorize banking, minting, allocation of real assets, payments, release, or live World of Warcraft automation."
+}
