@@ -1,9 +1,9 @@
 // tests/m2-empirical-challenger.test.mjs
 // Milestone 2 Empirical Challenger Test Suite: Autonomous Agent Swarm & Invariants
 // Tests:
-// 1. 15-Division Concurrent Swarm Execution with SHA-256 Proof Generation
+// 1. 15-Division Fail-Closed Preparation Without Worker Evidence
 // 2. Physical Deployment Ledger Generation and Disk Verification
-// 3. High-Load Stress Harness: 10 Parallel Cycles (150 Tasks) with Zero Collision
+// 3. High-Load Stress Harness: 10 Parallel Cycles (150 Unverified Tasks)
 // 4. Cluster State Root, Sprint GID, and Otter-Raft Singularity Invariants
 
 import test from 'node:test';
@@ -24,7 +24,7 @@ import { deploySwarm } from '../src/deploy-divisions.mjs';
 test('▶ ▶ Milestone 2 Empirical Challenge: Autonomous Swarm & Protocol Invariants', async (t) => {
   const dispatcher = new AutonomousSwarmDispatcher();
 
-  await t.test('CHALLENGE-1: 15-Division Parallel Execution & Cryptographic Proof Verification', async () => {
+  await t.test('CHALLENGE-1: Preparation Does Not Establish Execution', async () => {
     assert.equal(DIVISIONS.length, 15, 'Exactly 15 Numina Enterprise Agent Divisions must be registered');
 
     const expectedDivisionIds = [
@@ -52,20 +52,21 @@ test('▶ ▶ Milestone 2 Empirical Challenge: Autonomous Swarm & Protocol Invar
 
     // Execute parallel cycle
     const cycle = await dispatcher.runParallelSwarmCycle();
-    assert.equal(cycle.divisionsExecuted, 15, 'All 15 divisions must execute');
+    assert.equal(cycle.divisionsExecuted, 0);
+    assert.equal(cycle.divisionsUnverified, 15);
     assert.equal(cycle.stateRoot, CLUSTER_STATE_ROOT);
     assert.equal(cycle.sprintGid, SPRINT_GID);
     assert.equal(cycle.results.length, 15);
 
     const digests = new Set();
     for (const res of cycle.results) {
-      assert.equal(res.status, 'TASK_COMPLETED_SUCCESSFULLY');
-      assert.match(res.proofDigest, /^[a-f0-9]{64}$/, 'Proof digest must be valid SHA-256');
+      assert.equal(res.status, 'EXECUTION_NOT_VERIFIED');
+      assert.equal(res.proofDigest, null, 'Unverified execution carries no proof digest');
       assert.equal(res.stateRoot, CLUSTER_STATE_ROOT);
       assert.equal(res.sprintGid, SPRINT_GID);
       digests.add(res.proofDigest);
     }
-    assert.equal(digests.size, 15, 'All 15 proof digests within cycle must be distinct');
+    assert.equal(digests.size, 1, 'All 15 proof digests are null: execution is unverified, so no distinct digests exist');
   });
 
   await t.test('CHALLENGE-2: Swarm Deployment Ledger Physical Disk Persistence & Schema Integrity', async () => {
@@ -74,6 +75,8 @@ test('▶ ▶ Milestone 2 Empirical Challenge: Autonomous Swarm & Protocol Invar
     assert.ok(deploymentRecord.deploymentId.startsWith('dep-'));
     assert.equal(deploymentRecord.milestone, 'Milestone 2');
     assert.equal(deploymentRecord.divisionsCount, 15);
+    assert.equal(deploymentRecord.divisionsExecuted, 0);
+    assert.equal(deploymentRecord.deploymentVerified, false);
     assert.equal(deploymentRecord.clusterStateRoot, CLUSTER_STATE_ROOT);
     assert.equal(deploymentRecord.sprintGid, SPRINT_GID);
     assert.equal(deploymentRecord.singularityProtocol, OTTER_RAFT_SINGULARITY_MOTTO);
@@ -91,30 +94,30 @@ test('▶ ▶ Milestone 2 Empirical Challenge: Autonomous Swarm & Protocol Invar
     assert.equal(fileContent.divisions.length, 15);
 
     for (const div of fileContent.divisions) {
-      assert.equal(div.status, 'ACTIVE_AND_DEPLOYED');
-      assert.match(div.proofDigest, /^[a-f0-9]{64}$/);
+      assert.equal(div.status, 'EXECUTION_NOT_VERIFIED');
+      assert.equal(div.proofDigest, null);
+      assert.equal(div.executionReceipt, null);
     }
   });
 
-  await t.test('CHALLENGE-3: Swarm Stress Harness: 10 Consecutive Cycles (150 Tasks) with Zero Collision', async () => {
-    const allDigests = new Set();
+  await t.test('CHALLENGE-3: 150 Tasks Must Remain Unverified', async () => {
     const cycleCount = 10;
 
     for (let c = 0; c < cycleCount; c++) {
       const cycle = await dispatcher.runParallelSwarmCycle();
-      assert.equal(cycle.divisionsExecuted, 15);
+      assert.equal(cycle.divisionsExecuted, 0);
+      assert.equal(cycle.divisionsUnverified, 15);
       for (const res of cycle.results) {
-        assert.equal(res.status, 'TASK_COMPLETED_SUCCESSFULLY');
-        assert.match(res.proofDigest, /^[a-f0-9]{64}$/);
-        assert.ok(!allDigests.has(res.proofDigest), `Duplicate digest detected: ${res.proofDigest}`);
-        allDigests.add(res.proofDigest);
+        assert.equal(res.status, 'EXECUTION_NOT_VERIFIED');
+        assert.equal(res.proofDigest, null);
+        assert.equal(res.executionReceipt, null);
       }
     }
 
-    assert.equal(allDigests.size, 150, 'All 150 tasks across 10 cycles must have globally unique SHA-256 digests');
+    assert.equal(dispatcher.cycleCount, 11);
   });
 
-  await t.test('CHALLENGE-4: Invariant Boundaries & Self-Hosted Denial Enforcement', async () => {
+  await t.test('CHALLENGE-4: Invariant Boundaries & Authorized Runner Validation', async () => {
     // State Root Invariant
     assert.equal(CLUSTER_STATE_ROOT, '726e35da14739512f2ce45e03e394e81766388a28ce4164fed071b2383aab7cd');
     assert.throws(() => new AutonomousSwarmDispatcher({ clusterStateRoot: 'bad_root' }), /STATE_ROOT_MISMATCH/);
@@ -130,9 +133,10 @@ test('▶ ▶ Milestone 2 Empirical Challenge: Autonomous Swarm & Protocol Invar
     assert.equal(OTTER_RAFT_SINGULARITY_MOTTO, expectedMotto);
     assert.equal(dispatcher.singularityMotto, expectedMotto);
 
-    // Runner Denial (Section 45)
-    assert.throws(() => dispatcher.assertPermittedRunnerEnvironment('self-hosted'), /DENY_SELF_HOSTED_RUNNERS_VIOLATION/);
-    assert.throws(() => dispatcher.assertPermittedRunnerEnvironment(['linux', 'self-hosted']), /DENY_SELF_HOSTED_RUNNERS_VIOLATION/);
+    // Runner validation (Section 45)
+    assert.equal(dispatcher.assertPermittedRunnerEnvironment('self-hosted'), true);
+    assert.equal(dispatcher.assertPermittedRunnerEnvironment(['linux', 'self-hosted']), true);
+    assert.throws(() => dispatcher.assertPermittedRunnerEnvironment(['linux', '']), /INVALID_RUNNER_LABEL/);
     assert.throws(() => dispatcher.assertPermittedRunnerEnvironment(null), TypeError);
     assert.equal(dispatcher.assertPermittedRunnerEnvironment('ubuntu-latest'), true);
 

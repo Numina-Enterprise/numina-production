@@ -17,7 +17,7 @@ const RELEASE_IDENTITY=Object.freeze({
   "release": "core-v2.0+prod-v2.0.0-rc27",
   "core": "NUMINA",
   "core_version": "2.0.0",
-  "frozen_core_manifest_root": "3bf4d1259c9a60a759597e36e20ceff4f0b0352e5ede614cf068c56ac15de1a8",
+  "frozen_core_manifest_root": "5d5b1348617f4734f55db201f112dc2871e93c59e59903da6d1c0b43dd77b882",
   "production_version": "2.0.0-rc27",
   "environment": "FRONTIER",
   "final_build": "/final-build.json",
@@ -25,7 +25,7 @@ const RELEASE_IDENTITY=Object.freeze({
   "compatibility": {
     "release": "core-v2.0+prod-v2.0.0-rc27",
     "core_version": "2.0.0",
-    "frozen_core_manifest_root": "3bf4d1259c9a60a759597e36e20ceff4f0b0352e5ede614cf068c56ac15de1a8"
+    "frozen_core_manifest_root": "5d5b1348617f4734f55db201f112dc2871e93c59e59903da6d1c0b43dd77b882"
   },
   "production_files_root": "2bd0774d33070735791c6f971cf76e826124577a96667488498bc45288ca0aba",
   "build_id": "424f660e35e6f48f72cb53d6c0241702c35358dac48322477343b9103178113e",

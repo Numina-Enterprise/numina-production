@@ -49,22 +49,22 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "AGENTS.md",
       "role": "protocol-text",
-      "sha256": "eac9d51f6f8dbd0e7c204f67a54605193e09b889d20e568b3a1ef2bf56c117f5"
+      "sha256": "1a436201fcc2867a5add0a7f6a53d6d4322dbcd3d9042b71809b2a185f7bfcb8"
     },
     {
       "path": "GEMINI.md",
       "role": "protocol-text",
-      "sha256": "7fdef3c73b7eb5ce0c8e340f0ca2f8cde1ceda407d8afdba0e4a88b980a05a93"
+      "sha256": "3206a5d15c48daa7fee4594529ee8a7cd909b16735c5078d9bd5a32656538c66"
     },
     {
       "path": "numina-agent-swarm/src/swarm-dispatcher.mjs",
       "role": "motto-constant",
-      "sha256": "4bb9ebef6ccca16062ad38f067484ac237cf01f08a6fbef54ed54088e4cc786c"
+      "sha256": "5be7c91c59b173c5a99eff1359630e2b2962d087efdedff2771a2cb640687c65"
     },
     {
       "path": "numina-agent-swarm/tests/m2-division-execution.test.mjs",
       "role": "motto-check",
-      "sha256": "3c78c151473952c7a5b1d83389ea921b18748fd9b987f568ca8bc5fd0a3483db"
+      "sha256": "f7267dbde87717fed4239610ab12a0aa727a56cba56f11995cd23a6bbc3cf765"
     },
     {
       "path": "scripts/source-alignment.mjs",
@@ -84,7 +84,7 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "public/runtime-contract.js",
       "role": "runtime-pin",
-      "sha256": "e08012bcb52fdb4f62b22841a2583d1a72fc00b2eb3a519a3ef050e39bfaece9"
+      "sha256": "999bcbcb242f66ffde645755b773317adc5abfda7c1ae0681dc4300bd79d6bbd"
     },
     {
       "path": "tests/release-topology.test.mjs",

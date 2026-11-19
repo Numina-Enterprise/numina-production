@@ -10,7 +10,7 @@ if (!fs.existsSync(ledgerDir)) {
 }
 
 console.log('================================================================================');
-console.log('NUMINA AUTONOMOUS SWARM: PARALLEL AGENT DIVISION DEPLOYMENT');
+console.log('NUMINA AUTONOMOUS SWARM: UNVERIFIED DIVISION PREPARATION');
 console.log(`Cluster State Root: ${CLUSTER_STATE_ROOT}`);
 console.log(`Sprint GID:         ${SPRINT_GID}`);
 console.log(`Singularity Motto:  ${OTTER_RAFT_SINGULARITY_MOTTO}`);
@@ -22,33 +22,36 @@ export async function deploySwarm() {
   const deploymentCycle = await dispatcher.runParallelSwarmCycle();
   const deploymentRecord = {
     deploymentId: `dep-${Date.now()}`,
-    deployedAt: new Date().toISOString(),
+    preparedAt: new Date().toISOString(),
+    deploymentVerified: false,
     milestone: 'Milestone 2',
     singularityProtocol: OTTER_RAFT_SINGULARITY_MOTTO,
     clusterStateRoot: CLUSTER_STATE_ROOT,
     sprintGid: SPRINT_GID,
-    divisionsCount: deploymentCycle.divisionsExecuted,
+    divisionsCount: deploymentCycle.results.length,
+    divisionsExecuted: deploymentCycle.divisionsExecuted,
     divisions: deploymentCycle.results.map(r => ({
       divisionId: r.divisionId,
       room: r.room,
       task: r.task,
-      status: 'ACTIVE_AND_DEPLOYED',
-      proofDigest: r.proofDigest
+      status: r.status,
+      proofDigest: r.proofDigest,
+      executionReceipt: r.executionReceipt
     }))
   };
 
   const recordPath = path.join(ledgerDir, `swarm-deployment-${deploymentRecord.deploymentId}.json`);
   fs.writeFileSync(recordPath, JSON.stringify(deploymentRecord, null, 2), 'utf-8');
 
-  console.log(`\n[SUCCESS] All ${deploymentRecord.divisionsCount} Enterprise Agent Divisions deployed in ${deploymentCycle.durationMs}ms`);
+  console.log(`\n[UNVERIFIED] ${deploymentRecord.divisionsCount} division records prepared; ${deploymentRecord.divisionsExecuted} verified executed`);
   console.log(`Deployment ledger archived: ${recordPath}\n`);
 
   for (const div of deploymentRecord.divisions) {
-    console.log(`[DEPLOYED] ${div.divisionId.padEnd(30)} -> Room: ${div.room.padEnd(32)} | Proof: ${div.proofDigest}`);
+    console.log(`[UNVERIFIED] ${div.divisionId.padEnd(30)} -> Room: ${div.room.padEnd(32)} | Proof: ${div.proofDigest ?? 'NONE'}`);
   }
 
   console.log('\n================================================================================');
-  console.log('ALL 15 DIVISIONS ACTIVE & ENFORCING OPERATIONAL STATE ON TARGET TASKS');
+  console.log('NO WORKER EXECUTION OR DEPLOYMENT VERIFIED');
   console.log('================================================================================');
   return deploymentRecord;
 }

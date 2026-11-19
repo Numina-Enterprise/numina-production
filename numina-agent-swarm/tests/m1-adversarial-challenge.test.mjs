@@ -5,7 +5,7 @@
 // 2. Sprint Boundary Attack: Forbidden Sprint GID injection -> fail-closed
 // 3. Type Coercion Attack: Float, numeric strings, and prototype pollution in BigInt ledger
 // 4. Null & Undefined Boundary Attacks across all 15 division dispatch payloads
-// 5. Self-Hosted Runner Denial: Rejection of any CI/CD config specifying self-hosted runners
+// 5. Owner-Authorized Self-Hosted Runners: Validation of permitted runner labels (AGENTS.md §45)
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -60,23 +60,16 @@ test('▶ ▶ Milestone 1 Adversarial Runner & Invariant Challenge Suite', async
     await assert.rejects(undefinedDivisionExecution, TypeError);
   });
 
-  await t.test('CHALLENGE-5: CI/CD Self-Hosted Runner Denial Policy Invariant', async () => {
-    // Assert policy forbids self-hosted runners in CI workflows
-    const testWorkflows = [
-      { name: 'cloud-run', runsOn: 'ubuntu-latest', permitted: true },
-      { name: 'apple-xcode', runsOn: 'macos-latest', permitted: true },
-      { name: 'rogue-local-runner', runsOn: 'self-hosted', permitted: false },
-      { name: 'hybrid-daemon', runsOn: ['self-hosted', 'linux'], permitted: false }
-    ];
-
-    for (const wf of testWorkflows) {
-      const isSelfHosted = Array.isArray(wf.runsOn) 
-        ? wf.runsOn.includes('self-hosted') 
-        : wf.runsOn === 'self-hosted';
-
-      const isPermitted = !isSelfHosted;
-      assert.equal(isPermitted, wf.permitted, `Workflow ${wf.name} authorization check failed`);
-    }
+  await t.test('CHALLENGE-5: Owner-Authorized Self-Hosted Runner Policy Invariant', async () => {
+    // AGENTS.md §45 permits owner-authorized self-hosted runners; only
+    // missing or invalid labels are rejected.
+    assert.equal(swarm.assertPermittedRunnerEnvironment('ubuntu-latest'), true);
+    assert.equal(swarm.assertPermittedRunnerEnvironment('macos-latest'), true);
+    assert.equal(swarm.assertPermittedRunnerEnvironment('self-hosted'), true);
+    assert.equal(swarm.assertPermittedRunnerEnvironment(['self-hosted', 'linux']), true);
+    assert.throws(() => swarm.assertPermittedRunnerEnvironment(null), TypeError);
+    assert.throws(() => swarm.assertPermittedRunnerEnvironment('   '), /INVALID_RUNNER_LABEL/);
+    assert.throws(() => swarm.assertPermittedRunnerEnvironment(['ubuntu-latest', 42]), /INVALID_RUNNER_LABEL/);
   });
 
   await t.test('CHALLENGE-6: Concurrency & Roster Completeness across 15 Divisions', async () => {
@@ -86,10 +79,11 @@ test('▶ ▶ Milestone 1 Adversarial Runner & Invariant Challenge Suite', async
     
     // Run cycle and verify concurrent task outputs
     const cycle = await swarm.runParallelSwarmCycle();
-    assert.equal(cycle.divisionsExecuted, 15);
+    assert.equal(cycle.divisionsExecuted, 0);
+    assert.equal(cycle.divisionsUnverified, 15);
     for (const result of cycle.results) {
-      assert.equal(result.status, 'TASK_COMPLETED_SUCCESSFULLY');
-      assert.match(result.proofDigest, /^[a-f0-9]{64}$/);
+      assert.equal(result.status, 'EXECUTION_NOT_VERIFIED');
+      assert.equal(result.proofDigest, null);
     }
   });
 });
