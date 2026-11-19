@@ -18,7 +18,7 @@ export const EXPECTED_RELEASE = Object.freeze({
   "release": "core-v2.0+prod-v2.0.0-rc27",
   "core": "NUMINA",
   "core_version": "2.0.0",
-  "frozen_core_manifest_root": "3bf4d1259c9a60a759597e36e20ceff4f0b0352e5ede614cf068c56ac15de1a8",
+  "frozen_core_manifest_root": "c2f76333dd7fa180818e1ed11d574fa43354469819f6176fef2a9ba89cdb0d69",
   "production_version": "2.0.0-rc27",
   "environment": "FRONTIER",
   "final_build": "/final-build.json",
@@ -26,7 +26,7 @@ export const EXPECTED_RELEASE = Object.freeze({
   "compatibility": {
     "release": "core-v2.0+prod-v2.0.0-rc27",
     "core_version": "2.0.0",
-    "frozen_core_manifest_root": "3bf4d1259c9a60a759597e36e20ceff4f0b0352e5ede614cf068c56ac15de1a8"
+    "frozen_core_manifest_root": "c2f76333dd7fa180818e1ed11d574fa43354469819f6176fef2a9ba89cdb0d69"
   },
   "production_files_root": "2bd0774d33070735791c6f971cf76e826124577a96667488498bc45288ca0aba",
   "build_id": "424f660e35e6f48f72cb53d6c0241702c35358dac48322477343b9103178113e",

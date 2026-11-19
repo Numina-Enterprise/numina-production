@@ -69,7 +69,7 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "scripts/source-alignment.mjs",
       "role": "alignment-check",
-      "sha256": "bb5d675338bf545ecb634f08f0c4cfe04c04346b1758f0047bdf5dd3558548aa"
+      "sha256": "82f64c3c0df4ce97f0e55cfadf03c81a4cb4e8387ab49e835b80d9ba9cb17c5b"
     },
     {
       "path": "scripts/build.mjs",
@@ -84,7 +84,7 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "public/runtime-contract.js",
       "role": "runtime-pin",
-      "sha256": "e08012bcb52fdb4f62b22841a2583d1a72fc00b2eb3a519a3ef050e39bfaece9"
+      "sha256": "aa44394ff13cba8a3a35c745e30b7bd757680afcb5f3f319bbba0f5ec83b768a"
     },
     {
       "path": "tests/release-topology.test.mjs",
