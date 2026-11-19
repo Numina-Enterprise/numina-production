@@ -1,0 +1,49 @@
+{
+  "schema": "numina.nusd.admin-handoff-record.v1",
+  "network": { "name": "Numina blockchain", "chainId": "962421430" },
+  "token": { "address": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b", "decimals": 18 },
+  "before": {
+    "defaultAdmin": "0xa7e9FB02495700ccE0d209392C0A30FbE077498e",
+    "issuer": "0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0",
+    "minter": "0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6",
+    "pauser": "0x434AB24E613055Fd2598Fd9f0558A06a94D39c81",
+    "defaultAdminDelaySeconds": "86400",
+    "verifiedAt": null
+  },
+  "steps": {
+    "revokeIssuer": { "transactionHash": null, "blockNumber": null, "roleRevokedEventSeen": null },
+    "revokeMinter": { "transactionHash": null, "blockNumber": null, "roleRevokedEventSeen": null },
+    "safeRecord": "runtime/nusd/records/safe-numina.<date>.json",
+    "timelock": {
+      "address": null,
+      "deploymentTransactionHash": null,
+      "minDelaySeconds": "172800",
+      "proposers": [null],
+      "executors": [null],
+      "cancellers": [null, null],
+      "admin": "0x0000000000000000000000000000000000000000"
+    },
+    "beginDefaultAdminTransfer": { "transactionHash": null, "blockNumber": null, "acceptScheduleUnix": null },
+    "timelockScheduleAccept": { "operationId": null, "transactionHash": null, "readyAtUnix": null },
+    "timelockExecuteAccept": { "transactionHash": null, "blockNumber": null },
+    "cancelled": { "happened": false, "transactionHashes": [], "reason": null }
+  },
+  "expected": {
+    "chainId": "962421430",
+    "tokenAddress": "0x491c1DF1b5CA77AF797f052c2310ca17039C931b",
+    "decimals": 18,
+    "totalSupply": "1500000000000000000000000000000000",
+    "cap": "1500000000000000000000000000000000",
+    "defaultAdmin": null,
+    "pendingDefaultAdmin": "0x0000000000000000000000000000000000000000",
+    "defaultAdminDelay": "86400",
+    "paused": null,
+    "roles": {
+      "DEFAULT_ADMIN_ROLE": { "0xa7e9FB02495700ccE0d209392C0A30FbE077498e": false },
+      "ISSUER_ROLE": { "0xdfEb99a8CbB9d2536EB9CA3D4D38DC5f4D1dE1a0": false },
+      "MINTER_ROLE": { "0x62dC06f05aF1b9aBA65d7ee4DBaB067249FC5DA6": false },
+      "PAUSER_ROLE": { "0x434AB24E613055Fd2598Fd9f0558A06a94D39c81": true }
+    }
+  },
+  "postChecks": { "verifyAdminHandoffExitCode": null, "verifySafeFactoryExitCode": null, "verifiedAt": null }
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "numina.nusd.safe-record.v1",
+  "purpose": "3-of-6 Safe that proposes and executes through the NUSD admin timelock on the Numina chain",
+  "network": { "name": "Numina blockchain", "chainId": "962421430" },
+  "safeVersion": "1.4.1",
+  "factoryCheck": {
+    "safeSingletonFactory": "0x914d7Fec6aaC8cd542e72Bca78B30650d45643d7",
+    "safeL2Singleton": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+    "safeProxyFactory": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+    "compatibilityFallbackHandler": "0xfd0732Dc9E303f09fCEF3a7388Ad10A83459Ec99",
+    "allPresent": null,
+    "deployedByOwner": null,
+    "deploymentTransactions": [],
+    "verifiedAt": null
+  },
+  "safe": {
+    "address": null,
+    "creationTransactionHash": null,
+    "creationBlockNumber": null,
+    "saltNonce": null,
+    "threshold": 3,
+    "owners": [null, null, null, null, null, null],
+    "ownerCustodyNotes": [null, null, null, null, null, null],
+    "fallbackHandler": "0xfd0732Dc9E303f09fCEF3a7388Ad10A83459Ec99",
+    "readBack": { "threshold": null, "owners": null, "verifiedAt": null }
+  },
+  "notMeantFor": "Base (8453). The Base vault uses a separate Safe recorded in safe-base.json."
+}
