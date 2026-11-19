@@ -2,8 +2,9 @@
 
 **Stated by Samuel J. Kott, November 19, 2026.**
 
-> "A horizontal progression stuck in an upward trajectory, and it is not
-> changing. For eternity. It is an eternal upward trajectory."
+> "Every distinct object carries one singular identity, advancing in equal
+> linear steps along a horizontal progression — rising forever, never falling,
+> never reversing. An eternal upward trajectory."
 
 ## The law
 
@@ -21,7 +22,7 @@ climbs upward forever — never decreasing, never reversing, no ceiling.
 
 It stands alongside the laws that came before it. In Samuel J. Kott's words,
 Murphy's law has run its course, and Newton's laws keep things in motion;
-Kotts Law is the progression that motion is stuck in — upward, for eternity.
+Kotts Law is the progression that motion follows — upward, for eternity.
 
 ## What it carries
 

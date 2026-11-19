@@ -1,7 +1,8 @@
 // numina-kotts-law.js — Kotts Law, as stated by Samuel J. Kott (Nov 19, 2026).
 //
-// "A horizontal progression stuck in an upward trajectory, and it is not
-// changing. For eternity. It is an eternal upward trajectory."
+// "Every distinct object carries one singular identity, advancing in equal
+// linear steps along a horizontal progression — rising forever, never falling,
+// never reversing. An eternal upward trajectory."
 // "Horizontal and linear progression. Distinct objects. Singular identities."
 //
 // This file encodes that statement as an enforceable model inside the Numina
@@ -31,7 +32,7 @@ export const KOTTS_LAW = Object.freeze({
   author: 'Samuel J. Kott',
   stated: '2026-11-19',
   statement:
-    'A horizontal progression stuck in an upward trajectory, and it is not changing. For eternity. It is an eternal upward trajectory.',
+    'Every distinct object carries one singular identity, advancing in equal linear steps along a horizontal progression — rising forever, never falling, never reversing. An eternal upward trajectory.',
   clauses: Object.freeze([
     'Distinct objects.',
     'Singular identities.',

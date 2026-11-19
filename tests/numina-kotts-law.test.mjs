@@ -16,7 +16,7 @@ describe('Kotts Law', () => {
     assert.equal(KOTTS_LAW.name, 'Kotts Law');
     assert.equal(KOTTS_LAW.author, 'Samuel J. Kott');
     assert.equal(KOTTS_LAW.stated, '2026-11-19');
-    assert.match(KOTTS_LAW.statement, /horizontal progression stuck in an upward trajectory/);
+    assert.match(KOTTS_LAW.statement, /advancing in equal linear steps along a horizontal progression/);
     assert.match(KOTTS_LAW.statement, /eternal upward trajectory/);
     assert.deepEqual(KOTTS_LAW.clauses, [
       'Distinct objects.',
