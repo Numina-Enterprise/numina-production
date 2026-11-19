@@ -59,6 +59,12 @@ const execFileAsync = promisify(execFile);
 const CHAIN_ID = 962421430;
 const GENESIS = '0x05b4e83876ea30a83f011ab5b0537b59ea1175810dc977f1d4eefbd1d0d7c88b';
 
+// Tamper the first signature byte to a value it cannot already be, so the
+// tampered signature always differs from the original. A fixed '00' prefix
+// is a no-op 1 time in 256, when the byte is already 0x00, and the test
+// then passes a genuinely valid signature.
+const flipFirstByte = (hex) => (hex.startsWith('00') ? 'ff' : '00') + hex.slice(2);
+
 // A protocol object with ephemeral Ed25519 + ML-DSA-65 keys pinned for
 // both roles, so the dual-signature checks can be tested without touching
 // the real pinned Authority key (whose PQC key is unprovisioned).
@@ -265,7 +271,7 @@ test('a bad Ed25519 part fails that role', (t) => {
   const manifestSha256Hex = computeManifestSha256(manifest);
   const { sidecar } = signBothRoles(fixture, manifestSha256Hex);
   const tampered = structuredClone(sidecar);
-  tampered.authority.ed25519Signature = `00${tampered.authority.ed25519Signature.slice(2)}`;
+  tampered.authority.ed25519Signature = flipFirstByte(tampered.authority.ed25519Signature);
   const verified = verifyManifestSignatures({
     manifestSha256Hex,
     signatures: tampered,
@@ -287,7 +293,7 @@ test('a bad ML-DSA-65 part fails that role', (t) => {
   const manifestSha256Hex = computeManifestSha256(manifest);
   const { sidecar } = signBothRoles(fixture, manifestSha256Hex);
   const tampered = structuredClone(sidecar);
-  tampered.guardian.mlDsa65Signature = `00${tampered.guardian.mlDsa65Signature.slice(2)}`;
+  tampered.guardian.mlDsa65Signature = flipFirstByte(tampered.guardian.mlDsa65Signature);
   const verified = verifyManifestSignatures({
     manifestSha256Hex,
     signatures: tampered,
