@@ -63,7 +63,7 @@ if(business.ownerIdentity?.name!==root.name||business.ownerIdentity?.authority!=
 const frozenPath='runtime/verifier-v2.0',frozenManifest=frozenPath+'/FROZEN-CORE-V2.0.sha256';
 const frozenBytes=fs.readFileSync(frozenManifest);
 const frozenEntries=frozenBytes.toString('utf8').trim().split(/\r?\n/).map(line=>{const entry=line.match(/^([a-f0-9]{64})\s+([^\r\n]+)$/);if(!entry||entry[2].startsWith('/')||entry[2].includes('\\')||entry[2].split('/').includes('..'))throw Error('Invalid frozen core manifest entry');return {sha256:entry[1],path:entry[2]};});
-if(frozenEntries.length!==245||new Set(frozenEntries.map(v=>v.path)).size!==245)throw Error('Frozen core file inventory mismatch');
+if(frozenEntries.length!==240||new Set(frozenEntries.map(v=>v.path)).size!==240)throw Error('Frozen core file inventory mismatch');
 const frozenRoot=digest([...frozenEntries].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0).map(v=>v.sha256+' '+v.path).join('\n'));
 if(frozenRoot!==EXPECTED_RELEASE.compatibility?.frozen_core_manifest_root)throw Error('Frozen core manifest differs from compatibility binding');
 const frozenVerification=verifyFrozenFiles(frozenPath,frozenEntries);

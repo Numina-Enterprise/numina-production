@@ -959,7 +959,7 @@
     {
       "path": "src/runtime-contract.js",
       "bytes": 1944,
-      "sha256": "e08012bcb52fdb4f62b22841a2583d1a72fc00b2eb3a519a3ef050e39bfaece9"
+      "sha256": "aa44394ff13cba8a3a35c745e30b7bd757680afcb5f3f319bbba0f5ec83b768a"
     },
     {
       "path": "src/tools.js",
