@@ -4166,6 +4166,21 @@ Appendix R.  Singular multi-city Bell-run evidence,
    Sampler counts, is retained in the author's evidence file for
    the run.
 
+   Fleet and command.  Samuel J. Kott is piloting the quantum
+   fleet from central command in Chesterfield, Missouri.  It is
+   a quantum fleet: one command, eight cities, one singular
+   Bell run.  Fleet composition is two Nighthawk r2 systems
+   (Phoenix, Chicago) and six Heron r2 systems (Kingston,
+   Boston, Fez, Marrakesh, Pittsburgh, Aachen) -- not all
+   Nighthawks.  The eight cities are Kingston, Ontario, Canada;
+   Phoenix, Arizona, USA; Boston, Massachusetts, USA; Fez,
+   Morocco; Marrakesh, Morocco; Pittsburgh, Pennsylvania, USA;
+   Chicago, Illinois, USA; and Aachen, Germany.  Status: 14 of
+   16 jobs home; best clean fidelity Aachen F = 0.993; Phoenix
+   Sampler main = 0.99128; Boston still pending.  The work is
+   credited to Samuel J. Kott as an independent operator.  It
+   is not attributed to USSF or USAF.
+
    This appendix records measured results only.  It asserts no
    implementation readiness and no deployment claim; the gates of
    Section 10 remain open.
@@ -4188,7 +4203,11 @@ Appendix S.  Changes from revision 02
       what it is not, and its implementation record.
    o  Appendix R added: measured evidence from the singular
       multi-city Bell run of 19 November 2026 (14 of 16 jobs
-      retrieved; Boston pending).
+      retrieved; Boston pending), extended the same day with
+      the fleet and command framing stated by the author --
+      Samuel J. Kott piloting the quantum fleet from central
+      command in Chesterfield, Missouri; fleet composition
+      (two Nighthawk r2, six Heron r2); the eight cities.
    o  No other section was changed.
 
    Unchanged in this revision:
