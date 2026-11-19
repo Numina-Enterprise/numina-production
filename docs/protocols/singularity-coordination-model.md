@@ -49,7 +49,7 @@ These hashes record the existing cohesion checks. They are not additional protoc
     {
       "path": "AGENTS.md",
       "role": "protocol-text",
-      "sha256": "eac9d51f6f8dbd0e7c204f67a54605193e09b889d20e568b3a1ef2bf56c117f5"
+      "sha256": "9e9fdbbc4aef1db88b4956a2ca562c37f960f817aecea3388d999429a8d478ab"
     },
     {
       "path": "GEMINI.md",
