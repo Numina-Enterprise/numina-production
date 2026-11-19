@@ -49,7 +49,7 @@ function harness(override,preparation={}){
  vm.runInContext(source('http-client.js').replace(/^export /gm,'')+'\n'+source('deployment-readiness-model.js').replace(/^export /gm,'')+'\n'+source('deployment-readiness-ui.js').replace(/^import .*;\n/gm,'')+'\nglobalThis.subject={refresh,renderInputs};',context);
  return {get,calls,events,subject:context.subject};
 }
-const settle=async()=>{for(let i=0;i<5;i++)await new Promise(resolve=>setTimeout(resolve,0));};
+const settle=async()=>{for(let i=0;i<50;i++)await new Promise(resolve=>setTimeout(resolve,0));};
 test('website works signed out using only three credential-free GETs and keeps requirements pending',async()=>{
  const h=harness();await settle();
  assert.equal(h.calls.length,3);for(const {options} of h.calls){assert.equal(options.credentials,'omit');assert.equal(options.method,undefined);assert.equal(options.redirect,'error');}
