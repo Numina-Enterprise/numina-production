@@ -19,16 +19,16 @@ test('▶ Numina Autonomous Swarm Dispatcher Suite', async (t) => {
     const swarm = new AutonomousSwarmDispatcher();
     const cycle = await swarm.runParallelSwarmCycle();
 
-    assert.equal(cycle.divisionsExecuted, 15);
+    assert.equal(cycle.divisionsExecuted, 0);
+    assert.equal(cycle.divisionsUnverified, 15);
     assert.equal(cycle.stateRoot, CLUSTER_STATE_ROOT);
     assert.equal(cycle.results.length, 15);
 
     for (const r of cycle.results) {
-      assert.equal(r.status, 'TASK_COMPLETED_SUCCESSFULLY');
+      assert.equal(r.status, 'EXECUTION_NOT_VERIFIED');
       assert.equal(r.sprintGid, SPRINT_GID);
       assert.equal(r.stateRoot, CLUSTER_STATE_ROOT);
-      assert.ok(r.proofDigest);
-      assert.equal(r.proofDigest.length, 64);
+      assert.equal(r.proofDigest, null);
     }
   });
 

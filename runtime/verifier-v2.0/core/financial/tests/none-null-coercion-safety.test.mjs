@@ -10,7 +10,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseMonetaryToUnits, parseMinorUnits } from '../src/money.mjs';
 import { RWATokenizationEngine, QUALIFIED_RWA_ASSET_TYPES } from '../src/rwa-tokenization-engine.mjs';
-import { AutonomousSwarmDispatcher } from '../../numina-agent-swarm/src/swarm-dispatcher.mjs';
+import { AutonomousSwarmDispatcher } from '../../../../../numina-agent-swarm/src/swarm-dispatcher.mjs';
 
 test('▶ ▶ "None" & Null Safety / Type Coercion Invariant Suite', async (t) => {
   await t.test('1. Money Module: Strict String/BigInt Types & "None"/Null Rejection', () => {
@@ -90,9 +90,11 @@ test('▶ ▶ "None" & Null Safety / Type Coercion Invariant Suite', async (t) =
 
     // Permitted runner checks
     assert.throws(() => swarm.assertPermittedRunnerEnvironment(null), TypeError);
-    assert.throws(() => swarm.assertPermittedRunnerEnvironment('self-hosted'), /DENY_SELF_HOSTED_RUNNERS_VIOLATION/);
-    assert.throws(() => swarm.assertPermittedRunnerEnvironment(['ubuntu-latest', 'self-hosted']), /DENY_SELF_HOSTED_RUNNERS_VIOLATION/);
+    assert.equal(swarm.assertPermittedRunnerEnvironment('self-hosted'), true);
+    assert.equal(swarm.assertPermittedRunnerEnvironment(['ubuntu-latest', 'self-hosted']), true);
     assert.equal(swarm.assertPermittedRunnerEnvironment('ubuntu-latest'), true);
+    assert.throws(() => swarm.assertPermittedRunnerEnvironment('   '), /INVALID_RUNNER_LABEL/);
+    assert.throws(() => swarm.assertPermittedRunnerEnvironment(['ubuntu-latest', 42]), /INVALID_RUNNER_LABEL/);
   });
 
   await t.test('4. RWA Engine: 1.5 Quadrillion Scale Pure BigInt Formatting & Float Elimination', () => {

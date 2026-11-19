@@ -42,7 +42,7 @@ export class AutonomousSwarmDispatcher {
   }
 
   /**
-   * Validate CI/CD runner environments to deny self-hosted runners.
+   * Validate CI/CD runner labels, including authorized self-hosted runners.
    * @param {string|string[]} runsOn
    */
   assertPermittedRunnerEnvironment(runsOn) {
@@ -51,8 +51,8 @@ export class AutonomousSwarmDispatcher {
     }
     const runnerList = Array.isArray(runsOn) ? runsOn : [runsOn];
     for (const r of runnerList) {
-      if (typeof r !== 'string' || r.toLowerCase().includes('self-hosted')) {
-        throw new Error(`DENY_SELF_HOSTED_RUNNERS_VIOLATION: Runner '${r}' is strictly forbidden by Section 45`);
+      if (typeof r !== 'string' || !r.trim()) {
+        throw new TypeError('INVALID_RUNNER_LABEL: runner labels must be non-empty strings');
       }
     }
     return true;
@@ -76,37 +76,35 @@ export class AutonomousSwarmDispatcher {
       throw new TypeError('INVALID_DIVISION_TASK: division.task must be a non-empty string');
     }
 
-    const timestamp = Date.now();
-    const nonce = crypto.randomBytes(8).toString('hex');
-    const proofPayload = `${division.id}:${division.task}:${timestamp}:${nonce}:${this.clusterStateRoot}:${this.sprintGid}`;
-    const proofDigest = crypto.createHash('sha256').update(proofPayload).digest('hex');
-
-    const result = {
+    // No worker dispatch occurs in this module. A local digest is not execution evidence.
+    // Deliberately provide no caller-supplied success override: only a separate,
+    // independently authenticated receipt verifier may introduce completed status.
+    return Object.freeze({
       divisionId: division.id,
       room: division.room,
       task: division.task,
-      status: 'TASK_COMPLETED_SUCCESSFULLY',
-      proofDigest,
-      timestamp,
+      status: 'EXECUTION_NOT_VERIFIED',
+      proofDigest: null,
+      timestamp: Date.now(),
       stateRoot: this.clusterStateRoot,
-      sprintGid: this.sprintGid
-    };
-
-    return Object.freeze(result);
+      sprintGid: this.sprintGid,
+      executionReceipt: null
+    });
   }
 
   async runParallelSwarmCycle() {
     this.cycleCount++;
     const startTime = Date.now();
 
-    // Execute all 15 division workers concurrently
+    // Prepare all division records; no actual worker execution is performed
     const promises = this.divisions.map(div => this.executeTask(div));
     const taskResults = await Promise.all(promises);
 
     const cycleSummary = Object.freeze({
       cycle: this.cycleCount,
       timestamp: startTime,
-      divisionsExecuted: taskResults.length,
+      divisionsExecuted: 0,
+      divisionsUnverified: taskResults.length,
       durationMs: Date.now() - startTime,
       stateRoot: this.clusterStateRoot,
       sprintGid: this.sprintGid,
@@ -120,11 +118,11 @@ export class AutonomousSwarmDispatcher {
 
 if (process.argv[1]?.endsWith('swarm-dispatcher.mjs')) {
   const swarm = new AutonomousSwarmDispatcher();
-  console.log('Initiating parallel execution across all 15 divisions...');
+  console.log('Preparing 15 division records (execution unverified)...');
   swarm.runParallelSwarmCycle().then(summary => {
     console.log(`\nSwarm Cycle ${summary.cycle} completed in ${summary.durationMs}ms`);
-    console.log(`Divisions executed: ${summary.divisionsExecuted}/15`);
+    console.log(`Divisions verified executed: ${summary.divisionsExecuted}/15`);
     console.log(`Cluster State Root: ${summary.stateRoot}`);
-    console.table(summary.results.map(r => ({ Division: r.divisionId, Status: r.status, Digest: r.proofDigest.slice(0, 16) + '...' })));
+    console.table(summary.results.map(r => ({ Division: r.divisionId, Status: r.status, Digest: r.proofDigest ?? 'NONE' })));
   });
 }

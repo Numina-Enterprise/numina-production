@@ -18,6 +18,6 @@ All autonomous agents, subagents, and LLM inference runtimes within this workspa
 6. Cloud Scoping: Strictly pinned to project project-0317d6c9-e943-409e-83f and zone us-central1-a.
 7. Subagent Inheritance: All subagents launched via invoke_subagent inherit full security requirements and PoLAP boundaries.
 8. Multi-Platform Audits: Unified execution via unified_audit_orchestrator.ps1 across Windows, macOS, and GCP with Zero-Trust manifest verification.
-9. CI/CD Self-Hosted Runner Denial: Self-hosted runners (GitHub Actions, GitLab) are strictly prohibited; all pipelines execute exclusively on ephemeral managed cloud infrastructure (GitHub-hosted runners, Google Cloud Build, Xcode Cloud).
+9. CI/CD Self-Hosted Runners: Owner-authorized self-hosted runners are permitted alongside ephemeral managed cloud infrastructure (GitHub-hosted runners, Google Cloud Build, Xcode Cloud). Register runners only to intended repositories with explicit labels and least-privilege permissions; never run untrusted pull-request code on runners holding production credentials; isolate treasury signing keys; clean workspaces; rotate credentials after suspected compromise.
 10. The Humanistic Invariant: Numina operates with human dignity, human rights, privacy, safety, and security for mankind ALWAYS.
 

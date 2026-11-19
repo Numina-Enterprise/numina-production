@@ -51,17 +51,18 @@ test('▶ ▶ Milestone 2 15-Division Swarm Execution & Invariant Suite', async 
     }
   });
 
-  await t.test('2. Execute Parallel Swarm Cycle Across All 15 Divisions with Proof Digests', async () => {
+  await t.test('2. Execute Parallel Swarm Cycle Across All 15 Divisions (Unverified, No Proof Digests)', async () => {
     const summary = await dispatcher.runParallelSwarmCycle();
 
-    assert.equal(summary.divisionsExecuted, 15, 'All 15 divisions must execute in parallel cycle');
+    assert.equal(summary.divisionsExecuted, 0, 'No division executes with verified proof in a parallel cycle');
+    assert.equal(summary.divisionsUnverified, 15, 'All 15 divisions remain unverified');
     assert.equal(summary.stateRoot, CLUSTER_STATE_ROOT);
     assert.equal(summary.sprintGid, SPRINT_GID);
     assert.equal(summary.results.length, 15);
 
     for (const res of summary.results) {
-      assert.equal(res.status, 'TASK_COMPLETED_SUCCESSFULLY');
-      assert.match(res.proofDigest, /^[a-f0-9]{64}$/, 'Proof digest must be valid SHA-256 hex string');
+      assert.equal(res.status, 'EXECUTION_NOT_VERIFIED');
+      assert.equal(res.proofDigest, null, 'Unverified execution carries no proof digest');
       assert.equal(res.stateRoot, CLUSTER_STATE_ROOT);
       assert.equal(res.sprintGid, SPRINT_GID);
     }
@@ -115,8 +116,9 @@ test('▶ ▶ Milestone 2 15-Division Swarm Execution & Invariant Suite', async 
     assert.equal(savedRecord.sprintGid, SPRINT_GID);
     assert.equal(savedRecord.divisions.length, 15);
     for (const div of savedRecord.divisions) {
-      assert.equal(div.status, 'ACTIVE_AND_DEPLOYED');
-      assert.match(div.proofDigest, /^[a-f0-9]{64}$/);
+      assert.equal(div.status, 'EXECUTION_NOT_VERIFIED');
+      assert.equal(div.proofDigest, null);
+      assert.equal(div.executionReceipt, null);
     }
   });
 });

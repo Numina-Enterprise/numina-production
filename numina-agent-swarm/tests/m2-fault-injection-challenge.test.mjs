@@ -333,11 +333,10 @@ test('▶ ▶ Milestone 2 Empirical Fault Injection Challenge Suite', async (t) 
       assert.throws(() => swarm.assertPermittedRunnerEnvironment(nr), TypeError);
     }
 
+    assert.equal(swarm.assertPermittedRunnerEnvironment('self-hosted'), true);
+    assert.equal(swarm.assertPermittedRunnerEnvironment('SELF-HOSTED'), true);
+    assert.equal(swarm.assertPermittedRunnerEnvironment(['ubuntu-latest', 'self-hosted']), true);
     const forbiddenRunners = [
-      'self-hosted',
-      'SELF-HOSTED',
-      'self-hosted-runner',
-      ['ubuntu-latest', 'self-hosted'],
       ['ubuntu-latest', null],
       ['ubuntu-latest', undefined],
       ['ubuntu-latest', 123],
@@ -347,7 +346,7 @@ test('▶ ▶ Milestone 2 Empirical Fault Injection Challenge Suite', async (t) 
     for (const fr of forbiddenRunners) {
       assert.throws(
         () => swarm.assertPermittedRunnerEnvironment(fr),
-        /DENY_SELF_HOSTED_RUNNERS_VIOLATION/
+        /INVALID_RUNNER_LABEL/
       );
     }
 
