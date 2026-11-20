@@ -1,0 +1,201 @@
+{
+  "schema": "numina.agent-training-lab.v1",
+  "identity": "NUMINA",
+  "module_path": [
+    "numina.neural-network",
+    "numina.agents",
+    "numina.agent-training-lab"
+  ],
+  "environment": "PRIVATE_OFFLINE_SIMULATION",
+  "guild_scenario": "MyCentralGuild",
+  "simulation_theme": "fantasy multiplayer guild coordination, dungeon planning, progression and resource management",
+  "game_account_control": "DISABLED",
+  "external_game_api_control": "DISABLED",
+  "live_wow_automation": "DISABLED",
+  "capital_registry": "config/numina-agent-capital.v1.json",
+  "rooms": [
+    {
+      "id": "numina-accounting",
+      "room": "numina-accounting",
+      "exercise_group": "dungeon-leadership",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-apple-team",
+      "room": "numina-apple-deployment",
+      "exercise_group": "leveling-and-progression",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-compliance-risk",
+      "room": "#numina-compliance-risk",
+      "exercise_group": "resource-allocation",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-engineering-cio",
+      "room": "#numina-engineering",
+      "exercise_group": "dungeon-leadership",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-federal-capture",
+      "room": "#numina-federal-capture",
+      "exercise_group": "leveling-and-progression",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-finance-treasury",
+      "room": "#numina-finance-treasury",
+      "exercise_group": "resource-allocation",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-crypto-monitor",
+      "room": "#numina-finance-treasury",
+      "exercise_group": "dungeon-leadership",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-google-play-team",
+      "room": "numina-google-play-deployment",
+      "exercise_group": "leveling-and-progression",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-google-enterprise",
+      "room": "#numina-engineering",
+      "exercise_group": "resource-allocation",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-legal",
+      "room": "numina-legal",
+      "exercise_group": "dungeon-leadership",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-growth-matrix",
+      "room": "#numina-market-intel",
+      "exercise_group": "leveling-and-progression",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-publicity-narrative",
+      "room": "#numina-publicity-narrative",
+      "exercise_group": "resource-allocation",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-strategy",
+      "room": "#numina-strategy",
+      "exercise_group": "dungeon-leadership",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "numina-website-soc",
+      "room": "#numina",
+      "exercise_group": "leveling-and-progression",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "vengeance-independent-review",
+      "room": "VENGEANCE_SANDBOX_ISOLATED",
+      "exercise_group": "resource-allocation",
+      "training_mode": "SIMULATION_ONLY",
+      "status": "NOT_RUN"
+    }
+  ],
+  "curriculum": [
+    {
+      "id": "leveling",
+      "competencies": [
+        "memory",
+        "planning",
+        "sequencing",
+        "recovery"
+      ],
+      "scenario": "Progress through staged challenges with limited resources",
+      "completion_rule": "Demonstrate repeatable task execution against held-out scenarios"
+    },
+    {
+      "id": "dungeons",
+      "competencies": [
+        "coordination",
+        "role-specialization",
+        "risk-assessment"
+      ],
+      "scenario": "Collaborative multi-agent dungeon-style encounters in original simulated environments",
+      "completion_rule": "Complete objective with bounded resource spend and independently reviewed logs"
+    },
+    {
+      "id": "guild-economy",
+      "competencies": [
+        "reconciliation",
+        "budget-management",
+        "decision-making"
+      ],
+      "scenario": "Allocate simulation credits with explicit resource constraints",
+      "completion_rule": "Ledger conservation and no unauthorized real-money effects"
+    },
+    {
+      "id": "raid-leadership",
+      "competencies": [
+        "communication",
+        "delegation",
+        "incident-response"
+      ],
+      "scenario": "Coordinate multiple rooms through staged faults and recovery paths",
+      "completion_rule": "All decisions traceable; incidents escalated and replayed"
+    }
+  ],
+  "teams": [
+    {
+      "id": "white",
+      "assignment": "Diagnose configuration, connectivity, CI and recovery blockers"
+    },
+    {
+      "id": "blue",
+      "assignment": "Defensive security testing, evidence verification and remediation retest"
+    },
+    {
+      "id": "green",
+      "assignment": "Infrastructure operational checks, backups, service health and rollback readiness"
+    },
+    {
+      "id": "red",
+      "assignment": "Independent adversarial and security review without modifying production"
+    },
+    {
+      "id": "gold",
+      "assignment": "Release readiness coordination, evidence completeness, acceptance reconciliation and escalation to the owner; cannot sign, self-approve, deploy or move funds"
+    },
+    {
+      "id": "gamma",
+      "assignment": "Develop missing implementation and tests on isolated review branches; submit commits and receipts for independent review"
+    }
+  ],
+  "promotion_requirements": [
+    "held_out_eval_pass",
+    "security_review",
+    "independent_replay_receipts",
+    "source_and_runtime_hashes",
+    "owner_acceptance"
+  ],
+  "production_promotion": "NOT_AUTHORIZED",
+  "notes": "MyCentralGuild is a user-provided name, not evidence of external account access or active gameplay."
+}

@@ -1,0 +1,355 @@
+{
+  "schema": "numina.discord-training-command-center.v1",
+  "status": "PROPOSED_NOT_PROVISIONED",
+  "server": {
+    "name_suggestion": "Numina Agent Training Lab",
+    "server_id": null,
+    "created": false,
+    "linked": false,
+    "owner_role": "guild-leader"
+  },
+  "roles": [
+    {
+      "id": "guild-leader",
+      "authority": "HUMAN_OWNER_ONLY"
+    },
+    {
+      "id": "co-gm",
+      "authority": "COORDINATION_AND_PROPOSALS_ONLY",
+      "may_manage_roles": false,
+      "may_manage_channels": false,
+      "may_spend": false
+    },
+    {
+      "id": "officer",
+      "authority": "APPROVED_TRAINING_LEAD",
+      "may_spend": false
+    },
+    {
+      "id": "veteran",
+      "authority": "MENTOR_ONLY",
+      "may_spend": false
+    },
+    {
+      "id": "member",
+      "authority": "PARTICIPANT",
+      "may_spend": false
+    },
+    {
+      "id": "initiate",
+      "authority": "LIMITED_ONBOARDING",
+      "may_spend": false
+    }
+  ],
+  "categories": [
+    {
+      "name": "COMMAND CENTER",
+      "private": true,
+      "channels": [
+        {
+          "name": "command-center",
+          "purpose": "Owner-led task routing and approvals"
+        },
+        {
+          "name": "training-status",
+          "purpose": "Verified vs pending training health"
+        },
+        {
+          "name": "training-queue",
+          "purpose": "Proposals awaiting owner or officer assignment"
+        },
+        {
+          "name": "run-receipts",
+          "purpose": "Read-only run links and reproducible results"
+        },
+        {
+          "name": "incident-escalation",
+          "purpose": "Security incidents, stop conditions, and operator review"
+        }
+      ]
+    },
+    {
+      "name": "FIFTEEN PRIVATE TRAINING ROOMS",
+      "private": true,
+      "channels": [
+        {
+          "name": "training-01-accounting",
+          "division_id": "numina-accounting",
+          "legacy_room": "numina-accounting",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-02-apple-team",
+          "division_id": "numina-apple-team",
+          "legacy_room": "numina-apple-deployment",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-03-compliance-risk",
+          "division_id": "numina-compliance-risk",
+          "legacy_room": "#numina-compliance-risk",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-04-engineering-cio",
+          "division_id": "numina-engineering-cio",
+          "legacy_room": "#numina-engineering",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-05-federal-capture",
+          "division_id": "numina-federal-capture",
+          "legacy_room": "#numina-federal-capture",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-06-finance-treasury",
+          "division_id": "numina-finance-treasury",
+          "legacy_room": "#numina-finance-treasury",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-07-crypto-monitor",
+          "division_id": "numina-crypto-monitor",
+          "legacy_room": "#numina-finance-treasury",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-08-google-play-team",
+          "division_id": "numina-google-play-team",
+          "legacy_room": "numina-google-play-deployment",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-09-google-enterprise",
+          "division_id": "numina-google-enterprise",
+          "legacy_room": "#numina-engineering",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-10-legal",
+          "division_id": "numina-legal",
+          "legacy_room": "numina-legal",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-11-growth-matrix",
+          "division_id": "numina-growth-matrix",
+          "legacy_room": "#numina-market-intel",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-12-publicity-narrative",
+          "division_id": "numina-publicity-narrative",
+          "legacy_room": "#numina-publicity-narrative",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-13-strategy",
+          "division_id": "numina-strategy",
+          "legacy_room": "#numina-strategy",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-14-website-soc",
+          "division_id": "numina-website-soc",
+          "legacy_room": "#numina",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        },
+        {
+          "name": "training-15-vengeance-independent-review",
+          "division_id": "vengeance-independent-review",
+          "legacy_room": "VENGEANCE_SANDBOX_ISOLATED",
+          "channel_id": null,
+          "created": false,
+          "permission_policy": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "FULL",
+            "co_gm": "VIEW_AND_PROPOSE",
+            "assigned_officer": "VIEW_AND_MODERATE",
+            "assigned_division": "VIEW_AND_POST",
+            "others": "DENY_VIEW",
+            "agents": "NO_PERMISSIONS_UNTIL_VERIFIED"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TREASURY OBSERVATION",
+      "private": true,
+      "channels": [
+        {
+          "name": "treasury-summary-read-only",
+          "channel_id": null,
+          "created": false,
+          "purpose": "Timestamped, verified and redacted treasury summaries only; no instructions or transaction controls",
+          "permissions": {
+            "everyone": "DENY_VIEW",
+            "guild_leader": "VIEW",
+            "approved_accounting_reviewers": "VIEW",
+            "all_bots": "DENY_POST",
+            "all_agents": "DENY_POST"
+          },
+          "commands_allowed": [],
+          "spending_controls": false,
+          "token_transfer_controls": false,
+          "signing_controls": false,
+          "account_connections": false,
+          "balances_if_unverified": "UNAVAILABLE_NOT_ZERO"
+        }
+      ]
+    }
+  ],
+  "default_deny": true,
+  "separate_discord_and_in_game_rank_authority": true,
+  "enrollment_requires": [
+    "human owner creates server",
+    "owner approves roles",
+    "channel IDs and permission audit",
+    "independent review of bot scopes",
+    "consent for any voice intake"
+  ],
+  "game_character_control": "DISABLED",
+  "real_treasury_access": "DISABLED",
+  "notes": "Source-of-truth is Numina Native Treasury; this config does not create a Discord server or rooms. Room names are proposals. Real Discord changes require authenticated server access and permission review."
+}
