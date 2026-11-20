@@ -23,3 +23,26 @@
 /uk-eu.html /uk-eu 301
 /mena.html /mena 301
 /apac.html /apac 301
+
+# Added 2026-11-19 (Workstream C): clean-URL redirects for every remaining page.
+/app.html /app 301
+/connections.html /connections 301
+/deployment-readiness.html /deployment-readiness 301
+/financial-services.html /financial-services 301
+/frontier.html /frontier 301
+/integrations.html /integrations 301
+/kotts-law.html /kotts-law 301
+/master-spec.html /master-spec 301
+/nn-llm.html /nn-llm 301
+/privacy.html /privacy 301
+/provenance.html /provenance 301
+/redemption.html /redemption 301
+/reviewer.html /reviewer 301
+/security.html /security 301
+/task-ledger.html /task-ledger 301
+/testnet.html /testnet 301
+/transfer-receipts.html /transfer-receipts 301
+/treasury.html /treasury 301
+/treasury-simulation.html /treasury-simulation 301
+/wallet-signing.html /wallet-signing 301
+/workspaces.html /workspaces 301
