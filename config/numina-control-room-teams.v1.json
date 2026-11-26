@@ -1,0 +1,218 @@
+{
+  "schema": "numina.control-room-team-registry.v1",
+  "root": "numina.neural-network",
+  "scope": "control-room-and-sites-source",
+  "status": "CONFIGURATION_ONLY",
+  "source_repository": "Numina-Enterprise/numina-production",
+  "source_pr": 200,
+  "teams": [
+    {
+      "id": "white",
+      "name": "White Team",
+      "room": "#numina-engineering",
+      "responsibility": "Diagnose configuration, connectivity, CI and recovery blockers",
+      "mode": "REVIEW_AND_PROPOSE",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "blue",
+      "name": "Blue Team",
+      "room": "#numina-compliance-risk",
+      "responsibility": "Defensive security testing, evidence verification and remediation retest",
+      "mode": "REVIEW_AND_PROPOSE",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "green",
+      "name": "Green Team",
+      "room": "#numina-engineering",
+      "responsibility": "Infrastructure operational checks, backups, service health and rollback readiness",
+      "mode": "REVIEW_AND_PROPOSE",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "red",
+      "name": "Red Team",
+      "room": "VENGEANCE_SANDBOX_ISOLATED",
+      "responsibility": "Independent adversarial and security review without modifying production",
+      "mode": "READ_ONLY",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "gold",
+      "name": "Gold Team",
+      "room": "#numina",
+      "responsibility": "Release readiness coordination, evidence completeness, acceptance reconciliation and escalation to the owner; cannot sign, self-approve, deploy or move funds",
+      "mode": "COORDINATION_ONLY",
+      "activation": "NEWLY_DEFINED_NOT_ACTIVATED"
+    },
+    {
+      "id": "gamma",
+      "name": "Agent Gamma",
+      "room": "#numina-engineering",
+      "responsibility": "Develop missing implementation and tests on isolated review branches; submit commits and receipts for independent review",
+      "mode": "IMPLEMENTATION_PROPOSAL",
+      "activation": "UNVERIFIED"
+    }
+  ],
+  "operational_divisions": [
+    {
+      "id": "numina-accounting",
+      "room": "numina-accounting",
+      "responsibility": "Statement and native ledger reconciliation",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-apple-team",
+      "room": "numina-apple-deployment",
+      "responsibility": "macOS and Swift release verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-compliance-risk",
+      "room": "#numina-compliance-risk",
+      "responsibility": "Zero-trust and manifest verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-engineering-cio",
+      "room": "#numina-engineering",
+      "responsibility": "Windows services and ACL checks",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-federal-capture",
+      "room": "#numina-federal-capture",
+      "responsibility": "HSM and FIPS review",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-finance-treasury",
+      "room": "#numina-finance-treasury",
+      "responsibility": "Treasury settlement evidence",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-crypto-monitor",
+      "room": "#numina-finance-treasury",
+      "responsibility": "NUSD liquidity and pause verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-google-play-team",
+      "room": "numina-google-play-deployment",
+      "responsibility": "Android package verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-google-enterprise",
+      "room": "#numina-engineering",
+      "responsibility": "GCP resources and IAP verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-legal",
+      "room": "numina-legal",
+      "responsibility": "Dual-signature authorization verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-growth-matrix",
+      "room": "#numina-market-intel",
+      "responsibility": "Partner and telemetry integration",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-publicity-narrative",
+      "room": "#numina-publicity-narrative",
+      "responsibility": "Approved communications and release notes",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-strategy",
+      "room": "#numina-strategy",
+      "responsibility": "Milestones and capacity",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "numina-website-soc",
+      "room": "#numina",
+      "responsibility": "Website perimeter and TLS verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "vengeance-independent-review",
+      "room": "VENGEANCE_SANDBOX_ISOLATED",
+      "responsibility": "Independent isolated fuzzing",
+      "activation": "UNVERIFIED"
+    }
+  ],
+  "treasury_review_roles": [
+    {
+      "id": "dedicated-treasurer",
+      "responsibility": "Read-only treasury evidence inventory and reconciliation",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "engineering",
+      "responsibility": "Integration implementation without fund movement",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "blue-review",
+      "responsibility": "Independent current journal and receipt verification",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "red-review",
+      "responsibility": "Independent authorization and failure handling review",
+      "activation": "UNVERIFIED"
+    },
+    {
+      "id": "release-coordinator",
+      "responsibility": "Publication evidence and artifact alignment",
+      "activation": "UNVERIFIED"
+    }
+  ],
+  "routing": {
+    "MISSING_IMPLEMENTATION": "gamma",
+    "SECURITY_FAILURE": "blue",
+    "INFRASTRUCTURE_FAILURE": "green",
+    "CONFIGURATION_FAILURE": "white",
+    "ADVERSARIAL_REVIEW": "red",
+    "RELEASE_EVIDENCE_REVIEW": "gold"
+  },
+  "workflow": {
+    "states": [
+      "NOT_RUN",
+      "BLOCKED",
+      "IN_PROGRESS",
+      "PASS",
+      "FAIL",
+      "INCONCLUSIVE",
+      "RELEASE_HOLD"
+    ],
+    "required_evidence_fields": [
+      "commit",
+      "branch",
+      "artifact_path",
+      "expected_hash",
+      "observed_hash",
+      "exact_command",
+      "observed_output",
+      "runner_environment",
+      "reviewer",
+      "linked_evidence",
+      "blocker",
+      "final_disposition"
+    ],
+    "verified_closure_requires": [
+      "observed_test_receipt",
+      "independent_verifier",
+      "all_applicable_policy_gates"
+    ],
+    "automatic_retries": false,
+    "production_release": "RELEASE_HOLD"
+  },
+  "notes": "Registry describes coordination responsibilities, not Slack team creation, running agents, Sites publication, or production authorization."
+}

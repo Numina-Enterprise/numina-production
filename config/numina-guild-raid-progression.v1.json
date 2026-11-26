@@ -1,0 +1,181 @@
+{
+  "schema": "numina.guild-to-raid-progression.v1",
+  "status": "CONFIGURED_NOT_LIVE",
+  "guild": "MyCentralGuild",
+  "single_objective": "Prepare one verified 40-participant Alliance raid via coordinated human gameplay and isolated agent simulation",
+  "scope": {
+    "human_gameplay": "VOLUNTARY_HUMAN_PLAY_ONLY",
+    "agent_actions": "OFFLINE_SIMULATION_ONLY",
+    "wow_automation": "DISABLED",
+    "discord_connection": "NOT_CONNECTED"
+  },
+  "work_lanes": {
+    "farming": [
+      "numina-growth-matrix",
+      "numina-crypto-monitor",
+      "numina-apple-team"
+    ],
+    "crafting": [
+      "numina-engineering-cio",
+      "numina-google-play-team"
+    ],
+    "dungeon_progression": [
+      "numina-strategy",
+      "numina-google-enterprise",
+      "numina-federal-capture"
+    ],
+    "guild_bank_and_treasury": [
+      "numina-accounting",
+      "numina-finance-treasury",
+      "numina-legal"
+    ],
+    "raid_logistics": [
+      "numina-website-soc",
+      "numina-publicity-narrative"
+    ],
+    "independent_review": [
+      "numina-compliance-risk",
+      "vengeance-independent-review"
+    ]
+  },
+  "evaluation_coordinator": "gamma",
+  "command_review": "gold",
+  "security_review": "blue",
+  "diagnostics": "white",
+  "ops_review": "green",
+  "independent_adversarial_review": "red",
+  "events": [
+    "GATHER",
+    "CRAFT",
+    "DUNGEON_COMPLETE",
+    "CONSUME",
+    "CONTRIBUTE",
+    "REPAIR_RESERVE",
+    "REHEARSAL",
+    "ROSTER_CONFIRM"
+  ],
+  "evidence_levels": {
+    "simulated": "SYNTHETIC_NOT_ACTUAL",
+    "reported": "UNVERIFIED_NOT_COUNTED",
+    "verified": "HUMAN_CONFIRMED_WITH_TIMESTAMPED_EVIDENCE"
+  },
+  "ledger_fields": [
+    "event_id",
+    "timestamp",
+    "division",
+    "event_type",
+    "asset_id",
+    "quantity",
+    "unit",
+    "source",
+    "destination",
+    "authorization_ref",
+    "evidence_level",
+    "evidence_ref",
+    "before_balance",
+    "after_balance",
+    "gamma_score",
+    "reviewer"
+  ],
+  "accounting": {
+    "gold_and_items_separate": true,
+    "real_game_holdings_default": "UNVERIFIED",
+    "reported_real_not_usable": true,
+    "simulated_not_redeemable": true,
+    "conservation_required": true,
+    "transaction_audit_required": true
+  },
+  "readiness": {
+    "roster": {
+      "capacity": 40,
+      "confirmed_required": 40,
+      "tanks_required": 4,
+      "healers_required": 10,
+      "dps_required": 26,
+      "confirmed": 0,
+      "tanks_confirmed": 0,
+      "healers_confirmed": 0,
+      "dps_confirmed": 0
+    },
+    "thresholds": {
+      "consumables": null,
+      "materials": null,
+      "repair_reserve_gold": null,
+      "rehearsals": null,
+      "raid_identifier": null,
+      "wow_version": null
+    },
+    "threshold_status": "PENDING_RAID_AND_VERSION",
+    "acceptance": [
+      "40_DISTINCT_VERIFIED_PLAYERS",
+      "ROLE_MINIMA_MET",
+      "CONSUMABLES_AND_REPAIR_RESERVE_VERIFIED",
+      "REHEARSALS_EVIDENCED",
+      "GAMMA_SCORE_AT_LEAST_90",
+      "NO_UNAUTHORIZED_TRANSACTIONS",
+      "LEDGER_RECONCILED",
+      "OWNER_APPROVAL"
+    ],
+    "readiness_disposition": "NOT_READY"
+  },
+  "schedule": {
+    "target_start": "2026-12-01",
+    "target_end": "2026-12-07",
+    "timezone": "America/Chicago",
+    "type": "PLANNING_WINDOW"
+  },
+  "output": {
+    "discord_channel": "treasury-summary-read-only",
+    "mode": "READ_ONLY_AFTER_VERIFICATION",
+    "production_controls": false,
+    "transfer_controls": false
+  },
+  "disclaimers": "The 15 Numina divisions are training lanes, not 15 in-game automated players. None of the roster slots or holdings are confirmed by this config.",
+  "governance": {
+    "financial_authority": "HUMAN_OWNER_ONLY",
+    "authority_scope": "All real funds, NUSD, wallets, bank accounts, real in-game guild-bank spending or transfers",
+    "delegation": "NONE_CONFIGURED",
+    "owner_identity": "NUMINA_OWNER",
+    "agents": "READ_ONLY_OBSERVE_SIMULATE_PROPOSE",
+    "officers": "NO_FINANCIAL_AUTHORITY",
+    "gamma": "EVALUATION_ONLY_NO_FINANCIAL_AUTHORITY",
+    "co_gm": "COORDINATION_ONLY_NO_FINANCIAL_AUTHORITY",
+    "approval": "Explicit owner authorization plus applicable independent verification and custody/signing policy",
+    "state": "POLICY_CONFIG_ONLY_NOT_ENFORCED_IN_EXTERNAL_SERVICES"
+  },
+  "milestones": [
+    {
+      "id": "M1_DUNGEON",
+      "name": "Five-player dungeon readiness",
+      "criteria": [
+        "Human-reviewed five-player party composition",
+        "Consent and coordination procedure",
+        "Recorded rehearsal",
+        "Gamma evaluation and exception review"
+      ],
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "M2_ECONOMY",
+      "name": "Sustainable farming and crafting",
+      "criteria": [
+        "Per-run gathering and crafting ledger",
+        "Verified supply inflow and consumption",
+        "Reconciled shared guild-bank ledger",
+        "No unauthorized real or in-game transactions"
+      ],
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "M3_RAID",
+      "name": "Forty-player raid readiness",
+      "criteria": [
+        "40 unique confirmed player participants",
+        "Proposed roster of 4 tanks, 10 healers and 26 DPS adjusted to actual raid",
+        "Verified consumables, gear and repair reserve",
+        "Documented rehearsals and owner acceptance"
+      ],
+      "status": "NOT_VERIFIED"
+    }
+  ]
+}

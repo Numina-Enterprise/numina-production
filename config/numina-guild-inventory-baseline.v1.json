@@ -1,0 +1,70 @@
+{
+  "schema": "numina.guild-inventory-baseline.v1",
+  "scope": "HUMAN_CHARACTER_IN_GAME",
+  "source": "OWNER_REPORTED_SPOKEN",
+  "guild": "MyCentralGuild",
+  "character": {
+    "name": null,
+    "realm": null,
+    "faction": "ALLIANCE",
+    "identity_verified": false
+  },
+  "snapshot": {
+    "observed_at": null,
+    "reported_on_date": "2026-11-17",
+    "confirmation": "PENDING_IN_GAME_SCREENSHOT_OR_LEDGER_RECEIPT"
+  },
+  "opening_balance": {
+    "gold": 0,
+    "silver": 53,
+    "copper": 0,
+    "total_copper": 5300,
+    "currency": "WOW_IN_GAME_CURRENCY",
+    "verification": "USER_REPORTED_UNVERIFIED",
+    "spendable_by_agents": false
+  },
+  "guild_bank_balance": {
+    "gold": null,
+    "silver": null,
+    "copper": null,
+    "verification": "UNKNOWN"
+  },
+  "materials": {
+    "items": [],
+    "inventory_complete": false,
+    "verification": "UNKNOWN"
+  },
+  "consumables": {
+    "items": [],
+    "inventory_complete": false,
+    "verification": "UNKNOWN"
+  },
+  "transaction_journal": [],
+  "reconciliation": {
+    "status": "NOT_RUN",
+    "rule": "Closing copper equals opening copper plus verified inflows minus verified outflows; do not count reported amounts as verified holdings"
+  },
+  "separation": {
+    "simulation_gold": "SEPARATE_LEDGER",
+    "real_numina_treasury": "NO_ACCESS",
+    "real_currency": "NO_ACCESS",
+    "approval_authority": "HUMAN_GUILD_LEADER_ONLY"
+  },
+  "note": "53 silver is a user-reported character opening balance, not confirmed guild-bank holdings or real funds.",
+  "first_milestone": {
+    "id": "M0_ONE_GOLD",
+    "target_copper": 10000,
+    "target_display": "1 gold",
+    "baseline_copper": 5300,
+    "required_net_gain_copper": 4700,
+    "required_net_gain_display": "47 silver",
+    "status": "PENDING_VERIFIED_CHARACTER_SNAPSHOT",
+    "tracked_inflows": [],
+    "tracked_outflows": [],
+    "observed_balance_copper": null,
+    "reconciliation": "NOT_RUN",
+    "owner_financial_authority": true,
+    "gamma_authority": "OBSERVE_AND_RECONCILE_ONLY",
+    "promotion_condition": "timestamped character balance verification and balanced transaction journal"
+  }
+}

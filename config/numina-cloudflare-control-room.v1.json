@@ -1,0 +1,91 @@
+{
+  "schema": "numina.cloudflare-control-room.v1",
+  "domain": "numinalabs.xyz",
+  "status": "PROPOSED_NOT_DEPLOYED",
+  "source": {
+    "wrangler": "wrangler.jsonc",
+    "workflow": ".github/workflows/deploy-cloudflare.yml",
+    "team_registry": "config/numina-control-room-teams.v1.json",
+    "module_registry": "config/numina-module-tree.v1.json"
+  },
+  "surfaces": [
+    {
+      "id": "public-site",
+      "name": "Cloudflare Workers and domain",
+      "hostname": "numinalabs.xyz",
+      "aliases": [
+        "www.numinalabs.xyz"
+      ],
+      "purpose": "Public site, application routing, TLS, DNS and deployment readback",
+      "owners": [
+        "white",
+        "green",
+        "blue",
+        "gold"
+      ],
+      "requirements": [
+        "verified DNS ownership and records",
+        "TLS certificate and redirect checks",
+        "edge route and Worker identity",
+        "source commit and signed build provenance",
+        "smoke test and rollback evidence"
+      ],
+      "evidence_status": "NOT_RUN"
+    },
+    {
+      "id": "private-access",
+      "name": "Cloudflare Zero Trust WARP",
+      "purpose": "Authorized operator device enrollment and private access; not a public website deployment mechanism",
+      "owners": [
+        "white",
+        "blue",
+        "green",
+        "red"
+      ],
+      "requirements": [
+        "actual organization/team identifier",
+        "device posture evidence",
+        "identity and least-privilege application policies",
+        "WARP enrollment evidence",
+        "private route or tunnel scope",
+        "access-denied and offboarding tests"
+      ],
+      "evidence_status": "NOT_RUN"
+    }
+  ],
+  "checks": [
+    {
+      "id": "cf-zone",
+      "status": "NOT_RUN",
+      "expected": "Zone and authoritative DNS observed via authorized provider read"
+    },
+    {
+      "id": "cf-worker",
+      "status": "NOT_RUN",
+      "expected": "Production Worker revision, routes and artifact digest verified"
+    },
+    {
+      "id": "cf-tls",
+      "status": "NOT_RUN",
+      "expected": "TLS, HSTS, redirects and edge headers independently reviewed"
+    },
+    {
+      "id": "warp-identity",
+      "status": "NOT_RUN",
+      "expected": "Authorized device enrollment and Zero Trust policy observed"
+    },
+    {
+      "id": "warp-deny",
+      "status": "NOT_RUN",
+      "expected": "Unregistered client correctly denied restricted access"
+    },
+    {
+      "id": "release-readiness",
+      "status": "RELEASE_HOLD",
+      "expected": "signed provenance, CI, smoke tests, inference gate and owner approval"
+    }
+  ],
+  "scope": "SOURCE_CONFIGURATION_ONLY",
+  "production_release": "RELEASE_HOLD",
+  "notes": "No Cloudflare API operations, WARP enrollment, DNS updates, credential changes or deployment performed. Do not infer WARP exists from wrangler config."
+}

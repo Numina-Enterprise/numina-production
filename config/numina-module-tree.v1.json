@@ -1,0 +1,82 @@
+{
+  "schema": "numina.module-tree.v1",
+  "root_id": "numina.neural-network",
+  "status": "DEVELOPMENT",
+  "release_disposition": "RELEASE_HOLD",
+  "modules": [
+    {
+      "id": "numina.neural-network",
+      "parent_id": null,
+      "name": "NUMINA Neural Network",
+      "maturity": "ALPHA",
+      "audience": "INTERNAL",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "NOT_RUN"
+    },
+    {
+      "id": "numina.llm",
+      "parent_id": "numina.neural-network",
+      "name": "Numina LLM",
+      "maturity": "ALPHA",
+      "audience": "DEVELOPER",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "NOT_RUN"
+    },
+    {
+      "id": "numina.agents",
+      "parent_id": "numina.neural-network",
+      "name": "Numina Agents",
+      "maturity": "ALPHA",
+      "audience": "DEVELOPER",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "NOT_RUN"
+    },
+    {
+      "id": "numina.treasury",
+      "parent_id": "numina.neural-network",
+      "name": "Numina Native Treasury",
+      "maturity": "LEGACY",
+      "audience": "PRIVATE",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "INCONCLUSIVE"
+    },
+    {
+      "id": "numina.applications",
+      "parent_id": "numina.neural-network",
+      "name": "Numina Applications",
+      "maturity": "BETA",
+      "audience": "PUBLIC",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "INCONCLUSIVE"
+    },
+    {
+      "id": "numina.infrastructure",
+      "parent_id": "numina.neural-network",
+      "name": "Numina Infrastructure",
+      "maturity": "BETA",
+      "audience": "INTERNAL",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "INCONCLUSIVE"
+    },
+    {
+      "id": "numina.governance",
+      "parent_id": "numina.neural-network",
+      "name": "Numina Governance",
+      "maturity": "BETA",
+      "audience": "PRIVATE",
+      "deployment": "NOT_DEPLOYED",
+      "acceptance": "INCONCLUSIVE"
+    }
+  ],
+  "required_release_evidence": [
+    "licensed_weights",
+    "gguf_sha256",
+    "llama_cpp_binary_sha256",
+    "actual_generation_receipt",
+    "acceptance_fixtures",
+    "ci_receipts",
+    "independent_review",
+    "authorized_signatures"
+  ],
+  "release_evidence": {}
+}

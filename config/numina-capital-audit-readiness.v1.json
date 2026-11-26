@@ -1,0 +1,50 @@
+{
+  "schema": "numina.capital-audit-readiness.v1",
+  "purpose": "audit existing capital and prepare evidence-bounded fundraising plan",
+  "status": "UNVERIFIED_NO_LINKED_FINANCIAL_ACCOUNTS",
+  "scope": "NUMINA_LABS_OWNER_REVIEW",
+  "assets": {
+    "verified_cash": null,
+    "verified_tokens": null,
+    "reported_holdings": [],
+    "simulated_guild_gold": "EXCLUDED",
+    "net_available_capital": "UNKNOWN"
+  },
+  "verification_requirements": [
+    "account_ownership_or_custody_evidence",
+    "asset_and_currency_identifier",
+    "current_timestamped_source_balance",
+    "liabilities_and_encumbrances",
+    "independent_reconciliation",
+    "valuation_source_if_non_cash",
+    "owner_approval"
+  ],
+  "fundraising": {
+    "target_amount": null,
+    "instrument": null,
+    "investor_or_customer_channel": null,
+    "terms": "NOT_SELECTED",
+    "status": "PLANNING_ONLY",
+    "claims_require_evidence": true
+  },
+  "forbidden": [
+    "treat_simulated_gold_as_funds",
+    "treat_reported_NUSD_as_redeemable_cash_without_proof",
+    "perform_fund_movement",
+    "issue_securities",
+    "publish_unverified_returns",
+    "sign_or_deploy",
+    "assume_bank_or_wallet_is_connected"
+  ],
+  "governance": {
+    "owner_decisions_required": [
+      "capital_goal",
+      "fundraising_structure",
+      "disclosure",
+      "funds_custody",
+      "execution"
+    ],
+    "independent_review_required": true
+  },
+  "note": "This artifact does not confirm any balance, valuation, investor commitment, fundraising authorization, or source account."
+}
