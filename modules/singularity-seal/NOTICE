@@ -1,0 +1,19 @@
+Singularity Seal (Envelope Seal and Archive Seal)
+Copyright (c) 2026 Samuel J. Kott and SK Consulting LLC dba Numina Labs
+
+Author: Samuel J. Kott
+Operator: SK Consulting LLC dba Numina Labs
+License: BSD 3-Clause License. See LICENSE.md in this directory.
+This module uses the same license as the Numina repository.
+
+The generated package-lock.json file has no comment header. npm would reject
+one. Its attribution is the author and copyright fields of package.json.
+
+Third-party cryptography, used unmodified:
+- ML-DSA-65: @noble/post-quantum (MIT), FIPS 204. This module does not
+  reimplement the lattice signature.
+- Ed25519: Node.js node:crypto, pure Ed25519 as specified by RFC 8032.
+- Composite combiner: RFC 10073, id-MLDSA65-Ed25519-SHA512
+  (1.3.6.1.5.5.7.6.48).
+
+This module does not ship operational signing keys.

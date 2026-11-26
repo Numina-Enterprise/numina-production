@@ -1,0 +1,25 @@
+{
+  "name": "@numina/singularity-seal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Envelope Seal and Archive Seal. Composite Ed25519 plus ML-DSA-65 signatures for Singularity task envelopes and provenance records, plus a post-quantum archive counter-signature. Copyright (c) 2026 Samuel J. Kott and SK Consulting LLC dba Numina Labs.",
+  "license": "BSD-3-Clause",
+  "author": "Samuel J. Kott, SK Consulting LLC dba Numina Labs",
+  "copyright": "Copyright (c) 2026 Samuel J. Kott and SK Consulting LLC dba Numina Labs",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "seal": "./bin/seal.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "node scripts/run-tests.mjs"
+  },
+  "dependencies": {
+    "@noble/post-quantum": "0.7.1"
+  }
+}
