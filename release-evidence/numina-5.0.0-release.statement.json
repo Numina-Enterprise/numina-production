@@ -52,49 +52,67 @@
     {
       "name": "dist/client/_redirects",
       "digest": {
-        "sha256": "410009857735112953f381916ef72a4dccc4baff4d852d81612c1bfb76bcd3b2"
+        "sha256": "36a9de188deb8afd89c4660b1dd9af9fbbae0a43eb84811b8bff878fb6fbaa09"
       }
     },
     {
       "name": "dist/client/about.html",
       "digest": {
-        "sha256": "658706a251d5eec433fd15299592fec015dd1ef8b21acfc4cf34a50dd399622d"
+        "sha256": "8c09bf2cb6fd77163b484032a993fceb7845f5fd133e112774ca4b515e0d87fb"
       }
     },
     {
       "name": "dist/client/apac.html",
       "digest": {
-        "sha256": "bc4e854a72a09e24b2703450d1cd3d5a8270c755464b309cde987f0528e57568"
+        "sha256": "97b9f19fa95b7b6b261470dbfb101660650664aa48683bc41ad50798e2567090"
+      }
+    },
+    {
+      "name": "dist/client/app.css",
+      "digest": {
+        "sha256": "60e7d53ef03f159485e97b0be3da1d727fe64881fd61e3bbfdee7283303bbc45"
       }
     },
     {
       "name": "dist/client/app.html",
       "digest": {
-        "sha256": "6efae50f50feb86d2b7d696f87ae0b7a4daf2de5459eb02369a7a78b78b78933"
+        "sha256": "cb1a5b75f935bfb4cb67af77534289ac3b7e8e11e765f09fe381c06054930e1f"
       }
     },
     {
       "name": "dist/client/blockchain.html",
       "digest": {
-        "sha256": "59577af5e1e56390d395dc65723bcc96c6327d1aab9b65be53baf5a1ca29b15c"
+        "sha256": "9ac5c2d31e8ed1e9da27ed7a612ba7d2c4e239e5983900cdabab1f327e845c16"
       }
     },
     {
       "name": "dist/client/build.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "4948d179f0a788cca5ce73acf3170a7326e747fe68c849ce19c6dab28b579000"
       }
     },
     {
       "name": "dist/client/checkout-cancel.html",
       "digest": {
-        "sha256": "3e0787663c7631cbd92876162464789a4cddad24cec611ea192c46eaa7752463"
+        "sha256": "e2a3b73080e2b9c1ed9b93d428e9e05d91d6fc31f6255aeb66bca9c994341e62"
       }
     },
     {
       "name": "dist/client/checkout-success.html",
       "digest": {
-        "sha256": "69c0cee3dc9ee8aa35ad1757ba694c7af1c4c8e95c006f94e154dff837f41c41"
+        "sha256": "c3e7a8ae6910ba629de2524ed891f31c3201a0ca35a723164dd82dd05f5801cd"
+      }
+    },
+    {
+      "name": "dist/client/checkout.html",
+      "digest": {
+        "sha256": "de0a56220dac3d668bc90f14e5f1e0325ba49df2b7950e8caeb367f7c5e4a8d1"
+      }
+    },
+    {
+      "name": "dist/client/company-simulation.css",
+      "digest": {
+        "sha256": "45ec5099eedc08f49ffe04451d65aeccf17145862fdd2d2131c98478795f8407"
       }
     },
     {
@@ -106,37 +124,49 @@
     {
       "name": "dist/client/connections.html",
       "digest": {
-        "sha256": "16cd241ea176a9afed42ee9ba0f0e18974b2d1d0580bb9bd62f86317ffdf76ba"
+        "sha256": "e86446344ae33a5103423e1fcaa2b114e069566761b1c07b7901b32c80bd3938"
       }
     },
     {
       "name": "dist/client/contact.html",
       "digest": {
-        "sha256": "fb67b396f8435949bcb43f536740ef8e51638c8289a0106ce68e55351c166ccd"
+        "sha256": "1f42502aebca8d855b03226ecb0f4a979f45a6cbec0995cc43aaa1c0bc665183"
+      }
+    },
+    {
+      "name": "dist/client/control.css",
+      "digest": {
+        "sha256": "69c16fb66a217cef87c762d9c32b6e67136c5ece42916cf524f22d32a8b7310a"
       }
     },
     {
       "name": "dist/client/control.html",
       "digest": {
-        "sha256": "902aa181dd696f9da3213f5cbeb8ee87a3a80f6516b1b2b9597232372020c080"
+        "sha256": "f9fc1c153d69cfde8f244ff8df1a6c090272274f6cc1d29c5260424f2f33155f"
       }
     },
     {
       "name": "dist/client/core.html",
       "digest": {
-        "sha256": "01f58fa34679f498e69fd70bb00d32fa21593613cd4566a0631d196b7ba2f236"
+        "sha256": "89e0ea6bcad596110c57aedaf822be0fdfba417ba69f4f5285c341a6685acd3f"
+      }
+    },
+    {
+      "name": "dist/client/deployment-readiness.css",
+      "digest": {
+        "sha256": "3aea70dd416729bd2c059f5784a32d717a0ecbd0a5404864bdbd99095b0b5e17"
       }
     },
     {
       "name": "dist/client/deployment-readiness.html",
       "digest": {
-        "sha256": "c93ecfb4534e3906b38f9e8b1fbbf7bb0b9ff31d3affe54f82a154926e86b1d5"
+        "sha256": "cd82d9d73472521bbfff756fd07b288c76f9ade88f67eb0a0c616a58caa7c2a0"
       }
     },
     {
       "name": "dist/client/developers.html",
       "digest": {
-        "sha256": "0142b7515f322f09ef39cbbfd0cf5e3a3eedc5a076bce992b3c29d05a7990800"
+        "sha256": "9f484b4e17b857c7fffbcb9844bf237cc0e93e41a337899bf5c3467309442690"
       }
     },
     {
@@ -148,7 +178,7 @@
     {
       "name": "dist/client/economy.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "f69e92fb8d42a1b72db73c76823222f1746a2e9f7955e813d59669030d1b9beb"
       }
     },
     {
@@ -172,55 +202,85 @@
     {
       "name": "dist/client/financial-institutions.html",
       "digest": {
-        "sha256": "3f764dd76181044c2e7e5c99331cb92d78192ea5c0c4a6a4f401432ae017225c"
+        "sha256": "e01cf9fc90e30394a35e7f5faf4e3dfbf93f3599251dd4c723be0c6eed66a013"
       }
     },
     {
       "name": "dist/client/financial-services.html",
       "digest": {
-        "sha256": "1f70f99ea489eabff1eef540ce355a37f63bf06df231696b8a0c9f227ae3067c"
+        "sha256": "bf262e28dc141df873b31feff960073816790796ebeb56d8272be75014d75caa"
+      }
+    },
+    {
+      "name": "dist/client/financial.css",
+      "digest": {
+        "sha256": "4067284b1c3cb671ee71eeeb24fc18b03fd592c68354eb80dc8bed9fd81bd891"
+      }
+    },
+    {
+      "name": "dist/client/frontier.css",
+      "digest": {
+        "sha256": "42b468f62d30ca231fe2d2670df6ac7f4d3331897ef1587f6157dfafbc64d427"
       }
     },
     {
       "name": "dist/client/frontier.html",
       "digest": {
-        "sha256": "1af82c2526b795290f3b9e388d19ecdb977b058503fe4a319c5c268bc2aca569"
+        "sha256": "a03909b8e9f045ca09b5b82778b130b32c0963ab3de400a7a512d3ba7da4843c"
       }
     },
     {
       "name": "dist/client/government.html",
       "digest": {
-        "sha256": "57c320b747c135d601f5aacaf8955ceeb06f2b08dd1615a12f6bff3b785c9ce2"
+        "sha256": "5befba8300a68569bf2ac0352951e1779bfaab4c63c42bfd3651c73dcda58844"
       }
     },
     {
       "name": "dist/client/index.html",
       "digest": {
-        "sha256": "56d00cae9aed2b7823fc2fb9e106ffff80914acc1c268bdb41f2b112dfce415b"
+        "sha256": "9ff64617de242fcf517ab0cb9ad74fd8538b1a946e48c91f7f6d8a4a61207897"
       }
     },
     {
       "name": "dist/client/integrations.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "a8890e7f3a6a1f3792303915d0b0c3935f1a70facd61c085fbf79f2f4552c6e7"
+      }
+    },
+    {
+      "name": "dist/client/kotts-law.html",
+      "digest": {
+        "sha256": "9135cdaea934fee318cb04b927cd7f9c61d00445d93fbc78d6018a59fd552735"
       }
     },
     {
       "name": "dist/client/labs.html",
       "digest": {
-        "sha256": "043a1fba239f7e292e6f29ae9eee1b269ddfbbb0f24d114144d8c0d3adb5cbf6"
+        "sha256": "19eed5eee8db4c7706ac55851c4cf688d04357bc31bc659e7b2de2411162f39e"
+      }
+    },
+    {
+      "name": "dist/client/master-spec.html",
+      "digest": {
+        "sha256": "7007579df049c2ffdc59aa1018d993a6b2d23667583d60e088baf86a61f445f0"
       }
     },
     {
       "name": "dist/client/mena.html",
       "digest": {
-        "sha256": "5584cb35ec88dfc4c90f651d5b3b4d751767f315e2eb1fb0c359b8137edb20de"
+        "sha256": "e259c667a9bfe0374d156c460796921b7176d67ce2f81794a5eb6c3ef60a4b7c"
       }
     },
     {
       "name": "dist/client/motion.css",
       "digest": {
         "sha256": "6bfe1244883e6d0f875f19ef7b3580c94332d1fd6bb6eec9e864158ee8e45731"
+      }
+    },
+    {
+      "name": "dist/client/nn-llm.html",
+      "digest": {
+        "sha256": "5b3e0e63936cfbbccb7cdf70eebb8d4f0d85253795bd4a37dccb3c73b7f69135"
       }
     },
     {
@@ -244,43 +304,49 @@
     {
       "name": "dist/client/ownership.html",
       "digest": {
-        "sha256": "b0eb04b95a6e80efb18bed74c5037128aa30fbf4454e9c4c08358dec68375d1c"
+        "sha256": "e4de314d21d272dea28a12e7c86c869a9e6a3e1cc6bcd8f0f115d00bc15a60c6"
       }
     },
     {
       "name": "dist/client/partners.html",
       "digest": {
-        "sha256": "9be06afb4118ea560a5fb7dcb75773a05a3612d5267395d42d5ac5478a00c037"
+        "sha256": "213089365a6e7b811928a23056d0cb7b77e2de2b6362c423407114c34dbfcb87"
       }
     },
     {
       "name": "dist/client/platform.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "f09c9c4929ce4f73a2fe8975e8049ef763ac59ade8a91e940e2af2bfa23b87b4"
       }
     },
     {
       "name": "dist/client/privacy.html",
       "digest": {
-        "sha256": "37480e23d81cb4106f1096ac400d8b207aa1120b6a3ffde2b96d2325545741fb"
+        "sha256": "5bff6a782e1a8ce6eb5e88466ea98c7236e03b0cf3c2cdc97212c81b865b3038"
       }
     },
     {
       "name": "dist/client/provenance.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "aef2be2d4c17ce5aa12a661a555d3ea3076e1073013cfec242bb2f4428d63fbc"
       }
     },
     {
       "name": "dist/client/redemption.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "810a53fb7c66e25d00f2a2146e236ed8014bc8797f8e62c2660a999de5ca000a"
+      }
+    },
+    {
+      "name": "dist/client/reviewer.css",
+      "digest": {
+        "sha256": "0b5977ec9213c293a975c19a2283649fc28faf8da368cd78acaa257993bfa0c6"
       }
     },
     {
       "name": "dist/client/reviewer.html",
       "digest": {
-        "sha256": "ef86f5b9ea6d266a433c179afe6b2e06fa4a858c537cecac9ae26942cd1e760e"
+        "sha256": "dca714b38f53ca46cb594001339a574d12a4b923a9bcf962e0801ec8d0712a06"
       }
     },
     {
@@ -298,7 +364,7 @@
     {
       "name": "dist/client/security.html",
       "digest": {
-        "sha256": "5b6d44767fe5651ee7a3b55568c64c2142ccefeeb3e5d547ac5d8a405f2ad470"
+        "sha256": "a6c8a3b039e479a2acdf6122bfd3bcdd4554dd5c11c9c1ef0dd29dae6ff01e4a"
       }
     },
     {
@@ -310,7 +376,7 @@
     {
       "name": "dist/client/services.html",
       "digest": {
-        "sha256": "b1000ed02a84938ba75ec2f3a423ddf1c8d5adb4bdc8e5fc303ce49759370201"
+        "sha256": "9046dba05d6e8ec3f51d88071ff4c23034dca2516cd97c476f6523c0d7dd0ce3"
       }
     },
     {
@@ -322,7 +388,7 @@
     {
       "name": "dist/client/sitemap.xml",
       "digest": {
-        "sha256": "fe19022e951111d44cf575605db2a9ac910b0780ea95314278004c615e2f660c"
+        "sha256": "671f19a5cd036aa78c2cccf56e89cd6253fdfaffa85f48cc1dffd85e1260d26f"
       }
     },
     {
@@ -334,19 +400,25 @@
     {
       "name": "dist/client/status.html",
       "digest": {
-        "sha256": "ebf9f3500f5d2cbfd7e9863ae6456972ee969cce1d773488054cd602c2d5b66e"
+        "sha256": "35754dd3473260078d6822f42dcf7bd9e7eefae2f61736ea599d4263ac0735d1"
       }
     },
     {
       "name": "dist/client/task-ledger.html",
       "digest": {
-        "sha256": "24a9bcc6eea7a1195e65f1f3b781709a532484ff487ad22f72c421ccff5f2453"
+        "sha256": "b99f3bb88cea356645a55fc8bab86ca4213c1d8cb1110c58eb7ebb9ef7c97233"
       }
     },
     {
       "name": "dist/client/terminal.css",
       "digest": {
         "sha256": "632c002606f0715d80e0a5395df9ec3666c217e170e9effbacb810ef5184f4a9"
+      }
+    },
+    {
+      "name": "dist/client/testnet.html",
+      "digest": {
+        "sha256": "2e474d2fc9d92acfd5fe43c234d236a95154f4babffc840cd2e11de88ffa24bc"
       }
     },
     {
@@ -362,39 +434,63 @@
       }
     },
     {
+      "name": "dist/client/transfer-receipts.css",
+      "digest": {
+        "sha256": "34b0e80e5d439b48518e0a76c59877488e352762c731a2ebd932b7aa7bc52d48"
+      }
+    },
+    {
       "name": "dist/client/transfer-receipts.html",
       "digest": {
-        "sha256": "25961355af73aaf97408f87bbbd859b340321c343110a0b77889e149ad1abb7d"
+        "sha256": "14ad23833deb33cb6dee8b66bba4a1f26e4b5a7980ac7280dc600d0a18f64913"
+      }
+    },
+    {
+      "name": "dist/client/treasury-connection.css",
+      "digest": {
+        "sha256": "05176a27d7cf6b4d5baf43dc89f0c67606d2464cafc623078b07ba026886c5c4"
+      }
+    },
+    {
+      "name": "dist/client/treasury-simulation.css",
+      "digest": {
+        "sha256": "cd056bb2f777c2f3d096514c8098dcaec91141f0e415ef126b457e63159582cd"
       }
     },
     {
       "name": "dist/client/treasury-simulation.html",
       "digest": {
-        "sha256": "f817706fabda07b166ad9e8bbfa7f257fe44f8ac5215ed21707d3e1bb71d7e55"
+        "sha256": "97abe2806faf7a2ea9c7266021243975a2ea1ee1c6748ce3c8276fabf7552bf7"
       }
     },
     {
       "name": "dist/client/treasury.html",
       "digest": {
-        "sha256": "fcd4712e93688032aab5ce2b8eb49876fd0b93b55b9ed26a9d14d4422304f545"
+        "sha256": "ad57d0a20e7502c98076a13ac612fd36b944af1501cb66379d27fb496bb7d886"
       }
     },
     {
       "name": "dist/client/trust.html",
       "digest": {
-        "sha256": "37ee8ea972f21675992d0786335a52517abac76661d89d7eeb0e50dc8cfcdd6a"
+        "sha256": "e968dae2e7ce7dbba0606dd48d7155aa136eecf81b599a5c1306e1052db44592"
       }
     },
     {
       "name": "dist/client/uk-eu.html",
       "digest": {
-        "sha256": "816d82e65ba4284fbf3b0b1a5044f55e2dfe15be326151fdeb86f335fcef2963"
+        "sha256": "7b2f88ad07c1d46fa3e9d4dacb83b53433b0873e78f4cc945e6d61d07c968932"
+      }
+    },
+    {
+      "name": "dist/client/wallet-signing.css",
+      "digest": {
+        "sha256": "e15943ec7860e6234d90d501e0a1adda32e1f0f2161651210ce60d2a87e34c49"
       }
     },
     {
       "name": "dist/client/wallet-signing.html",
       "digest": {
-        "sha256": "bedbf2d33b9a6e983e9d220f1c33f6c233674c34c3b778415c38444da9d6efd0"
+        "sha256": "4de3f44d196d0f7677cdf1798e33b020ffea3e48e27774c074e764c9baeef708"
       }
     },
     {
@@ -406,13 +502,13 @@
     {
       "name": "dist/client/workspaces.html",
       "digest": {
-        "sha256": "582630fd3f1fb13fdbc7da2001c9887eb11b6de8e4926702282dc7a42eec2e0a"
+        "sha256": "4168e6d21a47b119975cd460a615f0d992894c27fc4b6930a90ef9137129474e"
       }
     },
     {
       "name": "dist/server/index.js",
       "digest": {
-        "sha256": "13566d3d9a85c594b00b1a370d61ed11ec6c67e7d34f4b73e64cadf3b32e8ec5"
+        "sha256": "be73f87cca11a907f177fb6b8870871e7acc096de4140b61a4feeab57280cfde"
       }
     }
   ],
@@ -424,12 +520,12 @@
     "builder": {
       "id": "local"
     },
-    "timestamp": "2026-11-12T23:52:55.339Z",
+    "timestamp": "2026-11-20T10:24:49.396Z",
     "sourceTree": {
       "algorithm": "sha256(git ls-tree -r --full-tree HEAD, excluding statement, envelope and release-evidence/pubkeys/)",
-      "sha256": "6c858e94cff6bbfce4afdf625fbb7d87f34fb1ca761702642b8dc9c6239afa06",
-      "gitCommit": "f24368f98b9afaa01c8f86a0cf22e95cca2f202e",
-      "gitTree": "2ad9b1a80239c076b5711df9f566f82e9ee5c37c"
+      "sha256": "6532964c0801fa064db7477fffcad0b30592ab44e666e00eab52d2063e85ec9d",
+      "gitCommit": "f1fab0dc998297ccd69877721e0670cf18654d6d",
+      "gitTree": "a5dd81e30e6c0ad7d758ab98a85ff2911fb5240d"
     },
     "subjectRoots": [
       "dist/client",
