@@ -41,6 +41,18 @@ struct ContentView: View {
                         .padding(.top, 8)
                 }
             }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                HStack(spacing: 0) {
+                    nativeAction("Workspace", icon: "house", isSelected: model.pageObservation.route == "/app", action: model.home)
+                    nativeAction("Services", icon: "square.grid.2x2", isSelected: model.pageObservation.route == "/services", action: model.services)
+                    nativeAction("Frontier", icon: "globe", isSelected: model.pageObservation.route == "/frontier", action: model.frontier)
+                    nativeAction("Status", icon: "info.circle") { showingSystemStatus = true }
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .background(.regularMaterial)
+                .overlay(alignment: .top) { Divider() }
+            }
             .navigationTitle("Numina")
             .navigationBarTitleDisplayMode(.inline)
             .tint(Color(red: 0.24, green: 0.65, blue: 0.70))
@@ -54,6 +66,7 @@ struct ContentView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button("Workspace", action: model.home)
+                        Button("Services", action: model.services)
                         Button("Frontier", action: model.frontier)
                         Button("Runtime & Quantum", action: model.openRuntimeMetrics)
                         Button("Reload", action: model.retry)
@@ -77,6 +90,21 @@ struct ContentView: View {
             }
         }
         .navigationViewStyle(.stack)
+    }
+
+    private func nativeAction(_ title: String, icon: String, isSelected: Bool = false, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: icon).font(.title3)
+                Text(title).font(.caption)
+            }
+            .frame(maxWidth: .infinity, minHeight: 50)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .foregroundColor(isSelected ? .accentColor : .primary)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityLabel(title == "Status" ? "Show System Status" : "Open \(title)")
     }
 }
 
