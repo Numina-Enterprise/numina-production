@@ -59,15 +59,21 @@ npm test
 That command runs:
 
 ```text
-node --test test/composite.test.mjs test/governance.test.mjs test/archive.test.mjs test/cli.test.mjs
+node --test test/composite.test.mjs test/governance.test.mjs test/archive.test.mjs test/cli.test.mjs test/vectors.test.mjs
 ```
 
-`scripts/run-tests.mjs` writes the full stdout, stderr, start time, end time, and exit code to `test-results/node-test.txt`. The root `.gitignore` ignores `*.log`, so the saved result uses a `.txt` name and can be committed with the module. Tests generate throwaway keys in memory or in a temporary directory and delete that directory. Do not point the tools at operational keys. The module refuses the published authority and guardian public keys.
+`npm run bench` writes `test-results/bench.txt` (composite keygen, sign, verify, and Archive Seal at 1000 and 10000 records), including the Node version and machine info.
+
+`scripts/run-tests.mjs` writes the full stdout, stderr, start time, end time, and exit code to `test-results/node-test.txt`. The root `.gitignore` ignores `*.log`, so saved results use `.txt` names and can be committed with the module. Tests generate throwaway keys in memory or in a temporary directory and delete that directory. Do not point the tools at operational keys. The module refuses the published authority and guardian public keys.
+
+Official vectors and their source commits are in [vectors/README.md](vectors/README.md). There is no FIPS 140-3 certificate. See [docs/FIPS-140-3.md](docs/FIPS-140-3.md).
 
 ## Gaps relative to the memo
 
 - Task envelopes were not encoded in the repository. This module defines that encoding. Provenance signing uses the labeled transcript, with PEM keys embedded. See the encoding note.
-- Published RFC 10073 and FIPS 204 ACVP vector files are not bundled. Tests cover a frozen deterministic vector, round trips, and the negative cases in the memo's v1 list that this scope can execute.
-- No latency numbers, no FIPS 140-3 validation claim, no ML-DSA-87, no SLH-DSA governance root, no phase 3.
+- ACVP coverage is the ML-DSA-65 external pure sample groups (keyGen, deterministic and hedged sigGen, sigVer). Pre-hash and internal-interface groups, and the other ML-DSA parameter sets, were not copied.
+- The RFC 10073 file contributes the `id-MLDSA65-Ed25519-SHA512` case. Its signatures are checked by verification. The file does not include the hedged ML-DSA randomness, so the signature bytes are not regenerated.
+- No ML-DSA-87, no SLH-DSA governance root, no phase 3.
 - ML-KEM, FN-DSA, HSM support, and a hosted service are out of scope, as the memo required.
 - Archive Seal uses ML-DSA-65. The memo's SLH-DSA fallback, if ML-DSA itself were broken, is not implemented.
+- This module is not FIPS 140-3 validated. See [docs/FIPS-140-3.md](docs/FIPS-140-3.md).

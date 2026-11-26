@@ -4,5 +4,6 @@ Operator: SK Consulting LLC dba Numina Labs
 License: BSD-3-Clause
 
 This directory holds the stdout, stderr, start time, end time, and exit code
-of the module test run, in node-test.txt. It does not hold signing keys.
-The result is a .txt file because the repository gitignore drops *.log files.
+of the module test run, in node-test.txt, and the benchmark, in bench.txt.
+It does not hold signing keys.
+Results are .txt files because the repository gitignore drops *.log files.

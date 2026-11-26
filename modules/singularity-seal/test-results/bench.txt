@@ -1,0 +1,25 @@
+Copyright (c) 2026 Samuel J. Kott and SK Consulting LLC dba Numina Labs
+Author: Samuel J. Kott
+Operator: SK Consulting LLC dba Numina Labs
+License: BSD-3-Clause
+
+command: node scripts/bench.mjs
+execPath: /Users/samuelkott/.config/numina/node-v26.13.0-darwin-arm64/bin/node
+node: v26.13.0
+platform: darwin 27.3.0 arm64
+cpu: Apple M4 Max
+cpu_count: 16
+total_mem_bytes: 51539607552
+start: 2026-11-26T20:57:38.712Z
+end: 2026-11-26T20:57:40.936Z
+exit_code: 0
+
+composite_keygen n=20 min_ms=1.287 median_ms=1.513 mean_ms=1.901 max_ms=7.294
+composite_sign n=20 min_ms=2.941 median_ms=5.325 mean_ms=7.659 max_ms=18.520
+composite_verify n=20 min_ms=1.498 median_ms=1.647 mean_ms=1.699 max_ms=2.707
+archive_prepare_records count=1000 ms=85.438
+archive_seal count=1000 ms=59.241
+archive_verify count=1000 ms=56.765
+archive_prepare_records count=10000 ms=784.456
+archive_seal count=10000 ms=505.347
+archive_verify count=10000 ms=504.285

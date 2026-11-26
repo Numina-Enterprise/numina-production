@@ -122,7 +122,7 @@ ML-DSA signing defaults to hedged FIPS 204 entropy. Tests and the `--determinist
 | Legacy Ed25519 public key | 32 |
 | Legacy Ed25519 signature | 64 |
 
-Base64 text is longer than these binary sizes. This module does not publish a hardware latency figure.
+Base64 text is longer than these binary sizes. One machine measurement is written by `npm run bench` to `test-results/bench.txt`. That file is not a cross-platform latency guarantee.
 
 ## 8. Migration
 
@@ -136,4 +136,4 @@ Phase 3 (ML-DSA without Ed25519) is out of v1.
 
 ## 9. What this spec does not do
 
-No ML-KEM, no FN-DSA, no SLH-DSA, no ML-DSA-87, no HSM, no hosted registry, no change to treasury code, and no replacement of the existing provenance governance gates. The policy file carried with the signature is the registry.
+No ML-KEM, no FN-DSA, no SLH-DSA, no ML-DSA-87, no HSM, no hosted registry, no change to treasury code, and no replacement of the existing provenance governance gates. The policy file carried with the signature is the registry. This module is not FIPS 140-3 validated. See [FIPS-140-3.md](FIPS-140-3.md). NIST ACVP ML-DSA-65 samples and the RFC 10073 Ed25519 composite vector are under `vectors/`.

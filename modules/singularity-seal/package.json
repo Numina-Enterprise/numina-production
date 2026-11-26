@@ -17,7 +17,8 @@
     ".": "./src/index.mjs"
   },
   "scripts": {
-    "test": "node scripts/run-tests.mjs"
+    "test": "node scripts/run-tests.mjs",
+    "bench": "node scripts/bench.mjs"
   },
   "dependencies": {
     "@noble/post-quantum": "0.7.1"

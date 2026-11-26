@@ -14,8 +14,15 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const testFiles = [
+  'test/composite.test.mjs',
+  'test/governance.test.mjs',
+  'test/archive.test.mjs',
+  'test/cli.test.mjs',
+  'test/vectors.test.mjs',
+];
 const started = new Date();
-const child = spawnSync(process.execPath, ['--test', 'test/composite.test.mjs', 'test/governance.test.mjs', 'test/archive.test.mjs', 'test/cli.test.mjs'], {
+const child = spawnSync(process.execPath, ['--test', ...testFiles], {
   cwd: root,
   encoding: 'utf8',
   maxBuffer: 32 * 1024 * 1024,
@@ -28,7 +35,9 @@ const body = [
   'Operator: SK Consulting LLC dba Numina Labs',
   'License: BSD-3-Clause',
   '',
-  'command: node --test test/composite.test.mjs test/governance.test.mjs test/archive.test.mjs test/cli.test.mjs',
+  'command: node --test ' + testFiles.join(' '),
+  'node: ' + process.version,
+  'execPath: ' + process.execPath,
   'cwd: ' + root,
   'start: ' + started.toISOString(),
   'end: ' + ended.toISOString(),
