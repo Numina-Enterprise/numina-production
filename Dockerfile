@@ -12,6 +12,8 @@
 FROM node:26.13.0
 WORKDIR /app
 COPY dist ./dist
+COPY public ./public
+COPY public ./public
 COPY scripts/cloudrun-server.mjs ./scripts/cloudrun-server.mjs
 ENV NODE_ENV=production
 EXPOSE 8080
