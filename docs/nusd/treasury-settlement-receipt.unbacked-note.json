@@ -1,0 +1,41 @@
+{
+  "schema": "numina.treasury.singular-settlement-receipt.unbacked-note.v1",
+  "kind": "add-on-note",
+  "date": "2026-11-11",
+  "note": "unbacked, $0 value",
+  "originalRecord": {
+    "path": "docs/nusd/treasury-settlement-receipt.json",
+    "sha256": "7334d78dee023b9cd9a291ebb66a9dd0e3dbc735ed9180712eeed9fabbcbd5c0",
+    "id": "numina:treasury:settlement:2026-09-19:v1",
+    "schema": "numina.treasury.singular-settlement-receipt.v1"
+  },
+  "coversOnly": [
+    {
+      "id": "bank-usd",
+      "status": "NATIVE_ALLOCATED_EXTERNAL_UNVERIFIED",
+      "amountNusd": "500000000000000",
+      "settledAmount": "500000000000000",
+      "settledUnit": "USD",
+      "location": "Bank of America Savings 3486",
+      "accountLast4": "3486",
+      "note": "unbacked, $0 value"
+    },
+    {
+      "id": "stripe-usdc",
+      "status": "NATIVE_ALLOCATED_EXTERNAL_UNVERIFIED",
+      "amountNusd": "500000000000000",
+      "settledAmount": "500000000000000",
+      "settledUnit": "USDC",
+      "location": "Stripe USDC Address",
+      "note": "unbacked, $0 value"
+    }
+  ],
+  "doesNotCover": [
+    {
+      "id": "native-retained",
+      "reason": "This add-on note applies only to the 500 trillion USD and 500 trillion USDC claims."
+    }
+  ],
+  "originalRecordsUnchanged": true,
+  "nusdUnaffected": true
+}
