@@ -1,0 +1,46 @@
+Copyright (c) 2026 Samuel J. Kott and SK Consulting LLC dba Numina Labs
+Author: Samuel J. Kott
+Operator: SK Consulting LLC dba Numina Labs
+License: BSD-3-Clause
+
+command: node --test test/composite.test.mjs test/governance.test.mjs test/archive.test.mjs test/cli.test.mjs test/vectors.test.mjs
+node: v26.13.0
+execPath: /Users/samuelkott/.config/numina/node-v26.13.0-darwin-arm64/bin/node
+cwd: /Users/samuelkott/bump-501-20261110/modules/singularity-seal
+start: 2026-11-26T20:57:22.734Z
+end: 2026-11-26T20:57:23.109Z
+exit_code: 0
+
+--- stdout ---
+✔ archive seal round trip and batch tamper detection (22.478167ms)
+✔ archive threshold counts distinct people (51.683542ms)
+✔ archive accepts a provenance manifest without changing it (9.967959ms)
+✔ version and help credit the author and operator (72.473458ms)
+✔ cli legacy flag is required and the verdict stays legacy (169.020375ms)
+✔ canonical JSON matches the provenance verifier rules (0.771917ms)
+✔ RFC 10073 message representative is a known byte layout (0.305459ms)
+✔ deterministic composite known answer and round trip (27.2875ms)
+✔ tamper of either half fails and the other half is reported (13.841917ms)
+✔ wrong key, wrong context, and a lifted Ed25519 component all fail (23.911ms)
+✔ envelope round trip binds the body and rejects a body edit (10.714875ms)
+✔ pinned repository public keys and already-used Ed25519 seeds are refused (0.117583ms)
+✔ package metadata names the author and operator (0.182083ms)
+✔ threshold counts people, not algorithms or repeated signatures (42.602417ms)
+✔ legacy mode is explicit and never reported as valid (2.059917ms)
+✔ a role or signer id on the signature does not grant registry authority (12.124ms)
+✔ governance changes do not count legacy signatures (6.996833ms)
+✔ provenance seal uses the repository transcript and leaves the manifest unsigned by mutation (13.306875ms)
+✔ ACVP ML-DSA-65 keyGen matches pk and sk (40.395292ms)
+✔ ACVP ML-DSA-65 sigGen matches deterministic and hedged signatures (223.844417ms)
+✔ ACVP ML-DSA-65 sigVer matches testPassed (20.234333ms)
+✔ RFC 10073 ML-DSA-65+Ed25519 vector verifies and the seed reproduces the public key (9.210042ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 344.634084
+
+--- stderr ---
